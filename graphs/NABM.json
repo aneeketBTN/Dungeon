@@ -1,0 +1,3672 @@
+{
+  "header": {
+    "subject": "NABM",
+    "subject_name": "New Age Business Models",
+    "professor": "Ganesh K",
+    "extracted_on": "2026-06-02",
+    "extracted_by": "Claude Opus 4.8 (engine v1.2)",
+    "source_modules_count": 8,
+    "node_count": 86,
+    "exam_format": "50 MCQ, 4 options, 2 marks each, no negative marking, 120 min",
+    "style_profile": "CLA (clas_biz_models.docx) is scenario/company-first: a real (usually Indian) company vignette - Zomato, Ola, Practo, Urban Company, IndiaMART, Zepto, Swiggy, Nykaa - then a classification or application question ('which business model is this?', 'which metric matters here?', 'which network effect?'). Two stem formats: (a) single-best-answer with 4 options, and (b) Roman-numeral multi-statement items scored by combination ('I and II', 'II and III', 'All of the above', 'None of the above'). Distractors are ADJACENT models or ADJACENT metrics - the metric<->model mismatch is the core trap (Sales/sqft->Retail not Aggregator; Take rate/GMV->Aggregator/Marketplace; Asset utilisation+Default rate->Leasing; Inventory turnover->Distributor; Utilisation rate != SaaS). Mix is mostly conceptual classification/application with a minority of light metric calculations (CLV=ARPU/churn, take rate, conversion rate, ROAS). ALWAYS establish the business_model_type in the scenario before asking a metric question.",
+    "extraction_note": "FULLY SOURCE-GROUNDED: all 8 modules (M1-M8) of New Age Business Models were read in full from the lecture transcripts (via each module's _merged_module.txt, identical content to the per-chapter files) and every node is traceable to a module/chapter source_ref. Transcripts are keyword-compressed (not verbatim prose); concepts/examples/formulas were reconstructed faithfully. No mega-file content was used (Section 6 hard rule).",
+    "business_model_type_note": "NABM context tag is required on every node (Section 4). The registry's listed values (SaaS/Marketplace/Aggregator/D2C/Leasing/Retail/Razor-Blade/Subscription/Creator Economy/Blockchain-Web3) were extended with Manufacturer, Distributor, Franchise, Licensing, Contract Manufacturing, Bundling, Pipeline, Platform, On-Demand, FinTech, Freemium and General to tag every concept accurately. context_tag carries the thematic grouping (foundations/traditional_model/new_age_model/platform_theory/network_effects/marketplace/saas/fintech/metrics/creator_economy/blockchain_web3/ai/ondc).",
+    "confirmed_by_student": true
+  },
+  "nodes": [
+    {
+      "id": "nabm_bm_definition",
+      "subject": "NABM",
+      "concept": "What a business model is (definitions)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "foundations",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "Netflix (Reed Hastings, $40 late fee on Apollo 13 -> subscription); Ford assembly line",
+      "teaching_note": "A business model is how a firm creates, delivers and captures value. Three canonical definitions: Teece (2010) — organisational & financial architecture of the business; Magretta (2002) — the 'story' of how a business works; Osterwalder & Pigneur (2010) — the rationale of how an organisation creates, delivers and captures value. Half the Fortune 500 has changed because models are dynamic, not fixed (Netflix's pivot from late-fee DVD rental to subscription streaming is the canonical example).",
+      "distractors": [
+        {
+          "wrong": "Marketing campaign",
+          "why": "a model change re-architects value creation/capture, not just promotion"
+        },
+        {
+          "wrong": "Pricing tactic only",
+          "why": "subscription was a structural shift in value appropriation, not a one-off price tweak"
+        }
+      ],
+      "sample_question": "Netflix moved from charging per-DVD with late fees to a fixed monthly subscription. This is best described as a change in the company's ______?",
+      "failure_mode": "Confusing 'business model' (how value is created/captured) with 'product' or 'strategy'.",
+      "source_ref": "NABM/M1/C01",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [],
+      "connects_to": [
+        "nabm_three_pillars",
+        "nabm_bm_canvas",
+        "nabm_bm_vs_strategy"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_three_pillars",
+      "subject": "NABM",
+      "concept": "Three pillars of a business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "foundations",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "Flipkart COD (value prop); Maruti dealer network (delivery); Zomato commission+Pro (appropriation)",
+      "teaching_note": "Every business model rests on three pillars: (1) Value Proposition — the important customer problem solved and why the solution beats alternatives (Flipkart's cash-on-delivery solved trust); (2) Value Delivery — the capabilities, processes and value network that deliver the experience (Maruti's dealer/service network; Jio's 4G); (3) Value Appropriation — how money is made: revenue model, pricing, cost structure, profit formula (Zomato's commission + Pro subscription; HDFC card interest+fees).",
+      "distractors": [
+        {
+          "wrong": "Value delivery",
+          "why": "delivery is the factories/network; the gap here is the revenue/profit formula = value appropriation"
+        },
+        {
+          "wrong": "Value proposition",
+          "why": "the product idea IS the value proposition; what's missing is appropriation"
+        }
+      ],
+      "sample_question": "A firm has a great product idea and strong factories but no clear revenue model or pricing. Which of the three business-model pillars is weakest?",
+      "failure_mode": "Treating 'value proposition' as the whole model and ignoring value appropriation (how money is actually captured).",
+      "source_ref": "NABM/M1/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_bm_definition"
+      ],
+      "connects_to": [
+        "nabm_bm_canvas",
+        "nabm_bm_vs_strategy"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_bm_canvas",
+      "subject": "NABM",
+      "concept": "Business Model Canvas (9 blocks)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "foundations",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "Swiggy & Big Basket mapped across all 9 blocks",
+      "teaching_note": "Osterwalder's Business Model Canvas visualises a model on one page via nine blocks: Customer Segments, Value Propositions, Channels, Customer Relationships, Revenue Streams, Key Resources, Key Activities, Key Partnerships, and Cost Structure. It maps the whole business in one frame (e.g. Swiggy: segments=urban convenience seekers; partners=restaurants, delivery fleet, cloud kitchens; revenue=delivery fees+commissions+ads).",
+      "distractors": [
+        {
+          "wrong": "Key Resources",
+          "why": "the promise that makes a customer choose is the Value Proposition; resources are the app/fleet"
+        },
+        {
+          "wrong": "Cost Structure",
+          "why": "that block lists costs incurred, not the customer-facing promise"
+        }
+      ],
+      "sample_question": "On the Business Model Canvas, 'reliable, certified, affordable service' that makes a customer choose Urban Company maps to which block?",
+      "failure_mode": "Mislabelling canvas blocks — e.g. calling a reason-to-buy a 'Key Resource' instead of the 'Value Proposition'.",
+      "source_ref": "NABM/M1/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_bm_definition"
+      ],
+      "connects_to": [
+        "nabm_three_pillars"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_bm_vs_strategy",
+      "subject": "NABM",
+      "concept": "Business model vs strategy",
+      "formula": null,
+      "variables": {},
+      "context_tag": "foundations",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "They are linked but distinct. Strategy is the high-level plan for competitive advantage — the choices about positioning, differentiation and where/how to compete. The business model is the system of operations that implements that strategy — how value is created, delivered and captured. A cost-leadership strategy (Ford 'any colour so long as it's black') leads to an efficiency/scale business model; a differentiation strategy leads to a premium model. Strategy guides design and evolution of the model.",
+      "distractors": [
+        {
+          "wrong": "model; strategy (reversed)",
+          "why": "competing-on-cost is the strategic choice; the production system is the model that implements it"
+        },
+        {
+          "wrong": "They are the same thing",
+          "why": "strategy is about competition/advantage; the model is about value operations"
+        }
+      ],
+      "sample_question": "A firm chooses to compete on lowest cost via massive scale. The decision to compete on cost is the ____, while the efficient mass-production system that executes it is the ____.",
+      "failure_mode": "Using 'strategy' and 'business model' interchangeably; strategy = competitive choices, model = the operating system that delivers them.",
+      "source_ref": "NABM/M1/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_bm_definition"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_traditional_vs_newage",
+      "subject": "NABM",
+      "concept": "Traditional vs new-age business models",
+      "formula": null,
+      "variables": {},
+      "context_tag": "foundations",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Traditional models (manufacturer, distributor, retailer, franchise, contract manufacturing, licensing, razor-blade, leasing, bundling, subscription) are largely linear/pipeline and centuries old. New-age models (platform, aggregator, on-demand, D2C, creator economy, C2C, freemium, crowdsourcing, super-app, blockchain/Web3) arose from the digital/4th-industrial revolution — driven by technology disruption (AI/ML, blockchain, smartphone, data), changing customer expectations (convenience, personalisation, on-demand) and geopolitics. Models are not mutually exclusive; firms combine them.",
+      "distractors": [
+        {
+          "wrong": "new-age to traditional (reversed)",
+          "why": "direct-online selling is the new-age (D2C) move, not the traditional one"
+        },
+        {
+          "wrong": "platform to pipeline",
+          "why": "selling your own goods directly is D2C/pipeline, not a multi-sided platform"
+        }
+      ],
+      "sample_question": "A company moves from selling through wholesalers/retailers to selling directly online with social-media marketing. This is a shift from a ____ to a ____ model.",
+      "failure_mode": "Assuming a firm uses exactly one model — most combine (e.g. a manufacturer that also franchises and bundles).",
+      "source_ref": "NABM/M1/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_bm_definition"
+      ],
+      "connects_to": [
+        "nabm_platform_model",
+        "nabm_d2c"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_manufacturer",
+      "subject": "NABM",
+      "concept": "Manufacturer business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "traditional_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Manufacturer",
+      "stage_in_funnel": null,
+      "example_from_source": "Tata Motors, Reliance Jamnagar, HUL; failures HMT, Moserbaer",
+      "teaching_note": "Creates products from raw materials and sells to consumers or intermediaries (Tata Motors, Reliance, HUL). Strengths: control over production/quality/pricing; economies of scale drive unit cost down. Weaknesses: high capex and maintenance, supply-chain complexity, and low flexibility to change infrastructure when markets shift — HMT watches and Moserbaer (optical media) failed by not adapting.",
+      "distractors": [
+        {
+          "wrong": "Distributor",
+          "why": "a distributor buys finished goods to resell; a manufacturer creates them from raw materials"
+        },
+        {
+          "wrong": "Franchise",
+          "why": "franchising licenses a brand/system to operators; it is not production"
+        }
+      ],
+      "sample_question": "A firm designs and mass-produces vehicles, selling through a dealer network and benefiting from economies of scale. Which traditional model is this?",
+      "failure_mode": "Confusing manufacturer (makes goods) with distributor (moves goods it did not make).",
+      "source_ref": "NABM/M1/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_distributor",
+        "nabm_retailer",
+        "nabm_traditional_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_distributor",
+      "subject": "NABM",
+      "concept": "Distributor business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "traditional_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Distributor",
+      "stage_in_funnel": null,
+      "example_from_source": "Redington, Ingram Micro, Pidilite, ITC",
+      "teaching_note": "Buys products from manufacturers and sells to retailers/consumers — the connecting link providing transportation, warehousing, financing and market reach (Redington, Ingram Micro, Pidilite/Marico/ITC networks). Operates on thin margins and absorbs market risk (unsold inventory). Threatened by D2C, online B2B marketplaces and manufacturers selling direct. Key metric: inventory turnover.",
+      "distractors": [
+        {
+          "wrong": "Retailer",
+          "why": "retailers sell to end consumers; distributors sell on to retailers and absorb inventory risk"
+        },
+        {
+          "wrong": "Aggregator",
+          "why": "an aggregator is an asset-light platform; a distributor takes ownership of inventory"
+        }
+      ],
+      "sample_question": "Redington buys IT products from brands and supplies them to retailers, managing warehousing and logistics on thin margins. Which model is this?",
+      "failure_mode": "Calling a distributor a 'retailer' — the distributor sells to retailers/businesses, not to end consumers in-store.",
+      "source_ref": "NABM/M1/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_manufacturer"
+      ],
+      "connects_to": [
+        "nabm_retailer",
+        "nabm_traditional_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_retailer",
+      "subject": "NABM",
+      "concept": "Retailer business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "traditional_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Retail",
+      "stage_in_funnel": null,
+      "example_from_source": "DMart, Reliance Retail, Walmart; failures Subhiksha, Big Bazaar",
+      "teaching_note": "Buys from manufacturers/distributors and sells directly to end consumers via brick-and-mortar, e-commerce or omnichannel (Reliance Retail, Walmart, DMart). Strengths: direct consumer contact, hyper-local access. Weaknesses: inventory risk, high rental/infra cost, low gross margins, intense competition (DMart succeeds via owned premises + lean supply chain; Subhiksha and Big Bazaar failed). Key metric: sales per square foot.",
+      "distractors": [
+        {
+          "wrong": "Take rate",
+          "why": "take rate is an aggregator/marketplace commission metric, not a physical-store metric"
+        },
+        {
+          "wrong": "Utilisation rate",
+          "why": "utilisation rate belongs to leasing of assets, not retail floor productivity"
+        }
+      ],
+      "sample_question": "DMart keeps prices low through an efficient supply chain and by owning its premises to avoid high rentals. The headline metric for its retail space productivity is ____.",
+      "failure_mode": "Forgetting that 'sales per square foot' is a RETAIL metric, not a platform/aggregator one (a classic metric-context trap).",
+      "source_ref": "NABM/M1/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_distributor"
+      ],
+      "connects_to": [
+        "nabm_traditional_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_franchise",
+      "subject": "NABM",
+      "concept": "Franchise business model (COFO / FOCO / FOFO)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "traditional_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Franchise",
+      "stage_in_funnel": null,
+      "example_from_source": "Cafe Coffee Day, McDonald's, Domino's, Marriott (COFO)",
+      "teaching_note": "The franchisor grants a franchisee the right to operate under its brand/system for a fee or royalty. Three structures: COFO (Company-Owned Franchise-Operated — franchisor owns assets, franchisee operates and pays royalty); FOCO (Franchisee-Owned Company-Operated — franchisee invests capital, franchisor runs operations, profits shared); FOFO (Franchisee-Owned Franchisee-Operated — franchisee owns and operates, franchisor supplies brand/products). Enables rapid expansion with low capital; risks brand-reputation and quality-control loss. Examples: CCD, McDonald's, Domino's.",
+      "distractors": [
+        {
+          "wrong": "COFO",
+          "why": "in COFO the company owns the asset and the franchisee operates — here the franchisee owns the capital"
+        },
+        {
+          "wrong": "FOFO",
+          "why": "in FOFO the franchisee both owns and operates; here the company operates"
+        }
+      ],
+      "sample_question": "A franchisee invests the capital to build the outlet but the franchisor runs day-to-day operations and they share profits. Which franchise structure is this?",
+      "failure_mode": "Mixing up COFO/FOCO/FOFO — track WHO owns the asset vs WHO operates it.",
+      "source_ref": "NABM/M1/C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_licensing",
+        "nabm_traditional_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_contract_mfg",
+      "subject": "NABM",
+      "concept": "Contract manufacturing business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "traditional_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Contract Manufacturing",
+      "stage_in_funnel": null,
+      "example_from_source": "Apple-Foxconn/Flextronics, Nike (Vietnam/China)",
+      "teaching_note": "The brand outsources production to a third-party manufacturer while keeping R&D, design, marketing and branding in-house (Apple-Foxconn, Nike). Brand benefits: cost efficiency at scale, focus on core competency, lower capex. Risks: quality control, dependency/supply-chain disruption, and intellectual-property theft. For the contract manufacturer: stable orders but thin margins and client concentration.",
+      "distractors": [
+        {
+          "wrong": "High capital expenditure on plants",
+          "why": "contract manufacturing removes the brand's capex; the manufacturer bears it"
+        },
+        {
+          "wrong": "Loss of marketing control",
+          "why": "the brand keeps marketing/branding in-house; the risk is IP leakage and dependency"
+        }
+      ],
+      "sample_question": "Apple designs the iPhone and owns the brand, but Foxconn manufactures it at scale. From Apple's view, the main RISK of this arrangement is ____.",
+      "failure_mode": "Thinking the brand bears high capex — the point of contract manufacturing is to AVOID it (the risk is IP/quality/dependency).",
+      "source_ref": "NABM/M1/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_manufacturer"
+      ],
+      "connects_to": [
+        "nabm_licensing"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_licensing",
+      "subject": "NABM",
+      "concept": "Licensing business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "traditional_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Licensing",
+      "stage_in_funnel": null,
+      "example_from_source": "Disney, Marvel, Microsoft, Qualcomm; Pierre Cardin over-licensing",
+      "teaching_note": "One company (licensor) lets another (licensee) use its IP — brand, patents, characters, technology — for a fee/royalty. Monetises IP without capex and expands the brand fast with the licensee bearing operational risk (Disney characters, Marvel, Microsoft/Qualcomm tech). Risks: quality control and brand dilution (Pierre Cardin lost luxury status by over-licensing; Kodak/Blockbuster failed to license into new tech).",
+      "distractors": [
+        {
+          "wrong": "Franchising",
+          "why": "franchising licenses an operating business/system; pure licensing rents IP/brand rights only"
+        },
+        {
+          "wrong": "Contract manufacturing",
+          "why": "there the brand outsources production; here the licensor lets others use its IP to make their own products"
+        }
+      ],
+      "sample_question": "Disney lets toy and apparel makers use Mickey Mouse for a royalty, without Disney running those factories. Which traditional model is this?",
+      "failure_mode": "Confusing licensing (rent your IP/brand to others) with franchising (license a whole business system + operations) or contract manufacturing (you own the brand, outsource making it).",
+      "source_ref": "NABM/M1/C10",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_franchise",
+        "nabm_contract_mfg"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_razor_blade",
+      "subject": "NABM",
+      "concept": "Razor-blade (bait-and-hook) model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "traditional_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Razor-Blade",
+      "stage_in_funnel": null,
+      "example_from_source": "Gillette, HP ink, Nespresso pods; Sony PS Vita failure",
+      "teaching_note": "A durable primary product is sold cheap (or at a loss) to lock customers into repeated purchases of a high-margin consumable (Gillette razors→blades, HP printers→ink, Nespresso machines→pods). Creates recurring revenue, loyalty and switching costs. Weaknesses: initial losses, dependence on consumable demand, and backlash if consumables feel over-priced (Sony PS Vita's pricey proprietary cards failed; third-party cartridges broke Kodak's version). Key metrics: CAC, LTV, repeat-purchase rate.",
+      "distractors": [
+        {
+          "wrong": "Bundling — profit on the bundle",
+          "why": "razor-blade splits cheap durable + profitable consumable over time; it is not one discounted package"
+        },
+        {
+          "wrong": "Profit is in the razor/printer itself",
+          "why": "the durable is sold cheap/at a loss; profit comes from the consumable"
+        }
+      ],
+      "sample_question": "A printer is sold at a low price while replacement ink cartridges carry high margins. Which model is this, and where is the profit?",
+      "failure_mode": "Thinking the profit is in the primary product — it's deliberately cheap; profit is in the recurring consumable.",
+      "source_ref": "NABM/M1/C11",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_bundling",
+        "nabm_traditional_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_leasing",
+      "subject": "NABM",
+      "concept": "Leasing business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "traditional_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Leasing",
+      "stage_in_funnel": null,
+      "example_from_source": "CAT Financial, AerCap, WeWork (failure), GE Healthcare",
+      "teaching_note": "The company retains ownership of an asset (equipment, vehicles, property) and rents its use to customers for a fee over a set term (CAT Financial, aircraft lessors AerCap/Air Lease, WeWork, GE Healthcare). Gives customers access to high-value assets without upfront cost; gives the lessor steady predictable revenue — but profitability DEPENDS ON HIGH UTILISATION and is hurt by maintenance costs and default. Xerox and WeWork (long leases vs short subleases) show the failure modes. Key metrics: utilisation rate, default rate, return on asset, residual value.",
+      "distractors": [
+        {
+          "wrong": "Sales per square foot / inventory turnover",
+          "why": "those are retail/distributor metrics; leasing turns on asset utilisation and default"
+        },
+        {
+          "wrong": "Take rate / GMV",
+          "why": "those are aggregator/marketplace metrics, not asset-leasing metrics"
+        }
+      ],
+      "sample_question": "For an equipment-leasing company, the two metrics most directly tied to whether the model works are ____ and ____.",
+      "failure_mode": "Metric-context trap: 'utilisation rate' and 'default rate' belong to LEASING, not to SaaS/retail/aggregator models.",
+      "source_ref": "NABM/M1/C12",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_traditional_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_bundling",
+      "subject": "NABM",
+      "concept": "Bundling business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "traditional_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Bundling",
+      "stage_in_funnel": null,
+      "example_from_source": "Microsoft Office, McDonald's meal, Amul; Windows 8/Surface RT, Fire Phone failures",
+      "teaching_note": "Selling multiple products/services together as a package priced below the sum of parts to raise order value, move slow inventory and cross-sell (Tata Sky channel packs, Microsoft Office, McDonald's meals, Amul butter+cheese). Use it when products are complementary and the portfolio is broad; avoid it when items don't complement, when it cheapens brand value, or when it forces unwanted items (Windows 8 + Surface RT, Amazon Fire Phone + Prime failed). Key metrics: average transaction value, cross-sell rate.",
+      "distractors": [
+        {
+          "wrong": "Default rate",
+          "why": "default rate is a leasing metric and irrelevant to a bundling promotion"
+        },
+        {
+          "wrong": "Asset utilisation rate",
+          "why": "utilisation belongs to leasing; bundling is judged by AOV and cross-sell rate"
+        }
+      ],
+      "sample_question": "A dairy bundles its slow-selling milkshakes with its popular milk and curd. The two metrics best for judging the bundling strategy over six months are higher AOV and ____.",
+      "failure_mode": "Confusing bundling (one combined package, profit on the bundle) with razor-blade (cheap durable + profitable consumable over time).",
+      "source_ref": "NABM/M1/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_razor_blade",
+        "nabm_traditional_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_aggregator",
+      "subject": "NABM",
+      "concept": "Aggregator business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "new_age_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Aggregator",
+      "stage_in_funnel": null,
+      "example_from_source": "Urban Company, Ola, Policybazaar, Practo, MakeMyTrip",
+      "teaching_note": "Brings many independent providers under one branded platform so customers can discover, compare and access services/products in one place (Urban Company, Ola, Policybazaar, MakeMyTrip, Just Eat). Asset-light, scalable, one-roof convenience. Challenges: building a large user base, quality control (a bad plumber reflects on the platform), regulatory compliance, and disintermediation. Earns a small fee/commission (take rate).",
+      "distractors": [
+        {
+          "wrong": "On-Demand model",
+          "why": "on-demand stresses instant fulfilment; aggregation stresses curating/comparing many providers under one brand"
+        },
+        {
+          "wrong": "B2C retail model",
+          "why": "a retailer owns/sells its own inventory; an aggregator is asset-light and lists third-party providers"
+        }
+      ],
+      "sample_question": "A healthcare app lets patients browse many doctors, compare consultation fees and read reviews before booking. Which business model is the platform primarily using?",
+      "failure_mode": "Confusing aggregator (curates/brands many providers for discovery+comparison) with on-demand (instant fulfilment) — many firms are both but the concepts differ.",
+      "source_ref": "NABM/M1/C17",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_on_demand",
+        "nabm_aggregator_vs_ondemand",
+        "nabm_platform_model"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_on_demand",
+      "subject": "NABM",
+      "concept": "On-demand business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "new_age_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "On-Demand",
+      "stage_in_funnel": null,
+      "example_from_source": "Swiggy, Zepto, Uber, Ola, Rapido, Dunzo, Instacart",
+      "teaching_note": "Uses mobile/real-time technology to fulfil a customer need immediately with minimal waiting (Swiggy ~30 min food, Zepto ~10 min grocery, Uber/Ola rides, Rapido, Dunzo). Value proposition = convenience, speed, responsiveness. Weaknesses: logistical strain at peak demand, fluctuating demand, quality control, and balancing competitive pricing against fair provider pay and profitability.",
+      "distractors": [
+        {
+          "wrong": "Traditional e-commerce",
+          "why": "standard e-commerce ships over days; on-demand promises near-immediate fulfilment"
+        },
+        {
+          "wrong": "Vertical SaaS",
+          "why": "SaaS sells software subscriptions, unrelated to instant physical fulfilment"
+        }
+      ],
+      "sample_question": "A user orders groceries on Zepto expecting delivery within 10 minutes. Which model does this exemplify?",
+      "failure_mode": "Assuming every on-demand service is also an aggregator (and vice versa): not all aggregators fulfil instantly, and not all on-demand platforms aggregate many providers.",
+      "source_ref": "NABM/M1/C18",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_aggregator",
+        "nabm_aggregator_vs_ondemand"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_subscription",
+      "subject": "NABM",
+      "concept": "Subscription business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "new_age_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Subscription",
+      "stage_in_funnel": null,
+      "example_from_source": "Netflix, Spotify, Amazon Prime, Zomato Pro; failures HOOQ, MoviePass",
+      "teaching_note": "Charges a recurring fee (monthly/annual) for ongoing access to a product/service — old in media (newspapers, cable) and dominant in the digital age (Netflix, Spotify, SaaS, Amazon Prime, Zomato Pro). Strengths: predictable recurring revenue, higher customer lifetime value, easier demand/inventory planning. Weaknesses: customer acquisition is hard (people resist recurring payment) and churn directly erodes revenue, so continuous value-add and pricing matter. Key metrics: MRR, churn, CLV.",
+      "distractors": [
+        {
+          "wrong": "Take rate",
+          "why": "take rate is an aggregator/marketplace commission metric; subscription health is about churn/MRR"
+        },
+        {
+          "wrong": "Inventory turnover",
+          "why": "an inventory metric is irrelevant to a digital subscription service"
+        }
+      ],
+      "sample_question": "A music app charges a fixed monthly fee for unlimited streaming. The single metric whose rise most threatens its revenue is ____.",
+      "failure_mode": "Treating 'take rate' or 'GMV' as subscription metrics — subscription turns on MRR, churn and CLV, not commission on third-party sales.",
+      "source_ref": "NABM/M1/C19",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_freemium",
+        "nabm_saas_model",
+        "nabm_newage_metrics_map"
+      ],
+      "shared_with": [
+        "GER.churn_retention"
+      ],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_d2c",
+      "subject": "NABM",
+      "concept": "Direct-to-Consumer (D2C) business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "new_age_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "D2C",
+      "stage_in_funnel": null,
+      "example_from_source": "Lenskart, Mamaearth, boAt, Warby Parker, Casper; Juicero failure",
+      "teaching_note": "The company sells directly to consumers — mostly via digital channels — bypassing distributors/wholesalers/retailers, keeping control of brand, data and customer experience (Lenskart, Mamaearth, boAt, Warby Parker, Casper, Dollar Shave Club). Strengths: better margins, direct relationship and feedback, fast iteration. Weaknesses: the firm now owns logistics/supply-chain and digital customer-acquisition spend, and scaling while keeping quality is hard.",
+      "distractors": [
+        {
+          "wrong": "Platform model",
+          "why": "a platform connects third parties; D2C sells the firm's own products with no intermediary"
+        },
+        {
+          "wrong": "Distributor model",
+          "why": "a distributor is the middleman D2C deliberately removes"
+        }
+      ],
+      "sample_question": "A new eyewear brand sells only through its own website and stores, controlling manufacturing, data and customer service. Which model is this?",
+      "failure_mode": "Calling D2C a 'platform' — D2C sells its OWN goods directly; a platform intermediates between third-party producers and consumers.",
+      "source_ref": "NABM/M1/C20",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_d2c_success_factors",
+        "nabm_d2c_failures"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_c2c",
+      "subject": "NABM",
+      "concept": "Consumer-to-Consumer (C2C) model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "new_age_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Marketplace",
+      "stage_in_funnel": null,
+      "example_from_source": "OLX, Quikr, eBay, Etsy, CarTrade",
+      "teaching_note": "Transactions happen directly between two consumers, facilitated by a third-party platform (OLX, Quikr, eBay, Etsy, CarTrade). Strengths: market expansion without owning inventory, low cost, wide variety. Challenges: trust/security between strangers, quality control/standardisation, and dispute resolution — so robust ratings and dispute systems are essential.",
+      "distractors": [
+        {
+          "wrong": "B2C retail",
+          "why": "in B2C a business sells to the consumer; C2C connects two consumers"
+        },
+        {
+          "wrong": "Aggregator of services",
+          "why": "C2C trades goods peer-to-peer; service aggregators curate professional providers"
+        }
+      ],
+      "sample_question": "OLX lets one individual sell used furniture directly to another individual. Which business model is this?",
+      "failure_mode": "Confusing C2C (consumer↔consumer via a facilitator) with B2C marketplace (a business sells to consumers).",
+      "source_ref": "NABM/M1/C22",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_marketplace_types"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_freemium",
+      "subject": "NABM",
+      "concept": "Freemium model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "new_age_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Freemium",
+      "stage_in_funnel": null,
+      "example_from_source": "Zoom, LinkedIn, Gaana, Dropbox; Evernote, Pandora struggles",
+      "teaching_note": "Free + premium: a basic product is given away free to acquire a large user base, then a small fraction is converted to paid for advanced features (Zoom, LinkedIn, Spotify/Gaana, Dropbox, Zomato Pro). Works for scalable digital products with low marginal cost, network effects and a clear upgrade trigger. Fails when free gives too much value (no reason to upgrade) or when serving free users is expensive (Evernote, Pandora struggled). Distinct from a free trial (time-limited).",
+      "distractors": [
+        {
+          "wrong": "Free trial",
+          "why": "a trial is time-limited then stops; freemium keeps a free tier indefinitely"
+        },
+        {
+          "wrong": "Razor-blade",
+          "why": "razor-blade ties a cheap durable to paid consumables; freemium gives software free to upsell features"
+        }
+      ],
+      "sample_question": "A video-conferencing tool is free for 40-minute meetings but charges for longer/larger sessions. Which pricing model is this, and what is its core risk?",
+      "failure_mode": "Confusing freemium (free tier forever + paid upgrade) with a free trial (full product, time-limited) — and forgetting the conversion-rate risk.",
+      "source_ref": "NABM/M1/C23",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_subscription"
+      ],
+      "connects_to": [
+        "nabm_saas_pricing",
+        "nabm_practo_seeding"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_crowdsourcing",
+      "subject": "NABM",
+      "concept": "Crowdsourcing model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "new_age_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "Ketto (5% fee), Topcoder, Kickstarter, Wikipedia",
+      "teaching_note": "Gets work, ideas or funding from an online 'crowd' (crowd + outsourcing): taps a diverse, geographically unconstrained talent pool (Ketto/Kickstarter funding, Topcoder developers, Wikipedia content). Use it for innovation, capital or distributable tasks; avoid it for sensitive/proprietary or expert-critical work (e.g. mental-health helplines) and where quality control is hard. Ketto monetises via a ~5% campaign fee + payment-gateway fee.",
+      "distractors": [
+        {
+          "wrong": "C2C marketplace",
+          "why": "C2C is two consumers trading goods; crowdsourcing pools many contributions toward a project/fund"
+        },
+        {
+          "wrong": "Aggregator",
+          "why": "an aggregator curates professional providers; crowdsourcing harnesses an open crowd"
+        }
+      ],
+      "sample_question": "A platform lets many small donors fund individuals' medical and social causes for a small fee on funds raised. Which model is this?",
+      "failure_mode": "Treating any user-generated platform as crowdsourcing — the defining trait is pooling distributed contributions (ideas/funds/labour) toward a goal.",
+      "source_ref": "NABM/M1/C24",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_superapp",
+      "subject": "NABM",
+      "concept": "Super-app model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "new_age_model",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "Paytm, Tata Neu, WeChat, Gojek; Hike Messenger failure",
+      "teaching_note": "A single mobile app bundles many services under one umbrella so users never leave (Paytm, Tata Neu, WeChat, Gojek). Drivers: user convenience/retention, data synergy across services, and economies of scope on shared infrastructure. Needs a large user base to justify it; risks are development/maintenance complexity and quality control across many services (Hike Messenger failed to retain users).",
+      "distractors": [
+        {
+          "wrong": "Bundling",
+          "why": "bundling packages products at a price; a super-app integrates many distinct services under one login"
+        },
+        {
+          "wrong": "Aggregator of one category",
+          "why": "a super-app spans many categories/services, not a single vertical"
+        }
+      ],
+      "sample_question": "An app offers payments, shopping, recharges, banking and investing all in one place to maximise retention and data synergy. Which model is this?",
+      "failure_mode": "Confusing a super-app (many DIVERSE services in one app) with bundling (packaging products together for a price).",
+      "source_ref": "NABM/M1/C25",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_platform_model"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_pipeline_model",
+      "subject": "NABM",
+      "concept": "Pipeline business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Pipeline",
+      "stage_in_funnel": null,
+      "example_from_source": "Ford, Walmart, McDonald's",
+      "teaching_note": "A linear value chain: the firm designs, manufactures, delivers and sells a product step by step, capturing ownership across the chain (Ford, Walmart, McDonald's). Growth comes from SUPPLY-SIDE economies of scale — bigger volumes lower unit cost and build market power. Value flows in one direction, producer→consumer.",
+      "distractors": [
+        {
+          "wrong": "Platform; network effects",
+          "why": "a pipeline is linear and scales on the supply side; network effects belong to platforms"
+        },
+        {
+          "wrong": "Aggregator; take rate",
+          "why": "a pipeline owns and sells its own output; it does not take a commission between third parties"
+        }
+      ],
+      "sample_question": "Ford produces standardised cars and sells them through dealers in a one-directional chain, driving cost down via volume. This is a ____ business model whose growth driver is ____.",
+      "failure_mode": "Confusing pipeline (linear, supply-side scale) with platform (multi-sided, demand-side network effects).",
+      "source_ref": "NABM/M2/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_platform_model",
+        "nabm_platform_vs_pipeline",
+        "nabm_pipeline_growth"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_platform_model",
+      "subject": "NABM",
+      "concept": "Platform business model & the four roles",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Uber, Airbnb, Flipkart; Amazon/Apple/Netflix hybrids; Android four roles",
+      "teaching_note": "A platform creates value by facilitating interactions/transactions between multiple groups rather than making a product itself (Uber, Airbnb, Flipkart, Etsy). It is asset-light, scalable and grows on network effects. Four roles in a platform ecosystem: Producers (create value, e.g. app developers/hosts), Consumers (use it), Providers (the interface — e.g. device/OS makers), and the Owner (controls the platform/arbiter, e.g. Google with Android). Many big firms are HYBRID (Amazon retail + Marketplace; Apple hardware + App Store).",
+      "distractors": [
+        {
+          "wrong": "Producer",
+          "why": "producers create the goods/content; the owner controls the platform and sets the rules"
+        },
+        {
+          "wrong": "Provider",
+          "why": "the provider supplies the interface/device; the owner governs the whole ecosystem"
+        }
+      ],
+      "sample_question": "On a platform, the party that controls the rules and infrastructure and arbitrates interactions (e.g. Google for Android) plays which of the four roles?",
+      "failure_mode": "Asking about a platform METRIC before establishing it IS a platform (vs pipeline) — and confusing the 'provider' (interface) role with the 'owner' role.",
+      "source_ref": "NABM/M2/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_pipeline_model"
+      ],
+      "connects_to": [
+        "nabm_platform_vs_pipeline",
+        "nabm_network_effects_types",
+        "nabm_platform_growth",
+        "nabm_aggregator"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_platform_vs_pipeline",
+      "subject": "NABM",
+      "concept": "Platform vs pipeline — five differences",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "YouTube co-creation, Kindle vs publishing, Spotify access, Etsy customisation",
+      "teaching_note": "Five contrasts: (1) linear value chain vs complex co-created value; (2) single fixed roles vs fluid multiple roles & co-creation (a YouTube user is producer AND consumer); (3) gatekeepers vs open access (traditional publishing vs Kindle self-publishing); (4) ownership vs access (owning a car vs Spotify streaming); (5) standardisation-for-efficiency vs customisation (Ford/Zara vs Etsy). Platforms benefit from lower costs via demand-side effects and blur producer/consumer roles.",
+      "distractors": [
+        {
+          "wrong": "All three including III",
+          "why": "III is false: ACCESS over ownership is a platform trait, not pipeline"
+        },
+        {
+          "wrong": "Only standardisation applies to platforms",
+          "why": "platforms enable customisation; standardisation is the pipeline efficiency lever"
+        }
+      ],
+      "sample_question": "Which set of statements is TRUE? I: platforms can offer customisation while pipelines rely on standardisation. II: in platforms, producer/consumer roles blur and value is co-created. III: pipelines emphasise access over ownership.",
+      "failure_mode": "Mixing up which trait belongs to which: e.g. assigning 'access over ownership' to pipelines (it's platforms) or 'standardisation' to platforms (it's pipelines).",
+      "source_ref": "NABM/M2/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_model",
+        "nabm_pipeline_model"
+      ],
+      "connects_to": [
+        "nabm_network_effects_types"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_pipeline_growth",
+      "subject": "NABM",
+      "concept": "Pipeline drivers of growth (supply-side economies of scale)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Pipeline",
+      "stage_in_funnel": null,
+      "example_from_source": "Maruti, Tata Motors, Walmart, Dell",
+      "teaching_note": "Pipeline businesses grow through SUPPLY-SIDE economies of scale: producing more spreads fixed overheads over larger volumes, lowering unit cost, enabling competitive pricing and reinvestment (Maruti/Tata produce efficiently; Walmart/Dell win on supply-chain efficiency). The advantage is on the cost/production side — contrast with platforms' demand-side network effects.",
+      "distractors": [
+        {
+          "wrong": "Network effects",
+          "why": "network effects are demand-side platform growth; pipelines grow via supply-side scale"
+        },
+        {
+          "wrong": "Demand economies of scale",
+          "why": "that is the platform virtuous cycle, not pipeline cost-down"
+        }
+      ],
+      "sample_question": "A carmaker lowers unit cost by spreading fixed overheads over higher production volumes. This growth driver is ____.",
+      "failure_mode": "Confusing supply-side economies of scale (pipeline cost advantage) with demand economies of scale / network effects (platform demand advantage).",
+      "source_ref": "NABM/M2/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_pipeline_model"
+      ],
+      "connects_to": [
+        "nabm_platform_growth",
+        "nabm_demand_eos"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_platform_growth",
+      "subject": "NABM",
+      "concept": "Platform drivers of growth",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Facebook/Twitter network effects, Amazon/Big Basket data, Apple App Store openness",
+      "teaching_note": "Platforms grow on three drivers: (1) network effects — value rises as more users join; (2) data-driven insights — behavioural data (clicks, cart abandonment, journeys) improves matching, recommendations and conversion (Amazon, Big Basket); (3) openness — third-party developers extend capability and innovation (Apple App Store). These are DEMAND-side advantages, unlike pipelines' supply-side scale.",
+      "distractors": [
+        {
+          "wrong": "Supply-side economies of scale",
+          "why": "that is a pipeline driver; platforms grow on demand-side effects, data and openness"
+        },
+        {
+          "wrong": "Network effects (only)",
+          "why": "the data/recommendation lever is 'data-driven insights', a separate driver"
+        }
+      ],
+      "sample_question": "Amazon's recommendation engine improving as it captures more behavioural data is an example of which platform growth driver?",
+      "failure_mode": "Lumping all platform growth under 'network effects' — data-driven insights and openness are distinct drivers.",
+      "source_ref": "NABM/M2/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_model"
+      ],
+      "connects_to": [
+        "nabm_network_effects_types",
+        "nabm_demand_eos",
+        "nabm_data_driven"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_network_effects_types",
+      "subject": "NABM",
+      "concept": "Network effects & their types",
+      "formula": null,
+      "variables": {},
+      "context_tag": "network_effects",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "WhatsApp (direct), game consoles/app stores (indirect), Uber/Visa (two-sided); Google+, Ping failures",
+      "teaching_note": "A network effect is a positive externality: a product's value rises as more people use it. Three types: (1) DIRECT / same-side — value rises with more users on the SAME side (WhatsApp, Facebook, telephones); (2) INDIRECT / cross-side — value to one group rises as the OTHER group grows (more game developers→more value to gamers; app stores; e-commerce buyers↔sellers); (3) TWO-SIDED — interdependent value across two groups in a reinforcing loop (Visa: more merchants↔more cardholders; Uber: more drivers↔more riders; ad platforms). Lack of network effects sank Google+ and Apple Ping.",
+      "distractors": [
+        {
+          "wrong": "Single-sided / direct network effect",
+          "why": "value here depends on the OTHER side (riders↔drivers), making it two-sided, not same-side"
+        },
+        {
+          "wrong": "No network effect",
+          "why": "ride-sharing is a textbook two-sided network effect"
+        }
+      ],
+      "sample_question": "A ride-sharing app where more drivers attract more riders and more riders attract more drivers exhibits which type of network effect?",
+      "failure_mode": "Confusing single-/same-side (one group's value from its own size) with two-sided/indirect (value comes from the OTHER group growing). Facebook = single-sided; Uber/Ola = two-sided.",
+      "source_ref": "NABM/M2/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_model"
+      ],
+      "connects_to": [
+        "nabm_network_effect_math",
+        "nabm_demand_eos",
+        "nabm_negative_network_effects",
+        "nabm_uber_asymptotic"
+      ],
+      "shared_with": [
+        "GER.network_effects",
+        "BEHECON.nash_equilibrium"
+      ],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_network_effect_math",
+      "subject": "NABM",
+      "concept": "Network-effect growth math (Metcalfe)",
+      "formula": "connections = n(n-1)/2",
+      "variables": {
+        "n": "number of nodes/users in the network"
+      },
+      "context_tag": "network_effects",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "2->1, 4->6, 12->66, 100->4,950 connections",
+      "teaching_note": "The number of possible pairwise connections in a network of n nodes is n(n-1)/2, which grows convexly (non-linearly) — illustrating why value explodes as users join. Worked from the lecture: 2 phones→1 connection, 4→6, 12→66, 100→4,950. So going from 12 to 100 users grows connections from 66 to 4,950 — the 'power of the network effect'.",
+      "distractors": [
+        {
+          "wrong": "132",
+          "why": "that is n(n-1)=12x11, which double-counts each connection; divide by 2 -> 66"
+        },
+        {
+          "wrong": "144",
+          "why": "that is n^2; the pairwise formula is n(n-1)/2 = 66"
+        }
+      ],
+      "sample_question": "Using connections = n(n-1)/2, how many possible connections exist among 12 telephones?",
+      "failure_mode": "Using n^2 or n(n-1) instead of n(n-1)/2 (each connection counted once, not twice).",
+      "source_ref": "NABM/M2/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_network_effects_types"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_demand_eos",
+      "subject": "NABM",
+      "concept": "Demand economies of scale (virtuous cycle)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "network_effects",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Uber, Urban Company virtuous cycle",
+      "teaching_note": "Unique to platforms: the platform's value GROWS as its user/customer base grows, attracting still more users — a self-reinforcing virtuous cycle (Uber: more drivers→faster pickups/lower prices→more riders→more drivers; Urban Company: more customers→more providers→more choice). This demand-side cycle drives market power, contrasting with pipelines' supply-side economies of scale.",
+      "distractors": [
+        {
+          "wrong": "Supply-side economies of scale",
+          "why": "that is the pipeline cost-down lever; this is the demand-side platform cycle"
+        },
+        {
+          "wrong": "Negative network effect",
+          "why": "this is a positive reinforcing loop, not value-destroying congestion"
+        }
+      ],
+      "sample_question": "More riders on Uber attract more drivers, which improves service and attracts still more riders. This self-reinforcing platform dynamic is called ____.",
+      "failure_mode": "Calling this 'supply-side economies of scale' — demand economies of scale are demand-driven and platform-specific.",
+      "source_ref": "NABM/M2/C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_network_effects_types"
+      ],
+      "connects_to": [
+        "nabm_flywheel",
+        "nabm_pipeline_growth"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_negative_network_effects",
+      "subject": "NABM",
+      "concept": "Negative network effects",
+      "formula": null,
+      "variables": {},
+      "context_tag": "network_effects",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Quora fake reviews, MySpace decline, Uber screening, TripAdvisor moderation",
+      "teaching_note": "When more users (or low-quality participation) REDUCE value: fake reviews/bias (Quora), spam and low-quality content (MySpace's decline vs Facebook), congestion. Firms mitigate with screening, ratings/accountability and content moderation/verification (Uber driver checks, TripAdvisor fake-review labels). Left unchecked they erode trust and engagement.",
+      "distractors": [
+        {
+          "wrong": "Two-sided network effect",
+          "why": "that is a positive reinforcing effect; here added users/poor quality reduce value"
+        },
+        {
+          "wrong": "Demand economies of scale",
+          "why": "that is the positive virtuous cycle, the opposite of this"
+        }
+      ],
+      "sample_question": "MySpace declined as spam and low-quality content overwhelmed the platform and users migrated to Facebook. This illustrates a ____.",
+      "failure_mode": "Assuming network effects are always positive — congestion, spam and fakes can make more users LOWER value.",
+      "source_ref": "NABM/M2/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_network_effects_types"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_liquidity",
+      "subject": "NABM",
+      "concept": "Liquidity — the key platform metric",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Uber time-to-accept/wait time; eBay time-to-sell; Airbnb host response/bookings",
+      "teaching_note": "Liquidity is the ease of buying/selling on a platform without large price changes — the balance between available supply and demand. It is described as THE most important platform metric. Uber tracks time-to-accept and average wait time; eBay tracks time-to-sell and bidders per listing; Airbnb tracks host response rate and bookings per listing. Surge pricing and supply nudges are interventions to maintain liquidity (you want neither idle drivers nor waiting riders).",
+      "distractors": [
+        {
+          "wrong": "Customer acquisition cost",
+          "why": "CAC measures marketing efficiency, not supply-demand balance/matching"
+        },
+        {
+          "wrong": "Net Promoter Score",
+          "why": "NPS measures recommendation/satisfaction, not marketplace liquidity"
+        }
+      ],
+      "sample_question": "Which metric best measures whether a two-sided platform like Uber is balancing drivers and riders so transactions happen smoothly?",
+      "failure_mode": "Naming a generic metric (CAC, NPS, LTV) when asked specifically for the metric that captures supply-demand balance/match — that is liquidity.",
+      "source_ref": "NABM/M2/C10",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_model"
+      ],
+      "connects_to": [
+        "nabm_platform_metrics",
+        "nabm_newage_metrics_map",
+        "nabm_uber_asymptotic"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_platform_metrics",
+      "subject": "NABM",
+      "concept": "Platform metrics (beyond liquidity)",
+      "formula": "CAC = total marketing/acquisition spend / number of new customers",
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "interaction failure rate, engagement, match quality, churn, retention, NPS, CAC, UGC",
+      "teaching_note": "Besides liquidity, platforms track: interaction failure rate (failed rides/bookings), engagement rate (DAU/MAU), match quality / success rate (CTR, driver-rider match), conversion rate, churn rate, retention rate, customer lifetime value, Net Promoter Score, customer acquisition cost (total marketing spend ÷ new customers), and user-generated content quality. These reveal platform health more than vanity counts.",
+      "distractors": [
+        {
+          "wrong": "GMV and take rate",
+          "why": "those measure transaction value/commission, not user churn/retention"
+        },
+        {
+          "wrong": "Sales per square foot",
+          "why": "a physical-retail metric, irrelevant to a digital platform"
+        }
+      ],
+      "sample_question": "A platform wants to know what fraction of users it lost this period and what fraction it kept. Which two metrics answer this?",
+      "failure_mode": "Using CAC or GMV when the question is about retention/churn; matching the metric to the exact question.",
+      "source_ref": "NABM/M2/C11",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_liquidity"
+      ],
+      "connects_to": [
+        "nabm_newage_metrics_map"
+      ],
+      "shared_with": [
+        "GER.churn_retention"
+      ],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_platform_architecture",
+      "subject": "NABM",
+      "concept": "Platform architecture framework (three layers)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Android (infra), Facebook (data), Uber/Craigslist (marketplace-community)",
+      "teaching_note": "Platforms have three layers in varying strengths: (1) Network/marketplace/community layer (connecting people/exchange — Facebook, eBay); (2) Infrastructure layer (where partners build value — Android dev platform 'heavy touch' vs Instagram 'light touch'); (3) Data layer (matching/relevance — simple geo-matching for Uber vs continuous real-time data for Google Maps/Fitbit). Three configurations follow from which layer dominates: marketplace/community platforms (Uber, Reddit, Craigslist), infrastructure platforms (Android, WordPress), and data platforms (Facebook feed, Google Maps, IoT).",
+      "distractors": [
+        {
+          "wrong": "Data platform",
+          "why": "WordPress is light on data; its strength is the build/infrastructure layer"
+        },
+        {
+          "wrong": "Marketplace-community platform",
+          "why": "its community/marketplace layer is thin; it is infrastructure-dominant"
+        }
+      ],
+      "sample_question": "WordPress provides the tools to build blogs but has little community or data layer. In the three-layer framework it is best classed as a ____ platform.",
+      "failure_mode": "Forcing every platform into one type — most have all three layers, but one usually dominates and defines the configuration.",
+      "source_ref": "NABM/M2/C12",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_model"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_platform_launch",
+      "subject": "NABM",
+      "concept": "Launching a platform — the chicken-and-egg problem",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Amazon (rabbit), PayPal/eBay & JustDial (piggyback), Google/Adobe (seed), Facebook (micro-market)",
+      "teaching_note": "Platforms have a two-sided cold-start: neither side joins without the other. Platforms use PULL not push, and four strategies solve it: (1) Follow-the-rabbit — prove the model on your own pipeline first, then open to third parties (Amazon retail→Marketplace; Huffington Post paid editors first); (2) Piggyback — bring users from another platform (PayPal on eBay; JustDial off Yellow Pages); (3) Seed the platform — spend money to populate one side (Google's $5M Android app prize; Adobe free PDF reader); (4) Micro-market — start with one tight segment then expand (Facebook: Harvard→universities→public).",
+      "distractors": [
+        {
+          "wrong": "Piggyback strategy",
+          "why": "piggyback borrows users from another platform; Facebook grew segment-by-segment from scratch"
+        },
+        {
+          "wrong": "Seeding strategy",
+          "why": "seeding pays to populate a side; Facebook used tight micro-markets, not payments"
+        }
+      ],
+      "sample_question": "Facebook launched only at Harvard, perfected it, then expanded to other universities and finally the public. Which platform-launch strategy is this?",
+      "failure_mode": "Confusing the four strategies — micro-market (one segment first) vs piggyback (borrow another platform's users) vs seeding (pay to populate a side).",
+      "source_ref": "NABM/M2/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_model"
+      ],
+      "connects_to": [
+        "nabm_platform_monetization",
+        "nabm_practo_seeding",
+        "nabm_airbnb_growth"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_platform_monetization",
+      "subject": "NABM",
+      "concept": "Platform monetisation & whom to charge",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Swiggy 23% transaction fee, Naukri/LinkedIn access charges, LinkedIn Premium",
+      "teaching_note": "Ways to monetise: (1) transaction fee (fixed or % — Swiggy ~23% of order value); (2) charge for access (Naukri/LinkedIn charge recruiters; consumers free); (3) charge for enhanced access (LinkedIn Premium, dating-app boosts); plus advertising (third party pays). The hard question is WHOM to charge — usually the side feeling the pain/constraint (in a hot property market sellers pay; in a dull market landlords/sellers pay to attract scarce buyers).",
+      "distractors": [
+        {
+          "wrong": "Transaction fee on each sale",
+          "why": "no per-transaction cut is taken here; access to the other side is sold via subscription"
+        },
+        {
+          "wrong": "Enhanced-access upsell",
+          "why": "the base access itself is paywalled for companies, not just premium add-ons"
+        }
+      ],
+      "sample_question": "On a job platform, basic profiles are free for job-seekers but companies pay to view resumes and post jobs. Which monetisation approach is this?",
+      "failure_mode": "Assuming the platform always charges the buyer — it charges the side that benefits most / feels the constraint, which varies by market.",
+      "source_ref": "NABM/M2/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_launch"
+      ],
+      "connects_to": [
+        "nabm_disintermediation",
+        "nabm_zomato_economics"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_disintermediation",
+      "subject": "NABM",
+      "concept": "Disintermediation / platform leakage",
+      "formula": null,
+      "variables": {},
+      "context_tag": "platform_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Urban Company plumber leakage; Amazon/Swiggy retention; Airbnb info-control",
+      "teaching_note": "Disintermediation (platform leakage) is when buyers and sellers, once matched, transact OFF-platform to avoid the fee — destroying platform revenue (acute for Urban Company: a customer who meets a plumber can rehire him directly). Platforms reduce it by adding value (Amazon fulfilment/logistics, Swiggy delivery), withholding direct contact, or making in-platform transaction more convenient/safe (Airbnb gives enough info to commit without leaking). Low leakage signals users value the platform.",
+      "distractors": [
+        {
+          "wrong": "Churn",
+          "why": "churn is users leaving the platform; disintermediation is matched parties transacting off-platform"
+        },
+        {
+          "wrong": "Negative network effect",
+          "why": "leakage is fee-avoidance, not value falling as users grow"
+        }
+      ],
+      "sample_question": "After Urban Company connects a customer with a carpenter, they arrange the next job privately and the platform earns nothing. This problem is called ____.",
+      "failure_mode": "Confusing disintermediation (matched parties leave the platform) with churn (users stop using the platform entirely).",
+      "source_ref": "NABM/M2/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_monetization"
+      ],
+      "connects_to": [
+        "nabm_urban_company",
+        "nabm_marketplace_risks"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_marketplace_types",
+      "subject": "NABM",
+      "concept": "Platforms & marketplaces — C2C / B2C / B2B",
+      "formula": null,
+      "variables": {},
+      "context_tag": "marketplace",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Marketplace",
+      "stage_in_funnel": null,
+      "example_from_source": "eBay/OLX (C2C), Amazon/Swiggy (B2C), Alibaba/Upwork (B2B)",
+      "teaching_note": "Marketplaces are multi-sided markets with network effects and data-driven decisions, in three types by who transacts: C2C (consumer↔consumer: eBay, OLX, Airbnb, Etsy), B2C (business→consumer: Amazon, Swiggy, Netflix), and B2B (business↔business: Alibaba, Salesforce, Upwork). Value to buyers: lower transaction/search cost, market efficiency (reviews/comparison), access to new markets. Value to sellers: expanded reach, lower marketing/distribution cost, network-effect customer acquisition.",
+      "distractors": [
+        {
+          "wrong": "B2C marketplace",
+          "why": "B2C is business-to-consumer; Alibaba connects businesses to businesses"
+        },
+        {
+          "wrong": "C2C marketplace",
+          "why": "C2C connects individual consumers, not businesses"
+        }
+      ],
+      "sample_question": "Alibaba connects suppliers and buyers who are both businesses. Which marketplace type is this?",
+      "failure_mode": "Misclassifying by who the participants are — B2B (business↔business) vs B2C (business→consumer) vs C2C.",
+      "source_ref": "NABM/M3/C01",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_model"
+      ],
+      "connects_to": [
+        "nabm_b2b_marketplace",
+        "nabm_marketplace_revenue",
+        "nabm_c2c"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_marketplace_revenue",
+      "subject": "NABM",
+      "concept": "Marketplace revenue generation & dynamic pricing",
+      "formula": null,
+      "variables": {},
+      "context_tag": "marketplace",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Marketplace",
+      "stage_in_funnel": null,
+      "example_from_source": "Airbnb dynamic host pricing, Uber surge, Amazon multi-stream revenue",
+      "teaching_note": "Marketplaces earn via transaction/commission fees, subscriptions and advertising, and often use DYNAMIC pricing — adjusting price to real-time demand/supply (Airbnb host pricing by demand/season; Uber surge pricing; Amazon mix of fixed seller prices + fulfilment fees + Prime + ad revenue). Customer acquisition leans on network effects, referrals and targeted marketing.",
+      "distractors": [
+        {
+          "wrong": "Fixed pricing",
+          "why": "fixed pricing does not change with demand; surge is dynamic pricing"
+        },
+        {
+          "wrong": "Freemium pricing",
+          "why": "freemium is free-tier-plus-paid software, not demand-responsive transaction pricing"
+        }
+      ],
+      "sample_question": "Uber raises fares automatically when demand outstrips supply in an area. This pricing approach is called ____.",
+      "failure_mode": "Calling surge/seasonal price changes 'fixed pricing' — dynamic pricing responds to real-time demand/supply.",
+      "source_ref": "NABM/M3/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_marketplace_types"
+      ],
+      "connects_to": [
+        "nabm_data_driven"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_data_driven",
+      "subject": "NABM",
+      "concept": "Data-driven decision-making on platforms",
+      "formula": null,
+      "variables": {},
+      "context_tag": "marketplace",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Uber surge, Netflix/Big Basket recommendations, Amazon forecasting",
+      "teaching_note": "Platforms leverage behavioural data for three benefits: price optimisation (Uber surge balances supply/demand and maximises revenue), customer experience (Netflix/Big Basket personalised recommendations raise engagement and reduce wastage on perishables), and operational efficiency (Amazon demand forecasting, inventory and logistics). Data is a core platform growth driver.",
+      "distractors": [
+        {
+          "wrong": "supply-side economies of scale",
+          "why": "that is a pipeline cost lever, not data-driven personalisation"
+        },
+        {
+          "wrong": "network effects",
+          "why": "recommendations come from data analytics, distinct from the user-count network effect"
+        }
+      ],
+      "sample_question": "Netflix using viewing history to personalise recommendations and raise engagement is an example of data-driven ____.",
+      "failure_mode": "Treating data only as 'price optimisation' — it also drives customer experience and operations.",
+      "source_ref": "NABM/M3/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_growth"
+      ],
+      "connects_to": [
+        "nabm_marketplace_revenue"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_marketplace_risks",
+      "subject": "NABM",
+      "concept": "Marketplace challenges & risks",
+      "formula": null,
+      "variables": {},
+      "context_tag": "marketplace",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Marketplace",
+      "stage_in_funnel": null,
+      "example_from_source": "Uber regulatory, Airbnb trust & safety, Amazon/Swiggy anti-disintermediation",
+      "teaching_note": "Three recurring risks: (1) regulatory/compliance (Uber licensing, data privacy, labour classification, taxation); (2) trust & safety (fraud, verification, dispute resolution — Airbnb identity verification + secure payment + reviews); (3) disintermediation (buyers/sellers transacting off-platform). Mitigation = value-add services, verification systems and retention incentives.",
+      "distractors": [
+        {
+          "wrong": "Regulatory compliance",
+          "why": "licensing/tax/labour are regulatory; verification & reviews address trust & safety"
+        },
+        {
+          "wrong": "Supply-side scale",
+          "why": "not a risk category here; the three risks are regulatory, trust/safety, disintermediation"
+        }
+      ],
+      "sample_question": "Airbnb's host/guest identity verification, secure payments and review system primarily address which marketplace risk?",
+      "failure_mode": "Conflating the three risk categories — verification/reviews target trust & safety, not regulatory compliance.",
+      "source_ref": "NABM/M3/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_marketplace_types"
+      ],
+      "connects_to": [
+        "nabm_disintermediation"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_b2b_marketplace",
+      "subject": "NABM",
+      "concept": "B2B marketplaces",
+      "formula": null,
+      "variables": {},
+      "context_tag": "marketplace",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Marketplace",
+      "stage_in_funnel": null,
+      "example_from_source": "Alibaba, IndiaMART, Udaan, Amazon Business",
+      "teaching_note": "Online platforms where businesses buy/sell products/services and collaborate — the digital equivalent of an ancient trading hub, transcending geography (Alibaba, IndiaMART, Udaan, Amazon Business). They replace complex, slow B2B procurement with efficient discovery, comparison and transaction. Growth drivers: digital transformation, wider connectivity/access, streamlined procurement, product/supplier diversity, trust & transparency (verified profiles, ratings, secure payment), and value-added services (logistics, financing).",
+      "distractors": [
+        {
+          "wrong": "A consumer marketplace like Amazon.in",
+          "why": "raw-material procurement at scale is a B2B need, served by IndiaMART/Udaan, not consumer retail"
+        },
+        {
+          "wrong": "An OTA like OYO",
+          "why": "hospitality booking is unrelated to industrial procurement"
+        }
+      ],
+      "sample_question": "Tata Motors wants to streamline buying raw materials from many verified suppliers online. Which type of platform would it most likely use?",
+      "failure_mode": "Recommending a B2C platform (Amazon consumer, OYO) for a business-procurement need; B2B platforms like IndiaMART fit.",
+      "source_ref": "NABM/M3/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_marketplace_types"
+      ],
+      "connects_to": [
+        "nabm_b2b_metrics",
+        "nabm_indiamart"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_b2b_metrics",
+      "subject": "NABM",
+      "concept": "B2B marketplace key metrics",
+      "formula": "GMV = total value of goods/services transacted on the platform",
+      "variables": {},
+      "context_tag": "marketplace",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Marketplace",
+      "stage_in_funnel": null,
+      "example_from_source": "GMV, active users, conversion rate, repeat business, AOV",
+      "teaching_note": "Top metrics for a B2B marketplace: gross merchandise value (GMV — total value transacted, the headline scale metric), active users (buyers & sellers transacting), conversion rate (visitors→purchasers), repeat business / customer loyalty, and average order value. Underpinned by liquidity. Strong sectors: manufacturing/industrial goods, construction/real estate, food, healthcare procurement, wholesale-retail.",
+      "distractors": [
+        {
+          "wrong": "Sales per square foot",
+          "why": "a physical-retail metric, irrelevant to an online B2B marketplace"
+        },
+        {
+          "wrong": "Platform revenue",
+          "why": "revenue is GMV x take rate; GMV itself is the gross transaction scale"
+        }
+      ],
+      "sample_question": "For a B2B marketplace, the single metric that best captures the total scale of transactions flowing through the platform is ____.",
+      "failure_mode": "Confusing GMV (total transaction value) with revenue (only the take-rate slice the platform keeps).",
+      "source_ref": "NABM/M3/C12",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_b2b_marketplace"
+      ],
+      "connects_to": [
+        "nabm_newage_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_indiamart",
+      "subject": "NABM",
+      "concept": "IndiaMART — B2B marketplace deep dive",
+      "formula": null,
+      "variables": {},
+      "context_tag": "marketplace",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Marketplace",
+      "stage_in_funnel": null,
+      "example_from_source": "IndiaMART FY23 ~Rs1000cr rev, RFQ + conversational commerce, freemium subscription",
+      "teaching_note": "India's largest B2B marketplace (FY23 ~₹1,000 cr revenue, ~₹284 cr net profit, negative working capital). Two-way discovery with AI/behaviour-driven matchmaking across ~95,000 categories. Revenue is a FREEMIUM, largely subscription model: free for suppliers, who convert to paid subscriptions (web storefront, priority listing, RFQ buy-leads, cloud telephony, Lead Manager CRM). Core mechanism = RFQ + conversational commerce: buyer posts a Request-for-Quotation → AI matchmaking picks likely suppliers → suppliers respond → negotiation via CRM/WhatsApp/chat → deal closed.",
+      "distractors": [
+        {
+          "wrong": "Take-rate commission on each order",
+          "why": "IndiaMART earns via paid SUBSCRIPTIONS, not a per-transaction commission like Swiggy"
+        },
+        {
+          "wrong": "Pure advertising model",
+          "why": "ads are minor; the core is supplier freemium-to-subscription + RFQ lead-gen"
+        }
+      ],
+      "sample_question": "On IndiaMART a buyer submits a Request-for-Quotation, an AI algorithm routes it to likely suppliers who then respond and negotiate via chat. This end-to-end mechanism is called ____.",
+      "failure_mode": "Calling IndiaMART's revenue a 'take rate/commission' model — it is freemium/subscription (suppliers pay to subscribe), not per-transaction commission.",
+      "source_ref": "NABM/M3/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_b2b_marketplace"
+      ],
+      "connects_to": [
+        "nabm_freemium",
+        "nabm_b2b_metrics"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_flywheel",
+      "subject": "NABM",
+      "concept": "Flywheel effect",
+      "formula": null,
+      "variables": {},
+      "context_tag": "marketplace",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Platform",
+      "stage_in_funnel": null,
+      "example_from_source": "Nykaa & Zomato flywheels",
+      "teaching_note": "A self-reinforcing positive-feedback loop that accelerates platform growth: e.g. Nykaa (brand partnerships→wider assortment→more users→reviews/engagement→more brands→revenue→reinvestment) and Zomato (more users→more orders→more restaurants→more variety→more users). Distinct but related to demand economies of scale: the flywheel is the compounding growth loop built once initial momentum exists.",
+      "distractors": [
+        {
+          "wrong": "Negative network effect",
+          "why": "the flywheel is a positive compounding loop, not value-destroying congestion"
+        },
+        {
+          "wrong": "Supply-side economies of scale",
+          "why": "the flywheel is demand-side and self-reinforcing, not a pipeline cost lever"
+        }
+      ],
+      "sample_question": "On Nykaa, more brand partnerships widen assortment, attracting more users whose reviews attract still more brands. This compounding loop is called the ____.",
+      "failure_mode": "Treating the flywheel as a one-off effect rather than a compounding loop where each turn powers the next.",
+      "source_ref": "NABM/M3/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_demand_eos"
+      ],
+      "connects_to": [
+        "nabm_airbnb_growth"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_airbnb_growth",
+      "subject": "NABM",
+      "concept": "Airbnb — solving liquidity via micro-markets",
+      "formula": null,
+      "variables": {},
+      "context_tag": "marketplace",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Marketplace",
+      "stage_in_funnel": null,
+      "example_from_source": "Airbnb event-driven micro-markets, host-home photography",
+      "teaching_note": "Airbnb kickstarted its flywheel by targeting MICRO-MARKETS with constrained, expensive hotel supply (cities hosting big events — conventions, World Cup). It offered cheaper, more personal/differentiated inventory (homes vs sterile hotel rooms), went to hosts' homes to photograph listings, and added social/trust features. More guests→more demand→more hosts→more supply, starting the network effect.",
+      "distractors": [
+        {
+          "wrong": "Seeding by paying hosts",
+          "why": "Airbnb targeted constrained micro-markets; it did not primarily pay to seed supply"
+        },
+        {
+          "wrong": "Piggyback off another platform",
+          "why": "Airbnb's signature move was micro-markets, not borrowing another platform's users (though it also used Craigslist)"
+        }
+      ],
+      "sample_question": "Airbnb first focused on cities with sold-out events and scarce, pricey hotel rooms to ignite supply and demand together. This launch tactic is the ____ strategy.",
+      "failure_mode": "Generic 'they advertised a lot' answers — the specific tactic was targeting supply-constrained micro-markets to solve the chicken-and-egg problem.",
+      "source_ref": "NABM/M3/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_launch",
+        "nabm_flywheel"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_saas_model",
+      "subject": "NABM",
+      "concept": "SaaS business model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "saas",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "SaaS",
+      "stage_in_funnel": null,
+      "example_from_source": "Salesforce, Zoho, Freshworks, Zoom, Office 365",
+      "teaching_note": "Software-as-a-Service: applications hosted by the provider and accessed over the internet on a subscription, removing the customer's need to install/maintain software or infrastructure (capex→opex). Key traits: multi-tenancy (shared infrastructure), subscription/pay-as-you-go pricing, centralised updates (fix once → all customers get it), accessibility anywhere, continuous innovation. Customers love low upfront cost, scalability and uptime; investors love predictable recurring revenue. Concerns: data security/privacy and response time for latency-critical apps.",
+      "distractors": [
+        {
+          "wrong": "On-premise licence (capex)",
+          "why": "SaaS shifts capex to a recurring opex subscription and is vendor-hosted"
+        },
+        {
+          "wrong": "Razor-blade model",
+          "why": "SaaS sells recurring access to software, not a cheap durable plus consumables"
+        }
+      ],
+      "sample_question": "A bakery accesses inventory/delivery software over the internet on a monthly fee, with the vendor handling all hosting and updates. Which model is this and what is its signature cost shift?",
+      "failure_mode": "Confusing SaaS metrics: 'utilisation rate' is NOT a SaaS metric (it's leasing). SaaS turns on MRR/ARR, churn, NDR.",
+      "source_ref": "NABM/M4/C01",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_subscription"
+      ],
+      "connects_to": [
+        "nabm_saas_horizontal_vertical",
+        "nabm_saas_pricing",
+        "nabm_saas_metrics",
+        "nabm_plg"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_saas_horizontal_vertical",
+      "subject": "NABM",
+      "concept": "Horizontal vs vertical SaaS",
+      "formula": null,
+      "variables": {},
+      "context_tag": "saas",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "SaaS",
+      "stage_in_funnel": null,
+      "example_from_source": "Salesforce/Slack (horizontal); Veeva, Guidewire, Zenoti (vertical)",
+      "teaching_note": "Horizontal SaaS serves any industry with a general function (Salesforce/Freshworks CRM, Office 365, Slack). Vertical SaaS targets one sector deeply (Veeva for pharma, Guidewire for insurance, Zenoti for salons, Textura for construction). Vertical SaaS advantages: niche 'winner-takes-most', lower CAC (focused, homogeneous segment), high capital efficiency, deep domain features, higher retention/switching costs and strong cross-sell/upsell.",
+      "distractors": [
+        {
+          "wrong": "Horizontal SaaS",
+          "why": "horizontal serves all industries; pharma-only software is vertical SaaS"
+        },
+        {
+          "wrong": "Product-led growth",
+          "why": "PLG is a go-to-market motion, not the horizontal/vertical classification"
+        }
+      ],
+      "sample_question": "Veeva builds software exclusively for pharmaceutical companies. Is this horizontal or vertical SaaS, and name one advantage of that choice.",
+      "failure_mode": "Calling industry-specific software 'horizontal' — horizontal = any industry; vertical = one sector deep.",
+      "source_ref": "NABM/M4/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_saas_model"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_saas_pricing",
+      "subject": "NABM",
+      "concept": "SaaS pricing models",
+      "formula": null,
+      "variables": {},
+      "context_tag": "saas",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "SaaS",
+      "stage_in_funnel": null,
+      "example_from_source": "AWS/Twilio usage-based, Salesforce value-based, Slack per-user, Canva tiered",
+      "teaching_note": "Common SaaS pricing: freemium (basic free, pay for advanced — Dropbox, Gmail), pay-as-you-go / usage-based (AWS, Twilio per API call), value-based (priced on perceived value — Salesforce, HubSpot by contacts), tiered (multiple plans — Canva free/pro/enterprise, Zoom), feature-based (Adobe), per-user/per-seat (Slack, Microsoft 365), and contract-based (discounts for longer commitments). Pricing must be matched to how value is delivered.",
+      "distractors": [
+        {
+          "wrong": "Per-seat pricing",
+          "why": "per-seat charges per user; AWS charges by resources consumed (usage-based)"
+        },
+        {
+          "wrong": "Flat-rate pricing",
+          "why": "flat rate is one fixed fee; AWS scales with consumption"
+        }
+      ],
+      "sample_question": "AWS charges based on the compute, storage and data transfer a customer actually consumes. Which SaaS pricing model is this?",
+      "failure_mode": "Confusing usage-based (pay for consumption) with per-seat (pay per user) or tiered (pick a plan).",
+      "source_ref": "NABM/M4/C03A",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_saas_model"
+      ],
+      "connects_to": [
+        "nabm_freemium"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_saas_metrics",
+      "subject": "NABM",
+      "concept": "SaaS metrics & Net Dollar Retention",
+      "formula": "NDR = (starting MRR + expansion - contraction - churn) / starting MRR ; ARR = MRR x 12",
+      "variables": {
+        "expansion": "upgrades/added modules",
+        "contraction": "downgrades",
+        "churn": "revenue from lost customers"
+      },
+      "context_tag": "saas",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "SaaS",
+      "stage_in_funnel": null,
+      "example_from_source": "($6000+3000-400-500)/6000 = 135%; healthy >100%, great >120%",
+      "teaching_note": "SaaS is recurring-revenue, so headline metrics are MRR and ARR (ARR = MRR x 12), churn rate, CAC, CLV and especially Net Dollar Retention (NDR / net revenue retention) = (starting MRR + expansion − contraction − churn) / starting MRR. NDR > 100% means existing customers grow faster than they churn; >120% is excellent. Worked example: ($6,000 + $3,000 − $400 − $500)/$6,000 = $8,100/$6,000 = 135%.",
+      "distractors": [
+        {
+          "wrong": "150% (= (6000+3000)/6000)",
+          "why": "this ignores the $400 contraction and $500 churn that must be subtracted"
+        },
+        {
+          "wrong": "58% (= 3500/6000)",
+          "why": "miscomputes; correct numerator is 6000+3000-400-500 = 8100, giving 135%"
+        }
+      ],
+      "sample_question": "A SaaS firm starts the month at $6,000 MRR, adds $3,000 in upgrades, loses $400 to downgrades and $500 to churn. What is its Net Dollar Retention?",
+      "failure_mode": "Forgetting to SUBTRACT contraction and churn, or dividing by ending instead of starting MRR.",
+      "source_ref": "NABM/M4/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_saas_model"
+      ],
+      "connects_to": [
+        "nabm_metrics_calculations",
+        "nabm_newage_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_saas_lifecycle",
+      "subject": "NABM",
+      "concept": "SaaS customer lifecycle",
+      "formula": null,
+      "variables": {},
+      "context_tag": "saas",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "SaaS",
+      "stage_in_funnel": null,
+      "example_from_source": "Tally upsell of GST/inventory modules; churn analysis & intervention",
+      "teaching_note": "Stages: acquisition (SEO, content, ads, lead-gen) → onboarding (training, tutorials, dedicated support so early experience is good) → customer success (proactive engagement on the customer's OUTCOMES, distinct from sales) → churn management & retention (churn analysis to spot at-risk users early, then intervene with offers/communication) → upselling/cross-selling (higher tiers, new modules, bundles) → feedback & continuous improvement (NPS, roadmap, agile releases). Customer success ≠ sales: it ensures the customer achieves value after the sale.",
+      "distractors": [
+        {
+          "wrong": "Sales",
+          "why": "sales closes the deal; customer success ensures post-sale value/outcomes"
+        },
+        {
+          "wrong": "Onboarding",
+          "why": "onboarding is the initial setup; proactive value-realisation later is customer success"
+        }
+      ],
+      "sample_question": "A SaaS firm proactively reaches out to a customer it sees is under-using key features, to help them get value before they churn. Which lifecycle function is this?",
+      "failure_mode": "Conflating customer SUCCESS (post-sale, outcome-focused) with sales or onboarding.",
+      "source_ref": "NABM/M4/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_saas_model"
+      ],
+      "connects_to": [
+        "nabm_saas_sales"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_saas_sales",
+      "subject": "NABM",
+      "concept": "SaaS sales models — low-touch vs high-touch",
+      "formula": null,
+      "variables": {},
+      "context_tag": "saas",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "SaaS",
+      "stage_in_funnel": null,
+      "example_from_source": "Basecamp/Atlassian (low-touch ~$100-5k); Salesforce (high-touch $100k-$1M)",
+      "teaching_note": "The sales motion must match the product/price. LOW-TOUCH: little human interaction — website, free trial, self-serve onboarding, customer-success-led conversion; typical ACV ~$100–$5,000 (Basecamp, Atlassian). HIGH-TOUCH: human-intensive tiered sales org (SDRs build pipeline, AEs close) for complex/expensive B2B; ACV ~$100k–$1M (Salesforce; vertical SaaS for niche industries). A mismatch between sales model and product/price causes failure.",
+      "distractors": [
+        {
+          "wrong": "Low-touch self-serve",
+          "why": "self-serve fits low ACV; six-figure enterprise deals need a high-touch sales org"
+        },
+        {
+          "wrong": "Product-led growth only",
+          "why": "PLG suits low-touch; large complex deals still need high-touch selling"
+        }
+      ],
+      "sample_question": "Enterprise software with a six-figure annual contract value is usually sold through which sales model?",
+      "failure_mode": "Mismatching motion to price — selling a cheap self-serve product with an expensive high-touch sales team (or vice versa).",
+      "source_ref": "NABM/M4/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_saas_lifecycle"
+      ],
+      "connects_to": [
+        "nabm_plg"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_plg",
+      "subject": "NABM",
+      "concept": "Product-Led Growth (PLG)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "saas",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "SaaS",
+      "stage_in_funnel": null,
+      "example_from_source": "Slack, Calendly, Datadog; deliver value before capturing",
+      "teaching_note": "A go-to-market strategy where the PRODUCT itself drives acquisition, conversion and expansion — discovered and championed by end-users, not sold top-down (Slack, Calendly, Datadog). Three pillars: design for the end-user; deliver value BEFORE capturing it (free/usage-based, customer success before sales); and invest product+go-to-market intent together. Often viral (Calendly invites pull in new users; Slack spreads as team size grows).",
+      "distractors": [
+        {
+          "wrong": "High-touch enterprise sales",
+          "why": "PLG is bottom-up, user-led and self-serve, the opposite of a top-down sales motion"
+        },
+        {
+          "wrong": "Razor-blade model",
+          "why": "PLG is a growth strategy, not a cheap-durable + consumable pricing structure"
+        }
+      ],
+      "sample_question": "Calendly grows because every meeting invite exposes a new person to the tool, who then signs up. This growth strategy is called ____.",
+      "failure_mode": "Confusing PLG (product/user-driven, often viral, bottom-up) with high-touch enterprise sales.",
+      "source_ref": "NABM/M4/C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_saas_model"
+      ],
+      "connects_to": [
+        "nabm_saas_sales"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_fintech_sector",
+      "subject": "NABM",
+      "concept": "FinTech sector & drivers",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fintech",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "FinTech",
+      "stage_in_funnel": null,
+      "example_from_source": "Paytm, ZestMoney, LendingKart, India Stack (Aadhaar/UPI)",
+      "teaching_note": "FinTech = technology-driven disruption of financial services. Four drivers: (1) technological advances (mobile, AI/ML for credit/fraud, blockchain for payments — Paytm, ZestMoney, Ripple); (2) changing customer expectations (convenience, personalisation, seamless digital experience — neobanks); (3) regulatory changes (data-sharing/account aggregators, RBI regulatory sandbox); (4) increased data access (alternative-data credit scoring — LendingKart). India's huge market, deep profit pools, weak-NPS incumbents and India Stack (Aadhaar/eKYC/UPI/account aggregator) make it especially fertile.",
+      "distractors": [
+        {
+          "wrong": "Supply-side economies of scale",
+          "why": "that is a pipeline lever; this is data-access / alternative-data credit scoring"
+        },
+        {
+          "wrong": "Razor-blade pricing",
+          "why": "unrelated; alternative-data underwriting is a data/technology driver"
+        }
+      ],
+      "sample_question": "A lender uses social-media and digital-transaction data (not just credit history) to assess creditworthiness and approve loans instantly. Which FinTech driver does this rely on?",
+      "failure_mode": "Treating FinTech as one monolith; it spans payments, lending, insurtech, wealth — each with distinct models.",
+      "source_ref": "NABM/M4/C10",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_fintech_segments",
+        "nabm_neobank",
+        "nabm_lending_pillars"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_fintech_segments",
+      "subject": "NABM",
+      "concept": "FinTech segments",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fintech",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "FinTech",
+      "stage_in_funnel": null,
+      "example_from_source": "PhonePe/Paytm (payments), Zerodha (broking), Policybazaar (insurance), Jupiter (neobank)",
+      "teaching_note": "FinTech captures value across segments: PAYMENTS (UPI apps PhonePe/GPay/Paytm; POS Pine Labs/BharatPe; gateways Razorpay/PayU); LENDING (LendingKart, EarlySalary/BNPL, kredX invoice discounting); WEALTH & BROKING (Zerodha, Groww, robo-advisors); INSURANCE/InsurTech (Policybazaar, Acko, Digit); BANKING/neobanks (Jupiter, Niyo, Open); infrastructure (Zeta). Revenue varies by segment: transaction/interchange fees (payments), interest income + fees (lending), distribution commission + advisory fees (wealth), premium + distribution (insurance).",
+      "distractors": [
+        {
+          "wrong": "Neobank",
+          "why": "neobanks offer digital banking accounts; Razorpay/PayU are payment gateways/processors"
+        },
+        {
+          "wrong": "Wealth management",
+          "why": "wealth is investing/advisory; gateways process merchant payments"
+        }
+      ],
+      "sample_question": "Razorpay and PayU sit between an online merchant and the banking rails to process card/UPI/wallet payments. Which FinTech segment are they in?",
+      "failure_mode": "Mixing segments — a payment gateway is not a neobank or a lending platform.",
+      "source_ref": "NABM/M4/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_fintech_sector"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_neobank",
+      "subject": "NABM",
+      "concept": "Neobanks (digital banks)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fintech",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "FinTech",
+      "stage_in_funnel": null,
+      "example_from_source": "Jupiter, Niyo, Open; Revolut, N26, Chime",
+      "teaching_note": "Digital-only banks with NO physical branches, partnering with licensed banks for the underlying licence/infrastructure while offering superior digital onboarding, personalised tools and value-added services (India: Jupiter, Niyo, Open; global: Revolut, N26, Chime). Revenue: transaction/interchange fees, subscription/premium memberships, partnership/referral commissions and cross-selling financial products. Edge: lower cost (no branches), customer-centric, agile.",
+      "distractors": [
+        {
+          "wrong": "A traditional private bank",
+          "why": "traditional banks hold their own licence and run branches; neobanks are branchless and partner for the licence"
+        },
+        {
+          "wrong": "A payment gateway",
+          "why": "gateways process merchant payments; neobanks offer consumer/SME banking experiences"
+        }
+      ],
+      "sample_question": "A company offers a slick mobile banking app with no branches, riding on a partner bank's licence. What is it called?",
+      "failure_mode": "Calling a neobank a 'traditional bank with an app' — neobanks have no branches and usually no own banking licence (they partner).",
+      "source_ref": "NABM/M4/C14",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_fintech_segments"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_lending_pillars",
+      "subject": "NABM",
+      "concept": "Lending business model — four pillars",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fintech",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "FinTech",
+      "stage_in_funnel": null,
+      "example_from_source": "LendingKart, EarlySalary/BNPL, kredX invoice discounting; 4 pillars",
+      "teaching_note": "Digital lending rests on four pillars: (1) sourcing (finding borrowers), (2) underwriting (pricing credit risk correctly — the core, increasingly via data/algorithms), (3) collections, and (4) a strong balance sheet to fund loans at scale. Tech is critical for fast, accurate, low-cost credit decisions. Sub-models: P2P lending, BNPL (LazyPay/EarlySalary), SME lending (LendingKart, Oxyzo), invoice discounting (kredX). Key risk: credit-risk assessment on thin digital data.",
+      "distractors": [
+        {
+          "wrong": "Sourcing",
+          "why": "sourcing finds borrowers; pricing their risk is underwriting"
+        },
+        {
+          "wrong": "Collections",
+          "why": "collections recovers dues; assessing/pricing risk upfront is underwriting"
+        }
+      ],
+      "sample_question": "In a digital-lending model, correctly pricing the risk of each borrower — increasingly via data and algorithms — is which of the four pillars?",
+      "failure_mode": "Treating lending as just 'giving loans' and ignoring underwriting/collections/balance-sheet as the real determinants of success.",
+      "source_ref": "NABM/M4/C17",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_fintech_segments"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_insurtech",
+      "subject": "NABM",
+      "concept": "InsurTech",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fintech",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "FinTech",
+      "stage_in_funnel": null,
+      "example_from_source": "Acko, Digit, Policybazaar, Lemonade, Oscar Health; usage-based/telematics",
+      "teaching_note": "Technology-driven insurance for an under-penetrated market: digital insurers (Acko, Digit) and online marketplaces (Policybazaar, Plum). Models: usage-based insurance (telematics prices premiums on actual behaviour — pay-how-you-drive), peer-to-peer/pooled insurance, and fully digital insurers (end-to-end digital purchase + claims). Data/tech enables personalisation, faster digital claims, and AI fraud detection. Low CAC + strong underwriting are critical.",
+      "distractors": [
+        {
+          "wrong": "Peer-to-peer pooled insurance",
+          "why": "P2P pools premiums across a community; telematics-priced premiums are usage-based insurance"
+        },
+        {
+          "wrong": "A pure comparison marketplace",
+          "why": "Policybazaar compares policies; pricing on driving data is usage-based insurance"
+        }
+      ],
+      "sample_question": "An auto insurer fits a telematics device to price each driver's premium on their actual driving behaviour. Which InsurTech model is this?",
+      "failure_mode": "Assuming all InsurTech is just 'insurance comparison sites' — usage-based, P2P and full digital insurers are distinct models.",
+      "source_ref": "NABM/M4/C18",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_fintech_segments"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_aggregator_vs_ondemand",
+      "subject": "NABM",
+      "concept": "Aggregator vs on-demand — the relationship",
+      "formula": null,
+      "variables": {},
+      "context_tag": "aggregator",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Aggregator",
+      "stage_in_funnel": null,
+      "example_from_source": "Swiggy/Zomato = aggregator + on-demand; Uber = both",
+      "teaching_note": "Overlapping but distinct. AGGREGATORS bring many providers under one brand to streamline DISCOVERY and COMPARISON; ON-DEMAND platforms focus on IMMEDIATE fulfilment of a request. Many firms are both (Swiggy/Zomato aggregate restaurants AND deliver on-demand; Uber aggregates drivers AND fulfils rides instantly). But not all aggregators fulfil instantly, and not all on-demand platforms aggregate many providers.",
+      "distractors": [
+        {
+          "wrong": "Pure aggregator only",
+          "why": "Swiggy also fulfils instantly (delivery), so it is also on-demand"
+        },
+        {
+          "wrong": "Pure on-demand only",
+          "why": "Swiggy also aggregates many restaurants for comparison, so it is also an aggregator"
+        }
+      ],
+      "sample_question": "Swiggy lets you choose among 50 local restaurants AND delivers within 30 minutes. How is this business model best classified?",
+      "failure_mode": "Treating aggregator and on-demand as identical, or as mutually exclusive — they are distinct concepts that often co-occur.",
+      "source_ref": "NABM/M5/C01",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_aggregator",
+        "nabm_on_demand"
+      ],
+      "connects_to": [
+        "nabm_zomato_economics",
+        "nabm_uber_asymptotic"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_zomato_economics",
+      "subject": "NABM",
+      "concept": "Zomato unit economics & take rate",
+      "formula": "Platform revenue ~= monthly transacting users x frequency x AOV x take rate + advertising",
+      "variables": {},
+      "context_tag": "aggregator",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Aggregator",
+      "stage_in_funnel": null,
+      "example_from_source": "Zomato ~25% take rate (industry 22-30%); operating leverage; Blinkit acquisition",
+      "teaching_note": "Food delivery (Swiggy/Zomato duopoly) runs on a take rate (commission) of ~22–30% of order value (Zomato ~25%). The order splits into items: food value (Zomato keeps its commission 1A, passes ~75% to the restaurant), delivery charge (to the delivery partner), packaging (to restaurant), tips (to delivery partner), plus restaurant advertising revenue to Zomato. Platform revenue ≈ monthly transacting users × frequency × average order value × take rate + advertising. Levers to grow revenue: raise AOV, raise take rate (hard — restaurant pushback), raise order frequency. Strong operating leverage + network effects.",
+      "distractors": [
+        {
+          "wrong": "Gross merchandise value",
+          "why": "GMV is the total order value; the take rate is the % slice the platform keeps"
+        },
+        {
+          "wrong": "Net dollar retention",
+          "why": "NDR is a SaaS recurring-revenue metric, not a food-delivery commission"
+        }
+      ],
+      "sample_question": "Zomato keeps roughly 25% of the food order value as its cut while passing the rest to the restaurant. This commission as a percentage of order value is called the ____.",
+      "failure_mode": "Confusing take rate (commission % the platform keeps) with GMV (total order value) or with the restaurant's share.",
+      "source_ref": "NABM/M5/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_aggregator_vs_ondemand"
+      ],
+      "connects_to": [
+        "nabm_platform_monetization",
+        "nabm_newage_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_uber_asymptotic",
+      "subject": "NABM",
+      "concept": "Uber liquidity network effect & asymptotic marketplace effect",
+      "formula": null,
+      "variables": {},
+      "context_tag": "on_demand",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "On-Demand",
+      "stage_in_funnel": null,
+      "example_from_source": "Uber liquidity loop; asymptotic marketplace effect; city-by-city network effects",
+      "teaching_note": "Uber's growth engine is the LIQUIDITY NETWORK EFFECT: more drivers → lower wait times and fares → more riders → higher driver earnings/less idle time → more drivers. But it suffers the ASYMPTOTIC MARKETPLACE EFFECT: network-effect benefits PLATEAU — cutting wait time 10→5 min helps, 5→3 helps less, 3→1 adds almost no rider value while drivers get fewer rides. So beyond a point more supply stops adding value (unlike Facebook). Network effects are also city-by-city (Bangalore liquidity doesn't help Mysore) and can even detract at peaks.",
+      "distractors": [
+        {
+          "wrong": "Negative network effect",
+          "why": "asymptotic means benefits plateau, not that added users reduce value"
+        },
+        {
+          "wrong": "Demand economies of scale (unbounded)",
+          "why": "the point is the cycle SATURATES; it is not unbounded growth"
+        }
+      ],
+      "sample_question": "On Uber, reducing rider wait time from 3 minutes to 1 minute adds almost no value while leaving drivers with fewer rides. This plateauing of network-effect benefits is called the ____.",
+      "failure_mode": "Assuming network effects grow without limit; in a marketplace like Uber they asymptote (and are local, city-by-city).",
+      "source_ref": "NABM/M5/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_liquidity",
+        "nabm_network_effects_types"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_urban_company",
+      "subject": "NABM",
+      "concept": "Urban Company — aggregator economics",
+      "formula": null,
+      "variables": {},
+      "context_tag": "aggregator",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Aggregator",
+      "stage_in_funnel": null,
+      "example_from_source": "Urban Company low-frequency services, small ticket -> small commission",
+      "teaching_note": "Urban Company aggregates verified home-service professionals (plumbing, beauty, repairs) and earns commission/take rate. Key metrics: platform LIQUIDITY (enough providers per category vs demand), and crucially CAC & LTV with RETENTION — but plumbing/electrical are LOW-FREQUENCY (needed once a year or two), so repeat bookings are few and lifetime value is hard to build. Also small ticket size → small commission (₹250 service × 10% = ₹25), unlike food delivery's higher frequency. Faces disintermediation, quality-control and provider-classification (employee vs contractor) challenges.",
+      "distractors": [
+        {
+          "wrong": "Because its take rate is zero",
+          "why": "it does charge commission; the issue is low repeat frequency, not zero take rate"
+        },
+        {
+          "wrong": "Because plumbing has no quality variation",
+          "why": "quality actually varies a lot; the LTV problem is low purchase frequency"
+        }
+      ],
+      "sample_question": "Why is customer lifetime value harder to build for Urban Company's plumbing service than for a food-delivery app?",
+      "failure_mode": "Assuming all aggregators have similar economics — low purchase FREQUENCY (plumbing) crushes LTV vs high-frequency food.",
+      "source_ref": "NABM/M5/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_aggregator",
+        "nabm_disintermediation"
+      ],
+      "connects_to": [
+        "nabm_newage_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_practo_seeding",
+      "subject": "NABM",
+      "concept": "Practo — seeding the marketplace",
+      "formula": null,
+      "variables": {},
+      "context_tag": "aggregator",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Aggregator",
+      "stage_in_funnel": null,
+      "example_from_source": "Practo free ERP to doctors -> seed marketplace -> monetise later",
+      "teaching_note": "Practo (healthcare aggregator) SEEDED one side of its marketplace by giving doctors FREE clinic-management/ERP software (appointments, records) with no initial monetisation — building adoption and the flywheel before charging. It later monetised via per-appointment fees, freemium subscriptions for providers, and surgery-discovery commissions. Classic 'seed one side by giving software free, then monetise additional features' play.",
+      "distractors": [
+        {
+          "wrong": "Generate immediate subscription revenue",
+          "why": "it was deliberately free at first; revenue came later"
+        },
+        {
+          "wrong": "Sell hardware to clinics",
+          "why": "the goal was to seed the doctor side of the marketplace, not sell hardware"
+        }
+      ],
+      "sample_question": "Practo originally gave doctors free clinic-management software. The primary strategic goal was to ____.",
+      "failure_mode": "Reading the free software as a charity/loss-leader with no strategy — it was seeding one side to kickstart the platform flywheel.",
+      "source_ref": "NABM/M5/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_launch",
+        "nabm_freemium"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_d2c_success_factors",
+      "subject": "NABM",
+      "concept": "D2C critical success factors",
+      "formula": null,
+      "variables": {},
+      "context_tag": "d2c",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "D2C",
+      "stage_in_funnel": null,
+      "example_from_source": "AOV, gross margin, repeat frequency; Mamaearth, Nykaa, boAt",
+      "teaching_note": "D2C economics work when three things hold: (1) HIGH average order value / premium pricing / large basket (digital marketing is costly, so cheap mass items don't pay back); (2) HIGH gross margin (lean, outsourced, low wastage/logistics cost); and (3) HIGH repeat-purchase frequency / adjacent categories (to amortise customer-acquisition cost over a lifetime). Levers: category (frequency/AOV), brand management (360° connect, community), operations (nimble outsourced supply chain). Top segments: beauty/personal care, food & beverage, fashion.",
+      "distractors": [
+        {
+          "wrong": "Foot traffic, sales/sqft, conversion",
+          "why": "those are physical-retail metrics; D2C is digital and turns on AOV/margin/repeat"
+        },
+        {
+          "wrong": "Take rate, GMV, liquidity",
+          "why": "those are marketplace/aggregator metrics, not D2C own-brand economics"
+        }
+      ],
+      "sample_question": "Which trio of metrics most determines whether a D2C brand's unit economics are sustainable?",
+      "failure_mode": "Assuming a great product alone makes D2C work — without high AOV, high gross margin and repeat frequency, CAC isn't recovered.",
+      "source_ref": "NABM/M5/C14",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_d2c"
+      ],
+      "connects_to": [
+        "nabm_d2c_failures",
+        "nabm_newage_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_d2c_failures",
+      "subject": "NABM",
+      "concept": "D2C failures — lessons",
+      "formula": null,
+      "variables": {},
+      "context_tag": "d2c",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "D2C",
+      "stage_in_funnel": null,
+      "example_from_source": "Casper (single low-repeat product), Peloton (demand miscalc), Dollar Shave Club",
+      "teaching_note": "Why D2C brands struggle: Casper (mattresses) — SINGLE product with very LOW repeat frequency (a mattress lasts ~10 years), high CAC, high R&D, low LTV → losses. Peloton — miscalculated demand (pandemic pulled demand forward; expanded supply then demand normalised; brand/perception shocks). Dollar Shave Club — simple low-basket razor subscription; after Unilever acquisition, adding complexity/premium SKUs eroded the simplicity that won. Lessons: turn profitable before scaling spend; pick a beachhead category with repeat potential; don't abandon the core value proposition when scaling.",
+      "distractors": [
+        {
+          "wrong": "Take rate too low",
+          "why": "Casper is D2C (no take rate); the issue is low repeat purchase + high CAC -> weak LTV"
+        },
+        {
+          "wrong": "It never advertised",
+          "why": "it spent heavily on acquisition; the problem was low lifetime value per acquired customer"
+        }
+      ],
+      "sample_question": "Casper sold high-quality mattresses D2C but lost money. The structural reason was ____.",
+      "failure_mode": "Blaming generic 'competition' rather than the structural cause: a single product with very low repeat frequency and high CAC → poor LTV.",
+      "source_ref": "NABM/M5/C15",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_d2c_success_factors"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_metrics_importance",
+      "subject": "NABM",
+      "concept": "Why business metrics matter",
+      "formula": null,
+      "variables": {},
+      "context_tag": "metrics",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "Facebook DAU/MAU, Airtel ARPU, Yes Bank NIM/NPA, Maruti sales volume",
+      "teaching_note": "Metrics/KPIs are quantifiable measures that (a) measure performance vs goals, (b) guide decisions with quantitative evidence, (c) are PREDICTIVE of future trends, (d) identify problem areas, and (e) track improvement. Markets react sharply to key metrics: Facebook lost ~$120B in a day on slow DAU/MAU growth; Netflix fell on subscriber miss; Airtel rose on ARPU; Yes Bank fell on net-interest-margin/NPA; Maruti fell on sales-volume decline.",
+      "distractors": [
+        {
+          "wrong": "Gross merchandise value",
+          "why": "GMV is a marketplace metric; telecom's headline per-user metric is ARPU"
+        },
+        {
+          "wrong": "Inventory turnover",
+          "why": "an inventory metric, irrelevant to a telecom subscriber business"
+        }
+      ],
+      "sample_question": "Bharti Airtel's share rose when it reported a higher average revenue per user. Which telecom KPI is this?",
+      "failure_mode": "Picking a generic profit figure when a sector-specific KPI (ARPU for telecom, NIM for banks) is what moves the stock.",
+      "source_ref": "NABM/M7/C01",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [],
+      "connects_to": [
+        "nabm_vanity_vs_actionable",
+        "nabm_kpi",
+        "nabm_balanced_scorecard"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_vanity_vs_actionable",
+      "subject": "NABM",
+      "concept": "Vanity vs actionable metrics",
+      "formula": null,
+      "variables": {},
+      "context_tag": "metrics",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "downloads/likes/page views/open rate (vanity) vs DAU/churn/conversion (actionable)",
+      "teaching_note": "VANITY metrics look impressive but don't correlate with business health: total app downloads, page views, registered users, Facebook likes, email open rate. ACTIONABLE metrics drive decisions and tie to revenue/profit: daily/monthly active users, churn, retention, conversion rate, customer lifetime value, engagement rate, click-through rate. Example: 1M downloads means little if few are active or purchasing — track DAU and in-app purchases instead. Relying on vanity metrics wastes money and creates false confidence.",
+      "distractors": [
+        {
+          "wrong": "Because it is too small to matter",
+          "why": "the issue is not size; downloads don't reflect active use/revenue, so they're vanity"
+        },
+        {
+          "wrong": "Because downloads always equal revenue",
+          "why": "the opposite — downloads rarely translate to active paying users"
+        }
+      ],
+      "sample_question": "An e-commerce app boasts of '1 million downloads'. Why is this a vanity rather than an actionable metric?",
+      "failure_mode": "Mistaking a big top-of-funnel number (downloads/likes/page views) for a sign of business health.",
+      "source_ref": "NABM/M7/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_metrics_importance"
+      ],
+      "connects_to": [
+        "nabm_digital_analytics",
+        "nabm_newage_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_traditional_metrics_map",
+      "subject": "NABM",
+      "concept": "Metric→model map: traditional models",
+      "formula": null,
+      "variables": {},
+      "context_tag": "metrics",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "Retail=sales/sqft; Distributor=inventory turnover; Leasing=utilisation+default+residual value",
+      "teaching_note": "Each traditional model has signature metrics: MANUFACTURER — production volume, COGS, machine utilisation, yield/scrap, gross margin, ROI; DISTRIBUTOR — inventory turnover rate, GMROII, order accuracy; RETAILER — sales per square foot, foot traffic, average transaction value, conversion; FRANCHISE — number of franchisees, sales per franchise, average unit volume, royalty fees; RAZOR-BLADE — CAC, LTV, repeat-purchase rate, upsell rate; BUNDLING — average transaction value, cross-sell rate, NPS; LEASING — utilisation rate, default rate, return on asset, residual value.",
+      "distractors": [
+        {
+          "wrong": "SaaS",
+          "why": "utilisation/default are leasing metrics; SaaS uses MRR/NDR/churn"
+        },
+        {
+          "wrong": "Retail",
+          "why": "retail uses sales/sqft and footfall; utilisation+default belong to leasing"
+        }
+      ],
+      "sample_question": "'Asset utilisation rate' and 'default rate' are signature metrics for which traditional business model?",
+      "failure_mode": "THE core NABM trap — pairing a metric to the wrong model (e.g. sales/sqft→Retail not Aggregator; utilisation→Leasing not SaaS; inventory turnover→Distributor).",
+      "source_ref": "NABM/M7/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_vanity_vs_actionable"
+      ],
+      "connects_to": [
+        "nabm_leasing",
+        "nabm_retailer",
+        "nabm_distributor",
+        "nabm_newage_metrics_map"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_newage_metrics_map",
+      "subject": "NABM",
+      "concept": "Metric→model map: new-age models",
+      "formula": null,
+      "variables": {},
+      "context_tag": "metrics",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "Aggregator/Marketplace=GMV+take rate; Subscription=MRR/churn; D2C=AOV/margin/repeat",
+      "teaching_note": "Signature metrics by new-age model: ON-DEMAND — CAC, LTV (healthy LTV ≈ 3× CAC), order volume, customer satisfaction; AGGREGATOR — GMV, take rate (~23–27%), active users, retention; SUBSCRIPTION — MRR, churn, CAC, CLV (CAC:LTV ~1:3); PLATFORM — network effect, new-user growth, active users, engagement, platform leakage (disintermediation); MARKETPLACE — GMV, take rate, buyer-to-seller ratio, liquidity; SaaS — ARR/MRR, NDR, churn, CAC, CLV; D2C — AOV, gross margin, repeat frequency; CREATOR — ARR/MRR, conversion-to-paid, creator earnings (80-20).",
+      "distractors": [
+        {
+          "wrong": "A subscription SaaS business",
+          "why": "subscription/SaaS turns on MRR/NDR/churn; GMV+take rate are aggregator/marketplace metrics"
+        },
+        {
+          "wrong": "A leasing business",
+          "why": "leasing uses utilisation/default/residual value, not GMV/take rate"
+        }
+      ],
+      "sample_question": "'Gross merchandise value' and 'take rate' are the headline metrics for which kind of business?",
+      "failure_mode": "Metric-context mismatch — e.g. assigning take rate to a subscription business or utilisation rate to SaaS.",
+      "source_ref": "NABM/M7/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_vanity_vs_actionable"
+      ],
+      "connects_to": [
+        "nabm_traditional_metrics_map",
+        "nabm_zomato_economics",
+        "nabm_liquidity"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_kpi",
+      "subject": "NABM",
+      "concept": "Key Performance Indicators (KPIs)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "metrics",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "industry-specific KPIs; dashboards; comparative analysis",
+      "teaching_note": "KPIs are quantifiable measures of progress toward objectives. Good practice: align KPIs with strategic goals; choose industry-specific KPIs (retail→sales/sqft; subscription→churn/retention; platform→network effect; leasing→utilisation); keep them few/focused; monitor & adjust regularly (dashboards, comparative analysis vs history/forecast); set challenging-but-achievable targets for continuous improvement.",
+      "distractors": [
+        {
+          "wrong": "They shouldn't — one KPI set fits all",
+          "why": "KPIs must be tailored to the business model; leasing≠subscription"
+        },
+        {
+          "wrong": "Only because they are different sizes",
+          "why": "the difference is the business model/value drivers, not company size"
+        }
+      ],
+      "sample_question": "Why should a leasing firm and a subscription firm track different KPIs?",
+      "failure_mode": "Using the same KPIs for every business — KPIs must be industry- and model-specific.",
+      "source_ref": "NABM/M7/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_metrics_importance"
+      ],
+      "connects_to": [
+        "nabm_balanced_scorecard"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_balanced_scorecard",
+      "subject": "NABM",
+      "concept": "Balanced Scorecard (Kaplan & Norton)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "metrics",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "Kaplan & Norton; telecom/Flipkart/airline 4-perspective examples",
+      "teaching_note": "A strategic management framework (Dr. Robert Kaplan & Dr. David Norton, early 1990s) that measures performance across FOUR perspectives, not just financials: (1) Financial (profit, ROI, revenue); (2) Customer (satisfaction, retention, NPS, market share); (3) Internal Business Process (operational efficiency, quality, cycle time); (4) Learning & Growth (employee satisfaction/training, skills, culture). It links objectives→measures→targets→initiatives across all four. Pitfalls: complex to implement, needs buy-in, must tie to rewards and the right KPIs.",
+      "distractors": [
+        {
+          "wrong": "Financial, Marketing, Sales, HR",
+          "why": "the four are Financial, Customer, Internal Process, Learning & Growth"
+        },
+        {
+          "wrong": "Only financial and customer",
+          "why": "it deliberately includes internal-process and learning-&-growth too"
+        }
+      ],
+      "sample_question": "The Balanced Scorecard measures organisational performance across which four perspectives?",
+      "failure_mode": "Listing only financial metrics — the whole point of the Balanced Scorecard is to ADD customer, process and learning-and-growth perspectives.",
+      "source_ref": "NABM/M7/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_kpi"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_digital_analytics",
+      "subject": "NABM",
+      "concept": "Digital analytics for online models",
+      "formula": null,
+      "variables": {},
+      "context_tag": "metrics",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "traffic, bounce rate, conversion, CTR, time on page; clickbait causes high bounce",
+      "teaching_note": "Online businesses capture every click. Core digital metrics: website traffic (by source — direct/organic/paid/social/referral); bounce rate (% leaving after one page — high = poor experience, irrelevant traffic, clickbait, or slow load); conversion rate (% completing the desired action); click-through rate (CTR); average time on page; page views per visit. Used for performance assessment, user-behaviour understanding, customer-journey mapping and resource allocation (spend more where traffic CONVERTS, not just where it's high).",
+      "distractors": [
+        {
+          "wrong": "Too many completed purchases",
+          "why": "purchases would LOWER bounce; high bounce signals irrelevant content/slow load"
+        },
+        {
+          "wrong": "A low number of page views being irrelevant",
+          "why": "the issue is content relevance/experience driving people away, i.e. high bounce"
+        }
+      ],
+      "sample_question": "A site gets huge traffic but a high bounce rate and low time-on-page. The most likely causes include slow load time, high prices, and ____.",
+      "failure_mode": "Optimising for raw traffic (a vanity metric) instead of conversion; ignoring bounce rate as a quality signal.",
+      "source_ref": "NABM/M7/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_vanity_vs_actionable"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_metrics_calculations",
+      "subject": "NABM",
+      "concept": "Metric calculations (worked)",
+      "formula": "CLV = ARPU / churn rate ; ROAS = revenue/ad spend ; inventory turnover = COGS/avg inventory ; conversion = purchases/visitors",
+      "variables": {
+        "ARPU": "average revenue per user/period",
+        "churn rate": "fraction of customers lost per period"
+      },
+      "context_tag": "metrics",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Subscription",
+      "stage_in_funnel": null,
+      "example_from_source": "$15/0.02=$750; ROAS 125%; inv turnover 4.44x; conversion 2%; RevPAR Rs1400",
+      "teaching_note": "Key formulas from the lecture: CLV (subscription) = ARPU ÷ churn rate (e.g. $15/0.02 = $750; if churn rises to 3%, $15/0.03 = $500 — a 1pp churn rise cuts LTV by $250). ROAS = revenue ÷ ad spend (500 sales × $250 = $125,000 ÷ $100,000 = 1.25 = 125%). Inventory turnover = COGS ÷ average inventory (avg = (500k+400k)/2 = 450k; $2M/450k = 4.44×). Conversion rate = purchases ÷ visitors (300/15,000 = 2%; to reach 5% needs 750 sales, i.e. 450 more). RevPAR (OYO) = ADR × occupancy (₹2,000 × 70% = ₹1,400).",
+      "distractors": [
+        {
+          "wrong": "$300 (= 15 x 0.02 x 1000)",
+          "why": "CLV divides ARPU by churn; it does not multiply ARPU by churn"
+        },
+        {
+          "wrong": "$500 (uses 3% churn)",
+          "why": "$500 corresponds to a 3% churn rate; at 2% it is $15/0.02 = $750"
+        }
+      ],
+      "sample_question": "A subscription service has ARPU of $15/month and a monthly churn rate of 2%. What is the customer lifetime value?",
+      "failure_mode": "Multiplying instead of dividing by churn, or forgetting CLV = ARPU/churn (higher churn → lower CLV).",
+      "source_ref": "NABM/M7/C10",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_newage_metrics_map",
+        "nabm_saas_metrics"
+      ],
+      "connects_to": [],
+      "shared_with": [
+        "GER.clv_ltv"
+      ],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_creator_lifecycle",
+      "subject": "NABM",
+      "concept": "Creator economy & the creator business lifecycle",
+      "formula": null,
+      "variables": {},
+      "context_tag": "creator_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Creator Economy",
+      "stage_in_funnel": null,
+      "example_from_source": "YouTube/Patreon/Substack; Bhuvan Bam, Graphy; 4-stage lifecycle",
+      "teaching_note": "The creator economy lets independent creators (bloggers, YouTubers, streamers, artisans) monetise content/products directly via platforms (YouTube, TikTok, Patreon, Substack), bypassing traditional gatekeepers (publishers, labels). The creator business has four lifecycle stages: CREATION (turn talent into consumable content/product) → DISCOVERY (build audience/community on social platforms) → MONETISATION (convert audience into paying customers — timing matters: too early loses interest, too late earns nothing) → GROWTH (end-to-end management: finance, CRM, analytics). Monetisation methods: ads/revenue-share, brand sponsorships, subscriptions/tips, creator-led commerce, courses, NFTs/social tokens.",
+      "distractors": [
+        {
+          "wrong": "Discovery",
+          "why": "discovery is building the audience; turning it into paying customers is monetisation"
+        },
+        {
+          "wrong": "Creation",
+          "why": "creation is making the content; revenue conversion is monetisation"
+        }
+      ],
+      "sample_question": "In the creator business lifecycle, the stage of converting an engaged audience into paying customers is called ____.",
+      "failure_mode": "Collapsing discovery and monetisation — building an audience (discovery) is distinct from converting it to revenue (monetisation).",
+      "source_ref": "NABM/M6/P1/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_creator_metrics",
+        "nabm_subscription"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_creator_metrics",
+      "subject": "NABM",
+      "concept": "Creator economy metrics & the 80-20 rule",
+      "formula": null,
+      "variables": {},
+      "context_tag": "creator_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Creator Economy",
+      "stage_in_funnel": null,
+      "example_from_source": "80-20 creator earnings; creator↔fan two-sided network effect",
+      "teaching_note": "Creator-economy startups (creator tools/SaaS, fan subscriptions, creator commerce, brand collaborations) track: ARR/MRR, CAC, LTV, conversion of audience→paid subscribers, creator earnings, creator retention, and engagement (likes/comments/shares). The 80-20 RULE applies: the top ~20% of creators drive ~80% of earnings — so platforms must ensure enough creators earn a minimum to stay (retention), since a two-sided creator↔fan network effect/flywheel powers growth. Creator acquisition is expensive, so loyalty compounds.",
+      "distractors": [
+        {
+          "wrong": "Network effect",
+          "why": "the network effect is value rising with users; the earnings concentration is the 80-20 rule"
+        },
+        {
+          "wrong": "Churn",
+          "why": "churn is users leaving; this is about skewed earnings distribution (80-20)"
+        }
+      ],
+      "sample_question": "On creator platforms, the top ~20% of creators drive about ~80% of total earnings. This concentration is known as the ____.",
+      "failure_mode": "Ignoring the long tail — assuming earnings are evenly spread when ~20% of creators capture ~80%.",
+      "source_ref": "NABM/M6/P1/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_creator_lifecycle",
+        "nabm_network_effects_types"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_blockchain",
+      "subject": "NABM",
+      "concept": "Blockchain fundamentals",
+      "formula": null,
+      "variables": {},
+      "context_tag": "blockchain_web3",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Blockchain/Web3",
+      "stage_in_funnel": null,
+      "example_from_source": "library/town-square analogies; coffee supply chain; consensus of nodes",
+      "teaching_note": "A blockchain is a decentralised, distributed digital ledger held in many identical copies across a network. Data is grouped into blocks chained cryptographically to the previous block; an entry cannot be altered without changing all subsequent blocks AND winning consensus of the majority of nodes — making it tamper-evident/immutable. Three pillars: TRUST (everyone can verify), SECURITY (cryptographic linkage, hard to hack), DECENTRALISATION (no single owner — like a community garden). Uses far beyond currency: supply-chain tracking, real estate titles, voting, healthcare records.",
+      "distractors": [
+        {
+          "wrong": "Decentralisation",
+          "why": "decentralisation = no single controller; not-changeable-once-added is immutability"
+        },
+        {
+          "wrong": "Anonymity",
+          "why": "anonymity concerns identity; tamper-resistance of recorded data is immutability"
+        }
+      ],
+      "sample_question": "Which property of blockchain means that once data is added it is practically impossible to change without detection?",
+      "failure_mode": "Confusing immutability (can't be altered undetected) with decentralisation (no central authority) — both are blockchain traits but distinct.",
+      "source_ref": "NABM/M6/P2/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [
+        "nabm_blockchain_vs_bitcoin",
+        "nabm_smart_contracts",
+        "nabm_nft",
+        "nabm_cryptocurrency"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_blockchain_vs_bitcoin",
+      "subject": "NABM",
+      "concept": "Blockchain vs Bitcoin",
+      "formula": null,
+      "variables": {},
+      "context_tag": "blockchain_web3",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Blockchain/Web3",
+      "stage_in_funnel": null,
+      "example_from_source": "1991 Haber/Stornetta concept; 2009 Bitcoin (Nakamoto); Ethereum smart contracts",
+      "teaching_note": "They are NOT the same. Blockchain is the underlying technology (concept outlined 1991 by Haber & Stornetta for tamper-proof timestamps). Bitcoin is ONE application of blockchain — a cryptocurrency/peer-to-peer electronic cash system introduced by Satoshi Nakamoto in 2008/2009, with no trusted third party. Bitcoin uses blockchain to record payments, but blockchain powers thousands of other uses (supply chain, voting, smart contracts). Blockchain vs banking: 24/7 vs business hours, user-set vs fixed fees, no mandatory KYC, harder for governments to seize.",
+      "distractors": [
+        {
+          "wrong": "Bitcoin and blockchain are the same thing",
+          "why": "blockchain is the underlying tech; Bitcoin is just one cryptocurrency built on it"
+        },
+        {
+          "wrong": "Ethereum is a physical coin",
+          "why": "Ethereum is a programmable blockchain platform, not a physical coin"
+        }
+      ],
+      "sample_question": "A developer picks Ethereum over Bitcoin because it supports smart contracts and decentralised apps, not just payments. What does this show about the blockchain-vs-Bitcoin relationship?",
+      "failure_mode": "Treating 'blockchain' and 'Bitcoin' as synonyms — blockchain is the technology; Bitcoin is one currency application of it.",
+      "source_ref": "NABM/M6/P2/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_blockchain"
+      ],
+      "connects_to": [
+        "nabm_bitcoin",
+        "nabm_smart_contracts"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_smart_contracts",
+      "subject": "NABM",
+      "concept": "Smart contracts",
+      "formula": null,
+      "variables": {},
+      "context_tag": "blockchain_web3",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Blockchain/Web3",
+      "stage_in_funnel": null,
+      "example_from_source": "rental door-code example; real estate title transfer; Ethereum",
+      "teaching_note": "A smart contract is computer code embedded in a blockchain that automatically executes the terms of an agreement when predefined conditions are met — no intermediary required (e.g. a rental smart contract releases the door code when the deposit is paid, and disables it if rent is unpaid). Popularised by Ethereum. Used in real-estate title transfer, supply chain and decentralised finance. Benefits: removes middlemen, speeds execution, increases transparency and reduces fraud.",
+      "distractors": [
+        {
+          "wrong": "NFT",
+          "why": "an NFT proves ownership of a unique asset; a smart contract is self-executing agreement code"
+        },
+        {
+          "wrong": "Cryptocurrency wallet",
+          "why": "a wallet stores keys/coins; a smart contract executes agreement logic"
+        }
+      ],
+      "sample_question": "Code on a blockchain that automatically transfers a property title once payment conditions are met, with no intermediary, is called a ____.",
+      "failure_mode": "Confusing a smart contract (self-executing code) with an NFT (proof of ownership of a unique asset).",
+      "source_ref": "NABM/M6/P2/C14",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_blockchain_vs_bitcoin"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_nft",
+      "subject": "NABM",
+      "concept": "NFTs (Non-Fungible Tokens)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "blockchain_web3",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Blockchain/Web3",
+      "stage_in_funnel": null,
+      "example_from_source": "Beeple $69.3M Christie's, NBA Top Shot, Decentraland, Gucci virtual sneakers",
+      "teaching_note": "An NFT is a blockchain-based token that represents verifiable ownership and authenticity of a UNIQUE digital (or digital-twin) item — even when identical copies exist anywhere. 'Non-fungible' = unique/not interchangeable (unlike a Bitcoin, which is fungible). Built largely on Ethereum (CryptoKitties were early). Applications: digital art (Beeple sold for ~$69.3M at Christie's), collectibles (NBA Top Shot), virtual real estate (Decentraland), music/royalties, gaming items, fashion (Gucci virtual sneakers). Lets creators prove originality and capture value/royalties.",
+      "distractors": [
+        {
+          "wrong": "Automatic copyright enforcement everywhere",
+          "why": "an NFT proves ownership/authenticity; it does not police copyright globally"
+        },
+        {
+          "wrong": "Physical ownership of all copies",
+          "why": "it establishes ownership/authenticity of the original token, not all copies"
+        }
+      ],
+      "sample_question": "A digital artist wants to prove she is the original creator of an artwork that thousands have copied online. What does an NFT establish for her?",
+      "failure_mode": "Thinking an NFT prevents copying or grants copyright — it proves authenticity/ownership of the original, it doesn't stop copies.",
+      "source_ref": "NABM/M6/P2/C17",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_blockchain"
+      ],
+      "connects_to": [
+        "nabm_smart_contracts",
+        "nabm_cryptocurrency"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_cryptocurrency",
+      "subject": "NABM",
+      "concept": "Cryptocurrency — types, uses, risks",
+      "formula": null,
+      "variables": {},
+      "context_tag": "blockchain_web3",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Blockchain/Web3",
+      "stage_in_funnel": null,
+      "example_from_source": "Bitcoin/Ethereum/Ripple/Litecoin; volatility, irreversibility, regulation risks",
+      "teaching_note": "A digital/virtual currency secured by cryptography, operating on a decentralised blockchain with no central bank. Types: Bitcoin (first/largest, 'digital gold'), Ethereum (smart contracts/dApps), Ripple/XRP (payments), Litecoin ('silver'), Bitcoin Cash, Cardano/Polkadot. Uses: transactions, investment, cross-border remittance, fundraising (ICOs), privacy (Monero), smart contracts/DeFi. Benefits: security, decentralisation, transparency, low fees, financial inclusion. Risks: VOLATILITY, regulatory bans, hacked exchanges/wallets, IRREVERSIBILITY (no chargebacks), environmental cost of mining.",
+      "distractors": [
+        {
+          "wrong": "Guaranteed stable value",
+          "why": "crypto is highly volatile; stability is not a feature"
+        },
+        {
+          "wrong": "Government-backed refunds",
+          "why": "transactions are irreversible with no central authority to refund"
+        }
+      ],
+      "sample_question": "Which of these is a key RISK (not benefit) of holding cryptocurrency?",
+      "failure_mode": "Listing only benefits and ignoring risks (volatility, irreversibility, regulation, security) — or vice versa.",
+      "source_ref": "NABM/M6/P2/C19",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_blockchain"
+      ],
+      "connects_to": [
+        "nabm_bitcoin"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_bitcoin",
+      "subject": "NABM",
+      "concept": "Bitcoin deep dive",
+      "formula": null,
+      "variables": {},
+      "context_tag": "blockchain_web3",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Blockchain/Web3",
+      "stage_in_funnel": null,
+      "example_from_source": "21M cap, Satoshi divisibility, digital gold, El Salvador legal tender",
+      "teaching_note": "Bitcoin (Satoshi Nakamoto, 2008 white paper 'A Peer-to-Peer Electronic Cash System') is a decentralised digital currency with no central bank. Characteristics: decentralised; LIMITED SUPPLY capped at 21 million (vs fiat which governments can print, causing devaluation); pseudonymous (addresses not directly tied to identities); immutable transactions; divisible to the smallest unit (Satoshi = 1/100,000,000 BTC). Used two ways: as alternative currency, or as a 'digital gold' store of value. El Salvador made it legal tender (2021); Japan recognised it (2017).",
+      "distractors": [
+        {
+          "wrong": "Unlimited supply set by a central bank",
+          "why": "Bitcoin has no central bank and a fixed 21M cap"
+        },
+        {
+          "wrong": "Backed by gold reserves",
+          "why": "Bitcoin is not gold-backed; its scarcity comes from the protocol's 21M cap"
+        }
+      ],
+      "sample_question": "What feature of Bitcoin — a hard cap of 21 million coins — distinguishes it from fiat currencies like the rupee?",
+      "failure_mode": "Assuming Bitcoin's supply can be expanded like fiat — it is capped at 21M, which underpins the 'digital gold' scarcity argument.",
+      "source_ref": "NABM/M6/P2/C20",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_cryptocurrency"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_web_evolution",
+      "subject": "NABM",
+      "concept": "Web 1.0 / 2.0 / 3.0 evolution",
+      "formula": null,
+      "variables": {},
+      "context_tag": "blockchain_web3",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "Blockchain/Web3",
+      "stage_in_funnel": null,
+      "example_from_source": "1.0 static (LiveJournal), 2.0 social (Facebook/YouTube), 3.0 decentralised (Ethereum/ChatGPT)",
+      "teaching_note": "Web 1.0 (read-only/static): one-way information, minimal interaction, company-published pages (early MySpace, LiveJournal). Web 2.0 (read-write/social): user-generated content, interactivity, social platforms and APIs (Facebook, YouTube, Wikipedia) — centralised data control by corporations. Web 3.0 (read-write-execute/semantic): AI-driven, machine-understandable, DECENTRALISED data and ownership, blockchain, VR/AR, personalisation (Ethereum dApps, ChatGPT, Decentraland). Business shift: from online presence (1.0) to engagement (2.0) to decentralised models + data privacy + AI (3.0).",
+      "distractors": [
+        {
+          "wrong": "Web 3.0",
+          "why": "Web 3.0 is decentralised/semantic/AI-driven; centralised social UGC is Web 2.0"
+        },
+        {
+          "wrong": "Web 1.0",
+          "why": "Web 1.0 is static read-only; user-generated social content is Web 2.0"
+        }
+      ],
+      "sample_question": "A read-write social web where users create content on centralised platforms like Facebook and YouTube describes which stage of the web?",
+      "failure_mode": "Mixing the stages — read-only=1.0, read-write/social=2.0, decentralised/semantic=3.0.",
+      "source_ref": "NABM/M6/P2/C21",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_blockchain"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_ai_hierarchy",
+      "subject": "NABM",
+      "concept": "AI / ML / Deep Learning / Generative AI / LLM / Agentic AI",
+      "formula": null,
+      "variables": {},
+      "context_tag": "ai",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "AI⊃ML⊃DL⊃GenAI⊃LLM; Gmail spam (ML); ChatGPT (GenAI); agentic flight-booking",
+      "teaching_note": "Nested hierarchy: ARTIFICIAL INTELLIGENCE (machines mimicking human intelligence, incl. rule-based systems) ⊃ MACHINE LEARNING (learns patterns from data, improves with experience — e.g. Gmail spam filter) ⊃ DEEP LEARNING (neural networks for in-depth pattern extraction) ⊃ GENERATIVE AI (creates new content — text/image/audio/code; ChatGPT, DALL·E) ⊃ LLMs (large language models trained on vast text — GPT-4o, Claude, Llama). AGENTIC AI is the newest frontier: independent agents that plan and perform multi-step tasks WITHOUT step-by-step prompting (e.g. autonomously book/reschedule/refund a flight), unlike generative AI which responds to prompts.",
+      "distractors": [
+        {
+          "wrong": "Generative AI",
+          "why": "generative AI creates content from prompts; autonomous multi-step action is agentic AI"
+        },
+        {
+          "wrong": "Machine learning",
+          "why": "ML learns patterns from data; autonomous goal-directed action is agentic AI"
+        }
+      ],
+      "sample_question": "AI that acts as an independent agent — planning and executing multi-step tasks (e.g. booking and rescheduling a flight) without being prompted at each step — is called ____.",
+      "failure_mode": "Confusing generative AI (creates content in response to prompts) with agentic AI (autonomously plans and acts).",
+      "source_ref": "NABM/M6/P3/C24",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_traditional_vs_newage"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_ondc",
+      "subject": "NABM",
+      "concept": "ONDC — network vs platform model",
+      "formula": null,
+      "variables": {},
+      "context_tag": "ondc",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "ONDC = open network like UPI; buyer app <-> gateway <-> seller app; not a platform",
+      "teaching_note": "ONDC (Open Network for Digital Commerce) is a Government-of-India digital-public-infrastructure initiative (like UPI) that democratises e-commerce. It is NOT a platform/app and NOT a regulator — it is an OPEN, decentralised, unbundled, INTEROPERABLE PROTOCOL. Closed platform-centric e-commerce (Amazon/Flipkart) locks a buyer to that app's sellers; ONDC's open network lets a buyer on any buyer-app transact with sellers registered via any seller-app, via the ONDC gateway. It removes the central intermediary, attacks platform lock-in, high commissions (Swiggy/Zomato 23-27%), and seller data-capture.",
+      "distractors": [
+        {
+          "wrong": "platform; open network (reversed)",
+          "why": "ONDC is the open network; platforms like Amazon/Flipkart are the closed model it contrasts with"
+        },
+        {
+          "wrong": "a regulator; a marketplace",
+          "why": "ONDC explicitly is neither a regulator nor a marketplace app — it is an open protocol"
+        }
+      ],
+      "sample_question": "ONDC lets a buyer on one app purchase from a seller registered on a different app, with no central intermediary owning the transaction. This makes ONDC a ____, not a ____.",
+      "failure_mode": "Calling ONDC a 'platform' or an 'app' or a 'regulator' — it is an open interoperable network/protocol, analogous to UPI.",
+      "source_ref": "NABM/M8/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_platform_model",
+        "nabm_marketplace_types"
+      ],
+      "connects_to": [
+        "nabm_ondc_architecture",
+        "nabm_ondc_benefits"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_ondc_architecture",
+      "subject": "NABM",
+      "concept": "ONDC — 5 pillars & transaction flow",
+      "formula": null,
+      "variables": {},
+      "context_tag": "ondc",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "5 pillars; Vijay atta flow (Gupta Kirana vs Big Basket; Dunzo vs Good Box)",
+      "teaching_note": "ONDC's unbundled architecture has FIVE pillars: (1) buyer-side apps (Paytm, WhatsApp — demand side); (2) seller-side apps (Flipkart, Big Basket, kirana stores — supply side); (3) adapter interfaces (open APIs/backend protocol); (4) gateway (discoverability — multicasts a buyer's search to seller apps); (5) open registries (lists of participants, network policies). Transaction flow (Vijay buying atta): buyer-app search → gateway multicasts to seller nodes via registry → results (e.g. Gupta Kirana ₹50 vs Big Basket ₹150) → choose seller → search logistics (Dunzo ₹50 vs Good Box ₹70) → choose delivery → pay via UPI/COD. Roles unbundled: buyer app, seller app, logistics buyer/seller apps, gateway, registry, tech/payment providers.",
+      "distractors": [
+        {
+          "wrong": "registry",
+          "why": "the registry lists participants and policies; the gateway multicasts searches for discovery"
+        },
+        {
+          "wrong": "seller-side app",
+          "why": "the seller app lets sellers list; the gateway routes/multicasts the buyer's search"
+        }
+      ],
+      "sample_question": "In ONDC, the component that takes a buyer's search request and multicasts it to relevant seller apps to enable discovery is the ____.",
+      "failure_mode": "Confusing the gateway (discovery/multicasting) with the registry (lists of participants/policies).",
+      "source_ref": "NABM/M8/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_ondc"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "nabm_ondc_benefits",
+      "subject": "NABM",
+      "concept": "ONDC — benefits & challenges",
+      "formula": null,
+      "variables": {},
+      "context_tag": "ondc",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": "General",
+      "stage_in_funnel": null,
+      "example_from_source": "seller discoverability + one registration + autonomy + no 23-27% cut; liability/ownership challenge",
+      "teaching_note": "Benefits: BUYERS get a single point of access to all domains/sellers, wider price options and hyper-local fulfilment; SELLERS become discoverable to the whole buyer universe with ONE registration, gain autonomy (less dependence on one platform's rules), and avoid heavy platform commissions (saving the 23-27% food-delivery cut); TECH companies can monetise unbundled services (payments, logistics, cataloguing) quickly. Challenges: incentive to switch (early adoption), digital hand-holding/onboarding of small sellers, OWNERSHIP OF TRANSACTIONS (who is liable for a damaged/ wrong order — seller? logistics? buyer app?), conflict resolution, and data privacy/ownership.",
+      "distractors": [
+        {
+          "wrong": "By guaranteeing the highest price for goods",
+          "why": "ONDC widens access/competition and cuts commissions; it does not guarantee high prices"
+        },
+        {
+          "wrong": "By acting as the single platform that owns the customer",
+          "why": "ONDC is the opposite — an open network that removes single-platform ownership/lock-in"
+        }
+      ],
+      "sample_question": "A small kirana store dislikes paying a large platform commission and being bound by one platform's rules. How does ONDC primarily help it?",
+      "failure_mode": "Assuming ONDC is friction-free — its hard problems are transaction ownership/liability, onboarding incentives and data governance.",
+      "source_ref": "NABM/M8/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "nabm_ondc"
+      ],
+      "connects_to": [
+        "nabm_zomato_economics",
+        "nabm_disintermediation"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    }
+  ]
+}

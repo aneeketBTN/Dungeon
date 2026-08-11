@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Exam — NABM Formula Drill</title>
+<meta name="description" content="NABM formula drill — 30 progressive metric questions with worked solutions.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NABM Formula Drill — 30 Q">
+<meta property="og:description" content="Drill CLV, NDR, GMV, ROAS, RevPAR and more. Auto-grades with worked solutions.">
+<link rel="icon" href="data:,">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, "Segoe UI", sans-serif;
+    background: #e9eaec;
+    color: #222;
+    font-size: 14px;
+  }
+  /* ---------- TOP BAR ---------- */
+  .topbar {
+    background: #1c1c1c;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+  }
+  .topbar .brand { color: #f0a429; font-weight: bold; font-size: 15px; }
+  .topbar .links a {
+    color: #fff; text-decoration: none; margin-left: 22px; cursor: pointer; font-size: 13px;
+  }
+  .topbar .links a:hover { color: #f0a429; }
+  /* ---------- SECTION BAR ---------- */
+  .sectionbar {
+    background: #fff;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 8px 16px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  .sectionbar .label { font-weight: bold; padding-top: 6px; margin-right: 12px; }
+  .tabs { display: flex; gap: 4px; }
+  .tab {
+    padding: 6px 16px; background: #d4d6da; cursor: pointer; font-weight: bold;
+    border-radius: 3px 3px 0 0; font-size: 13px;
+  }
+  .tab.active { background: #2d6fd4; color: #fff; }
+  .timers { text-align: right; padding-top: 4px; font-size: 13px; }
+  .timers b { color: #c0392b; }
+  /* ---------- LAYOUT ---------- */
+  .examband {
+    background: #3b7ddd; color: #fff; padding: 7px 16px; font-weight: bold; font-size: 14px;
+  }
+  .layout { display: flex; align-items: stretch; min-height: calc(100vh - 200px); }
+  .main { flex: 1; background: #fff; padding: 14px 22px 90px; position: relative; }
+  .qno { font-weight: bold; font-size: 15px; margin-bottom: 14px; }
+  .qtext { font-size: 16px; line-height: 1.6; margin-bottom: 26px; }
+  .qtext .formula {
+    display: inline-block; background: #f4f6f8; border: 1px solid #dde2e7;
+    padding: 2px 8px; border-radius: 4px; font-family: "Consolas", monospace;
+    font-size: 13px; color: #2d4a66; margin-top: 8px;
+  }
+  /* ---------- OPTIONS ---------- */
+  .options { display: flex; flex-direction: column; gap: 10px; max-width: 760px; }
+  .option {
+    display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+    border: 1px solid #cfd4da; border-radius: 6px; cursor: pointer; background: #fff;
+    transition: background .12s, border-color .12s;
+  }
+  .option:hover { background: #f3f7fd; border-color: #9cc0f0; }
+  .option.selected { background: #e7f0fd; border-color: #2d6fd4; }
+  .option .radio {
+    width: 18px; height: 18px; border-radius: 50%; border: 2px solid #888;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  }
+  .option.selected .radio { border-color: #2d6fd4; }
+  .option.selected .radio::after {
+    content: ""; width: 9px; height: 9px; border-radius: 50%; background: #2d6fd4;
+  }
+  .option .key { font-weight: bold; color: #555; }
+  /* ---------- SA NUMERIC INPUT ---------- */
+  .sa-wrap { max-width: 300px; }
+  .sa-input {
+    width: 100%; padding: 10px; font-size: 16px; border: 1px solid #aaa;
+    border-radius: 4px; margin-bottom: 10px;
+  }
+  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+    background: #f4f4f4; padding: 10px; border: 1px solid #ddd; border-radius: 6px; max-width: 260px; }
+  .keypad .wide { grid-column: span 2; }
+  .key-btn {
+    padding: 12px; font-size: 16px; background: #fff; border: 1px solid #ccc;
+    border-radius: 5px; cursor: pointer; text-align: center;
+  }
+  .key-btn:hover { background: #eef4ff; }
+  /* ---------- SIDEBAR ---------- */
+  .sidebar { width: 290px; background: #fafbfc; border-left: 1px solid #d2d6da; padding: 12px; }
+  .profile { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .profile .avatar {
+    width: 54px; height: 54px; border-radius: 4px; background: #cdd6e0;
+    display: flex; align-items: center; justify-content: center; font-size: 28px; color:#7a8ba0;
+  }
+  .profile .name { font-weight: bold; }
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 6px; margin-bottom: 16px; font-size: 11px; }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .badge {
+    width: 24px; height: 24px; flex-shrink: 0; display: flex; align-items: center;
+    justify-content: center; font-weight: bold; color: #fff; font-size: 12px;
+  }
+  .b-ans { background: #34a853; border-radius: 4px 4px 14px 14px; }
+  .b-notans { background: #d14836; border-radius: 14px 14px 4px 4px; }
+  .b-notvis { background: #fff; color: #444; border: 1px solid #aaa; border-radius: 4px; }
+  .b-marked { background: #6f42c1; border-radius: 50%; }
+  .b-ansmarked { background: #6f42c1; border-radius: 50%; position: relative; }
+  .b-ansmarked::after {
+    content: "✓"; position: absolute; right: -3px; bottom: -3px; background: #34a853;
+    border-radius: 50%; width: 13px; height: 13px; font-size: 9px; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .palette-title { background: #3b7ddd; color: #fff; padding: 6px 10px; font-weight: bold; border-radius: 3px; margin-bottom: 4px; }
+  .choose { font-weight: bold; margin: 8px 0; font-size: 13px; }
+  .palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .pcell {
+    height: 36px; display: flex; align-items: center; justify-content: center;
+    font-weight: bold; cursor: pointer; border: 1px solid #aaa; background: #fff;
+    border-radius: 4px; color: #444; position: relative;
+  }
+  .pcell.answered { background: #34a853; color: #fff; border-color: #2d8c46; border-radius: 4px 4px 16px 16px; }
+  .pcell.notans { background: #d14836; color: #fff; border-color: #b03a2b; border-radius: 16px 16px 4px 4px; }
+  .pcell.marked { background: #6f42c1; color: #fff; border-color: #5a36a0; border-radius: 50%; }
+  .pcell.ansmarked { background: #6f42c1; color: #fff; border-color: #5a36a0; border-radius: 50%; }
+  .pcell.ansmarked::after {
+    content: "✓"; position: absolute; right: -2px; bottom: -2px; background: #34a853;
+    border-radius: 50%; width: 14px; height: 14px; font-size: 9px; display: flex;
+    align-items: center; justify-content: center; color:#fff;
+  }
+  .pcell.current { outline: 3px solid #f0a429; outline-offset: 1px; }
+  /* ---------- BOTTOM BAR ---------- */
+  .bottombar {
+    position: fixed; bottom: 0; left: 0; right: 0; background: #f0f1f3;
+    border-top: 1px solid #c8ccd0; padding: 10px 16px; display: flex;
+    justify-content: space-between; align-items: center; z-index: 50;
+  }
+  .bottombar .group { display: flex; gap: 8px; }
+  .btn {
+    padding: 9px 16px; border: 1px solid #b5bcc4; background: #fff; border-radius: 4px;
+    cursor: pointer; font-size: 13px; font-weight: bold;
+  }
+  .btn:hover { background: #eef1f5; }
+  .btn-primary { background: #2d6fd4; color: #fff; border-color: #2560bd; }
+  .btn-primary:hover { background: #2560bd; }
+  .btn-submit { background: #1a8a4a; color: #fff; border-color: #157038; }
+  .btn-submit:hover { background: #157038; }
+  /* ---------- MODALS ---------- */
+  .overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 100;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .overlay.show { display: flex; }
+  .modal {
+    background: #fff; border-radius: 8px; max-width: 720px; width: 100%; max-height: 86vh;
+    overflow-y: auto; padding: 22px 26px;
+  }
+  .modal h2 { margin-bottom: 12px; color: #2d6fd4; }
+  .modal h3 { margin: 16px 0 6px; }
+  .modal p, .modal li { line-height: 1.6; margin-bottom: 6px; }
+  .modal ul { padding-left: 20px; }
+  .modal .close { float: right; cursor: pointer; font-size: 22px; color: #888; line-height: 1; }
+  /* score report */
+  .scorebig { font-size: 40px; font-weight: bold; color: #1a8a4a; }
+  .review-q { border: 1px solid #e0e4e8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+  .review-q.wrong { border-left: 5px solid #d14836; }
+  .review-q.right { border-left: 5px solid #34a853; }
+  .review-q.skip { border-left: 5px solid #999; }
+  .review-q .tag { font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 10px; color: #fff; }
+  .tag.tw { background: #d14836; } .tag.tr { background: #34a853; } .tag.ts { background: #999; }
+  .review-q .exp { background: #f6f8fa; padding: 8px 10px; border-radius: 4px; margin-top: 8px; font-size: 13px; color: #333; }
+  /* floating calculator */
+  #calc {
+    display: none; position: fixed; top: 120px; right: 40px; width: 220px; background: #2b2b2b;
+    border-radius: 8px; padding: 12px; z-index: 90; box-shadow: 0 8px 30px rgba(0,0,0,.4);
+  }
+  #calc.show { display: block; }
+  #calc .disp { background: #111; color: #6f6; font-family: monospace; font-size: 20px;
+    padding: 8px; text-align: right; border-radius: 4px; margin-bottom: 8px; min-height: 38px; overflow:hidden; }
+  #calc .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  #calc button { padding: 10px; background: #444; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+  #calc button:hover { background: #555; }
+  #calc .op { background: #f0a429; }
+  #calc .eq { background: #2d6fd4; }
+  #calc .drag { cursor: move; color:#aaa; font-size: 11px; text-align:center; margin-bottom:6px; }
+  @media (max-width: 820px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; border-left: none; border-top: 1px solid #d2d6da; }
+    .palette { grid-template-columns: repeat(6, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">Open Mock</div>
+  <div class="links">
+    <a onclick="openModal('instr')">View Instructions</a>
+    <a onclick="openModal('paper')">Question Paper</a>
+    <a onclick="toggleCalc()">Calculator</a>
+    <a onclick="clearSaved()">↺ Reset</a>
+  </div>
+</div>
+
+<div class="sectionbar">
+  <div style="display:flex">
+    <div class="label">Sections</div>
+    <div class="tabs">
+      <div class="tab active">NABM</div>
+      <div class="tab" title="Single section in this drill">MCQ</div>
+    </div>
+  </div>
+  <div class="timers">
+    Time Left: <b id="timeLeft">40:00</b><br>
+    Time Spent (Question): <span id="qtime">00:00</span>
+  </div>
+</div>
+
+<div class="examband">Mock Exam — NABM Formula Drill</div>
+
+<div class="layout">
+  <div class="main">
+    <div class="qno" id="qno">Question No. 1</div>
+    <div class="qtext" id="qtext"></div>
+    <div id="answerArea"></div>
+  </div>
+
+  <div class="sidebar">
+    <div class="profile">
+      <div class="avatar">👤</div>
+      <div class="name">Aneecake</div>
+    </div>
+    <div class="legend">
+      <div class="item"><span class="badge b-ans" id="cAns">0</span> Answered</div>
+      <div class="item"><span class="badge b-notans" id="cNotans">0</span> Not Answered</div>
+      <div class="item"><span class="badge b-notvis" id="cNotvis">30</span> Not Visited</div>
+      <div class="item"><span class="badge b-marked" id="cMarked">0</span> Marked For Review</div>
+      <div class="item" style="grid-column:1/3"><span class="badge b-ansmarked" id="cAnsmarked">0</span> Answered &amp; Marked (will be considered)</div>
+    </div>
+    <div class="palette-title">Mock Exams</div>
+    <div class="choose">Choose a Question</div>
+    <div class="palette" id="palette"></div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <div class="group">
+    <button class="btn" onclick="markReviewNext()">Mark for Review &amp; Next</button>
+    <button class="btn" onclick="clearResponse()">Clear Response</button>
+  </div>
+  <div class="group">
+    <button class="btn" onclick="prevQ()">Previous</button>
+    <button class="btn btn-primary" onclick="saveNext()">Save &amp; Next</button>
+    <button class="btn btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<!-- Instructions modal -->
+<div class="overlay" id="m-instr">
+  <div class="modal">
+    <span class="close" onclick="closeModal('instr')">&times;</span>
+    <h2>Instructions</h2>
+    <p><b>NABM — New Age Business Models · Formula Drill</b></p>
+    <ul>
+      <li>30 questions · 2 marks each · 60 marks total · no negative marking.</li>
+      <li>Timer is 40 minutes (real NABM paper is 50 MCQ in 120 min — this is a speed drill).</li>
+      <li>Click an option to select. Use <b>Save &amp; Next</b> to record and advance.</li>
+      <li><b>Mark for Review</b> flags a question to revisit; if also answered, it is still graded.</li>
+      <li>The question palette colours: <span style="color:#34a853;font-weight:bold">green</span> answered,
+        <span style="color:#d14836;font-weight:bold">red</span> visited-not-answered,
+        <span style="color:#6f42c1;font-weight:bold">purple</span> marked, grey not visited.</li>
+      <li><b>Submit</b> shows your score plus a worked solution for every question.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Question paper modal -->
+<div class="overlay" id="m-paper">
+  <div class="modal">
+    <span class="close" onclick="closeModal('paper')">&times;</span>
+    <h2>Question Paper</h2>
+    <div id="paperList"></div>
+  </div>
+</div>
+
+<!-- Score modal -->
+<div class="overlay" id="m-score">
+  <div class="modal">
+    <span class="close" onclick="closeModal('score')">&times;</span>
+    <h2>Result</h2>
+    <div id="scoreBody"></div>
+  </div>
+</div>
+
+<!-- Floating calculator -->
+<div id="calc">
+  <div class="drag" id="calcDrag">Calculator — drag</div>
+  <div class="disp" id="calcDisp">0</div>
+  <div class="grid">
+    <button onclick="calcC()">C</button>
+    <button onclick="calcBack()">⌫</button>
+    <button class="op" onclick="calcIn('%')">%</button>
+    <button class="op" onclick="calcIn('/')">÷</button>
+    <button onclick="calcIn('7')">7</button><button onclick="calcIn('8')">8</button><button onclick="calcIn('9')">9</button>
+    <button class="op" onclick="calcIn('*')">×</button>
+    <button onclick="calcIn('4')">4</button><button onclick="calcIn('5')">5</button><button onclick="calcIn('6')">6</button>
+    <button class="op" onclick="calcIn('-')">−</button>
+    <button onclick="calcIn('1')">1</button><button onclick="calcIn('2')">2</button><button onclick="calcIn('3')">3</button>
+    <button class="op" onclick="calcIn('+')">+</button>
+    <button onclick="calcIn('0')">0</button><button onclick="calcIn('.')">.</button>
+    <button class="eq" onclick="calcEq()" style="grid-column:span 2">=</button>
+  </div>
+</div>
+
+<script>
+/* ================= QUESTION BANK ================= */
+const Q = [
+ {t:"<b>CLV cluster.</b> A music app charges ₹199/month. Monthly churn = 5%. Find the customer lifetime value.<br><span class='formula'>CLV = ARPU ÷ Churn</span>",
+  o:["₹995","₹3,980","₹199","₹9,950"], c:1, e:"CLV = 199 ÷ 0.05 = ₹3,980. Lower churn → bigger denominator shrinks → CLV rises."},
+ {t:"Churn = 2%. CLV = ₹5,000. What is ARPU?<br><span class='formula'>CLV = ARPU ÷ Churn ⇒ ARPU = CLV × Churn</span>",
+  o:["₹10","₹100","₹250","₹2,500"], c:1, e:"ARPU = 5,000 × 0.02 = ₹100. When rearranging, churn flips from denominator to multiplier — don't divide."},
+ {t:"Zomato Gold: ₹300/mo, 3% churn. Spotify India: ₹119/mo, 1% churn. Which has higher CLV?",
+  o:["Zomato ₹10,000","Zomato ₹1,000","Spotify ₹11,900","Spotify ₹1,190"], c:2, e:"Zomato = 300/0.03 = ₹10,000. Spotify = 119/0.01 = ₹11,900. Low churn beats high ARPU here."},
+ {t:"A SaaS app: 10,000 subscribers at ₹500/mo, 4% monthly churn. A retention campaign halves churn to 2%. Change in total CLV across the base?",
+  o:["+₹6.25 crore","+₹12.5 crore","+₹25 crore","+₹125 crore"], c:1, e:"Old CLV = 500/0.04 = ₹12,500. New = 500/0.02 = ₹25,000. Δ = ₹12,500 × 10,000 = ₹12.5 crore. Halving churn doubles CLV."},
+ {t:"CAC = ₹2,000. ARPU = ₹150/mo. Churn = 8%. Benchmark: healthy SaaS has CLV ≥ 3× CAC. Viable?",
+  o:["Yes — CLV (₹1,875) > CAC","No — CLV (₹1,875) < 3× CAC (₹6,000)","Yes — ratio > 1× is enough","Cannot determine"], c:1, e:"CLV = 150/0.08 = ₹1,875. That's below CAC, let alone 3×. Unit economics broken — fix churn or ARPU."},
+ {t:"Churn rises 2% → 3% (competition). ARPU stays ₹400. How much does CLV fall?",
+  o:["₹2,000","₹4,000","₹6,667","₹13,333"], c:2, e:"CLV: 400/0.02 = ₹20,000 → 400/0.03 = ₹13,333. Fall = ₹6,667. A 1pt churn rise wiped a third of lifetime value — churn is non-linear."},
+
+ {t:"<b>NDR cluster.</b> <span class='formula'>NDR = (Start + Expansion − Contraction − Churn) ÷ Start</span><br>Start MRR ₹50,000. Upgrades ₹15,000. Downgrades ₹3,000. Churn ₹5,000. NDR?",
+  o:["114%","100%","130%","107%"], c:0, e:"(50,000+15,000−3,000−5,000)/50,000 = 57,000/50,000 = 114%."},
+ {t:"A SaaS firm reports NDR of 115%. What does this mean structurally?",
+  o:["Acquiring 15% more customers/mo","Existing customers generate 15% more revenue — even with zero new customers","Churn is 15% below average","ARR grew 15% this quarter"], c:1, e:"NDR ignores new logos. >100% = the existing base expands faster than it shrinks. Land-and-expand."},
+ {t:"Start MRR ₹100,000. Upgrades ₹20,000. Downgrades ₹5,000. Lost customers ₹8,000. NDR?",
+  o:["107%","93%","115%","120%"], c:0, e:"(100,000+20,000−5,000−8,000)/100,000 = 107,000/100,000 = 107%."},
+ {t:"Company A: 20% churn, 35% expansion from retained customers. Company B: 5% churn, 8% expansion. Higher NDR — and what does it reveal?",
+  o:["A (~115%) — land-and-expand offsets high churn via heavy upsell","B (~103%) — lower churn is always better","Same NDR — they cancel","Cannot compare without absolute MRR"], c:0, e:"A: 1−0.20+0.35 = 1.15. B: 1−0.05+0.08 = 1.03. Massive upsell can beat low churn. NDR rewards expansion, not just retention."},
+ {t:"Start MRR ₹200,000. 5 customers each upgrade ₹6,000; 3 each downgrade ₹2,000; 2 churn (₹4,000 each). NDR?",
+  o:["120%","108%","93%","115%"], c:1, e:"+30,000 −6,000 −8,000 = +16,000. (200,000+16,000)/200,000 = 108%."},
+
+ {t:"<b>GMV / Platform Revenue cluster.</b> <span class='formula'>GMV = Users × Frequency × AOV</span><br>2M monthly users, 3 orders/mo, ₹300 AOV. GMV?",
+  o:["₹18 crore","₹180 crore","₹1,800 crore","₹600 crore"], c:1, e:"2,000,000 × 3 × 300 = ₹1,800,000,000 = ₹180 crore."},
+ {t:"Same app. GMV = ₹180 crore. <span class='formula'>Platform Rev = GMV × Take Rate + Ads</span> Take rate 23%, ad revenue ₹5 cr/mo. Platform revenue?",
+  o:["₹41.4 crore","₹46.4 crore","₹185 crore","₹36.4 crore"], c:1, e:"180 × 0.23 = ₹41.4 cr + ₹5 cr ads = ₹46.4 cr. GMV is the volume; revenue is only the slice kept."},
+ {t:"AOV falls ₹300 → ₹270 (discount). 2M users, 3 orders/mo, 23% take rate. Change in monthly order revenue?",
+  o:["−₹3 crore","−₹4.14 crore","−₹6.9 crore","−₹30 crore"], c:1, e:"6M orders × ₹30 drop = ₹18 cr GMV lost × 0.23 = −₹4.14 cr. AOV multiplies straight into revenue."},
+ {t:"Swiggy: 3M users, 4 orders/mo, ₹350 AOV, 24% take. Zomato: 4M users, 3.5 orders/mo, ₹320 AOV, 25% take. Whose order revenue is higher?",
+  o:["Swiggy ₹100.8 crore","Zomato ₹112 crore","Equal","Swiggy ₹84 crore"], c:1, e:"Swiggy GMV ₹420 cr × 0.24 = ₹100.8 cr. Zomato GMV ₹448 cr × 0.25 = ₹112 cr. Zomato wins on volume × take."},
+ {t:"GMV ₹500 cr, take 22%, ads ₹20 cr → Rev ₹130 cr. (X) Raise take to 24% but GMV drops 10%. (Y) Upsell raises AOV 10% → GMV +10%, take unchanged. Which earns more?",
+  o:["X — higher take rate always wins","Y — AOV growth at same take beats a rate hike that shrinks GMV","Equal","Cannot compare"], c:1, e:"X: 450×0.24+20 = ₹128 cr. Y: 550×0.22+20 = ₹141 cr. Squeezing take rate angers supply and shrinks the pie."},
+
+ {t:"<b>Network effects.</b> <span class='formula'>Connections = n(n−1)/2</span><br>10 users. How many unique pairwise connections?",
+  o:["100","45","90","10"], c:1, e:"10×9/2 = 45. Value scales ~n², not n — Metcalfe's law."},
+ {t:"Network grows 10 → 20 users. How many NEW connections added?",
+  o:["100","145","200","90"], c:1, e:"20×19/2 = 190; minus 45 = 145 new. Doubling users ~quadruples connections."},
+ {t:"A messaging app has 1,000 users; a rival enters with 10,000. Roughly how many times more connections?",
+  o:["10×","~100×","1,000×","Equal — connections scale linearly"], c:1, e:"~n²/2 ⇒ (10,000/1,000)² = 100×. This is why incumbents are hard to dislodge."},
+
+ {t:"<b>ROAS cluster.</b> <span class='formula'>ROAS = Revenue ÷ Ad Spend</span><br>₹50,000 on Instagram ads → 200 sales × ₹500 AOV. ROAS?",
+  o:["2.0","4.0","0.5","200"], c:0, e:"Revenue = 200×500 = ₹100,000. ÷ 50,000 = 2.0. Below ~2–3 is weak for D2C."},
+ {t:"Ad spend ₹1,20,000. ROAS = 3.5. Revenue generated?",
+  o:["₹34,286","₹4,20,000","₹1,20,000","₹3,50,000"], c:1, e:"Revenue = ROAS × spend = 3.5 × 1,20,000 = ₹4,20,000."},
+ {t:"Campaign A: ₹80k spend, ₹2.4L revenue, 40% margin. Campaign B: ₹50k spend, ₹1.3L revenue, 60% margin. Which is actually more profitable after ad spend?",
+  o:["A — higher ROAS (3.0) wins","B — lower ROAS but higher margin yields ₹12,000 more net","Equal","A — more revenue"], c:1, e:"A net = 0.40×240k − 80k = ₹16k. B net = 0.60×130k − 50k = ₹28k. ROAS ignores margin — always pair them."},
+
+ {t:"<b>Inventory cluster.</b> <span class='formula'>Inv Turnover = COGS ÷ Avg Inventory</span><br>COGS ₹60 lakh. Opening ₹8L, closing ₹12L. Turnover?",
+  o:["5×","6×","7.5×","4×"], c:1, e:"Avg inv = (8+12)/2 = ₹10L. 60/10 = 6×. Higher = leaner, less capital trapped."},
+ {t:"Redington: COGS ₹500 cr, avg inv ₹50 cr. CompX: COGS ₹300 cr, avg inv ₹75 cr. Which is more efficient and why?",
+  o:["Redington (10×) — sells through stock 2.5× faster, less capital tied, lower obsolescence","CompX (4×) — more stock = better service","Equal — absolute COGS matters more","Cannot compare"], c:0, e:"Redington 10× vs CompX 4×. Distributor model lives on turnover — dead stock is trapped working capital."},
+
+ {t:"<b>Conversion cluster.</b> <span class='formula'>Conversion = Purchases ÷ Visitors</span><br>50,000 monthly visitors, 1,200 purchases. Conversion rate?",
+  o:["0.24%","4.2%","2.4%","24%"], c:2, e:"1,200/50,000 = 0.024 = 2.4%. Typical e-commerce sits ~2–3%."},
+ {t:"Now: 80,000 visitors, 2% conversion = 1,600 sales. Target 2,400. (A) grow to 120,000 visitors. (B) lift conversion to 3%. Which needs less investment and why?",
+  o:["A — more traffic is easier","B — same traffic, better UX/checkout, cheaper than buying 40,000 more visitors","Equal","A — more visitors always scales"], c:1, e:"Both hit 2,400. CRO (fixing the funnel) is usually 3–10× cheaper than buying incremental traffic."},
+
+ {t:"<b>RevPAR cluster.</b> <span class='formula'>RevPAR = ADR × Occupancy</span><br>ADR ₹1,800. Occupancy 65%. RevPAR?",
+  o:["₹1,800","₹1,170","₹2,769","₹900"], c:1, e:"1,800 × 0.65 = ₹1,170. RevPAR blends pricing power AND utilisation."},
+ {t:"Property X: ADR ₹2,500, 50% occ. Property Y: ADR ₹1,600, 80% occ. Higher RevPAR — and what's the lesson?",
+  o:["X — premium room rate","Y — higher utilisation produces higher RevPAR despite lower ADR","Equal","Cannot compare without room count"], c:1, e:"X = ₹1,250. Y = ₹1,280. Empty premium rooms lose to fuller cheaper ones — RevPAR captures both levers."},
+
+ {t:"<b>Synthesis.</b> ARPU ₹400/mo, churn 5%, CAC ₹3,000. Ads ₹10L/mo → ₹30L revenue at 50% margin. Evaluate via CLV:CAC AND ROAS net.",
+  o:["Healthy — ROAS profitable and CLV > CAC","Borderline — CLV:CAC below 3× benchmark; ad margin positive but thin; cut churn first","Unhealthy — CLV:CAC must exceed 5×","Healthy — absolute CLV ₹8,000 is strong"], c:1, e:"CLV = 400/0.05 = ₹8,000. CLV:CAC = 2.67× — under the 3× bar. ROAS 3× but 50% margin = ₹5L net on ₹10L spend (positive but thin). Verdict: borderline; attack churn."},
+ {t:"Marketplace: 5M users, 2 orders/mo, ₹400 AOV, 20% take. 200 sellers × ₹2,000/mo subscription, 10% churn. CEO asks: cut seller churn 10%→5%, or raise AOV ₹400→₹450? Calculate both.",
+  o:["Seller churn — supply moat","AOV — ₹10 cr/mo uplift vs ₹40 lakh extra seller value","Equal","Acquire new buyers first"], c:1, e:"AOV +₹50 × 5M × 2 = +₹50 cr GMV × 0.20 = +₹10 cr/mo. Seller side is tiny: 200 × ₹2,000 = ₹4L/mo total — halving churn moves lakhs, not crores. Size the levers before deciding."}
+];
+
+/* ================= STATE ================= */
+let cur = 0;
+const ans = new Array(Q.length).fill(null);     // selected option index
+const marked = new Array(Q.length).fill(false);
+const visited = new Array(Q.length).fill(false);
+let totalSecs = 40*60, qSecs = 0, lastQ = 0;
+
+const SKEY='ab_nabm_drill_v1';
+function saveState(){ try{ localStorage.setItem(SKEY, JSON.stringify({ans:ans,marked:marked,visited:visited,cur:cur,totalSecs:totalSecs})); }catch(e){} }
+function loadState(){ try{ var raw=localStorage.getItem(SKEY); if(!raw) return; var s=JSON.parse(raw); if(!s||!Array.isArray(s.ans)||s.ans.length!==Q.length) return; for(var i=0;i<Q.length;i++){ ans[i]=s.ans[i]; marked[i]=s.marked[i]; visited[i]=s.visited[i]; } if(typeof s.cur==='number'&&s.cur<Q.length) cur=s.cur; if(typeof s.totalSecs==='number') totalSecs=s.totalSecs; }catch(e){} }
+function clearSaved(){ if(confirm('Clear saved progress and restart this drill?')){ try{ localStorage.removeItem(SKEY); }catch(e){} location.reload(); } }
+document.addEventListener('click', function(){ setTimeout(saveState,0); });
+window.addEventListener('beforeunload', saveState);
+
+/* ================= RENDER ================= */
+function render() {
+  const q = Q[cur];
+  visited[cur] = true;
+  document.getElementById('qno').textContent = "Question No. " + (cur+1);
+  document.getElementById('qtext').innerHTML = q.t;
+  const area = document.getElementById('answerArea');
+  area.innerHTML = "";
+  const wrap = document.createElement('div');
+  wrap.className = 'options';
+  q.o.forEach((opt, i) => {
+    const d = document.createElement('div');
+    d.className = 'option' + (ans[cur]===i ? ' selected' : '');
+    d.innerHTML = "<span class='radio'></span><span class='key'>"+"ABCD"[i]+".</span><span>"+opt+"</span>";
+    d.onclick = () => { ans[cur] = i; render(); };
+    wrap.appendChild(d);
+  });
+  area.appendChild(wrap);
+  buildPalette();
+  updateCounts();
+  qSecs = 0;
+}
+
+function buildPalette() {
+  const p = document.getElementById('palette');
+  p.innerHTML = "";
+  for (let i=0;i<Q.length;i++){
+    const c = document.createElement('div');
+    let cls = 'pcell';
+    if (marked[i] && ans[i]!==null) cls += ' ansmarked';
+    else if (marked[i]) cls += ' marked';
+    else if (ans[i]!==null) cls += ' answered';
+    else if (visited[i]) cls += ' notans';
+    if (i===cur) cls += ' current';
+    c.className = cls;
+    c.textContent = i+1;
+    c.onclick = () => { cur = i; render(); };
+    p.appendChild(c);
+  }
+}
+
+function updateCounts() {
+  let a=0,na=0,nv=0,m=0,am=0;
+  for (let i=0;i<Q.length;i++){
+    if (marked[i] && ans[i]!==null) am++;
+    else if (marked[i]) m++;
+    else if (ans[i]!==null) a++;
+    else if (visited[i]) na++;
+    else nv++;
+  }
+  cAns.textContent=a; cNotans.textContent=na; cNotvis.textContent=nv; cMarked.textContent=m; cAnsmarked.textContent=am;
+}
+
+/* ================= ACTIONS ================= */
+function saveNext(){ if(cur<Q.length-1){cur++;} render(); }
+function prevQ(){ if(cur>0){cur--;} render(); }
+function clearResponse(){ ans[cur]=null; render(); }
+function markReviewNext(){ marked[cur]=true; if(cur<Q.length-1){cur++;} render(); }
+
+/* ================= TIMERS ================= */
+setInterval(()=>{
+  if(totalSecs>0) totalSecs--;
+  qSecs++;
+  const m=String(Math.floor(totalSecs/60)).padStart(2,'0'), s=String(totalSecs%60).padStart(2,'0');
+  document.getElementById('timeLeft').textContent = m+":"+s;
+  const qm=String(Math.floor(qSecs/60)).padStart(2,'0'), qs=String(qSecs%60).padStart(2,'0');
+  document.getElementById('qtime').textContent = qm+":"+qs;
+  if(totalSecs%10===0) saveState();
+  if(totalSecs===0){ submitExam(); }
+},1000);
+
+/* ================= SUBMIT / SCORE ================= */
+function confirmSubmit(){
+  const unanswered = ans.filter(a=>a===null).length;
+  if(confirm("Submit the exam?\n\nAnswered: "+(Q.length-unanswered)+" / "+Q.length+(unanswered? "\nUnanswered: "+unanswered : ""))) submitExam();
+}
+function submitExam(){
+  let score=0, correct=0, wrong=0, skipped=0;
+  let html = "";
+  for (let i=0;i<Q.length;i++){
+    const q=Q[i];
+    let cls, tag, tagtxt;
+    if(ans[i]===null){ skipped++; cls='skip'; tag='ts'; tagtxt='SKIPPED'; }
+    else if(ans[i]===q.c){ correct++; score+=2; cls='right'; tag='tr'; tagtxt='CORRECT'; }
+    else { wrong++; cls='wrong'; tag='tw'; tagtxt='WRONG'; }
+    const yours = ans[i]===null ? "—" : "ABCD"[ans[i]]+". "+q.o[ans[i]];
+    const right = "ABCD"[q.c]+". "+q.o[q.c];
+    html += "<div class='review-q "+cls+"'><div><span class='tag "+tag+"'>"+tagtxt+"</span> "+
+      "<b style='margin-left:8px'>Q"+(i+1)+"</b></div>"+
+      "<div style='margin:8px 0'>"+q.t+"</div>"+
+      "<div><b>Your answer:</b> "+yours+"</div>"+
+      "<div><b>Correct:</b> "+right+"</div>"+
+      "<div class='exp'>💡 "+q.e+"</div></div>";
+  }
+  const pct = Math.round(score/(Q.length*2)*100);
+  document.getElementById('scoreBody').innerHTML =
+    "<div class='scorebig'>"+score+" / "+(Q.length*2)+"</div>"+
+    "<p style='margin:6px 0 16px'><b>"+pct+"%</b> &nbsp;·&nbsp; "+
+    "<span style='color:#34a853'>✔ "+correct+" correct</span> &nbsp; "+
+    "<span style='color:#d14836'>✘ "+wrong+" wrong</span> &nbsp; "+
+    "<span style='color:#999'>○ "+skipped+" skipped</span></p>"+
+    "<h3>Worked solutions</h3>"+html;
+  openModal('score');
+}
+
+/* ================= MODALS ================= */
+function openModal(id){
+  if(id==='paper') buildPaper();
+  document.getElementById('m-'+id).classList.add('show');
+}
+function closeModal(id){ document.getElementById('m-'+id).classList.remove('show'); }
+function buildPaper(){
+  let h="<ol style='padding-left:20px;line-height:1.8'>";
+  Q.forEach(q=>{ h+="<li style='margin-bottom:10px'>"+q.t.replace(/<br>/g,' ')+"</li>"; });
+  h+="</ol>";
+  document.getElementById('paperList').innerHTML=h;
+}
+
+/* ================= CALCULATOR ================= */
+let calcVal="0";
+function toggleCalc(){ document.getElementById('calc').classList.toggle('show'); }
+function calcRefresh(){ document.getElementById('calcDisp').textContent = calcVal; }
+function calcIn(x){ calcVal = (calcVal==="0" && "0123456789.".includes(x)) ? x : calcVal+x; calcRefresh(); }
+function calcC(){ calcVal="0"; calcRefresh(); }
+function calcBack(){ calcVal = calcVal.length>1 ? calcVal.slice(0,-1) : "0"; calcRefresh(); }
+function calcEq(){ try{ calcVal = String(Function('"use strict";return ('+calcVal.replace(/%/g,'/100')+')')()); }catch(e){ calcVal="Error"; } calcRefresh(); }
+// drag
+(function(){
+  const c=document.getElementById('calc'), h=document.getElementById('calcDrag');
+  let dx,dy,drag=false;
+  h.onmousedown=e=>{drag=true;dx=e.clientX-c.offsetLeft;dy=e.clientY-c.offsetTop;};
+  document.onmousemove=e=>{ if(drag){ c.style.left=(e.clientX-dx)+'px'; c.style.top=(e.clientY-dy)+'px'; c.style.right='auto'; } };
+  document.onmouseup=()=>drag=false;
+})();
+
+loadState();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "dungeon-t6-tester-release",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build-site.mjs",
+    "test": "node --test tests/site-release.test.mjs",
+    "validate:bank": "node mock/validate_t6_bank.js"
+  }
+}

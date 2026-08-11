@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Mocks — Generating Entrepreneurial Resources</title>
+<meta name="description" content="Three full-length, timed GER mock exams (25 MCQ, 75 min, +2 / −1 negative marking). Fresh scenario-first questions; submit to grade and review the answer key.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:,">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,"Segoe UI",sans-serif;background:#eef0f2;color:#1f2328;font-size:15px;line-height:1.55;}
+  .top{position:sticky;top:0;z-index:20;background:#1c1c1c;padding:11px 14px;border-bottom:2px solid #7a4cc4;}
+  .top .brand{color:#b399e6;font-weight:bold;font-size:16px;}
+  .top .sub{color:#9aa0a6;font-size:12px;margin-top:2px;}
+  .nav{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap;}
+  .nav a{padding:6px 9px;background:#2a2f35;color:#e8eaed;text-decoration:none;border-radius:6px;font-size:12px;font-weight:bold;}
+  .nav a:hover{background:#7a4cc4;}
+  .wrap{max-width:860px;margin:0 auto;padding:14px 12px 80px;}
+  .intro{background:#f1ecfa;border-left:4px solid #7a4cc4;border-radius:6px;padding:11px 13px;margin-bottom:16px;font-size:13.5px;}
+  .intro b{color:#5b34a3;} .intro .neg{color:#c1392b;font-weight:bold;}
+  .mcard{display:block;text-align:left;width:100%;background:#fff;border:1px solid #dde1e5;border-radius:11px;padding:15px 16px;margin-bottom:12px;cursor:pointer;transition:border-color .12s,transform .1s;}
+  .mcard:hover{border-color:#7a4cc4;transform:translateY(-2px);}
+  .mcard .mt{font-size:16px;font-weight:bold;color:#15171a;}
+  .mcard .mb{color:#5a6169;font-size:13px;margin-top:4px;}
+  .mcard .mmeta{margin-top:8px;font-size:12px;color:#5b34a3;font-weight:bold;}
+  .examhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+  .examhead h2{font-size:18px;color:#15171a;}
+  .backbtn{border:1px solid #cfd6de;background:#f4f6f8;color:#3a4047;border-radius:7px;padding:7px 11px;font-size:12.5px;font-weight:bold;cursor:pointer;}
+  .bar{position:sticky;top:96px;z-index:15;display:flex;gap:8px;align-items:center;justify-content:space-between;background:#fff;border:1px solid #cfd6de;border-radius:9px;padding:9px 13px;margin:8px 0 16px;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+  .bar .timer{font-weight:bold;font-size:15px;color:#15171a;}
+  .bar .timer.low{color:#c1392b;}
+  .bar .ans{color:#5a6169;}
+  .bar button{border:none;background:#7a4cc4;color:#fff;border-radius:7px;padding:7px 13px;font-size:13px;font-weight:bold;cursor:pointer;}
+  .q{background:#fff;border:1px solid #dde1e5;border-radius:10px;margin-bottom:12px;padding:13px 14px;}
+  .qhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:7px;}
+  .qnum{font-weight:bold;color:#9aa0a6;font-size:12px;}
+  .chip{font-size:10.5px;font-weight:bold;letter-spacing:.3px;border-radius:9px;padding:2px 8px;color:#5b34a3;background:#f1ecfa;border:1px solid #ddd0f0;}
+  .chip.calc{color:#b06a00;background:#fdf3e2;border:1px solid #f3dcae;}
+  .stem{font-size:14.5px;margin-bottom:10px;}
+  .opts{display:flex;flex-direction:column;gap:7px;}
+  .opt{display:flex;gap:9px;align-items:flex-start;text-align:left;background:#f7f9fb;border:1px solid #d7dde3;border-radius:8px;padding:9px 11px;font-size:13.7px;cursor:pointer;}
+  .opt:hover{background:#f0ecf8;border-color:#b79edb;}
+  .opt.sel{background:#efe7fb;border-color:#7a4cc4;}
+  .opt .lk{font-weight:bold;color:#5a6169;min-width:15px;}
+  .opt .mk{margin-left:auto;font-weight:bold;}
+  .graded .opt{cursor:default;}
+  .graded .opt.correct{background:#e7f6ec;border-color:#46b56e;}
+  .graded .opt.wrong{background:#fdecea;border-color:#e07d6e;}
+  .graded .opt.correct .mk{color:#1a8a4a;} .graded .opt.wrong .mk{color:#c1392b;}
+  .exp{display:none;margin-top:9px;border-top:1px dashed #d7dde3;padding-top:8px;font-size:13.3px;}
+  .graded .exp{display:block;}
+  .exp .a{font-weight:bold;color:#1a8a4a;}
+  .exp .w{background:#f4f1fb;border-left:3px solid #7a4cc4;border-radius:5px;padding:6px 9px;margin-top:5px;}
+  .results{display:none;background:#fff;border:2px solid #7a4cc4;border-radius:11px;padding:16px;margin:6px 0 16px;text-align:center;}
+  .results.show{display:block;}
+  .results .big{font-size:30px;font-weight:bold;color:#15171a;}
+  .results .band{display:inline-block;margin-top:6px;padding:4px 14px;border-radius:14px;font-weight:bold;color:#fff;font-size:13px;}
+  .foot{text-align:center;color:#9aa0a6;font-size:12px;margin-top:24px;}
+  .foot a{color:#2d6fd4;text-decoration:none;}
+</style>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-theme-base="light">
+<div class="top">
+  <div class="brand">🟪 Exam Mocks — Generating Entrepreneurial Resources</div>
+  <div class="sub">Full-length timed papers · 25 MCQ · 75 min · 2 marks each · −1 negative marking</div>
+  <div class="nav"><a href="#" onclick="showLauncher();return false;">All papers</a><a href="discuss_ger.html">Drill</a><a href="test_ger.html">Module Tests</a><a href="formulas_ger.html">Formulas</a><a href="index.html">← Portal</a></div>
+</div>
+<div class="wrap">
+  <div id="launcher">
+    <div class="intro"><b>Sit a full paper.</b> Each mock is a fresh 25-question, scenario-first exam across the whole syllabus in <i>new</i> contexts — none repeat the drill, module tests or other papers. <span class="neg">Negative marking is live (+2 / −1)</span>, so skip what you truly can't reason out. Answers reveal only on <b>submit</b> (or when the timer ends). Best score posts to the <a href="index.html" style="color:#5b34a3;font-weight:bold;">leaderboard</a>.</div>
+    <div id="modlist"></div>
+  </div>
+  <div id="exam" style="display:none;">
+    <div class="examhead"><h2 id="examTitle"></h2><button class="backbtn" onclick="quit()">← Papers</button></div>
+    <div class="bar">
+      <span class="timer" id="timer">75:00</span>
+      <span class="ans"><span id="aDone">0</span>/<span id="aTot">0</span> answered</span>
+      <button onclick="submitExam()">Submit</button>
+    </div>
+    <div class="results" id="results"></div>
+    <div id="paper"></div>
+    <button class="backbtn" style="width:100%;padding:12px;margin-top:4px;" onclick="submitExam()">Submit paper</button>
+  </div>
+  <div class="foot">Full-length mock exams · fresh scenario-first questions · −1 negative marking · <a href="index.html">← back to portal</a></div>
+</div>
+<script>
+const MARK_RIGHT=2, MARK_WRONG=-1, MINUTES=75;
+const SETS=[
+ {id:"A",name:"Paper A",blurb:"Full-syllabus mock — capital & sources, valuation/cap-table maths, cash, term sheets & rights, exits, compliance, structures."},
+ {id:"B",name:"Paper B",blurb:"Second full mock with all-new numbers and legal vignettes across every module."},
+ {id:"C",name:"Paper C",blurb:"Third full mock — hardest mix, heavier on cap-table and liquidation computations."},
+ {id:"D",name:"Paper D · Coverage",blurb:"Covers the corners the other papers don't reach: motivations & venture risk, the funding ladder, the VC process, structuring instruments (warrants/convertibles), planning, incorporation & rights issues."}
+];
+/* compact: s set, t topic, q stem, o options, c correct, e explanation, w working, x calc */
+const Q=[
+/* ============================ PAPER A ============================ */
+{s:"A",t:"Finance function",q:"Beyond raising money, a start-up's finance function is responsible for:",o:["Only marketing","Keeping capital providers satisfied, measuring performance and designing incentives","Only hiring","Only production"],c:1,e:"Finance also satisfies capital providers, monitors performance and designs incentives."},
+{s:"A",t:"Debt vs equity",q:"For a risky, pre-revenue venture, equity is preferred over debt because:",o:["Equity is free (no interest)","It shares risk/reward; lenders won't fund unsecured risky ventures","Debt has no obligations","Equity needs no governance"],c:1,e:"Equity shares risk; debt's fixed obligations are dangerous and lenders demand security."},
+{s:"A",t:"Kerr-Nanda",q:"A novel medtech device needing only a few crore sits in which Kerr-Nanda quadrant — the classic VC zone?",o:["High novelty, high capital","High novelty, low capital","Low novelty, high capital","Low novelty, low capital"],c:1,e:"High-novelty/low-capital is the typical VC-backed quadrant."},
+{s:"A",t:"Post-money (compute)",x:1,q:"An investor puts ₹12 crore for a 20% stake. Post-money valuation?",o:["₹48 crore","₹60 crore","₹72 crore","₹2.4 crore"],c:1,e:"post = investment/%stake = 12/0.20 = ₹60 cr.",w:"12 / 0.20 = ₹60 cr (pre = 60−12 = ₹48 cr)."},
+{s:"A",t:"%stake (compute)",x:1,q:"Pre-money ₹90 crore, raise ₹30 crore. New investor's stake?",o:["33.3%","25%","30%","20%"],c:1,e:"%stake = 30/(90+30) = 30/120 = 25% (dividing by pre gives the wrong 33.3%).",w:"30/120 = 25%."},
+{s:"A",t:"Exit multiple (compute)",x:1,q:"Invest ₹25 cr for 20%; exit at ₹500 cr, no further dilution. Exit multiple?",o:["20x","4x","2.5x","5x"],c:1,e:"realisation = 0.20×500 = ₹100 cr; multiple = 100/25 = 4x.",w:"0.20·500=100; 100/25=4x (500/25=20x is the trap)."},
+{s:"A",t:"P/B (compute)",x:1,q:"Share ₹150; 40,000 shares of ₹100 face value; retained earnings ₹20,00,000. P/B?",o:["1.5","0.83","1.0","2.0"],c:2,e:"net worth = capital + reserves = 40,00,000 + 20,00,000 = 60,00,000; BVPS = 150; P/B = 150/150 = 1.0.",w:"capital = 40,000·100 = 40,00,000; +20,00,000 = 60,00,000 net worth; BVPS = 60,00,000/40,000 = 150; P/B = 150/150 = 1.0."},
+{s:"A",t:"Enterprise value (compute)",x:1,q:"Equity ₹600 cr, debt ₹250 cr, cash ₹80 cr. Enterprise value?",o:["₹600 cr","₹770 cr","₹930 cr","₹350 cr"],c:1,e:"EV = equity + debt − cash = 600+250−80 = ₹770 cr.",w:"600+250−80=₹770 cr."},
+{s:"A",t:"Cash budget (compute)",x:1,q:"Month: revenue ₹6,00,000 (₹2,50,000 in cash), pays ₹2,00,000 rent + ₹1,50,000 salary in cash, opens ₹1,00,000. Closing cash?",o:["+₹2,50,000 (accrual)","+₹0 (break-even)","−₹50,000","+₹50,000"],c:1,e:"2,50,000 + 1,00,000 − 3,50,000 = 0 (use cash received, not accrual ₹6L).",w:"in 2,50,000 + open 1,00,000 = 3,50,000; out 3,50,000 → 0."},
+{s:"A",t:"Funding requirement (compute)",x:1,q:"Forecast cash inflow ₹90L, cash outflow ₹130L, plus one-off ₹60L tech CapEx. Funding requirement?",o:["₹40L","₹100L","₹60L","₹130L"],c:1,e:"deficit = (130+60) − 90 = ₹100L.",w:"130+60−90=₹100L."},
+{s:"A",t:"Term sheet",q:"A term sheet is best described as:",o:["A binding ownership contract","A mostly non-binding summary of key terms, with some clauses (no-shop, confidentiality) binding","A 5-year financial plan","A tax-exemption estimate"],c:1,e:"Mostly non-binding; only clauses like no-shop/confidentiality bind."},
+{s:"A",t:"No-shop",q:"After signing a term sheet, a founder secretly courts another investor. Which clause is breached?",o:["Valuation","No-shop / exclusivity","Liquidation preference","Governance"],c:1,e:"The no-shop clause bars negotiating with other investors after signing."},
+{s:"A",t:"Liquidation pref (compute)",x:1,q:"Invest ₹12 cr for 20%, 1x participating; exit proceeds ₹80 cr. Payout?",o:["₹16 cr","₹25.6 cr","₹12 cr","₹80 cr"],c:1,e:"1×12 + 0.20×(80−12) = 12 + 13.6 = ₹25.6 cr.",w:"pref 12; remainder 68; 0.20·68=13.6; total ₹25.6 cr."},
+{s:"A",t:"Anti-dilution",q:"Which protection shields an early investor in a down round, and which form gives the MOST protection?",o:["Information rights; weighted average","Anti-dilution rights; full ratchet","Board rights; broad-based","Tag-along; narrow-based"],c:1,e:"Anti-dilution protects down rounds; full ratchet (reset to new price) gives the most protection."},
+{s:"A",t:"Exit routes",q:"Most-preferred to least-preferred exit routes:",o:["Buyback → IPO → trade sale","IPO → secondary → trade sale → buyback","Trade sale → buyback → IPO","Secondary → buyback → IPO"],c:1,e:"IPO is most preferred; buyback is least common in India."},
+{s:"A",t:"Buyback cap",q:"A 30% investor wants to fully exit via company buyback. This is:",o:["Allowed for any %","Not fully possible — buyback ≤ 25% of share capital","Allowed after an IPO only","The most common Indian exit"],c:1,e:"A company can't buy back more than 25% of share capital."},
+{s:"A",t:"Pitching",q:"An investor asks 'what stops a giant from copying you?'. The founder must show:",o:["A long feature list","Defensibility (moats); first-mover status alone isn't enough (OYO vs Stayzilla)","A tiny market","Early tax savings"],c:1,e:"Defensibility/competition answer matters; first-mover advantage doesn't stop imitators."},
+{s:"A",t:"Unlimited liability",q:"Which has unlimited liability?",o:["Private limited company","Sole proprietorship","LLP","One Person Company"],c:1,e:"A sole proprietorship (and general partnership) carries unlimited personal liability."},
+{s:"A",t:"MOA vs AOA",q:"Which document defines a company's scope and objectives?",o:["Articles of Association","Memorandum of Association","Partnership deed","LLP agreement"],c:1,e:"The MOA defines scope/objects; the AOA governs internal management."},
+{s:"A",t:"DPIIT",q:"DPIIT start-up registration is primarily for:",o:["Paying tax early","Start-up recognition and access to government benefits (optional)","Mandatory audit","Hiring staff"],c:1,e:"Optional recognition unlocking self-certification, convertible notes, tax benefits, etc."},
+{s:"A",t:"Resolutions",q:"Private placement / preferential allotment requires which resolution?",o:["Ordinary (>50%)","Special (75%)","Board minutes only","Unanimous"],c:1,e:"It requires a 75% special resolution (and a registered-valuer report)."},
+{s:"A",t:"IP pillars",q:"A firm wants to protect the distinctive shape/appearance of its new bottle. The right IP pillar:",o:["Patent","Design","Trademark","Copyright"],c:1,e:"Design protects the visual appearance/aesthetics of a product."},
+{s:"A",t:"VC fund / AIF",q:"Indian early-stage VC funds are:",o:["RBI-regulated, mostly listed equity","SEBI-regulated Category I AIFs, ≥2/3 unlisted, ≤25% per company","Banks","Unregulated"],c:1,e:"Cat I AIFs are SEBI-regulated with unlisted-focus and single-company caps."},
+{s:"A",t:"ROFR vs ROFO",q:"Under a Right of First Refusal (ROFR):",o:["The holder names a price first","The seller gets a market offer first, then must offer it to the holder at that price","The company sets a fixed price","No price is involved"],c:1,e:"ROFR: market price first → offer to holder; ROFO: holder names a price first."},
+{s:"A",t:"Governance",q:"The lesson of the Tata-Mistry dispute is that boards:",o:["Should act on who is commercially right","May make commercial decisions if proper process is followed","Cannot remove a chairman","Need no process"],c:1,e:"The courts focused on process — commercial decisions stand if procedures are followed."},
+
+/* ============================ PAPER B ============================ */
+{s:"B",t:"Forms of capital",q:"A founder who quits a salaried job to build her start-up before investing cash is:",o:["Not a capital provider yet","A capital provider via intellectual capital and foregone compensation","Only a future shareholder","An employee"],c:1,e:"Capital includes intellectual/foregone-comp; she's a capital provider to her own venture."},
+{s:"B",t:"Phased funding",q:"Investors stage funding across phases mainly to:",o:["Be polite","Limit dilution and resolve founder-investor information asymmetry","Avoid taxes","Delay diligence"],c:1,e:"Staging limits dilution and reveals information gradually."},
+{s:"B",t:"Hybrid instrument",q:"Preference share capital that pays a fixed dividend and is redeemable is classified as:",o:["Pure equity","A hybrid (debt-like features, but share capital)","Pure debt","A grant"],c:1,e:"It blends debt and equity features — a hybrid."},
+{s:"B",t:"Pre-money (compute)",x:1,q:"Invest ₹20 cr for 25%. Pre-money valuation?",o:["₹80 cr","₹60 cr","₹100 cr","₹25 cr"],c:1,e:"post = 20/0.25 = 80; pre = 80 − 20 = ₹60 cr.",w:"post 80; pre 80−20=₹60 cr."},
+{s:"B",t:"Required stake (compute)",x:1,q:"Invest ₹8 cr at 25%/yr for 4 years; exit equity ₹49 cr, no dilution. Entry stake?",o:["16.3%","≈40.7%","≈20%","25%"],c:1,e:"Grow the investment to future value, then divide by exit equity: FV = 8×1.25⁴ ≈ ₹19.5 cr; stake = 19.5/49 ≈ 40%.",w:"FV = 8·(1.25)⁴ = 8·2.4414 ≈ 19.5; 19.5/49 ≈ 0.40 → ~40%."},
+{s:"B",t:"Dilution",q:"In a primary round issuing new shares, an existing founder's:",o:["Absolute share count falls","Percentage falls but absolute share count is unchanged","Shares are sold by the founder","Stake always loses value"],c:1,e:"The company issues new shares; the founder's % drops, share count unchanged."},
+{s:"B",t:"Method choice",q:"Two loss-making, high-growth firms (no PAT) are best valued by:",o:["P/E","EV/EBITDA","Price-to-interest","Face value"],c:1,e:"With no PAT, P/E is meaningless; EV/EBITDA is capital-structure neutral."},
+{s:"B",t:"Net burn (compute)",x:1,q:"Monthly cash receipts ₹3,00,000; payments ₹8,00,000. Net cash burn?",o:["₹8,00,000","₹5,00,000","₹11,00,000","₹3,00,000"],c:1,e:"burn = payments − receipts = 8,00,000 − 3,00,000 = ₹5,00,000.",w:"8L−3L=₹5L."},
+{s:"B",t:"Runway (compute)",x:1,q:"Cash balance ₹60,00,000; monthly net burn ₹5,00,000. Runway?",o:["6 months","12 months","5 months","3 months"],c:1,e:"runway = balance / monthly burn = 60/5 = 12 months.",w:"60,00,000 / 5,00,000 = 12."},
+{s:"B",t:"Info rights",q:"Information rights let an investor:",o:["Run daily operations","Access financial/management reports to monitor (not manage)","Hire staff","Approve dividends directly"],c:1,e:"They are monitoring rights, not management rights."},
+{s:"B",t:"Board observer",q:"A board observer (vs director) can:",o:["Vote on resolutions","Attend and monitor but NOT vote","Appoint the CEO","Override shareholders"],c:1,e:"An observer attends but does not vote; only a director votes."},
+{s:"B",t:"Convertible note",q:"A convertible note can be issued by:",o:["Any start-up, any amount, valuation at issue","DPIIT start-ups only, ≥₹25 lakh per investor, no valuation at issue","Only listed firms","Only banks"],c:1,e:"DPIIT-only, ≥₹25 lakh per investor, valuation deferred to conversion."},
+{s:"B",t:"Liquidation (non-part., compute)",x:1,q:"Invest ₹30 cr for 20%, 2x non-participating; exit ₹300 cr. Optimal payout?",o:["₹40 cr","₹60 cr","₹30 cr","₹90 cr"],c:1,e:"max(2×30, 0.20×300) = max(60, 60) = ₹60 cr.",w:"pref 60; convert 0.20·300=60; max=₹60 cr."},
+{s:"B",t:"Down round",q:"A down round is one where the company raises at:",o:["A higher valuation than before","A lower share price than the prior round (heavy dilution)","The same valuation","Bonus shares"],c:1,e:"Down = priced below the last round; anti-dilution protects against this."},
+{s:"B",t:"IPO realities",q:"Which is true of an IPO?",o:["Done in a few weeks","~8–12 months, needs a SEBI-cleared RHP and a merchant banker, raises ongoing compliance","Reduces disclosure","Needs no prospectus"],c:1,e:"IPOs take months, need RHP/merchant banker, and increase compliance."},
+{s:"B",t:"Trade vs secondary",q:"A financial investor buying an earlier investor's existing stake (no strategic motive) is a:",o:["Trade sale","Secondary purchase","Buyback","IPO"],c:1,e:"Secondary = financial buyer of existing shares; trade sale = strategic acquirer."},
+{s:"B",t:"OPC",q:"A One Person Company differs from a sole proprietorship by having:",o:["Unlimited liability","Separate legal status, perpetual succession and limited liability","Two members","No PAN"],c:1,e:"OPC is a separate entity with limited liability and perpetual succession."},
+{s:"B",t:"AGM",q:"An Annual General Meeting is mandatory for:",o:["An LLP","A private limited company","A sole proprietorship","A partnership firm"],c:1,e:"AGMs are mandatory for companies, not LLPs/partnerships/proprietorships."},
+{s:"B",t:"MSME (UDYAM)",q:"MSME (UDYAM) registration is:",o:["Costly, renewed yearly","Free, one-time, with a 45-day buyer-payment rule","A ban on loans","A replacement for incorporation"],c:1,e:"Free/one-time; MSME dues must be paid within 45 days."},
+{s:"B",t:"Payout hierarchy",q:"In the payout queue, ordinary equity shareholders are:",o:["Paid before preference holders","The residual claimants — paid after debt and preference","Paid before lenders","Guaranteed a coupon"],c:1,e:"Equity is the residual claimant: highest risk, paid last."},
+{s:"B",t:"SHA vs AOA",q:"Why incorporate the shareholders' agreement (SHA) into the Articles (AOA)?",o:["The SHA overrides the AOA","Because the AOA supersedes the SHA, so SHA terms must be in the AOA to bind","They are identical","The AOA cannot change"],c:1,e:"The AOA supersedes the SHA; fold SHA terms into the AOA."},
+{s:"B",t:"IP: code ownership",q:"A contractor writes your app's code with no special clause. Who owns the copyright?",o:["The company, since it paid","The contractor (creator is first owner) unless an IP-assignment clause transfers it","Nobody until registered","The government"],c:1,e:"Creator is first owner; you need an IP-assignment clause."},
+{s:"B",t:"Labour law",q:"A post-employment non-compete against a departing engineer in India is:",o:["Fully enforceable","Generally unenforceable — use notice periods/non-solicitation","Automatic without a clause","Only for promoters"],c:1,e:"Post-employment non-competes are generally void in India."},
+{s:"B",t:"Investor motivations",q:"A strategic investor (e.g. Intel) backing a start-up is mainly after:",o:["Pure financial return","Strategic benefits (tech/market access), often with restrictive terms","Psychic income","Liquidity above all"],c:1,e:"Strategic investors seek strategic benefits, often with restrictive terms."},
+{s:"B",t:"Incubators vs accelerators",q:"Which statement is correct?",o:["They are identical","Distinct — accelerators run fixed cohorts (e.g. Y Combinator); both fill early resource/capital gaps","Incubators only give cash","Accelerators only give lab space"],c:1,e:"Incubators provide labs/mentors/talent + small seed; accelerators are cohort-based (YC)."},
+
+/* ============================ PAPER C ============================ */
+{s:"C",t:"Equity characteristics",q:"Which statement about equity capital is correct?",o:["Dividends are guaranteed","Equity is patient/permanent capital; dividends are discretionary, returns not guaranteed","It is repaid on a schedule","It guarantees appreciation"],c:1,e:"Equity is permanent/patient; dividends are discretionary and returns aren't guaranteed."},
+{s:"C",t:"Terms of share capital",q:"Largest to smallest, the share-capital terms are:",o:["Paid-up ≥ subscribed ≥ issued ≥ authorised","Authorised ≥ issued ≥ subscribed ≥ paid-up","Issued ≥ authorised ≥ paid-up","Subscribed ≥ authorised ≥ issued"],c:1,e:"Authorised (MOA ceiling) ≥ issued ≥ subscribed ≥ paid-up."},
+{s:"C",t:"% equity at exit (compute)",x:1,q:"An investor must realise ₹60 cr at exit; forecast exit valuation ₹400 cr. % of the company needed at exit?",o:["10%","15%","20%","6.7%"],c:1,e:"%equity at exit = realisation/exit valuation = 60/400 = 15%.",w:"60/400 = 15%."},
+{s:"C",t:"Adjust entry for dilution (compute)",x:1,q:"An investor needs 15% at exit; a later round dilutes her by 25%. Entry stake required?",o:["11.25%","20%","15%","18.75%"],c:1,e:"entry = exit/(1−dilution) = 15%/0.75 = 20%.",w:"0.15/0.75 = 0.20 = 20%."},
+{s:"C",t:"Full ratchet (compute)",x:1,q:"Founder 8,00,000 sh; Series A ₹2,00,000 at ₹1 (2,00,000 sh); Series B ₹1,50,000 at ₹0.50. Under full ratchet, Series A is re-priced to ₹0.50, getting how many shares?",o:["2,00,000","4,00,000","3,00,000","1,00,000"],c:1,e:"Full ratchet: A shares = investment/new price = 2,00,000/0.50 = 4,00,000.",w:"2,00,000 / 0.50 = 4,00,000 shares."},
+{s:"C",t:"Cap table sums",q:"After any anti-dilution adjustment, the resulting cap table must:",o:["Exceed 100%","Sum to exactly 100%","Be below 100%","Ignore options"],c:1,e:"All stakes must sum to 100% (within rounding)."},
+{s:"C",t:"Exit multiple → annual (compute)",x:1,q:"An investment returns a 16x money multiple over 4 years. The implied annual return is:",o:["16%","100% p.a.","400%","25%"],c:1,e:"annual = multiple^(1/n) − 1 = 16^(1/4) − 1 = 2 − 1 = 100%.",w:"16^0.25 = 2 → 2 − 1 = 100% p.a."},
+{s:"C",t:"Early vs evolved valuation",q:"Early-stage valuation differs from valuing a listed manufacturer because it:",o:["Uses DCF on long history","Hinges on capital availability and investor sector-preference (limited stable history)","Ignores the market","Uses only face value"],c:1,e:"Early-stage value is sentiment/capital-driven; no stable history for DCF."},
+{s:"C",t:"Unit economics",q:"A startup earns ₹400/customer and spends ₹520 to acquire/serve each. This indicates:",o:["Strong unit economics","Negative unit economics","Break-even","High valuation"],c:1,e:"Cost exceeds per-customer revenue → negative unit economics."},
+{s:"C",t:"Rising valuations",q:"Pre/post-money valuations rising across rounds signal:",o:["Noise","Validated progress that also lifts earlier investors' stake value","Only the latest investor gains","Trouble"],c:1,e:"An arm's-length higher round validates progress and raises earlier stakes."},
+{s:"C",t:"Convertible (downside)",q:"To protect against an over-optimistic exit-valuation forecast, an investor should:",o:["Lock equity at a fixed price now","Use a convertible whose price tracks actual performance","Demand the highest fixed valuation","Wait for profits"],c:1,e:"A performance-linked convertible re-prices to actual results, protecting the downside."},
+{s:"C",t:"Reserved matters",q:"A 30% investor's 'reserved matters' should be:",o:["As long as possible","A tight veto list over key decisions (new shares, AOA changes, major sales)","Operational control","Removal of the founder"],c:1,e:"Reserved matters are a tight veto list over company-critical actions."},
+{s:"C",t:"Conditions precedent",q:"An investor will release funds only after the firm hires a professional CEO. This requirement is a:",o:["Condition subsequent","Condition precedent (must be met before funding)","Reserved matter","Warranty"],c:1,e:"CPs must be satisfied before money is released; CS come after."},
+{s:"C",t:"Rich vs King",q:"A founder who turns down a big, well-priced round to keep control and grow slower is choosing the:",o:["'Rich' path","'King' path (control over wealth)","Liquidation path","Down round"],c:1,e:"Wasserman's 'king' keeps control at the cost of wealth/growth."},
+{s:"C",t:"Self-liquidating",q:"In a market with unreliable IPO/trade-sale exits, an investor funds a profitable firm via preference shares redeemed from cash flow. These are:",o:["IPO-dependent instruments","Self-liquidating instruments (repaid from cash flow)","Equity with control","Grants"],c:1,e:"Self-liquidating instruments are repaid from cash flow, for underdeveloped markets."},
+{s:"C",t:"Private limited cap",q:"A private limited company is capped at how many shareholders, with what liability?",o:["No cap; unlimited liability","200 shareholders; liability limited to unpaid share capital","50; unlimited","Unlimited; limited"],c:1,e:"Max 200 shareholders; limited liability (veil lifts only for fraud)."},
+{s:"C",t:"Partnership firm",q:"Which is true of a partnership firm?",o:["It has a separate legal identity","No separate identity, unlimited liability; registration optional but unregistered firms can't sue third parties","Registration is mandatory","Partners have limited liability"],c:1,e:"No separate identity, unlimited liability; registration optional (but recommended)."},
+{s:"C",t:"Borrowing compliance",q:"A private company's borrowing: which is correct?",o:["It can freely borrow from friends/family","Director loans are an 'exempted deposit'; it generally can't borrow from friends/family unless they're shareholders","Director loans count to the cap","It can take public deposits"],c:1,e:"Director loans are exempted deposits; friends/family can't lend unless shareholders."},
+{s:"C",t:"ESOP eligibility",q:"For a non-DPIIT private company, ESOPs can be granted to:",o:["Anyone, vesting immediately","Permanent employees/directors — NOT promoters/independent directors/>10% holders; min 1-year vesting","Only promoters","Only independent directors"],c:1,e:"Promoters/independent directors/>10% holders are barred (unless DPIIT); 1-year vesting."},
+{s:"C",t:"Due diligence",q:"Due diligence is:",o:["Post-investment, to embarrass the founder","Pre-investment (after the term sheet), to price and offset risk","Only at exit","Replaced by the term sheet"],c:1,e:"DD is a pre-investment risk-pricing health check feeding CPs/safeguards."},
+{s:"C",t:"Tag vs drag",q:"Which pairing is correct?",o:["Tag-along forces a sale; drag-along lets a minority join","Drag-along forces others to sell; tag-along lets a minority join on the same terms","They are identical","Both protect the majority only"],c:1,e:"Drag forces a sale; tag lets a minority join."},
+{s:"C",t:"CLM",q:"Negotiating a customer contract, an Indian founder should:",o:["Accept unlimited liability; pick foreign law","Cap liability to fees; choose Indian law/jurisdiction","Leave liability unspecified","Avoid a termination clause"],c:1,e:"Cap liability and choose home-jurisdiction law; negotiate the value points."},
+{s:"C",t:"Governance: RPTs",q:"The Fortis collapse warns that related-party transactions must be:",o:["Fine if the promoter approves","Transparent, board-approved and arm's-length","Hidden for speed","Ignored"],c:1,e:"Opaque RPTs destroyed governance; they must be transparent and arm's-length."},
+{s:"C",t:"Comparing sources",q:"Which statement about funding sources is correct?",o:["Debt dilutes ownership","Debt avoids dilution but adds repayment pressure; founder leverage rises at growth stage","Founders never gain leverage","Angels demand the most governance"],c:1,e:"Debt avoids dilution (repayment pressure instead); founder power rises with a proven product."},
+{s:"C",t:"Liquidation preference",q:"A liquidation preference ensures:",o:["Priority payout to common shareholders","Priority payout to preference shareholders over common holders at liquidation","An equal split regardless of share class","A guaranteed annual dividend"],c:1,e:"It gives the investor (preference holder) priority in the payout queue, ahead of common holders."},
+
+/* ============================ PAPER D · COVERAGE ============================ */
+{s:"D",t:"Motivations for starting up",q:"A founder deliberately builds a slow-growing 'lifestyle' business rather than chasing scale. The course's point about motivations is:",o:["Only profit-maximisation is a legitimate motive","Purpose (society/livelihood/lifestyle/returns/self-actualisation) shapes the financial strategy — how much to raise and on what terms","Motivation has no bearing on financing","Lifestyle founders can't raise money"],c:1,e:"Different motivations are all legitimate and drive different funding needs/terms."},
+{s:"D",t:"Evolution of venture risk",q:"As a venture moves from building the product to scaling nationally, the dominant risk shifts roughly from:",o:["Growth risk → product risk","Product/market-fit risk → market-acceptance risk → growth/competition risk","The same risk throughout","Regulatory risk only"],c:1,e:"Risk is stage-dependent, so investors specialise by stage."},
+{s:"D",t:"Liability of novelty",q:"A genuinely novel product suffers slow adoption because customers don't yet understand or trust it. This is best described as:",o:["Purely an advantage of innovation","The liability of novelty — novelty is also a risk, not only an asset","The liability of smallness","A regulatory barrier"],c:1,e:"Novelty is both an advantage and a liability (low trust/understanding slows adoption)."},
+{s:"D",t:"Sources of risk / forecasts",q:"Why might an early-stage VC barely rely on a startup's 5-year financial model?",o:["VCs always trust forecasts","Early-stage forecasts are unreliable — ~30% of early investors don't use them, betting on idea/market/team","The model is illegal to share","Forecasts are only for banks"],c:1,e:"Forecast uncertainty is a key early-stage risk; many investors discount the model."},
+{s:"D",t:"Downsides of equity",q:"'Equity is cheaper than debt because there's no interest.' The best correction:",o:["Correct — equity is free","Equity costs ownership, a share of wealth, voting/control and governance duties, and is lumpy to raise","Equity is cheaper only for big firms","Equity carries hidden interest"],c:1,e:"Equity isn't free: it gives away wealth and control, adds governance, and is lumpy."},
+{s:"D",t:"Ownership & control (compute)",x:1,q:"A company issues 1,000 shares; X subscribes 600, Y 400. If it later sells for ₹1 crore, X's share of the proceeds is:",o:["₹40,00,000","₹60,00,000","₹50,00,000","₹1,00,00,000"],c:1,e:"Wealth (and voting) track %shareholding: X owns 600/1,000 = 60% → 60% of ₹1 cr.",w:"600/1,000 = 60%; 0.60 × ₹1,00,00,000 = ₹60,00,000."},
+{s:"D",t:"The 3 Fs",q:"The first external capital — founders, family and friends — is best characterised by:",o:["Arm's-length, return-driven money","A support/'psychic income' motive, rarely imposing discipline or covenants","VC-style governance","Mandatory board seats"],c:1,e:"3F money backs the person, not commercial return, and rarely adds discipline."},
+{s:"D",t:"Angel networks",q:"In an angel network (vs a VC fund), investment decisions are made by:",o:["The network manager for all members","Each angel individually — members retain discretion per deal","A vote of all members","SEBI"],c:1,e:"Angels keep per-deal discretion; a VC fund manager decides for the fund."},
+{s:"D",t:"VC investment process",q:"The most common sequence of the VC investment process is:",o:["Sourcing → Structuring → Screening → Evaluation → Contracting → Exit","Sourcing → Screening → Evaluation → Structuring → Contracting → Exit","Sourcing → Evaluation → Screening → Contracting → Structuring → Exit","Screening → Sourcing → Evaluation → Exit → Structuring"],c:1,e:"Source → quick screen → deep evaluation → structure → contract → exit."},
+{s:"D",t:"Steps in valuing a start-up",q:"The valuation of a start-up typically BEGINS by:",o:["Computing the exit multiple","Estimating the funding requirement (CapEx + cash burn)","Picking a P/E","Setting the share price"],c:1,e:"It's a ~10-step chain that starts from the funding requirement and works to pre/post money."},
+{s:"D",t:"Using the valuation model",q:"Raising less upfront and staging the large raise for later tends to:",o:["Increase founder dilution","Reduce founder dilution (a de-risked later round earns a better valuation)","Have no effect on dilution","Always lower the company's value"],c:1,e:"Big upfront raises (held longer, higher uncertainty) demand more dilution; staging after de-risking improves valuation. The model is a planning tool, not truth."},
+{s:"D",t:"Comparables method",q:"To value target firm T by comparables, you:",o:["Use only T's own numbers","Take similar listed firms' average multiple and apply it to T's metric (EPS/EBITDA/sales)","Always use DCF","Use T's face value"],c:1,e:"Comparables value is relative — average a peer multiple and apply it to the target's metric."},
+{s:"D",t:"Financial planning steps",q:"The correct order of start-up financial planning is:",o:["Cash budget → sales → costs → valuation","Sales estimate → unit costs/opex → cash budget → forecast statements → funding plan → valuation","Valuation → funding → sales → costs","Funding → cash budget → sales"],c:1,e:"Start from sales, then costs, then cash budget, then statements, funding and valuation."},
+{s:"D",t:"Cash budget line items",q:"In a cash budget, which is a ONE-TIME (CapEx) item rather than a recurring operating cost?",o:["Associate salaries","Technology/infrastructure investment","Marketing spend","Overheads"],c:1,e:"Infrastructure/technology are one-time CapEx; salary/overhead/marketing are recurring."},
+{s:"D",t:"Growth path & dilution",q:"A faster growth strategy generally requires ___ capital and, if raised upfront, causes ___ dilution:",o:["less; less","more; more","more; less","less; more"],c:1,e:"Faster growth needs more capital and (raised upfront) more dilution, due to higher perceived risk."},
+{s:"D",t:"Structuring goal",q:"'Structuring' a financing package primarily aims to:",o:["Set the share price only","Design the whole package to realise the investor's return while leaving founders enough incentive — aligning interests","Maximise the investor's take","Minimise paperwork"],c:1,e:"Good structuring aligns interests under uncertainty, not just price."},
+{s:"D",t:"Factors affecting structure",q:"Which SEBI rule shapes how an early-stage VC (Category I AIF) structures deals?",o:["It may invest its whole corpus in one company","It must hold the bulk (≥2/3) in unlisted VC undertakings, with single-company caps","It is RBI-regulated","It must invest only in listed equity"],c:1,e:"Cat I AIF rules (unlisted focus, ≤25% single-company) and leaving room for future investors shape structure."},
+{s:"D",t:"Warrants & options",q:"A warrant in a financing package can be exercised:",o:["Only by the investor, always","By either party — the founder if the firm outperforms, the investor if it underperforms","Only by the founder","By neither (decorative)"],c:1,e:"Warrants let either side adjust holdings by performance — a non-convertible performance lever."},
+{s:"D",t:"Convertible types",q:"Compulsorily vs optionally convertible instruments differ in that:",o:["They are identical","Compulsorily convertible MUST convert; optionally convertible MAY convert or be redeemed","Only optionally convertible exist","Compulsorily convertible can be redeemed"],c:1,e:"CCPS/CCD must convert; optionally convertible can convert or redeem (preference is usually cleaner for the company)."},
+{s:"D",t:"Exit-related terms",q:"Investors often secure a PUT option (force a buyback) without giving the founder a reciprocal CALL because:",o:["It's a drafting error","Of bargaining power and differing exit horizons (the fund must exit; the founder may hold forever)","It's legally required","Put and call are the same"],c:1,e:"Exit terms are often asymmetric, reflecting investor leverage and fund-life pressure."},
+{s:"D",t:"Strategic perspectives",q:"How do founders mostly learn the prevailing early-stage valuations and terms?",o:["From public databases","Through networking — the private market is opaque and terms are confidential","From SEBI filings","They can't, so they shouldn't try"],c:1,e:"The private market is opaque; networking reveals shifting terms. Don't over-optimise fundraising at the cost of the business."},
+{s:"D",t:"Incorporation: DIN",q:"A Director Identification Number (DIN) is:",o:["Obtained fresh for each MCA filing","Allotted once, for the director's lifetime (with periodic KYC)","The same as a DSC","Issued by SEBI"],c:1,e:"A DIN is a one-time lifetime ID; the DSC (separate) signs MCA filings."},
+{s:"D",t:"Post-incorporation compliance",q:"After allotment, a company must issue share certificates within:",o:["6 months","60 days","1 year","No deadline"],c:1,e:"Share certificates within 60 days of allotment; the first AGM within 9 months of FY close."},
+{s:"D",t:"Funding stages",q:"Series A funding is typically provided by:",o:["Family and friends","Institutional VC funds (SEBI-registered)","An IPO","Bank term loans"],c:1,e:"Series A = institutional VC; family/friends fund pre-seed; angels suit proof-of-concept."},
+{s:"D",t:"Rights issue",q:"In a rights issue, a shareholder's silence (no response) counts as:",o:["Acceptance","A decline — they must actively accept and pay","Renunciation to the company","An automatic pro-rata allotment"],c:1,e:"A rights issue offers shares to existing holders pro-rata; silence = decline (accept/decline/renounce)."}
+];
+
+/* ===== exam engine (negative marking) ===== */
+function showLauncher(){ stopTimer(); document.getElementById('launcher').style.display=''; document.getElementById('exam').style.display='none'; window.scrollTo({top:0}); }
+function quit(){ if(!graded && Object.keys(answers).length){ if(!confirm('Leave this paper? Your answers will be lost.')) return; } showLauncher(); }
+const modlist=document.getElementById('modlist');
+SETS.forEach(s=>{
+  const n=Q.filter(q=>q.s===s.id).length;
+  const b=document.createElement('button'); b.className='mcard'; b.onclick=()=>startSet(s.id);
+  b.innerHTML='<div class="mt">'+s.name+'</div><div class="mb">'+s.blurb+'</div><div class="mmeta">'+n+' questions · max '+(n*MARK_RIGHT)+' marks · −1 each wrong · '+MINUTES+' min</div>';
+  modlist.appendChild(b);
+});
+let CUR=null, answers={}, graded=false, timeLeft=0, timerId=null, list=[];
+function startSet(id){
+  CUR=id; answers={}; graded=false;
+  const s=SETS.find(x=>x.id===id);
+  list=Q.filter(q=>q.s===id);
+  document.getElementById('examTitle').textContent='GER · '+s.name;
+  document.getElementById('launcher').style.display='none';
+  document.getElementById('exam').style.display='';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('aTot').textContent=list.length;
+  const paper=document.getElementById('paper'); paper.classList.remove('graded'); paper.innerHTML='';
+  list.forEach((q,i)=>paper.appendChild(card(q,i)));
+  updateCount();
+  timeLeft=MINUTES*60; renderTimer(); startTimer();
+  window.scrollTo({top:0});
+}
+function card(q,i){
+  const el=document.createElement('div'); el.className='q'; el.id='q'+i;
+  let h='<div class="qhead"><span class="qnum">Q'+(i+1)+'</span><span class="chip'+(q.x?' calc':'')+'">'+q.t+'</span></div>';
+  h+='<div class="stem">'+q.q+'</div><div class="opts">';
+  q.o.forEach((o,k)=>{ h+='<button class="opt" data-k="'+k+'"><span class="lk">'+'ABCD'[k]+'</span><span>'+o+'</span><span class="mk"></span></button>'; });
+  h+='</div><div class="exp"></div>';
+  el.innerHTML=h;
+  el.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>pick(i,+b.dataset.k,el)));
+  return el;
+}
+function pick(i,k,el){ if(graded) return; answers[i]=k; el.querySelectorAll('.opt').forEach((b,j)=>b.classList.toggle('sel',j===k)); updateCount(); }
+function updateCount(){ document.getElementById('aDone').textContent=Object.keys(answers).length; }
+function submitExam(){
+  if(graded) return;
+  if(Object.keys(answers).length<list.length){ if(!confirm((list.length-Object.keys(answers).length)+' unanswered (no penalty for blanks). Submit anyway?')) return; }
+  graded=true; stopTimer();
+  let right=0, wrong=0;
+  list.forEach((q,i)=>{
+    const el=document.getElementById('q'+i); const opts=el.querySelectorAll('.opt');
+    opts.forEach((b,k)=>{ b.classList.remove('sel');
+      if(k===q.c){ b.classList.add('correct'); b.querySelector('.mk').textContent='✓'; }
+      else if(answers[i]===k){ b.classList.add('wrong'); b.querySelector('.mk').textContent='✗'; }
+    });
+    if(answers[i]===q.c) right++; else if(answers[i]!=null) wrong++;
+    el.querySelector('.exp').innerHTML='<span class="a">Answer: '+'ABCD'[q.c]+'.</span> '+q.e+(q.w?'<div class="w"><b>Working.</b> '+q.w+'</div>':'');
+  });
+  document.getElementById('paper').classList.add('graded');
+  const max=list.length*MARK_RIGHT, marks=right*MARK_RIGHT + wrong*MARK_WRONG, pct=Math.round(right/list.length*100);
+  let band,col; if(pct>=80){band='Strong — exam-ready';col='#1a8a4a';} else if(pct>=60){band='Solid — but −1 punishes slips';col='#c47e0a';} else {band='Revise before the real paper';col='#c1392b';}
+  const r=document.getElementById('results');
+  r.innerHTML='<div class="big">'+marks+' / '+max+' marks</div><div style="color:#5a6169;font-size:13px;">'+right+' right · '+wrong+' wrong · '+pct+'% correct</div><div class="band" style="background:'+col+'">'+band+'</div>';
+  r.classList.add('show'); r.scrollIntoView({behavior:'smooth',block:'center'});
+  if(window.Mock){ Mock.recordResult('GER '+SETS.find(x=>x.id===CUR).name, Math.max(0,marks), max); }
+}
+function renderTimer(){ const m=Math.floor(timeLeft/60), s=timeLeft%60; const el=document.getElementById('timer'); el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; el.classList.toggle('low',timeLeft<=300); }
+function startTimer(){ stopTimer(); timerId=setInterval(()=>{ timeLeft--; if(timeLeft<=0){ timeLeft=0; renderTimer(); stopTimer(); submitExam(); return; } renderTimer(); },1000); }
+function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+showLauncher();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

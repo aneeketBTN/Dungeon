@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Exam — New Age Business Models</title>
+<meta name="description" content="NABM mock — 50 MCQ across the full New Age Business Models syllabus, auto-graded with worked solutions.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NABM Mock — 50 MCQ">
+<meta property="og:description" content="New Age Business Models practice exam. Tap to open the portal; auto-grades with explanations.">
+<link rel="icon" href="data:,">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, "Segoe UI", sans-serif; background: #e9eaec; color: #222; font-size: 14px; }
+  .topbar { background: #1c1c1c; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; flex-wrap: wrap; gap: 6px; }
+  .topbar .brand { color: #f0a429; font-weight: bold; font-size: 15px; }
+  .topbar .links a { color: #fff; text-decoration: none; margin-left: 18px; cursor: pointer; font-size: 13px; }
+  .topbar .links a:hover { color: #f0a429; }
+  .topbar .links a.notes { color: #f0a429; font-weight: bold; }
+  .sectionbar { background: #fff; display: flex; align-items: flex-start; justify-content: space-between; padding: 8px 16px 0; border-bottom: 1px solid #ccc; flex-wrap: wrap; gap: 8px; }
+  .sectionbar .label { font-weight: bold; padding-top: 6px; margin-right: 12px; }
+  .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tab { padding: 6px 14px; background: #d4d6da; cursor: pointer; font-weight: bold; border-radius: 3px 3px 0 0; font-size: 12px; }
+  .tab.active { background: #2d6fd4; color: #fff; }
+  .timers { text-align: right; padding-top: 4px; font-size: 13px; }
+  .timers b { color: #c0392b; }
+  .examband { background: #3b7ddd; color: #fff; padding: 7px 16px; font-weight: bold; font-size: 14px; }
+  .layout { display: flex; align-items: stretch; min-height: calc(100vh - 210px); }
+  .main { flex: 1; background: #fff; padding: 14px 22px 90px; position: relative; }
+  .qhead { display:flex; align-items:center; gap:10px; margin-bottom: 14px; }
+  .qno { font-weight: bold; font-size: 15px; }
+  .mkbadge { background:#eef3fb; color:#2560bd; border:1px solid #cfe0f5; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:10px; }
+  .qtext { font-size: 16px; line-height: 1.6; margin-bottom: 22px; }
+  .qtext .formula { display: inline-block; background: #f4f6f8; border: 1px solid #dde2e7; padding: 2px 8px; border-radius: 4px; font-family: Consolas, monospace; font-size: 13px; color: #2d4a66; margin-top: 8px; }
+  .options { display: flex; flex-direction: column; gap: 10px; max-width: 820px; }
+  .option { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1px solid #cfd4da; border-radius: 6px; cursor: pointer; background: #fff; transition: background .12s, border-color .12s; }
+  .option:hover { background: #f3f7fd; border-color: #9cc0f0; }
+  .option.selected { background: #e7f0fd; border-color: #2d6fd4; }
+  .option .radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #888; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .option.selected .radio { border-color: #2d6fd4; }
+  .option.selected .radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #2d6fd4; }
+  .option .key { font-weight: bold; color: #555; }
+  .wordhint { font-size:12px; color:#888; margin-bottom:8px; font-style:italic; }
+  textarea.answer { width:100%; max-width:820px; min-height:170px; padding:12px; border:1px solid #bbb; border-radius:6px; font-family:inherit; font-size:14px; line-height:1.55; resize:vertical; }
+  .choicebox { display:flex; flex-direction:column; gap:10px; max-width:820px; margin-bottom:14px; }
+  .choiceopt { border:1px solid #cfd4da; border-radius:6px; padding:12px 14px; cursor:pointer; background:#fff; }
+  .choiceopt:hover { background:#f3f7fd; border-color:#9cc0f0; }
+  .choiceopt.picked { background:#e7f0fd; border-color:#2d6fd4; }
+  .choiceopt .lab { font-weight:bold; color:#2560bd; margin-right:6px; }
+  .sidebar { width: 290px; background: #fafbfc; border-left: 1px solid #d2d6da; padding: 12px; }
+  .profile { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .profile .avatar { width: 54px; height: 54px; border-radius: 4px; background: #cdd6e0; display: flex; align-items: center; justify-content: center; font-size: 28px; color:#7a8ba0; }
+  .profile .name { font-weight: bold; }
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 6px; margin-bottom: 16px; font-size: 11px; }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .badge { width: 24px; height: 24px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 12px; }
+  .b-ans { background: #34a853; border-radius: 4px 4px 14px 14px; }
+  .b-notans { background: #d14836; border-radius: 14px 14px 4px 4px; }
+  .b-notvis { background: #fff; color: #444; border: 1px solid #aaa; border-radius: 4px; }
+  .b-marked { background: #6f42c1; border-radius: 50%; }
+  .b-ansmarked { background: #6f42c1; border-radius: 50%; position: relative; }
+  .b-ansmarked::after { content: "✓"; position: absolute; right: -3px; bottom: -3px; background: #34a853; border-radius: 50%; width: 13px; height: 13px; font-size: 9px; display: flex; align-items: center; justify-content: center; }
+  .palette-title { background: #3b7ddd; color: #fff; padding: 6px 10px; font-weight: bold; border-radius: 3px; margin-bottom: 4px; font-size:12px; }
+  .choose { font-weight: bold; margin: 8px 0; font-size: 13px; }
+  .palette { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+  .pcell { height: 34px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 1px solid #aaa; background: #fff; border-radius: 4px; color: #444; position: relative; font-size:13px; }
+  .pcell.answered { background: #34a853; color: #fff; border-color: #2d8c46; border-radius: 4px 4px 16px 16px; }
+  .pcell.notans { background: #d14836; color: #fff; border-color: #b03a2b; border-radius: 16px 16px 4px 4px; }
+  .pcell.marked { background: #6f42c1; color: #fff; border-color: #5a36a0; border-radius: 50%; }
+  .pcell.ansmarked { background: #6f42c1; color: #fff; border-color: #5a36a0; border-radius: 50%; }
+  .pcell.ansmarked::after { content: "✓"; position: absolute; right: -2px; bottom: -2px; background: #34a853; border-radius: 50%; width: 14px; height: 14px; font-size: 9px; display: flex; align-items: center; justify-content: center; color:#fff; }
+  .pcell.current { outline: 3px solid #f0a429; outline-offset: 1px; }
+  .bottombar { position: fixed; bottom: 0; left: 0; right: 0; background: #f0f1f3; border-top: 1px solid #c8ccd0; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 50; flex-wrap: wrap; gap: 8px; }
+  .bottombar .group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { padding: 9px 14px; border: 1px solid #b5bcc4; background: #fff; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; }
+  .btn:hover { background: #eef1f5; }
+  .btn-primary { background: #2d6fd4; color: #fff; border-color: #2560bd; }
+  .btn-primary:hover { background: #2560bd; }
+  .btn-submit { background: #1a8a4a; color: #fff; border-color: #157038; }
+  .btn-submit:hover { background: #157038; }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+  .overlay.show { display: flex; }
+  .modal { background: #fff; border-radius: 8px; max-width: 820px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 22px 26px; }
+  .modal h2 { margin-bottom: 12px; color: #2d6fd4; }
+  .modal h3 { margin: 18px 0 6px; color:#1a3a5c; border-bottom:2px solid #eaeef3; padding-bottom:4px; }
+  .modal h4 { margin: 12px 0 4px; color:#2560bd; }
+  .modal p, .modal li { line-height: 1.6; margin-bottom: 6px; }
+  .modal ul, .modal ol { padding-left: 20px; }
+  .modal table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
+  .modal th, .modal td { border: 1px solid #d6dbe0; padding: 6px 9px; text-align: left; vertical-align: top; }
+  .modal th { background: #eef3fb; }
+  .modal .close { float: right; cursor: pointer; font-size: 26px; color: #888; line-height: 1; }
+  .modal code, .ncode { background:#f4f6f8; border:1px solid #e0e5ea; padding:1px 6px; border-radius:4px; font-family:Consolas,monospace; font-size:13px; color:#2d4a66; }
+  .callout { background:#fff8e6; border-left:4px solid #f0a429; padding:8px 12px; border-radius:4px; margin:8px 0; }
+  .scorebig { font-size: 40px; font-weight: bold; color: #1a8a4a; }
+  .review-q { border: 1px solid #e0e4e8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+  .review-q.wrong { border-left: 5px solid #d14836; }
+  .review-q.right { border-left: 5px solid #34a853; }
+  .review-q.skip { border-left: 5px solid #999; }
+  .review-q.written { border-left: 5px solid #2d6fd4; }
+  .review-q .tag { font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 10px; color: #fff; }
+  .tag.tw { background: #d14836; } .tag.tr { background: #34a853; } .tag.ts { background: #999; } .tag.tb { background:#2d6fd4; }
+  .review-q .exp { background: #f6f8fa; padding: 8px 10px; border-radius: 4px; margin-top: 8px; font-size: 13px; color: #333; }
+  .model { background:#eef7ef; border:1px solid #cfe6d2; padding:10px 12px; border-radius:5px; margin-top:8px; font-size:13px; line-height:1.55; }
+  .youranswer { background:#f4f6f8; border:1px solid #e0e5ea; padding:10px 12px; border-radius:5px; margin-top:8px; font-size:13px; white-space:pre-wrap; min-height:20px; }
+  .selfscore { margin-top:8px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .ss-btn { padding:5px 12px; border:1px solid #bbb; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold; background:#fff; }
+  .ss-btn.on { background:#2d6fd4; color:#fff; border-color:#2560bd; }
+  #calc { display: none; position: fixed; top: 120px; right: 40px; width: 220px; background: #2b2b2b; border-radius: 8px; padding: 12px; z-index: 90; box-shadow: 0 8px 30px rgba(0,0,0,.4); }
+  #calc.show { display: block; }
+  #calc .disp { background: #111; color: #6f6; font-family: monospace; font-size: 20px; padding: 8px; text-align: right; border-radius: 4px; margin-bottom: 8px; min-height: 38px; overflow:hidden; }
+  #calc .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  #calc button { padding: 10px; background: #444; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+  #calc button:hover { background: #555; }
+  #calc .op { background: #f0a429; } #calc .eq { background: #2d6fd4; }
+  #calc .drag { cursor: move; color:#aaa; font-size: 11px; text-align:center; margin-bottom:6px; }
+  @media (max-width: 820px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; border-left: none; border-top: 1px solid #d2d6da; }
+    .palette { grid-template-columns: repeat(8, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">Open Mock</div>
+  <div class="links">
+    <a class="notes" onclick="openModal('notes')">📖 Revision Notes</a>
+    <a onclick="openModal('instr')">View Instructions</a>
+    <a onclick="openModal('paper')">Question Paper</a>
+    <a onclick="toggleCalc()">Calculator</a>
+    <a onclick="clearSaved()" title="Clear saved progress">↺ Reset</a>
+  </div>
+</div>
+
+<div class="sectionbar">
+  <div style="display:flex; flex-wrap:wrap">
+    <div class="label">Sections</div>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <div class="timers">
+    Time Left: <b id="timeLeft">60:00</b><br>
+    Time Spent (Question): <span id="qtime">00:00</span>
+  </div>
+</div>
+
+<div class="examband" id="examband">Mock Exam — New Age Business Models</div>
+
+<div class="layout">
+  <div class="main">
+    <div class="qhead"><div class="qno" id="qno">Question No. 1</div><span class="mkbadge" id="mkbadge"></span></div>
+    <div class="qtext" id="qtext"></div>
+    <div id="answerArea"></div>
+  </div>
+  <div class="sidebar">
+    <div class="profile"><div class="avatar">👤</div><div class="name">Aneecake</div></div>
+    <div class="legend">
+      <div class="item"><span class="badge b-ans" id="cAns">0</span> Answered</div>
+      <div class="item"><span class="badge b-notans" id="cNotans">0</span> Not Answered</div>
+      <div class="item"><span class="badge b-notvis" id="cNotvis">0</span> Not Visited</div>
+      <div class="item"><span class="badge b-marked" id="cMarked">0</span> Marked</div>
+      <div class="item" style="grid-column:1/3"><span class="badge b-ansmarked" id="cAnsmarked">0</span> Answered &amp; Marked</div>
+    </div>
+    <div class="palette-title" id="palTitle">Section Palette</div>
+    <div class="choose">Choose a Question</div>
+    <div class="palette" id="palette"></div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <div class="group">
+    <button class="btn" onclick="markReviewNext()">Mark for Review &amp; Next</button>
+    <button class="btn" onclick="clearResponse()">Clear Response</button>
+  </div>
+  <div class="group">
+    <button class="btn" onclick="prevQ()">Previous</button>
+    <button class="btn btn-primary" onclick="saveNext()">Save &amp; Next</button>
+    <button class="btn btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div class="overlay" id="m-instr"><div class="modal">
+  <span class="close" onclick="closeModal('instr')">&times;</span>
+  <h2>Instructions — New Age Business Models</h2>
+  <ul>
+    <li><b>Single section, 30 MCQs, 2 marks each, no negative marking.</b> Real paper: 50 MCQ in 120 min — this is a representative mock.</li>
+    <li>Click an option, then Save &amp; Next. Use the palette to jump around.</li>
+    <li>Mix of theory, framework, metric-model mapping and a few calculations.</li>
+    <li>On <b>Submit</b>: auto-grade + worked explanation for every question.</li>
+    <li>Hit <b>📖 Revision Notes</b> (top-left, orange) for your break-study sheet.</li>
+  </ul>
+</div></div>
+
+<div class="overlay" id="m-paper"><div class="modal">
+  <span class="close" onclick="closeModal('paper')">&times;</span>
+  <h2>Question Paper</h2><div id="paperList"></div>
+</div></div>
+
+<div class="overlay" id="m-score"><div class="modal">
+  <span class="close" onclick="closeModal('score')">&times;</span>
+  <h2>Result</h2><div id="scoreBody"></div>
+</div></div>
+
+<div class="overlay" id="m-notes"><div class="modal">
+  <span class="close" onclick="closeModal('notes')">&times;</span>
+  <div id="notesBody"></div>
+</div></div>
+
+<div id="calc">
+  <div class="drag" id="calcDrag">Calculator — drag</div>
+  <div class="disp" id="calcDisp">0</div>
+  <div class="grid">
+    <button onclick="calcC()">C</button><button onclick="calcBack()">⌫</button>
+    <button class="op" onclick="calcIn('%')">%</button><button class="op" onclick="calcIn('/')">÷</button>
+    <button onclick="calcIn('7')">7</button><button onclick="calcIn('8')">8</button><button onclick="calcIn('9')">9</button><button class="op" onclick="calcIn('*')">×</button>
+    <button onclick="calcIn('4')">4</button><button onclick="calcIn('5')">5</button><button onclick="calcIn('6')">6</button><button class="op" onclick="calcIn('-')">−</button>
+    <button onclick="calcIn('1')">1</button><button onclick="calcIn('2')">2</button><button onclick="calcIn('3')">3</button><button class="op" onclick="calcIn('+')">+</button>
+    <button onclick="calcIn('0')">0</button><button onclick="calcIn('.')">.</button><button class="eq" onclick="calcEq()" style="grid-column:span 2">=</button>
+  </div>
+</div>
+
+<script>
+/* ===================== EXAM DATA ===================== */
+const EXAM = {
+  durationMin: 60,
+  sections: [
+    { id:'A', label:'NABM · MCQ', perMark:2, type:'mcq', qs:[
+      {t:"A business model is best described as:",
+       o:["A detailed financial forecast for investors","The 'story of how an enterprise operates' — how it creates, delivers and captures value","A marketing plan for a product launch","The legal structure of the company"], c:1,
+       e:"A business model is the operating story: create value (proposition), deliver it (infrastructure/network), and capture it (revenue/cost). Not a forecast or a marketing plan."},
+      {t:"The three pillars of any business model are Value Proposition, Value Delivery, and:",
+       o:["Value Chain","Value Appropriation","Value Engineering","Value Migration"], c:1,
+       e:"Value Appropriation = the financial architecture (how you capture/monetise enough value to profit). Proposition = what pain you kill; Delivery = how you fulfil it."},
+      {t:"What distinguishes strategy from a business model?",
+       o:["They are identical","Strategy is the choice of WHERE to compete; the business model is the SYSTEM that implements that choice","Strategy is short-term; the model is long-term","Strategy is for startups, models for incumbents"], c:1,
+       e:"Professor's line: strategy = where to compete; business model = how you operate to deliver that choice. A brilliant strategy with a broken model still goes bankrupt."},
+      {t:"Which of the following is NOT one of the nine blocks of the Business Model Canvas?",
+       o:["Customer Segments","Key Activities","Competitive Rivalry","Cost Structure"], c:2,
+       e:"'Competitive Rivalry' is from Porter's Five Forces, not the BMC. The nine blocks: Segments, Value Props, Channels, Relationships, Revenue, Key Resources, Activities, Partnerships, Cost Structure."},
+      {t:"Gillette sells razor handles cheaply to lock customers into high-margin blades. This is the:",
+       o:["Bundling model","Razor-Blade (bait-and-hook) model","Leasing model","Freemium model"], c:1,
+       e:"Razor-Blade / bait-and-hook: sell the durable cheap (or at a loss), profit on the recurring consumable. HP printers + ink is the classic parallel."},
+      {t:"AirCap leases aircraft to airlines for a fee instead of selling them. The core value of the leasing model is:",
+       o:["Higher profit margins than selling","Removing the customer's large upfront CAPEX barrier by giving access to a high-cost asset","Avoiding all maintenance responsibility","Creating network effects"], c:1,
+       e:"Leasing converts a big upfront purchase into a manageable access fee — removing the CAPEX barrier for high-cost assets (planes, medical equipment)."},
+      {t:"The fundamental difference between a Pipeline and a Platform business is:",
+       o:["Pipelines are digital; platforms are physical","Pipelines create value linearly (supply-side scale); platforms enable co-created value via demand-side network effects","Pipelines are always larger","Platforms never hold inventory, pipelines always do"], c:1,
+       e:"Pipeline = linear value flow, supply-side economies of scale (Ford). Platform = multi-sided, value co-created, demand-side economies of scale (Airbnb, Android)."},
+      {t:"In the platform ecosystem, the player that controls the IP and sets the rules is the:",
+       o:["Provider","Producer","Owner","Consumer"], c:2,
+       e:"Owner = controls IP and arbitrates rules (Google for Android). Provider = the interface (Samsung device); Producer = creates value (app developers); Consumer = user."},
+      {t:"More WhatsApp users making the app more valuable to other WhatsApp users is an example of:",
+       o:["Indirect (cross-side) network effects","Direct (same-side) network effects","Economies of scale","A vanity metric"], c:1,
+       e:"Direct/same-side: more of the SAME group raises value for that group (Facebook, WhatsApp). Cross-side would be one group attracting a different group."},
+      {t:"More Visa merchants attract more cardholders, which attracts still more merchants. This virtuous cycle is a:",
+       o:["Same-side network effect","Two-sided (cross-side) network effect","Pipeline effect","Asymptotic effect"], c:1,
+       e:"Two-sided/cross-side: growth on one side feeds the other in a loop (merchants ↔ cardholders). The engine of platform monopolies."},
+      {t:"A social network grows from 100 to 101 users. Roughly how does the number of possible connections behave? <span class='formula'>Connections = n(n−1)/2</span>",
+       o:["It grows linearly (one new connection)","It grows non-linearly — adding ~100 new connections, because value scales ~n²","It stays the same","It doubles"], c:1,
+       e:"At 100 users: 4,950 connections. At 101: 5,050 — about 100 new links from one user. Convex (~n²) growth is why platforms tip to monopoly."},
+      {t:"IndiaMART, connecting bulk buyers and suppliers, is which marketplace type?",
+       o:["C2C","B2C","B2B","D2C"], c:2,
+       e:"B2B (business-to-business), like Alibaba. C2C = OLX/eBay; B2C = Amazon/Nykaa; D2C = brand sells direct to consumer."},
+      {t:"Amazon used its own retail inventory to prove the model before opening to third-party sellers. This chicken-and-egg tactic is called:",
+       o:["Piggyback","Follow the Rabbit","Micro-market","Seed the Platform"], c:1,
+       e:"Follow the Rabbit: use a non-platform (first-party) success to seed the marketplace, then invite third parties once liquidity is proven."},
+      {t:"PayPal grew by attaching itself to eBay's existing user base (even paying credits to onboard them). This launch tactic is:",
+       o:["Follow the Rabbit","Piggyback","Micro-market","Burn-led growth"], c:1,
+       e:"Piggyback: find where your users already are on another platform and 'steal'/seed them. PayPal on eBay is the textbook case."},
+      {t:"On a marketplace, the 'Take Rate' refers to:",
+       o:["The total value of goods sold","The percentage of each transaction the platform keeps as revenue","The share of users who transact","The rate of new seller signups"], c:1,
+       e:"Take Rate = the platform's cut of GMV (Zomato ~25%). GMV is the total volume; revenue is GMV × take rate (+ ads)."},
+      {t:"A founder boasts about 10 million app downloads. Why is this a 'vanity metric'?",
+       o:["Downloads are hard to measure","Downloads don't reflect engagement or revenue — only active, transacting users pay the bills","Downloads are always faked","It should be measured monthly, not cumulatively"], c:1,
+       e:"Vanity metrics (downloads, raw GMV with 0 take rate) look big but don't prove value. Engagement, liquidity and retention are what matter."},
+      {t:"'Multi-tenancy' in SaaS means:",
+       o:["Multiple founders share equity","One shared infrastructure/codebase serves all customers, so the marginal cost of the next user is near-zero","Customers can sub-let their licences","The software runs on multiple clouds"], c:1,
+       e:"Multi-tenancy: a single infrastructure serves everyone → high operating leverage; adding the 10,000th user costs almost nothing."},
+      {t:"Slack and Calendly grow because the product itself drives adoption (a Calendly link markets the product). This is:",
+       o:["Outbound sales","Product-Led Growth (PLG)","Account-based marketing","Channel partnership"], c:1,
+       e:"PLG: the product is the salesperson — it delivers value before capturing it and spreads through use. Contrast with high-touch enterprise sales."},
+      {t:"A healthy SaaS business should have an LTV that is at least:",
+       o:["1× CAC","2× CAC","3× CAC","Equal to CAC"], c:2,
+       e:"Rule of thumb: LTV ≥ 3× CAC. Below that, you spend too much to acquire each customer relative to their lifetime value."},
+      {t:"A SaaS company reports Net Dollar Retention (NDR) of 120%. This means:",
+       o:["It acquired 20% more customers this year","Even with zero new customers, revenue from the existing base would still grow 20%","Churn is 20%","Margins improved 20%"], c:1,
+       e:"NDR measures growth from the existing base (expansion − contraction − churn). 120% = the base alone grows revenue 20%. World-class."},
+      {t:"The 'India Stack' trio that democratised credit is:",
+       o:["GST, PAN, Aadhaar","Aadhaar (identity), UPI (payments), Account Aggregator (data/credit)","UPI, RuPay, NEFT","Aadhaar, DigiLocker, FASTag"], c:1,
+       e:"India Stack = Aadhaar (identity) + UPI (payments) + Account Aggregator (consented financial-data sharing to prove creditworthiness instantly)."},
+      {t:"On a typical Zomato order, the platform's take rate from the restaurant is approximately:",
+       o:["About 5%","About 10%","About 25% (range ~22–30%)","About 50%"], c:2,
+       e:"~25% (22–30%) commission from the restaurant plus ad revenue; riders are often paid more than the customer's delivery fee — a thin-margin, high-volume game on operating leverage."},
+      {t:"Casper (mattresses) struggled largely because:",
+       o:["Its product quality was poor","A mattress is a ~10-year purchase, so repeat purchase frequency is near-zero and CAC can't be recovered through repeats","It never advertised","It lacked venture funding"], c:1,
+       e:"With near-zero repeat frequency and no strong adjacent products, every sale must recover CAC alone — brutal D2C economics."},
+      {t:"Peloton's ~$40bn market-cap collapse is best explained as:",
+       o:["A manufacturing defect","Treating pandemic-pulled-forward demand as a permanent shift and over-expanding supply","A failed acquisition","A cyberattack"], c:1,
+       e:"They mistook a temporary demand blip for a permanent trend and scaled supply accordingly. 'Don't confuse a bull market with brilliance.'"},
+      {t:"In the creator economy, the '80/20' observation means:",
+       o:["80% of creators earn a living","The top ~20% of creators capture ~80% of the income; most are hobbyists","Creators keep 80% of revenue","Platforms take 20%"], c:1,
+       e:"Power-law: a small top slice earns most of the money (e.g. ~150k professionals out of ~80M Indian creators). Follower count is a vanity metric."},
+      {t:"Blockchain creates 'trust without intermediaries' primarily because:",
+       o:["A central bank verifies each trade","Each block carries a hash (puzzle solution); altering any record breaks the chain and the whole network detects tampering","Transactions are reversible","Only banks hold the ledger"], c:1,
+       e:"Immutability via hashing + a distributed ledger (everyone holds a copy). Tamper with one block and its hash breaks, so the network rejects it — no gatekeeper needed."},
+      {t:"A carpenter and homeowner meet on Urban Company, then transact privately to dodge the fee. This platform threat is:",
+       o:["Disintermediation (platform leakage)","Multi-homing","Network collapse","Vanity churn"], c:0,
+       e:"Disintermediation: the two sides bypass the platform after matching. Defence = provide ongoing value (insurance, trust, seamless payment, guarantees) that makes staying worth it."},
+      {t:"The 'Asymptotic Marketplace Effect' (Uber) warns that:",
+       o:["Marketplaces always grow forever","Beyond a point, adding more supply barely helps users (3→1 min wait) but dilutes each driver's earnings — extra supply can destroy ecosystem value","Demand always exceeds supply","Network effects are linear"], c:1,
+       e:"Network effects plateau. Cutting wait 10→3 min is huge; 3→1 min the rider barely notices, yet you've doubled drivers, so each earns less — value now leaks out."},
+      {t:"A subscription app has ARPU ₹250/month and 5% monthly churn. Customer lifetime value? <span class='formula'>CLV = ARPU ÷ Churn</span>",
+       o:["₹1,250","₹5,000","₹12,500","₹50,000"], c:1,
+       e:"250 ÷ 0.05 = ₹5,000. Lower churn → larger lifetime → higher CLV. CLV anchors how much you can afford to spend on CAC."},
+      {t:"A SaaS subscription business should be evaluated primarily with which metric set (the metric-model match)?",
+       o:["Sales per sq ft and footfall","Inventory turnover and GMV","MRR, NDR, Churn and CLV","RevPAR and occupancy"], c:2,
+       e:"Match metric to model: SaaS/subscription → MRR, NDR, churn, CLV. (Retail → sales/sqft; Distributor → inventory turnover; Marketplace → GMV + take rate; Hotel → RevPAR.) Metric-model mismatch is the core NABM trap."},
+      {t:"A hotel chain builds and owns its properties, then contracts local operators to run them day-to-day. The franchise structure is: <span class='formula'>parse [OWNER]-[OPERATOR]</span>",
+       o:["FOFO","FOCO — Franchisee-Owned, Company-Operated","COFO — Company-Owned, Franchisee-Operated","Master franchise"], c:2,
+       e:"The company built/owns the asset (CO) and the franchisee runs it (FO) → COFO. Always identify who funded the asset first, then who operates."},
+      {t:"A franchisee invests ₹5 crore to build and own an outlet, while the brand owner manages operations and staff. This is:",
+       o:["COFO","FOCO — Franchisee-Owned, Company-Operated","FOFO","Licensing"], c:1,
+       e:"Franchisee owns (invested the capital), company operates → FOCO. The owner is whoever paid for the asset; the operator is whoever runs it."},
+      {t:"A firm rents out its brand and characters to other manufacturers for a royalty, without making or operating anything itself. This is the ___ model.",
+       o:["Contract manufacturing","Licensing","Franchising (FOFO)","Leasing"], c:1,
+       e:"Licensing = rent your IP/brand for a royalty (Disney characters on merchandise). Contrast: contract manufacturing = you hire a factory to make YOUR product (Apple–Foxconn)."},
+      {t:"Spotify offers a free ad-supported tier and a paid ad-free tier. This is the ___ model.",
+       o:["Razor-blade","Freemium","Bundling","Leasing"], c:1,
+       e:"Freemium: a free base tier acquires users at scale, then converts a fraction to paid. Distinct from a time-limited free trial."},
+      {t:"Microsoft Office sells Word, Excel and PowerPoint together for less than buying each alone. This ___ model works to:",
+       o:["razor-blade; lock in consumables","bundling; raise average order value and move less-popular items","freemium; convert free users","leasing; remove CAPEX"], c:1,
+       e:"Bundling packages items to increase AOV and shift weaker SKUs (Happy Meal, Office suite)."},
+      {t:"Paytm and WeChat pack payments, shopping, messaging and mobility into one app. This 'super-app' design aims to:",
+       o:["be free to use","maximise engagement and cross-sell by keeping users inside one ecosystem","operate in many countries","use only AI"], c:1,
+       e:"Super-app = many services in one shell, compounding engagement and cross-sell within a single ecosystem."},
+      {t:"Amazon's loop — lower prices → more customers → more sellers → economies of scale → lower prices — illustrates the:",
+       o:["vanity metric","flywheel: a self-reinforcing virtuous cycle where each turn powers the next","razor-blade model","asymptotic effect"], c:1,
+       e:"Flywheel = compounding virtuous cycle; momentum builds with each turn. The platform version of demand economies of scale."},
+      {t:"Salesforce (CRM for any industry) vs Toast (software built only for restaurants). This contrast is:",
+       o:["horizontal SaaS (broad, many industries) vs vertical SaaS (deep, one industry)","vertical vs horizontal","B2C vs B2B","PLG vs sales-led"], c:0,
+       e:"Horizontal SaaS serves a function across all industries; vertical SaaS goes deep on one industry's workflows."},
+      {t:"Which is NOT a core FinTech segment?",
+       o:["Payments","Lending / credit","WealthTech &amp; InsurTech","Inventory warehousing"], c:3,
+       e:"FinTech segments span payments, lending, neobanking, WealthTech and InsurTech. Warehousing is logistics, not FinTech."},
+      {t:"A neobank such as Jupiter or Fi is best described as:",
+       o:["a traditional bank with branches","a digital-only bank (no branches) competing on UX and cost, often riding a licensed bank on the backend","a crypto exchange","a payment gateway only"], c:1,
+       e:"Neobanks are branchless, app-first banks; many partner a licensed bank for the regulated rails while owning the customer experience."},
+      {t:"The core pillars of a digital lending model are sourcing, underwriting, ___ and collections.",
+       o:["advertising","disbursement (and servicing)","manufacturing","franchising"], c:1,
+       e:"Source the borrower → underwrite (assess risk) → disburse funds → collect repayments. The Account Aggregator mainly strengthens underwriting."},
+      {t:"InsurTech mainly innovates insurance through:",
+       o:["removing the need for claims","digital distribution, data/usage-based pricing and faster claims (embedded, on-demand cover)","guaranteeing zero premiums","government subsidy"], c:1,
+       e:"InsurTech digitises distribution and uses data for usage-based pricing and quicker claims — e.g. embedded or on-demand cover."},
+      {t:"The Balanced Scorecard (Kaplan &amp; Norton) evaluates a firm across Financial, Customer, Internal Process and:",
+       o:["Marketing","Learning &amp; Growth","Competition","Regulation"], c:1,
+       e:"Four perspectives: Financial, Customer, Internal Process, and Learning &amp; Growth — balancing lagging financials with leading drivers."},
+      {t:"Web 1.0 → 2.0 → 3.0 is best characterised as:",
+       o:["static read-only → interactive read-write (platforms, user-generated) → decentralised read-write-own (blockchain, tokens)","desktop → mobile → AI","text → image → video","free → paid → subscription"], c:0,
+       e:"1.0 = read-only pages; 2.0 = read-write social platforms; 3.0 = read-write-OWN, with users owning data/assets via decentralisation and tokens."},
+      {t:"The relationship between blockchain and Bitcoin is:",
+       o:["they are the same thing","blockchain is the underlying distributed-ledger technology; Bitcoin is one application (a cryptocurrency) built on it","Bitcoin is the technology; blockchain is the coin","blockchain replaced Bitcoin"], c:1,
+       e:"Blockchain = the ledger tech (many uses). Bitcoin = one app on it. Bitcoin's value rests on a capped supply (21M) secured by proof-of-work."},
+      {t:"A smart contract is:",
+       o:["a notarised paper contract","self-executing code on a blockchain that enforces terms automatically when conditions are met, without intermediaries","an AI that drafts contracts","a subscription agreement"], c:1,
+       e:"Smart contract = code that runs itself when conditions are satisfied — trust shifts from a middleman to the protocol."},
+      {t:"An NFT (Non-Fungible Token) is:",
+       o:["a cryptocurrency interchangeable unit-for-unit, like Bitcoin","a unique, non-interchangeable token on a blockchain proving ownership of a specific asset","a smart contract","a stablecoin"], c:1,
+       e:"Fungible (Bitcoin: each unit identical/interchangeable) vs non-fungible (each NFT unique, proving ownership of a specific item)."},
+      {t:"ONDC (Open Network for Digital Commerce) differs fundamentally from a platform like Amazon because it is:",
+       o:["a single company-owned marketplace","an open, interoperable network/protocol where buyers and sellers on different apps can transact — unbundling the platform","a government payments app","a logistics company"], c:1,
+       e:"ONDC is a network/protocol (think UPI for commerce), not a platform. It decouples the buyer app, seller app and logistics to break platform lock-in."},
+      {t:"A key benefit ONDC targets over closed platforms is:",
+       o:["higher take rates for the network","breaking platform monopoly/lock-in by letting small sellers be discovered across many buyer apps","eliminating logistics","guaranteeing seller profits"], c:1,
+       e:"By making discovery interoperable, ONDC lets a small seller appear across many buyer apps — reducing dependence on any single platform's algorithm and fees."},
+      {t:"In the AI hierarchy, which ordering is correct (broadest → narrowest)?",
+       o:["AI ⊃ Machine Learning ⊃ Deep Learning ⊃ Generative AI / LLMs","Deep Learning ⊃ AI ⊃ ML","Generative AI ⊃ AI ⊃ ML","ML ⊃ AI ⊃ Deep Learning"], c:0,
+       e:"AI is the umbrella; ML a subset; deep learning a subset of ML; generative AI/LLMs a recent deep-learning application. Agentic AI = systems that plan and act autonomously."},
+    ]},
+  ]
+};
+
+/* ===================== REVISION NOTES ===================== */
+const NOTES = `
+<h2>📖 New Age Business Models — Break Revision Sheet</h2>
+<div class="callout"><b>The core NABM trap:</b> metric-model mismatch. Always match the metric to the business model (table below). Second trap: confusing pipeline vs platform mechanics.</div>
+
+<h3>Foundations</h3>
+<ul>
+<li><b>Business model</b> = the 'story of how an enterprise operates': create → deliver → capture value.</li>
+<li><b>Three pillars:</b> Value Proposition (pain you kill) · Value Delivery (infra/network) · Value Appropriation (revenue/cost/pricing).</li>
+<li><b>Strategy vs model:</b> strategy = WHERE to compete; model = the SYSTEM that implements it.</li>
+<li><b>BMC 9 blocks:</b> Customer Segments, Value Props, Channels, Customer Relationships, Revenue Streams, Key Resources, Key Activities, Key Partnerships, Cost Structure. (Beware fakes like 'Competitive Rivalry' — that's Porter.)</li>
+</ul>
+
+<h3>Traditional models</h3>
+<ul>
+<li><b>Razor-Blade (bait-and-hook):</b> cheap durable, profit on consumables (Gillette, HP ink).</li>
+<li><b>Leasing:</b> access to high-CAPEX asset for a fee — removes upfront barrier (AirCap, GE medical).</li>
+<li><b>Bundling:</b> package items to move inventory + raise AOV (MS Office, Happy Meal).</li>
+<li><b>Franchise — parse [OWNER]-[OPERATOR]:</b> COFO (company owns, franchisee operates) · FOCO (franchisee owns/invests, company operates) · FOFO (franchisee owns &amp; operates). Ask who funded the asset first.</li>
+<li><b>Licensing</b> = rent your IP/brand for a royalty (Disney merch). <b>Contract manufacturing</b> = hire a factory to make YOUR product (Apple–Foxconn).</li>
+<li><b>Freemium</b> (Spotify free→paid) · <b>Super-app</b> (Paytm/WeChat bundle) · <b>Flywheel</b> (self-reinforcing loop — Amazon).</li>
+<li><b>Manufacturer</b> (owns production, high CAPEX) vs <b>Retailer</b> (owns customer + data, thin margins).</li>
+<li><b>Evolve-or-die:</b> HMT (killed by Titan), Moser Baer (DVDs → cloud), Nokia/BlackBerry.</li>
+</ul>
+
+<h3>Pipeline vs Platform &amp; network effects</h3>
+<ul>
+<li><b>Pipeline:</b> linear, firm creates all value, supply-side scale (Ford).</li>
+<li><b>Platform:</b> multi-sided, value co-created, demand-side network effects (Airbnb, Android).</li>
+<li><b>4 players:</b> Owner (IP/rules — Google) · Provider (interface — Samsung) · Producer (app devs) · Consumer.</li>
+<li><b>Network effects:</b> Direct/same-side (WhatsApp) · Indirect/cross-side (PlayStation devs→gamers) · Two-sided loop (Visa).</li>
+<li><b>Maths:</b> <span class="ncode">Connections = n(n−1)/2</span> — convex (~n²) growth → monopoly tipping.</li>
+<li><b>Asymptotic effect:</b> network value plateaus; extra supply past a point dilutes each provider (Uber 3→1 min).</li>
+</ul>
+
+<h3>Marketplaces &amp; launch tactics</h3>
+<ul>
+<li><b>Types:</b> C2C (OLX) · B2C (Amazon) · B2B (IndiaMART, Alibaba) · D2C.</li>
+<li><b>Chicken-and-egg solutions:</b> Follow the Rabbit (Amazon's own stock) · Piggyback (PayPal on eBay) · Seed the Platform (Google Android prizes) · Micro-market (Facebook @ Harvard).</li>
+<li><b>IndiaMART:</b> negative working capital — collects subscriptions upfront → more cash than revenue.</li>
+<li><b>Disintermediation</b> = the platform killer: two sides transact off-platform. Defend with insurance/trust/seamless payment.</li>
+</ul>
+
+<h3>SaaS, FinTech, D2C, Creator, Blockchain</h3>
+<ul>
+<li><b>SaaS:</b> multi-tenancy, scalability (near-zero marginal cost), predictable MRR. <b>PLG</b> = product is the salesperson (Slack, Calendly). <b>Sales-model mismatch</b> kills SaaS — don't sell a ₹10/mo product with a ₹1L/yr salesperson.</li>
+<li><b>India Stack:</b> Aadhaar (identity) + UPI (payments) + Account Aggregator (data/credit).</li>
+<li><b>D2C:</b> own the customer + data. Watch AOV &amp; Repeat Frequency. Casper (no repeats), Peloton (pulled-forward demand).</li>
+<li><b>Creator economy:</b> 80/20 power law; platform risk = 'sharecropping on someone else's land'.</li>
+<li><b>Blockchain:</b> distributed ledger + hashing = immutability = trust without intermediaries.</li>
+</ul>
+
+<h3>Web3, crypto &amp; ONDC</h3>
+<ul>
+<li><b>Web 1.0→2.0→3.0:</b> read-only → read-write (platforms, UGC) → read-write-<i>own</i> (decentralised, tokens).</li>
+<li><b>Blockchain</b> = the ledger tech; <b>Bitcoin</b> = one app on it (capped 21M, proof-of-work). <b>Smart contract</b> = self-executing code. <b>NFT</b> = unique non-fungible ownership token (vs fungible crypto).</li>
+<li><b>ONDC</b> = open network/<i>protocol</i> for commerce (UPI-for-retail), <b>not</b> a platform — unbundles buyer app / seller app / logistics to break platform lock-in.</li>
+<li><b>AI hierarchy:</b> AI ⊃ ML ⊃ Deep Learning ⊃ Generative AI/LLMs; Agentic AI plans &amp; acts autonomously.</li>
+<li><b>FinTech:</b> Payments · Lending (source→underwrite→disburse→collect) · Neobanks (branchless) · WealthTech · InsurTech. <b>Balanced Scorecard:</b> Financial · Customer · Internal Process · Learning &amp; Growth.</li>
+</ul>
+
+<h3>Metric ↔ Model map (the exam trap)</h3>
+<table>
+<tr><th>Model</th><th>Key metrics</th></tr>
+<tr><td>Retail</td><td>Sales / sq ft, footfall</td></tr>
+<tr><td>Leasing</td><td>Utilisation rate, default rate</td></tr>
+<tr><td>Distributor</td><td>Inventory turnover</td></tr>
+<tr><td>Aggregator / Marketplace</td><td>GMV, Take rate, Liquidity</td></tr>
+<tr><td>SaaS / Subscription</td><td>MRR, NDR, Churn, CLV</td></tr>
+<tr><td>D2C</td><td>AOV, Gross margin, Repeat frequency</td></tr>
+<tr><td>Hotel / OYO</td><td>RevPAR (ADR × Occupancy)</td></tr>
+</table>
+
+<h3>Formulas</h3>
+<table>
+<tr><th>Metric</th><th>Formula</th></tr>
+<tr><td>CLV</td><td><span class="ncode">ARPU ÷ Churn</span></td></tr>
+<tr><td>NDR</td><td><span class="ncode">(Start + Expansion − Contraction − Churn) ÷ Start</span></td></tr>
+<tr><td>GMV</td><td><span class="ncode">Users × Frequency × AOV</span></td></tr>
+<tr><td>Platform revenue</td><td><span class="ncode">GMV × Take rate + Ads</span></td></tr>
+<tr><td>ROAS</td><td><span class="ncode">Revenue ÷ Ad spend</span></td></tr>
+<tr><td>Inventory turnover</td><td><span class="ncode">COGS ÷ Avg inventory</span></td></tr>
+<tr><td>Conversion</td><td><span class="ncode">Purchases ÷ Visitors</span></td></tr>
+<tr><td>RevPAR</td><td><span class="ncode">ADR × Occupancy</span></td></tr>
+<tr><td>Connections</td><td><span class="ncode">n(n−1)/2</span></td></tr>
+</table>
+`;
+
+const HAS_CALC = true;
+
+/* ===================== ENGINE ===================== */
+const FLAT = [];
+EXAM.sections.forEach((s, si) => s.qs.forEach((q, qi) => { if(!q.type) q.type = s.type; FLAT.push({ si, qi, q, sec: s }); }));
+let cur = 0;
+const N = FLAT.length;
+const resp = FLAT.map(f => f.q.type === 'mcq' ? null : (f.q.type === 'choice' ? {pick:null, text:''} : ''));
+const marked = new Array(N).fill(false);
+const visited = new Array(N).fill(false);
+const selfScore = new Array(N).fill(null);
+let totalSecs = EXAM.durationMin*60, qSecs = 0;
+
+const SKEY='ab_nabm_v1';
+function saveState(){ try{ localStorage.setItem(SKEY, JSON.stringify({resp:resp,marked:marked,visited:visited,selfScore:selfScore,cur:cur,totalSecs:totalSecs})); }catch(e){} }
+function loadState(){ try{ var raw=localStorage.getItem(SKEY); if(!raw) return; var s=JSON.parse(raw); if(!s||!Array.isArray(s.resp)||s.resp.length!==N) return; for(var i=0;i<N;i++){ resp[i]=s.resp[i]; marked[i]=s.marked[i]; visited[i]=s.visited[i]; selfScore[i]=s.selfScore[i]; } if(typeof s.cur==='number'&&s.cur<N) cur=s.cur; if(typeof s.totalSecs==='number') totalSecs=s.totalSecs; }catch(e){} }
+function clearSaved(){ if(confirm('Clear saved progress and restart this paper?')){ try{ localStorage.removeItem(SKEY); }catch(e){} location.reload(); } }
+document.addEventListener('click', function(){ setTimeout(saveState,0); });
+document.addEventListener('input', saveState);
+window.addEventListener('beforeunload', saveState);
+
+function isAnswered(i){
+  const f=FLAT[i];
+  if(f.q.type==='mcq') return resp[i]!==null;
+  if(f.q.type==='choice') return resp[i].pick!==null && resp[i].text.trim()!=='';
+  return resp[i].trim()!=='';
+}
+function buildTabs(){
+  const tabs=document.getElementById('tabs'); tabs.innerHTML='';
+  EXAM.sections.forEach((s,si)=>{
+    const d=document.createElement('div');
+    d.className='tab'+(FLAT[cur].si===si?' active':'');
+    d.textContent=s.label;
+    d.onclick=()=>{ const first=FLAT.findIndex(f=>f.si===si); cur=first; render(); };
+    tabs.appendChild(d);
+  });
+}
+function render(){
+  const f=FLAT[cur], q=f.q, sec=f.sec;
+  visited[cur]=true;
+  const within = FLAT.filter(x=>x.si===f.si).findIndex(x=>x===f)+1;
+  document.getElementById('qno').textContent = sec.label.split('·')[0].trim()+" — Q"+within;
+  document.getElementById('mkbadge').textContent = sec.perMark+" mark"+(sec.perMark>1?'s':'');
+  document.getElementById('qtext').innerHTML = q.t;
+  const area=document.getElementById('answerArea'); area.innerHTML='';
+  if(q.type==='mcq'){
+    const wrap=document.createElement('div'); wrap.className='options';
+    q.o.forEach((opt,i)=>{
+      const d=document.createElement('div');
+      d.className='option'+(resp[cur]===i?' selected':'');
+      d.innerHTML="<span class='radio'></span><span class='key'>"+"ABCD"[i]+".</span><span>"+opt+"</span>";
+      d.onclick=()=>{ resp[cur]=i; render(); };
+      wrap.appendChild(d);
+    });
+    area.appendChild(wrap);
+  } else if(q.type==='written'){
+    area.innerHTML="<div class='wordhint'>"+(q.wordHint||sec.wordHint||'')+"</div>";
+    const ta=document.createElement('textarea'); ta.className='answer'; ta.value=resp[cur];
+    ta.placeholder="Type your answer here…";
+    ta.oninput=()=>{ resp[cur]=ta.value; updateCounts(); buildPalette(); };
+    area.appendChild(ta);
+  } else if(q.type==='choice'){
+    area.innerHTML="<div class='wordhint'>"+(q.wordHint||sec.wordHint||'')+"</div>";
+    const box=document.createElement('div'); box.className='choicebox';
+    [['a',q.a],['b',q.b]].forEach(([key,sub])=>{
+      const c=document.createElement('div');
+      c.className='choiceopt'+(resp[cur].pick===key?' picked':'');
+      c.innerHTML="<span class='lab'>("+key+")</span>"+sub.prompt;
+      c.onclick=()=>{ resp[cur].pick=key; render(); };
+      box.appendChild(c);
+    });
+    area.appendChild(box);
+    if(resp[cur].pick){
+      const ta=document.createElement('textarea'); ta.className='answer';
+      ta.value=resp[cur].text; ta.placeholder="Writing your answer to ("+resp[cur].pick+")…";
+      ta.oninput=()=>{ resp[cur].text=ta.value; updateCounts(); buildPalette(); };
+      area.appendChild(ta);
+    }
+  }
+  buildTabs(); buildPalette(); updateCounts(); qSecs=0;
+  document.getElementById('palTitle').textContent = sec.label.split('·')[0].trim()+" Palette";
+}
+function buildPalette(){
+  const p=document.getElementById('palette'); p.innerHTML='';
+  const si=FLAT[cur].si;
+  FLAT.forEach((f,i)=>{
+    if(f.si!==si) return;
+    const within=FLAT.filter(x=>x.si===si).indexOf(f)+1;
+    const c=document.createElement('div');
+    let cls='pcell';
+    if(marked[i]&&isAnswered(i)) cls+=' ansmarked';
+    else if(marked[i]) cls+=' marked';
+    else if(isAnswered(i)) cls+=' answered';
+    else if(visited[i]) cls+=' notans';
+    if(i===cur) cls+=' current';
+    c.className=cls; c.textContent=within;
+    c.onclick=()=>{ cur=i; render(); };
+    p.appendChild(c);
+  });
+}
+function updateCounts(){
+  let a=0,na=0,nv=0,m=0,am=0;
+  for(let i=0;i<N;i++){
+    if(marked[i]&&isAnswered(i)) am++;
+    else if(marked[i]) m++;
+    else if(isAnswered(i)) a++;
+    else if(visited[i]) na++;
+    else nv++;
+  }
+  cAns.textContent=a; cNotans.textContent=na; cNotvis.textContent=nv; cMarked.textContent=m; cAnsmarked.textContent=am;
+}
+function saveNext(){ if(cur<N-1)cur++; render(); }
+function prevQ(){ if(cur>0)cur--; render(); }
+function clearResponse(){ const t=FLAT[cur].q.type; resp[cur]= t==='mcq'?null:(t==='choice'?{pick:null,text:''}:''); render(); }
+function markReviewNext(){ marked[cur]=true; if(cur<N-1)cur++; render(); }
+setInterval(()=>{
+  if(totalSecs>0) totalSecs--; qSecs++;
+  const m=String(Math.floor(totalSecs/60)).padStart(2,'0'), s=String(totalSecs%60).padStart(2,'0');
+  document.getElementById('timeLeft').textContent=m+":"+s;
+  const qm=String(Math.floor(qSecs/60)).padStart(2,'0'), qs=String(qSecs%60).padStart(2,'0');
+  document.getElementById('qtime').textContent=qm+":"+qs;
+  if(totalSecs%10===0) saveState();
+  if(totalSecs===0) submitExam();
+},1000);
+function confirmSubmit(){
+  const un=[...Array(N).keys()].filter(i=>!isAnswered(i)).length;
+  if(confirm("Submit the exam?\n\nAnswered: "+(N-un)+" / "+N+(un?"\nUnanswered: "+un:""))) submitExam();
+}
+let maxMarks=0; FLAT.forEach(f=>maxMarks+=f.sec.perMark);
+function recalcTotal(){
+  let mcq=0, written=0;
+  FLAT.forEach((f,i)=>{
+    if(f.q.type==='mcq'){ if(resp[i]===f.q.c) mcq+=f.sec.perMark; }
+    else { if(selfScore[i]!==null) written+=selfScore[i]*f.sec.perMark; }
+  });
+  const total=mcq+written;
+  const el=document.getElementById('runTotal');
+  if(el) el.innerHTML="<span class='scorebig'>"+total.toFixed(1)+" / "+maxMarks+"</span> "+
+    "<span style='font-size:13px;color:#555'>(MCQ auto: "+mcq+(written?" · Written: "+written.toFixed(1):"")+")</span>";
+}
+function setSelf(i,ratio,btnEl){
+  selfScore[i]=ratio;
+  const wrap=btnEl.parentElement;
+  [...wrap.querySelectorAll('.ss-btn')].forEach(b=>b.classList.remove('on'));
+  btnEl.classList.add('on');
+  recalcTotal();
+}
+function submitExam(){
+  let html="<div id='runTotal' style='margin:6px 0 14px'></div>";
+  EXAM.sections.forEach((s,si)=>{
+    if(EXAM.sections.length>1) html+="<h3>"+s.label+"</h3>";
+    FLAT.forEach((f,i)=>{
+      if(f.si!==si) return;
+      const q=f.q;
+      const within=FLAT.filter(x=>x.si===si).indexOf(f)+1;
+      if(q.type==='mcq'){
+        let cls,tag,tagtxt;
+        if(resp[i]===null){cls='skip';tag='ts';tagtxt='SKIPPED';}
+        else if(resp[i]===q.c){cls='right';tag='tr';tagtxt='CORRECT';}
+        else {cls='wrong';tag='tw';tagtxt='WRONG';}
+        const yours=resp[i]===null?"—":"ABCD"[resp[i]]+". "+q.o[resp[i]];
+        html+="<div class='review-q "+cls+"'><div><span class='tag "+tag+"'>"+tagtxt+"</span> <b style='margin-left:8px'>Q"+within+"</b></div>"+
+          "<div style='margin:8px 0'>"+q.t+"</div>"+
+          "<div><b>Your answer:</b> "+yours+"</div><div><b>Correct:</b> "+"ABCD"[q.c]+". "+q.o[q.c]+"</div>"+
+          "<div class='exp'>💡 "+q.e+"</div></div>";
+      } else {
+        const yours = q.type==='choice' ? (resp[i].pick? "("+resp[i].pick+") "+resp[i].text : "—") : (resp[i]||"—");
+        let modelHtml;
+        if(q.type==='choice'){ modelHtml="<div class='model'><b>Model answer (a):</b><br>"+q.a.model+"<br><br><b>Model answer (b):</b><br>"+q.b.model+"</div>"; }
+        else { modelHtml="<div class='model'><b>Model answer:</b><br>"+q.model+"</div>"; }
+        html+="<div class='review-q written'><div><span class='tag tb'>SELF-ASSESS</span> <b style='margin-left:8px'>Q"+within+"</b> <span style='color:#888;font-size:12px'>("+f.sec.perMark+" marks)</span></div>"+
+          "<div style='margin:8px 0'>"+q.t+"</div>"+
+          "<div><b>Your answer:</b></div><div class='youranswer'>"+(yours.replace(/</g,'&lt;'))+"</div>"+
+          modelHtml+
+          "<div class='selfscore'><b style='font-size:12px'>Score yourself:</b>"+
+          "<span class='ss-btn' onclick='setSelf("+i+",1,this)'>Full</span>"+
+          "<span class='ss-btn' onclick='setSelf("+i+",0.5,this)'>Half</span>"+
+          "<span class='ss-btn' onclick='setSelf("+i+",0,this)'>None</span></div></div>";
+      }
+    });
+  });
+  document.getElementById('scoreBody').innerHTML=html;
+  recalcTotal();
+  openModal('score');
+}
+function openModal(id){ if(id==='paper')buildPaper(); if(id==='notes')document.getElementById('notesBody').innerHTML=NOTES; document.getElementById('m-'+id).classList.add('show'); }
+function closeModal(id){ document.getElementById('m-'+id).classList.remove('show'); }
+function buildPaper(){
+  let h="";
+  EXAM.sections.forEach(s=>{
+    if(EXAM.sections.length>1) h+="<h3>"+s.label+" — "+s.perMark+" marks each</h3>";
+    h+="<ol style='padding-left:20px;line-height:1.7'>";
+    s.qs.forEach(q=>{
+      if(q.type==='choice') h+="<li>"+q.t.replace(/<br>/g,' ')+" <i>(a)</i> "+q.a.prompt+" <i>(b)</i> "+q.b.prompt+"</li>";
+      else h+="<li>"+q.t.replace(/<br>/g,' ')+"</li>";
+    });
+    h+="</ol>";
+  });
+  document.getElementById('paperList').innerHTML=h;
+}
+let calcVal="0";
+function toggleCalc(){ document.getElementById('calc').classList.toggle('show'); }
+function calcRefresh(){ document.getElementById('calcDisp').textContent=calcVal; }
+function calcIn(x){ calcVal=(calcVal==="0"&&"0123456789.".includes(x))?x:calcVal+x; calcRefresh(); }
+function calcC(){ calcVal="0"; calcRefresh(); }
+function calcBack(){ calcVal=calcVal.length>1?calcVal.slice(0,-1):"0"; calcRefresh(); }
+function calcEq(){ try{ calcVal=String(Function('"use strict";return ('+calcVal.replace(/%/g,'/100')+')')()); }catch(e){ calcVal="Error"; } calcRefresh(); }
+(function(){ const c=document.getElementById('calc'),h=document.getElementById('calcDrag'); let dx,dy,drag=false;
+  h.onmousedown=e=>{drag=true;dx=e.clientX-c.offsetLeft;dy=e.clientY-c.offsetTop;};
+  document.onmousemove=e=>{ if(drag){c.style.left=(e.clientX-dx)+'px';c.style.top=(e.clientY-dy)+'px';c.style.right='auto';} };
+  document.onmouseup=()=>drag=false; })();
+if(!HAS_CALC){ document.querySelector('.links a[onclick*="Calc"]').style.display='none'; }
+loadState();
+render();
+</script>
+</body>
+</html>

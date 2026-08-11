@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module Tests — Behavioural Economics</title>
+<meta name="description" content="One MCQ mock per module: heuristics & prospect theory, intertemporal & games, discrimination & nudges, methods. Exam-style, scored, with full per-option breakdowns.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:,">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,"Segoe UI",sans-serif;background:#eef0f2;color:#1f2328;font-size:15px;line-height:1.55;}
+  .top{position:sticky;top:0;z-index:20;background:#1c1c1c;padding:11px 14px;border-bottom:2px solid #2d6fd4;}
+  .top .brand{color:#5fa3ff;font-weight:bold;font-size:16px;}
+  .top .sub{color:#9aa0a6;font-size:12px;margin-top:2px;}
+  .nav{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap;}
+  .nav a{padding:6px 9px;background:#2a2f35;color:#e8eaed;text-decoration:none;border-radius:6px;font-size:12px;font-weight:bold;}
+  .nav a:hover{background:#2d6fd4;}
+  .wrap{max-width:860px;margin:0 auto;padding:14px 12px 70px;}
+  .intro{background:#eaf2fd;border-left:4px solid #2d6fd4;border-radius:6px;padding:11px 13px;margin-bottom:16px;font-size:13.5px;}
+  .intro b{color:#1c4f9c;}
+  /* launcher */
+  .mcard{display:block;text-align:left;width:100%;background:#fff;border:1px solid #dde1e5;border-radius:11px;padding:15px 16px;margin-bottom:12px;cursor:pointer;transition:border-color .12s,transform .1s;}
+  .mcard:hover{border-color:#2d6fd4;transform:translateY(-2px);}
+  .mcard .mt{font-size:16px;font-weight:bold;color:#15171a;}
+  .mcard .mb{color:#5a6169;font-size:13px;margin-top:4px;}
+  .mcard .mmeta{margin-top:8px;font-size:12px;color:#2560bd;font-weight:bold;}
+  .mcard .done{color:#1a8a4a;}
+  /* test view */
+  .testhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;}
+  .testhead h2{font-size:18px;color:#15171a;}
+  .backbtn{border:1px solid #cfd6de;background:#f4f6f8;color:#3a4047;border-radius:7px;padding:7px 11px;font-size:12.5px;font-weight:bold;cursor:pointer;}
+  .backbtn:hover{background:#e8ebee;}
+  .score{position:sticky;top:96px;z-index:15;display:flex;gap:8px;align-items:center;justify-content:space-between;background:#fff;border:1px solid #cfd6de;border-radius:9px;padding:9px 13px;margin:8px 0 16px;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+  .score .s1{font-weight:bold;color:#15171a;}
+  .score .s2{color:#5a6169;}
+  .score .marks{font-weight:bold;color:#1a8a4a;}
+  .q{background:#fff;border:1px solid #dde1e5;border-radius:10px;margin-bottom:12px;padding:13px 14px;}
+  .qhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:7px;}
+  .qnum{font-weight:bold;color:#9aa0a6;font-size:12px;}
+  .chip{font-size:10.5px;font-weight:bold;letter-spacing:.3px;border-radius:9px;padding:2px 8px;}
+  .chip.topic{color:#2560bd;background:#eef3fb;border:1px solid #cfe0f5;}
+  .chip.calc{color:#7a4cc4;background:#f1ecfa;border:1px solid #ddd0f0;}
+  .chip.d1{color:#1a8a4a;background:#e9f6ee;} .chip.d2{color:#b9770a;background:#fdf3e2;} .chip.d3{color:#c1392b;background:#fbeae8;}
+  .stem{font-size:14.5px;margin-bottom:10px;}
+  .opts{display:flex;flex-direction:column;gap:7px;}
+  .opt{display:flex;gap:9px;align-items:flex-start;text-align:left;background:#f7f9fb;border:1px solid #d7dde3;border-radius:8px;padding:9px 11px;font-size:13.7px;cursor:pointer;transition:background .1s,border-color .1s;}
+  .opt:hover{background:#eef3f8;border-color:#9bb6d8;}
+  .opt .lk{font-weight:bold;color:#5a6169;min-width:15px;}
+  .opt.correct{background:#e7f6ec;border-color:#46b56e;}
+  .opt.wrong{background:#fdecea;border-color:#e07d6e;}
+  .opt.dim{opacity:.62;} .opt.locked{cursor:default;}
+  .opt .mk{margin-left:auto;font-weight:bold;}
+  .opt.correct .mk{color:#1a8a4a;} .opt.wrong .mk{color:#c1392b;}
+  .reveal{display:none;margin-top:11px;border-top:1px dashed #d7dde3;padding-top:10px;}
+  .reveal.show{display:block;}
+  .verdict{display:inline-block;font-size:12px;font-weight:bold;color:#fff;padding:3px 11px;border-radius:12px;margin-bottom:4px;background:#1a8a4a;}
+  .work{background:#f4f1fb;border-left:3px solid #7a4cc4;border-radius:5px;padding:8px 11px;margin:6px 0;font-size:13px;}
+  .work b{color:#5b34a3;}
+  .traps{margin:4px 0;font-size:13.3px;}
+  .traps .t{margin:3px 0;padding-left:16px;position:relative;}
+  .traps .t::before{content:"✗";position:absolute;left:0;color:#c1392b;font-weight:bold;}
+  .traps .t.ok::before{content:"✓";color:#1a8a4a;}
+  .recall{background:#eef7ef;border-left:3px solid #34a853;border-radius:5px;padding:8px 11px;margin-top:7px;font-size:13.3px;}
+  .recall b{color:#1a8a4a;}
+  .tested{background:#fff8e6;border-left:3px solid #f0a429;border-radius:5px;padding:8px 11px;margin-top:7px;font-size:13.3px;}
+  .tested b{color:#b06a00;}
+  .results{display:none;background:#fff;border:2px solid #2d6fd4;border-radius:11px;padding:16px;margin-top:6px;text-align:center;}
+  .results.show{display:block;}
+  .results .big{font-size:30px;font-weight:bold;color:#15171a;}
+  .results .band{display:inline-block;margin-top:6px;padding:4px 14px;border-radius:14px;font-weight:bold;color:#fff;font-size:13px;}
+  .finishbtn{display:block;width:100%;margin:6px 0 20px;border:none;background:#2d6fd4;color:#fff;border-radius:9px;padding:12px;font-size:14px;font-weight:bold;cursor:pointer;}
+  .finishbtn:hover{background:#245bb0;}
+  .foot{text-align:center;color:#9aa0a6;font-size:12px;margin-top:24px;}
+  .foot a{color:#2d6fd4;text-decoration:none;}
+</style>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-theme-base="light">
+<div class="top">
+  <div class="brand">🟦 Module Tests — Behavioural Economics</div>
+  <div class="sub">One MCQ mock per chapter · exam-style · 5 marks/Q · no negative marking · full breakdowns</div>
+  <div class="nav"><a href="#" onclick="showLauncher();return false;">All modules</a><a href="discuss_behecon.html">Drill</a><a href="formulas_behecon.html">Formulas</a><a href="index.html">← Portal</a></div>
+</div>
+<div class="wrap">
+  <div id="launcher">
+    <div class="intro"><b>Pick a chapter, take its mock.</b> Each module test mirrors the real paper (concept-ID, multi-statement, and computation), scaled to the chapter's weight. Answer → instant grade and a full breakdown of every trap. The full exam is 30 MCQ · 90 min · calculator · no negative marking.</div>
+    <div id="modlist"></div>
+  </div>
+
+  <div id="test" style="display:none;">
+    <div class="testhead">
+      <h2 id="testTitle"></h2>
+      <button class="backbtn" onclick="showLauncher()">← Modules</button>
+    </div>
+    <div class="score">
+      <span><span class="s1" id="sDone">0</span> <span class="s2">/ <span id="sTot">0</span></span></span>
+      <span class="s2"><span id="sRight">0</span> right · <span class="marks" id="sMarks">0</span> marks</span>
+    </div>
+    <div id="quiz"></div>
+    <button class="finishbtn" onclick="finish()">Finish &amp; see results</button>
+    <div class="results" id="results"></div>
+  </div>
+
+  <div class="foot">Module mock tests · built around Behavioural Economics' most-tested concepts &amp; planted traps · <a href="index.html">← back to portal</a></div>
+</div>
+<script>
+const MARK_RIGHT=5, MARK_WRONG=0, NEG=false;
+const MODULES=[
+ {id:"be_m1",name:"M1 · Heuristics, Biases &amp; Prospect Theory",blurb:"System 1 shortcuts, judgement errors, reference dependence, loss aversion, framing, utility under risk.",time:"~16 Q"},
+ {id:"be_m2",name:"M2 · Intertemporal Choice &amp; Game Theory",blurb:"δ / β-δ discounting (Econ, naïf, sophisticate), preference reversals, Nash, level-k, cognitive hierarchy.",time:"~12 Q"},
+ {id:"be_m3",name:"M3 · Discrimination, Gender &amp; Nudges",blurb:"Taste vs statistical discrimination & policy, gender gaps, what is/ isn't a nudge, libertarian paternalism.",time:"~10 Q"},
+ {id:"be_m4",name:"M4 · Experimental Methods &amp; Ethics",blurb:"Causality & control, lab vs field (WEIRD), RCTs, the Belmont pillars, the deception ban.",time:"~6 Q"}
+];
+const Q=[
+/* ===================== be_m1 ===================== */
+{mod:"be_m1",topic:"Affect / identifiable victim",diff:2,
+ stem:"People donate far more to one named, photographed child in poverty than to statistics about millions in need — even though the utilitarian case favours the many. Which heuristic best explains the 'identifiable victim effect'?",
+ opts:["Anchoring","Affect heuristic","Representativeness","Availability"],
+ correct:1,
+ why:["No numeric anchor drives the gift.","A vivid individual triggers an emotional (affect) response that drives the donation.","It isn't prototype-matching.","Not mere ease of recall — it's the emotional pull of a concrete face."],
+ tested:"That a concrete, emotionally vivid target recruits the affect heuristic over cold statistics.",
+ recall:"<b>Affect heuristic</b>: a quick good/bad feeling (System 1) drives the choice; a single identifiable victim feels more affecting than aggregate suffering."},
+
+{mod:"be_m1",topic:"Hindsight bias",diff:2,
+ stem:"After a startup fails, board members insist 'the warning signs were obvious all along' — though none flagged them beforehand. This is:",
+ opts:["Confirmation bias","Hindsight bias — outcomes feel more predictable after the fact, which impairs learning","Availability","Anchoring"],
+ correct:1,
+ why:["Confirmation bias is about defending a prior with selective evidence.","Knowing the outcome makes it seem inevitable ('I knew it'), warping judgement of the past decision.","Not about ease of recall.","No starting number is involved."],
+ tested:"Spotting hindsight bias and that it harms (not helps) learning from the past.",
+ recall:"<b>Hindsight bias</b> (Fischhoff): post-outcome, events seem more predictable than they were; judge past decisions by the information available <i>then</i>, not the result."},
+
+{mod:"be_m1",topic:"Curse of knowledge",diff:2,
+ stem:"An expert engineer writes documentation that beginners find impossible to follow, because she can no longer imagine not knowing the basics. This is:",
+ opts:["Hindsight bias","Curse of knowledge — once you know something you can't model a mind that doesn't","Overconfidence (over-precision)","Confirmation bias"],
+ correct:1,
+ why:["Hindsight is about outcomes seeming predictable, not about modelling the ignorant.","You can't 'un-know' to take the novice's perspective.","Over-precision is about confidence bands, not perspective-taking.","Not belief-consistent evidence search."],
+ tested:"Distinguishing curse of knowledge (can't un-know to model others) from hindsight bias.",
+ recall:"<b>Curse of knowledge</b>: knowing something blocks you from simulating a mind without it (David's restaurant-note study). Distinct from hindsight bias (outcome predictability)."},
+
+{mod:"be_m1",topic:"Conjunction fallacy",diff:2,
+ stem:"After a vivid news report, people rate \"a flood AND a dam failure next year\" as more likely than \"a flood next year\". The error and the rule it breaks:",
+ opts:["Availability; ease of recall raises the estimate","Conjunction fallacy; P(A∩B) can never exceed P(A)","Base-rate neglect; ignoring the prior","Anchoring; the report sets an anchor"],
+ correct:1,
+ why:["Availability is a different mechanism; the specific violation here is the conjunction rule.","Adding a detail makes the joint event more representative but strictly less probable.","No base rate is being discarded.","No numeric anchor is at play."],
+ tested:"The conjunction rule P(A∩B) ≤ P(A) and why added detail lowers probability.",
+ recall:"<b>Conjunction fallacy</b>: a more specific (more representative) scenario is judged more likely though P(A∩B) ≤ P(A). A child of representativeness."},
+
+{mod:"be_m1",topic:"Anchoring (negotiation)",diff:1,
+ stem:"In a salary negotiation, the side that states a (high) number first usually pulls the final figure toward it, even when both sides know it's aggressive. The mechanism is:",
+ opts:["Availability","Anchoring & adjustment — the first number anchors, and adjustment is insufficient","Loss aversion","Representativeness"],
+ correct:1,
+ why:["Not ease of recall.","The opening figure becomes the reference, and the counterparty adjusts away from it too little.","Loss aversion is about gains/losses asymmetry, not anchoring on a number.","Not prototype-matching."],
+ tested:"Anchoring in negotiation and that adjustment from an anchor is insufficient (even for experts).",
+ recall:"<b>Anchoring</b>: estimates start from an initial value and adjust too little. Used deliberately in first-offer and salary-history bargaining."},
+
+{mod:"be_m1",topic:"Availability",diff:2,
+ stem:"Asked whether more English words have 'r' as the first letter or as the third letter, most people say first — though third is actually more common. Why?",
+ opts:["Representativeness","Availability — words starting with 'r' are easier to retrieve, so judged more frequent","Anchoring","Conjunction fallacy"],
+ correct:1,
+ why:["Not similarity to a prototype.","Retrieval ease (first-letter recall) is mistaken for true frequency.","No anchor number.","No joint event."],
+ tested:"Mistaking ease of recall for frequency — the availability heuristic.",
+ recall:"<b>Availability</b>: frequency judged by retrieval ease; salient/easily-recalled categories are over-weighted."},
+
+{mod:"be_m1",topic:"Overconfidence (over-placement)",diff:2,
+ stem:"Surveys repeatedly find ~90% of drivers rate themselves 'above average'. Which form of overconfidence is this?",
+ opts:["Over-precision (confidence bands too narrow)","Over-placement (better-than-average effect)","Overestimation (planning fallacy)","Optimism bias only"],
+ correct:1,
+ why:["Over-precision is about too-narrow ranges, not ranking vs others.","Believing you're better than most is over-placement by definition.","Overestimation is about absolute ability/speed, not relative ranking.","Optimism bias is a form of overestimation, not the better-than-others ranking."],
+ tested:"Telling apart the three forms of overconfidence — here it's over-placement.",
+ recall:"<b>Over-placement</b> = better-than-average effect; <b>over-precision</b> = bands too narrow; <b>overestimation</b> = better/faster than reality (planning/optimism)."},
+
+{mod:"be_m1",topic:"Exponential growth bias",diff:2,
+ stem:"A customer carries a credit-card balance at 3%/month, sure it'll only be 'a bit' over a year, but is shocked it grows ~43%. This systematic under-estimation of compounding is:",
+ opts:["Mental accounting","Exponential growth bias — linearising an exponential process","Sunk-cost fallacy","Anchoring"],
+ correct:1,
+ why:["Not about non-fungible money buckets.","Treating exponential growth as linear under-shoots the true total.","No past unrecoverable cost drives it.","Not anchoring on a number."],
+ tested:"Recognising exponential growth bias (under-estimation) in compounding debt.",
+ recall:"<b>Exponential growth bias</b>: people forecast exponential series as linear → under-estimate debt/growth → lower precautionary saving. Stepwise prediction reduces it."},
+
+{mod:"be_m1",topic:"Reference dependence",diff:2,
+ stem:"An employee expecting a ₹2L bonus gets ₹1L and feels cheated; a colleague expecting nothing gets the same ₹1L and is delighted. Prospect theory explains this via:",
+ opts:["Final wealth levels","Reference dependence — value is felt as a gain/loss from an expectation-based reference point","Probability weighting","Risk aversion"],
+ correct:1,
+ why:["Classical utility (final wealth) predicts equal happiness — contradicted here.","The same ₹1L is a loss vs one reference and a gain vs another.","No probabilities are in play.","Not about curvature over a gamble."],
+ tested:"Principle 1 of prospect theory: evaluate outcomes against a reference point set by expectations.",
+ recall:"<b>Reference dependence</b>: value tracks changes from a reference point (expectations, status quo, goals), not absolute levels."},
+
+{mod:"be_m1",topic:"Framing & risk attitudes",diff:3,
+ stem:"A firm can take a sure ₹3 cr loss or a gamble (50% ₹0, 50% ₹6 cr loss). Most managers gamble. The same managers, offered a sure ₹3 cr gain vs a 50/50 ₹0/₹6 cr gain, take the sure gain. This pattern is:",
+ opts:["Risk-seeking in gains, risk-averse in losses","Risk-averse in gains, risk-seeking in losses (the S-shaped value function)","Pure inconsistency","Probability weighting of the 50%"],
+ correct:1,
+ why:["Reversed — concave gains (risk-averse), convex losses (risk-seeking).","Sure thing in the gain domain, gamble in the loss domain — exactly the value-function curvature.","The pattern is systematic, not random.","Driven by gain/loss framing, not the probability weight."],
+ tested:"Principle 3: concave-in-gains / convex-in-losses, producing risk-seeking to avoid a sure loss.",
+ recall:"Value function: <b>concave in gains</b> (risk-averse) and <b>convex in losses</b> (risk-seeking). Same outcomes framed as loss → gamble (Asian-disease logic)."},
+
+{mod:"be_m1",topic:"Expected utility (compute)",diff:3,calc:true,
+ stem:"A person with utility u(w)=√w chooses between a sure ₹64 and a 50/50 gamble of ₹0 or ₹144. Which do they prefer, and are they risk-averse?",
+ opts:["The gamble; risk-seeking","The sure ₹64; risk-averse (E[u] of the gamble = 6 &lt; u(64) = 8)","Indifferent; risk-neutral","The gamble; risk-averse"],
+ correct:1,
+ why:["√w is concave → risk-averse, and the numbers favour the sure thing.","E[u(gamble)] = ½√0 + ½√144 = 6; u(64) = 8 &gt; 6, so take the sure amount.","Not indifferent: 8 ≠ 6.","A risk-averse person prefers the sure ₹64, not the gamble."],
+ tested:"Computing expected utility with a concave function and reading off risk aversion (E[u(X)] &lt; u(E[X])).",
+ recall:"<b>EU = Σ pᵢu(xᵢ)</b>; concave u ⇒ risk averse ⇒ E[u(X)] &lt; u(E[X]). Compare EU(gamble) to u(sure amount).",
+ work:"E[u]=½·√0+½·√144=½·0+½·12=6. u(64)=√64=8. 8&gt;6 → choose the sure ₹64 (gamble's EV is ₹72 but utility is lower → risk-averse)."},
+
+{mod:"be_m1",topic:"Prospect value function (compute)",diff:3,calc:true,
+ stem:"Using v(x)=x^0.5 for gains and v(x)=−2(−x)^0.5 for losses, is a 50/50 gamble of +₹100 or −₹100 attractive to this person?",
+ opts:["Yes, v is positive","No — v(+100)=10 but v(−100)=−20, so the expected value of v is −5","Indifferent","Can't tell without probabilities of each"],
+ correct:1,
+ why:["The loss term dominates, so it's negative.","½(10) + ½(−20) = −5 &lt; 0 → reject the fair gamble (loss aversion, λ=2).","Not indifferent; the expected v is −5.","Probabilities are given (50/50)."],
+ tested:"Applying the value function with λ to show loss aversion makes a fair gamble unattractive.",
+ recall:"<b>v(x)=x^β (gains), −λ(−x)^β (losses)</b>. Even a fair gamble is rejected because the loss is weighted by λ≈2.",
+ work:"v(+100)=100^0.5=10; v(−100)=−2·(100)^0.5=−20. E[v]=½·10+½·(−20)=−5 → unattractive."},
+
+{mod:"be_m1",topic:"Mental accounting",diff:2,
+ stem:"A man drives across town to save ₹100 on a ₹500 calculator, but wouldn't drive the same distance to save ₹100 on a ₹50,000 laptop. The ₹100 is identical. This violates fungibility via:",
+ opts:["Sunk-cost fallacy","Mental accounting — the saving is evaluated relative to its category, not as fungible money","Anchoring","Affect heuristic"],
+ correct:1,
+ why:["No past unrecoverable spend is involved.","₹100 looms large against ₹500 but small against ₹50,000 — money treated non-fungibly.","Not anchoring on a number.","Not an emotional valence response."],
+ tested:"Recognising non-fungibility — money judged relative to its mental account/category.",
+ recall:"<b>Mental accounting</b> (Thaler): money in separate non-fungible buckets; gains/losses evaluated within each (Heath-Soll)."},
+
+{mod:"be_m1",topic:"Sunk-cost fallacy",diff:2,
+ stem:"A firm has spent ₹8 cr on a failing project; the cheapest path to finish is ₹3 cr more, but the finished product is now worth only ₹2 cr. A rational manager should:",
+ opts:["Continue, to recover the ₹8 cr already spent","Stop — the ₹8 cr is sunk; ₹3 cr to make something worth ₹2 cr is a ₹1 cr loss going forward","Continue, because more was invested than remains","Continue if the team is motivated"],
+ correct:1,
+ why:["The ₹8 cr is unrecoverable and irrelevant to the forward decision.","Compare only future cost (₹3 cr) vs future value (₹2 cr) → stop.","Past spend doesn't justify a forward-looking loss.","Motivation doesn't change the negative forward economics."],
+ tested:"Ignoring sunk costs and deciding on forward marginal cost vs benefit.",
+ recall:"<b>Sunk-cost fallacy</b>: letting unrecoverable past spend drive current choices. Econs ignore sunk costs; compare only future costs and benefits."},
+
+/* ===================== be_m2 ===================== */
+{mod:"be_m2",topic:"Exponential U^t (compute)",diff:3,calc:true,
+ stem:"Movies: a=3 (wk0), b=5 (wk1), c=8 (wk2), d=13 (wk3). As an <b>Econ</b> (β=1, δ=1), find U⁰(d), U¹(d), U²(d) — the value of the Marvel movie seen from weeks 0, 1, 2.",
+ opts:["5, 8 and 13","13, 13 and 13","6.5, 6.5 and 6.5","3.25, 6.5 and 13"],
+ correct:1,
+ why:["Those are other movies' utilities, not d viewed over time.","With δ=1 and β=1, d (=13) isn't discounted from any vantage point: 13, 13, 13.","6.5 wrongly applies β=½ — but an Econ has β=1.","Mixes discounting incorrectly."],
+ tested:"That an Econ has β=1, and with δ=1 there is no discounting — the trap option applies the human's β=½.",
+ recall:"Econ: <b>U^t(x)=δ^(T−t)·u_x</b> with β=1. δ=1 ⇒ value is constant across vantage points. β=½ is for the present-biased human, not the Econ.",
+ work:"d occurs at week 3, u=13. U⁰(d)=δ³·13=13; U¹(d)=δ²·13=13; U²(d)=δ¹·13=13 (δ=1, β=1)."},
+
+{mod:"be_m2",topic:"Exponential choice",diff:2,
+ stem:"With the same movies (a=3,b=5,c=8,d=13) and an exponential discounter (β=1, δ=1) who may watch exactly one, which does she watch?",
+ opts:["Mediocre (a)","Marvel (d)","Great (c)","Indifferent"],
+ correct:1,
+ why:["She has no reason to take the lowest payoff.","δ=1 means no impatience, so she simply takes the highest utility, d=13 — and being time-consistent, she actually waits for it.","c=8 is dominated by d=13.","Strict preference for d, not indifference."],
+ tested:"That a time-consistent exponential discounter picks (and sticks with) the highest-value option.",
+ recall:"Exponential (β=1) ⇒ time-consistent: plan = action. With δ=1 the agent maximises raw utility → Marvel (d)."},
+
+{mod:"be_m2",topic:"Vice/virtue reversal (compute)",diff:3,calc:true,
+ stem:"Going to the gym has an immediate cost C=8 and a delayed benefit B=10. With β=½, δ=1, compare 'go today' vs 'plan to go tomorrow'.",
+ opts:["Goes today (today's value positive)","Skips today (−8+½·10 = −3) but plans to go tomorrow (½(10−8) = +1) — a classic reversal","Goes both today and tomorrow","Skips both"],
+ correct:1,
+ why:["Today's value is negative, so she doesn't go.","Present action discounts only the delayed benefit by β; when both are future, β multiplies (B−C) → positive, so she intends to go later but won't when 'later' arrives.","Today's value is −3 (skips), so not both.","Tomorrow's plan is +1 (intends), so not 'skips both'."],
+ tested:"Computing a virtue's preference reversal: present bias postpones virtues.",
+ recall:"Virtue now: <b>U=−C+βB</b>; planned: <b>β(B−C)</b>. Gym: now −8+5=−3 (skip), planned ½(2)=+1 (intend) → reversal.",
+ work:"Today: −C+βB = −8+½·10 = −3 → skip. Planned (both future): β(B−C)=½(10−8)=+1 → intend. Reversal."},
+
+{mod:"be_m2",topic:"δ from indifference (compute)",diff:3,calc:true,
+ stem:"An exponential discounter is indifferent between ₹100 today and ₹400 in three years. What is δ?",
+ opts:["0.25","≈ 0.63","0.75","≈ 1.59"],
+ correct:1,
+ why:["0.25 is δ³, not δ.","100 = δ³·400 ⇒ δ³ = 0.25 ⇒ δ = 0.25^(1/3) ≈ 0.63.","Doesn't satisfy the equation.","That's 1/δ, the inverse."],
+ tested:"Solving for δ across a 3-year gap (apply the cube root, not just the ratio).",
+ recall:"<b>value_now = δⁿ·value_future</b> ⇒ δ = (ratio)^(1/n). Three years ⇒ cube root.",
+ work:"100 = δ³·400 ⇒ δ³ = 0.25 ⇒ δ = 0.25^(1/3) ≈ 0.63."},
+
+{mod:"be_m2",topic:"Bubbles / level-k",diff:2,
+ stem:"Investors know the market will crash and that the Nash strategy is to exit now, yet each keeps buying, betting they'll get out just before everyone else. This 'I'm one step ahead' reasoning is best described as:",
+ opts:["Convergence to Nash equilibrium","Level-k thinking","Dominant-strategy equilibrium","Risk aversion"],
+ correct:1,
+ why:["They explicitly are NOT playing the Nash (exit) strategy.","Each believes they out-reason others by one step (exit just before the crowd) — bounded, finite-step reasoning.","There's no single best-regardless action being played.","It's strategic mis-reasoning, not a risk attitude."],
+ tested:"Identifying level-k 'one step ahead' reasoning as the engine of bubbles.",
+ recall:"<b>Level-k</b>: finite steps of reasoning; believing you're one level above others drives buying into a known bubble rather than exiting (Nash)."},
+
+{mod:"be_m2",topic:"Beauty-contest Nash",diff:2,
+ stem:"In a game where each player picks a number from 20 to 100 and the winner is closest to ⅔ of the average, what is the Nash equilibrium?",
+ opts:["0","20","60","None of the above"],
+ correct:1,
+ why:["0 would be the Nash if the range allowed it, but the floor is 20.","Iterated dominance pushes everyone down to the lowest allowed number — here the boundary, 20.","60 is not stable (you'd want ⅔ of it).","20 is the equilibrium, so 'none' is wrong."],
+ tested:"Applying iterated dominance to a bounded ⅔-average game (the Nash is the lower boundary, not 0).",
+ recall:"⅔-average game: iterated dominance drives play to the minimum feasible number. Range 0–100 → 0; range 20–100 → <b>20</b>."},
+
+{mod:"be_m2",topic:"Level-2 best response (compute)",diff:3,calc:true,
+ stem:"In a ⅔-of-average game (10–100), you're a Level-2 thinker who believes opponents are 30% Level-0 (≈ average ~55) and 70% Level-1. What's your best guess (approx.)?",
+ opts:["~55","~28","~37","~19"],
+ correct:1,
+ why:["55 is roughly a Level-0 guess, not Level-2.","L1 guesses ⅔·55≈37; expected opp avg = 0.3·55 + 0.7·37 ≈ 42; your guess = ⅔·42 ≈ 28.","37 is the Level-1 guess, one step too shallow.","19 over-iterates beyond the believed mix."],
+ tested:"Best-responding to a believed type-mix: weight the average, then take ⅔.",
+ recall:"Best response = ⅔ × E[opp guesses], E = Σ share·guess. Don't just take ⅔ of 55; weight L0 and L1.",
+ work:"L0≈55, L1=⅔·55≈37. E[opp]=0.3·55+0.7·37≈16.5+25.9≈42. Your guess=⅔·42≈<b>28</b>."},
+
+{mod:"be_m2",topic:"Cognitive hierarchy (τ)",diff:2,
+ stem:"In the cognitive-hierarchy model, a higher τ implies:",
+ opts:["Firms are less strategically sophisticated","More higher-order types emerge, and (empirically) higher profits and survival","τ has no bearing on profits","Firms are less likely to stay in business"],
+ correct:1,
+ why:["Higher τ means MORE sophistication, not less.","τ is the mean reasoning depth; Goldfarb-Yang found higher-τ firms more profitable and longer-lived.","τ does affect outcomes — higher τ → better performance.","Reversed — higher τ firms survive more."],
+ tested:"The direction of τ's effect: more sophistication → better business outcomes.",
+ recall:"<b>Cognitive hierarchy</b> (Poisson-τ): higher τ ⇒ more higher-order thinkers ⇒ higher profit/survival (τ≈2.66 for ISP managers)."},
+
+{mod:"be_m2",topic:"Nash equilibrium multiplicity",diff:3,
+ stem:"In the Stag Hunt, both hunting stag (high payoff if both cooperate) and both hunting hare (safe) are stable. Which statement is correct?",
+ opts:["The game has a unique Nash equilibrium","It has two pure-strategy Nash equilibria — (Stag,Stag) and (Hare,Hare)","Only (Stag,Stag) is Nash","There is no Nash equilibrium"],
+ correct:1,
+ why:["It does not have a unique NE.","Neither player gains by deviating from either profile, so both are Nash.","(Hare,Hare) is also self-enforcing.","Both pure profiles are Nash."],
+ tested:"That a game can have multiple Nash equilibria; not every 'good' outcome is the unique NE.",
+ recall:"<b>Nash equilibrium</b>: no profitable unilateral deviation. Stag Hunt has two pure NE; coordination/trust selects between them."},
+
+{mod:"be_m2",topic:"Centipede game (SPNE)",diff:2,
+ stem:"In the centipede game, the pie grows the longer both players continue, yet backward induction predicts:",
+ opts:["Continue to the last node","Stop at the very first node (the subgame-perfect equilibrium)","Both always cooperate to the end","No prediction is possible"],
+ correct:1,
+ why:["Backward induction unravels cooperation from the end.","Anticipating the other will take at the last node, each takes earlier — back to the first node.","Cooperation isn't the SPNE, though people often continue in experiments.","Backward induction gives a clear prediction."],
+ tested:"Applying backward induction to get the SPNE (stop immediately), despite a growing pie.",
+ recall:"<b>Centipede</b>: SPNE is stop at the first node. Stronger strategic players (chess masters) stop earlier, closer to SPNE."},
+
+{mod:"be_m2",topic:"Dominant strategy / PD",diff:2,
+ stem:"Two firms can each 'compete hard' or 'collude'. Competing is best regardless of the rival's choice, but mutual collusion would earn both more. The equilibrium and its name:",
+ opts:["Mutual collusion; cooperative equilibrium","Mutual competition; a dominant-strategy equilibrium that is Pareto-inferior","Whatever the rival does","No equilibrium exists"],
+ correct:1,
+ why:["Collusion isn't individually stable.","'Compete' is dominant for each, so both compete — worse for both than colluding (Prisoner's Dilemma).","A dominant strategy is best irrespective of the rival.","The dominant-strategy equilibrium is well-defined."],
+ tested:"Identifying the dominant-strategy equilibrium and that it can be Pareto-inferior (PD).",
+ recall:"<b>Dominant strategy</b>: best regardless of the opponent. PD: both defect though cooperation is jointly better — individual rationality ≠ collective optimum."},
+
+{mod:"be_m2",topic:"Commitment devices",diff:2,
+ stem:"A smoker who knows he'll relapse signs up for a savings account that forfeits his money if a future urine test shows nicotine. Who uses such commitment devices, and why?",
+ opts:["Naïfs, because they're unaware of their bias","Sophisticates — they foresee their future self-control failure and pre-commit","Econs, to maximise flexibility","Anyone, regardless of self-awareness"],
+ correct:1,
+ why:["Naïfs don't foresee the lapse, so they see no need.","Sophisticates know β̂=β<1 and raise the cost of lapsing in advance (CARES account).","Econs are time-consistent and need no commitment.","Demand for commitment specifically comes from foreseeing the lapse."],
+ tested:"That commitment demand comes from sophisticates (who foresee the lapse), not naïfs.",
+ recall:"<b>Commitment devices</b> (Ulysses, stickK, CARES smoking account, Kremer's dominated contract): used by sophisticates to constrain a foreseen future self."},
+
+/* ===================== be_m3 ===================== */
+{mod:"be_m3",topic:"Post-hoc justification",diff:2,
+ stem:"In Norton's study, subjects who preferred to hire the male candidate ranked 'experience' as most important when he had more experience, but ranked 'education' as most important when he had more education. This reveals:",
+ opts:["Statistical discrimination","Post-hoc justification — the criterion is constructed after the choice to fit it","Stereotype threat","The Pygmalion effect"],
+ correct:1,
+ why:["Not an information shortcut about group averages.","People decide first (often on bias) then shift their stated reasons to justify it.","Stereotype threat is about performance under stigma salience.","Pygmalion is about expectations changing others' performance."],
+ tested:"That shifting stated criteria to fit a pre-made choice exposes hidden discrimination (post-hoc justification).",
+ recall:"<b>Post-hoc justification</b>: choose first, rationalise after; stated criteria flex to fit the preferred candidate. A method to uncover bias."},
+
+{mod:"be_m3",topic:"Statistical vs taste",diff:2,
+ stem:"A lender, lacking individual credit data, charges a higher rate to applicants from a group with a worse average repayment record — applying the group average to identical individuals. This is:",
+ opts:["Taste-based discrimination","Statistical discrimination — an information shortcut, fixed by reducing the information gap","Post-hoc justification","Stereotype threat"],
+ correct:1,
+ why:["No psychic distaste is described; it's a signal-extraction shortcut.","Group averages stand in for missing individual data → identical people treated differently; remedy = better individual signals.","Not a constructed justification.","Not a performance effect under stigma."],
+ tested:"Identifying statistical (information) discrimination vs taste (preference), and its remedy.",
+ recall:"<b>Statistical discrimination</b> (Phelps-Arrow): incomplete info → group average applied to individuals; fix by reducing information asymmetry. <b>Taste</b> (Becker) needs contact, not info."},
+
+{mod:"be_m3",topic:"Persistence of discrimination",diff:3,
+ stem:"Men are 22% of healthcare employees but 56% of its managers. Which statements help explain why such under-representation persists? (I) Few minority members are decision-makers, so leader bias self-perpetuates (II) The majority rarely observes minority success, reinforcing the belief minorities can't succeed (III) Minorities may internalise that the system is rigged against them",
+ opts:["Only I and II","I, II and III","Only II and III","Only I and III"],
+ correct:1,
+ why:["I is true but incomplete.","All three mechanisms (structural, belief-reinforcement, internalisation) jointly sustain under-representation.","Omits the structural decision-maker channel (I).","Omits the majority-belief channel (II)."],
+ tested:"That persistence works through structural, belief-reinforcement and internalisation channels together.",
+ recall:"Under-representation self-perpetuates: few minority decision-makers (structural), unobserved success (belief reinforcement), and internalised low expectations."},
+
+{mod:"be_m3",topic:"Low-promotability tasks",diff:2,
+ stem:"On Babcock et al. (2007): which statements are true? (I) Low-promotability tasks are necessary but don't advance careers (II) Women volunteer more for them in mixed-gender settings (III) Higher volunteering occurs in all-female than all-male groups",
+ opts:["I and II only","I, II and III","II and III only","I only"],
+ correct:1,
+ why:["I and II are right but III is also supported.","All three hold: in single/same-sex groups someone still must volunteer, so all-female groups show more volunteering than all-male — and the mixed-group gap is belief-driven.","Omits I.","Too narrow."],
+ tested:"The Babcock findings, including that all-female groups volunteer more than all-male (the gap is belief-driven).",
+ recall:"<b>Babcock et al.</b>: women do/are-asked-for more non-promotable tasks in mixed groups; gap is belief-driven; recognition (not pay) narrows it."},
+
+{mod:"be_m3",topic:"Intergroup contact (Allport)",diff:2,
+ stem:"A manager hopes that simply putting two rival groups in the same office will reduce prejudice. Under Allport's contact hypothesis, contact reliably reduces prejudice only when:",
+ opts:["Any contact at all occurs","There is equal status, a common goal, cooperation and institutional support","The majority group leads the minority","Groups are kept separate but informed about each other"],
+ correct:1,
+ why:["Mere proximity can entrench prejudice.","Allport's four conditions must hold for contact to work (Pettigrew-Tropp: prejudice fell in 94% of studies meeting them).","Unequal status undermines the effect.","Information without cooperative contact isn't the mechanism."],
+ tested:"That contact reduces prejudice only under Allport's four conditions, not from mere proximity.",
+ recall:"<b>Allport contact hypothesis</b>: equal status + common goal + cooperation + institutional support. Quotas and role models also shift majority beliefs and minority aspirations."},
+
+{mod:"be_m3",topic:"What is a nudge",diff:2,
+ stem:"Consider: (I) A nudge alters the choice set available to individuals (II) A nudge alters behaviour in predictable ways (III) A nudge significantly changes economic incentives. Which is/are true?",
+ opts:["Both I and II","Only II","I, II and III","Both II and III"],
+ correct:1,
+ why:["I is false — a nudge must NOT alter/forbid the choice set.","Only II is correct: a nudge changes choice architecture and behaviour predictably, without removing options or changing incentives.","I and III are both false.","III is false (no significant incentive change)."],
+ tested:"The precise definition — a nudge does NOT alter the choice set or significantly change incentives.",
+ recall:"<b>Nudge</b>: alters choice <i>architecture</i> to change behaviour predictably, <b>without</b> forbidding options or significantly changing incentives — and easy/cheap to avoid."},
+
+{mod:"be_m3",topic:"Libertarian paternalism",diff:2,
+ stem:"Which traits qualify an intervention as a nudge under libertarian paternalism? (I) Easy and cheap to avoid (II) Harmful options removed from the choice set (III) Full liberty to choose from the entire set",
+ opts:["Only I","I and III","Only II","I and II"],
+ correct:1,
+ why:["Incomplete — III is also required.","A nudge preserves free choice (III) and is easy to avoid (I).","Removing options (II) is a mandate, not a nudge.","II violates the 'don't forbid' criterion."],
+ tested:"That a nudge preserves full liberty and is easy to avoid; removing options disqualifies it.",
+ recall:"<b>Libertarian paternalism</b>: steer toward the chooser's interest while preserving free choice — easy/cheap to avoid, no options removed."},
+
+{mod:"be_m3",topic:"Save More Tomorrow",diff:2,
+ stem:"Why does 'Save More Tomorrow' (commit now to save more from future raises) work? (I) People want to save more but don't follow through (II) Self-control problems make it easier to commit to future, not immediate, saving (III) People dislike unfair actions",
+ opts:["Only I","I and II","II and III","I and III"],
+ correct:1,
+ why:["I alone is incomplete.","It exploits the intention-action gap (I) and present bias — committing the future self is easier (II).","Fairness (III) isn't the mechanism here.","III is irrelevant to this nudge."],
+ tested:"The behavioural levers behind Save More Tomorrow: the intention-action gap and present bias.",
+ recall:"<b>Save More Tomorrow</b> (Thaler-Benartzi): pre-commit future raises to savings — works because people want to save (intention gap) and find future commitment easier (present bias)."},
+
+{mod:"be_m3",topic:"Control group (BIT letters)",diff:2,
+ stem:"The UK Behavioural Insights Team tested tax-reminder letters with social-norm messages of increasing specificity (national → local → 'people with a debt like yours' → both). Which was most likely the CONTROL group's letter?",
+ opts:["'Nine out of ten people in your local area pay on time…'","The plain standard reminder with no social-norm message","'Nine out of ten people with a debt like yours, in your area, pay on time…'","'Nine out of ten people with a debt like yours pay on time…'"],
+ correct:1,
+ why:["That's a treatment (local social norm).","The control is the unmodified standard letter — the others are the social-norm treatments being tested against it.","That's the most specific treatment.","That's another treatment variant."],
+ tested:"Identifying the control as the baseline (no social-norm message), against which treatments are compared.",
+ recall:"In an RCT the <b>control</b> gets the status-quo (plain letter); treatments add the manipulated factor (social-norm framing). Specificity of the norm was the treatment."},
+
+{mod:"be_m3",topic:"Where nudges help most",diff:2,
+ stem:"Which decisions are good candidates for a choice-architecture nudge? (I) Investment goods (saving, exercise) — costs now, benefits later (II) Sin goods (smoking, sweets) — benefits now, costs later (III) Rare high-stakes decisions (house, life insurance) with little feedback",
+ opts:["I and II only","I, II and III","I only","II only"],
+ correct:1,
+ why:["Incomplete — III also fits.","All three suit nudges: present-biased trade-offs (I, II) and rare, low-feedback, hard-to-map choices (III).","Too narrow.","Too narrow."],
+ tested:"Recognising the choice problems nudges help most: present-biased trade-offs and rare/low-feedback decisions.",
+ recall:"Nudges help most where feedback is poor and choices are hard/infrequent or self-control-laden: investment goods, sin goods, and rare high-stakes decisions."},
+
+/* ===================== be_m4 ===================== */
+{mod:"be_m4",topic:"Field vs method",diff:1,
+ stem:"A student says 'behavioural economics and experimental economics are the same thing.' The correct correction is:",
+ opts:["They are indeed identical","Behavioural economics is a field (the subject); experimental economics is a method (the tool) — overlapping but distinct","Experimental economics is a sub-field of psychology","Behavioural economics never uses experiments"],
+ correct:1,
+ why:["They are not identical.","One is a subject area, the other a methodology; they overlap heavily but aren't the same.","It's a method within economics, not psychology.","Behavioural economics relies heavily on experiments."],
+ tested:"The field-vs-method distinction (behavioural = subject, experimental = method).",
+ recall:"<b>Behavioural</b> economics = a field; <b>experimental</b> economics = a method. An experiment holds the environment fixed and varies one thing to identify causality."},
+
+{mod:"be_m4",topic:"Lab & the ultimatum game",diff:2,
+ stem:"Which statement about laboratory experiments is correct?",
+ opts:["Responders in the ultimatum game accept any positive offer, as Nash predicts","Labs give clean causal identification but face external-validity limits (WEIRD samples); low (&lt;20%) offers are routinely rejected","Lab samples represent the general population well","Lab and field studies share identical strengths"],
+ correct:1,
+ why:["Empirically, low offers are rejected — contradicting the Nash prediction.","Strong on mechanism/causal control, weak on generalisability; unfair offers get rejected.","Student pools are typically WEIRD.","They trade off differently (lab = mechanism, field = external validity)."],
+ tested:"The lab's mechanism-clarity strength vs WEIRD-sample weakness, and the real ultimatum result.",
+ recall:"<b>Lab</b>: clean causal ID; weakness = <b>WEIRD</b> samples. Ultimatum offers average ~40–50%; sub-20% offers are rejected (contra Nash)."},
+
+{mod:"be_m4",topic:"Methods typology",diff:2,
+ stem:"A researcher runs lab-style tasks with rural farmers ('lab-in-the-field') and also large online MTurk surveys. The key trade-off across these formats is:",
+ opts:["Online gives more control than the lab","Each trades control for scale/generalisability — online is cheap and large but low-control; lab-in-field is more generalisable but costlier","All experiments must randomise","Field formats give the clearest mechanism"],
+ correct:1,
+ why:["Online gives LESS control than the lab.","Moving toward the field buys generalisability/scale at the cost of control (and adds bot/attention concerns online).","Experimental tools are used in non-randomised designs too.","Mechanism clarity is the lab's strength, not the field's."],
+ tested:"The control-vs-generalisability trade-off across lab, lab-in-field and online designs.",
+ recall:"<b>Lab-in-field</b> (non-standard subjects, costlier, more generalisable) and <b>online</b> (cheap, large, low control, bot concerns). Experimental tools also appear in non-randomised designs."},
+
+{mod:"be_m4",topic:"Field/RCT trade-off",diff:2,
+ stem:"Compared with the lab, randomised field experiments (e.g. Kremer-Miguel deworming):",
+ opts:["Give the clearest mechanism","Offer stronger external validity and less Hawthorne bias, but cost more and reveal the mechanism less cleanly","Are cheap and quick","Never require randomisation"],
+ correct:1,
+ why:["Mechanism clarity is the lab's strength.","Natural settings buy external validity but cost more and obscure the precise channel.","RCTs are expensive and logistically hard.","RCTs randomise by definition."],
+ tested:"The field/RCT trade-off: external validity up, mechanism clarity and cheapness down.",
+ recall:"<b>RCTs</b>: external validity, less social-desirability bias; weakness = cost and unclear mechanism (Banerjee-Duflo, Bertrand-Mullainathan)."},
+
+{mod:"be_m4",topic:"Belmont pillars",diff:2,
+ stem:"Modern research ethics (post-Tuskegee/Milgram) rest on the Belmont Report's three principles. They are:",
+ opts:["Honesty, profit and speed","Respect for persons, beneficence and justice","Consent, funding and publication","Randomisation, replication and review"],
+ correct:1,
+ why:["Not the Belmont principles.","Respect for persons (informed consent), beneficence (risk-benefit), justice (protect the vulnerable).","These aren't the three pillars.","These are methodological, not the ethical pillars."],
+ tested:"The three Belmont pillars.",
+ recall:"<b>Belmont Report (1979)</b>: respect for persons (autonomy/consent), beneficence (maximise benefit, minimise harm), justice (fair distribution; protect vulnerable groups). IRB ≥5 members."},
+
+{mod:"be_m4",topic:"Deception ban",diff:2,
+ stem:"A researcher wants to deceive participants about a study's true aim, planning to debrief them after. In ECONOMICS specifically, this is:",
+ opts:["Acceptable, provided there's a debrief","Not allowed — economics bans deception to protect the credibility of the subject pool","Required by the IRB","Only allowed with more than five IRB members"],
+ correct:1,
+ why:["Debriefing rescues deception in psychology, not economics.","Economics prohibits deception outright so subjects can trust that instructions are true.","The IRB doesn't require deception.","IRB size is unrelated to the deception rule."],
+ tested:"The economics-specific deception ban (vs psychology, where debriefed deception is allowed).",
+ recall:"<b>Deception is banned in economics</b> — it would destroy the credibility of experimental instructions. (Psychology permits debriefed deception.)"}
+];
+
+/* ===== engine: launcher + test ===== */
+function showLauncher(){
+  document.getElementById('launcher').style.display='';
+  document.getElementById('test').style.display='none';
+  window.scrollTo({top:0});
+}
+const modlist=document.getElementById('modlist');
+MODULES.forEach(m=>{
+  const n=Q.filter(q=>q.mod===m.id).length;
+  const b=document.createElement('button'); b.className='mcard'; b.onclick=()=>openModule(m.id);
+  b.innerHTML='<div class="mt">'+m.name+'</div><div class="mb">'+m.blurb+'</div><div class="mmeta">'+n+' questions · '+(n*MARK_RIGHT)+' marks · '+m.time+'</div>';
+  modlist.appendChild(b);
+});
+let CUR=null, state={};
+function openModule(id){
+  CUR=id; state={};
+  const m=MODULES.find(x=>x.id===id);
+  document.getElementById('testTitle').innerHTML=m.name;
+  document.getElementById('launcher').style.display='none';
+  document.getElementById('test').style.display='';
+  document.getElementById('results').classList.remove('show');
+  const list=Q.filter(q=>q.mod===id);
+  document.getElementById('sTot').textContent=list.length;
+  const quiz=document.getElementById('quiz'); quiz.innerHTML='';
+  list.forEach((q,i)=>quiz.appendChild(card(q,i)));
+  updateScore();
+  window.scrollTo({top:0});
+}
+function card(q,i){
+  const el=document.createElement('div'); el.className='q'; el.id='q'+i;
+  const dlabel={1:'Recall',2:'Applied',3:'Hard'}[q.diff];
+  let h='<div class="qhead"><span class="qnum">Q'+(i+1)+'</span><span class="chip topic">'+q.topic+'</span>'+
+        (q.calc?'<span class="chip calc">CALC</span>':'')+'<span class="chip d'+q.diff+'">'+dlabel+'</span></div>';
+  h+='<div class="stem">'+q.stem+'</div><div class="opts">';
+  q.opts.forEach((o,k)=>{ h+='<button class="opt" data-k="'+k+'"><span class="lk">'+'ABCD'[k]+'</span><span>'+o+'</span><span class="mk"></span></button>'; });
+  h+='</div><div class="reveal"><span class="verdict">Answer: '+'ABCD'[q.correct]+'</span>';
+  if(q.work) h+='<div class="work"><b>Working.</b> '+q.work+'</div>';
+  h+='<div class="traps">';
+  q.why.forEach((w,k)=>{ h+='<div class="t'+(k===q.correct?' ok':'')+'"><b>'+'ABCD'[k]+'.</b> '+w+'</div>'; });
+  h+='</div><div class="tested"><b>What\'s really tested:</b> '+q.tested+'</div><div class="recall"><b>Recall:</b> '+q.recall+'</div></div>';
+  el.innerHTML=h;
+  el.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>choose(i,+b.dataset.k,el,q)));
+  return el;
+}
+function choose(i,pick,el,q){
+  if(state[i]!=null) return; state[i]=pick;
+  el.querySelectorAll('.opt').forEach((b,k)=>{
+    b.classList.add('locked');
+    if(k===q.correct){ b.classList.add('correct'); b.querySelector('.mk').textContent='✓'; }
+    else if(k===pick){ b.classList.add('wrong'); b.querySelector('.mk').textContent='✗'; }
+    else b.classList.add('dim');
+  });
+  el.querySelector('.reveal').classList.add('show');
+  updateScore();
+}
+function updateScore(){
+  const list=Q.filter(q=>q.mod===CUR);
+  const keys=Object.keys(state); let right=0;
+  keys.forEach(k=>{ if(state[k]===list[k].correct) right++; });
+  const marks=right*MARK_RIGHT + (keys.length-right)*MARK_WRONG;
+  document.getElementById('sDone').textContent=keys.length;
+  document.getElementById('sRight').textContent=right;
+  document.getElementById('sMarks').textContent=marks;
+}
+function finish(){
+  const list=Q.filter(q=>q.mod===CUR);
+  const keys=Object.keys(state); let right=0;
+  keys.forEach(k=>{ if(state[k]===list[k].correct) right++; });
+  const pct=Math.round(right/list.length*100);
+  let band,col;
+  if(pct>=80){band='Strong — exam-ready';col='#1a8a4a';}
+  else if(pct>=60){band='Solid — tighten the traps';col='#c47e0a';}
+  else {band='Revise this module';col='#c1392b';}
+  const r=document.getElementById('results');
+  r.innerHTML='<div class="big">'+right+' / '+list.length+'</div><div style="color:#5a6169;font-size:13px;">'+(right*MARK_RIGHT)+' / '+(list.length*MARK_RIGHT)+' marks · '+pct+'%</div><div class="band" style="background:'+col+'">'+band+'</div>'+
+    (keys.length<list.length?'<div style="color:#c47e0a;font-size:12.5px;margin-top:8px;">('+(list.length-keys.length)+' unanswered)</div>':'');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  if(window.Mock){ var lbl=MODULES.find(x=>x.id===CUR).name.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')+' · BE'; Mock.recordResult(lbl, right*MARK_RIGHT, list.length*MARK_RIGHT); }
+}
+showLauncher();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

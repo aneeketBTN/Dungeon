@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recall Drill</title>
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:,">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,"Segoe UI",sans-serif;background:#eef0f2;color:#1f2328;font-size:15px;line-height:1.55;}
+  .top{position:sticky;top:0;z-index:20;background:#1c1c1c;padding:10px 16px;}
+  .top .row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .top .ttl{color:#fff;font-weight:bold;font-size:15px;}
+  .top .chip{background:#2d6fd4;color:#fff;font-size:11px;font-weight:bold;padding:3px 9px;border-radius:20px;}
+  .top .chip.npd{background:#c47e0a;}
+  .top a.exit{color:#9aa0a6;text-decoration:none;font-size:13px;}
+  .pbar{height:6px;background:#33383e;border-radius:4px;margin-top:9px;overflow:hidden;}
+  .pfill{height:100%;background:#34a853;width:0;transition:width .25s;}
+  .meta{display:flex;justify-content:space-between;color:#9aa0a6;font-size:12px;margin-top:6px;}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 14px 110px;}
+  .blurb{font-style:italic;color:#555;background:#fff8e6;border-left:4px solid #f0a429;padding:9px 12px;border-radius:5px;margin-bottom:16px;font-size:13.5px;}
+  .card{background:#fff;border:1px solid #dde1e5;border-radius:12px;padding:18px 18px;}
+  .qtag{display:inline-block;font-size:11px;font-weight:bold;color:#2560bd;background:#eef3fb;border:1px solid #cfe0f5;border-radius:10px;padding:2px 9px;margin-bottom:10px;}
+  .qtag.w{color:#b06a00;background:#fff4e6;border-color:#f0d8a8;}
+  .q{font-size:17px;line-height:1.5;margin-bottom:16px;}
+  .q .f{display:inline-block;background:#f4f6f8;border:1px solid #dde2e7;padding:1px 7px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;color:#2d4a66;}
+  .opts{display:flex;flex-direction:column;gap:9px;}
+  .opt{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;border:1px solid #cfd4da;border-radius:9px;cursor:pointer;background:#fff;transition:background .12s,border-color .12s;}
+  .opt:hover{background:#f3f7fd;border-color:#9cc0f0;}
+  .opt .k{font-weight:bold;color:#666;flex-shrink:0;}
+  .opt.correct{background:#e7f6ec;border-color:#34a853;}
+  .opt.wrong{background:#fdecea;border-color:#d14836;}
+  .opt.dim{opacity:.55;}
+  .opt.locked{cursor:default;}
+  .opt .mk{margin-left:auto;font-weight:bold;}
+  .opt.correct .mk{color:#1a8a4a;}
+  .opt.wrong .mk{color:#b03a2b;}
+  .why{margin-top:14px;background:#eef7ef;border-left:4px solid #34a853;border-radius:6px;padding:11px 13px;font-size:14px;line-height:1.55;display:none;}
+  .why.show{display:block;}
+  .why b{color:#1a8a4a;}
+  .why.wrongwhy{background:#fdf2f0;border-color:#d14836;}
+  .why.wrongwhy b{color:#b03a2b;}
+  .reveal{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 2px;}
+  .rbtn{padding:8px 13px;border:1px solid #b5bcc4;background:#fff;border-radius:7px;cursor:pointer;font-size:13px;font-weight:bold;color:#2560bd;}
+  .rbtn:hover{background:#eef4ff;}
+  .rbox{margin-top:12px;border-radius:6px;padding:11px 13px;font-size:14px;line-height:1.55;display:none;}
+  .rbox.show{display:block;}
+  .rbox.looking{background:#fff4e6;border-left:4px solid #f0a429;}
+  .rbox.looking b{color:#b06a00;}
+  .rbox.model{background:#eef7ef;border-left:4px solid #34a853;}
+  .rbox.use{background:#eef3fb;border-left:4px solid #2d6fd4;}
+  .rbox.use b{color:#2560bd;}
+  .rbox ul{padding-left:18px;margin:4px 0;}
+  .rbox li{margin-bottom:4px;}
+  .nav{position:fixed;bottom:0;left:0;right:0;background:#f0f1f3;border-top:1px solid #c8ccd0;padding:11px 16px;display:flex;justify-content:space-between;gap:10px;z-index:30;}
+  .btn{padding:11px 18px;border:1px solid #b5bcc4;background:#fff;border-radius:8px;cursor:pointer;font-size:14px;font-weight:bold;}
+  .btn:hover{background:#eef1f5;}
+  .btn.primary{background:#2d6fd4;color:#fff;border-color:#2560bd;flex:1;max-width:280px;}
+  .btn.primary:hover{background:#2560bd;}
+  .btn:disabled{opacity:.4;cursor:default;}
+  .done{text-align:center;background:#fff;border:1px solid #dde1e5;border-radius:12px;padding:30px 20px;}
+  .done .big{font-size:30px;font-weight:bold;color:#1a8a4a;margin-bottom:6px;}
+  .done p{color:#555;margin-bottom:16px;}
+  .err{background:#fff;border:1px solid #dde1e5;border-radius:12px;padding:24px;text-align:center;color:#b03a2b;}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="row">
+    <span class="ttl" id="ttl">Recall Drill</span>
+    <a class="exit" href="index.html">✕ Portal</a>
+  </div>
+  <div class="pbar"><div class="pfill" id="pfill"></div></div>
+  <div class="meta"><span id="subj"></span><span id="counter"></span></div>
+</div>
+<div class="wrap">
+  <div class="blurb" id="blurb" style="display:none"></div>
+  <div id="stage"></div>
+</div>
+<div class="nav">
+  <button class="btn" id="prev" onclick="go(-1)">← Prev</button>
+  <button class="btn primary" id="next" onclick="go(1)">Next →</button>
+</div>
+
+<script>
+function qs(k){ return new URLSearchParams(location.search).get(k); }
+const SETID = qs('set') || '';
+let MOCK=null, idx=0, answered={}, reviewed={}, SKEY='';
+
+function boot(){
+  if(!SETID){ fail("No drill selected. Open this from the portal."); return; }
+  const s=document.createElement('script');
+  s.src='sets/'+SETID+'.js';
+  s.onload=init; s.onerror=()=>fail("Couldn't load drill: "+SETID);
+  document.head.appendChild(s);
+}
+function fail(msg){ document.getElementById('stage').innerHTML="<div class='err'>"+msg+"</div>"; }
+
+function init(){
+  MOCK=window.MOCK;
+  if(!MOCK||!MOCK.items){ fail("Drill data malformed."); return; }
+  SKEY='ab_recall_'+MOCK.id;
+  document.getElementById('ttl').textContent=MOCK.title;
+  document.getElementById('subj').textContent=MOCK.subject;
+  const chip=document.createElement('span'); chip.className='chip'+(MOCK.subject.indexOf('NPD')>=0||MOCK.subject.indexOf('Product')>=0?' npd':''); chip.textContent=MOCK.subject;
+  if(MOCK.blurb){ const b=document.getElementById('blurb'); b.textContent=MOCK.blurb; b.style.display='block'; }
+  load();
+  render();
+}
+function save(){ try{ localStorage.setItem(SKEY, JSON.stringify({idx:idx,answered:answered,reviewed:reviewed})); }catch(e){} }
+function load(){ try{ const r=localStorage.getItem(SKEY); if(!r) return; const s=JSON.parse(r); if(s){ idx=s.idx||0; answered=s.answered||{}; reviewed=s.reviewed||{}; } }catch(e){} }
+function doneCount(){ let n=0; for(let i=0;i<MOCK.items.length;i++){ if(answered[i]!==undefined||reviewed[i]) n++; } return n; }
+
+function render(){
+  const N=MOCK.items.length;
+  if(idx>=N){ renderDone(); return; }
+  const it=MOCK.items[idx];
+  const stage=document.getElementById('stage');
+  document.getElementById('counter').textContent=(idx+1)+' / '+N+'  ·  '+doneCount()+' done';
+  document.getElementById('pfill').style.width=(doneCount()/N*100)+'%';
+  document.getElementById('prev').disabled=(idx===0);
+  document.getElementById('next').textContent=(idx===N-1?'Finish ✓':'Next →');
+
+  let h="<div class='card'>";
+  if(it.type==='written'){
+    h+="<span class='qtag w'>APPLY · written</span>";
+    h+="<div class='q'>"+it.t+"</div>";
+    h+="<div class='reveal'>"+
+       "<span class='rbtn' onclick=\"tog('look')\">🎯 What it's looking for</span>"+
+       "<span class='rbtn' onclick=\"tog('mod')\">📝 Example answer</span>"+
+       (it.use?"<span class='rbtn' onclick=\"tog('use')\">💡 Where it's used</span>":"")+"</div>";
+    h+="<div class='rbox looking' id='rb-look'><b>Hit these ideas:</b><ul>"+it.looking.map(p=>"<li>"+p+"</li>").join("")+"</ul></div>";
+    h+="<div class='rbox model' id='rb-mod'><b>Example answer:</b><br>"+it.model+"</div>";
+    if(it.use) h+="<div class='rbox use' id='rb-use'><b>Where &amp; how to use it:</b> "+it.use+"</div>";
+    h+="</div>";
+    stage.innerHTML=h;
+  } else {
+    h+="<span class='qtag'>RECALL · "+(it.tag||'concept')+"</span>";
+    h+="<div class='q'>"+it.t+"</div><div class='opts' id='opts'>";
+    it.o.forEach((o,i)=>{ h+="<div class='opt' data-i='"+i+"' onclick='pick("+i+")'><span class='k'>"+"ABCD"[i]+"</span><span>"+o+"</span><span class='mk'></span></div>"; });
+    h+="</div>";
+    h+="<div class='why' id='why'></div>";
+    h+="</div>";
+    stage.innerHTML=h;
+    if(answered[idx]!==undefined) showFeedback(answered[idx], true);
+  }
+  window.scrollTo(0,0);
+}
+
+function pick(i){
+  if(answered[idx]!==undefined) return;
+  answered[idx]=i; save();
+  showFeedback(i,false);
+  render_progress();
+}
+function render_progress(){
+  const N=MOCK.items.length;
+  document.getElementById('counter').textContent=(idx+1)+' / '+N+'  ·  '+doneCount()+' done';
+  document.getElementById('pfill').style.width=(doneCount()/N*100)+'%';
+}
+function showFeedback(chosen, restoring){
+  const it=MOCK.items[idx];
+  const opts=document.querySelectorAll('#opts .opt');
+  opts.forEach(el=>{
+    const i=+el.dataset.i;
+    el.classList.add('locked');
+    if(i===it.c){ el.classList.add('correct'); el.querySelector('.mk').textContent='✓'; }
+    else if(i===chosen){ el.classList.add('wrong'); el.querySelector('.mk').textContent='✗'; }
+    else el.classList.add('dim');
+  });
+  const why=document.getElementById('why');
+  const right=(chosen===it.c);
+  why.className='why show'+(right?'':' wrongwhy');
+  why.innerHTML="<b>"+(right?'✓ Right.':'✗ Not quite.')+"</b> "+it.why;
+}
+let shown={look:false,mod:false,use:false};
+function tog(which){
+  const map={look:'rb-look',mod:'rb-mod',use:'rb-use'};
+  const el=document.getElementById(map[which]); if(!el) return;
+  el.classList.toggle('show');
+  if(el.classList.contains('show')){ reviewed[idx]=true; save(); render_progress(); }
+}
+function go(d){
+  const N=MOCK.items.length;
+  idx=Math.min(N, Math.max(0, idx+d));
+  save(); render();
+}
+function renderDone(){
+  const N=MOCK.items.length;
+  let correct=0, total=0;
+  for(let i=0;i<N;i++){ if(MOCK.items[i].type!=='written'){ total++; if(answered[i]===MOCK.items[i].c) correct++; } }
+  document.getElementById('pfill').style.width='100%';
+  document.getElementById('counter').textContent='complete';
+  document.getElementById('next').disabled=true; document.getElementById('prev').disabled=false;
+  document.getElementById('stage').innerHTML="<div class='done'><div class='big'>🎉 Drill complete</div>"+
+    "<p>You recalled <b>"+correct+" / "+total+"</b> concept checks correctly"+(total<N?" (plus the written prompts).":".")+"<br>Recall fades — come back and run it again tomorrow.</p>"+
+    "<button class='btn primary' style='max-width:240px;margin:0 auto' onclick='restart()'>↺ Run it again</button>"+
+    "<div style='margin-top:14px'><a class='exit' style='color:#2d6fd4' href='index.html'>← Back to portal</a></div></div>";
+}
+function restart(){ idx=0; answered={}; reviewed={}; save(); document.getElementById('next').disabled=false; render(); }
+
+boot();
+</script>
+</body>
+</html>

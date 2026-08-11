@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Exam — New Product Development</title>
+<meta name="description" content="NPD mock — 30 MCQ + 9 short answers, with examiner rubrics for the written questions.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NPD Mock — 30 MCQ + 9 written">
+<meta property="og:description" content="New Product Development practice exam. MCQs auto-grade; short answers come with a marker's rubric.">
+<link rel="icon" href="data:,">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, "Segoe UI", sans-serif; background: #e9eaec; color: #222; font-size: 14px; }
+  .topbar { background: #1c1c1c; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; flex-wrap: wrap; gap: 6px; }
+  .topbar .brand { color: #f0a429; font-weight: bold; font-size: 15px; }
+  .topbar .links a { color: #fff; text-decoration: none; margin-left: 18px; cursor: pointer; font-size: 13px; }
+  .topbar .links a:hover { color: #f0a429; }
+  .topbar .links a.notes { color: #f0a429; font-weight: bold; }
+  .sectionbar { background: #fff; display: flex; align-items: flex-start; justify-content: space-between; padding: 8px 16px 0; border-bottom: 1px solid #ccc; flex-wrap: wrap; gap: 8px; }
+  .sectionbar .label { font-weight: bold; padding-top: 6px; margin-right: 12px; }
+  .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tab { padding: 6px 14px; background: #d4d6da; cursor: pointer; font-weight: bold; border-radius: 3px 3px 0 0; font-size: 12px; }
+  .tab.active { background: #2d6fd4; color: #fff; }
+  .timers { text-align: right; padding-top: 4px; font-size: 13px; }
+  .timers b { color: #c0392b; }
+  .examband { background: #3b7ddd; color: #fff; padding: 7px 16px; font-weight: bold; font-size: 14px; }
+  .layout { display: flex; align-items: stretch; min-height: calc(100vh - 210px); }
+  .main { flex: 1; background: #fff; padding: 14px 22px 90px; position: relative; }
+  .qhead { display:flex; align-items:center; gap:10px; margin-bottom: 14px; }
+  .qno { font-weight: bold; font-size: 15px; }
+  .mkbadge { background:#eef3fb; color:#2560bd; border:1px solid #cfe0f5; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:10px; }
+  .qtext { font-size: 16px; line-height: 1.6; margin-bottom: 22px; }
+  .qtext .formula { display: inline-block; background: #f4f6f8; border: 1px solid #dde2e7; padding: 2px 8px; border-radius: 4px; font-family: Consolas, monospace; font-size: 13px; color: #2d4a66; margin-top: 8px; }
+  .options { display: flex; flex-direction: column; gap: 10px; max-width: 820px; }
+  .option { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1px solid #cfd4da; border-radius: 6px; cursor: pointer; background: #fff; transition: background .12s, border-color .12s; }
+  .option:hover { background: #f3f7fd; border-color: #9cc0f0; }
+  .option.selected { background: #e7f0fd; border-color: #2d6fd4; }
+  .option .radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #888; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .option.selected .radio { border-color: #2d6fd4; }
+  .option.selected .radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #2d6fd4; }
+  .option .key { font-weight: bold; color: #555; }
+  .wordhint { font-size:12px; color:#888; margin-bottom:8px; font-style:italic; }
+  textarea.answer { width:100%; max-width:820px; min-height:170px; padding:12px; border:1px solid #bbb; border-radius:6px; font-family:inherit; font-size:14px; line-height:1.55; resize:vertical; }
+  .choicebox { display:flex; flex-direction:column; gap:10px; max-width:820px; margin-bottom:14px; }
+  .choiceopt { border:1px solid #cfd4da; border-radius:6px; padding:12px 14px; cursor:pointer; background:#fff; }
+  .choiceopt:hover { background:#f3f7fd; border-color:#9cc0f0; }
+  .choiceopt.picked { background:#e7f0fd; border-color:#2d6fd4; }
+  .choiceopt .lab { font-weight:bold; color:#2560bd; margin-right:6px; }
+  .sidebar { width: 290px; background: #fafbfc; border-left: 1px solid #d2d6da; padding: 12px; }
+  .profile { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .profile .avatar { width: 54px; height: 54px; border-radius: 4px; background: #cdd6e0; display: flex; align-items: center; justify-content: center; font-size: 28px; color:#7a8ba0; }
+  .profile .name { font-weight: bold; }
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 6px; margin-bottom: 16px; font-size: 11px; }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .badge { width: 24px; height: 24px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 12px; }
+  .b-ans { background: #34a853; border-radius: 4px 4px 14px 14px; }
+  .b-notans { background: #d14836; border-radius: 14px 14px 4px 4px; }
+  .b-notvis { background: #fff; color: #444; border: 1px solid #aaa; border-radius: 4px; }
+  .b-marked { background: #6f42c1; border-radius: 50%; }
+  .b-ansmarked { background: #6f42c1; border-radius: 50%; position: relative; }
+  .b-ansmarked::after { content: "✓"; position: absolute; right: -3px; bottom: -3px; background: #34a853; border-radius: 50%; width: 13px; height: 13px; font-size: 9px; display: flex; align-items: center; justify-content: center; }
+  .palette-title { background: #3b7ddd; color: #fff; padding: 6px 10px; font-weight: bold; border-radius: 3px; margin-bottom: 4px; font-size:12px; }
+  .choose { font-weight: bold; margin: 8px 0; font-size: 13px; }
+  .palette { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+  .pcell { height: 34px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 1px solid #aaa; background: #fff; border-radius: 4px; color: #444; position: relative; font-size:13px; }
+  .pcell.answered { background: #34a853; color: #fff; border-color: #2d8c46; border-radius: 4px 4px 16px 16px; }
+  .pcell.notans { background: #d14836; color: #fff; border-color: #b03a2b; border-radius: 16px 16px 4px 4px; }
+  .pcell.marked { background: #6f42c1; color: #fff; border-color: #5a36a0; border-radius: 50%; }
+  .pcell.ansmarked { background: #6f42c1; color: #fff; border-color: #5a36a0; border-radius: 50%; }
+  .pcell.ansmarked::after { content: "✓"; position: absolute; right: -2px; bottom: -2px; background: #34a853; border-radius: 50%; width: 14px; height: 14px; font-size: 9px; display: flex; align-items: center; justify-content: center; color:#fff; }
+  .pcell.current { outline: 3px solid #f0a429; outline-offset: 1px; }
+  .bottombar { position: fixed; bottom: 0; left: 0; right: 0; background: #f0f1f3; border-top: 1px solid #c8ccd0; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 50; flex-wrap: wrap; gap: 8px; }
+  .bottombar .group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { padding: 9px 14px; border: 1px solid #b5bcc4; background: #fff; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; }
+  .btn:hover { background: #eef1f5; }
+  .btn-primary { background: #2d6fd4; color: #fff; border-color: #2560bd; }
+  .btn-primary:hover { background: #2560bd; }
+  .btn-submit { background: #1a8a4a; color: #fff; border-color: #157038; }
+  .btn-submit:hover { background: #157038; }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+  .overlay.show { display: flex; }
+  .modal { background: #fff; border-radius: 8px; max-width: 820px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 22px 26px; }
+  .modal h2 { margin-bottom: 12px; color: #2d6fd4; }
+  .modal h3 { margin: 18px 0 6px; color:#1a3a5c; border-bottom:2px solid #eaeef3; padding-bottom:4px; }
+  .modal h4 { margin: 12px 0 4px; color:#2560bd; }
+  .modal p, .modal li { line-height: 1.6; margin-bottom: 6px; }
+  .modal ul, .modal ol { padding-left: 20px; }
+  .modal table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
+  .modal th, .modal td { border: 1px solid #d6dbe0; padding: 6px 9px; text-align: left; vertical-align: top; }
+  .modal th { background: #eef3fb; }
+  .modal .close { float: right; cursor: pointer; font-size: 26px; color: #888; line-height: 1; }
+  .modal code, .ncode { background:#f4f6f8; border:1px solid #e0e5ea; padding:1px 6px; border-radius:4px; font-family:Consolas,monospace; font-size:13px; color:#2d4a66; }
+  .callout { background:#fff8e6; border-left:4px solid #f0a429; padding:8px 12px; border-radius:4px; margin:8px 0; }
+  .scorebig { font-size: 40px; font-weight: bold; color: #1a8a4a; }
+  .review-q { border: 1px solid #e0e4e8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+  .review-q.wrong { border-left: 5px solid #d14836; }
+  .review-q.right { border-left: 5px solid #34a853; }
+  .review-q.skip { border-left: 5px solid #999; }
+  .review-q.written { border-left: 5px solid #2d6fd4; }
+  .review-q .tag { font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 10px; color: #fff; }
+  .tag.tw { background: #d14836; } .tag.tr { background: #34a853; } .tag.ts { background: #999; } .tag.tb { background:#2d6fd4; }
+  .review-q .exp { background: #f6f8fa; padding: 8px 10px; border-radius: 4px; margin-top: 8px; font-size: 13px; color: #333; }
+  .model { background:#eef7ef; border:1px solid #cfe6d2; padding:10px 12px; border-radius:5px; margin-top:8px; font-size:13px; line-height:1.55; }
+  .youranswer { background:#f4f6f8; border:1px solid #e0e5ea; padding:10px 12px; border-radius:5px; margin-top:8px; font-size:13px; white-space:pre-wrap; min-height:20px; }
+  .rubric { background:#fff4e6; border:1px solid #f0d8a8; border-radius:5px; padding:10px 12px; margin-top:8px; font-size:13px; }
+  .rubric > b { display:block; margin-bottom:6px; color:#b06a00; }
+  .rubric .ritem { display:flex; gap:8px; align-items:flex-start; margin:5px 0; cursor:pointer; line-height:1.45; }
+  .rubric .ritem input { margin-top:3px; flex-shrink:0; width:16px; height:16px; }
+  .rverdict { margin-top:8px; font-weight:bold; color:#b06a00; }
+  .ss-btn.suggest { box-shadow:0 0 0 2px #f0a429; }
+  .modelwrap summary { cursor:pointer; color:#2d6fd4; font-size:12px; font-weight:bold; margin-top:10px; }
+  .modelwrap .model { margin-top:6px; }
+  .selfscore { margin-top:8px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .ss-btn { padding:5px 12px; border:1px solid #bbb; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold; background:#fff; }
+  .ss-btn.on { background:#2d6fd4; color:#fff; border-color:#2560bd; }
+  #calc { display: none; position: fixed; top: 120px; right: 40px; width: 220px; background: #2b2b2b; border-radius: 8px; padding: 12px; z-index: 90; box-shadow: 0 8px 30px rgba(0,0,0,.4); }
+  #calc.show { display: block; }
+  #calc .disp { background: #111; color: #6f6; font-family: monospace; font-size: 20px; padding: 8px; text-align: right; border-radius: 4px; margin-bottom: 8px; min-height: 38px; overflow:hidden; }
+  #calc .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  #calc button { padding: 10px; background: #444; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+  #calc button:hover { background: #555; }
+  #calc .op { background: #f0a429; } #calc .eq { background: #2d6fd4; }
+  #calc .drag { cursor: move; color:#aaa; font-size: 11px; text-align:center; margin-bottom:6px; }
+  @media (max-width: 820px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; border-left: none; border-top: 1px solid #d2d6da; }
+    .palette { grid-template-columns: repeat(8, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">Open Mock</div>
+  <div class="links">
+    <a class="notes" onclick="openModal('notes')">📖 Revision Notes</a>
+    <a onclick="openModal('instr')">View Instructions</a>
+    <a onclick="openModal('paper')">Question Paper</a>
+    <a onclick="toggleCalc()">Calculator</a>
+    <a onclick="clearSaved()" title="Clear saved progress">↺ Reset</a>
+  </div>
+</div>
+
+<div class="sectionbar">
+  <div style="display:flex; flex-wrap:wrap">
+    <div class="label">Sections</div>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <div class="timers">
+    Time Left: <b id="timeLeft">60:00</b><br>
+    Time Spent (Question): <span id="qtime">00:00</span>
+  </div>
+</div>
+
+<div class="examband" id="examband">Mock Exam — New Product Development</div>
+
+<div class="layout">
+  <div class="main">
+    <div class="qhead"><div class="qno" id="qno">Question No. 1</div><span class="mkbadge" id="mkbadge"></span></div>
+    <div class="qtext" id="qtext"></div>
+    <div id="answerArea"></div>
+  </div>
+  <div class="sidebar">
+    <div class="profile"><div class="avatar">👤</div><div class="name">Aneecake</div></div>
+    <div class="legend">
+      <div class="item"><span class="badge b-ans" id="cAns">0</span> Answered</div>
+      <div class="item"><span class="badge b-notans" id="cNotans">0</span> Not Answered</div>
+      <div class="item"><span class="badge b-notvis" id="cNotvis">0</span> Not Visited</div>
+      <div class="item"><span class="badge b-marked" id="cMarked">0</span> Marked</div>
+      <div class="item" style="grid-column:1/3"><span class="badge b-ansmarked" id="cAnsmarked">0</span> Answered &amp; Marked</div>
+    </div>
+    <div class="palette-title" id="palTitle">Section Palette</div>
+    <div class="choose">Choose a Question</div>
+    <div class="palette" id="palette"></div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <div class="group">
+    <button class="btn" onclick="markReviewNext()">Mark for Review &amp; Next</button>
+    <button class="btn" onclick="clearResponse()">Clear Response</button>
+  </div>
+  <div class="group">
+    <button class="btn" onclick="prevQ()">Previous</button>
+    <button class="btn btn-primary" onclick="saveNext()">Save &amp; Next</button>
+    <button class="btn btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div class="overlay" id="m-instr"><div class="modal">
+  <span class="close" onclick="closeModal('instr')">&times;</span>
+  <h2>Instructions — New Product Development</h2>
+  <ul>
+    <li><b>2 sections, no negative marking.</b> Real paper: 30 MCQ (1M) + 9 short answers (5M) in 120 min. This mock subsets it.</li>
+    <li><b>Sec A</b> — MCQs, 1 mark each. Definition / classification / which-framework items.</li>
+    <li><b>Sec B</b> — Short answers, 5 marks each. Define → contrast/apply → example → implication.</li>
+    <li><b>Core trap:</b> funnel-stage confusion and reversed dichotomies (modular↔integral, alpha↔beta, horizontal↔vertical). Always fix the funnel stage first.</li>
+    <li>On <b>Submit</b>: MCQs auto-grade; short answers show a model answer for you to self-score.</li>
+    <li>Real exam has <b>no calculator</b> — the ATAR/QFD sums are small; practise mentally.</li>
+    <li>Hit <b>📖 Revision Notes</b> (top-left, orange) for your break-study sheet.</li>
+  </ul>
+</div></div>
+
+<div class="overlay" id="m-paper"><div class="modal">
+  <span class="close" onclick="closeModal('paper')">&times;</span>
+  <h2>Question Paper</h2><div id="paperList"></div>
+</div></div>
+
+<div class="overlay" id="m-score"><div class="modal">
+  <span class="close" onclick="closeModal('score')">&times;</span>
+  <h2>Result</h2><div id="scoreBody"></div>
+</div></div>
+
+<div class="overlay" id="m-notes"><div class="modal">
+  <span class="close" onclick="closeModal('notes')">&times;</span>
+  <div id="notesBody"></div>
+</div></div>
+
+<div id="calc">
+  <div class="drag" id="calcDrag">Calculator — drag</div>
+  <div class="disp" id="calcDisp">0</div>
+  <div class="grid">
+    <button onclick="calcC()">C</button><button onclick="calcBack()">⌫</button>
+    <button class="op" onclick="calcIn('%')">%</button><button class="op" onclick="calcIn('/')">÷</button>
+    <button onclick="calcIn('7')">7</button><button onclick="calcIn('8')">8</button><button onclick="calcIn('9')">9</button><button class="op" onclick="calcIn('*')">×</button>
+    <button onclick="calcIn('4')">4</button><button onclick="calcIn('5')">5</button><button onclick="calcIn('6')">6</button><button class="op" onclick="calcIn('-')">−</button>
+    <button onclick="calcIn('1')">1</button><button onclick="calcIn('2')">2</button><button onclick="calcIn('3')">3</button><button class="op" onclick="calcIn('+')">+</button>
+    <button onclick="calcIn('0')">0</button><button onclick="calcIn('.')">.</button><button class="eq" onclick="calcEq()" style="grid-column:span 2">=</button>
+  </div>
+</div>
+
+<script>
+/* ===================== EXAM DATA ===================== */
+const EXAM = {
+  durationMin: 60,
+  sections: [
+    { id:'A', label:'Sec A · MCQ', perMark:1, type:'mcq', qs:[
+      {t:"A firm surveys 500 customers with ratings and ranking tasks about a new product idea — <b>before any prototype exists</b>. Which funnel stage?",
+       o:["Prototyping","Concept Testing","Market Testing","Idea Generation"], c:1,
+       e:"Testing the idea/concept with customers, pre-prototype = Concept Testing. Always fix the funnel stage before answering stage-dependent questions."},
+      {t:"A customer says your coffee machine <b>must</b> have auto-shutoff: without it they're angry, with it they're merely neutral. Kano category?",
+       o:["Delighter","One-dimensional","Must-be","Indifferent"], c:2,
+       e:"Must-be (threshold): absence = anger, presence = neutral. You satisfy these first before investing in delighters."},
+      {t:"ATAR: Market = 2M, Awareness 60%, Trial 40%, Availability 80%, Repeat 50%. Demand? <span class='formula'>Demand = Mkt × A × T × Av × R</span>",
+       o:["192,000","96,000","384,000","48,000"], c:0,
+       e:"2,000,000 × 0.6 × 0.4 × 0.8 × 0.5 = 192,000. All factors are fractions; multiply straight through."},
+      {t:"QFD: a 'waterproof battery' scores 9 with 'long battery life' (importance 4) and 3 with 'portability' (importance 5). Technical weight? <span class='formula'>Σ(importance × 9/3/1 score)</span>",
+       o:["51","36","15","27"], c:0,
+       e:"(4×9) + (5×3) = 36 + 15 = 51. Higher weight ⇒ prioritise that technical spec in design."},
+      {t:"iPhone internals — components are tightly interdependent and optimised as a single whole. This is:",
+       o:["Modular architecture","Integral architecture","Platform architecture","Open architecture"], c:1,
+       e:"Integral = interdependent, optimised together, high performance, hard to change. Don't reverse it with modular."},
+      {t:"A desktop PC lets you swap the RAM, upgrade the GPU and keep the motherboard. This is:",
+       o:["Integral","Modular","Vertical","Closed"], c:1,
+       e:"Modular = standardised interfaces, mix-and-match components, easy variety. PC and bicycle are classic examples."},
+      {t:"A firm keeps ownership of a washing machine but charges the customer <b>per wash cycle</b>. Which PSS type?",
+       o:["Product-oriented","Use-oriented","Result-oriented","Service-oriented"], c:1,
+       e:"Use-oriented: provider owns the asset, customer pays for access/use. (Product-oriented = you own it + a service; Result-oriented = pay for the outcome.)"},
+      {t:"Rolls-Royce charges airlines 'Power by the Hour' — paying per hour of engine thrust, not for the engine. PSS type?",
+       o:["Product-oriented","Use-oriented","Result-oriented","Asset-sharing"], c:2,
+       e:"Result-oriented: the customer buys the outcome (thrust hours), provider bears all asset/maintenance risk. The deepest servitisation."},
+      {t:"A new product is rolled out to a limited city with the full marketing mix to test before national launch. Stage?",
+       o:["Product Use Testing","Concept Testing","Market Testing","Prototyping"], c:2,
+       e:"Real market, full marketing mix, limited geography before national launch = Market Testing (test market)."},
+      {t:"Alpha vs Beta testing — which statement is correct?",
+       o:["Alpha = external customers; Beta = internal team","Alpha = internal team in controlled conditions; Beta = external users in real conditions","Both use external users, Alpha first","Alpha is quantitative; Beta is qualitative"], c:1,
+       e:"Alpha = internal/controlled; Beta = real external users in natural environment. A favourite reversed-dichotomy trap."},
+      {t:"'Eliminate the wait, Reduce the price, Raise comfort, Create home delivery.' This is the ___ framework.",
+       o:["Kano","ATAR","Blue Ocean ERRC","QFD"], c:2,
+       e:"Eliminate-Reduce-Raise-Create = Blue Ocean's value-curve tool for opening uncontested market space."},
+      {t:"Same basic product, newly positioned for a different use/segment (e.g. aspirin → heart treatment). Category?",
+       o:["New-to-the-world","Line extension","Repositioning","Cost reduction"], c:2,
+       e:"Repositioning = same product, new use/segment. New-to-world creates a new market; line extension adds a variant."},
+      {t:"Which adopter group: 'deliberate, many informal contacts, adopts just before the average, bridges early and late'?",
+       o:["Innovators","Early Adopters","Early Majority","Late Majority"], c:2,
+       e:"Early Majority — deliberate, well-connected, adopt just ahead of the average; the bridge to the mainstream."},
+      {t:"Horizontal vs Vertical differentiation — which is correct?",
+       o:["Horizontal = objectively better (all agree); Vertical = taste-based","Horizontal = taste-based (red vs blue car); Vertical = objectively better (faster chip)","They mean the same thing","Horizontal = services; Vertical = goods"], c:1,
+       e:"Horizontal = preference/taste (no agreed ranking); Vertical = quality everyone ranks the same way. Another reversed-pole trap."},
+      {t:"A Product Innovation Charter (PIC) states target market, budget, timeline and goals before development. Its primary purpose is to:",
+       o:["Serve as the final product spec","Align cross-functional teams on scope, market, timeline and financial goals up front","Test willingness to pay","Replace the business case"], c:1,
+       e:"The PIC/charter is the strategic 'north star' that aligns teams before the funnel begins — not a spec sheet."},
+      {t:"In the QFD House of Quality, the 'roof' (correlation matrix) shows:",
+       o:["How customer needs correlate with each other","How technical requirements correlate with each other — conflicts &amp; synergies","Competitor comparison","Customer importance ratings"], c:1,
+       e:"The roof maps technical-requirement interactions (e.g. lighter vs stronger may conflict), guiding engineering trade-offs."},
+      {t:"Gamma testing is best described as:",
+       o:["Testing with internal employees","Testing with lead users in their environment","Final verification that the product meets specifications before full launch","Live-market A/B testing"], c:2,
+       e:"Gamma = final conformance check against specs/requirements pre-launch. Alpha (internal) → Beta (real users) → Gamma (spec verification)."},
+      {t:"Plastic replaces a steel part to deliver the same benefit at lower cost. New-product category?",
+       o:["Improvement/revision","Repositioning","Cost reduction","Line extension"], c:2,
+       e:"Cost reduction = same benefit, lower cost to produce/deliver. Lowest novelty/risk of the six categories."},
+      {t:"A 'new product line for the firm' (e.g. P&amp;G launching its first-ever shampoo) means:",
+       o:["New-to-the-world breakthrough","The firm enters a business new to it, though the product type already exists in the market","A minor line extension","A repositioning"], c:1,
+       e:"New-to-the-firm: novel for the company, not for the world. Distinct from new-to-the-world (creates a brand-new market)."},
+      {t:"A startup's online survey asks 'would you buy this hydration-tracking bottle?' — 78% say yes; actual trial is 12%. The core lesson?",
+       o:["The survey was too small","Concept surveys suffer hypothetical bias — stated intent overstates real behaviour; a simulated test market predicts trial better","The price was wrong","Beta testing would have caught it"], c:1,
+       e:"Stated-intent concept tests overstate purchase (hypothetical bias). Behaviour-based methods (simulated test market) predict real trial far better."},
+      {t:"A consumer is injured by a defective product. The legal basis that holds the maker liable simply because the product was defective and caused harm — without proving carelessness — is:",
+       o:["Negligence","Strict liability","Breach of warranty","Caveat emptor"], c:1,
+       e:"Strict liability: defect + harm is enough, no need to prove negligence. (Negligence = failure of due care; breach of warranty = a broken promise about the product.)"},
+      {t:"Component-swapping, component-sharing, bus, sectional, mix and cut-to-fit are the six types of:",
+       o:["differentiation","modularity","prototyping","PSS"], c:1,
+       e:"The six modularity types. E.g. bus = a common backbone with added modules (PC motherboard); sectional = standard interfaces freely configured (Lego); cut-to-fit = adjust a continuous dimension."},
+      {t:"Lead users — a prime idea source — are best found:",
+       o:["only inside the firm","at the leading edge of the target market, in analogous/advanced markets, and among extreme users","among laggards","only among direct competitors"], c:1,
+       e:"Lead users face needs months/years ahead of the market and benefit from solving them, so they innovate first — look at the leading edge, analogous markets, and extreme users."},
+      {t:"Conjoint analysis in concept testing is used to:",
+       o:["test a prototype's durability","decompose customers' overall preferences into the part-worth value of each attribute, revealing the trade-offs they make","forecast factory capacity","design the launch ad"], c:1,
+       e:"Conjoint shows customers full-product bundles and infers how much each attribute (price, feature, brand) contributes — exposing real trade-offs, not stated importance."},
+      {t:"Which correctly matches the IP type?",
+       o:["Patent protects brand names; trademark protects inventions","Patent protects inventions; trademark protects brand identifiers; copyright protects creative works; trade secret protects confidential know-how","Copyright protects inventions","A trade secret must be publicly filed"], c:1,
+       e:"Patent → inventions (time-limited monopoly, disclosed). Trademark → brand identity. Copyright → creative works. Trade secret → undisclosed know-how (e.g. the Coke formula)."},
+      {t:"The Buyer Utility Map (Blue Ocean) plots utility levers against:",
+       o:["price versus cost","the six stages of the buyer experience cycle: purchase, delivery, use, supplements, maintenance, disposal","the funnel stages","competitor positions"], c:1,
+       e:"It scans all six experience stages for untapped utility — revealing blue-ocean opportunities rivals ignore (not just the 'use' stage)."},
+      {t:"A balanced new-product portfolio is typically mapped on a 2-D grid trading off:",
+       o:["price versus colour","newness/risk versus reward — e.g. technical newness against market newness","alpha versus beta","modular versus integral"], c:1,
+       e:"Balance breakthrough high-risk bets with safer derivatives/extensions — don't crowd every project into one cell of the risk-reward map."},
+      {t:"Design thinking for NPD is best described as:",
+       o:["a linear engineering checklist","a human-centred, iterative approach: empathise → define → ideate → prototype → test","a financial appraisal method","a launch tactic"], c:1,
+       e:"Design thinking is iterative and user-centred, cycling through empathise, define, ideate, prototype and test — not a one-pass linear process."},
+      {t:"Morville's UX honeycomb says a great product must be useful, usable, desirable, findable, accessible, credible and:",
+       o:["cheap","valuable","modular","patented"], c:1,
+       e:"The seventh facet is valuable — the experience must deliver value to the business as well as the user. The honeycomb defines superior user experience."},
+      {t:"A simulated test market, a controlled test market and a full test market are all methods of:",
+       o:["concept testing","market testing — the funnel stage just before national launch","prototyping","alpha testing"], c:1,
+       e:"These are market-testing designs (rising in cost/realism), used to validate the full marketing mix in a real market before committing to a national launch."},
+    ]},
+    { id:'B', label:'Sec B · Short (5M)', perMark:5, type:'written', wordHint:'Short answer. Define → contrast/apply → example → implication.', qs:[
+      {t:"Define and contrast <b>modular vs integral</b> product architecture, with one example each.",
+       rubric:["Define modular: standardised interfaces, mix-and-match (example: PC / bicycle)","Define integral: interdependent components optimised as a whole (example: iPhone / F1 car)","State the trade-off: variety/upgradability vs performance/efficiency","Say when to choose each"],
+       model:"Modular architecture uses standardised, decoupled interfaces so components can be mixed, matched, swapped and upgraded independently (e.g. a desktop PC or bicycle). Integral architecture has tightly interdependent components optimised together as a single whole, maximising performance but making change costly (e.g. iPhone internals or an F1 car). Trade-off: modularity enables variety, customisation, reuse and lower change-cost; integrality enables superior performance, compactness and efficiency. Choose modular when customer variety/upgradability matters; integral when performance and optimisation dominate."},
+      {t:"Explain the <b>Kano model's</b> three core need categories with examples.",
+       rubric:["Must-be: absent → anger, present → neutral (give an example)","One-dimensional: more = better, roughly linear (give an example)","Delighter / attractive: absent → neutral, present → delight (give an example)","Strategic implication: secure must-bes first; delighters decay into expectations"],
+       model:"Kano classifies attributes by how satisfaction responds to performance. (1) Must-be (basic): expected; absence causes anger, presence only prevents dissatisfaction (car brakes, seatbelts). (2) One-dimensional (performance): satisfaction rises linearly with performance — more is better (battery life, fuel economy). (3) Delighter (attractive): unexpected features that delight when present but don't dissatisfy when absent (a surprise free upgrade). Strategy: secure must-bes first, compete on one-dimensionals, and differentiate with delighters — noting delighters erode into expectations over time."},
+      {t:"What is QFD's <b>House of Quality</b>? Explain the role of the relationship matrix and the roof.",
+       rubric:["WHATs = customer needs with importance ratings (the rows)","HOWs = technical requirements (the columns)","Relationship matrix uses 9/3/1 → technical weights → prioritise specs","The roof = correlation among technical requirements (conflicts / synergies)","Purpose: translate the Voice of the Customer into engineering specs"],
+       model:"QFD (Quality Function Deployment) translates the Voice of the Customer into engineering specs via the House of Quality. Customer needs (WHATs) with importance ratings form the rows; technical requirements (HOWs) form the columns. The relationship matrix scores how strongly each spec serves each need using 9/3/1 (strong/moderate/weak); weighting these by importance and summing gives each spec a technical weight that prioritises design effort. The 'roof' is a correlation matrix showing how technical requirements interact — flagging synergies and conflicts (e.g. lighter vs stronger) so engineers manage trade-offs deliberately."},
+      {t:"Distinguish <b>alpha, beta and gamma</b> testing.",
+       rubric:["Alpha = internal team, controlled conditions","Beta = real external users in their natural environment","Gamma = final conformance to specifications before launch","Note the sequence — each answers a different readiness question"],
+       model:"These are sequential product-use tests. Alpha testing is done internally by the firm's own team under controlled conditions to catch obvious defects early. Beta testing puts the product with real external users in their natural environment to surface real-world usage problems, edge cases and acceptance issues. Gamma testing is a final verification that the finished product conforms to its specifications/requirements before full launch (often important in regulated or safety-critical products). The progression moves from controlled-internal → real-external → final-conformance, each answering a different question about readiness."},
+      {t:"Explain the <b>Blue Ocean ERRC</b> framework and how it creates uncontested market space.",
+       rubric:["Concept: create uncontested 'blue' space vs competing in 'red' oceans","Eliminate and Reduce → strip out cost","Raise and Create → lift buyer value","Breaks the value-cost trade-off / targets non-customers (give an example)"],
+       model:"Blue Ocean strategy seeks uncontested 'blue' market space instead of competing in bloody 'red' oceans. The ERRC grid reconstructs the value curve by asking four questions: Eliminate which factors the industry takes for granted? Reduce which factors below industry standard? Raise which above standard? Create which factors the industry has never offered? Eliminating and reducing strip out cost; raising and creating lift buyer value — together breaking the usual value-cost trade-off. Example: a low-cost airline eliminates meals/seat-class and creates point-to-point frequency, opening demand from non-customers rather than fighting rivals."},
+      {t:"Differentiate the three <b>PSS (Product-Service System)</b> types by who owns the asset.",
+       rubric:["Product-oriented: customer owns the product + add-on services","Use-oriented: provider owns the asset, customer pays to use","Result-oriented: customer buys the outcome, provider owns everything (Rolls-Royce)","Ownership and risk shift along the product → use → result spectrum"],
+       model:"PSS types vary by ownership and what the customer pays for. (1) Product-oriented: the customer buys and owns the product, with add-on services (maintenance, warranty) — ownership transfers. (2) Use-oriented: the provider retains ownership; the customer pays for access/use (leasing, pay-per-wash) — risk stays with the provider, customer avoids capex. (3) Result-oriented: no specific product is sold at all — the customer buys a guaranteed outcome (Rolls-Royce 'Power by the Hour'); the provider owns and manages everything and is paid for results. Servitisation deepens product → use → result."},
+      {t:"Walk through the <b>NPD funnel stages</b> and explain why funnel-stage discipline matters.",
+       rubric:["List the funnel stages in order (PIC → ... → Launch)","Each stage is a gate that kills weak ideas cheaply","The right action is stage-dependent (e.g. a concept test is not a market test)","Consequence of skipping / mislabelling a stage = wrong tool, misread evidence"],
+       model:"The canonical funnel: PIC (product innovation charter) → Idea Generation → Concept Testing → Prototyping → Product-Use Testing (alpha/beta/gamma) → Market Testing → Launch. Each stage answers a specific question and applies a gate before spending escalates, so weak ideas are killed cheaply early. Funnel discipline matters because the right action is stage-dependent: a concept test (survey) cannot substitute for a market test (real behaviour), and skipping prototyping or use-testing lets defects reach launch. Mis-locating the stage — the course's key failure mode — leads to applying the wrong tool and mis-reading evidence (e.g. trusting stated intent for a launch decision)."},
+      {t:"Distinguish <b>internal</b> and <b>external product integrity</b> (Clark &amp; Fujimoto).",
+       rubric:["Internal integrity = coherence between function and internal structure (engineering / org coordination)","External integrity = fit between the product's character and customer expectations / lifestyle","The two are independent — a product can have one without the other","Best products achieve both; a heavyweight product manager links them"],
+       model:"Product integrity is how coherently a product delivers on its concept. Internal integrity is the consistency between the product's function and its internal structure — how well sub-systems, components and the organisation that builds them fit and work together; it is achieved through tight cross-functional coordination and good engineering. External integrity is the fit between the product's total character and customers' expectations, values and lifestyle — how well it resonates in the market. The two are independent: a product can be beautifully engineered (high internal integrity) yet misread the customer (low external integrity), or vice versa. Outstanding products achieve both, which typically requires a heavyweight product manager who links internal engineering coherence to external customer meaning."},
+      {t:"Describe the main <b>types of NPD organisation structure</b> and how to match them to projects.",
+       rubric:["Functional: deep specialist expertise but weak coordination","Lightweight matrix: a coordinator with little authority","Heavyweight matrix: a powerful product manager, strong integration","Autonomous / tiger team: dedicated, co-located, fastest, best for radical projects","Match structure to project: incremental → functional/light; radical → heavy/autonomous"],
+       model:"NPD structures trade functional depth against cross-functional integration. (1) Functional: members stay in their departments under functional managers — deep expertise but weak coordination and slow hand-offs. (2) Lightweight matrix: a coordinator links functions but has little authority; members still report to functional heads. (3) Heavyweight matrix: a powerful product manager with broad authority drives integration while members keep functional ties — strong concept integrity. (4) Autonomous / project ('tiger') team: dedicated, co-located members under a project leader — fastest and most integrated, best for radical projects, but weak on long-run functional learning. Match to project: incremental/derivative work suits functional or lightweight structures; breakthrough/complex projects suit heavyweight or autonomous teams."},
+    ]},
+  ]
+};
+
+/* ===================== REVISION NOTES ===================== */
+const NOTES = `
+<h2>📖 New Product Development — Break Revision Sheet</h2>
+<div class="callout"><b>Sec B answer reflex:</b> Define → Contrast (or apply to the scenario) → Example → Implication/trade-off. <b>Always state the funnel stage first</b> on any scenario question — stage-dependency is the #1 trap.</div>
+
+<h3>The NPD Funnel (memorise the order)</h3>
+<p><span class="ncode">PIC → Idea Generation → Concept Testing → Prototyping → Product-Use Testing → Market Testing → Launch</span></p>
+<ul>
+<li><b>PIC</b> = product innovation charter: scope, target market, timeline, financial goals — aligns teams before work starts.</li>
+<li>Each stage is a <b>gate</b>: kill weak ideas cheaply before spend escalates.</li>
+<li><b>Concept test</b> (survey, stated intent) ≠ <b>Market test</b> (real city rollout, real behaviour). Don't substitute one for the other.</li>
+</ul>
+
+<h3>The two calculations (no calculator — keep them mental)</h3>
+<table>
+<tr><th>Model</th><th>Formula</th><th>Note</th></tr>
+<tr><td>ATAR demand</td><td><span class="ncode">Mkt × Awareness × Trial × Availability × Repeat</span></td><td>All fractions; multiply straight through</td></tr>
+<tr><td>QFD weight</td><td><span class="ncode">Σ(importance × relationship[9/3/1])</span></td><td>Higher weight ⇒ prioritise that spec</td></tr>
+</table>
+
+<h3>Kano model (feature prioritisation)</h3>
+<table>
+<tr><th>Category</th><th>Absent</th><th>Present</th><th>Example</th></tr>
+<tr><td>Must-be</td><td>Anger</td><td>Neutral</td><td>Brakes, seatbelt</td></tr>
+<tr><td>One-dimensional</td><td>Dissatisfied</td><td>More = better</td><td>Battery life</td></tr>
+<tr><td>Delighter</td><td>Neutral</td><td>Delight</td><td>Surprise upgrade</td></tr>
+</table>
+<p>Secure must-bes → compete on one-dimensionals → differentiate with delighters (which decay into expectations over time).</p>
+
+<h3>Reversed-dichotomy traps (know which pole is which)</h3>
+<table>
+<tr><th>Pair</th><th>Pole A</th><th>Pole B</th></tr>
+<tr><td>Architecture</td><td><b>Modular</b>: standardised interfaces, mix-and-match (PC, bicycle)</td><td><b>Integral</b>: interdependent, optimised whole (iPhone, F1 car)</td></tr>
+<tr><td>Differentiation</td><td><b>Horizontal</b>: taste-based, no agreed ranking (red vs blue)</td><td><b>Vertical</b>: objectively better, all agree (faster chip)</td></tr>
+<tr><td>Use-testing</td><td><b>Alpha</b>: internal team, controlled</td><td><b>Beta</b>: real external users, natural env (then <b>Gamma</b>: spec verification)</td></tr>
+</table>
+
+<h3>PSS — Product-Service Systems (who owns the asset?)</h3>
+<ul>
+<li><b>Product-oriented:</b> customer owns it + add-on services (warranty).</li>
+<li><b>Use-oriented:</b> provider owns it, customer pays to use (leasing, pay-per-wash).</li>
+<li><b>Result-oriented:</b> customer buys the outcome, provider owns everything (Rolls-Royce 'Power by the Hour').</li>
+</ul>
+
+<h3>Six new-product categories (novelty high → low)</h3>
+<ol>
+<li>New-to-the-world (creates a market — first iPhone)</li>
+<li>New product line for the firm (P&amp;G's first shampoo)</li>
+<li>Line extension / addition (new flavour)</li>
+<li>Improvement / revision (small tweak)</li>
+<li>Repositioning (same product, new use — aspirin → heart)</li>
+<li>Cost reduction (plastic replaces steel)</li>
+</ol>
+
+<h3>Blue Ocean — ERRC grid</h3>
+<p><b>E</b>liminate &amp; <b>R</b>educe (strip cost) · <b>R</b>aise &amp; <b>C</b>reate (lift buyer value) → breaks the value-cost trade-off, opens uncontested space, targets non-customers.</p>
+
+<h3>Adopter categories</h3>
+<p>Innovators → Early Adopters → <b>Early Majority</b> (deliberate, the bridge) → Late Majority (sceptical) → Laggards. The 'chasm' sits between Early Adopters and Early Majority.</p>
+
+<h3>More exam-flagged items</h3>
+<table>
+<tr><th>Topic</th><th>Key point</th></tr>
+<tr><td>Product liability</td><td><b>Strict liability</b> = liable for a defect that causes harm, no need to prove negligence (vs negligence / breach of warranty)</td></tr>
+<tr><td>Six modularity types</td><td>component-swapping · component-sharing · bus · sectional · mix · cut-to-fit</td></tr>
+<tr><td>Lead users</td><td>at the market's leading edge · in analogous/advanced markets · extreme users (feel needs early)</td></tr>
+<tr><td>Conjoint analysis</td><td>decomposes overall preference into per-attribute part-worths → reveals trade-offs</td></tr>
+<tr><td>IP types</td><td>patent (inventions) · trademark (brand) · copyright (creative works) · trade secret (know-how)</td></tr>
+<tr><td>Product integrity</td><td><b>internal</b> = function↔structure coherence; <b>external</b> = product↔customer expectations/lifestyle fit</td></tr>
+<tr><td>NPD org structures</td><td>functional → lightweight matrix → heavyweight matrix → autonomous 'tiger' team (depth ↔ integration)</td></tr>
+<tr><td>Morville honeycomb</td><td>useful · usable · desirable · findable · accessible · credible · valuable</td></tr>
+<tr><td>Buyer Utility Map</td><td>utility levers × 6 experience stages: purchase, delivery, use, supplements, maintenance, disposal</td></tr>
+</table>
+
+<div class="callout"><b>Key examples to name-drop:</b> Lego (modular bricks), Gillette Mach3, Rubbermaid, Chipotle, Luxottica, Southwest (Blue Ocean), Rolls-Royce (result PSS), iPhone (integral).</div>
+`;
+
+const HAS_CALC = true;
+
+/* ===================== ENGINE ===================== */
+const FLAT = [];
+EXAM.sections.forEach((s, si) => s.qs.forEach((q, qi) => { if(!q.type) q.type = s.type; FLAT.push({ si, qi, q, sec: s }); }));
+let cur = 0;
+const N = FLAT.length;
+const resp = FLAT.map(f => f.q.type === 'mcq' ? null : (f.q.type === 'choice' ? {pick:null, text:''} : ''));
+const marked = new Array(N).fill(false);
+const visited = new Array(N).fill(false);
+const selfScore = new Array(N).fill(null);
+let totalSecs = EXAM.durationMin*60, qSecs = 0;
+
+const SKEY='ab_npd_v1';
+function saveState(){ try{ localStorage.setItem(SKEY, JSON.stringify({resp:resp,marked:marked,visited:visited,selfScore:selfScore,cur:cur,totalSecs:totalSecs})); }catch(e){} }
+function loadState(){ try{ var raw=localStorage.getItem(SKEY); if(!raw) return; var s=JSON.parse(raw); if(!s||!Array.isArray(s.resp)||s.resp.length!==N) return; for(var i=0;i<N;i++){ resp[i]=s.resp[i]; marked[i]=s.marked[i]; visited[i]=s.visited[i]; selfScore[i]=s.selfScore[i]; } if(typeof s.cur==='number'&&s.cur<N) cur=s.cur; if(typeof s.totalSecs==='number') totalSecs=s.totalSecs; }catch(e){} }
+function clearSaved(){ if(confirm('Clear saved progress and restart this paper?')){ try{ localStorage.removeItem(SKEY); }catch(e){} location.reload(); } }
+document.addEventListener('click', function(){ setTimeout(saveState,0); });
+document.addEventListener('input', saveState);
+window.addEventListener('beforeunload', saveState);
+
+function isAnswered(i){
+  const f=FLAT[i];
+  if(f.q.type==='mcq') return resp[i]!==null;
+  if(f.q.type==='choice') return resp[i].pick!==null && resp[i].text.trim()!=='';
+  return resp[i].trim()!=='';
+}
+function buildTabs(){
+  const tabs=document.getElementById('tabs'); tabs.innerHTML='';
+  EXAM.sections.forEach((s,si)=>{
+    const d=document.createElement('div');
+    d.className='tab'+(FLAT[cur].si===si?' active':'');
+    d.textContent=s.label;
+    d.onclick=()=>{ const first=FLAT.findIndex(f=>f.si===si); cur=first; render(); };
+    tabs.appendChild(d);
+  });
+}
+function render(){
+  const f=FLAT[cur], q=f.q, sec=f.sec;
+  visited[cur]=true;
+  const within = FLAT.filter(x=>x.si===f.si).findIndex(x=>x===f)+1;
+  document.getElementById('qno').textContent = sec.label.split('·')[0].trim()+" — Q"+within;
+  document.getElementById('mkbadge').textContent = sec.perMark+" mark"+(sec.perMark>1?'s':'');
+  document.getElementById('qtext').innerHTML = q.t;
+  const area=document.getElementById('answerArea'); area.innerHTML='';
+  if(q.type==='mcq'){
+    const wrap=document.createElement('div'); wrap.className='options';
+    q.o.forEach((opt,i)=>{
+      const d=document.createElement('div');
+      d.className='option'+(resp[cur]===i?' selected':'');
+      d.innerHTML="<span class='radio'></span><span class='key'>"+"ABCD"[i]+".</span><span>"+opt+"</span>";
+      d.onclick=()=>{ resp[cur]=i; render(); };
+      wrap.appendChild(d);
+    });
+    area.appendChild(wrap);
+  } else if(q.type==='written'){
+    area.innerHTML="<div class='wordhint'>"+(q.wordHint||sec.wordHint||'')+"</div>";
+    const ta=document.createElement('textarea'); ta.className='answer'; ta.value=resp[cur];
+    ta.placeholder="Type your answer here…";
+    ta.oninput=()=>{ resp[cur]=ta.value; updateCounts(); buildPalette(); };
+    area.appendChild(ta);
+  } else if(q.type==='choice'){
+    area.innerHTML="<div class='wordhint'>"+(q.wordHint||sec.wordHint||'')+"</div>";
+    const box=document.createElement('div'); box.className='choicebox';
+    [['a',q.a],['b',q.b]].forEach(([key,sub])=>{
+      const c=document.createElement('div');
+      c.className='choiceopt'+(resp[cur].pick===key?' picked':'');
+      c.innerHTML="<span class='lab'>("+key+")</span>"+sub.prompt;
+      c.onclick=()=>{ resp[cur].pick=key; render(); };
+      box.appendChild(c);
+    });
+    area.appendChild(box);
+    if(resp[cur].pick){
+      const ta=document.createElement('textarea'); ta.className='answer';
+      ta.value=resp[cur].text; ta.placeholder="Writing your answer to ("+resp[cur].pick+")…";
+      ta.oninput=()=>{ resp[cur].text=ta.value; updateCounts(); buildPalette(); };
+      area.appendChild(ta);
+    }
+  }
+  buildTabs(); buildPalette(); updateCounts(); qSecs=0;
+  document.getElementById('palTitle').textContent = sec.label.split('·')[0].trim()+" Palette";
+}
+function buildPalette(){
+  const p=document.getElementById('palette'); p.innerHTML='';
+  const si=FLAT[cur].si;
+  FLAT.forEach((f,i)=>{
+    if(f.si!==si) return;
+    const within=FLAT.filter(x=>x.si===si).indexOf(f)+1;
+    const c=document.createElement('div');
+    let cls='pcell';
+    if(marked[i]&&isAnswered(i)) cls+=' ansmarked';
+    else if(marked[i]) cls+=' marked';
+    else if(isAnswered(i)) cls+=' answered';
+    else if(visited[i]) cls+=' notans';
+    if(i===cur) cls+=' current';
+    c.className=cls; c.textContent=within;
+    c.onclick=()=>{ cur=i; render(); };
+    p.appendChild(c);
+  });
+}
+function updateCounts(){
+  let a=0,na=0,nv=0,m=0,am=0;
+  for(let i=0;i<N;i++){
+    if(marked[i]&&isAnswered(i)) am++;
+    else if(marked[i]) m++;
+    else if(isAnswered(i)) a++;
+    else if(visited[i]) na++;
+    else nv++;
+  }
+  cAns.textContent=a; cNotans.textContent=na; cNotvis.textContent=nv; cMarked.textContent=m; cAnsmarked.textContent=am;
+}
+function saveNext(){ if(cur<N-1)cur++; render(); }
+function prevQ(){ if(cur>0)cur--; render(); }
+function clearResponse(){ const t=FLAT[cur].q.type; resp[cur]= t==='mcq'?null:(t==='choice'?{pick:null,text:''}:''); render(); }
+function markReviewNext(){ marked[cur]=true; if(cur<N-1)cur++; render(); }
+setInterval(()=>{
+  if(totalSecs>0) totalSecs--; qSecs++;
+  const m=String(Math.floor(totalSecs/60)).padStart(2,'0'), s=String(totalSecs%60).padStart(2,'0');
+  document.getElementById('timeLeft').textContent=m+":"+s;
+  const qm=String(Math.floor(qSecs/60)).padStart(2,'0'), qs=String(qSecs%60).padStart(2,'0');
+  document.getElementById('qtime').textContent=qm+":"+qs;
+  if(totalSecs%10===0) saveState();
+  if(totalSecs===0) submitExam();
+},1000);
+function confirmSubmit(){
+  const un=[...Array(N).keys()].filter(i=>!isAnswered(i)).length;
+  if(confirm("Submit the exam?\n\nAnswered: "+(N-un)+" / "+N+(un?"\nUnanswered: "+un:""))) submitExam();
+}
+let maxMarks=0; FLAT.forEach(f=>maxMarks+=f.sec.perMark);
+function recalcTotal(){
+  let mcq=0, written=0;
+  FLAT.forEach((f,i)=>{
+    if(f.q.type==='mcq'){ if(resp[i]===f.q.c) mcq+=f.sec.perMark; }
+    else { if(selfScore[i]!==null) written+=selfScore[i]*f.sec.perMark; }
+  });
+  const total=mcq+written;
+  const el=document.getElementById('runTotal');
+  if(el) el.innerHTML="<span class='scorebig'>"+total.toFixed(1)+" / "+maxMarks+"</span> "+
+    "<span style='font-size:13px;color:#555'>(MCQ auto: "+mcq+" · Written self-scored: "+written.toFixed(1)+")</span>";
+}
+function setSelf(i,ratio,btnEl){
+  selfScore[i]=ratio;
+  const wrap=btnEl.parentElement;
+  [...wrap.querySelectorAll('.ss-btn')].forEach(b=>b.classList.remove('on'));
+  btnEl.classList.add('on');
+  recalcTotal();
+}
+function rubricHtml(arr,label){
+  if(!arr||!arr.length) return "";
+  let h="<div class='rubric'><b>"+label+" — tick what you covered:</b>";
+  arr.forEach(pt=>{ h+="<label class='ritem'><input type='checkbox' onchange='tick(this)'><span>"+pt+"</span></label>"; });
+  h+="<div class='rverdict'>Covered 0 / "+arr.length+"</div></div>";
+  return h;
+}
+function tick(cb){
+  const box=cb.closest('.rubric');
+  const items=[...box.querySelectorAll('.ritem input')];
+  const total=items.length, done=items.filter(x=>x.checked).length;
+  const frac=total?done/total:0;
+  const band= frac>=0.7?'Full': frac>=0.35?'Half':'None';
+  box.querySelector('.rverdict').textContent='Covered '+done+' / '+total+' — suggested band: '+band;
+  const card=cb.closest('.review-q');
+  const ss=[...card.querySelectorAll('.selfscore .ss-btn')];
+  ss.forEach(b=>b.classList.remove('suggest'));
+  const map={Full:0,Half:1,None:2};
+  if(ss[map[band]]) ss[map[band]].classList.add('suggest');
+}
+function submitExam(){
+  let html="<div id='runTotal' style='margin:6px 0 14px'></div>";
+  EXAM.sections.forEach((s,si)=>{
+    html+="<h3>"+s.label+"</h3>";
+    FLAT.forEach((f,i)=>{
+      if(f.si!==si) return;
+      const q=f.q;
+      const within=FLAT.filter(x=>x.si===si).indexOf(f)+1;
+      if(q.type==='mcq'){
+        let cls,tag,tagtxt;
+        if(resp[i]===null){cls='skip';tag='ts';tagtxt='SKIPPED';}
+        else if(resp[i]===q.c){cls='right';tag='tr';tagtxt='CORRECT';}
+        else {cls='wrong';tag='tw';tagtxt='WRONG';}
+        const yours=resp[i]===null?"—":"ABCD"[resp[i]]+". "+q.o[resp[i]];
+        html+="<div class='review-q "+cls+"'><div><span class='tag "+tag+"'>"+tagtxt+"</span> <b style='margin-left:8px'>Q"+within+"</b></div>"+
+          "<div style='margin:8px 0'>"+q.t+"</div>"+
+          "<div><b>Your answer:</b> "+yours+"</div><div><b>Correct:</b> "+"ABCD"[q.c]+". "+q.o[q.c]+"</div>"+
+          "<div class='exp'>💡 "+q.e+"</div></div>";
+      } else {
+        const yours = q.type==='choice' ? (resp[i].pick? "("+resp[i].pick+") "+resp[i].text : "—") : (resp[i]||"—");
+        let modelHtml, rubricH;
+        if(q.type==='choice'){
+          modelHtml="<details class='modelwrap'><summary>Show a reference answer (optional)</summary><div class='model'><b>Reference (a):</b><br>"+q.a.model+"<br><br><b>Reference (b):</b><br>"+q.b.model+"</div></details>";
+          if(resp[i].pick==='a') rubricH=rubricHtml(q.a.rubric,"(a) What the examiner is looking for");
+          else if(resp[i].pick==='b') rubricH=rubricHtml(q.b.rubric,"(b) What the examiner is looking for");
+          else rubricH=rubricHtml(q.a.rubric,"(a) What the examiner is looking for")+rubricHtml(q.b.rubric,"(b) What the examiner is looking for");
+        } else {
+          modelHtml="<details class='modelwrap'><summary>Show a reference answer (optional)</summary><div class='model'>"+q.model+"</div></details>";
+          rubricH=rubricHtml(q.rubric,"What the examiner is looking for");
+        }
+        html+="<div class='review-q written'><div><span class='tag tb'>SELF-ASSESS</span> <b style='margin-left:8px'>Q"+within+"</b> <span style='color:#888;font-size:12px'>("+f.sec.perMark+" marks)</span></div>"+
+          "<div style='margin:8px 0'>"+q.t+"</div>"+
+          "<div><b>Your answer:</b></div><div class='youranswer'>"+(yours.replace(/</g,'&lt;'))+"</div>"+
+          rubricH+
+          "<div class='selfscore'><b style='font-size:12px'>Score yourself:</b>"+
+          "<span class='ss-btn' onclick='setSelf("+i+",1,this)'>Full</span>"+
+          "<span class='ss-btn' onclick='setSelf("+i+",0.5,this)'>Half</span>"+
+          "<span class='ss-btn' onclick='setSelf("+i+",0,this)'>None</span></div>"+
+          modelHtml+"</div>";
+      }
+    });
+  });
+  document.getElementById('scoreBody').innerHTML=html;
+  recalcTotal();
+  openModal('score');
+}
+function openModal(id){ if(id==='paper')buildPaper(); if(id==='notes')document.getElementById('notesBody').innerHTML=NOTES; document.getElementById('m-'+id).classList.add('show'); }
+function closeModal(id){ document.getElementById('m-'+id).classList.remove('show'); }
+function buildPaper(){
+  let h="";
+  EXAM.sections.forEach(s=>{
+    h+="<h3>"+s.label+" — "+s.perMark+" marks each</h3><ol style='padding-left:20px;line-height:1.7'>";
+    s.qs.forEach(q=>{
+      if(q.type==='choice') h+="<li>"+q.t.replace(/<br>/g,' ')+" <i>(a)</i> "+q.a.prompt+" <i>(b)</i> "+q.b.prompt+"</li>";
+      else h+="<li>"+q.t.replace(/<br>/g,' ')+"</li>";
+    });
+    h+="</ol>";
+  });
+  document.getElementById('paperList').innerHTML=h;
+}
+let calcVal="0";
+function toggleCalc(){ document.getElementById('calc').classList.toggle('show'); }
+function calcRefresh(){ document.getElementById('calcDisp').textContent=calcVal; }
+function calcIn(x){ calcVal=(calcVal==="0"&&"0123456789.".includes(x))?x:calcVal+x; calcRefresh(); }
+function calcC(){ calcVal="0"; calcRefresh(); }
+function calcBack(){ calcVal=calcVal.length>1?calcVal.slice(0,-1):"0"; calcRefresh(); }
+function calcEq(){ try{ calcVal=String(Function('"use strict";return ('+calcVal.replace(/%/g,'/100')+')')()); }catch(e){ calcVal="Error"; } calcRefresh(); }
+(function(){ const c=document.getElementById('calc'),h=document.getElementById('calcDrag'); let dx,dy,drag=false;
+  h.onmousedown=e=>{drag=true;dx=e.clientX-c.offsetLeft;dy=e.clientY-c.offsetTop;};
+  document.onmousemove=e=>{ if(drag){c.style.left=(e.clientX-dx)+'px';c.style.top=(e.clientY-dy)+'px';c.style.right='auto';} };
+  document.onmouseup=()=>drag=false; })();
+if(!HAS_CALC){ document.querySelector('.links a[onclick*="Calc"]').style.display='none'; }
+loadState();
+render();
+</script>
+</body>
+</html>

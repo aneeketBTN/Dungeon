@@ -1,0 +1,262 @@
+# Bug Laws — Living, Tiered Decision Aid
+
+Two tiers:
+
+- 🔴 **REDLINE** — a severe demonstrated failure; hard rule with a comply path.
+- 🟡 **WATCH** — an avoidable gotcha; verify after related changes.
+
+Statuses are living: `ACTIVE`, `DOWNGRADED`, `SUPERSEDED`, `RETIRED`.
+REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules.
+
+## Laws
+
+### LAW-01 🔴 — Never ship a selectable control that lies about its effect
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-07-16 prototype audit: length, difficulty, Dungeon, and feedback controls can
+  change visibly without changing the connected five-question run.
+- **Why:** False affordances destroy setup trust and invalidate usability evidence.
+- **Comply:** Connect each choice to real run configuration, or show it locked/disabled with its
+  reason before selection.
+- **Verify:** For every setup combination in the deterministic scenario matrix, capture selected
+  values and assert matching run header, question count/pool, timing/scoring, and feedback behavior.
+
+### LAW-02 🔴 — World progress must derive from awarded progress, not answer commitment
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-07-16 prototype audit: Ari's position advances after a missed answer because
+  position is calculated from `answered`.
+- **Why:** The game's central metaphor contradicts grading and makes failure look rewarded.
+- **Comply:** Derive step/world position from explicit awarded progress. Give secure, partial, and
+  missed outcomes separate state transitions.
+- **Verify:** Run all-correct, all-wrong, and mixed/partial scenarios; compare score, completed
+  steps, Ari position, Resolve, and result totals after every answer.
+
+### LAW-03 🔴 — Reset semantic state and presentation state together
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-07-16 prototype audit: quest completion class and copy can survive into a new
+  run after semantic quest state resets.
+- **Why:** CSS/DOM residue displays rewards and progress that do not exist.
+- **Comply:** Render presentation entirely from reset state, or explicitly clear every derived
+  class/copy/animation token in one reset path.
+- **Verify:** Complete a quest, return/retry, begin a second run, and capture the quest card before
+  question one. Repeat after failure and successful completion.
+
+### LAW-04 🟡 — Run labels must come from the same selected state as content
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-07-16 prototype audit: run header remains hard-coded after another Macro Dungeon
+  is selected.
+- **Why:** Parallel hard-coded labels drift from the question pool and results.
+- **Comply:** Use one typed run configuration for Hall, transition, header, question selector,
+  persistence, and results.
+- **Verify:** Search for duplicated literal subject/chapter labels, then start every supported
+  chapter and compare Hall, run, and dashboard metadata.
+
+### LAW-05 🟡 — Historical documents never silently override current authority
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-07-16 source audit: `personalities.md`, `REVIEW_LOG.md`, `PROMPT.md`, prototype
+  behavior, and newer product briefs overlap and sometimes differ.
+- **Why:** Reading order can accidentally change product decisions.
+- **Comply:** Follow `DESIGN_SOURCE_INDEX.md`; put unresolved contradictions in its conflict
+  register before implementation.
+- **Verify:** Every implementation plan names the source files and conflicts governing its slice.
+
+### LAW-06 🔴 — Fresh-user testing must never erase real learner data
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-07-16 operating-system installation: current `state/` and `history/` may contain
+  real learner progress while the UX loop requires clean scenarios.
+- **Why:** Clearing real state to test onboarding causes irreversible learning-history loss.
+- **Comply:** Use an isolated test profile or deterministic scenario loader outside live data.
+- **Verify:** Before and after UI tests, compare live-state file hashes/timestamps or run against a
+  declared test-data path; evidence must name the isolation method.
+
+### LAW-07 🟡 — Source inspection is not browser verification
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-07-16 initial audit completed without an exposed Browser/Computer Use runtime.
+- **Why:** Layout, timing, focus, pointer behavior, responsive states, and animation cannot be
+  accepted from source alone.
+- **Comply:** Label source findings `DIAGNOSED`; promote only after declared real-browser evidence.
+- **Verify:** Evidence includes Browser screenshots/video, viewport, input method, state fixture,
+  and route steps.
+
+### LAW-08 🟡 — Record generated measurements only after the final artifact change
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-07-16 admin-system close-out: `AGENTS.md` was measured, then edited to record
+  DONE status, making the written byte count stale until the final audit caught it.
+- **Why:** Evidence can become false when the measured artifact changes during close-out.
+- **Comply:** Make status/content edits first, run final measurements last, then update only the
+  evidence values that do not alter the measured artifact.
+- **Verify:** Re-run the measurement after the final artifact edit and compare the observed value
+  with every changelog/evidence claim.
+
+### LAW-09 🟡 — Browser-only state does not travel with a copied project folder
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-07-16 Mac transfer audit: the web prototype stores its profile in browser local
+  storage while the learning engine stores durable state under `state/` and `history/`.
+- **Why:** A folder transfer can appear complete while onboarding, cosmetics, currency, or an
+  unfinished prototype run silently remains on the old machine.
+- **Comply:** Document storage boundaries in every machine-transfer handoff; never imply that
+  browser-local profile data is included in the folder.
+- **Verify:** The handoff names both storage systems and explicitly states which one resets.
+
+### LAW-10 🟡 — Optional helpers must not auto-download executable dependencies
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-04 npm supply-chain audit found that `mock/serve-tunnel.cmd` used
+  `npx -y localtunnel`, resolving and executing an unpinned package without review.
+- **Why:** A convenience launcher can execute malicious install or runtime code even when the
+  application itself has no npm dependency graph.
+- **Comply:** Fail closed when the external tool is absent. Require an explicitly installed,
+  reviewed version; resolve and display its executable path; validate its exact version before
+  starting any server or network exposure; never add an automatic-download fallback.
+- **Verify:** Search launchers for package-manager execution, run the missing-tool and
+  wrong-version cases, confirm both exit nonzero before child processes start, and record any
+  intentionally unrun network-exposure path.
+
+### LAW-11 🟡 — Derive every destination summary after the state mutation it reports
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-10 real-Browser T6 acceptance: the results screen initially said a repaired
+  miss was still queued, the global completed-run count lagged until the course map rendered, and
+  the revised dashboard initially left the concept-status pill and growing question total stale
+  immediately after scheduling a re-attempt.
+- **Why:** A correct underlying state still becomes a lying product when headers, badges, or result
+  labels are derived from the historical event or pre-mutation presentation.
+- **Comply:** Commit the semantic mutation first, then render every visible destination from that
+  same current state. Historical responses may explain what happened but may not independently
+  declare whether a repair, reward, save, or completion remains active.
+- **Verify:** Miss then close a repair and inspect results; complete an all-correct run and inspect
+  the header before leaving results; save/resume/reset and compare the hero, route card, results,
+  and global header after each transition.
+
+### LAW-12 🟡 — A route alias must preserve the document's asset base
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-10 all-subject dashboard Browser acceptance: the server internally served
+  `mock/t6.html` at `/`, so the browser resolved `sets/t6_catalog.js` from `/sets/` and the route
+  loaded without its course data.
+- **Why:** Returning the right HTML bytes at a different URL does not preserve relative script,
+  stylesheet, media, navigation, or module paths.
+- **Comply:** Redirect aliases to the canonical document URL, use an explicit base URL, or make
+  every dependent URL root-absolute. Prefer a redirect when the canonical route already exists.
+- **Verify:** Open both the alias and canonical URL in a real Browser; confirm the final URL, all
+  assets, route-relative links, and application data load without console errors.
+
+### LAW-13 🟡 — Persistence is incomplete until loaded state becomes the visible state
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-10 all-subject dashboard Browser acceptance: unfinished practice was written
+  correctly to local storage, but page initialisation always rendered the dashboard and ignored
+  the saved active session.
+- **Why:** A valid save that is not restored is indistinguishable from lost progress to a student.
+- **Comply:** Validate saved state, restore the active model before rendering, and reproduce both
+  unanswered and already-resolved question presentation. Keep reset scoped and explicit.
+- **Verify:** Reload before answering, after choosing, after feedback, and after advancing; compare
+  subject, set, question number, queue length, due re-attempts, selected answer, and feedback. Then
+  confirm reset removes only the intended browser profile.
+
+### LAW-14 🔴 — Partial multi-step success never satisfies a whole-chain mastery gate
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 boss-question Browser pass: two correct steps initially credited each
+  covered concept with boss success even though the reasoning chain failed.
+- **Why:** A dashboard can call a concept Strong from the very failure a boss item was designed to
+  expose.
+- **Comply:** Record step-level evidence for explanation, but award boss/mastery credit only when
+  the entire required chain is correct without a revealed step or hint.
+- **Verify:** Submit every one-step-wrong permutation; confirm partial feedback remains visible,
+  the concept is Needs practice, and the boss gate remains open.
+
+### LAW-15 🟡 — Native selects must not inherit the width of their longest option
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 case-cloze Browser pass: a plausible long option expanded an inline
+  native select to 1,486 pixels and created horizontal scrolling.
+- **Why:** Better distractors often need complete sentences; intrinsic control sizing must not make
+  the question unreadable or hide actions off-screen.
+- **Comply:** Put long-choice controls in a min-width-zero container and constrain both container
+  and select to the available width. Let the open menu expose full option text.
+- **Verify:** Use the longest active choice at desktop and 390 pixels; compare document and viewport
+  widths and inspect every cloze, match, and boss select.
+
+### LAW-16 🔴 — Removing an answer-shape cue must not create a new stylistic cue
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 bank hardening: an initial option-length repair padded distractors with a
+  repeated generic reasoning tail, making options verbose and mechanically recognisable.
+- **Why:** Cosmetic equalisation can make guessing easier while pretending the item improved.
+- **Comply:** Build distractors from plausible neighbouring applications of comparable specificity.
+  Quarantine legacy shape-risk items from active pools until rewritten; never pad with repeated
+  filler.
+- **Verify:** Validate option shape, assert quarantined IDs are absent from all run pools, inspect
+  representative choices for recurring syntax, and require minimum active breadth per concept.
+
+### LAW-17 🟡 — A dependent case and task must look like one prompt
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 question-hierarchy review: the case was normal text in an isolated box
+  while its bold dependent question sat outside.
+- **Why:** Visual containment can tell a student that required evidence is optional subtext.
+- **Comply:** Put a genuine case and its instruction in one aligned prompt flow. Make the
+  substantive case the larger semibold reading text and the instruction a compact bold directive;
+  do not add a nested panel or that case-specific flow to case-free questions.
+- **Verify:** Inspect boss and case-fill prompts at desktop and 390 pixels, then inspect a no-case
+  question to confirm it has no empty or decorative wrapper.
+
+### LAW-18 🟡 — Recommendation language must name its scope
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 dashboard review: every subject-local focus panel said “Recommended now,”
+  implying several simultaneous global recommendations.
+- **Why:** Vague priority language makes the dashboard look arbitrary and weakens trust in the
+  practice order.
+- **Comply:** Use “recommended” only when one cross-subject ranking actually selects a unique next
+  action. Otherwise name the scope and concrete action without the claim.
+- **Verify:** Switch through all four subjects and inspect the focus eyebrow, title, and button;
+  none may claim a global recommendation and each button must match the returned action kind.
+
+### LAW-19 🟡 — Do not express every hierarchy level as a card
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 applied-question review: a tinted prompt, a descriptive banner, and one
+  bordered panel per reasoning step made a single task feel like several disconnected objects.
+- **Why:** Repeated fills, borders, and radii create visual distance and imply interaction or state
+  changes where none exist.
+- **Comply:** Default to one warm-white question surface. Use alignment, spacing, type, and at most
+  a restrained divider to connect dependent content. Add a box only when it identifies a control,
+  feedback state, navigation boundary, or materially separate interaction.
+- **Verify:** Inspect boss, case-fill, and match questions at desktop and 390 pixels. Prompt, cloze,
+  boss-step, and match-row wrappers must be transparent and unboxed; no redundant descriptive strip
+  may appear; controls and post-answer feedback must remain visibly bounded.
+
+### LAW-20 🔴 — Held feedback must include every answer-shaped cue
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 generic-practice Browser pass: selected answers correctly withheld
+  correctness, but a saved short answer initially exposed its rubric before the results screen.
+- **Why:** A “feedback at the end” check becomes a different and easier task when criteria,
+  exemplars, correctness styling, explanations, or evidence mutations reveal the answer early.
+- **Comply:** In held-feedback mode, save responses without grading display or learning-state
+  mutation. Reveal correctness, explanations, constructed rubrics, and exemplars only in the final
+  review; keep written responses explicitly unscored.
+- **Verify:** Complete recognition, application, generation, and mixed held-feedback checks. After
+  every saved response inspect copy, classes, controls, rubric/exemplar visibility, and dashboard
+  state; then confirm the complete review appears at results.
+
+### LAW-21 🟡 — New release tooling must preserve legacy script semantics
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 release build: setting package-wide `type: module` made the existing
+  CommonJS bank validator fail even though the new build script was the only ESM consumer.
+- **Why:** A deployment wrapper can silently change how unrelated checked-in scripts load.
+- **Comply:** Scope new module behavior with `.mjs` files or explicit per-file configuration; do
+  not change package-wide semantics unless every existing script is intentionally migrated.
+- **Verify:** Run syntax checks, the legacy bank validator, the release build, and release tests
+  together after any package or module-loader change.

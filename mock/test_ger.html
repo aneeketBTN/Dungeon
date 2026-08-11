@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module Tests — Generating Entrepreneurial Resources</title>
+<meta name="description" content="One MCQ mock per GER module: foundations & capital, valuation & cap table, cash, structuring & rights, exits, pitching, incorporation & compliance, structures & governance. Exam-style, negative marking simulated, full breakdowns.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:,">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,"Segoe UI",sans-serif;background:#eef0f2;color:#1f2328;font-size:15px;line-height:1.55;}
+  .top{position:sticky;top:0;z-index:20;background:#1c1c1c;padding:11px 14px;border-bottom:2px solid #7a4cc4;}
+  .top .brand{color:#b399e6;font-weight:bold;font-size:16px;}
+  .top .sub{color:#9aa0a6;font-size:12px;margin-top:2px;}
+  .nav{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap;}
+  .nav a{padding:6px 9px;background:#2a2f35;color:#e8eaed;text-decoration:none;border-radius:6px;font-size:12px;font-weight:bold;}
+  .nav a:hover{background:#7a4cc4;}
+  .wrap{max-width:860px;margin:0 auto;padding:14px 12px 70px;}
+  .intro{background:#f1ecfa;border-left:4px solid #7a4cc4;border-radius:6px;padding:11px 13px;margin-bottom:16px;font-size:13.5px;}
+  .intro b{color:#5b34a3;} .intro .neg{color:#c1392b;font-weight:bold;}
+  .mcard{display:block;text-align:left;width:100%;background:#fff;border:1px solid #dde1e5;border-radius:11px;padding:15px 16px;margin-bottom:12px;cursor:pointer;transition:border-color .12s,transform .1s;}
+  .mcard:hover{border-color:#7a4cc4;transform:translateY(-2px);}
+  .mcard .mt{font-size:16px;font-weight:bold;color:#15171a;}
+  .mcard .mb{color:#5a6169;font-size:13px;margin-top:4px;}
+  .mcard .mmeta{margin-top:8px;font-size:12px;color:#5b34a3;font-weight:bold;}
+  .testhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;}
+  .testhead h2{font-size:18px;color:#15171a;}
+  .backbtn{border:1px solid #cfd6de;background:#f4f6f8;color:#3a4047;border-radius:7px;padding:7px 11px;font-size:12.5px;font-weight:bold;cursor:pointer;}
+  .backbtn:hover{background:#e8ebee;}
+  .score{position:sticky;top:96px;z-index:15;display:flex;gap:8px;align-items:center;justify-content:space-between;background:#fff;border:1px solid #cfd6de;border-radius:9px;padding:9px 13px;margin:8px 0 16px;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+  .score .s1{font-weight:bold;color:#15171a;} .score .s2{color:#5a6169;}
+  .score .marks{font-weight:bold;} .score .marks.pos{color:#1a8a4a;} .score .marks.neg{color:#c1392b;}
+  .q{background:#fff;border:1px solid #dde1e5;border-radius:10px;margin-bottom:12px;padding:13px 14px;}
+  .qhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:7px;}
+  .qnum{font-weight:bold;color:#9aa0a6;font-size:12px;}
+  .chip{font-size:10.5px;font-weight:bold;letter-spacing:.3px;border-radius:9px;padding:2px 8px;}
+  .chip.topic{color:#5b34a3;background:#f1ecfa;border:1px solid #ddd0f0;}
+  .chip.calc{color:#b06a00;background:#fdf3e2;border:1px solid #f3dcae;}
+  .chip.d1{color:#1a8a4a;background:#e9f6ee;} .chip.d2{color:#b9770a;background:#fdf3e2;} .chip.d3{color:#c1392b;background:#fbeae8;}
+  .stem{font-size:14.5px;margin-bottom:10px;}
+  .opts{display:flex;flex-direction:column;gap:7px;}
+  .opt{display:flex;gap:9px;align-items:flex-start;text-align:left;background:#f7f9fb;border:1px solid #d7dde3;border-radius:8px;padding:9px 11px;font-size:13.7px;cursor:pointer;transition:background .1s,border-color .1s;}
+  .opt:hover{background:#f0ecf8;border-color:#b79edb;}
+  .opt .lk{font-weight:bold;color:#5a6169;min-width:15px;}
+  .opt.correct{background:#e7f6ec;border-color:#46b56e;}
+  .opt.wrong{background:#fdecea;border-color:#e07d6e;}
+  .opt.dim{opacity:.62;} .opt.locked{cursor:default;}
+  .opt .mk{margin-left:auto;font-weight:bold;}
+  .opt.correct .mk{color:#1a8a4a;} .opt.wrong .mk{color:#c1392b;}
+  .reveal{display:none;margin-top:11px;border-top:1px dashed #d7dde3;padding-top:10px;}
+  .reveal.show{display:block;}
+  .verdict{display:inline-block;font-size:12px;font-weight:bold;color:#fff;padding:3px 11px;border-radius:12px;margin-bottom:4px;background:#1a8a4a;}
+  .work{background:#f4f1fb;border-left:3px solid #7a4cc4;border-radius:5px;padding:8px 11px;margin:6px 0;font-size:13px;}
+  .work b{color:#5b34a3;}
+  .traps{margin:4px 0;font-size:13.3px;}
+  .traps .t{margin:3px 0;padding-left:16px;position:relative;}
+  .traps .t::before{content:"✗";position:absolute;left:0;color:#c1392b;font-weight:bold;}
+  .traps .t.ok::before{content:"✓";color:#1a8a4a;}
+  .recall{background:#eef7ef;border-left:3px solid #34a853;border-radius:5px;padding:8px 11px;margin-top:7px;font-size:13.3px;}
+  .recall b{color:#1a8a4a;}
+  .tested{background:#fff8e6;border-left:3px solid #f0a429;border-radius:5px;padding:8px 11px;margin-top:7px;font-size:13.3px;}
+  .tested b{color:#b06a00;}
+  .results{display:none;background:#fff;border:2px solid #7a4cc4;border-radius:11px;padding:16px;margin-top:6px;text-align:center;}
+  .results.show{display:block;}
+  .results .big{font-size:30px;font-weight:bold;color:#15171a;}
+  .results .band{display:inline-block;margin-top:6px;padding:4px 14px;border-radius:14px;font-weight:bold;color:#fff;font-size:13px;}
+  .finishbtn{display:block;width:100%;margin:6px 0 20px;border:none;background:#7a4cc4;color:#fff;border-radius:9px;padding:12px;font-size:14px;font-weight:bold;cursor:pointer;}
+  .finishbtn:hover{background:#653bab;}
+  .foot{text-align:center;color:#9aa0a6;font-size:12px;margin-top:24px;}
+  .foot a{color:#2d6fd4;text-decoration:none;}
+</style>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-theme-base="light">
+<div class="top">
+  <div class="brand">🟪 Module Tests — Generating Entrepreneurial Resources</div>
+  <div class="sub">One MCQ mock per chapter · exam-style · 2 marks/Q · −1 negative marking · full breakdowns</div>
+  <div class="nav"><a href="#" onclick="showLauncher();return false;">All modules</a><a href="discuss_ger.html">Drill</a><a href="formulas_ger.html">Formulas</a><a href="index.html">← Portal</a></div>
+</div>
+<div class="wrap">
+  <div id="launcher">
+    <div class="intro"><b>Pick a chapter, take its mock.</b> Each test mirrors the real paper — scenario-first computation and conceptual/legal single-best-answer — scaled to the chapter's weight. <span class="neg">Negative marking is live (+2 / −1): a careless pick costs you 3 marks vs the right answer.</span> The full exam is 25 MCQ · 75 min · 4 options · −1 per wrong.</div>
+    <div id="modlist"></div>
+  </div>
+  <div id="test" style="display:none;">
+    <div class="testhead">
+      <h2 id="testTitle"></h2>
+      <button class="backbtn" onclick="showLauncher()">← Modules</button>
+    </div>
+    <div class="score">
+      <span><span class="s1" id="sDone">0</span> <span class="s2">/ <span id="sTot">0</span></span></span>
+      <span class="s2"><span id="sRight">0</span> right · <span id="sWrong">0</span> wrong · <span class="marks pos" id="sMarks">0</span> marks</span>
+    </div>
+    <div id="quiz"></div>
+    <button class="finishbtn" onclick="finish()">Finish &amp; see results</button>
+    <div class="results" id="results"></div>
+  </div>
+  <div class="foot">Module mock tests · built around GER's most-tested calculations &amp; legal traps · negative marking simulated · <a href="index.html">← back to portal</a></div>
+</div>
+<script>
+const MARK_RIGHT=2, MARK_WRONG=-1, NEG=true;
+const MODULES=[
+ {id:"ger_m1",name:"M1 · Foundations, Capital &amp; Sources",blurb:"Finance function, forms of capital, debt/equity/hybrids, phased risk, the funding ladder, investor motivations.",time:"~12 Q"},
+ {id:"ger_m2",name:"M2 · Valuation &amp; Cap-Table Maths",blurb:"Pre/post-money, %stake, dilution, exit %, required equity, exit multiple, P/B, EV — the calculation cascades.",time:"~12 Q"},
+ {id:"ger_m3",name:"M3 · Financial Planning &amp; Cash",blurb:"Planning steps, cash budget vs P&amp;L, net burn, total funding requirement, unit economics.",time:"~7 Q"},
+ {id:"ger_m4",name:"M4 · Structuring, Term Sheet &amp; Rights",blurb:"Structuring goals, convertibles & warrants, term-sheet clauses, info/board/reserved-matter rights, liquidation & anti-dilution.",time:"~12 Q"},
+ {id:"ger_m5",name:"M5 · Exits",blurb:"Why exits matter, route preference, IPO mechanics & realities, trade sale vs secondary, buyback cap, self-liquidating.",time:"~8 Q"},
+ {id:"ger_m6",name:"M6 · Pitching to Investors",blurb:"Benefit vs features, market/defensibility/unit economics, early- vs growth-stage pitch, integrity.",time:"~4 Q"},
+ {id:"ger_m7",name:"M7 · Incorporation, Compliance &amp; Funding Methods",blurb:"LLP/OPC, MOA/AOA, DSC/DIN, DPIIT/MSME, resolutions, rights issue, private placement, convertible note, ESOP.",time:"~12 Q"},
+ {id:"ger_m8",name:"M8 · Structures, Documents &amp; Governance",blurb:"Choosing a structure, SHA/SSA/SPA, ROFR/ROFO/tag/drag, AIF fund structure, IP, labour law, corporate governance.",time:"~10 Q"}
+];
+const Q=[
+/* ===================== ger_m1 ===================== */
+{mod:"ger_m1",topic:"Forms of capital",diff:2,
+ stem:"A founder quits a ₹40 lakh/year job to build her start-up before putting in any cash. In the course's framing, is she a capital provider?",
+ opts:["No — she's only a capital provider once she invests money","Yes — she contributes intellectual capital and foregone compensation, making her a capital provider","No — only investors and lenders provide capital","Yes, but only of financial capital"],
+ correct:1,
+ why:["Foregone salary and expertise already count as capital.","Capital includes financial, intellectual, relationship and reputational forms; her foregone comp + skill is real capital.","Founders are capital providers to their own venture.","Her contribution is intellectual/foregone-comp, not financial cash."],
+ tested:"That capital isn't only cash — founders provide intellectual/foregone-compensation capital.",
+ recall:"<b>Forms of capital</b>: financial, intellectual, relationship, reputational. A founder forgoing salary is a capital provider to her own enterprise."},
+
+{mod:"ger_m1",topic:"Phased development",diff:2,
+ stem:"Why do investors fund a start-up in phases rather than committing all the capital upfront?",
+ opts:["Purely an operational convenience","It limits dilution and resolves founder-investor information asymmetry — each tranche is better-informed after the prior phase","Because the law requires staged funding","Because founders dislike large cheques"],
+ correct:1,
+ why:["It's more than convenience.","Staging reveals information gradually (founders know the tech, investors the capital) and limits money raised → less dilution.","The sequence is market practice, not law.","Not about cheque-size preference."],
+ tested:"The information-asymmetry and dilution rationale for staged funding.",
+ recall:"<b>Phased development</b>: lets founders focus, limits dilution, and resolves information asymmetry — each commitment is better-informed after the prior phase's learning."},
+
+{mod:"ger_m1",topic:"Evolution of venture risk",diff:2,
+ stem:"Why do early-stage and growth-stage investors tend to be different firms?",
+ opts:["Risk is constant, so it's just branding","The nature of risk shifts by stage — product/market-fit early, then market-acceptance, then growth/competition — so investors specialise","Growth investors are simply richer","Only early-stage investing carries risk"],
+ correct:1,
+ why:["Risk is not constant across a venture's life.","Different stages carry different risks needing different value-add, so investors specialise (and work to fixed-life funds needing exits).","It's about risk-type specialisation, not wealth.","Every stage carries risk, just different kinds."],
+ tested:"That venture risk is stage-dependent, driving investor specialisation.",
+ recall:"<b>Evolution of risk</b>: Phase 1 product/PMF risk → Phase 2 market-acceptance/business-model → Phase 3 growth/competition. Early vs growth investors manage different risks."},
+
+{mod:"ger_m1",topic:"Liability of novelty",diff:2,
+ stem:"A start-up's product is genuinely novel. Which statement is correct about novelty?",
+ opts:["Novelty is purely an advantage","Novelty is also a liability — customers don't know how to use/trust a new product, slowing adoption","Novelty removes the liability of smallness","Novelty guarantees fast adoption"],
+ correct:1,
+ why:["It cuts both ways.","The 'liability of novelty' means low trust/understanding slows adoption, alongside liabilities of newness and smallness.","Smallness (low resilience) remains a separate liability.","Novelty often slows, not speeds, adoption."],
+ tested:"That novelty is both an advantage and a liability (adoption friction).",
+ recall:"Start-up vulnerabilities: liabilities of <b>smallness</b> (low resilience), <b>newness</b> (no track record), <b>novelty</b> (low trust/adoption). Innovation is an asset and a risk."},
+
+{mod:"ger_m1",topic:"Sources of risk / forecasts",diff:2,
+ stem:"A founder is shocked that an early-stage VC barely looked at her 5-year financial model. Why might that be?",
+ opts:["VCs always rely heavily on financial forecasts","Early-stage forecasts are unreliable — ~30% of early-stage investors don't use them, betting on the idea/market/team","The model wasn't detailed enough","Forecasts are illegal to share pre-investment"],
+ correct:1,
+ why:["Many early investors discount forecasts.","Forecast uncertainty is a recognised risk source; a 2017 study found ~30% of early-stage investors don't use forecasts.","Detail isn't the issue — early forecasts are inherently unreliable.","Forecasts are routinely shared."],
+ tested:"That early-stage financial forecasts are unreliable and often discounted by investors.",
+ recall:"Sources of early-stage risk: technology, customer acceptance, incomplete team, resources, regulation, and <b>forecast unreliability</b> (~30% of early investors skip forecasts)."},
+
+{mod:"ger_m1",topic:"Hybrid instruments",diff:1,
+ stem:"Preference share capital pays a fixed dividend and is redeemed after a set period, yet it is share capital. It is best classified as:",
+ opts:["Pure equity","A hybrid instrument (debt-like fixed dividend + redemption, but share capital)","Pure debt","A government grant"],
+ correct:1,
+ why:["Its fixed dividend and redemption make it debt-like, not pure equity.","It blends debt features (fixed coupon, redeemable) with equity (share capital) — a hybrid.","It isn't a loan; it's share capital.","Not a grant."],
+ tested:"Classifying preference/convertible instruments as hybrids, not pure debt or equity.",
+ recall:"<b>Hybrids</b> (preference capital, convertibles) blend debt and equity features, tuned for tax/balance-sheet/regulatory treatment."},
+
+{mod:"ger_m1",topic:"Characteristics of equity",diff:2,
+ stem:"Which statement about equity capital is correct?",
+ opts:["Equity holders are guaranteed annual dividends","Equity is patient, permanent capital; dividends are discretionary and returns come via dividends + capital appreciation, neither guaranteed","Equity must be repaid on a fixed schedule","Equity guarantees capital appreciation"],
+ correct:1,
+ why:["Dividends are discretionary (the board may retain earnings).","Equity stays on the books (permanent/patient), giving stability; returns are dividends + appreciation, not guaranteed.","Equity isn't repaid like a loan.","Appreciation is not guaranteed."],
+ tested:"Equity as patient/permanent capital with discretionary, non-guaranteed returns.",
+ recall:"<b>Equity</b> = risk + patient + permanent capital; returns via discretionary dividends and capital appreciation, neither guaranteed."},
+
+{mod:"ger_m1",topic:"Downsides of equity",diff:1,
+ stem:"A founder says 'equity is cheaper than debt because there's no interest.' The best correction is:",
+ opts:["Correct — equity is free","Equity costs ownership, a share of wealth, voting/control and governance obligations, and is lumpy to raise — it isn't free","Equity is cheaper only for large firms","Equity carries hidden interest"],
+ correct:1,
+ why:["Equity is not free.","It gives away wealth and control, adds governance duties, and is lumpy (hard to raise tiny sums).","The cost applies regardless of size.","It has no interest, but other real costs."],
+ tested:"That equity is not costless — it shares wealth and control and is lumpy.",
+ recall:"<b>Downsides of equity</b>: dilution of ownership/wealth, voting rights/control, governance obligations (Companies Act 2013), and lumpiness."},
+
+{mod:"ger_m1",topic:"Terms of share capital",diff:1,
+ stem:"Which ordering of share-capital terms is correct (largest to smallest)?",
+ opts:["Paid-up ≥ subscribed ≥ issued ≥ authorised","Authorised ≥ issued ≥ subscribed ≥ paid-up","Issued ≥ authorised ≥ subscribed ≥ paid-up","Subscribed ≥ authorised ≥ issued ≥ paid-up"],
+ correct:1,
+ why:["Reversed.","Authorised (MOA ceiling) ≥ issued ≥ subscribed ≥ paid-up (actually paid).","Authorised is the ceiling, so it can't be below issued.","Authorised caps everything."],
+ tested:"The share-capital hierarchy (authorised is the MOA ceiling; paid-up is actual).",
+ recall:"<b>Authorised ≥ issued ≥ subscribed ≥ paid-up.</b> Face value = nominal value/share; premium above it → securities-premium account."},
+
+{mod:"ger_m1",topic:"Angel networks",diff:2,
+ stem:"How does an angel network differ from a VC fund in decision-making?",
+ opts:["The network manager decides each member's investments","Each angel retains discretion over which deals to join (a VC fund manager decides for the fund)","Angels must invest in every sourced deal","Angel networks can't do due diligence"],
+ correct:1,
+ why:["The manager doesn't decide for members.","Networks pool sourcing/diligence/expertise but each angel chooses their own deals — unlike a discretionary VC fund.","Members opt in deal by deal.","A shared secretariat does initial diligence."],
+ tested:"Angel-network discretion (members choose) vs VC-fund discretionary decision-making.",
+ recall:"<b>Angel networks</b> pool capital, a shared secretariat and expertise, but each angel keeps <b>discretion</b> per deal. VC fund manager decides for the fund."},
+
+{mod:"ger_m1",topic:"Incubators vs accelerators",diff:1,
+ stem:"Which statement about incubators and accelerators is correct?",
+ opts:["They are the same institution","They are related but distinct — accelerators are cohort-based (e.g. Y Combinator); both fill resource/capital gaps early","Incubators only provide cash","Accelerators only provide lab space"],
+ correct:1,
+ why:["They are distinct models.","Incubators provide labs/mentors/talent + small seed; accelerators run fixed cohorts (YC).","Incubators provide facilities, mentors and talent too.","Accelerators provide capital and mentorship, not just space."],
+ tested:"Distinguishing incubators (resource providers) from cohort-based accelerators.",
+ recall:"<b>Incubators</b>: labs, mentors, talent, small seed. <b>Accelerators</b>: cohort-based (Y Combinator). Both fill early resource/capital gaps."},
+
+{mod:"ger_m1",topic:"Investor motivations",diff:2,
+ stem:"A strategic investor like Intel or Cisco backing a start-up is primarily motivated by:",
+ opts:["Pure financial return only","Strategic benefits (access to/driving demand for its products), often with restrictive terms","Psychic income, like the 3 Fs","Liquidity above all"],
+ correct:1,
+ why:["Strategic investors want more than financial return.","They seek strategic benefits (tech, market access) and often impose restrictive terms.","Psychic income motivates 3Fs, not strategic corporates.","Liquidity is the VC's central concern, not the strategic investor's."],
+ tested:"The four investor-motivation buckets and matching strategic investors to strategic benefits.",
+ recall:"Motivations: <b>returns, liquidity, strategic benefits, psychic income</b>. 3Fs → psychic; angels → returns; VCs → return + liquidity; strategic → strategic benefits."},
+
+/* ===================== ger_m2 ===================== */
+{mod:"ger_m2",topic:"Early vs evolved valuation",diff:2,
+ stem:"Why can't you value an early-stage start-up the way you'd value a listed, decades-old manufacturer?",
+ opts:["Early-stage firms must use DCF on their history","Early-stage firms lack stable history; their value hinges heavily on capital availability and investor sector-preference","Listed firms can't be valued by DCF","Early-stage valuation ignores the market entirely"],
+ correct:1,
+ why:["They lack the stable history DCF needs.","With no stabilised economics, sentiment/capital availability (a hot sector inflates values) matters as much as fundamentals.","Evolved firms are exactly where DCF works.","Market conditions strongly drive early-stage value."],
+ tested:"That early-stage valuation is sentiment/capital-driven, not stable-history DCF.",
+ recall:"<b>Evolved</b> firms: stable economics → DCF/comparables. <b>Early-stage</b>: value hinges on capital availability and sector preference (a hot sector inflates valuations)."},
+
+{mod:"ger_m2",topic:"Method choice",diff:2,
+ stem:"Two loss-making, high-growth firms (no profit after tax) need valuing. The appropriate multiple is:",
+ opts:["P/E, the standard ratio","EV/EBITDA — P/E is meaningless with no PAT, and EV/EBITDA is capital-structure neutral","P/B, since they have no earnings","Price-to-interest ratio"],
+ correct:1,
+ why:["No PAT ⇒ P/E denominator is meaningless.","EV/EBITDA sits above interest/tax/depreciation, so it works for loss-makers and compares across capital structures.","P/B isn't the go-to for asset-light loss-makers.","Not a standard valuation ratio."],
+ tested:"Matching the valuation tool to loss-makers (EV/EBITDA, not P/E).",
+ recall:"P/E needs PAT; loss-makers → <b>EV/EBITDA</b> (or EV/sales). P/E also fails when growth prospects differ widely."},
+
+{mod:"ger_m2",topic:"Post-money (compute)",diff:1,calc:true,
+ stem:"Investors contribute ₹8 million for 25% equity. What is the post-money valuation?",
+ opts:["₹24 million","₹32 million","₹40 million","₹48 million"],
+ correct:1,
+ why:["₹24M would be the pre-money (32 − 8).","post = investment/%stake = 8/0.25 = ₹32M.","₹40M doesn't follow.","Over-counts."],
+ tested:"post-money = investment ÷ %stake.",
+ recall:"<b>post-money = investment / %stake</b>; pre-money = post − investment.",
+ work:"8 / 0.25 = <b>₹32M</b> post-money (pre-money = 32 − 8 = ₹24M)."},
+
+{mod:"ger_m2",topic:"%stake (compute)",diff:2,calc:true,
+ stem:"A start-up has a pre-money valuation of ₹40 million and raises ₹10 million. What % do the new investors get?",
+ opts:["25%","20%","30%","10%"],
+ correct:1,
+ why:["25% = 10/40 — dividing by pre-money (the classic trap).","%stake = 10/(40+10) = 10/50 = 20%.","30% doesn't follow.","10% ignores the relationship."],
+ tested:"Dividing by post-money, not pre-money.",
+ recall:"<b>%stake = investment / (pre + investment).</b> Using pre-money overstates the stake.",
+ work:"post = 40 + 10 = 50. %stake = 10/50 = <b>20%</b> (10/40 = 25% is the trap)."},
+
+{mod:"ger_m2",topic:"% equity at exit (compute)",diff:3,calc:true,
+ stem:"An investor needs to realise ₹50 crore at exit to hit her return. The company's forecast exit valuation is ₹250 crore. What % of the company must she own at exit (no further dilution)?",
+ opts:["10%","20%","25%","2x"],
+ correct:1,
+ why:["10% would realise only ₹25cr.","%equity at exit = required realisation / exit valuation = 50/250 = 20%.","25% = 50/200 — wrong exit valuation.","A multiple isn't a stake."],
+ tested:"%equity at exit = required realisation ÷ exit valuation.",
+ recall:"<b>%equity at exit = required realisation / exit valuation</b>; realisation = investment × target multiple.",
+ work:"50 / 250 = <b>20%</b>."},
+
+{mod:"ger_m2",topic:"Adjust entry for dilution (compute)",diff:3,calc:true,
+ stem:"A round-1 investor must hold 20% at exit. A later round will dilute her by 25%. What entry stake must she take so she ends at 20%?",
+ opts:["15%","≈ 26.7%","20%","25%"],
+ correct:1,
+ why:["15% would shrink below 20% after dilution.","entry = exit/(1 − dilution) = 20%/(1 − 0.25) = 20/0.75 ≈ 26.7%.","20% ignores the later dilution.","25% under-grosses-up."],
+ tested:"Grossing up the entry stake for later-round dilution.",
+ recall:"<b>entry % = exit % / (1 − next-round dilution)</b>; the cap table must sum to 100%.",
+ work:"20% / (1 − 0.25) = 20/0.75 ≈ <b>26.7%</b>."},
+
+{mod:"ger_m2",topic:"Exit multiple (compute)",diff:2,calc:true,
+ stem:"An investor invests ₹30 crore for a 20% stake; the company exits at ₹450 crore (no further dilution). What is the exit multiple?",
+ opts:["15x","3x","4.5x","6x"],
+ correct:1,
+ why:["15x = 450/30 — using the whole exit value, ignoring the 20% stake.","multiple = (0.20×450)/30 = 90/30 = 3x.","4.5x mis-multiplies.","6x doesn't follow."],
+ tested:"Multiple uses the investor's realisation (%×exit), not the whole exit value.",
+ recall:"<b>multiple = (%stake × exit valuation) / investment.</b>",
+ work:"realisation = 0.20 × 450 = ₹90cr. multiple = 90/30 = <b>3x</b>."},
+
+{mod:"ger_m2",topic:"Required stake from return (compute)",diff:3,calc:true,
+ stem:"An investor puts in ₹5 crore expecting 25% per year for 4 years. Exit equity is forecast at ₹61 crore. What entry stake should she seek (no further dilution)?",
+ opts:["≈ 8.2%","≈ 20%","≈ 12.2%","25%"],
+ correct:1,
+ why:["8.2% ignores compounding (5/61).","FV = 5×1.25⁴ ≈ ₹12.2cr; stake = 12.2/61 ≈ 20%.","12.2% is the FV in crore, not the stake.","Confuses the return rate with the stake."],
+ tested:"Compounding the investment to FV before dividing by exit equity.",
+ recall:"<b>required stake = investment × (1+r)ⁿ / exit equity.</b>",
+ work:"FV = 5 × 1.25⁴ = 5 × 2.4414 ≈ ₹12.2cr. stake = 12.2/61 ≈ <b>20%</b>."},
+
+{mod:"ger_m2",topic:"P/B (compute)",diff:2,calc:true,
+ stem:"A share trades at ₹300. The firm has 20,000 shares of ₹100 face value and ₹10,00,000 of retained earnings. Find the P/B ratio.",
+ opts:["3.00","2.00","1.50","2.50"],
+ correct:1,
+ why:["3.00 = 300/100 uses face value, not book value.","net worth = 20,000×100 + 10,00,000 = ₹30,00,000 → BVPS 150 → P/B = 300/150 = 2.","1.50 mis-scales.","2.50 doesn't follow."],
+ tested:"Using book value per share (incl. reserves), not face value.",
+ recall:"net worth = capital + reserves; BVPS = net worth/shares; <b>P/B = price/BVPS</b>.",
+ work:"capital 20,000×100 = 20,00,000; + 10,00,000 reserves = 30,00,000. BVPS = 30,00,000/20,000 = 150. P/B = 300/150 = <b>2.0</b>."},
+
+{mod:"ger_m2",topic:"Enterprise value (compute)",diff:1,calc:true,
+ stem:"A firm's equity is worth ₹500 crore, with ₹200 crore debt and ₹50 crore cash. Its enterprise value is:",
+ opts:["₹500 crore","₹650 crore","₹750 crore","₹350 crore"],
+ correct:1,
+ why:["That's equity value only.","EV = equity + debt − cash = 500 + 200 − 50 = ₹650cr.","₹750cr adds cash instead of subtracting.","₹350cr subtracts debt instead of adding."],
+ tested:"EV = equity + debt − cash (add debt, subtract cash).",
+ recall:"<b>EV = equity + debt − cash.</b> EV ≠ equity value; EV/EBITDA is capital-structure neutral.",
+ work:"500 + 200 − 50 = <b>₹650cr</b>."},
+
+{mod:"ger_m2",topic:"Rising valuations",diff:1,
+ stem:"Pre- and post-money valuations rise from round to round. What does this signal?",
+ opts:["Meaningless noise","Validated progress — an arm's-length higher valuation confirms development and lifts earlier investors' stakes too","Only the latest investor benefits","The company is in trouble"],
+ correct:1,
+ why:["The trend is a meaningful signal.","A later arm's-length investor paying more validates the founder and raises the value of earlier stakes.","Earlier investors' holdings also rise in value.","Rising rounds signal progress, not trouble."],
+ tested:"Reading rising round valuations as validated progress that lifts earlier stakes.",
+ recall:"Rising pre/post valuations signal validated development; an arm's-length higher round confirms progress and raises earlier investors' stake values."},
+
+{mod:"ger_m2",topic:"P/E comparability",diff:2,
+ stem:"Which set of companies is LEAST suitable for valuation by P/E ratios?",
+ opts:["Mature companies with stable profits","Companies whose sales are growing but which incur losses before interest and depreciation","Companies in the same industry","Profitable companies with similar growth"],
+ correct:1,
+ why:["Stable profits are ideal for P/E.","Loss-making firms have no meaningful earnings denominator → P/E fails; use EV/EBITDA.","Same-industry firms are exactly where P/E comparables work.","Comparable profitable firms suit P/E well."],
+ tested:"That P/E is unsuitable for loss-making firms (use EV/EBITDA).",
+ recall:"P/E needs positive earnings and comparable growth; loss-makers or very different growth → EV/EBITDA or EV/sales."},
+
+/* ===================== ger_m3 ===================== */
+{mod:"ger_m3",topic:"Financial planning steps",diff:2,
+ stem:"Which is the correct order of start-up financial planning?",
+ opts:["Cash budget → sales estimate → costs → valuation","Sales estimate → unit costs/opex → cash budget → forecast statements → funding plan → valuation","Valuation → funding → sales → costs","Funding plan → cash budget → sales estimate"],
+ correct:1,
+ why:["You can't budget cash before estimating sales.","Start from sales, then costs, then the cash budget, then statements, funding and valuation.","Valuation comes near the end, not the start.","Sales must come first."],
+ tested:"Ordering the planning chain (sales first, valuation last).",
+ recall:"<b>Sales → unit costs/opex → cash budget → forecast statements → funding plan → valuation.</b> A forecast projects future flows, not just history."},
+
+{mod:"ger_m3",topic:"Cash budget purpose",diff:1,
+ stem:"A cash budget most directly enables a start-up to:",
+ opts:["Segment customers by demographics","Estimate the funding requirement over the planning horizon","Choose a go-to-market strategy","Plan staffing levels"],
+ correct:1,
+ why:["That's a marketing task.","Tracking receipts vs payments and the closing balance shows how much funding is needed.","GTM is a separate decision.","Staffing is a separate plan."],
+ tested:"The cash budget's primary purpose: estimating the funding requirement.",
+ recall:"<b>Cash budget</b>: receipts − payments, focused on the closing balance; its most direct purpose is to estimate the funding requirement."},
+
+{mod:"ger_m3",topic:"Financial forecast components",diff:1,
+ stem:"Which is a key component of a financial forecast?",
+ opts:["Weather conditions","Revenue projections","Office location","Employee names"],
+ correct:1,
+ why:["Irrelevant to a forecast.","A forecast projects revenues (and expenses, cash flows).","Not a forecast component.","Not a forecast component."],
+ tested:"That a forecast projects revenues/expenses/cash flows (not irrelevant operational details).",
+ recall:"A <b>financial forecast</b> projects revenues, expenses and cash flows — not historical statements alone, and not weather/location/names."},
+
+{mod:"ger_m3",topic:"Cash budget (compute)",diff:2,calc:true,
+ stem:"In July a startup earns ₹8,00,000 revenue (₹3,00,000 received in cash), pays ₹2,00,000 rent and ₹2,50,000 salaries in cash, and opens with ₹1,00,000 cash. Closing cash position?",
+ opts:["Surplus ₹1,50,000 (using accrual revenue)","Deficit ₹50,000","Surplus ₹3,50,000","Deficit ₹4,50,000"],
+ correct:1,
+ why:["Using accrual ₹8,00,000 is the trap.","cash in 3,00,000 + opening 1,00,000 − payments 4,50,000 = −₹50,000.","Ignores payments.","Forgets the cash received and opening balance."],
+ tested:"Cash basis (count cash received, not accrual revenue) plus the opening balance.",
+ recall:"<b>closing cash = opening + cash receipts − cash payments.</b> Use cash received (₹3L), not accrual revenue (₹8L).",
+ work:"3,00,000 + 1,00,000 − (2,00,000+2,50,000) = 4,00,000 − 4,50,000 = <b>−₹50,000 deficit</b>."},
+
+{mod:"ger_m3",topic:"Funding requirement (compute)",diff:2,calc:true,
+ stem:"A startup forecasts cash inflow ₹120 lakh and cash outflow ₹150 lakh from operations, plus a one-off ₹40 lakh equipment purchase. If the whole deficit must be funded, the funding requirement is:",
+ opts:["₹30 lakh","₹70 lakh","₹40 lakh","₹10 lakh"],
+ correct:1,
+ why:["₹30 lakh omits the CapEx.","deficit = (150 + 40) − 120 = ₹70 lakh.","₹40 lakh counts only CapEx.","₹10 lakh mixes figures."],
+ tested:"Funding requirement = operational cash deficit + CapEx.",
+ recall:"<b>total funding = peak cumulative operational cash deficit + CapEx.</b>",
+ work:"outflow 150 + equipment 40 = 190; − inflow 120 = <b>₹70 lakh</b>."},
+
+{mod:"ger_m3",topic:"Net cash burn",diff:1,
+ stem:"A high cash burn rate primarily indicates that the company:",
+ opts:["Is highly profitable","Is spending cash rapidly","Is generating surplus cash","Has high revenue projections"],
+ correct:1,
+ why:["Burn is not profit.","High burn = cash leaving fast (payments ≫ receipts).","Burn is the opposite of surplus.","Burn is about cash, not projected revenue."],
+ tested:"That high burn = rapid cash spend, not profitability.",
+ recall:"<b>net burn = payments − receipts</b>; high burn = spending fast. Runway = cash / monthly burn."},
+
+{mod:"ger_m3",topic:"Unit economics",diff:1,
+ stem:"A startup earns ₹500 per customer and spends ₹600 to acquire and serve each. This indicates:",
+ opts:["Strong unit economics","Negative unit economics","Break-even","High valuation"],
+ correct:1,
+ why:["Costs exceed revenue per unit — not strong.","Spending ₹600 to earn ₹500 is a negative per-customer contribution.","₹500 ≠ ₹600, so not break-even.","Says nothing about valuation."],
+ tested:"That unit economics compares per-customer revenue to the cost to acquire/serve.",
+ recall:"<b>Unit economics</b>: revenue per unit vs cost to make/deliver/acquire. CLV = (revenue × contribution margin)/churn; compare CLV/CAC."},
+
+/* ===================== ger_m4 ===================== */
+{mod:"ger_m4",topic:"Structuring goal",diff:2,
+ stem:"What does 'structuring' a financing package primarily aim to do?",
+ opts:["Just set the share price","Design the whole package (instrument, control, incentives, protections) to realise the investor's return while leaving founders enough incentive — aligning interests under uncertainty","Maximise the investor's return only","Minimise legal paperwork"],
+ correct:1,
+ why:["It's far more than price.","Good structuring aligns interests so both prosper from success, mitigating uncertainty/valuation gaps.","It must also keep founders incentivised.","It's about economics/control, not paperwork volume."],
+ tested:"That structuring designs the whole package to align interests, not just price.",
+ recall:"<b>Structuring</b>: design terms to realise the investor's return AND leave founders/employees incentive — aligning interests under uncertainty."},
+
+{mod:"ger_m4",topic:"Investor goals",diff:2,
+ stem:"In structuring a deal, an investor typically wants three things:",
+ opts:["Return only","Rate of return, liquidity (ability to convert to cash), and contractual control over key decisions","Return and free office space","Control and nothing else"],
+ correct:1,
+ why:["Investors want more than return.","Return + liquidity (central in illiquid early-stage) + control over key decisions.","Office space isn't a structuring goal.","Return and liquidity matter too."],
+ tested:"The investor's triad: return, liquidity, control.",
+ recall:"Investors want <b>return, liquidity, control</b>. Founders vary between wealth (rich) and control (king)."},
+
+{mod:"ger_m4",topic:"Factors affecting structure",diff:2,
+ stem:"A Category I AIF (early-stage VC) faces which key SEBI requirement that shapes deal structure?",
+ opts:["It may invest its whole corpus in one company","It must invest predominantly in venture-capital undertakings / unlisted early-stage ventures, with single-company caps","It is regulated by the RBI","It must invest only in listed equity"],
+ correct:1,
+ why:["A single-company cap (25%) forbids this.","Cat I AIFs target early-stage/innovation, must hold the bulk in unlisted VC undertakings, with risk-spreading caps.","AIFs are SEBI-regulated.","They invest in unlisted, not listed, equity."],
+ tested:"How AIF/SEBI rules (Cat I, unlisted focus, caps) constrain structuring.",
+ recall:"Structuring is shaped by taxation (e.g. the repealed angel tax), <b>regulation</b> (SEBI AIF rules — Cat I ≥75% in VC undertakings), leaving room for future investors, and ESOP provision."},
+
+{mod:"ger_m4",topic:"Performance-linked convertible",diff:2,
+ stem:"A convertible's conversion price is tied to the company's actual performance. What can it be based on?",
+ opts:["Only a fixed pre-agreed number","PBT, sales, milestones, or a discount to the next round's price","Only the founder's salary","Only the market index"],
+ correct:1,
+ why:["It need not be a single fixed number.","Performance can be measured by profit, sales (pre-profit firms), milestones, or a next-round discount — incentivising the founder.","Salary isn't a basis.","Not an index."],
+ tested:"That performance-linked conversion can use PBT/sales/milestones/discount, incentivising the founder.",
+ recall:"<b>Convertible mechanism</b>: conversion price linked to PBT/sales/milestones or a discount to the next round — better performance → higher price → less founder dilution."},
+
+{mod:"ger_m4",topic:"Warrants & options",diff:1,
+ stem:"In a financing with warrants, who can exercise them and when?",
+ opts:["Only the investor, always","Either party — the founder if the firm outperforms (buy cheap shares to raise their stake), the investor if it underperforms","Only the founder, always","Neither — warrants are decorative"],
+ correct:1,
+ why:["Not investor-only.","Warrants let either side adjust holdings by performance — founder exercises on outperformance, investor on underperformance.","Not founder-only.","Warrants have real economic effect."],
+ tested:"That warrants let either party adjust holdings based on performance.",
+ recall:"<b>Warrants/options</b>: a right to buy shares at a low/fixed price; founder exercises if the firm outperforms, investor if it underperforms — a non-convertible performance lever."},
+
+{mod:"ger_m4",topic:"Types of convertibles",diff:2,
+ stem:"Which statement about convertible instruments is correct?",
+ opts:["Compulsorily and optionally convertible are the same","Compulsorily convertible MUST convert; optionally convertible MAY convert or be redeemed — and convertible preference is usually cleaner for the company than convertible debt","A convertible loan is always best for the company","Preference dividends are never cumulative"],
+ correct:1,
+ why:["They differ on whether conversion is mandatory.","CCPS/CCD must convert; optionally convertible can redeem; convertible preference avoids court-as-loan risk.","Convertible preference (cleaner balance sheet) is usually better for the company.","Preference can be cumulative or non-cumulative."],
+ tested:"Compulsorily vs optionally convertible, and convertible preference vs debt.",
+ recall:"<b>Compulsorily</b> convertible must convert; <b>optionally</b> may convert/redeem. Convertible preference is usually cleaner for the company; dividends can be cumulative or not."},
+
+{mod:"ger_m4",topic:"Term-sheet staging",diff:1,
+ stem:"A term sheet says funds will be disbursed in tranches tied to milestones. This staging is:",
+ opts:["Uncommon and unconditional","Common — disbursement can depend on hitting performance milestones","Illegal","Only for debt, never equity"],
+ correct:1,
+ why:["Milestone staging is common.","Tranches tied to milestones let investors release capital as risk reduces.","It's a standard, legal practice.","It applies to equity rounds too."],
+ tested:"That staged disbursement tied to milestones is common and conditional.",
+ recall:"Term-sheet contents include deal terms, <b>staging/tranches tied to milestones</b>, information/governance rights, minority protection, exit expectations, and the binding no-shop clause."},
+
+{mod:"ger_m4",topic:"Board observer",diff:1,
+ stem:"A foreign investor takes a board OBSERVER seat instead of a director seat. What can the observer do?",
+ opts:["Vote on board resolutions","Attend and monitor, but NOT vote — chosen to avoid director liability","Appoint the CEO unilaterally","Override shareholder votes"],
+ correct:1,
+ why:["Observers don't vote.","An observer attends/monitors without a vote (and without director fiduciary liability); only a director votes.","CXO appointments aren't an observer's unilateral power.","Observers can't override votes."],
+ tested:"That a board observer attends but does not vote (unlike a director).",
+ recall:"<b>Board rights</b>: a director votes and owes fiduciary duty; an <b>observer</b> attends but cannot vote. Information rights are for monitoring, not managing."},
+
+{mod:"ger_m4",topic:"Reserved matters",diff:2,
+ stem:"A minority investor (30%) negotiates 'reserved matters'. What do these do, and how should the list be sized?",
+ opts:["Give proportional control of all decisions; make the list as long as possible","Grant a veto over specified key decisions (new shares, AOA changes, major asset sales); keep the list TIGHT to company-critical actions","Let the investor run daily operations","Remove the founder's board seat"],
+ correct:1,
+ why:["Proportional votes don't give a minority control; and an overlong list paralyses the firm.","Reserved matters = veto over enumerated critical decisions; keep them tight so the company isn't slowed.","They're a brake, not operational control.","They don't remove the founder."],
+ tested:"That reserved matters are a tight veto list over key decisions, protecting a minority.",
+ recall:"<b>Reserved matters</b> (minority protection): positive-consent veto over key actions (issue shares, amend AOA/MOA, borrow above limits, sell major assets). Keep tight."},
+
+{mod:"ger_m4",topic:"Put vs call asymmetry",diff:2,
+ stem:"A term sheet gives the investor a PUT option (force the company/founder to buy its shares) but gives the founder no reciprocal CALL. This reflects:",
+ opts:["A drafting error","Investor bargaining power — exit terms are often asymmetric (a put without a founder call)","An illegal clause","That founders and investors share the same exit horizon"],
+ correct:1,
+ why:["It's deliberate, not an error.","Investors with leverage often secure a put without giving a reciprocal call, because their exit horizon differs from the founder's.","Such asymmetric options are standard and legal.","Their exit horizons differ (fund life vs build forever)."],
+ tested:"Exit-term asymmetry (put without call) reflecting bargaining power and differing horizons.",
+ recall:"<b>Exit terms</b>: investors need to exit within fund life; founders may hold forever. A <b>put</b> (force a buyback) often comes without a reciprocal founder <b>call</b>."},
+
+{mod:"ger_m4",topic:"Liquidation preference (compute)",diff:3,calc:true,
+ stem:"An investor put ₹15 crore for a 25% stake with a 1x PARTICIPATING liquidation preference. The company exits with ₹100 crore of proceeds. Payout?",
+ opts:["₹25 crore","₹36.25 crore","₹15 crore","₹40 crore"],
+ correct:1,
+ why:["₹25cr is the pro-rata 25%, ignoring the preference.","1×15 + 0.25×(100−15) = 15 + 21.25 = ₹36.25cr.","₹15cr is only the preference (forgets participation).","₹40cr over-applies."],
+ tested:"Participating preference = multiple AND pro-rata of the remainder.",
+ recall:"<b>participating = multiple×inv + ownership%×(proceeds − multiple×inv).</b>",
+ work:"preference = 1×15 = 15. remainder = 100 − 15 = 85. participation = 0.25×85 = 21.25. total = <b>₹36.25cr</b>."},
+
+{mod:"ger_m4",topic:"Anti-dilution method",diff:2,
+ stem:"Comparing anti-dilution methods, which statement is correct?",
+ opts:["Broad-based weighted average protects the investor more than full ratchet","Full ratchet gives the MOST protection (resets to the new low price); broad-based weighted average gives the LEAST (most founder-friendly)","Full ratchet keeps the original conversion price","Weighted average ignores the down-round price"],
+ correct:1,
+ why:["Reversed — full ratchet is the strongest protection.","Full ratchet resets 1:1 to the new low; broad-based weighted average (includes options/ESOP) softens it most.","Full ratchet resets to the new low price, not the original.","Weighted average blends old and new prices."],
+ tested:"Ranking anti-dilution protection: full ratchet (most) vs broad-based weighted average (least).",
+ recall:"<b>Full ratchet</b>: reset to new low price (max protection). <b>Weighted average</b>: re-price between old/new; broad-based (incl. ESOP) = least protection, most founder-friendly."},
+
+/* ===================== ger_m5 ===================== */
+{mod:"ger_m5",topic:"Why exits matter",diff:1,
+ stem:"Exits matter to whom, and why?",
+ opts:["Only investors, for returns","Both investors (return capital to LPs, liquidity) and founders (diversification, liquidity) — and without reliable exits, investors won't invest","Only founders","Neither — exits are incidental"],
+ correct:1,
+ why:["Founders need exits too.","Investors must return capital within fund life; founders need to diversify wealth locked in one company; reliable exits attract investment.","Investors need exits as well.","Exits are central, not incidental."],
+ tested:"That exits matter to founders (diversification) as well as investors, and underpin willingness to invest.",
+ recall:"<b>Exits</b>: investors need liquidity/return to LPs; founders need diversification. Without reliable exit mechanisms, investors are reluctant to invest."},
+
+{mod:"ger_m5",topic:"Exit routes order",diff:2,
+ stem:"From most to least preferred, the main exit routes are:",
+ opts:["Buyback → trade sale → IPO → secondary","IPO → secondary sale → trade sale → buyback → self-liquidating","Trade sale → IPO → buyback → secondary","Self-liquidating → buyback → IPO → trade sale"],
+ correct:1,
+ why:["Buyback is least common in India, not first.","IPO (capital appreciation, visibility) is most preferred; buyback/self-liquidating least.","Trade sale ranks below IPO.","Reversed."],
+ tested:"The exit preference ordering.",
+ recall:"<b>IPO → secondary → trade sale → buyback → self-liquidating.</b> Not all routes suit every company."},
+
+{mod:"ger_m5",topic:"IPO fundamentals",diff:2,
+ stem:"At an IPO, an existing investor sells via an 'offer for sale' (OFS). At what price do those shares sell?",
+ opts:["The post-listing trading price","The book-built IPO price (aftermarket sales use the trading price)","Face value","A price set by the RBI"],
+ correct:1,
+ why:["Aftermarket (post-listing) sales use the trading price, not OFS.","OFS shares sell at the book-built IPO price; selling later in the market uses the trading price.","Not face value.","Pricing is book-built, SEBI-regulated, not RBI-set."],
+ tested:"Distinguishing OFS (IPO price) from aftermarket sales (trading price).",
+ recall:"<b>IPO</b>: price set by book-building; OFS sells at the IPO price; aftermarket sales use the trading price. Prized for capital appreciation and visibility."},
+
+{mod:"ger_m5",topic:"IPO realities",diff:1,
+ stem:"Which statement about the IPO process is correct?",
+ opts:["A company can IPO within a few weeks","From board approval to completion takes ~8–12 months, needs a SEBI-cleared (D)RHP and a merchant banker, and increases ongoing compliance","Listing reduces compliance and disclosure","No prospectus is required"],
+ correct:1,
+ why:["It takes the better part of a year.","RHP (~450–500 pages), SEBI clearance, mandatory merchant banker, roadshow, ~7–10% cost, and more post-listing compliance.","Listing increases compliance and disclosure.","A (Draft) Red Herring Prospectus is mandatory."],
+ tested:"The time/cost/compliance realities of an IPO.",
+ recall:"<b>IPO</b>: ~8–12 months, (D)RHP cleared by SEBI, mandatory merchant banker, roadshow, ~7–10% cost, and heavier ongoing governance/disclosure."},
+
+{mod:"ger_m5",topic:"Trade sale vs secondary",diff:2,
+ stem:"A strategic acquirer buys a start-up to get its technology and customers, wanting 100% — and forces minority holders to sell. The route and the clause are:",
+ opts:["Secondary purchase; tag-along","Trade sale / strategic acquisition; drag-along","Buyback; ROFR","IPO; lock-in"],
+ correct:1,
+ why:["A secondary is a financial buyer of existing shares, with no strategic motive.","A strategic buyer wanting 100% triggers a drag-along to force minorities into the deal.","Buyback is the company/promoter repurchasing.","Not an IPO."],
+ tested:"Trade sale (strategic, wants majority → drag-along) vs secondary (financial buyer).",
+ recall:"<b>Trade sale</b>: strategic acquirer (tech/customers), often wants 100% → drag-along. <b>Secondary</b>: financial buyer of existing shares. Both usually realise less than an IPO."},
+
+{mod:"ger_m5",topic:"Buyback cap",diff:2,
+ stem:"A 30% investor wants to fully exit through a company buyback. Under the Companies Act, this is:",
+ opts:["Allowed — companies may buy back any %","Not fully possible — a company cannot buy back more than 25% of its share capital","Allowed only after an IPO","The most common Indian exit"],
+ correct:1,
+ why:["There is a statutory cap.","A company buyback ≤ 25% of share capital, so a 30% holder can't fully exit this way.","No IPO precondition.","Buyback is the least common Indian exit."],
+ tested:"The 25% company-buyback cap.",
+ recall:"Company <b>buyback ≤ 25%</b> of share capital (ss. 68–69); shares usually extinguished. Promoter buyback fits a failed company or a promoter raising control."},
+
+{mod:"ger_m5",topic:"Self-liquidating instruments",diff:1,
+ stem:"In a market where IPOs and trade sales are unreliable, an investor funds a profitable firm via preference shares redeemed from the firm's own cash flow (e.g. 3–4x over 5 years). These are:",
+ opts:["Instruments needing an IPO to pay out","Self-liquidating instruments — repaid from cash flow without an exit event, used in underdeveloped markets","Only for highly developed markets","A type of equity with voting control"],
+ correct:1,
+ why:["The point is they don't need an exit event.","Redeemed from cash flow precisely because no reliable IPO/trade-sale exit exists.","They're for underdeveloped markets, not developed.","They're quasi-equity repaid from cash flow, not voting equity."],
+ tested:"That self-liquidating instruments are repaid from cash flow (no exit event), for underdeveloped markets.",
+ recall:"<b>Self-liquidating instruments</b> (preference/convertible loans redeemed from cash flow): used where IPO/trade-sale exits are unreliable."},
+
+{mod:"ger_m5",topic:"Private-market opacity",diff:1,
+ stem:"How do founders learn the prevailing valuations, terms and investor preferences in early-stage funding?",
+ opts:["From public databases — terms are fully disclosed","Through networking (conferences, peer conversations) — the private market is opaque and terms are confidential","From SEBI filings","They can't, so they shouldn't try"],
+ correct:1,
+ why:["Early-stage terms are private, not public.","The opaque private market means founders learn shifting preferences/terms via networks.","Private deal terms aren't in SEBI filings.","Founders should network to learn — but not over-optimise fundraising."],
+ tested:"That the early-stage market is opaque, so networking is how founders learn terms.",
+ recall:"Early-stage funding is private/opaque; learn terms via <b>networking</b>. Don't over-optimise dilution at the cost of running the business."},
+
+/* ===================== ger_m6 ===================== */
+{mod:"ger_m6",topic:"Benefit vs features",diff:1,
+ stem:"A founder's pitch leads with detailed product specifications. What's the core mistake?",
+ opts:["Nothing — specs prove credibility","Pitch the customer BENEFIT and the problem solved, not feature specs — leading with specs is a common founder error","Add even more specifications","Hide the specifications entirely"],
+ correct:1,
+ why:["Specs alone don't make the case.","Investors buy the benefit/problem-solving and market, not a spec list.","More specs worsen it.","The point is to lead with benefit, not to hide detail."],
+ tested:"That a pitch leads with customer benefit, not features.",
+ recall:"<b>Investment criteria</b>: lead with the problem/benefit (not features), market size, competition/defensibility, unit economics, money needed, exit, and team."},
+
+{mod:"ger_m6",topic:"Growth vs early-stage pitch",diff:2,
+ stem:"How should a growth/expansion-stage pitch differ from an early-stage one?",
+ opts:["They should be identical","Emphasise expansion headroom, competition for market share, realised (not pen-and-paper) unit costs, existing-investor support and a leadership/staffing plan","Hide the existing investors","Drop all financial detail"],
+ correct:1,
+ why:["The audience and proof points differ by stage.","Growth pitches stress realised metrics, headroom and continued backing by existing investors (a strong vote of confidence).","Existing-investor support is a selling point, not to hide.","Growth pitches need more, not less, realised financial detail."],
+ tested:"That growth-stage pitches emphasise realised metrics, headroom and existing-investor backing.",
+ recall:"Growth-stage pitch: expansion headroom, market-share competition, <b>realised</b> unit costs, existing investors re-backing you, and a staffing plan — unlike an early-stage pitch."},
+
+{mod:"ger_m6",topic:"Integrity in pitching",diff:1,
+ stem:"A founder's traction slide shows some metrics that missed plan. The best approach is to:",
+ opts:["Hide the misses to look stronger","Discuss the deviations honestly — it conveys integrity and reflectiveness to investors","Blame the market and move on","Remove the traction slide"],
+ correct:1,
+ why:["Hiding misses erodes trust and surfaces in diligence.","Honest discussion of what deviated from plan builds investor confidence in the founder.","Deflecting blame reads poorly.","Traction (incl. honest setbacks) is exactly what investors want to see."],
+ tested:"That candour about setbacks conveys integrity in a pitch.",
+ recall:"A strong pitch includes <b>traction with honest deviations</b> from plan — integrity matters more than a flawless story."},
+
+{mod:"ger_m6",topic:"Defensibility",diff:2,
+ stem:"An investor asks 'what stops a bigger rival from copying you?' (OYO vs Stayzilla). The founder must demonstrate:",
+ opts:["First-mover advantage, so competition can be ignored","Defensibility — product/lock-in/pricing moats and an answer on competition","A long feature list","That the market is tiny"],
+ correct:1,
+ why:["First-mover status doesn't stop imitators (Stayzilla lost to OYO).","Investors require a credible moat and a competition answer.","Features aren't a moat.","A tiny market is a negative, not defensibility."],
+ tested:"That founders must show defensibility/competition answers, not rely on first-mover advantage.",
+ recall:"<b>Defensibility</b>: product, lock-in, pricing moats. First-mover advantage doesn't prevent incumbents/imitators (OYO vs Stayzilla)."},
+
+/* ===================== ger_m7 ===================== */
+{mod:"ger_m7",topic:"LLP",diff:2,
+ stem:"Which statement about a Limited Liability Partnership (LLP) is correct?",
+ opts:["It has unlimited liability like a partnership firm","It is a separate legal entity with limited liability, registered with the MCA, and does NOT require an AGM","It must hold an Annual General Meeting","It cannot own property in its own name"],
+ correct:1,
+ why:["An LLP gives limited liability, unlike a general partnership.","Separate entity, limited liability (to contribution), MCA-registered, lighter compliance, no AGM.","An LLP does not require an AGM (a company does).","It can own property and sue independently."],
+ tested:"LLP basics: separate entity, limited liability, no AGM.",
+ recall:"<b>LLP</b> (LLP Act 2008): separate legal entity, limited liability, MCA-registered, lighter compliance, no AGM; hard to raise formal equity (no shares)."},
+
+{mod:"ger_m7",topic:"OPC",diff:1,
+ stem:"A One Person Company (OPC) differs from a sole proprietorship because it:",
+ opts:["Has unlimited liability","Has separate legal status, perpetual succession and limited liability for its single member","Needs at least two members","Cannot be incorporated by an NRI"],
+ correct:1,
+ why:["An OPC gives limited liability.","Unlike a sole prop, it is a separate entity with perpetual succession and limited liability.","An OPC has a single member by definition.","An Indian citizen (resident or NRI) can incorporate one."],
+ tested:"OPC vs sole proprietorship: separate status, perpetual succession, limited liability.",
+ recall:"<b>OPC</b>: single-member private company with separate legal status, perpetual succession, limited liability (cannot do NBFC activity or be Section 8)."},
+
+{mod:"ger_m7",topic:"DSC / DIN",diff:1,
+ stem:"During incorporation, what is the Digital Signature Certificate (DSC) primarily for?",
+ opts:["Paying salaries online","Online filing of documents with the Ministry of Corporate Affairs (MCA)","Hiring employees","Internal non-statutory reviews"],
+ correct:1,
+ why:["Not for payroll.","The DSC (in a USB token, valid under the IT Act) signs MCA e-filings.","Not for hiring.","Not for internal reviews."],
+ tested:"The DSC's purpose (signing MCA online filings).",
+ recall:"Incorporation needs a <b>DSC</b> (sign MCA filings), <b>DIN</b> (lifetime director ID), a registered office (INC-22) and MOA/AOA; companies file SPICe+, LLPs file FiLLiP."},
+
+{mod:"ger_m7",topic:"Post-incorporation compliance",diff:2,
+ stem:"After incorporation, by when must a company issue share certificates to allottees, and is an AGM mandatory?",
+ opts:["Within 6 months; AGM optional","Within 60 days of allotment; and yes, an AGM is mandatory for a company (not an LLP)","Within 1 year; AGM only if profitable","No deadline; AGM never required"],
+ correct:1,
+ why:["The deadline is 60 days, and the AGM is mandatory.","Share certificates within 60 days of allotment; an AGM is mandatory for a company (first within 9 months of FY close).","Profitability is irrelevant to the AGM duty.","There are firm deadlines and AGM duties."],
+ tested:"Post-incorporation timelines (60-day share certificates) and the company AGM requirement.",
+ recall:"Post-incorporation: board meeting in 30 days, INC-20A before operating, <b>share certificates within 60 days</b>, auditor in 30 days, AGM mandatory (company, not LLP)."},
+
+{mod:"ger_m7",topic:"DPIIT",diff:1,
+ stem:"DPIIT start-up registration is primarily for:",
+ opts:["Paying tax early","Start-up recognition, promotion and access to government benefits (and it is optional)","Mandatory audit compliance","Hiring employees"],
+ correct:1,
+ why:["It's not about early tax payment.","Optional recognition unlocking self-certification, convertible notes, ESOPs to promoters, the borrowing-cap exemption and tax holidays.","It eases, not adds, compliance.","Not a hiring tool."],
+ tested:"That DPIIT is optional recognition unlocking benefits (and split entities are ineligible).",
+ recall:"<b>DPIIT</b> (optional): self-certification, convertible notes, ESOPs to promoters, exemption from the 100%-of-capital borrowing cap (5 yrs), tax holidays. Not for split/reconstructed entities."},
+
+{mod:"ger_m7",topic:"MSME (UDYAM)",diff:1,
+ stem:"Which statement about MSME (UDYAM) registration is correct?",
+ opts:["It is costly and renewed annually","It is free and one-time, and gives a 45-day payment-protection rule for MSME dues","It bans the firm from taking bank loans","It replaces incorporation"],
+ correct:1,
+ why:["UDYAM is free, one-time, no renewal.","Free/one-time, easier loans, and buyers must pay MSME dues within 45 days (Form MSME-1).","It improves loan access, not bans it.","It doesn't replace incorporation."],
+ tested:"MSME registration: free/one-time and the 45-day payment protection.",
+ recall:"<b>MSME (UDYAM)</b>: free, one-time, no renewal; easier/cheaper loans, subsidies, and a 45-day buyer-payment rule (delays via Form MSME-1)."},
+
+{mod:"ger_m7",topic:"Resolutions",diff:1,
+ stem:"Raising funds via a preferential allotment / private placement requires which resolution?",
+ opts:["An ordinary resolution (>50%)","A special resolution (75% majority)","No resolution, just board minutes","A unanimous resolution"],
+ correct:1,
+ why:["Routine matters use ordinary resolutions.","Private placement, raising authorised capital, convertible notes and AOA amendments need a 75% special resolution (file MGT-14).","Shareholder approval is required, not just the board.","75%, not unanimity."],
+ tested:"Ordinary (>50%) vs special (75%) and which actions need a special resolution.",
+ recall:"<b>Special resolution = 75%</b> for private placement, authorised-capital hikes, convertible notes, AOA amendments (file MGT-14 in 30 days). Ordinary = >50%."},
+
+{mod:"ger_m7",topic:"Funding stages",diff:1,
+ stem:"Which source most suitably funds the proof-of-concept stage of a high-risk, high-growth start-up?",
+ opts:["An IPO","Angel investors","A bank term loan","A corporate loan"],
+ correct:1,
+ why:["IPO needs scale/compliance.","Angels (and family/friends/grants) suit the earliest, riskiest stage.","Banks rarely lend to risky early start-ups.","Corporate loans don't fund PoC risk."],
+ tested:"Matching the funding source to the proof-of-concept stage (angels, not banks/IPO).",
+ recall:"Stages: pre-seed (F&amp;F, grants), seed (angels/HNIs), Series A (institutional VC). <b>Angels suit PoC</b>; banks/IPO do not."},
+
+{mod:"ger_m7",topic:"Payout hierarchy",diff:2,
+ stem:"In the payout queue, where do ordinary equity shareholders stand?",
+ opts:["Paid before preference shareholders","They are the residual claimants — paid AFTER preference shareholders, and bear the highest risk","Paid before lenders","Guaranteed a fixed coupon"],
+ correct:1,
+ why:["Equity ranks after preference, not before.","Equity is the residual claimant: highest risk, paid last (dividend after preference).","Lenders rank ahead of equity.","Equity has no fixed coupon."],
+ tested:"The payout hierarchy — equity is the residual claimant (after debt and preference).",
+ recall:"Payout order: debt → preference → <b>equity (residual claimant, highest risk)</b>. Equity dividends come after preference."},
+
+{mod:"ger_m7",topic:"Borrowing compliance",diff:2,
+ stem:"Which statement about a private company's borrowing is correct?",
+ opts:["It can freely borrow from friends and family","It generally cannot borrow from friends/family (unless they become shareholders); director loans are an 'exempted deposit' (no specific limit, board approval + declaration)","Director loans count toward the 100%-of-capital borrowing cap","It can take public deposits freely"],
+ correct:1,
+ why:["Friends/family borrowing is generally not allowed unless they're shareholders.","Director loans are exempted deposits (reported in DPT-3); the shareholder-borrowing cap (100% of capital+reserves, DPIIT-exempt 5 yrs) doesn't apply to them.","The cap is on shareholder borrowings, not director loans.","Private companies can't take public deposits."],
+ tested:"Borrowing rules: no friends/family loans (unless shareholders); director loans are exempted deposits.",
+ recall:"Shareholder borrowing capped at 100% of (capital+reserves+premium) — DPIIT-exempt 5 yrs. <b>Director loans = exempted deposit</b>; no friends/family loans unless they become shareholders."},
+
+{mod:"ger_m7",topic:"Convertible note",diff:2,
+ stem:"A DPIIT-registered start-up needs urgent funds and wants to defer valuation. The convertible note's key rules are:",
+ opts:["Any start-up can issue one for any amount, with a valuation report at issue","DPIIT-registered start-ups only, minimum ₹25 lakh per single investor, and NO valuation report at issue (deferred to conversion)","Only listed companies can issue it","It must convert within 1 year"],
+ correct:1,
+ why:["Not any start-up, and a valuation is NOT needed at issue.","CN (2016) is DPIIT-only, ≥₹25 lakh per investor, converts/repays within 10 years, no valuation at issue → fast urgent funding.","It's a private-start-up instrument.","The window is 10 years, not 1."],
+ tested:"Convertible-note eligibility and the no-valuation-at-issue advantage.",
+ recall:"<b>Convertible note</b>: DPIIT start-ups only, ≥₹25 lakh per single investor, convert/repay within 10 yrs, no valuation at issue (deferred to conversion) → urgent, light-compliance funding."},
+
+{mod:"ger_m7",topic:"ESOP eligibility",diff:2,
+ stem:"To whom can a (non-DPIIT) private company grant ESOPs, and what's the vesting rule?",
+ opts:["Anyone, vesting immediately on grant","Permanent employees/directors — but NOT promoters, independent directors or >10% holders (unless a DPIIT start-up); minimum 1-year vesting from grant","Only promoters, with no vesting period","Only independent directors"],
+ correct:1,
+ why:["Not anyone, and not immediate.","ESOPs go to permanent employees/directors; promoters/independent directors/>10% holders are barred unless DPIIT-registered; ≥1-year cooling before exercise.","Promoters are barred (unless DPIIT).","Independent directors are barred."],
+ tested:"ESOP eligibility bars (promoters/independent directors unless DPIIT) and the 1-year vesting.",
+ recall:"<b>ESOP</b>: for permanent employees/directors; <b>barred</b> to promoters/independent directors/>10% holders unless DPIIT (exempt 10 yrs); minimum 1-year vesting. Lifecycle: grant → vest → exercise → sell."},
+
+/* ===================== ger_m8 ===================== */
+{mod:"ger_m8",topic:"Choosing a structure",diff:2,
+ stem:"Why does the choice of business structure matter so much, and which form best suits repeated equity fundraising?",
+ opts:["It's easy to change later, so it barely matters","It's hard to pivot later and drives liability/tax/funding/governance — the private limited company is best for raising equity from investors","All structures raise equity equally well","A partnership firm is best for VC funding"],
+ correct:1,
+ why:["Pivoting structures midway is difficult.","The choice is sticky and shapes liability/funding; companies win for equity raises.","Proprietorships/partnerships deter investors.","Investors avoid partnership firms."],
+ tested:"That structure is hard to change and the private limited company is best for equity fundraising.",
+ recall:"<b>Structure</b> drives liability, tax, funding, governance, succession — hard to pivot. Private limited company = the standard vehicle for funded start-ups."},
+
+{mod:"ger_m8",topic:"Sole proprietorship",diff:1,
+ stem:"Which statement about a sole proprietorship is correct?",
+ opts:["It has limited liability","It has unlimited personal liability and cannot raise equity from investors","It is a separate legal entity","It has perpetual succession"],
+ correct:1,
+ why:["It has unlimited liability.","Proprietor and business are the same person: unlimited liability, no equity investors (only personal/bank finance).","No separate legal status.","It ends if the proprietor dies/retires."],
+ tested:"Sole-proprietorship traits: unlimited liability, not investable, no separate identity.",
+ recall:"<b>Sole proprietorship</b>: same as the proprietor — unlimited liability, no separate status, no perpetual succession, can't raise equity. Good only for testing an idea."},
+
+{mod:"ger_m8",topic:"Partnership firm",diff:2,
+ stem:"Which statement about a partnership firm is correct?",
+ opts:["It has a separate legal identity from its partners","It has no separate identity and unlimited liability; registration is OPTIONAL but an unregistered firm cannot sue third parties","Registration is mandatory","Partners have limited liability"],
+ correct:1,
+ why:["A partnership firm has no separate legal identity.","No separate identity, unlimited liability; registration is optional but unregistered firms can't sue third parties or claim set-off.","Registration is optional (but recommended).","Partners face unlimited liability."],
+ tested:"Partnership-firm traits: no separate identity, unlimited liability, optional (but recommended) registration.",
+ recall:"<b>Partnership firm</b> (1932 Act): 2–20 partners, no separate identity, unlimited liability; registration optional but unregistered firms can't sue third parties."},
+
+{mod:"ger_m8",topic:"Private limited cap",diff:1,
+ stem:"A private limited company is best described by which pair?",
+ opts:["Unlimited shareholders; owners personally liable for all debts","Capped at 200 shareholders; liability limited to unpaid share capital (veil lifts only for fraud)","No shareholder cap; unlimited liability","Capped at 50 shareholders; no separate identity"],
+ correct:1,
+ why:["It has a 200-shareholder cap and limited liability.","Max 200 shareholders (beyond → public company); shareholders' liability is limited to unpaid capital.","It is capped and has limited liability.","The cap is 200, and it is a separate entity."],
+ tested:"The 200-shareholder cap and limited liability of a private limited company.",
+ recall:"<b>Private limited company</b>: separate entity, limited liability (veil lifts for fraud), perpetual succession, ≤200 shareholders, heaviest compliance — best for funded start-ups."},
+
+{mod:"ger_m8",topic:"SHA vs AOA",diff:2,
+ stem:"An investor insists the shareholders' agreement (SHA) be incorporated into the company's Articles. Why?",
+ opts:["The SHA automatically overrides the Articles","Because the AOA SUPERSEDES the SHA — so SHA terms must be written into the AOA or they're toothless","The SHA and AOA are identical","Articles cannot be amended"],
+ correct:1,
+ why:["The SHA does not automatically override the AOA.","Since the AOA prevails, SHA provisions must be folded into the AOA to be enforceable.","They are distinct documents.","The AOA can be amended via Companies Act procedures."],
+ tested:"That the AOA supersedes the SHA, so SHA terms must be incorporated into the AOA.",
+ recall:"<b>SHA</b> = founder-investor rulebook; <b>SSA</b> = new shares; <b>SPA</b> = existing shares. The <b>AOA supersedes the SHA</b> — fold SHA terms into the AOA."},
+
+{mod:"ger_m8",topic:"ROFR vs ROFO",diff:2,
+ stem:"Under a Right of First Refusal (ROFR), how does the price get set?",
+ opts:["The ROFR holder names a price first, then the seller tests the market","The seller first obtains a market offer, then must offer the shares to the holder at that price","The company sets a fixed statutory price","No price is involved"],
+ correct:1,
+ why:["That describes ROFO, not ROFR.","ROFR: seller gets a market price first, then offers it to the holder; ROFO: holder names a price first.","Price is negotiated/market-driven, not statutory.","Price is central to both."],
+ tested:"ROFR (market price first → offer to holder) vs ROFO (holder names price first).",
+ recall:"<b>ROFR</b>: market offer first, then offer to the holder (investor-preferred). <b>ROFO</b>: holder names a price first. Tag-along = minority joins; drag-along = majority forces a sale."},
+
+{mod:"ger_m8",topic:"AIF fund structure",diff:2,
+ stem:"Which statement about an Indian VC fund (Category I AIF) is correct?",
+ opts:["Regulated by the RBI; mainly invests in listed firms","Regulated by SEBI; must hold ≥2/3 of corpus in unlisted equity and ≤25% in a single company; earns ~2% fee + ~20% carry","Can put its whole corpus into one company","Cannot charge any fees"],
+ correct:1,
+ why:["AIFs are SEBI-regulated and invest in unlisted equity.","Cat I AIF: ≥₹5cr corpus, ≥2/3 unlisted, ≤25% per company; LP-funded; ~2% management fee + ~20% carried interest.","The 25% cap forbids this.","Funds charge a fee plus carry."],
+ tested:"AIF regulator (SEBI) and the Cat-I limits (≥2/3 unlisted, ≤25% single company) plus fee+carry.",
+ recall:"<b>VC = Category I AIF, SEBI-regulated</b>: ≥₹5cr corpus, ≥2/3 unlisted equity, ≤25% in one company; LP capital; ~2% fee + ~20% carry; pass-through tax."},
+
+{mod:"ger_m8",topic:"Contract lifecycle",diff:2,
+ stem:"Negotiating a customer contract, an Indian founder should:",
+ opts:["Accept unlimited liability to win the deal and choose foreign governing law","Negotiate a liability CAP linked to fees and choose Indian law/jurisdiction (easier to fight on home ground)","Leave liability and jurisdiction unspecified","Avoid any termination clause"],
+ correct:1,
+ why:["Unlimited liability can be company-killing; foreign jurisdiction is costly to litigate.","Cap liability to fees and pick Indian law/jurisdiction; negotiate the points of business value (ownership, payment, liability, termination, IP).","Ambiguity invites the worst reading.","Termination terms protect you and must be defined."],
+ tested:"Key contract clauses: cap liability, choose home-jurisdiction law, negotiate the value points.",
+ recall:"<b>CLM</b>: cap liability to fees (avoid unlimited), choose Indian law/jurisdiction, define payment/termination/IP; if a clause reads two ways, assume the worst."},
+
+{mod:"ger_m8",topic:"IP four pillars",diff:2,
+ stem:"A start-up wants to protect a novel, technically inventive manufacturing process. Which IP pillar fits — and what about its app's source code?",
+ opts:["Trademark for the process; patent for the code","Patent for the inventive process; copyright for the code (with an IP-assignment clause so the company owns it)","Design for the process; trademark for the code","Copyright for the process; patent for the code"],
+ correct:1,
+ why:["Trademark is for brand identity, not a process; the code isn't patentable as such.","A novel inventive process → patent; source code → copyright (creator is first owner, so assign it to the company).","Design protects appearance, not a process.","Copyright doesn't protect a process; pure code/algorithms generally aren't patentable."],
+ tested:"Matching IP pillars — patent (invention) vs copyright (code, needs assignment) vs trademark/design.",
+ recall:"<b>Patent</b> = novel invention (not pure algorithms); <b>Copyright</b> = code/content (creator owns it — need an IP-assignment clause); <b>Trademark</b> = brand; <b>Design</b> = appearance."},
+
+{mod:"ger_m8",topic:"Governance case studies",diff:2,
+ stem:"What is the key governance lesson from the Tata-Mistry and Fortis disputes?",
+ opts:["Boards should act on whoever is commercially 'right'","Process and transparency matter — boards may make commercial decisions IF procedures are followed (Tata-Mistry); opaque related-party transactions destroy value (Fortis)","Related-party transactions are fine if the promoter approves","Governance only matters for listed firms"],
+ correct:1,
+ why:["The courts focused on process, not who was commercially right.","Tata-Mistry upheld a removal because process was followed; Fortis collapsed on opaque RPTs — process/transparency are the lesson.","RPTs must be transparent, board-approved and arm's-length.","Governance matters for any multi-stakeholder company."],
+ tested:"Governance lessons: process/transparency over being 'right'; RPTs must be arm's-length.",
+ recall:"<b>Tata-Mistry</b>: boards may decide commercially if process is followed. <b>Fortis</b>: opaque RPTs collapse governance. Good governance applies to any multi-stakeholder company."}
+];
+
+/* ===== engine ===== */
+function showLauncher(){
+  document.getElementById('launcher').style.display='';
+  document.getElementById('test').style.display='none';
+  window.scrollTo({top:0});
+}
+const modlist=document.getElementById('modlist');
+MODULES.forEach(m=>{
+  const n=Q.filter(q=>q.mod===m.id).length;
+  const b=document.createElement('button'); b.className='mcard'; b.onclick=()=>openModule(m.id);
+  b.innerHTML='<div class="mt">'+m.name+'</div><div class="mb">'+m.blurb+'</div><div class="mmeta">'+n+' questions · max '+(n*MARK_RIGHT)+' marks · '+m.time+'</div>';
+  modlist.appendChild(b);
+});
+let CUR=null, state={};
+function openModule(id){
+  CUR=id; state={};
+  const m=MODULES.find(x=>x.id===id);
+  document.getElementById('testTitle').innerHTML=m.name;
+  document.getElementById('launcher').style.display='none';
+  document.getElementById('test').style.display='';
+  document.getElementById('results').classList.remove('show');
+  const list=Q.filter(q=>q.mod===id);
+  document.getElementById('sTot').textContent=list.length;
+  const quiz=document.getElementById('quiz'); quiz.innerHTML='';
+  list.forEach((q,i)=>quiz.appendChild(card(q,i)));
+  updateScore();
+  window.scrollTo({top:0});
+}
+function card(q,i){
+  const el=document.createElement('div'); el.className='q'; el.id='q'+i;
+  const dlabel={1:'Recall',2:'Applied',3:'Hard'}[q.diff];
+  let h='<div class="qhead"><span class="qnum">Q'+(i+1)+'</span><span class="chip topic">'+q.topic+'</span>'+
+        (q.calc?'<span class="chip calc">CALC</span>':'')+'<span class="chip d'+q.diff+'">'+dlabel+'</span></div>';
+  h+='<div class="stem">'+q.stem+'</div><div class="opts">';
+  q.opts.forEach((o,k)=>{ h+='<button class="opt" data-k="'+k+'"><span class="lk">'+'ABCD'[k]+'</span><span>'+o+'</span><span class="mk"></span></button>'; });
+  h+='</div><div class="reveal"><span class="verdict">Answer: '+'ABCD'[q.correct]+'</span>';
+  if(q.work) h+='<div class="work"><b>Working.</b> '+q.work+'</div>';
+  h+='<div class="traps">';
+  q.why.forEach((w,k)=>{ h+='<div class="t'+(k===q.correct?' ok':'')+'"><b>'+'ABCD'[k]+'.</b> '+w+'</div>'; });
+  h+='</div><div class="tested"><b>What\'s really tested:</b> '+q.tested+'</div><div class="recall"><b>Recall:</b> '+q.recall+'</div></div>';
+  el.innerHTML=h;
+  el.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>choose(i,+b.dataset.k,el,q)));
+  return el;
+}
+function choose(i,pick,el,q){
+  if(state[i]!=null) return; state[i]=pick;
+  el.querySelectorAll('.opt').forEach((b,k)=>{
+    b.classList.add('locked');
+    if(k===q.correct){ b.classList.add('correct'); b.querySelector('.mk').textContent='✓'; }
+    else if(k===pick){ b.classList.add('wrong'); b.querySelector('.mk').textContent='✗'; }
+    else b.classList.add('dim');
+  });
+  el.querySelector('.reveal').classList.add('show');
+  updateScore();
+}
+function updateScore(){
+  const list=Q.filter(q=>q.mod===CUR);
+  const keys=Object.keys(state); let right=0;
+  keys.forEach(k=>{ if(state[k]===list[k].correct) right++; });
+  const wrong=keys.length-right;
+  const marks=right*MARK_RIGHT + wrong*MARK_WRONG;
+  document.getElementById('sDone').textContent=keys.length;
+  document.getElementById('sRight').textContent=right;
+  document.getElementById('sWrong').textContent=wrong;
+  const m=document.getElementById('sMarks'); m.textContent=marks; m.className='marks '+(marks<0?'neg':'pos');
+}
+function finish(){
+  const list=Q.filter(q=>q.mod===CUR);
+  const keys=Object.keys(state); let right=0;
+  keys.forEach(k=>{ if(state[k]===list[k].correct) right++; });
+  const wrong=keys.length-right;
+  const marks=right*MARK_RIGHT + wrong*MARK_WRONG;
+  const maxm=list.length*MARK_RIGHT;
+  const pct=Math.round(right/list.length*100);
+  let band,col;
+  if(pct>=80){band='Strong — exam-ready';col='#1a8a4a';}
+  else if(pct>=60){band='Solid — but −1 punishes slips';col='#c47e0a';}
+  else {band='Revise this module';col='#c1392b';}
+  const r=document.getElementById('results');
+  r.innerHTML='<div class="big">'+marks+' / '+maxm+' marks</div><div style="color:#5a6169;font-size:13px;">'+right+' right · '+wrong+' wrong · '+pct+'% correct</div><div class="band" style="background:'+col+'">'+band+'</div>'+
+    (keys.length<list.length?'<div style="color:#c47e0a;font-size:12.5px;margin-top:8px;">('+(list.length-keys.length)+' skipped — under −1 marking, skipping unsure ones is legitimate)</div>':'');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  if(window.Mock){ var lbl=MODULES.find(x=>x.id===CUR).name.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')+' · GER'; Mock.recordResult(lbl, Math.max(0,marks), maxm); }
+}
+showLauncher();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

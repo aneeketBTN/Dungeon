@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Exams — IIMB BBA Term 5</title>
+<meta name="description" content="Practice mock exams: GER, Behavioural Economics, plus NABM, Macroeconomics and New Product Development. MCQs auto-graded; written answers with examiner rubrics.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mock Exams — IIMB BBA Term 5">
+<meta property="og:description" content="GER · Behavioural Economics next. NABM · Macro · NPD still open for practice. Tap to open the exam portal.">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:Arial,"Segoe UI",sans-serif; background:#15171a; color:#e8eaed; min-height:100vh; padding:0 0 40px; }
+  .top { background:#1c1c1c; padding:18px 20px; border-bottom:2px solid #f0a429; }
+  .top .brand { color:#f0a429; font-weight:bold; font-size:20px; }
+  .top .sub { color:#9aa0a6; font-size:13px; margin-top:3px; }
+  .viewtoggle { display:flex; gap:6px; margin-top:12px; max-width:760px; }
+  .viewtoggle button { flex:1; padding:9px 8px; border:1px solid #3a4047; background:#22262b; color:#9aa0a6; border-radius:8px; font-size:12.5px; font-weight:bold; cursor:pointer; transition:background .12s,color .12s; }
+  .viewtoggle button.active { background:#f0a429; color:#1c1c1c; border-color:#f0a429; }
+  .wrap { max-width:760px; margin:0 auto; padding:22px 16px; }
+  .lead { color:#b8bdc4; font-size:14px; line-height:1.6; margin-bottom:20px; }
+  .card { display:block; text-decoration:none; background:#22262b; border:1px solid #31363c; border-radius:12px;
+    padding:18px 18px; margin-bottom:14px; transition:transform .12s, border-color .12s, background .12s; }
+  .card:hover, .card:active { transform:translateY(-2px); border-color:#f0a429; background:#272c32; }
+  .card.hot { border-color:#f0a429; background:#26211a; }
+  .card .row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .card .name { color:#fff; font-size:17px; font-weight:bold; }
+  .card .meta { color:#9aa0a6; font-size:12.5px; margin-top:5px; line-height:1.5; }
+  .pill { background:#2d6fd4; color:#fff; font-size:11px; font-weight:bold; padding:4px 10px; border-radius:20px; white-space:nowrap; }
+  .pill.green { background:#1a8a4a; }
+  .pill.amber { background:#c47e0a; }
+  .pill.red { background:#c1392b; }
+  .pill.tom { background:#f0a429; color:#1c1c1c; }
+  .warn { color:#f0a429; font-weight:bold; }
+  .go { color:#f0a429; font-size:22px; }
+  .tag { display:inline-block; background:#2a2f35; color:#cfd4da; font-size:11px; padding:3px 9px; border-radius:6px; margin:6px 6px 0 0; }
+  .note { background:#1d2226; border-left:3px solid #f0a429; border-radius:6px; padding:12px 14px; margin-top:20px; font-size:13px; color:#b8bdc4; line-height:1.6; }
+  .foot { text-align:center; color:#6b7178; font-size:12px; margin-top:26px; }
+  .sect { color:#fff; font-size:18px; margin:28px 0 4px; scroll-margin-top:12px; }
+  .sect.hot { color:#f0a429; }
+  .nav2 { display:flex; gap:6px; flex-wrap:wrap; margin:4px 0 6px; }
+  .nav2 a { flex:1; min-width:84px; text-align:center; padding:8px 6px; background:#2a2f35; color:#e8eaed; text-decoration:none; border-radius:7px; font-size:12.5px; font-weight:bold; }
+  .nav2 a:hover { background:#2d6fd4; }
+  .grouplab { font-weight:bold; color:#9aa0a6; font-size:13px; margin:14px 0 7px; }
+  .dgrid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .dcard { display:flex; flex-direction:column; gap:3px; background:#22262b; border:1px solid #31363c; border-radius:10px; padding:13px 14px; text-decoration:none; transition:border-color .12s, background .12s; }
+  .dcard:hover { border-color:#34a853; background:#272c32; }
+  .dcard b { color:#fff; font-size:14px; }
+  .dcard span { color:#9aa0a6; font-size:12px; }
+  /* passed-exam banner + grey treatment */
+  .passed-banner { display:none; background:#20242a; border:1px dashed #3a4047; border-radius:9px; padding:11px 14px; margin:8px 0 14px; color:#9aa0a6; font-size:13px; }
+  .passed-banner b { color:#cfd4da; }
+  body.view-tomorrow #earlier { opacity:.5; }
+  body.view-tomorrow #earlier .passed-banner { display:block; }
+  body.view-tomorrow #earlier:hover { opacity:.78; transition:opacity .2s; }
+  body.view-earlier #tomorrow .meta, body.view-earlier #tomorrow .lead-t { display:none; }
+  body.view-earlier #tomorrow .card.hot { padding:11px 14px; }
+  body.view-earlier #tomorrow .sect.hot { font-size:15px; }
+  @media (max-width:600px){ .dgrid { grid-template-columns:1fr; } }
+</style>
+<link rel="stylesheet" href="app.css">
+</head>
+<body class="view-tomorrow" data-theme-base="dark" data-ask-name data-board="lb">
+  <div class="top">
+    <div class="brand">Open Mock</div>
+    <div class="sub">IIMB BBA DBE · Batch 1 · Term 5 — practice portal</div>
+    <div class="viewtoggle">
+      <button id="bt-tom" onclick="setView('tomorrow')">🎯 Tomorrow · GER &amp; Beh-Econ</button>
+      <button id="bt-ear" onclick="setView('earlier')">📚 Earlier exams</button>
+    </div>
+  </div>
+  <div class="wrap">
+
+    <a class="card hot" href="rogue.html" style="border-width:2px;">
+      <div class="row"><span class="name">⚔ The Ascent — flow prototype</span><span class="pill tom">NEW MOCK</span></div>
+      <div class="meta">Try the proposed character → Hall of Doors → mixed-format staircase run → results loop. Placeholder visuals, functional interactions.</div>
+      <div><span class="tag">MCQ</span><span class="tag">Written response</span><span class="tag">Case choice</span><span class="tag">3 Resolve</span></div>
+    </a>
+
+    <div id="lb"></div>
+
+    <!-- ============ TOMORROW'S EXAMS (featured) ============ -->
+    <div id="tomorrow">
+      <h2 class="sect hot" style="margin-top:6px">🎯 Up next — tomorrow's exams</h2>
+      <p class="lead lead-t" style="margin-bottom:12px;">Both are <b>MCQ-only</b>. Drill the statements and situations the examiner can throw at you — verdict, the trap that catches people, and how it shows up in a scenario.</p>
+
+      <div class="card hot">
+        <div class="row"><span class="name">🟦 Behavioural Economics</span><span class="pill tom">30 MCQ · 5M</span></div>
+        <div class="meta">Heuristics &amp; biases, prospect theory, intertemporal choice (β/δ), games &amp; level-k/CH, discrimination &amp; nudges. <b>No negative marking</b> · calculator allowed.</div>
+        <div class="dgrid" style="margin-top:11px;">
+          <a class="dcard" href="discuss_behecon.html"><b>🗣️ Evaluate &amp; Discuss</b><span>44 situational MCQs · trap breakdowns</span></a>
+          <a class="dcard" href="test_behecon.html"><b>📝 Module Tests</b><span>4 chapter mocks · scored</span></a>
+          <a class="dcard" href="formulas_behecon.html"><b>🧮 Formula Sheet</b><span>discounting · prospect · games</span></a>
+          <a class="dcard" href="exam_behecon.html"><b>🎓 Exam Mocks</b><span>3 full papers · 30Q · 90 min timed</span></a>
+          <a class="dcard" href="drill_math.html#be"><b>⚡ Math Drill</b><span>10-min instinct sprint</span></a>
+        </div>
+      </div>
+
+      <div class="card hot">
+        <div class="row"><span class="name">🟪 Generating Entrepreneurial Resources</span><span class="pill tom">25 MCQ · 2M</span></div>
+        <div class="meta">Forms &amp; liability, instruments &amp; rights, valuation &amp; cap-table maths, cash planning, term sheets, IP, compliance. <span class="warn">⚠ Negative marking −1 per wrong</span> — precision matters.</div>
+        <div class="dgrid" style="margin-top:11px;">
+          <a class="dcard" href="discuss_ger.html"><b>🗣️ Evaluate &amp; Discuss</b><span>45 situational MCQs · calc traps</span></a>
+          <a class="dcard" href="test_ger.html"><b>📝 Module Tests</b><span>8 chapter mocks · −1 scored</span></a>
+          <a class="dcard" href="formulas_ger.html"><b>🧮 Formula Sheet</b><span>cap table · valuation · cash</span></a>
+          <a class="dcard" href="exam_ger.html"><b>🎓 Exam Mocks</b><span>4 papers (incl. coverage) · 25Q · 75 min · −1</span></a>
+          <a class="dcard" href="drill_math.html#ger"><b>⚡ Math Drill</b><span>10-min instinct sprint</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ EARLIER EXAMS (passed — still open) ============ -->
+    <div id="earlier">
+      <div class="passed-banner">✓ <b>These exams are done.</b> Everything below stays open for practice — tap any card to revise. Switch to <b>📚 Earlier exams</b> above to bring them back to the front.</div>
+
+    <p class="lead">Tap a paper to open the exam portal. MCQs auto-grade on submit; written answers come with a marker's rubric so you can self-score. Hit <b style="color:#f0a429">📖 Revision Notes</b> in any paper for a break-study sheet.</p>
+    <div class="nav2">
+      <a href="#mocks">📝 Mocks</a><a href="#learn">📚 Learn</a><a href="#discuss">🗣️ Evaluate</a><a href="#speed">⚡ Formulas</a><a href="#recall">🧠 Recall</a>
+    </div>
+
+    <h2 class="sect" id="mocks" style="margin-top:18px">📝 Exam Mocks — timed, exam conditions</h2>
+    <a class="card" href="nabm_test.html">
+      <div class="row"><span class="name">New Age Business Models</span><span class="pill">50 MCQ · 2M</span></div>
+      <div class="meta">Full syllabus — models, platforms, marketplaces, SaaS, FinTech, D2C, creator economy, Web3/ONDC, metric-model mapping.</div>
+      <div><span class="tag">No negative marking</span><span class="tag">Calculator</span></div>
+    </a>
+
+    <a class="card" href="nabm_mock.html">
+      <div class="row"><span class="name">NABM — Formula Drill</span><span class="pill amber">30 Q</span></div>
+      <div class="meta">Progressive metric practice: CLV, NDR, GMV/take rate, ROAS, inventory turnover, RevPAR, conversion, n(n−1)/2.</div>
+      <div><span class="tag">Worked solutions</span></div>
+    </a>
+
+    <a class="card" href="macro_mock.html">
+      <div class="row"><span class="name">Principles of Macroeconomics</span><span class="pill green">4 sections</span></div>
+      <div class="meta">Sec A MCQ + Sec B short + Sec C case (a/b) + Sec D subjective (a/b). 60-min clock. Written answers come with rubrics.</div>
+      <div><span class="tag">Revision Notes</span><span class="tag">Self-score rubrics</span></div>
+    </a>
+
+    <a class="card" href="npd_mock.html">
+      <div class="row"><span class="name">New Product Development</span><span class="pill green">30 MCQ + 9 written</span></div>
+      <div class="meta">Funnel stages, Kano, QFD/ATAR, modular vs integral, PSS, alpha/beta/gamma, Blue Ocean, liability, IP, integrity.</div>
+      <div><span class="tag">Revision Notes</span><span class="tag">Self-score rubrics</span></div>
+    </a>
+
+    <a class="card" href="notes.html" style="border-color:#f0a429;">
+      <div class="row"><span class="name">📖 Study Notes — all 3 subjects</span><span class="pill amber">Read</span></div>
+      <div class="meta">Blog-energy meets exam-cram. Condensed, trap-aware notes for NABM (6 modules), Macro (4) and NPD (7). Hooks to remember, bold = testable, ⚠️ = exam trap.</div>
+      <div><span class="tag">Break-study</span><span class="tag">Collapsible by module</span></div>
+    </a>
+
+    <h2 class="sect" id="learn">📚 Learning Mocks — full-length, instant feedback</h2>
+    <p class="lead" style="margin-bottom:10px;">Mock-length sweeps built to <i>teach</i>, not test. Answer → instant feedback → written prompts with actionable advice and examples. One pass covers the whole syllabus.</p>
+    <div class="dgrid">
+      <a class="dcard" href="player.html?set=learn_macro"><b>🟩 Macro — Full Course Sweep</b><span>full-syllabus sweep · 4 modules + 6 written</span></a>
+      <a class="dcard" href="player.html?set=learn_npd"><b>🟧 NPD — Full Course Sweep</b><span>full-syllabus sweep · 8 modules + 6 written</span></a>
+    </div>
+
+    <h2 class="sect" id="discuss">🗣️ Evaluate &amp; Discuss — opinion/statement questions</h2>
+    <p class="lead" style="margin-bottom:10px;">The dominant Sec B/C/D format: a statement, then "evaluate/discuss". Each prompt gives the <b>verdict → what to weigh both ways → the edge case</b> that qualifies it. Sorted by module, built around the exact traps and misreadings examiners exploit. <i>GER &amp; Beh-Econ versions are featured up top.</i></p>
+    <div class="dgrid">
+      <a class="dcard" href="discuss.html" style="border-color:#f0a429;"><b>🟧 NPD — Evaluate &amp; Discuss</b><span>~45 statements · 6 modules · verdict + edge cases</span></a>
+      <a class="dcard" href="discuss_behecon.html"><b>🟦 Beh-Econ — Evaluate &amp; Discuss</b><span>situational MCQ traps · theory + math</span></a>
+    </div>
+
+    <h2 class="sect" id="speed">⚡ Formula Speedrun &amp; Sheet</h2>
+    <p class="lead" style="margin-bottom:10px;">Every formula, hit 4 ways in different contexts until the principle is reflex — plus a one-page reference sheet.</p>
+    <div class="dgrid">
+      <a class="dcard" href="player.html?set=speed_macro"><b>⚡ Macro Formula Speedrun</b><span>8 formulas × 4 contexts (32 reps)</span></a>
+      <a class="dcard" href="player.html?set=speed_npd"><b>⚡ NPD Formula Speedrun</b><span>ATAR &amp; QFD × 4 each</span></a>
+      <a class="dcard" href="formulas.html" style="border-color:#f0a429;"><b>🧮 Formula Sheet (Macro + NPD)</b><span>every formula · meaning · when · example</span></a>
+    </div>
+
+    <h2 class="sect" id="recall">🧠 Recall Drills — by topic</h2>
+    <p class="lead" style="margin-bottom:10px;">Bite-size, instant-feedback drills (no timer). Answer → see <i>why</i> it's right and <i>how to use it</i>. Together they cover the whole syllabus — perfect for breaks.</p>
+
+    <div class="grouplab">🟩 Macroeconomics</div>
+    <div class="dgrid">
+      <a class="dcard" href="player.html?set=macro_foundations"><b>Foundations &amp; National Accounts</b><span>GDP · nominal vs real · identities</span></a>
+      <a class="dcard" href="player.html?set=macro_money"><b>Money, Banking &amp; Inflation</b><span>multiplier · M0/M1/M3 · cost-push</span></a>
+      <a class="dcard" href="player.html?set=macro_monetary"><b>Monetary Policy &amp; Bonds</b><span>repo · yields · transmission · Fisher</span></a>
+      <a class="dcard" href="player.html?set=macro_fiscal"><b>Fiscal Policy &amp; Growth</b><span>multiplier · debt · crowding out</span></a>
+      <a class="dcard" href="player.html?set=macro_open"><b>Open Economy &amp; Forex</b><span>IRP · PPP · trilemma · BOP · 1991</span></a>
+    </div>
+
+    <div class="grouplab">🟧 New Product Development</div>
+    <div class="dgrid">
+      <a class="dcard" href="player.html?set=npd_foundations"><b>Foundations &amp; Process</b><span>5 news · stage-gate · PM · 10/100</span></a>
+      <a class="dcard" href="player.html?set=npd_ideas"><b>Ideas, Concept Testing &amp; Eval</b><span>lead users · Kano · QFD · ATAR</span></a>
+      <a class="dcard" href="player.html?set=npd_design"><b>Design, Prototyping &amp; Architecture</b><span>modular vs integral · DFM</span></a>
+      <a class="dcard" href="player.html?set=npd_testing"><b>Use-Testing, Teams &amp; PSS</b><span>alpha/beta/gamma · org · servitisation</span></a>
+      <a class="dcard" href="player.html?set=npd_strategy"><b>Strategy, IP, Blue Ocean &amp; Launch</b><span>ERRC · diffusion · liability</span></a>
+    </div>
+    </div><!-- /#earlier -->
+
+    <div class="note">📱 <b>On your phone:</b> these run fully in any browser. For an app-like experience, tap your browser's <b>Share → Add to Home Screen</b> — it launches fullscreen like the real portal. Your answers don't save if you close the tab, so finish a paper in one sitting.</div>
+
+    <div class="foot">Built for exam prep</div>
+  </div>
+<script>
+  function setView(v){
+    document.body.className = 'view-' + v;
+    document.getElementById('bt-tom').classList.toggle('active', v==='tomorrow');
+    document.getElementById('bt-ear').classList.toggle('active', v==='earlier');
+    try { localStorage.setItem('portalView', v); } catch(e){}
+  }
+  (function(){
+    var saved = 'tomorrow';
+    try { saved = localStorage.getItem('portalView') || 'tomorrow'; } catch(e){}
+    setView(saved);
+  })();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

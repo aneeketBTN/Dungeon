@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formula Sheet — Behavioural Economics</title>
+<meta name="description" content="Every BE formula you can be asked to compute: discounting (δ, β-δ), prospect-theory value, expected utility, certainty equivalent, risk premium, level-k / cognitive hierarchy, Becker. Meaning, when, worked example, trap.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:,">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,"Segoe UI",sans-serif;background:#eef0f2;color:#1f2328;font-size:15px;line-height:1.55;}
+  .top{position:sticky;top:0;z-index:20;background:#1c1c1c;padding:11px 14px;border-bottom:2px solid #2d6fd4;}
+  .top .brand{color:#5fa3ff;font-weight:bold;font-size:16px;}
+  .top .sub{color:#9aa0a6;font-size:12px;margin-top:2px;}
+  .nav{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap;}
+  .nav a{padding:6px 9px;background:#2a2f35;color:#e8eaed;text-decoration:none;border-radius:6px;font-size:12px;font-weight:bold;}
+  .nav a:hover{background:#2d6fd4;}
+  .wrap{max-width:880px;margin:0 auto;padding:14px 12px 70px;}
+  .intro{background:#eaf2fd;border-left:4px solid #2d6fd4;border-radius:6px;padding:11px 13px;margin-bottom:16px;font-size:13.5px;}
+  .intro b{color:#1c4f9c;}
+  h2.sect{font-size:18px;color:#15171a;margin:22px 0 8px;padding-top:8px;border-top:3px solid #1c1c1c;}
+  h2.sect:first-of-type{border-top:none;}
+  .f{background:#fff;border:1px solid #dde1e5;border-radius:10px;margin-bottom:11px;padding:13px 14px;}
+  .f .name{font-weight:bold;color:#15171a;font-size:14.5px;margin-bottom:7px;}
+  .f .formula{font-family:"Consolas","Courier New",monospace;background:#0f1419;color:#9fe0ff;border-radius:7px;padding:9px 12px;font-size:13.5px;margin-bottom:8px;overflow-x:auto;white-space:pre-wrap;}
+  .f .line{font-size:13.5px;margin:3px 0;padding-left:64px;position:relative;}
+  .f .line .lab{position:absolute;left:0;top:0;font-weight:bold;font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:#5a6169;}
+  .f .line.ex{background:#f4f1fb;border-left:3px solid #7a4cc4;border-radius:5px;padding:7px 10px 7px 64px;margin-top:6px;}
+  .f .line.ex .lab{left:10px;color:#5b34a3;}
+  .f .line.trap{background:#fbeae8;border-left:3px solid #c1392b;border-radius:5px;padding:7px 10px 7px 64px;margin-top:6px;}
+  .f .line.trap .lab{left:10px;color:#c1392b;}
+  .f code{background:#eef1f4;border-radius:3px;padding:0 4px;font-family:"Consolas",monospace;font-size:12.8px;}
+  .foot{text-align:center;color:#9aa0a6;font-size:12px;margin-top:24px;}
+  .foot a{color:#2d6fd4;text-decoration:none;}
+  @media(max-width:560px){.f .line,.f .line.ex,.f .line.trap{padding-left:12px;padding-top:22px;}.f .line .lab{position:static;display:block;margin-bottom:2px;}.f .line.ex .lab,.f .line.trap .lab{left:10px;}}
+</style>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-theme-base="light">
+<div class="top">
+  <div class="brand">🟦 Formula Sheet — Behavioural Economics</div>
+  <div class="sub">Every computable formula · meaning · when · worked example · the trap · calculator allowed, no negative marking</div>
+  <div class="nav"><a href="#disc">Discounting</a><a href="#pt">Prospect &amp; Utility</a><a href="#prob">Probability</a><a href="#games">Games</a><a href="#disc2">Discrimination</a><a href="discuss_behecon.html">Drill →</a><a href="index.html">← Portal</a></div>
+</div>
+<div class="wrap">
+  <div class="intro"><b>Use it like a cheat-sheet, then test it.</b> Every stem that asks you to <i>compute</i> maps to one of these. Memorise the form, the <b>direction</b> of each parameter, and the single most common slip (the ⚠ line). Then hit the <a href="discuss_behecon.html" style="color:#1c4f9c;font-weight:bold;">situational drill</a> and <a href="test_behecon.html" style="color:#1c4f9c;font-weight:bold;">module tests</a>.</div>
+
+  <h2 class="sect" id="disc">⏳ Intertemporal Discounting</h2>
+
+  <div class="f">
+    <div class="name">Discount factor δ (one period)</div>
+    <div class="formula">U = u₀ + δ·u₁ ,  δ ∈ (0,1)</div>
+    <div class="line"><span class="lab">Means</span>How much you weight tomorrow vs today. High δ = patient, low δ = impatient.</div>
+    <div class="line"><span class="lab">Use</span>Two-period choices; the marshmallow-test intuition.</div>
+    <div class="line ex"><span class="lab">Eg</span>Dinner today (u=10) + next week (u=10), δ=0.9 → U = 10 + 0.9×10 = 19.</div>
+    <div class="line trap"><span class="lab">Trap</span>Direction: <b>higher δ = MORE patient</b>. δ can't exceed 1.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Exponential (Samuelson) discounting — time-consistent Econ</div>
+    <div class="formula">U⁰ = u₀ + δu₁ + δ²u₂ + … = Σ_{t≥0} δᵗ·uₜ    (β = 1)</div>
+    <div class="line"><span class="lab">Means</span>Constant discount ratio between any two periods ⇒ plans never reverse.</div>
+    <div class="line"><span class="lab">Use</span>Any "as an Econ…" question; benchmark against present-biased agents.</div>
+    <div class="line ex"><span class="lab">Eg</span>PV of u₂ is <code>δ²·u₂</code> (discounting compounds), not δ·u₂.</div>
+    <div class="line trap"><span class="lab">Trap</span>Exponential discounters are <b>time-consistent</b> — they do NOT switch plans.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Quasi-hyperbolic (β–δ) present-biased discounting</div>
+    <div class="formula">U⁰ = u₀ + β·Σ_{t≥1} δᵗ·uₜ ,  β &lt; 1</div>
+    <div class="line"><span class="lab">Means</span>β discounts the <i>whole future block</i> (not u₀): impatient now, patient later ⇒ inconsistent plans.</div>
+    <div class="line"><span class="lab">Use</span>Naïf/sophisticate movie & egg-roll/gym problems (β=½ or ⅗, δ=1).</div>
+    <div class="line ex"><span class="lab">Eg</span>β=½, δ=1: value today of (u₁=5, u₂=8) = 0 + ½(5+8) = 6.5.</div>
+    <div class="line trap"><span class="lab">Trap</span>β multiplies <b>all</b> future periods, <b>never u₀</b>, and not just t=1.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Present-action payoff: vices vs virtues (δ=1)</div>
+    <div class="formula">Vice now:    U = B − βC      (immediate benefit B, delayed cost C)
+Virtue now:  U = −C + βB     (immediate cost C, delayed benefit B)
+Either, planned for the future:  U = β(B − C)</div>
+    <div class="line"><span class="lab">Means</span>Present bias <b>prepones vices, postpones virtues</b>. Compare "do it now" vs "plan to do it later".</div>
+    <div class="line ex"><span class="lab">Eg</span>Egg roll B=3,C=4,β=½: now = 3−2 = +1 (eats); planned = ½(3−4) = −0.5 (won't) → reversal.</div>
+    <div class="line trap"><span class="lab">Trap</span>For a present action only the <b>delayed</b> side gets β; when both are future, β multiplies <b>(B−C)</b>.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Naïf vs Sophisticate (same β, δ — only belief β̂ differs)</div>
+    <div class="formula">Naïf:        believes future self patient (β̂ = 1) → re-optimises, plans fail
+Sophisticate: knows future self biased (β̂ = β) → backward induction, pre-commits</div>
+    <div class="line"><span class="lab">Means</span>Both present-biased; differ in self-awareness, so they end on <b>different</b> choices.</div>
+    <div class="line ex"><span class="lab">Eg</span>Movies a=3,b=5,c=8,d=13 (β=½,δ=1): Econ skips a, <b>naïf ends on c</b>, sophisticate on b.</div>
+    <div class="line trap"><span class="lab">Trap</span>Solve the sophisticate by <b>backward induction</b>, not forwards. β and δ are identical across the two.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Solving δ from observed indifference</div>
+    <div class="formula">value_now = δⁿ · value_future   ⇒   δ = (value_now / value_future)^(1/n)</div>
+    <div class="line"><span class="lab">Means</span>Back out the per-period factor across an n-year gap.</div>
+    <div class="line ex"><span class="lab">Eg</span>Indifferent between $40 today and $80 in 2 yrs → 40 = δ²·80 → δ = √0.5 ≈ <b>0.71</b>.</div>
+    <div class="line trap"><span class="lab">Trap</span>Don't forget the exponent: 0.5 is δ² (one-year), not δ. 1.41 is 1/δ.</div>
+  </div>
+
+  <h2 class="sect" id="pt">💹 Prospect Theory &amp; Utility under Risk</h2>
+
+  <div class="f">
+    <div class="name">Prospect-theory value function</div>
+    <div class="formula">v(x) =  x^β            for gains  (x ≥ 0)
+v(x) = −λ·(−x)^β        for losses (x &lt; 0)
+β ≈ 0.88 (diminishing sensitivity),  λ ≈ 2.25 (loss aversion)</div>
+    <div class="line"><span class="lab">Means</span>Value over <b>changes from a reference point</b>: concave in gains, convex & steeper in losses (S-shape).</div>
+    <div class="line"><span class="lab">Use</span>Bundling / hedonic-editing comparisons; any "value of a gain vs loss".</div>
+    <div class="line trap"><span class="lab">Trap</span>λ multiplies <b>losses only</b>; β &lt; 1 (not &gt;1). Always anchor at the reference point.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Loss aversion (λ)</div>
+    <div class="formula">v(loss) = −λ · v(equal gain) ,  λ ≈ 2   ⇒   WTA &gt; WTP (endowment effect)</div>
+    <div class="line"><span class="lab">Means</span>A loss hurts ≈ twice as much as an equal gain pleases.</div>
+    <div class="line ex"><span class="lab">Eg</span>Cornell mugs: sellers ask ~$7 (WTA), buyers offer ~$3 (WTP).</div>
+    <div class="line trap"><span class="lab">Trap</span>Endowment effect = reference points + loss aversion. <b>NOT</b> risk aversion or probability weighting.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Bundling / hedonic editing (apply v(x) curvature)</div>
+    <div class="formula">SEGREGATE gains  (two gains &gt; one combined, concave)
+INTEGRATE losses (one big loss &lt; two losses, convex)
+INTEGRATE small loss into big gain (cancellation)
+SEGREGATE small gain from big loss (silver lining)</div>
+    <div class="line"><span class="lab">Means</span>Decide whether to combine or split outcomes to maximise felt value.</div>
+    <div class="line ex"><span class="lab">Eg</span>Pay bonuses in separate instalments (segregate gains); bundle penalties (integrate losses).</div>
+    <div class="line trap"><span class="lab">Trap</span>It's segregate-gains / integrate-losses — the reverse is the planted error.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Expected utility, risk aversion &amp; certainty equivalent</div>
+    <div class="formula">EU = Σ pᵢ·u(xᵢ)
+risk averse ⇔ u concave ⇔ E[u(X)] &lt; u(E[X])   (Jensen)
+Certainty equivalent CE:  u(CE) = E[u(X)]</div>
+    <div class="line"><span class="lab">Means</span>Choose by average of <i>utilities</i>, not average payoff. Concave u ⇒ prefers the sure thing.</div>
+    <div class="line"><span class="lab">Use</span>"Which would a risk-averse person choose / what's the CE".</div>
+    <div class="line trap"><span class="lab">Trap</span><b>Concave</b> (not convex) ⇒ risk aversion; and E[u(X)] &lt; u(E[X]), not &gt;.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Risk premium</div>
+    <div class="formula">Risk premium = E[X] − CE      (positive for a risk-averse person)</div>
+    <div class="line"><span class="lab">Means</span>Most a risk-averse person will pay to avoid the risk — what insurers extract.</div>
+    <div class="line ex"><span class="lab">Eg</span>EV ₹20,000, CE ₹16,000 → premium = 20,000 − 16,000 = ₹4,000.</div>
+    <div class="line trap"><span class="lab">Trap</span>It's EV − CE (not CE, not CE − EV).</div>
+  </div>
+
+  <div class="f">
+    <div class="name">St Petersburg paradox</div>
+    <div class="formula">EV = Σ (1/2ⁿ)·2ⁿ = 1 + 1 + … = ∞
+EU = Σ (1/2ⁿ)·u(2ⁿ)  →  small finite when u concave (e.g. log)</div>
+    <div class="line"><span class="lab">Means</span>Infinite EV but people pay little → resolved by concave utility (diminishing marginal utility).</div>
+    <div class="line trap"><span class="lab">Trap</span>People pay little because <b>EU</b> is finite, not because EV is small (EV is infinite).</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Acquisition + transaction utility</div>
+    <div class="formula">Purchase utility = acquisition utility + transaction utility
+transaction utility = reference (fair) price − actual price</div>
+    <div class="line"><span class="lab">Means</span>You value both the good (acquisition) and the "deal" vs a fair reference price (transaction).</div>
+    <div class="line ex"><span class="lab">Eg</span>Beer-on-the-beach: pay more for the same beer from a posh hotel (higher reference price).</div>
+    <div class="line trap"><span class="lab">Trap</span>Transaction utility is about the <b>deal</b>, not the good's consumption value.</div>
+  </div>
+
+  <h2 class="sect" id="prob">🎲 Probability &amp; Judgement Rules</h2>
+
+  <div class="f">
+    <div class="name">Conjunction rule</div>
+    <div class="formula">P(A ∩ B) ≤ P(A)   and   ≤ P(B)</div>
+    <div class="line"><span class="lab">Means</span>A joint event is never more probable than either component — violating this is the conjunction fallacy (Linda).</div>
+    <div class="line trap"><span class="lab">Trap</span>More detail = more conjuncts = <b>lower</b> probability, even though it feels more representative.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Probability weighting (decision weights ≠ probabilities)</div>
+    <div class="formula">small p → OVER-weighted (possibility effect)
+near-certain p → UNDER-weighted vs certainty (certainty effect)   [S-shaped curve]</div>
+    <div class="line"><span class="lab">Means</span>People act on decision weights, not objective probabilities (Allais, lottery play).</div>
+    <div class="line trap"><span class="lab">Trap</span>Small probabilities are <b>over</b>-weighted (not under). Weights ≠ probabilities.</div>
+  </div>
+
+  <h2 class="sect" id="games">🎯 Strategic Reasoning</h2>
+
+  <div class="f">
+    <div class="name">Level-k thinking (⅔-of-the-average beauty contest)</div>
+    <div class="formula">Level-0 ≈ 50 (random)   Level-1 = ⅔×50 ≈ 33   Level-2 = ⅔×33 ≈ 22   Level-∞ → 0 (Nash)</div>
+    <div class="line"><span class="lab">Means</span>People do a finite number of reasoning steps; masses cluster at L1/L2.</div>
+    <div class="line ex"><span class="lab">Eg</span>FT readers clustered ~22 and ~33; winning guess ≈ 13. Range 20–100 → Nash = 20 (boundary).</div>
+    <div class="line trap"><span class="lab">Trap</span>Level-0 ≈ 50 (random); <b>0 is the Nash/level-∞</b> value, not level-0.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Best response to a known mix (level-2 example)</div>
+    <div class="formula">Guess = ⅔ × E[opponents' guesses],  E = Σ (share_k × guess_k)</div>
+    <div class="line"><span class="lab">Means</span>Form the expected average from the believed type-mix, then take ⅔ of it.</div>
+    <div class="line ex"><span class="lab">Eg</span>30% L0 (≈50) + 70% L1 (≈33): E ≈ 0.3×50 + 0.7×33 ≈ 38 → guess ≈ ⅔×38 ≈ <b>25–28</b>.</div>
+    <div class="line trap"><span class="lab">Trap</span>Weight by the believed shares; don't just take ⅔ of 50.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Cognitive Hierarchy (Poisson-τ)</div>
+    <div class="formula">Each type-k best-responds to a Poisson(τ) distribution over ALL lower types 0..k−1
+Higher τ → more higher-order thinkers → LOWER average guess (and ↑ profit/survival)</div>
+    <div class="line"><span class="lab">Means</span>Generalises level-k with a distribution (τ≈2). Goldfarb-Yang: τ≈2.66 for ISP managers.</div>
+    <div class="line ex"><span class="lab">Eg</span>Group averages 35 / 26 / 17 → τ = 1 / 2 / 4 (lower average = higher τ).</div>
+    <div class="line trap"><span class="lab">Trap</span>Lower guess ⇒ <b>higher</b> τ. CH ≠ level-k (level-k assumes others are exactly one level below).</div>
+  </div>
+
+  <h2 class="sect" id="disc2">⚖️ Discrimination</h2>
+
+  <div class="f">
+    <div class="name">Becker taste-based discrimination</div>
+    <div class="formula">effective wage of out-group labour = w·(1 + d)     d = psychic cost of discriminating</div>
+    <div class="line"><span class="lab">Means</span>A "distaste" adds a psychic cost d, so the discriminator acts as if out-group wages are higher → hires fewer.</div>
+    <div class="line"><span class="lab">Use</span>Distinguish from statistical discrimination (an information problem, no d).</div>
+    <div class="line trap"><span class="lab">Trap</span>Taste-based is fixed by <b>contact/intermixing</b> (and competition), not by more information. Statistical is the information one.</div>
+  </div>
+
+  <div class="foot">BE formula sheet · pair with the <a href="discuss_behecon.html">situational drill</a> &amp; <a href="test_behecon.html">module tests</a> · <a href="index.html">← back to portal</a></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

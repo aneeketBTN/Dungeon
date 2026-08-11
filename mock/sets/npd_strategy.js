@@ -1,0 +1,40 @@
+window.MOCK = {
+  id: "npd_strategy",
+  subject: "NPD",
+  title: "Strategy, IP, Blue Ocean & Launch",
+  blurb: "Create a blue ocean, protect it with IP, then land the launch. Differentiation, ERRC, the diffusion curve and the liability trap.",
+  items: [
+    {type:"mcq", tag:"differentiation", t:"Horizontal vs vertical differentiation — which is correct?",
+     o:["Horizontal = objectively better; Vertical = taste-based","Horizontal = taste-based (red vs blue car); Vertical = objectively better (faster chip)","They're identical","Horizontal is for services only"], c:1,
+     why:"Horizontal = preference with no agreed ranking (some like red, some blue); Vertical = a quality everyone ranks the same way (faster is better). <b>Trap:</b> the reversal. <b>Use it:</b> vertical → compete on performance; horizontal → segment by taste."},
+    {type:"mcq", tag:"IP", t:"Which IP type protects an invention (a new technical solution)?",
+     o:["Trademark","Patent","Copyright","Trade secret"], c:1,
+     why:"Patent = inventions (disclosed, time-limited monopoly). Trademark = brand identity; copyright = creative works; trade secret = undisclosed know-how (Coke formula). <b>Use it:</b> match the protection to the asset — and remember a patent trades secrecy for a temporary monopoly."},
+    {type:"mcq", tag:"ERRC", t:"Blue Ocean's ERRC grid pairs cost-cutting and value-lifting as:",
+     o:["Eliminate/Raise cut cost; Reduce/Create lift value","Eliminate/Reduce cut cost; Raise/Create lift value","All four cut cost","All four lift value"], c:1,
+     why:"Eliminate &amp; Reduce strip cost; Raise &amp; Create lift buyer value — together breaking the value-cost trade-off. <b>Use it:</b> apply ERRC to reconstruct the value curve and open uncontested space (Southwest, IPL, iPhone) rather than fighting rivals head-on."},
+    {type:"mcq", tag:"red vs blue", t:"Competing in a 'red ocean' means:",
+     o:["Creating a brand-new market","Fighting rivals in existing market space on existing terms (bloody competition)","Ignoring competitors","Selling only to non-customers"], c:1,
+     why:"Red ocean = known market, head-to-head, shrinking margins. Blue ocean = create new demand from non-customers. <b>Use it:</b> when a market looks commoditised, the escape is to redefine value (ERRC), not to compete harder on price."},
+    {type:"mcq", tag:"diffusion", t:"In the diffusion curve, the 'chasm' sits between:",
+     o:["Innovators and Early Adopters","Early Adopters and the Early Majority","Late Majority and Laggards","Early and Late Majority"], c:1,
+     why:"Adopters: Innovators → Early Adopters → Early Majority → Late Majority → Laggards. The hard gap (the chasm) is reaching the pragmatic Early Majority — the bridge to the mainstream. <b>Use it:</b> launch strategy must specifically cross this gap (beachhead, references)."},
+    {type:"mcq", tag:"market testing", t:"Simulated, controlled and full test markets are methods of:",
+     o:["Concept testing","Market testing — validating the full marketing mix before national launch","Prototyping","Alpha testing"], c:1,
+     why:"These rise in cost/realism and validate the whole mix in a real market before the national rollout. <b>Trap:</b> don't confuse with concept testing (pre-prototype, idea-stage) — market testing is late-funnel, behaviour-based."},
+    {type:"mcq", tag:"liability", t:"A consumer is injured by a defective product. The basis that holds the maker liable WITHOUT proving carelessness is:",
+     o:["Negligence","Strict liability","Breach of warranty","Caveat emptor"], c:1,
+     why:"Strict liability: defect + harm is enough — no need to prove negligence. (Negligence = failure of due care; breach of warranty = a broken product promise.) <b>Use it:</b> 'injury + defect, no mention of carelessness' → strict liability. This is an explicit Sec A item type."},
+    {type:"written", t:"Explain the <b>Blue Ocean ERRC</b> framework and how it lets a firm create uncontested market space, with an example.",
+     looking:[
+       "Blue ocean = uncontested space vs red-ocean head-to-head competition",
+       "Eliminate: which factors taken for granted can be removed?",
+       "Reduce: which below industry standard?",
+       "Raise: which above standard?",
+       "Create: which new factors never offered?",
+       "Eliminate+Reduce cut cost; Raise+Create lift value → breaks value-cost trade-off; targets non-customers (e.g. Southwest / low-cost airline)"
+     ],
+     model:"Blue Ocean strategy seeks uncontested 'blue' market space instead of fighting rivals in bloody 'red' oceans. The ERRC grid reconstructs the value curve by asking four questions: which factors the industry takes for granted should we Eliminate? Which should we Reduce well below the standard? Which should we Raise above the standard? And which new factors, never offered before, should we Create? Eliminating and reducing strip out cost, while raising and creating lift buyer value — so together they break the usual value-cost trade-off, letting a firm be simultaneously differentiated and lower-cost. This opens demand among non-customers rather than splitting existing demand. For example, a low-cost airline like Southwest eliminated meals and seat classes and reduced hub complexity (cutting cost) while creating high-frequency point-to-point routes and friendly speed (lifting value), opening a new market of people who would otherwise have driven.",
+     use:"Any 'enter a crowded/commoditised market' or 'create new demand' question; contrast explicitly with red-ocean competing-harder strategies."}
+  ]
+};

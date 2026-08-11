@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131f">
+  <title>Dungeon — The Door Above</title>
+  <meta name="description" content="A dangerous climb toward understanding.">
+  <link rel="stylesheet" href="rogue.css">
+</head>
+<body data-screen="preload-screen">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="preload" id="preload-screen" role="status" aria-live="polite">
+    <div class="preload-mark" aria-hidden="true"><i></i></div>
+    <p>Preparing the threshold…</p>
+  </div>
+
+  <header class="global-header" id="global-header">
+    <button class="brand-button" id="brand-home" type="button" aria-label="Return to Dungeon home">
+      <span class="brand-rune" aria-hidden="true">D</span>
+      <span><b>Dungeon</b><small>The Door Above</small></span>
+    </button>
+    <div class="global-context" aria-label="Player resources">
+      <span><small>Embers</small><b>● <i data-embers>40</i></b></span>
+      <span><small>Insight</small><b>◇ <i data-insight>1</i></b></span>
+    </div>
+  </header>
+
+  <main id="app">
+    <section class="screen cinematic-screen home-screen" id="home-screen" aria-labelledby="home-title">
+      <video class="threshold-media" id="threshold-video" autoplay muted loop playsinline
+        poster="/outputs/door-threshold-planes/door-threshold-layered-composite.png">
+        <source src="/outputs/door-threshold-environment-loop.mp4" type="video/mp4">
+      </video>
+      <div class="threshold-fallback" aria-hidden="true"></div>
+      <div class="cinematic-shade" aria-hidden="true"></div>
+      <div class="home-threat threat-near" aria-hidden="true"><i></i></div>
+      <div class="home-threat threat-watch" aria-hidden="true"><i></i></div>
+
+      <div class="home-copy">
+        <p class="eyebrow">A dangerous climb toward understanding</p>
+        <h1 id="home-title">Dungeon</h1>
+        <p class="home-deck">The Door remembers every attempt. Bring what you know. Recover what
+          you have forgotten.</p>
+
+        <nav class="home-menu" aria-label="Dungeon menu">
+          <button class="menu-action primary" id="home-primary" type="button">
+            <span><small id="home-primary-kicker">Before the first door</small><b id="home-primary-label">Enter the Dungeon</b></span>
+            <i aria-hidden="true">→</i>
+          </button>
+          <button class="menu-action" id="home-market" type="button">
+            <span><small>Spend earned Embers</small><b>Threshold Market</b></span>
+            <i aria-hidden="true">›</i>
+          </button>
+          <button class="menu-action" id="home-archive" type="button">
+            <span><small>Runs and recommendations</small><b>Archive</b></span>
+            <i aria-hidden="true">›</i>
+          </button>
+          <button class="menu-action" id="home-settings" type="button">
+            <span><small>Motion and access</small><b>Settings</b></span>
+            <i aria-hidden="true">›</i>
+          </button>
+        </nav>
+      </div>
+
+      <aside class="home-record" id="home-record">
+        <p class="eyebrow">The record is quiet</p>
+        <b id="home-record-title">No completed ascent</b>
+        <p id="home-record-copy">Your first run will leave a route in the Archive.</p>
+        <div class="resource-line">
+          <span><small>Embers</small><strong>● <i data-embers>40</i></strong></span>
+          <span><small>Equipped</small><strong id="home-equipped">Saffron scarf</strong></span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="screen page-screen character-screen" id="character-screen" aria-labelledby="character-title">
+      <button class="back-action" data-back-home type="button">← Back to the threshold</button>
+      <div class="page-heading">
+        <p class="eyebrow">Before the first Door</p>
+        <h1 id="character-title">Choose who continues.</h1>
+        <p>Explorers carry no statistical advantage. Their differences are visible, personal,
+          and earned.</p>
+      </div>
+
+      <div class="character-stage">
+        <div class="character-world" aria-hidden="true">
+          <div class="character-halo"></div>
+          <div class="ari ari-front scarf-saffron character-large" data-ari>
+            <i class="ari-hair"></i><i class="ari-head"></i><i class="ari-coat"></i>
+            <i class="ari-scarf"></i><i class="ari-satchel"></i>
+            <i class="ari-leg ari-left"></i><i class="ari-leg ari-right"></i>
+          </div>
+        </div>
+        <article class="character-card selected">
+          <span class="selection-mark" aria-hidden="true">✓</span>
+          <p class="eyebrow">First explorer</p>
+          <h2>Ari</h2>
+          <p>A small figure with a worn satchel and a scarf that answers the Door’s pull.</p>
+          <dl>
+            <div><dt>Learning power</dt><dd>None — cosmetics only</dd></div>
+            <div><dt>Starting scarf</dt><dd id="character-scarf-name">Saffron</dd></div>
+          </dl>
+          <button class="button primary" id="confirm-character" type="button">Continue as Ari <span>→</span></button>
+        </article>
+      </div>
+    </section>
+
+    <section class="screen page-screen market-screen" id="market-screen" aria-labelledby="market-title">
+      <button class="back-action" data-back-home type="button">← Back to the threshold</button>
+      <div class="page-heading split-heading">
+        <div>
+          <p class="eyebrow">Threshold Market</p>
+          <h1 id="market-title">Carry a different signal.</h1>
+          <p>Cosmetics change Ari’s appearance only. Every learning rule remains untouched.</p>
+        </div>
+        <div class="balance-card"><small>Your Embers</small><b>● <i data-embers>40</i></b></div>
+      </div>
+
+      <div class="market-layout">
+        <div class="market-grid" id="market-grid" role="list" aria-label="Available scarves">
+          <button class="cosmetic-card selected" data-cosmetic="saffron" type="button" role="listitem">
+            <span class="swatch saffron"></span><b>Saffron Thread</b><small>Owned</small>
+          </button>
+          <button class="cosmetic-card" data-cosmetic="blue" type="button" role="listitem">
+            <span class="swatch blue"></span><b>Threshold Mist</b><small>30 Embers</small>
+          </button>
+          <button class="cosmetic-card" data-cosmetic="green" type="button" role="listitem">
+            <span class="swatch green"></span><b>Rootbound Moss</b><small>30 Embers</small>
+          </button>
+        </div>
+
+        <article class="market-preview">
+          <div class="preview-plinth" aria-hidden="true">
+            <div class="ari ari-front scarf-saffron character-large" id="market-ari">
+              <i class="ari-hair"></i><i class="ari-head"></i><i class="ari-coat"></i>
+              <i class="ari-scarf"></i><i class="ari-satchel"></i>
+              <i class="ari-leg ari-left"></i><i class="ari-leg ari-right"></i>
+            </div>
+          </div>
+          <div>
+            <p class="eyebrow" id="market-state-label">Equipped</p>
+            <h2 id="market-item-name">Saffron Thread</h2>
+            <p id="market-item-copy">Warm against the cold threshold. Ari’s original signal.</p>
+            <button class="button primary" id="market-action" type="button">Equipped</button>
+            <p class="inline-status" id="market-status" aria-live="polite"></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="screen hall-screen" id="hall-screen" aria-labelledby="hall-title">
+      <button class="back-action hall-back" data-back-home type="button">← Back to the threshold</button>
+      <div class="hall-layout">
+        <aside class="setup-panel">
+          <div>
+            <p class="eyebrow">Run setup</p>
+            <h1 id="hall-title">Prepare the ascent.</h1>
+            <p>One connected route is ready. Locked choices are shown before you commit.</p>
+          </div>
+
+          <div class="setup-block">
+            <span class="field-label">Subject</span>
+            <div class="selected-field"><span class="subject-sigil">M</span><span><b>Macroeconomics</b><small>Connected</small></span></div>
+          </div>
+
+          <div class="setup-block">
+            <span class="field-label">Chapter</span>
+            <div class="chapter-choice selected">
+              <span><b>The Transmission Stair</b><small>Foundations, money, policy, and open-economy transmission</small></span>
+              <strong>Ready</strong>
+            </div>
+            <div class="chapter-choice locked" aria-disabled="true">
+              <span><b>Money &amp; Monetary Policy</b><small>Requires its connected question pool</small></span>
+              <strong>Locked</strong>
+            </div>
+          </div>
+
+          <div class="setup-block">
+            <span class="field-label">Run rules</span>
+            <div class="truth-grid">
+              <span><small>Mode</small><b>Practice</b></span>
+              <span><small>Difficulty</small><b>Applied II</b></span>
+              <span><small>Length</small><b>5 questions</b></span>
+              <span><small>Feedback</small><b>Immediate</b></span>
+            </div>
+            <p class="locked-note">Mock, Endless, other difficulties, and delayed feedback remain
+              unavailable until their rules are connected.</p>
+          </div>
+
+          <div class="setup-summary">
+            <span><small>Estimated time</small><b>~8 minutes</b></span>
+            <span><small>Starting Resolve</small><b class="resolve-copy">♥ ♥</b></span>
+          </div>
+        </aside>
+
+        <div class="hall-world">
+          <div class="hall-atmosphere" aria-hidden="true"></div>
+          <div class="hall-copy">
+            <p class="eyebrow">Macroeconomics · Practice</p>
+            <h2>The Transmission Stair</h2>
+            <p>Secure each causal link. The world moves only when the answer earns it.</p>
+          </div>
+          <div class="door-plaque"><span>Applied II</span><i></i><span>5 questions</span></div>
+          <button class="door" id="enter-run" type="button" aria-label="Enter The Transmission Stair">
+            <span class="door-frame">
+              <span class="door-leaf"><span class="door-sigil">M</span><i class="door-band one"></i><i class="door-band two"></i></span>
+              <span class="door-seam"></span>
+            </span>
+          </button>
+          <div class="ari ari-back scarf-saffron hall-ari" data-ari aria-hidden="true">
+            <i class="ari-hair"></i><i class="ari-head"></i><i class="ari-coat"></i>
+            <i class="ari-scarf"></i><i class="ari-satchel"></i>
+            <i class="ari-leg ari-left"></i><i class="ari-leg ari-right"></i>
+          </div>
+          <button class="button primary hall-cta" id="enter-run-secondary" type="button">
+            Enter the Transmission Stair <span>→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen run-screen" id="run-screen" aria-labelledby="question-title">
+      <header class="run-header">
+        <button class="text-button" id="leave-run" type="button">← Leave run</button>
+        <div class="run-name"><small id="run-subject">Macroeconomics · Practice</small><b id="run-chapter">The Transmission Stair</b></div>
+        <div class="run-hud">
+          <span><small>Resolve</small><b class="hearts" id="hearts">♥ ♥</b></span>
+          <span><small>Embers</small><b>● <i data-embers>40</i></b></span>
+        </div>
+      </header>
+      <div class="run-progress" aria-label="Questions completed"><i id="run-progress-fill"></i></div>
+
+      <div class="question-layout">
+        <article class="question-card" id="question-card">
+          <div class="question-meta">
+            <span id="question-kind">Recall · MCQ</span>
+            <span id="question-count">Question 1 of 5</span>
+          </div>
+          <p class="concept-label" id="question-concept">Foundations</p>
+          <h1 id="question-title">Question loads here.</h1>
+          <div id="answer-area" class="answer-area"></div>
+          <div class="feedback" id="feedback" aria-live="polite"></div>
+
+          <section class="powerup-section" aria-labelledby="powerup-title">
+            <div class="powerup-heading">
+              <span><small>Tools carried into this run</small><b id="powerup-title">Power-ups</b></span>
+              <small>Assistance is recorded in your review.</small>
+            </div>
+            <div class="powerup-row">
+              <button class="powerup" id="power-insight" type="button" data-power="insight">
+                <span>◇</span><span><b>Insight</b><small>Reveal a conceptual hint</small></span><strong id="insight-count">1</strong>
+              </button>
+              <button class="powerup" id="power-compass" type="button" data-power="compass">
+                <span>⌁</span><span><b>Compass</b><small>Remove one wrong MCQ route</small></span><strong id="compass-count">1</strong>
+              </button>
+              <button class="powerup" id="power-anchor" type="button" data-power="anchor">
+                <span>⌾</span><span><b>Anchor</b><small>Guard one Resolve before commit</small></span><strong id="anchor-count">1</strong>
+              </button>
+            </div>
+            <p class="inline-status" id="power-status" aria-live="polite"></p>
+          </section>
+
+          <div class="question-actions">
+            <span class="commit-note" id="commit-note">Choose a response, then commit it.</span>
+            <button class="button primary hidden" id="next-question" type="button">Next step <span>→</span></button>
+          </div>
+        </article>
+
+        <aside class="climb-card" aria-label="The Ascent run progress">
+          <div class="quest-card" id="quest-card">
+            <span class="quest-glyph" aria-hidden="true">✦</span>
+            <span><b>Recovery Trial</b><small id="quest-copy">Secure 2 answers in a row · reward: Resolve if missing + 12 Embers</small></span>
+            <strong id="quest-progress">0 / 2</strong>
+          </div>
+
+          <div class="stair-world" id="stair-world">
+            <div class="sky-copy"><span>THE ASCENT</span><small id="floor-label">Floor 01</small></div>
+            <div class="summit-door" id="summit-door" aria-hidden="true"><span>Ω</span><i></i></div>
+            <div class="stair step-1" data-step="0"></div>
+            <div class="stair step-2" data-step="1"></div>
+            <div class="stair step-3" data-step="2"></div>
+            <div class="stair step-4" data-step="3"></div>
+            <div class="stair step-5" data-step="4"></div>
+            <div class="ari ari-back scarf-saffron climber" id="climber" data-ari aria-hidden="true">
+              <i class="ari-hair"></i><i class="ari-head"></i><i class="ari-coat"></i>
+              <i class="ari-scarf"></i><i class="ari-satchel"></i>
+              <i class="ari-leg ari-left"></i><i class="ari-leg ari-right"></i>
+            </div>
+          </div>
+
+          <div class="run-note">
+            <span class="status-light" aria-hidden="true"></span>
+            <p id="run-note-copy">The world reacts after you commit.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen cinematic-screen summit-screen" id="summit-screen" aria-labelledby="summit-title">
+      <div class="summit-backdrop" aria-hidden="true"></div>
+      <div class="summit-light" aria-hidden="true"></div>
+      <div class="summit-content">
+        <p class="eyebrow" id="summit-kicker">Run complete</p>
+        <h1 id="summit-title">The Door remembers the route.</h1>
+        <p id="summit-copy">Five questions resolved. Your record is ready.</p>
+        <button class="button primary" id="show-results" type="button">Reveal the run record <span>→</span></button>
+      </div>
+      <div class="ari ari-back scarf-saffron summit-ari" data-ari aria-hidden="true">
+        <i class="ari-hair"></i><i class="ari-head"></i><i class="ari-coat"></i>
+        <i class="ari-scarf"></i><i class="ari-satchel"></i>
+        <i class="ari-leg ari-left"></i><i class="ari-leg ari-right"></i>
+      </div>
+    </section>
+
+    <section class="screen cinematic-screen failure-screen" id="failure-screen" aria-labelledby="failure-title">
+      <div class="failure-backdrop" aria-hidden="true"></div>
+      <div class="failure-content">
+        <p class="eyebrow">Resolve exhausted</p>
+        <h1 id="failure-title">The stair rejected this attempt.</h1>
+        <p>Your answered questions are preserved. Reset this route or return to the threshold.</p>
+        <div class="action-row">
+          <button class="button primary" id="retry-run" type="button">Reset the route</button>
+          <button class="button secondary" id="failure-home" type="button">Review attempt</button>
+        </div>
+      </div>
+      <div class="ari ari-front scarf-saffron failure-ari" data-ari aria-hidden="true">
+        <i class="ari-hair"></i><i class="ari-head"></i><i class="ari-coat"></i>
+        <i class="ari-scarf"></i><i class="ari-satchel"></i>
+        <i class="ari-leg ari-left"></i><i class="ari-leg ari-right"></i>
+      </div>
+    </section>
+
+    <section class="screen page-screen results-screen" id="results-screen" aria-labelledby="results-title">
+      <div class="results-hero">
+        <div>
+          <p class="eyebrow">Run record</p>
+          <h1 id="results-title">Here is what changed.</h1>
+          <p id="results-intro">Your next useful action comes before the full diagnostic.</p>
+        </div>
+        <div class="result-emblem"><span id="result-score">0%</span><small>awarded progress</small></div>
+      </div>
+
+      <div class="recommendation-banner">
+        <div>
+          <p class="eyebrow">Recommended next</p>
+          <h2 id="recommendation-title">Review the uncertain route</h2>
+          <p id="recommendation-copy">Your recommendation will appear here.</p>
+        </div>
+        <button class="button primary" id="recovery-run" type="button">Start recovery run <span>→</span></button>
+      </div>
+
+      <div class="result-grid">
+        <div class="metric secure"><small>Secure</small><b id="secure-count">0</b><span>Full progress</span></div>
+        <div class="metric partial"><small>Developing</small><b id="partial-count">0</b><span>Partial progress</span></div>
+        <div class="metric missed"><small>Missed</small><b id="missed-count">0</b><span>Needs recovery</span></div>
+        <div class="metric"><small>Assisted</small><b id="assisted-count">0</b><span>Power-up used</span></div>
+        <div class="metric"><small>Average response</small><b id="average-time">—</b><span>Before feedback</span></div>
+        <div class="metric"><small>Resolve remaining</small><b id="resolve-left">—</b><span>Out of 2</span></div>
+      </div>
+
+      <div class="results-columns">
+        <article class="result-card">
+          <p class="eyebrow">Concept evidence</p>
+          <div id="concept-breakdown"></div>
+        </article>
+        <article class="result-card quest-result">
+          <p class="eyebrow">Run systems</p>
+          <div id="systems-breakdown"></div>
+        </article>
+      </div>
+
+      <details class="review-details" open>
+        <summary>Review every response</summary>
+        <div id="answer-review"></div>
+      </details>
+
+      <div class="result-actions">
+        <button class="button primary" id="results-home" type="button">Return to Dungeon</button>
+        <button class="button secondary" id="run-again" type="button">Repeat full chapter</button>
+      </div>
+    </section>
+
+    <section class="screen page-screen archive-screen" id="archive-screen" aria-labelledby="archive-title">
+      <button class="back-action" data-back-home type="button">← Back to the threshold</button>
+      <div class="page-heading">
+        <p class="eyebrow">Archive</p>
+        <h1 id="archive-title">Routes the Door remembers.</h1>
+        <p>Only completed local prototype runs appear here. Real learner state remains separate.</p>
+      </div>
+      <div id="archive-content" class="archive-content"></div>
+    </section>
+
+    <section class="screen page-screen settings-screen" id="settings-screen" aria-labelledby="settings-title">
+      <button class="back-action" data-back-home type="button">← Back to the threshold</button>
+      <div class="page-heading">
+        <p class="eyebrow">Settings</p>
+        <h1 id="settings-title">Keep meaning. Change motion.</h1>
+        <p>Reduced motion removes parallax, camera movement, shake, and looping character motion
+          while preserving state changes and feedback.</p>
+      </div>
+      <div class="settings-card">
+        <label class="setting-row" for="reduced-motion">
+          <span><b>Reduced motion</b><small>Use light and opacity instead of camera or character motion</small></span>
+          <input id="reduced-motion" type="checkbox">
+        </label>
+        <button class="button secondary" id="clear-prototype-data" type="button">Reset local prototype profile</button>
+        <p class="inline-status" id="settings-status" aria-live="polite">This never touches the learning-engine files.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="portal-wash" id="portal-wash" aria-hidden="true"><span>Entering the stair…</span></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog class="leave-dialog" id="leave-dialog">
+    <form method="dialog">
+      <p class="eyebrow">Leave this run?</p>
+      <h2>Your place can be remembered.</h2>
+      <p>Save and return to the threshold, abandon this attempt, or stay on the stair.</p>
+      <div class="dialog-actions">
+        <button class="button primary" value="save">Save and return</button>
+        <button class="button danger" value="abandon">Abandon run</button>
+        <button class="button secondary" value="cancel">Stay</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="rogue.js"></script>
+</body>
+</html>

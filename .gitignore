@@ -1,0 +1,33 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Dependencies and generated deployment output
+node_modules/
+dist/
+*.tgz
+.wrangler/
+
+# Real learner data and local runtime state
+state/
+history/
+mock/leaderboard.json
+mock/leaderboard.json.tmp
+
+# Owner-supplied or generated working material
+mock/CLAs/
+outputs/
+work/
+mock/tunnel-out.txt
+
+# Private transfer and coordination records
+_TRANSFER/
+coordination/exchange/
+
+# OS/editor noise
+.claude/settings.local.json
+.DS_Store
+Thumbs.db
+*.pyc
+__pycache__/

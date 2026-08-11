@@ -1,0 +1,113 @@
+/* ===== Shared layer: theme toggle, name modal, leaderboard ===== */
+
+/* floating theme button */
+.mk-theme-btn{position:fixed;right:14px;bottom:14px;z-index:60;width:44px;height:44px;border-radius:50%;
+  border:none;cursor:pointer;font-size:20px;line-height:44px;text-align:center;background:#1c1c1c;color:#f0a429;
+  box-shadow:0 3px 12px rgba(0,0,0,.35);transition:transform .12s;}
+.mk-theme-btn:hover{transform:scale(1.08);}
+
+/* name modal */
+.mk-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:120;padding:16px;}
+.mk-box{background:#fff;color:#1f2328;border-radius:13px;padding:20px;max-width:370px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.4);}
+.mk-box h3{font-size:17px;margin-bottom:6px;color:#15171a;}
+.mk-box p{font-size:13px;color:#5a6169;margin-bottom:12px;line-height:1.5;}
+.mk-box input{width:100%;padding:10px 12px;font-size:15px;border:1px solid #cfd6de;border-radius:8px;font-family:inherit;}
+.mk-row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
+.mk-row button{padding:9px 16px;border-radius:8px;border:1px solid #cfd6de;background:#f4f6f8;font-weight:bold;cursor:pointer;font-size:13.5px;}
+.mk-row button.pri{background:#2d6fd4;color:#fff;border-color:#2d6fd4;}
+
+/* leaderboard widget */
+.mk-board-wrap{background:#22262b;border:1px solid #31363c;border-radius:12px;padding:14px 16px;margin-bottom:14px;}
+.mk-board-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.mk-board-head .t{font-weight:bold;color:#f0a429;font-size:15px;}
+.mk-board-head .who{font-size:12px;color:#9aa0a6;}
+.mk-board-head .who a{color:#5fa3ff;cursor:pointer;text-decoration:underline;}
+.mk-lb{width:100%;border-collapse:collapse;font-size:13px;}
+.mk-lb th{text-align:left;color:#9aa0a6;font-weight:bold;padding:5px 8px;border-bottom:1px solid #3a4047;}
+.mk-lb td{padding:6px 8px;border-bottom:1px solid #2a2f35;color:#cfd4da;}
+.mk-lb td:nth-child(3){font-weight:bold;color:#fff;white-space:nowrap;}
+.mk-lb tr.me td{color:#f0a429;}
+.mk-lb-empty,.mk-lb-load{color:#9aa0a6;font-size:13px;padding:6px 2px;}
+/* leaderboard on light content pages */
+body[data-theme-base="light"] .mk-board-wrap{background:#fff;border-color:#dde1e5;}
+body[data-theme-base="light"] .mk-lb td{color:#3a4047;border-bottom-color:#eef0f2;}
+body[data-theme-base="light"] .mk-lb td:nth-child(3){color:#15171a;}
+body[data-theme-base="light"] .mk-lb th{border-bottom-color:#dde1e5;}
+body[data-theme-base="light"] .mk-board-head .t{color:#b06a00;}
+body[data-theme-base="light"] .mk-board-head .who a{color:#2d6fd4;}
+
+/* ===== DARK overrides for light-base pages (drills, tests, formula, exam) ===== */
+body[data-theme-base="light"].theme-dark{background:#15171a;color:#d7dadf;}
+.theme-dark .intro{background:#1b2330;border-left-color:#2d6fd4;color:#c4cbd2;}
+.theme-dark .intro b{color:#7fb0ff;}
+.theme-dark .intro .neg,.theme-dark .warn{color:#ff8a7a;}
+.theme-dark .score,.theme-dark .q,.theme-dark .mcard,.theme-dark .results,.theme-dark .f,.theme-dark details.s{
+  background:#1e2228;border-color:#31363c;color:#d7dadf;}
+.theme-dark .score .s1,.theme-dark .mcard .mt,.theme-dark .f .name,.theme-dark .results .big{color:#f0f2f4;}
+.theme-dark .score .s2,.theme-dark .mcard .mb,.theme-dark .qnum,.theme-dark .mnote,.theme-dark .foot{color:#9aa0a6;}
+.theme-dark .stem,.theme-dark .ans{color:#e3e6e9;}
+.theme-dark h2.subj,.theme-dark h2.sect{color:#f0f2f4;}
+.theme-dark .opt{background:#242a31;border-color:#363c44;color:#dfe3e7;}
+.theme-dark .opt:hover{background:#2b323a;border-color:#4a525c;}
+.theme-dark .opt.correct{background:#15301f;border-color:#2f7d4f;}
+.theme-dark .opt.wrong{background:#3a1f1d;border-color:#a14a3e;}
+.theme-dark .opt .lk{color:#9aa0a6;}
+.theme-dark .reveal{border-top-color:#363c44;}
+.theme-dark .work{background:#211c30;}
+.theme-dark .work b{color:#c3a6ef;}
+.theme-dark .recall{background:#13271a;} .theme-dark .recall b{color:#5fd089;}
+.theme-dark .tested{background:#2b2614;} .theme-dark .tested b{color:#f0bf6a;}
+.theme-dark .edge{background:#14263a;} .theme-dark .edge b{color:#7fb0ff;}
+.theme-dark .move{background:#13271a;} .theme-dark .move b{color:#5fd089;}
+.theme-dark .f .formula{background:#0a0d11;}
+.theme-dark .f .line.ex{background:#211c30;} .theme-dark .f .line.ex .lab{color:#c3a6ef;}
+.theme-dark .f .line.trap{background:#311a18;} .theme-dark .f .line.trap .lab{color:#ff8a7a;}
+.theme-dark .f .line .lab{color:#9aa0a6;}
+.theme-dark .f code{background:#2a2f35;color:#dfe3e7;}
+/* any inline <code> on a light-base page (recipe steps, etc.) */
+body[data-theme-base="light"].theme-dark code{background:#2a2f35;color:#9fe0ff;border:1px solid #3a4047;}
+.theme-dark .backbtn{background:#242a31;color:#cfd4da;border-color:#363c44;}
+.theme-dark .score button{background:#242a31;color:#cfd4da;border-color:#363c44;}
+.theme-dark .chip.topic{background:#1b2a3d;border-color:#274868;}
+.theme-dark .chip.calc{background:#2a2340;border-color:#3f3460;}
+.theme-dark .chip.d1{background:#16271c;} .theme-dark .chip.d2{background:#2c2615;} .theme-dark .chip.d3{background:#321b19;}
+.theme-dark details.s summary.q{color:#e3e6e9;}
+.theme-dark .stmt{color:#cfd4da;}
+/* exam-mock specific surfaces */
+.theme-dark .bar{background:#1e2228;border-color:#31363c;}
+.theme-dark .bar .timer{color:#f0f2f4;}
+.theme-dark .bar .timer.low{color:#ff8a7a;}
+.theme-dark .bar .ans{color:#9aa0a6;}
+.theme-dark .exp{background:#172019;border-top-color:#363c44;}
+.theme-dark .exp .a{color:#5fd089;}
+.theme-dark .opt.sel{background:#26314a;border-color:#5b7bb5;}
+.theme-dark .results>div:not(.band){color:#cfd4da !important;}
+.theme-dark .results .big{color:#f0f2f4 !important;}
+
+/* ===== LIGHT overrides for dark-base page (portal/index) ===== */
+body[data-theme-base="dark"].theme-light{background:#eef0f2;color:#1f2328;}
+.theme-light .lead{color:#3a4047;}
+.theme-light .card{background:#fff;border-color:#dde1e5;}
+.theme-light .card.hot{background:#fff7e9;border-color:#f0a429;}
+.theme-light .card:hover{background:#fbfcfd;}
+.theme-light .card .name{color:#15171a;}
+.theme-light .card .meta{color:#5a6169;}
+.theme-light .sect{color:#15171a;}
+.theme-light .sect.hot{color:#b06a00;}
+.theme-light .dcard{background:#fff;border-color:#dde1e5;}
+.theme-light .dcard b{color:#15171a;}
+.theme-light .dcard span{color:#5a6169;}
+.theme-light .tag{background:#e7eaee;color:#3a4047;}
+.theme-light .passed-banner{background:#f4f6f8;border-color:#cfd6de;color:#5a6169;}
+.theme-light .passed-banner b{color:#15171a;}
+.theme-light .note{background:#fff8e6;color:#5a6169;}
+.theme-light .grouplab{color:#5a6169;}
+.theme-light .nav2 a{background:#e7eaee;color:#1f2328;}
+.theme-light .foot{color:#9aa0a6;}
+.theme-light .viewtoggle button{background:#e7eaee;color:#5a6169;border-color:#cfd6de;}
+.theme-light .viewtoggle button.active{background:#f0a429;color:#1c1c1c;border-color:#f0a429;}
+.theme-light .mk-board-wrap{background:#fff;border-color:#dde1e5;}
+.theme-light .mk-lb td{color:#3a4047;border-bottom-color:#eef0f2;}
+.theme-light .mk-lb td:nth-child(3){color:#15171a;}
+.theme-light .mk-lb th{border-bottom-color:#dde1e5;}
+.theme-light .mk-board-head .t{color:#b06a00;}

@@ -1,0 +1,2540 @@
+{
+  "header": {
+    "subject": "MACRO",
+    "subject_name": "Principles of Macroeconomics",
+    "professor": "Dr. Vipul Mathur",
+    "extracted_on": "2026-06-02",
+    "extracted_by": "Claude Opus 4.8 (engine v1.2)",
+    "source_modules_count": 4,
+    "node_count": 63,
+    "exam_format": "Sec A: 20 MCQ (2M); Sec B: 4 short conceptual (5M, 50-80 words); Sec C: 2 case-based (10M, 100-150 words); Sec D: 2 higher-order subjective (10M, 100-150 words). No negative marking. 60 min.",
+    "style_profile": "CLA (macro.docx) MCQs are CAUSAL-CHAIN: a scenario/shock, then the directional effect on a macro variable (e.g. 'exports rise, imports unchanged -> open-economy GDP identity -> GDP increases'). Distractors reverse the arrow, give the null effect, or name an adjacent variable. The written sections (B/C/D) demand the TRANSMISSION MECHANISM and correct TIMEFRAME (short-run vs long-run), grounded in the given case - not just the endpoint. Test causal DIRECTION explicitly.",
+    "extraction_note": "FULLY VERBATIM: all four modules (M1-M4) of Principles of Macroeconomics were read in full from the lecture transcripts and every node is source-grounded. No outline-based or unverified nodes remain.",
+    "timeframe_tagging": "Every node carries a 'timeframe' field per the subject registry (short-run / long-run / both / structural-accounting).",
+    "confirmed_by_student": true
+  },
+  "nodes": [
+    {
+      "id": "ma_m1_micro_vs_macro",
+      "subject": "MACRO",
+      "concept": "Micro vs macro; aggregation over space & time",
+      "formula": null,
+      "variables": {},
+      "context_tag": "framework",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Microeconomics studies individual units (household/firm); macroeconomics is the AGGREGATE of millions of micro decisions, summed over space (geography/sector) and time (quarter/year). Markets do the aggregating; macro variables emerge from it.",
+      "distractors": [
+        {
+          "wrong": "Macro studies a single firm's pricing",
+          "why": "that is microeconomics; macro is the economy-wide aggregate"
+        }
+      ],
+      "sample_question": "What does it mean that macro variables are 'aggregated over space and time'?",
+      "failure_mode": "Thinking macro is just 'big micro' — it is the emergent aggregate, and individual intuitions can fail at the aggregate level.",
+      "source_ref": "MACRO/M1/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [],
+      "connects_to": [
+        "ma_m1_macro_variables",
+        "ma_m1_gdp_identity"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_macro_variables",
+      "subject": "MACRO",
+      "concept": "Macro variables as price–quantity pairs",
+      "formula": null,
+      "variables": {},
+      "context_tag": "framework",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Every macro variable carries a dual fingerprint: a QUANTITY and its PRICE. GDP(qty)/inflation(price); money(qty)/interest rate(price); govt budget(qty)/tax rate(price); trade balance(qty)/exchange rate(price); employment(qty)/wage(price); capital(qty)/rental rate(price).",
+      "distractors": [
+        {
+          "wrong": "Interest rate is the quantity of money",
+          "why": "interest rate is the PRICE of money; the quantity is the money stock"
+        }
+      ],
+      "sample_question": "Name the quantity that pairs with each price: inflation, interest rate, exchange rate, wage.",
+      "failure_mode": "Treating a price variable and its quantity variable as unrelated — they are paired sides of the same market.",
+      "source_ref": "MACRO/M1/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_micro_vs_macro"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_real_vs_nominal",
+      "subject": "MACRO",
+      "concept": "Real vs nominal GDP; constant vs current prices",
+      "formula": null,
+      "variables": {},
+      "context_tag": "national_accounts",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Nominal GDP values output at CURRENT prices (mixes price + quantity changes); real GDP values it at CONSTANT base-year prices to isolate the quantity story. Because you cannot add apples+oranges, convert to money, then hold prices fixed to a chosen base year (convention: a past year) to measure real growth. The price story separated out is inflation (deflator/index).",
+      "distractors": [
+        {
+          "wrong": "Nominal GDP holds prices constant",
+          "why": "that is REAL GDP; nominal uses current prices"
+        },
+        {
+          "wrong": "If nominal GDP rises 8% and inflation is 6%, real growth is 8%",
+          "why": "real ≈ nominal − inflation ≈ 2%"
+        }
+      ],
+      "sample_question": "Nominal GDP grew 11% while inflation was 6%. Roughly what was real GDP growth, and why isn't it 11%?",
+      "failure_mode": "Reading nominal growth as real growth — nominal change conflates price inflation with real output change.",
+      "source_ref": "MACRO/M1/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_macro_variables"
+      ],
+      "connects_to": [
+        "ma_m2_inflation_mechanics"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_timeframes",
+      "subject": "MACRO",
+      "concept": "Short-run vs long-run: trend vs fluctuations",
+      "formula": null,
+      "variables": {},
+      "context_tag": "framework",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both (definitional split)",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "GDP = a smooth upward LONG-RUN trend (supply-driven, ~10yr) + SHORT-RUN zigzag fluctuations around it (demand-driven, ~1yr). In the long run all factors are flexible; in the short run they are sticky/fixed. THE organizing distinction of the course — the same shock can have opposite SR vs LR effects.",
+      "distractors": [
+        {
+          "wrong": "The long run is demand-driven, the short run supply-driven",
+          "why": "reversed — SR is demand-driven, LR supply-driven"
+        },
+        {
+          "wrong": "In the short run all prices/wages are fully flexible",
+          "why": "they are STICKY in the short run; flexible only in the long run"
+        }
+      ],
+      "sample_question": "Why is the short run 'demand-driven' but the long run 'supply-driven'? Give the intuition.",
+      "failure_mode": "Applying a short-run mechanism to a long-run question (or vice-versa). Always fix the timeframe first.",
+      "source_ref": "MACRO/M1/C07-C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_micro_vs_macro"
+      ],
+      "connects_to": [
+        "ma_m1_shocks",
+        "ma_m1_frictions",
+        "ma_m2_sr_demand_driven"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_shocks",
+      "subject": "MACRO",
+      "concept": "Demand, supply & policy shocks",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fluctuations",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Short-run fluctuations come partly from SHOCKS — surprises hitting demand (consumption/investment/export demand), supply (oil prices, pandemic production halt, monsoon), or policy (visa/tariff rules). A shock can morph (COVID: health→supply→demand). They arrive staggered and distributed, not as one instantaneous hit.",
+      "distractors": [
+        {
+          "wrong": "An oil-price spike is a demand shock",
+          "why": "it raises production costs → supply (cost-push) shock"
+        },
+        {
+          "wrong": "Shocks always hit instantaneously and all at once",
+          "why": "they are staggered and distributed over time"
+        }
+      ],
+      "sample_question": "Classify: (a) global oil-price spike, (b) central bank cuts rates spurring home loans, (c) pandemic lockdown.",
+      "failure_mode": "Mislabeling a shock's origin — e.g. calling an oil-price spike a demand shock; it is a cost-push supply shock.",
+      "source_ref": "MACRO/M1/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_timeframes"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_frictions",
+      "subject": "MACRO",
+      "concept": "Frictions: price stickiness, info asymmetry, credit constraints",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fluctuations",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The economy is choppy in the SR because it is not a frictionless machine: prices are STICKY (menu costs — Domino's can't reprint menus daily; wage contracts fixed for a year), information is asymmetric, and credit/liquidity is constrained. Frictions vanish in the long run when everything adjusts.",
+      "distractors": [
+        {
+          "wrong": "Menu costs mean prices adjust instantly to shocks",
+          "why": "menu costs are precisely why prices are STICKY/slow"
+        },
+        {
+          "wrong": "Frictions operate mainly in the long run",
+          "why": "they are short-run; the long run is frictionless/flexible"
+        }
+      ],
+      "sample_question": "Define price stickiness ('menu costs') and explain why it makes the short-run economy choppy.",
+      "failure_mode": "Assuming instant adjustment — frictions are why short-run effects lag and persist.",
+      "source_ref": "MACRO/M1/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_timeframes"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_circular_flow",
+      "subject": "MACRO",
+      "concept": "Circular flow of income",
+      "formula": null,
+      "variables": {},
+      "context_tag": "national_accounts",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Households and firms transact in two markets: the RESOURCE market (households supply labour, firms pay wages) and the PRODUCT market (firms sell goods, households spend). Real flows (goods, labour) run opposite to nominal flows (money). Government taxes both and provides public goods. One agent's spending is another's income — the basis for measuring GDP.",
+      "distractors": [
+        {
+          "wrong": "Money and goods flow in the same direction",
+          "why": "they flow in opposite directions in the circular flow"
+        }
+      ],
+      "sample_question": "In the circular flow, which direction does money flow relative to goods/labour, and why?",
+      "failure_mode": "Forgetting that money and real goods flow in OPPOSITE directions around the loop.",
+      "source_ref": "MACRO/M1/C10",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_micro_vs_macro"
+      ],
+      "connects_to": [
+        "ma_m1_gdp_approaches"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_gdp_approaches",
+      "subject": "MACRO",
+      "concept": "Three approaches to measuring GDP",
+      "formula": null,
+      "variables": {},
+      "context_tag": "national_accounts",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Dip the 'thermometer' anywhere in the circular flow and (in principle) get the same reading: PRODUCTION (count output) = EXPENDITURE (count spending) = INCOME (count earnings), because one person's spending is another's income. Conceptually equal; the EXPENDITURE approach is most practical to execute.",
+      "distractors": [
+        {
+          "wrong": "The income approach normally yields a larger GDP than the expenditure approach",
+          "why": "conceptually they are equal; differences are only measurement error"
+        },
+        {
+          "wrong": "Production approach is the easiest to implement",
+          "why": "expenditure is the most practical; income/production are harder"
+        }
+      ],
+      "sample_question": "Why are the production, expenditure and income approaches to GDP conceptually identical?",
+      "failure_mode": "Believing the three approaches give different GDP figures conceptually — they measure the same flow at different points.",
+      "source_ref": "MACRO/M1/C11",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_circular_flow"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_gdp_identity",
+      "subject": "MACRO",
+      "concept": "GDP identity: Y = C + I + G + NX",
+      "formula": "Y = C + I + G + NX, where NX = Exports − Imports",
+      "variables": {},
+      "context_tag": "national_accounts",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "From the expenditure approach: everything produced-at-home + imported = everything consumed + invested + bought by govt + exported. Rearranged: Y = C + I + G + (Ex − Im) = C + I + G + NX. An accounting IDENTITY, true by construction. NX can be negative (trade deficit).",
+      "distractors": [
+        {
+          "wrong": "Y = C + I + G + Im (imports added)",
+          "why": "imports are SUBTRACTED: NX = Ex − Im"
+        },
+        {
+          "wrong": "A rise in imports, all else equal, raises GDP",
+          "why": "imports enter NX negatively → reduce measured GDP"
+        }
+      ],
+      "sample_question": "Using Y=C+I+G+NX, what happens to GDP if exports rise while imports are unchanged?",
+      "failure_mode": "Adding imports with a + sign, or forgetting NX = exports − imports (net).",
+      "source_ref": "MACRO/M1/C12-C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_gdp_approaches"
+      ],
+      "connects_to": [
+        "ma_m1_savings_investment",
+        "ma_m3_open_economy_identity",
+        "ma_m2_sr_demand_driven"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_savings_investment",
+      "subject": "MACRO",
+      "concept": "Savings = Investment identity",
+      "formula": "(Y−C−T) + (T−G) + (Im−Ex) = I  ⇔  S_private + S_public + S_foreign = I",
+      "variables": {},
+      "context_tag": "national_accounts",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Rearranging the GDP identity with taxes T: private savings (Y−C−T) + public savings (T−G) + foreign savings (Im−Ex) = Investment (I). Total savings (private+public+foreign) must equal investment — an accounting identity, not a behavioural claim.",
+      "distractors": [
+        {
+          "wrong": "A government deficit (T<G) has no link to private/foreign saving",
+          "why": "it must be offset by higher private or foreign saving (lower I) by identity"
+        },
+        {
+          "wrong": "Savings and investment are unrelated quantities",
+          "why": "they are equal by the national-accounts identity"
+        }
+      ],
+      "sample_question": "If the government runs a deficit (T<G) and private saving is unchanged, what must adjust to keep S=I?",
+      "failure_mode": "Confusing 'saving' (the act) with 'investment' (capital formation), or forgetting the foreign-savings term in an open economy.",
+      "source_ref": "MACRO/M1/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_gdp_identity"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m1_gdp_shares_percapita",
+      "subject": "MACRO",
+      "concept": "GDP component shares & per-capita GDP",
+      "formula": null,
+      "variables": {},
+      "context_tag": "national_accounts",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "long-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Dividing the identity by Y gives C/Y + I/Y + G/Y + NX/Y = 100%; the evolving shares tell a country's story (India post-1991 liberalization: imports/exports & investment up, consumption share down; China export/investment-driven; US consumption-driven). Per-capita GDP (GDP/population) proxies living standards better than aggregate GDP.",
+      "distractors": [
+        {
+          "wrong": "Aggregate GDP measures standard of living",
+          "why": "per-capita GDP does; a populous country can have high GDP but low per-capita"
+        }
+      ],
+      "sample_question": "Why do economists prefer per-capita GDP over aggregate GDP to compare living standards?",
+      "failure_mode": "Reading aggregate GDP as living standards — per-capita GDP is the right comparator across countries.",
+      "source_ref": "MACRO/M1/C14",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_gdp_identity"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_functions_of_money",
+      "subject": "MACRO",
+      "concept": "Three functions of money",
+      "formula": null,
+      "variables": {},
+      "context_tag": "money",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Money is anything serving as (1) MEDIUM OF EXCHANGE, (2) UNIT OF ACCOUNT, and (3) STORE OF VALUE. Good money also needs legality, acceptability, reasonably stable value (low inflation), and network effects.",
+      "distractors": [
+        {
+          "wrong": "A primary function of money is to generate interest income",
+          "why": "that is not a function of money itself; the three are exchange, account, store of value"
+        }
+      ],
+      "sample_question": "State the three functions of money and which one inflation most directly erodes.",
+      "failure_mode": "Listing only 'medium of exchange' and missing unit-of-account / store-of-value.",
+      "source_ref": "MACRO/M2/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [],
+      "connects_to": [
+        "ma_m2_money_is_debt"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_money_is_debt",
+      "subject": "MACRO",
+      "concept": "Money is debt; central-bank vs commercial-bank money",
+      "formula": null,
+      "variables": {},
+      "context_tag": "money",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Fiat currency is an IOU: a ₹500 note is the RBI Governor's promise (a central-bank liability), not backed by gold (since 1971). Bank DEPOSITS are IOUs of COMMERCIAL banks, not the central bank. In India only ~3-5% of money is cash (central-bank money); ~95% is deposits (commercial-bank money). Both circulate but are different promises with different risk.",
+      "distractors": [
+        {
+          "wrong": "Indian fiat currency is backed by gold",
+          "why": "fiat is NOT gold-backed (since the early 1970s); it's a central-bank promise"
+        },
+        {
+          "wrong": "Bank deposits are direct liabilities of the central bank",
+          "why": "they are commercial-bank IOUs, not central-bank money"
+        }
+      ],
+      "sample_question": "A ₹500 note and ₹500 in your savings account — whose liability is each, and which is 'central-bank money'?",
+      "failure_mode": "Treating cash and bank deposits as the same kind of money — they are liabilities of different issuers.",
+      "source_ref": "MACRO/M2/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_functions_of_money"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_money_aggregates",
+      "subject": "MACRO",
+      "concept": "Monetary aggregates: M0, M1 (narrow), M3 (broad)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "money",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "M0 / high-powered / base money = currency with public + banks' reserves at the central bank (purest central-bank money). M1 (narrow money) = currency + demand deposits — spendable immediately. M3 (broad money, India's headline) = narrow money + time deposits (FDs). Broad ⊃ narrow ⊃ base.",
+      "distractors": [
+        {
+          "wrong": "M0 (base money) is larger than M3 (broad money)",
+          "why": "M3 is much larger; base money is multiplied up into broad money"
+        },
+        {
+          "wrong": "Time deposits (FDs) are part of narrow money M1",
+          "why": "they are in BROAD money; M1 is currency + demand deposits"
+        }
+      ],
+      "sample_question": "Rank M0, M1, M3 by size and state what each adds over the previous.",
+      "failure_mode": "Confusing base money (M0, central-bank-created) with broad money (M3, mostly bank-created via the multiplier).",
+      "source_ref": "MACRO/M2/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_money_is_debt"
+      ],
+      "connects_to": [
+        "ma_m2_money_multiplier"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_inside_outside_money",
+      "subject": "MACRO",
+      "concept": "Inside vs outside money",
+      "formula": null,
+      "variables": {},
+      "context_tag": "money",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "OUTSIDE money is created by the government/central bank from outside the private system (currency, reserves) — it is net positive wealth to the private sector. INSIDE money is created within the private banking system (deposits); every deposit-asset is matched by a loan-liability, so inside money nets to zero for the private sector as a whole.",
+      "distractors": [
+        {
+          "wrong": "Inside money (bank deposits) is net positive wealth for the private sector",
+          "why": "it nets to zero — each deposit is matched by a loan; only OUTSIDE money is net positive"
+        }
+      ],
+      "sample_question": "Why is 'inside money' said to net to zero for the private sector while 'outside money' does not?",
+      "failure_mode": "Thinking commercial banks create net new wealth — inside money is matched by offsetting liabilities (nets to zero).",
+      "source_ref": "MACRO/M2/C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_money_is_debt"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_money_multiplier",
+      "subject": "MACRO",
+      "concept": "Money multiplier = 1/CRR",
+      "formula": "Money multiplier = 1 / CRR;  Total deposits = Base money × (1/CRR)",
+      "variables": {},
+      "context_tag": "money",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Banks keep a fraction (cash reserve ratio, CRR) of deposits and lend the rest; the loan becomes a new deposit elsewhere, cascading. Total deposits / base money = 1/CRR. India CRR ~4-5% → multiplier ~20-25. Cutting CRR raises the multiplier and credit (post-demonetisation: CRR cut released ~₹1.5tn of lending capacity).",
+      "distractors": [
+        {
+          "wrong": "Raising the CRR increases the money multiplier",
+          "why": "a higher CRR LOWERS the multiplier (1/CRR), shrinking money creation"
+        },
+        {
+          "wrong": "With CRR = 5%, the multiplier is 5",
+          "why": "it is 1/0.05 = 20"
+        }
+      ],
+      "sample_question": "If the RBI cuts CRR from 5% to 4%, how does the money multiplier change (give both values)?",
+      "failure_mode": "Forgetting the multiplier is 1/CRR — a lower CRR means a LARGER multiplier and more money creation.",
+      "source_ref": "MACRO/M2/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_money_aggregates"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_govt_bonds",
+      "subject": "MACRO",
+      "concept": "Government bonds: face value, coupon, maturity",
+      "formula": null,
+      "variables": {},
+      "context_tag": "bonds_rates",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A government bond (G-Sec) is a written promise to repay a FACE VALUE at MATURITY plus a fixed COUPON (interest) each period. The coupon is fixed and printed on the bond; it does not change. Short-maturity govt paper = T-bills; longer = notes/bonds. The safest rupee instrument (sovereign promise).",
+      "distractors": [
+        {
+          "wrong": "A bond's coupon changes as its market price changes",
+          "why": "the coupon is fixed/printed; the YIELD changes with price"
+        }
+      ],
+      "sample_question": "A ₹100 face-value bond has a 6.5% coupon. What rupee interest does it pay yearly, and does that change if its price falls?",
+      "failure_mode": "Confusing the fixed coupon rate with the yield (the coupon never changes; the yield does).",
+      "source_ref": "MACRO/M2/C11",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_money_is_debt"
+      ],
+      "connects_to": [
+        "ma_m2_bond_yield"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_bond_yield",
+      "subject": "MACRO",
+      "concept": "Bond yield and price move inversely",
+      "formula": "Current yield = annual coupon (₹) / current price (₹)",
+      "variables": {},
+      "context_tag": "bonds_rates",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Yield = fixed coupon ÷ current price. Since the coupon is fixed, when a bond's PRICE rises the YIELD falls, and vice-versa. E.g. ₹10 coupon: at price ₹100 → 10% yield; at ₹90 → 11.1%; at ₹110 → 9.1%. Yields (not coupons) are the market 'interest rates' economists track.",
+      "distractors": [
+        {
+          "wrong": "When bond prices rise, yields also rise",
+          "why": "they move INVERSELY — price up, yield down"
+        },
+        {
+          "wrong": "A ₹10-coupon bond bought at ₹90 yields 10%",
+          "why": "10/90 ≈ 11.1%, above the 10% coupon"
+        }
+      ],
+      "sample_question": "A bond pays a fixed ₹10/yr. Its price falls from ₹100 to ₹80. What happens to its yield (compute)?",
+      "failure_mode": "Getting the direction wrong — a price RISE means a yield FALL (inverse relationship).",
+      "source_ref": "MACRO/M2/C12",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_govt_bonds"
+      ],
+      "connects_to": [
+        "ma_m2_repo_arbitrage"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_interest_rate_intuition",
+      "subject": "MACRO",
+      "concept": "Interest rate = price of money over time",
+      "formula": null,
+      "variables": {},
+      "context_tag": "bonds_rates",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The interest rate is the RENT on money — the price of borrowing today, compensating the lender's opportunity cost and the cost of waiting. Normally positive (people must be paid to defer consumption); can be ~0 (Japan 1990s) or even negative in rare crises (Switzerland/Denmark 2015-20).",
+      "distractors": [
+        {
+          "wrong": "Interest rates can never be zero or negative",
+          "why": "rare but real: Japan ~0%, Switzerland/Denmark went negative"
+        }
+      ],
+      "sample_question": "Explain why interest rates are normally positive, in terms of waiting and opportunity cost.",
+      "failure_mode": "Treating interest as a fee unrelated to time — it is fundamentally the price of money ACROSS time.",
+      "source_ref": "MACRO/M2/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_bond_yield"
+      ],
+      "connects_to": [],
+      "shared_with": [
+        "BEHECON.be_m2_time_preference",
+        "GER.dcf_time_value"
+      ],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_repo_arbitrage",
+      "subject": "MACRO",
+      "concept": "Repo rate as policy anchor; arbitrage transmission",
+      "formula": null,
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The RBI sets one POLICY rate — the repo rate (rate at which it lends overnight to banks against govt-bond collateral, 'repurchase obligation'). It doesn't set every rate; via an ARBITRAGE mechanism (connected-water-tanks analogy) all other rates in the family adjust around the repo anchor. 'RBI wags the dog; the whole ecosystem follows.'",
+      "distractors": [
+        {
+          "wrong": "The RBI directly fixes home-loan and deposit rates",
+          "why": "it sets only the policy (repo) rate; other rates adjust by arbitrage"
+        },
+        {
+          "wrong": "Repo lending is unsecured",
+          "why": "it is secured against government-bond collateral"
+        }
+      ],
+      "sample_question": "The RBI raises the repo rate by 50bps. Explain how home-loan rates end up rising without the RBI setting them directly.",
+      "failure_mode": "Thinking the RBI directly sets all interest rates — it sets the anchor; markets transmit it via arbitrage.",
+      "source_ref": "MACRO/M2/C14",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_bond_yield"
+      ],
+      "connects_to": [
+        "ma_m2_monetary_transmission"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_inflation_mechanics",
+      "subject": "MACRO",
+      "concept": "Inflation; CPI vs WPI; headline vs core",
+      "formula": null,
+      "variables": {},
+      "context_tag": "inflation",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Inflation = sustained rise in the general price level, measured by tracking a fixed basket. WPI tracks wholesale/production-side prices; CPI tracks consumer-side prices (food, fuel, housing…). HEADLINE CPI includes volatile food & fuel; CORE inflation = CPI minus food & fuel (persistent, sticky — a diagnostic). India's RBI targets headline CPI.",
+      "distractors": [
+        {
+          "wrong": "Core inflation includes food and fuel",
+          "why": "core EXCLUDES food & fuel; headline includes them"
+        },
+        {
+          "wrong": "The RBI's inflation target is WPI",
+          "why": "India targets CPI (headline)"
+        }
+      ],
+      "sample_question": "Define core inflation and explain why a central bank watches it even though it targets headline CPI.",
+      "failure_mode": "Confusing headline (volatile, food+fuel) with core (persistent) — and forgetting the RBI targets headline CPI.",
+      "source_ref": "MACRO/M2/C15",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_real_vs_nominal"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_demand_pull_cost_push",
+      "subject": "MACRO",
+      "concept": "Demand-pull vs cost-push inflation",
+      "formula": null,
+      "variables": {},
+      "context_tag": "inflation",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "DEMAND-PULL inflation: excess demand bids prices up (queue at the pizza shop) — the RBI CAN fight it by raising rates to curb borrowing/spending. COST-PUSH inflation: supply-side cost shocks (oil, monsoon, war) push prices up — the RBI is largely helpless (raising rates can't grow tomatoes). Diagnosing the source determines whether monetary policy can help.",
+      "distractors": [
+        {
+          "wrong": "The RBI can cure an oil-price-driven inflation by raising rates",
+          "why": "that's cost-push; rate hikes curb demand, not supply shocks"
+        },
+        {
+          "wrong": "Demand-pull and cost-push call for the same policy response",
+          "why": "they don't — only demand-pull is squarely addressable by monetary policy"
+        }
+      ],
+      "sample_question": "Inflation jumps because of a global oil-price spike. Should the RBI raise rates? Why or why not?",
+      "failure_mode": "Prescribing rate hikes for cost-push (supply) inflation — monetary policy mainly addresses demand-pull.",
+      "source_ref": "MACRO/M2/C16",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_inflation_mechanics",
+        "ma_m1_shocks"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_inflation_expectations",
+      "subject": "MACRO",
+      "concept": "Inflation expectations (self-fulfilling)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "inflation",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Expectations are a third inflation channel and are self-fulfilling: if consumers/firms expect higher inflation they buy/raise prices now, validating it; if they trust low inflation, behaviour stays calm. Central-bank CREDIBILITY anchors expectations — the key reason inflation targeting works.",
+      "distractors": [
+        {
+          "wrong": "Inflation expectations are irrelevant if there's no real shock",
+          "why": "expectations are self-fulfilling and can drive inflation on their own"
+        }
+      ],
+      "sample_question": "Explain how an expectation of higher future inflation can become self-fulfilling on both the consumer and firm side.",
+      "failure_mode": "Ignoring expectations — even without a real shock, expected inflation can become actual inflation.",
+      "source_ref": "MACRO/M2/C17",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_inflation_mechanics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_inflation_targeting",
+      "subject": "MACRO",
+      "concept": "Flexible inflation targeting (India)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Since the 2016 RBI Act amendment, the RBI has a legal mandate to keep CPI inflation at 4% within a ±2% band (2–6%), set by a Monetary Policy Committee. If inflation stays outside 2–6% for three consecutive quarters, the RBI must report to government (accountability). 'Flexible' = a band over time, not a point.",
+      "distractors": [
+        {
+          "wrong": "India targets exactly 4% with no tolerance band",
+          "why": "it's 4% ± 2% (a 2–6% band)"
+        },
+        {
+          "wrong": "The target is enforced on WPI",
+          "why": "it is CPI (headline)"
+        }
+      ],
+      "sample_question": "State India's inflation target and the accountability trigger if the RBI persistently misses it.",
+      "failure_mode": "Stating a single point target (4%) without the ±2% band, or attributing it to WPI.",
+      "source_ref": "MACRO/M2/C18",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_inflation_expectations"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_output_gap",
+      "subject": "MACRO",
+      "concept": "Output gap (actual − potential)",
+      "formula": "Output gap = Actual GDP − Potential GDP",
+      "variables": {},
+      "context_tag": "fluctuations",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Output gap = actual GDP − potential GDP. NEGATIVE gap: economy below capacity → slack, idle factories, unemployment. POSITIVE gap: producing above sustainable capacity → overheating → inflation (like cramming by cutting sleep — unsustainable). The RBI wants the gap near zero.",
+      "distractors": [
+        {
+          "wrong": "A positive output gap is purely good (more output)",
+          "why": "it's unsustainable → inflationary overheating"
+        },
+        {
+          "wrong": "A negative output gap causes inflation",
+          "why": "a negative gap causes slack/unemployment; a POSITIVE gap is inflationary"
+        }
+      ],
+      "sample_question": "An economy produces above its potential capacity. What is the sign of the output gap and what does it imply for inflation?",
+      "failure_mode": "Thinking a positive output gap is unambiguously good — it signals unsustainable overheating/inflation.",
+      "source_ref": "MACRO/M2/C19",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_timeframes"
+      ],
+      "connects_to": [
+        "ma_m2_inflation_output_tradeoff"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_dual_mandate",
+      "subject": "MACRO",
+      "concept": "RBI dual mandate (inflation + output)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Legally the RBI is accountable only for INFLATION (post-2016), but it traditionally also cares about OUTPUT/growth, financial stability and smoothing cycles. The two goals conflict in the short run (fighting inflation can slow growth), making the RBI's job a tug-of-war.",
+      "distractors": [
+        {
+          "wrong": "The RBI has a legal mandate for both growth and inflation",
+          "why": "the LEGAL mandate is inflation; growth is a traditional (non-statutory) objective"
+        }
+      ],
+      "sample_question": "What is the RBI's legal mandate vs its traditional objectives, and why do they conflict short-run?",
+      "failure_mode": "Assuming the RBI optimizes growth and inflation independently — short-run they trade off.",
+      "source_ref": "MACRO/M2/C20",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_inflation_targeting",
+        "ma_m2_output_gap"
+      ],
+      "connects_to": [
+        "ma_m2_inflation_output_tradeoff"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_inflation_output_tradeoff",
+      "subject": "MACRO",
+      "concept": "Short-run inflation–output trade-off",
+      "formula": null,
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Car analogy: rates are the accelerator, output the speed, inflation the engine heat. Cutting rates → more borrowing/spending → faster growth BUT overheating/inflation. Raising rates → cools inflation BUT slows growth. This SR trade-off exists because capacity is fixed short-run; in the long run capacity can expand and the trade-off dissolves.",
+      "distractors": [
+        {
+          "wrong": "Lowering interest rates reduces both inflation and boosts growth",
+          "why": "lower rates boost growth but RAISE inflation — that's the trade-off"
+        },
+        {
+          "wrong": "The inflation-output trade-off holds in the long run",
+          "why": "it's a SHORT-RUN trade-off; long-run capacity expansion dissolves it"
+        }
+      ],
+      "sample_question": "The RBI cuts rates to boost growth. Trace the effect on inflation and explain the short-run trade-off.",
+      "failure_mode": "Believing you can raise growth and cut inflation simultaneously in the short run — they trade off.",
+      "source_ref": "MACRO/M2/C21",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_dual_mandate"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_sr_demand_driven",
+      "subject": "MACRO",
+      "concept": "Short-run output is demand-driven",
+      "formula": null,
+      "variables": {},
+      "context_tag": "framework",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Auditorium analogy: seats (capacity) are fixed short-run; attendance (output) is set by DEMAND for the speaker. So short-run, the economy produces what people WANT (demand); long-run, it produces what it CAN (supply capacity). This is why the RBI manages demand to keep output near capacity.",
+      "distractors": [
+        {
+          "wrong": "Short-run output is set by supply capacity",
+          "why": "short-run it's DEMAND-determined; supply capacity binds in the long run"
+        }
+      ],
+      "sample_question": "Why does the 'auditorium' analogy show short-run output is demand-driven while long-run is supply-driven?",
+      "failure_mode": "Applying long-run supply logic to short-run questions — short-run output follows demand.",
+      "source_ref": "MACRO/M2/C22",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_timeframes",
+        "ma_m1_gdp_identity"
+      ],
+      "connects_to": [
+        "ma_m2_monetary_transmission"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_monetary_transmission",
+      "subject": "MACRO",
+      "concept": "Monetary transmission: rates → borrowing → C+I → AD",
+      "formula": "↑ repo → ↑ borrowing cost → ↓ C, ↓ I → ↓ AD → ↓ output & inflation (with lags)",
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Closed-economy aggregate demand = C + I + G. Both C (EMIs, credit-card spend) and I (firm investment) are partly borrowing-financed, so they depend on interest rates. CHAIN: RBI raises repo → borrowing dearer → C and I fall → aggregate demand falls → output and inflation cool (with lags). Rate cut runs the chain in reverse. Effects lag and depend on interest-elasticity.",
+      "distractors": [
+        {
+          "wrong": "A repo-rate hike raises consumption and investment demand",
+          "why": "it RAISES borrowing cost → LOWERS C and I"
+        },
+        {
+          "wrong": "Monetary policy affects demand instantly",
+          "why": "it works with lags (EMIs, habits, contracts adjust slowly)"
+        }
+      ],
+      "sample_question": "Walk the full causal chain from an RBI repo-rate CUT to its effect on output and inflation.",
+      "failure_mode": "Getting the causal DIRECTION wrong (the core MACRO failure mode): rate HIKE → demand DOWN, not up.",
+      "source_ref": "MACRO/M2/C23-C25",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_repo_arbitrage",
+        "ma_m2_sr_demand_driven"
+      ],
+      "connects_to": [
+        "ma_m2_limits_monetary_policy"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_limits_monetary_policy",
+      "subject": "MACRO",
+      "concept": "Limits of monetary policy",
+      "formula": null,
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Monetary policy is not omnipotent. (1) It cannot fix COST-PUSH/supply inflation — raising rates curbs demand, not supply ('can't plant tomatoes or drill oil'). Russia-Ukraine 2022: oil ~$90→$130, India CPI >7% (food is ~40-45% of the CPI basket, fuel ~8-10%); aggressive RBI hikes barely dented it because the cause was global supply, not domestic demand → risk of STAGFLATION (high inflation + low growth). (2) The ZERO LOWER BOUND: once rates ≈0 the RBI is 'out of ammunition' (Japan's lost decade — rates cut 6%→~0% by 1995, recession persisted), forcing non-traditional QUANTITATIVE EASING (central bank buys assets to inject liquidity — powerful but risks asset bubbles & currency depreciation). (3) Lags & impaired banks also weaken it.",
+      "distractors": [
+        {
+          "wrong": "The RBI can cure oil/food-driven (supply) inflation by hiking rates",
+          "why": "rate hikes curb demand, not supply; that's the cost-push limit → stagflation risk"
+        },
+        {
+          "wrong": "At the zero lower bound, conventional rate cuts still work fine",
+          "why": "below ~0 the RBI loses its main tool and must resort to QE"
+        }
+      ],
+      "sample_question": "Inflation hits 7% from a global oil shock. The RBI hikes aggressively but inflation barely falls while growth slows. Name this outcome and explain why monetary policy underperformed.",
+      "failure_mode": "Assuming the RBI can always hit its target quickly — lags, the zero bound, and supply shocks limit it.",
+      "source_ref": "MACRO/M2/C27",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_monetary_transmission"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_yield_curve",
+      "subject": "MACRO",
+      "concept": "Yield curve & the family of rates",
+      "formula": null,
+      "variables": {},
+      "context_tag": "bonds_rates",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The yield curve plots yield vs maturity. It is normally UPWARD-sloping because longer maturities carry a TERM PREMIUM (compensation for locking money up longer / more uncertainty): 10yr yield ≈ short-rate + term premium. Other issuers stack ABOVE the Govt-of-India curve by added risk — state bonds (SDLs) add credit risk; corporate bonds (AAA→AA→BBB→junk) add credit + LIQUIDITY risk. The RBI sets only the short end (repo); via arbitrage the whole curve moves. An INVERTED curve (short yields > long yields) historically signals an impending recession.",
+      "distractors": [
+        {
+          "wrong": "An inverted yield curve signals a coming boom",
+          "why": "it classically signals a recession"
+        },
+        {
+          "wrong": "Corporate and government bonds of equal maturity carry the same yield",
+          "why": "corporates sit above GoI by credit + liquidity risk premia"
+        }
+      ],
+      "sample_question": "Why is the yield curve usually upward-sloping, and what does an inversion (short > long yields) historically warn of?",
+      "failure_mode": "Reading any single rate in isolation — rates form a term-structure family anchored to policy.",
+      "source_ref": "MACRO/M2/C28",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_repo_arbitrage"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_financial_intermediation",
+      "subject": "MACRO",
+      "concept": "Banking regulation & structure (CRR, SLR, CAR)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Banks are the main conduit of policy and are actively regulated by the RBI via 'knobs': CRR (cash reserve ratio — deposits held as reserves at the RBI, ~4.5%, non-lendable), SLR (statutory liquidity ratio — a fraction of deposits held in govt securities, ~18%), and the capital adequacy ratio (capital to absorb losses). India's system mixes large public-sector banks (>50% of assets), more-efficient private banks (~30-35%), and niche foreign banks (<10%). Banks are NOT passive pipes — their risk appetite and balance-sheet health decide whether RBI rate changes actually reach borrowers.",
+      "distractors": [
+        {
+          "wrong": "CRR and SLR are the same requirement",
+          "why": "CRR is cash reserves at the RBI; SLR is govt-securities holdings"
+        },
+        {
+          "wrong": "Banks mechanically pass through every RBI rate change",
+          "why": "banks are active; risk perception & balance-sheet health can block transmission"
+        }
+      ],
+      "sample_question": "Distinguish CRR from SLR, and explain why a well-capitalised banking system is needed for monetary policy to reach the real economy.",
+      "failure_mode": "Ignoring the banking channel — if intermediation is impaired, rate cuts don't reach borrowers.",
+      "source_ref": "MACRO/M2/C31",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_monetary_transmission"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_investment_demand",
+      "subject": "MACRO",
+      "concept": "Investment demand & interest-rate sensitivity",
+      "formula": "Invest if expected project return > cost of borrowing",
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Investment demand is MORE interest-rate-sensitive than consumption, because most investment is debt-financed and is a cost-benefit call: a firm invests only if expected return > borrowing cost. A project returning 12% is viable at an 8% borrowing cost (4% margin) but is shelved if rates rise to 10% (2% margin). In India a ~1% rate cut raises investment ~2%, fastest in the SME/bank-loan segment; the full effect lags ~2-3 months due to approval/contract frictions.",
+      "distractors": [
+        {
+          "wrong": "Consumption is more interest-rate-sensitive than investment",
+          "why": "investment is more sensitive — it's largely debt-financed and margin-driven"
+        },
+        {
+          "wrong": "A rate hike from 8% to 10% leaves a 12%-return project equally attractive",
+          "why": "the margin shrinks from 4% to 2%, often shelving the project"
+        }
+      ],
+      "sample_question": "A project yields 12%. Borrowing cost rises from 8% to 11%. What happens to the firm's investment decision and why is investment so rate-sensitive?",
+      "failure_mode": "Treating investment as rate-insensitive — it is the MOST rate-sensitive demand component.",
+      "source_ref": "MACRO/M2/C25",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_monetary_transmission"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_mp_channels",
+      "subject": "MACRO",
+      "concept": "The five monetary-policy transmission channels",
+      "formula": null,
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Monetary policy is a 'Swiss-army knife' transmitting through FIVE channels, not one: (1) INTEREST-RATE channel (repo→loan rates→C and I); (2) BANK-CREDIT channel (more liquidity / lower CRR → banks relax lending standards & approve more loans); (3) BALANCE-SHEET channel (lower rates lift borrowers' asset/collateral values → they look safer → easier credit); (4) ASSET-PRICE channel (cheap liquidity lifts stocks & real estate → WEALTH EFFECT → more spending; firms also raise equity cheaply via IPOs — vivid in COVID); (5) EXPECTATIONS channel (an accommodative signal shifts beliefs → households/firms spend & invest now, self-fulfilling).",
+      "distractors": [
+        {
+          "wrong": "Monetary policy works only through the interest-rate channel",
+          "why": "there are five: interest-rate, credit, balance-sheet, asset-price, expectations"
+        },
+        {
+          "wrong": "The 'wealth effect' is part of the bank-credit channel",
+          "why": "it is the ASSET-PRICE channel — rising asset values make people feel richer and spend"
+        }
+      ],
+      "sample_question": "Name the five channels of monetary-policy transmission and give the one-line mechanism of the asset-price channel.",
+      "failure_mode": "Reducing monetary policy to the interest-rate channel alone — four other channels operate in parallel.",
+      "source_ref": "MACRO/M2/C26",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_monetary_transmission"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_real_vs_nominal_rates",
+      "subject": "MACRO",
+      "concept": "Real vs nominal interest rates (Fisher identity)",
+      "formula": "Real rate ≈ Nominal rate − Inflation  (Fisher identity)",
+      "variables": {},
+      "context_tag": "bonds_rates",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Every quoted rate (repo, loan, deposit, bond yield) is NOMINAL; economic decisions hinge on the REAL rate = nominal − inflation (Fisher identity). A 7% loan with 6% inflation is only ~1% real cost (nearly free); a 6% loan with 6% inflation is a 0% real cost. The RBI sets the nominal rate; the real rate is deduced and is the true economic cost of borrowing.",
+      "distractors": [
+        {
+          "wrong": "A 7% loan is expensive regardless of inflation",
+          "why": "at 6% inflation its REAL cost is only ~1%"
+        },
+        {
+          "wrong": "The RBI directly sets the real interest rate",
+          "why": "the RBI sets the NOMINAL rate; the real rate is nominal − inflation"
+        }
+      ],
+      "sample_question": "A firm borrows at 8% when inflation is 7%. What is the approximate real interest rate, and why does it matter more than the nominal rate?",
+      "failure_mode": "Judging borrowing cost by the nominal rate, ignoring that inflation erodes it (real = nominal − inflation).",
+      "source_ref": "MACRO/M2/C30",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_interest_rate_intuition",
+        "ma_m2_inflation_mechanics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_rbi_toolkit",
+      "subject": "MACRO",
+      "concept": "RBI's liquidity toolkit: repo ops, OMO, CRR, SLR, forward guidance",
+      "formula": null,
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Beyond setting the repo rate the RBI manages money with: REPO/REVERSE-REPO daily ops (lend/absorb overnight vs collateral — fine-tunes the rate; the corridor: MSF = repo+δ, SDF/reverse-repo = repo−δ); OPEN MARKET OPERATIONS (OMO — buying govt bonds PERMANENTLY injects liquidity/expands money, selling withdraws it — a structured permanent tool, unlike the reversible repo); the CRR (reserve ratio — small changes hit hard via the 1/CRR multiplier: COVID cut 4→3% released ~₹1.75tn; demonetisation 4.75→4% released ~₹1.5tn); the SLR; and FORWARD GUIDANCE (communicating the future rate-path stance — dovish/accommodative, neutral, or hawkish — which moves markets WITHOUT touching the repo, vital at the zero lower bound).",
+      "distractors": [
+        {
+          "wrong": "OMO and repo operations are both temporary/reversible",
+          "why": "repo is reversible (repurchase); OMO is a PERMANENT injection/withdrawal"
+        },
+        {
+          "wrong": "Forward guidance requires changing the repo rate",
+          "why": "it moves markets purely via communication of the future stance"
+        }
+      ],
+      "sample_question": "Contrast a repo operation with an open-market operation (OMO) in terms of permanence, and explain how forward guidance moves markets without a rate change.",
+      "failure_mode": "Thinking the repo rate is the RBI's only tool — OMO, CRR and forward guidance are distinct, powerful levers.",
+      "source_ref": "MACRO/M2/C29+C31",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_repo_arbitrage",
+        "ma_m2_money_multiplier"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m2_npa_nbfc",
+      "subject": "MACRO",
+      "concept": "NPAs, NBFCs & shadow-banking contagion",
+      "formula": null,
+      "variables": {},
+      "context_tag": "monetary_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Transmission can break INSIDE the financial system. NPAs (non-performing assets — loans unpaid >90 days) force banks to set aside PROVISIONS, eroding lending capital → banks turn risk-averse and fail to pass on RBI rate cuts (India's public-sector banks, 2014-19). NBFCs (non-bank financial companies, ~20% of credit — 'shadow banking') lend like banks but cannot take deposits, so they borrow SHORT (markets/banks) and lend LONG — structurally fragile. The IL&FS default (2018, ~₹90,000cr) triggered CONTAGION: ratings downgrades → credit freeze → SMEs/auto/housing borrowers cut off — showing the system's upstream-downstream linkages.",
+      "distractors": [
+        {
+          "wrong": "High NPAs make banks lend more freely",
+          "why": "provisions erode capital → banks turn risk-averse and lend less"
+        },
+        {
+          "wrong": "NBFCs fund themselves with public deposits like banks",
+          "why": "they CANNOT take deposits; they borrow short from markets/banks — hence fragility"
+        }
+      ],
+      "sample_question": "Why did high public-sector-bank NPAs (2014-19) blunt RBI rate cuts, and why are deposit-less NBFCs structurally fragile?",
+      "failure_mode": "Assuming RBI rate cuts always reach borrowers — NPAs and NBFC stress can freeze transmission.",
+      "source_ref": "MACRO/M2/C31",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_financial_intermediation"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_open_economy_identity",
+      "subject": "MACRO",
+      "concept": "Open-economy GDP identity & net exports",
+      "formula": "Y = C + I + G + NX;  NX = Exports − Imports",
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Opening the economy adds NET EXPORTS: Y = C + I + G + NX, NX = Exports − Imports (the 'trade balance'). NX>0 = trade surplus (net seller; foreign demand ADDS to GDP); NX<0 = trade deficit (net buyer; domestic demand leaks abroad). EXPORTS depend on (i) global/world income, (ii) the real exchange rate, (iii) trade barriers/tariffs. IMPORTS depend on (i) domestic income, (ii) the real exchange rate, (iii) tariffs. So a rupee depreciation raises exports & cuts imports (improving NX); a domestic boom raises imports (worsening NX).",
+      "distractors": [
+        {
+          "wrong": "A domestic boom (rising domestic income) improves the trade balance",
+          "why": "it raises IMPORTS → worsens NX"
+        },
+        {
+          "wrong": "Rising imports increase GDP via the identity",
+          "why": "imports enter NX negatively → reduce measured GDP"
+        }
+      ],
+      "sample_question": "India's exports rise (imports unchanged). What happens to GDP via Y=C+I+G+NX? And what happens to NX if instead domestic income booms?",
+      "failure_mode": "Directional error — thinking higher imports raise GDP, or that a domestic boom improves the trade balance.",
+      "source_ref": "MACRO/M3/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_gdp_identity"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_exchange_rate_asset_market",
+      "subject": "MACRO",
+      "concept": "Exchange rate in the asset market",
+      "formula": "E = rupees per $1;  rupee 'price' = 1/E;  E↑ ⇒ $ appreciates, ₹ depreciates",
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Treat currencies as commodities. The NOMINAL exchange rate E = price of $1 in rupees (E=90 ⇒ ₹90 per $). If E rises the dollar APPRECIATES and the rupee DEPRECIATES (rupee price is the inverse, 1/E). More rupees chasing dollars → dollar dearer. To price E, set up a US investor with D dollars and a no-arbitrage choice: (a) US bond → (1+i_US)·D; or (b) convert to rupees at E_today, buy the Indian bond, reconvert at E_tomorrow → (1+i_IND)·D·(E_today/E_tomorrow). Arbitrage equalises the two routes — this yields interest-rate parity.",
+      "distractors": [
+        {
+          "wrong": "If E rises from 80 to 90, the rupee has appreciated",
+          "why": "E↑ = rupee DEPRECIATION (you pay more ₹ per $)"
+        }
+      ],
+      "sample_question": "The exchange rate moves from ₹80/$ to ₹90/$. Which currency appreciated, and set up the US investor's two no-arbitrage routes.",
+      "failure_mode": "Confusing the direction: E↑ means rupee DEPRECIATION (dollar appreciation), not strengthening.",
+      "source_ref": "MACRO/M3/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_open_economy_identity"
+      ],
+      "connects_to": [
+        "ma_m3_interest_rate_parity"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_interest_rate_parity",
+      "subject": "MACRO",
+      "concept": "Interest rate parity (UIP)",
+      "formula": "UIP: %ΔE (₹ depreciation) ≈ i_IND − i_US;  Covered IRP uses the forward rate to lock E",
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "UNCOVERED interest parity (UIP), from no-arbitrage: E_tomorrow/E_today = (1+i_IND)/(1+i_US); linearised, the expected % depreciation of the rupee ≈ i_IND − i_US (interest-rate differential). Empirically UIP fits POORLY period-to-period (currency risk isn't hedged), but the LONG-RUN average holds: India ~7% vs US ~3% ⇒ ~4%/yr differential, and the rupee depreciated ~4%/yr (₹65/$ in 2015 → ₹90/$ in 2025, ≈40% over 10 yrs). COVERED interest parity — locking the future rate with an FX forward/future — removes the exchange risk and matches data much better.",
+      "distractors": [
+        {
+          "wrong": "UIP says a higher domestic interest rate makes the currency appreciate over time",
+          "why": "UIP implies expected DEPRECIATION ≈ the rate differential"
+        },
+        {
+          "wrong": "Uncovered IRP fits the data better than covered IRP",
+          "why": "covered IRP (hedged with forwards) fits much better"
+        }
+      ],
+      "sample_question": "India's bond yield is 7%, the US's is 3%. By UIP, what is the expected annual change in the ₹/$ rate, and in which direction?",
+      "failure_mode": "Mixing the direction — a HIGHER domestic rate is matched by EXPECTED DEPRECIATION, not appreciation, under UIP.",
+      "source_ref": "MACRO/M3/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_exchange_rate_asset_market"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_exchange_rate_product_market",
+      "subject": "MACRO",
+      "concept": "Exchange rate in the product market (PPP)",
+      "formula": "Real exchange rate e = E·(P_US / P_India);  long-run PPP: e → 1",
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "long-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "From the product market: the REAL exchange rate e = E·(P_US/P_India) — how many Indian goods one US good buys after conversion (the Big Mac index makes it concrete: a US Big Mac that buys 2 Indian Big Macs ⇒ e≈2). PURCHASING POWER PARITY says arbitrage drives identical tradable goods to the same price, so in the LONG RUN e → 1 (a gravitational anchor). e>1 ⇒ domestic goods are cheap / currency UNDERvalued ⇒ demand for rupees rises ⇒ rupee tends to APPRECIATE toward 1; e<1 ⇒ OVERvalued ⇒ tends to depreciate. Short-run e moves mainly through the fast-moving nominal rate E (prices P are sticky).",
+      "distractors": [
+        {
+          "wrong": "A real exchange rate above 1 means the currency is overvalued and will depreciate",
+          "why": "e>1 ⇒ goods cheap ⇒ UNDERvalued ⇒ tends to APPRECIATE toward 1"
+        },
+        {
+          "wrong": "PPP holds tightly month-to-month",
+          "why": "PPP is a LONG-RUN anchor; short-run e floats around 1 via the nominal rate"
+        }
+      ],
+      "sample_question": "A US Big Mac converts to enough rupees to buy 2 Indian Big Macs (e≈2). Is the rupee over- or under-valued, and which way does PPP push it?",
+      "failure_mode": "Applying PPP to short-run moves (it's a long-run anchor) or mixing under/over-valuation directions.",
+      "source_ref": "MACRO/M3/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_exchange_rate_asset_market"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_impossible_trinity",
+      "subject": "MACRO",
+      "concept": "The impossible trinity",
+      "formula": null,
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Three desirables — (1) a FIXED exchange rate (certainty), (2) free CAPITAL MOBILITY (efficient global allocation), (3) INDEPENDENT monetary policy (sovereignty) — but only TWO can hold at once (the trilemma). It falls straight out of UIP: fix E (ratio=1) + free mobility (the arbitrage '=' holds) forces i_IND = i_US, killing independence. Choices: Eurozone & Hong Kong/Saudi/Qatar = fixed + mobility (give up independence); China = fixed + independence (capital controls); US/UK = floating + mobility + independence (give up the fix). It's a SPECTRUM, not all-or-nothing: India sits in the middle (managed float + partial capital controls + semi-independent policy), getting partial benefits of all three.",
+      "distractors": [
+        {
+          "wrong": "With free capital mobility and a fixed exchange rate, a country still keeps independent monetary policy",
+          "why": "UIP forces i_domestic = i_foreign — independence is lost"
+        },
+        {
+          "wrong": "The trilemma is an all-or-nothing choice among the three corners",
+          "why": "it's a spectrum; most countries (incl. India) sit in the middle"
+        }
+      ],
+      "sample_question": "India fixes the rupee AND keeps open capital flows. Show via UIP why it then cannot set its interest rate independently.",
+      "failure_mode": "Claiming all three can hold simultaneously, or that the choice is binary rather than a spectrum.",
+      "source_ref": "MACRO/M3/C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_interest_rate_parity"
+      ],
+      "connects_to": [],
+      "shared_with": [
+        "BEHECON.be_m2_nash_equilibrium"
+      ],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_exchange_rate_regimes",
+      "subject": "MACRO",
+      "concept": "Exchange-rate regimes; nominal vs real shocks",
+      "formula": null,
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Regimes span FIXED (a peg, e.g. Hong Kong→USD; needs reserves + capital controls) → MANAGED/'dirty' FLOAT (market-determined but the central bank intervenes on volatility — India since the mid-1990s) → FREE FLOAT (pure market, e.g. USD/EUR/JPY). Terminology matters: under floating, currency moves are DEPRECIATION/APPRECIATION (market-driven); under a fix, a deliberate policy move is DEVALUATION/REVALUATION (govt/central-bank decision — e.g. India's 1991 devaluation). The regime choice trades off price certainty against monetary autonomy (per the trilemma).",
+      "distractors": [
+        {
+          "wrong": "A market-driven fall in a floating currency is called a 'devaluation'",
+          "why": "that's DEPRECIATION; devaluation is a deliberate policy cut under a fixed regime"
+        },
+        {
+          "wrong": "India runs a hard fixed-exchange-rate peg",
+          "why": "India runs a MANAGED float since the mid-1990s"
+        }
+      ],
+      "sample_question": "Distinguish depreciation from devaluation, and classify India's current exchange-rate regime.",
+      "failure_mode": "Using 'devaluation' for a market-driven float move (that's depreciation) — devaluation is a policy act under a peg.",
+      "source_ref": "MACRO/M3/C02+C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_impossible_trinity"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_exchange_rate_monetary_channel",
+      "subject": "MACRO",
+      "concept": "Exchange-rate channel of monetary policy",
+      "formula": "↑i → capital inflow → ₹ appreciates → exports↓, imports↑ → NX↓ → AD↓ → inflation↓",
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A SECOND transmission channel beyond the interest-rate channel. CHAIN: RBI raises rates → (via UIP, with mobile capital) foreign capital flows in chasing higher Indian yields → demand for rupees rises → rupee NOMINALLY appreciates → (prices sticky) REAL appreciation → Indian exports dearer, foreign goods cheaper → exports↓, imports↑ → NX↓ → aggregate demand↓ → inflation↓. Its strength depends on (a) CAPITAL MOBILITY (high mobility → big flows from small rate gaps) and (b) the EXCHANGE-RATE REGIME (blocked under a hard peg, since the RBI must defend the fixed rate; partial under India's managed float).",
+      "distractors": [
+        {
+          "wrong": "An RBI rate hike depreciates the rupee and boosts exports",
+          "why": "a hike attracts capital → rupee APPRECIATES → exports FALL"
+        },
+        {
+          "wrong": "The exchange-rate channel works fully under a hard fixed peg",
+          "why": "under a peg the RBI must defend the rate, blocking the channel"
+        }
+      ],
+      "sample_question": "Trace how an RBI rate HIKE affects net exports and inflation through the exchange-rate channel, and state the two conditions it depends on.",
+      "failure_mode": "Forgetting this is a distinct channel, or reversing it (a rate HIKE appreciates the rupee and CUTS net exports).",
+      "source_ref": "MACRO/M3/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_interest_rate_parity",
+        "ma_m3_open_economy_identity",
+        "ma_m2_monetary_transmission"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_balance_of_payments",
+      "subject": "MACRO",
+      "concept": "Balance of payments identity",
+      "formula": "Current account + Capital account = 0  (a CAD is financed by a capital-account surplus)",
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The Balance of Payments records all transactions with the world over a period. CURRENT account = trade in goods & services + income (dividends) + transfers (NRI remittances); CAPITAL/financial account = FDI, FPI, external commercial borrowings (ECB), and changes in RBI reserves. By double-entry, current + capital = 0: a current-account DEFICIT (imports>exports) MUST be financed by a capital-account surplus (borrowing/selling assets to foreigners). Whether a CAD is 'bad' depends on (1) USE — investment/capital goods (good, like an education loan) vs consumption (bad); (2) SOURCE — patient FDI vs hot-money FPI; (3) SIZE — ~2-2.5% of GDP comfortable, 4-5% danger (India ~1.3%). The 1991 crisis: a Gulf-War oil spike + falling remittances drained reserves to ~$1bn (2 weeks of imports); India airlifted 47t of gold to the Bank of England and launched the reforms.",
+      "distractors": [
+        {
+          "wrong": "A current-account deficit can exist without any offsetting capital inflow",
+          "why": "by the BoP identity it MUST be financed by a capital-account surplus / reserve drawdown"
+        },
+        {
+          "wrong": "A larger current-account deficit is always more dangerous than a smaller one",
+          "why": "what it FUNDS (investment vs consumption) and its SOURCE (FDI vs FPI) matter more than size"
+        }
+      ],
+      "sample_question": "India runs a $30bn current-account deficit. By the BoP identity how is it financed, and what three questions decide whether it is dangerous?",
+      "failure_mode": "Treating the current account in isolation, or judging a deficit by size alone (use & source matter more).",
+      "source_ref": "MACRO/M3/C11",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_open_economy_identity"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_currency_crises",
+      "subject": "MACRO",
+      "concept": "External vulnerabilities & currency crises",
+      "formula": null,
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Currency crises recur when a country holds a (managed/fixed) exchange rate + open capital + dollar-denominated debt, then sentiment reverses — 'hot money' (FPI) flees, reserves run out, the peg breaks, and CONTAGION spreads ('fear travels faster than facts'). Case library: East Asia 1997 (Thai baht peg, China's 1994 devaluation hurt exports → reserves gone → IMF bailout); Mexico 1994 'Tequila' (dollar tesobonos + political shocks); Argentina 2001 (1:1 dollar peg + Brazil's 1999 devaluation); Euro/Greece (gave up monetary independence → only 'internal devaluation'/austerity left); India 2013 TAPER TANTRUM (Fed QE-taper hint → FPI fled → rupee ₹54→₹68, −25% in 3 months); Sri Lanka 2022 (dollar debt + COVID tourism/remittance collapse + fertilizer-import ban → default, ₹200→360); Turkey (Erdogan kept rates low despite inflation → lira crash, ~80% inflation). Lesson: avoid over-reliance on volatile FPI; keep CAD low and reserves high.",
+      "distractors": [
+        {
+          "wrong": "A country with a hard peg, open capital account and dollar debt is well-insulated from crises",
+          "why": "that's exactly the fragile combination that breaks in a sudden capital reversal"
+        },
+        {
+          "wrong": "The 2013 'Taper Tantrum' was caused by an actual RBI policy change",
+          "why": "it was triggered by a US Fed signal about tapering QE — a foreign shock"
+        }
+      ],
+      "sample_question": "Why did the 2013 'Taper Tantrum' crash the rupee 25%, and what made India structurally vulnerable to it?",
+      "failure_mode": "Seeing each crisis as unique rather than the same impossible-trinity + hot-money pattern; underrating contagion.",
+      "source_ref": "MACRO/M3/C14-C15",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_exchange_rate_regimes"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_bretton_woods",
+      "subject": "MACRO",
+      "concept": "History of exchange-rate regimes (gold → Bretton Woods → fiat)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "long-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Regime history: the classical GOLD STANDARD (1870-1914, currencies fixed to gold) → BRETTON WOODS (1944: the US$ fixed to gold at $35/oz, other currencies pegged to the $) → in 1971 President Nixon CLOSED THE GOLD WINDOW (US printed too many dollars financing the Vietnam War; couldn't honour gold), ending Bretton Woods. Since 1971 money is pure FIAT — value rests on TRUST in institutions/policy credibility, not a commodity anchor — and major currencies FLOAT. Developed economies float; emerging economies often run managed floats with capital controls.",
+      "distractors": [
+        {
+          "wrong": "The rupee is backed by gold reserves at the RBI",
+          "why": "since 1971 money is fiat — backed by institutional trust, not gold"
+        },
+        {
+          "wrong": "Bretton Woods established floating exchange rates",
+          "why": "it established FIXED rates ($-to-gold); floating came after its 1971 collapse"
+        }
+      ],
+      "sample_question": "What did Nixon's 1971 'closing of the gold window' change about what gives money its value?",
+      "failure_mode": "Thinking modern currencies are gold-backed — they are fiat (trust-based) since 1971.",
+      "source_ref": "MACRO/M3/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_exchange_rate_regimes"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_nominal_vs_real_shocks",
+      "subject": "MACRO",
+      "concept": "Regime choice: nominal vs real shocks",
+      "formula": null,
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The economic case for a fixed vs flexible regime depends on the dominant shock. A FIXED rate INSULATES against NOMINAL shocks (monetary/paper shocks) — you don't want the real economy disturbed by a paper wrapper. A FLEXIBLE rate is better for REAL shocks (e.g. an oil discovery, a productivity change) because it lets relative prices/real allocations adjust. Since countries face BOTH, most adopt a MANAGED float (flexibility + intervention) as a compromise.",
+      "distractors": [
+        {
+          "wrong": "A flexible exchange rate best insulates against nominal (monetary) shocks",
+          "why": "a FIXED rate insulates nominal shocks; flexible suits REAL shocks"
+        },
+        {
+          "wrong": "Real shocks call for a fixed exchange rate",
+          "why": "real shocks need price/allocation adjustment → FLEXIBLE rate"
+        }
+      ],
+      "sample_question": "Should a country facing mainly real (supply-side) shocks prefer a fixed or flexible exchange rate, and why?",
+      "failure_mode": "Recommending a fixed rate for real shocks (or floating for nominal shocks) — it's the reverse.",
+      "source_ref": "MACRO/M3/C10",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_exchange_rate_regimes"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_india_integration",
+      "subject": "MACRO",
+      "concept": "India's global integration, risk premium & sterilized intervention",
+      "formula": null,
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "India chose PARTIAL (calibrated) integration. Trade openness ((X+M)/GDP) rose ~15%→~45% (vs China 35-40%, Vietnam/Thailand 120-150%); the capital account is only MODERATELY open (FDI welcomed, short-term debt/FPI restricted). Emerging markets carry a COUNTRY RISK PREMIUM (India ~BBB at S&P vs US AA+, China A+) — when global sentiment turns 'risk-off', capital rushes to US treasuries. The RBI manages rupee VOLATILITY (not a level) via STERILIZED INTERVENTION: it buys/sells dollars, then mops up the resulting rupee liquidity by selling/buying govt bonds, so the exchange-rate action doesn't disturb domestic money/inflation. Plus countercyclical macroprudential tools (variable reserve ratio, ECB caps).",
+      "distractors": [
+        {
+          "wrong": "'Sterilized' intervention means the RBI only buys/sells dollars and ignores the rupee-liquidity side-effect",
+          "why": "sterilization is the SECOND leg — mopping up rupee liquidity via bond ops so domestic money is unaffected"
+        },
+        {
+          "wrong": "The country risk premium is something the RBI directly controls",
+          "why": "it's set by global investors/ratings; the RBI can only manage rates & Forex, not the premium"
+        }
+      ],
+      "sample_question": "The RBI buys dollars to stem rupee appreciation. Why must it then sell government bonds, and what is this two-leg operation called?",
+      "failure_mode": "Thinking RBI Forex intervention targets a fixed rupee level (it targets volatility) or that it ignores the inflation side-effect (it sterilizes).",
+      "source_ref": "MACRO/M3/C12",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_exchange_rate_monetary_channel",
+        "ma_m3_balance_of_payments"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m3_trade_policy",
+      "subject": "MACRO",
+      "concept": "Trade-policy instruments & India's evolution",
+      "formula": null,
+      "variables": {},
+      "context_tag": "open_economy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Trade-policy tools shape the quantity/composition of trade beyond monetary policy: TARIFFS (tax on imports — protect domestic/infant industry), IMPORT QUOTAS (cap quantity), EXPORT SUBSIDIES (cheapen exports), NON-TARIFF BARRIERS (standards/licensing), FREE-TRADE AGREEMENTS, and ANTI-DUMPING DUTIES (vs below-cost foreign selling). India's arc: IMPORT-SUBSTITUTION (1950s-80s, ~100% tariffs + licensing → inefficient, slow growth) → 1991 LIBERALIZATION (tariffs ~80%→15%, FTAs, IT/export boom) → mid-2010s STRATEGIC AUTONOMY / Atmanirbhar Bharat (selective tariffs, managed — not full — integration). Tariffs protect visible jobs but invite retaliation and disrupt supply chains (US-China trade war, 'China+1').",
+      "distractors": [
+        {
+          "wrong": "A tariff is a tax on exports",
+          "why": "a tariff is a tax on IMPORTS (to protect domestic producers)"
+        },
+        {
+          "wrong": "India has moved monotonically toward ever-freer trade since independence",
+          "why": "it went protectionist (import-substitution) → liberal (1991) → selectively protectionist again (Atmanirbhar)"
+        }
+      ],
+      "sample_question": "Define a tariff vs an import quota, and outline the three phases of India's trade-policy evolution.",
+      "failure_mode": "Assuming tariffs straightforwardly help — they protect some jobs but trigger retaliation and raise input costs.",
+      "source_ref": "MACRO/M3/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m3_open_economy_identity"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_fiscal_policy",
+      "subject": "MACRO",
+      "concept": "Fiscal policy: spending & taxation",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fiscal",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Fiscal policy is the finance ministry's use of government SPENDING (the G in Y=C+I+G+NX) and TAXES to manage aggregate demand. Spending injects money into the private economy (highways, salaries); taxes pull money out. Versus monetary policy it is SLOWER (annual budget, not weekly), more TARGETED (you can direct a highway or a cash transfer), and POLITICAL (decided by elected governments, not an independent technocrat).",
+      "distractors": [
+        {
+          "wrong": "Fiscal policy is faster-acting than monetary policy",
+          "why": "fiscal is SLOWER — budget cycles & execution lags; monetary is fast"
+        },
+        {
+          "wrong": "Fiscal policy is set by the RBI",
+          "why": "it's the finance ministry; the RBI runs MONETARY policy"
+        }
+      ],
+      "sample_question": "Give two ways fiscal policy differs from monetary policy in how it reaches the economy.",
+      "failure_mode": "Confusing fiscal (G & taxes, finance ministry) with monetary (rates & money, RBI); calling fiscal policy 'fast'.",
+      "source_ref": "MACRO/M4/C01",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_gdp_identity"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_revenue_spending",
+      "subject": "MACRO",
+      "concept": "Government revenue & spending",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fiscal",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "structural",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Governments fund themselves via (1) TAXES — direct (income/corporate) vs indirect (GST/excise); fund ~60-70% of India's budget; (2) BORROWING (issuing bonds); (3) MONEY CREATION (monetisation — inflationary, avoided in normal years). India also has large NON-TAX revenue (PSU dividends, disinvestment, user fees). Of every ₹100 spent India raises ~55-60 from taxes, ~10-12 non-tax, ~30-35 borrowed. SPENDING splits into REVENUE expenditure (runs the system — salaries, pensions, subsidies; non-productive but not wasteful), CAPITAL expenditure (builds the system — roads, ports; PRODUCTIVE, raises future capacity), and TRANSFERS (balance the system). Quality (productive vs not) matters more than quantity.",
+      "distractors": [
+        {
+          "wrong": "Revenue expenditure (salaries, subsidies) builds long-run productive capacity",
+          "why": "that's CAPITAL expenditure; revenue spending runs the system"
+        },
+        {
+          "wrong": "Monetisation (printing money to fund spending) is India's main funding source",
+          "why": "it's avoided in normal years (inflationary); taxes are the main source"
+        }
+      ],
+      "sample_question": "Classify as revenue or capital expenditure: (a) teacher salaries, (b) a new metro line, (c) a food subsidy. Which is 'productive'?",
+      "failure_mode": "Equating all government spending — capital (productive) vs revenue (non-productive) have very different effects.",
+      "source_ref": "MACRO/M4/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_fiscal_policy"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_fiscal_deficit_debt",
+      "subject": "MACRO",
+      "concept": "Fiscal deficit & debt sustainability",
+      "formula": "Debt/GDP stabilises when growth g > interest rate r (sustainable); spirals when r > g",
+      "variables": {},
+      "context_tag": "fiscal",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A fiscal DEFICIT = spending > (tax + non-tax) revenue (India ~5-6% of GDP, spiked in COVID); accumulated deficits = DEBT (a stock, measured as debt/GDP). GOOD debt finances productive investment that raises future GDP (infrastructure — like an education loan); BAD debt funds consumption/freebies (no future return). SUSTAINABILITY hinges on growth vs interest: debt/GDP stabilises when growth g > interest rate r on debt, and spirals when r > g. India's nominal GDP growth ~10-12% exceeds bond yields ~7% (g>r → manageable); Greece's r>g (couldn't grow, couldn't print in the euro) → crisis. Japan sustains ~250% debt/GDP because g and confidence hold. So it's not the debt level but the dynamics.",
+      "distractors": [
+        {
+          "wrong": "Debt is sustainable when the interest rate exceeds the growth rate (r > g)",
+          "why": "reversed — g > r is the sustainable condition; r > g spirals"
+        },
+        {
+          "wrong": "A 250%-debt/GDP country must be in crisis",
+          "why": "Japan sustains ~250% because g & confidence hold — dynamics, not level, decide"
+        }
+      ],
+      "sample_question": "India's nominal growth is ~11% and its bond yield ~7%. Is its debt path sustainable, and what is the general condition?",
+      "failure_mode": "Judging debt by its level alone, or getting the sustainability inequality backwards (it's g>r that's safe).",
+      "source_ref": "MACRO/M4/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_revenue_spending"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_crowding_out",
+      "subject": "MACRO",
+      "concept": "Crowding out",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fiscal",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Crowding out: when the government borrows heavily it competes with the private sector for the LIMITED pool of loanable funds → pushes up interest rates → private INVESTMENT (and rate-sensitive consumption) gets squeezed out, partly offsetting the fiscal stimulus. It is WORST in booms (private sector wants those funds, near full capacity) and MINIMAL in deep recessions (private demand for credit is already dead, so government borrowing displaces little). Doubly bad if government borrows to crowd out productive private investment for non-productive spending.",
+      "distractors": [
+        {
+          "wrong": "Government borrowing lowers interest rates and boosts private investment",
+          "why": "it RAISES rates → crowds OUT private investment"
+        },
+        {
+          "wrong": "Crowding out is most severe during a deep recession",
+          "why": "it's WEAKEST in recessions (private credit demand is dead); worst in booms"
+        }
+      ],
+      "sample_question": "Why is crowding-out a serious concern when the government borrows in a boom, but a minor one in a deep recession?",
+      "failure_mode": "Directional error — thinking government borrowing lowers rates; and ignoring that crowding-out is state-dependent (weak in recession).",
+      "source_ref": "MACRO/M4/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_fiscal_deficit_debt",
+        "ma_m2_monetary_transmission"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_fiscal_multiplier",
+      "subject": "MACRO",
+      "concept": "Fiscal multiplier & Keynes",
+      "formula": "Fiscal multiplier = 1 / (1 − MPC)   [MPC = marginal propensity to consume]",
+      "variables": {},
+      "context_tag": "fiscal",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "One rupee of government spending becomes someone's income; they spend a fraction (the marginal propensity to consume, MPC) which becomes the next person's income, and so on — a geometric series. The fiscal MULTIPLIER = 1/(1−MPC). With MPC = 0.8, the multiplier = 1/(1−0.8) = 5, so ₹1 lakh crore of spending can raise GDP by ~₹5 lakh crore. The multiplier is LARGER in a recession (idle capacity, high MPC) and SMALLER near full employment (where extra demand just raises prices / is crowded out).",
+      "distractors": [
+        {
+          "wrong": "With MPC = 0.8 the multiplier is 0.8",
+          "why": "it is 1/(1−0.8) = 5"
+        },
+        {
+          "wrong": "The multiplier is largest near full employment",
+          "why": "it's largest in a recession with slack; smallest near full capacity"
+        }
+      ],
+      "sample_question": "If the MPC is 0.75, what is the fiscal multiplier, and is it larger in a boom or a slump?",
+      "failure_mode": "Assuming ΔGDP = ΔG one-for-one (ignoring the multiplier), or mis-computing 1/(1−MPC).",
+      "source_ref": "MACRO/M4/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_fiscal_policy"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_fiscal_vs_monetary",
+      "subject": "MACRO",
+      "concept": "Fiscal vs monetary policy; countercyclical use",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fiscal",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Two stabilisation tools compared: SPEED (monetary fast — rate change in weeks; fiscal slow — budget+execution lags); TARGETING (fiscal targeted to a sector/group; monetary hits the economy uniformly); POLITICS (monetary is independent/technocratic; fiscal is political/electoral); and crowding (fiscal can crowd out private investment; monetary easing encourages it). They are COMPLEMENTS, not substitutes — best when coordinated (RBI cuts + government spends → faster growth). But they can CLASH (India 2013-14: government deficits expansionary while the RBI hiked to fight inflation). The extreme 'coordination' is DEBT MONETISATION (RBI prints to buy government debt) — the ultimate coordination and the ultimate risk to central-bank independence.",
+      "distractors": [
+        {
+          "wrong": "Monetary policy is the slower, more targeted tool",
+          "why": "it's FASTER and more uniform; FISCAL is slower and more targeted"
+        },
+        {
+          "wrong": "Debt monetisation poses no risk to central-bank independence",
+          "why": "it's the ultimate risk — politicians effectively control money creation"
+        }
+      ],
+      "sample_question": "Contrast fiscal and monetary policy on speed and targeting, and explain how they clashed in India around 2013-14.",
+      "failure_mode": "Treating fiscal & monetary as interchangeable, or forgetting they can pull in opposite directions.",
+      "source_ref": "MACRO/M4/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_fiscal_policy",
+        "ma_m2_monetary_transmission"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_growth_theory",
+      "subject": "MACRO",
+      "concept": "Growth theory: Malthusian trap & diminishing returns to capital",
+      "formula": null,
+      "variables": {},
+      "context_tag": "growth",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "long-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Long-run growth is about GDP PER CAPITA. The MALTHUSIAN trap: with land fixed and population growing geometrically, per-capita resources fall toward subsistence — a doomsday path. The Industrial Revolution ESCAPED it by inventing a new, accumulable resource: MACHINES (capital). But capital faces DIMINISHING RETURNS (the laundromat: the 1st machine is transformational, the 5th sits idle) — so accumulating capital alone cannot grow an economy forever; growth slows as the capital stock deepens (China 10%→5-6%, South Korea, India all decelerated). So capital is not the ultimate engine.",
+      "distractors": [
+        {
+          "wrong": "Accumulating physical capital can grow an economy indefinitely",
+          "why": "diminishing returns to capital make growth slow as the capital stock deepens"
+        },
+        {
+          "wrong": "The Malthusian trap was escaped by adding more farmland",
+          "why": "it was escaped by inventing MACHINES (an accumulable resource), not more fixed land"
+        }
+      ],
+      "sample_question": "Use the laundromat analogy to explain why a country can't grow forever just by building more factories.",
+      "failure_mode": "Believing endless investment in capital sustains growth — diminishing returns cap it.",
+      "source_ref": "MACRO/M4/C11-C12",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m1_timeframes"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_technology_growth",
+      "subject": "MACRO",
+      "concept": "Technology as the growth engine",
+      "formula": null,
+      "variables": {},
+      "context_tag": "growth",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "long-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Since capital hits diminishing returns, sustained long-run growth comes from TECHNOLOGY = IDEAS. Ideas are NON-RIVALROUS: my use of an idea (a washing-machine design, Faraday's law, an Excel formula) doesn't prevent yours, and ideas don't wear out — so, unlike machines, they do NOT face diminishing returns and can lift the whole production function indefinitely. This ties back to Module 1's 'thread of technology'. The open question (R&D incentives, patents, education) is how to PRODUCE more ideas.",
+      "distractors": [
+        {
+          "wrong": "Technology faces the same diminishing returns as physical capital",
+          "why": "ideas are NON-RIVALROUS and don't wear out — they escape diminishing returns"
+        },
+        {
+          "wrong": "An idea, once used by one firm, can't be freely used by another",
+          "why": "ideas are non-rivalrous — simultaneous use doesn't deplete them (unlike a machine)"
+        }
+      ],
+      "sample_question": "Why does technology (ideas) escape the diminishing returns that limit physical capital? Use the non-rivalry property.",
+      "failure_mode": "Attributing long-run per-capita growth to more capital/labour rather than to non-rivalrous ideas/technology.",
+      "source_ref": "MACRO/M4/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_growth_theory"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_growth_myths",
+      "subject": "MACRO",
+      "concept": "Macro myths & truths (capstone)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "growth",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "long-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "First-principles myth-busting: (1) a STRONG currency ≠ a strong economy — the exchange rate is a relative price/unit (Afghani 20/$ vs INR 80/$ is like Celsius vs Fahrenheit; CHANGES matter, not absolute levels); a weak currency can aid exports. (2) Printing rupees WEAKENS, not strengthens, the currency (more rupees chasing the same goods → inflation). (3) A trade/current-account DEFICIT isn't inherently bad — growing economies import capital goods; USE & financing source matter. (4) GDP is a limited measure (ignores distribution & wellbeing). (5) Debt sustainability depends on growth & context (Japan 250% fine; Greece not), not a magic threshold. (6) Markets aggregate information but exhibit fear/greed/herd biases (2008 mispriced risk). Economics is about TRADE-OFFS, not absolutes.",
+      "distractors": [
+        {
+          "wrong": "A rising rupee (stronger currency) always signals a stronger economy",
+          "why": "the level is just a relative price/unit; a weak currency can boost exports — changes, not levels, matter"
+        },
+        {
+          "wrong": "Crossing a 90% debt/GDP ratio mechanically triggers a growth collapse",
+          "why": "the Reinhart-Rogoff '90%' threshold was an Excel error; sustainability is context/growth-dependent"
+        }
+      ],
+      "sample_question": "'A strong rupee means a strong India.' Use relative prices and the units argument to explain why this is a myth.",
+      "failure_mode": "Reasoning from slogans ('strong rupee = strong India', 'deficits are bad') instead of relative prices & trade-offs.",
+      "source_ref": "MACRO/M4/C14-C15",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_growth_theory"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_keynes_great_depression",
+      "subject": "MACRO",
+      "concept": "Keynes & the birth of fiscal policy",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fiscal",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Before the 1930s the classical view was that markets self-correct, so governments should balance budgets. The Great Depression (1929) — mass unemployment, idle capacity — shattered that. KEYNES argued that in a slump the private sector won't spend, so the GOVERNMENT must spend (even 'dig ditches') to inject demand and pull the economy out of the low-output trap. This founded modern fiscal policy (the US New Deal). Crucially, fiscal policy is the tool of LAST RESORT when monetary policy is exhausted (rates near zero / liquidity trap) — the same logic that returned in COVID-19.",
+      "distractors": [
+        {
+          "wrong": "Keynes argued governments should balance budgets during a depression",
+          "why": "he argued they should SPEND and run deficits to revive demand"
+        },
+        {
+          "wrong": "Fiscal policy is most needed when monetary policy still has room to cut",
+          "why": "it's the last resort precisely WHEN monetary policy is exhausted (ZLB)"
+        }
+      ],
+      "sample_question": "Why did Keynes argue governments must spend in a depression, and why is fiscal policy the tool of last resort at the zero lower bound?",
+      "failure_mode": "Assuming markets always self-correct, or that monetary policy is always available — in a liquidity trap only fiscal works.",
+      "source_ref": "MACRO/M4/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_fiscal_policy",
+        "ma_m2_limits_monetary_policy"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_fiscal_space",
+      "subject": "MACRO",
+      "concept": "Fiscal space & the FRBM Act",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fiscal",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Fiscal space = a country's 'credit-card limit' — how much it can borrow before markets stop trusting it. It's larger with low debt/GDP, high growth prospects, a broad tax base, a credible own currency, and strong institutions. The US has vast space (the dollar); India has MODERATE space (debt/GDP ~80-90%, a thin ~17-18% tax base); Sri Lanka had NONE (2022). Fiscal space is dynamic (grows with growth, shrinks with panic). India's FRBM Act (2003) sets discipline anchors — fiscal deficit ~3% of GDP, debt ~60% — with an escape clause (used in COVID); a 'speed limit, not a brick wall'.",
+      "distractors": [
+        {
+          "wrong": "Every country has the same ability to run large deficits",
+          "why": "fiscal space varies hugely (US large via the dollar, Sri Lanka none)"
+        },
+        {
+          "wrong": "The FRBM Act bans all government deficits",
+          "why": "it sets disciplinary targets (~3% deficit, ~60% debt) with escape clauses, not a ban"
+        }
+      ],
+      "sample_question": "What determines a country's 'fiscal space', and what targets does India's FRBM Act set?",
+      "failure_mode": "Treating fiscal space as fixed, or thinking all countries can borrow/spend like the US.",
+      "source_ref": "MACRO/M4/C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_fiscal_deficit_debt"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_countercyclical",
+      "subject": "MACRO",
+      "concept": "Countercyclical fiscal strategy",
+      "formula": null,
+      "variables": {},
+      "context_tag": "fiscal",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "both",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Fiscal policy should lean AGAINST the cycle: EXPAND (deficits) in recessions, wars, nation-building, or when monetary policy is exhausted; CONTRACT (surpluses) in booms, when inflation is high, or when debt is unsustainable. 'Save in good times, spend in bad' — surpluses in booms, deficits in slumps. Spending in a boom is counterproductive (adds inflation, crowds out a healthy private sector). Cautionary tale: the Reinhart-Rogoff '90% debt/GDP kills growth' threshold that drove global austerity turned out to rest on an EXCEL ERROR (rows omitted) — when fixed, the threshold vanished. No universal rule; context dominates.",
+      "distractors": [
+        {
+          "wrong": "Governments should increase spending during economic booms",
+          "why": "that's procyclical & inflationary; spend in slumps, save in booms"
+        },
+        {
+          "wrong": "Research firmly establishes a universal 90% debt/GDP danger threshold",
+          "why": "the Reinhart-Rogoff 90% figure was an Excel error; sustainability is context-dependent"
+        }
+      ],
+      "sample_question": "State the countercyclical rule for fiscal policy across the business cycle, and what the Reinhart-Rogoff episode teaches about debt 'thresholds'.",
+      "failure_mode": "Running procyclical policy (spending more in booms), or treating a debt threshold as a universal law.",
+      "source_ref": "MACRO/M4/C09-C10",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m4_fiscal_deficit_debt",
+        "ma_m1_timeframes"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "ma_m4_bank_money_creation",
+      "subject": "MACRO",
+      "concept": "How banks create money (loans create deposits)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "money",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": "short-run",
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A myth-buster from the capstone: banks do NOT need deposits first to lend. When a bank makes a loan it creates TWO entries — a new deposit in the borrower's account and a matching loan asset — so the LOAN CREATES THE DEPOSIT. Banks are limited not by deposits but by CAPITAL and reserve/regulatory requirements (CRR, SLR, capital adequacy). Corollary: loan waivers are NOT free — the government compensates banks (taxpayer money) or banks absorb losses as provisions, weakening future lending (the NPA friction).",
+      "distractors": [
+        {
+          "wrong": "A bank must collect deposits before it can make a loan",
+          "why": "the loan CREATES the deposit; banks are constrained by capital/regulation, not prior deposits"
+        },
+        {
+          "wrong": "A government loan waiver is costless free money",
+          "why": "someone pays — taxpayers compensate banks, or banks book losses as provisions (NPA friction)"
+        }
+      ],
+      "sample_question": "Explain 'loans create deposits' and why a farm-loan waiver is not actually free money.",
+      "failure_mode": "Believing banks lend out pre-existing deposits (the simple multiplier story) — loans create deposits; capital/regulation bind.",
+      "source_ref": "MACRO/M4/C15",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "ma_m2_money_multiplier",
+        "ma_m2_npa_nbfc"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    }
+  ]
+}

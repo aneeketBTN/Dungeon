@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formula Sheet — Generating Entrepreneurial Resources</title>
+<meta name="description" content="Every GER calculation: pre/post-money, %stake, dilution, exit %, required equity, exit multiple, P/E, P/B, EV, cash burn, funding requirement, liquidation preference, full ratchet, CLV. Meaning, when, worked example, the off-by-one trap.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:,">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,"Segoe UI",sans-serif;background:#eef0f2;color:#1f2328;font-size:15px;line-height:1.55;}
+  .top{position:sticky;top:0;z-index:20;background:#1c1c1c;padding:11px 14px;border-bottom:2px solid #7a4cc4;}
+  .top .brand{color:#b399e6;font-weight:bold;font-size:16px;}
+  .top .sub{color:#9aa0a6;font-size:12px;margin-top:2px;}
+  .nav{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap;}
+  .nav a{padding:6px 9px;background:#2a2f35;color:#e8eaed;text-decoration:none;border-radius:6px;font-size:12px;font-weight:bold;}
+  .nav a:hover{background:#7a4cc4;}
+  .wrap{max-width:880px;margin:0 auto;padding:14px 12px 70px;}
+  .intro{background:#f1ecfa;border-left:4px solid #7a4cc4;border-radius:6px;padding:11px 13px;margin-bottom:16px;font-size:13.5px;}
+  .intro b{color:#5b34a3;}
+  .intro .neg{color:#c1392b;font-weight:bold;}
+  h2.sect{font-size:18px;color:#15171a;margin:22px 0 8px;padding-top:8px;border-top:3px solid #1c1c1c;}
+  h2.sect:first-of-type{border-top:none;}
+  .f{background:#fff;border:1px solid #dde1e5;border-radius:10px;margin-bottom:11px;padding:13px 14px;}
+  .f .name{font-weight:bold;color:#15171a;font-size:14.5px;margin-bottom:7px;}
+  .f .formula{font-family:"Consolas","Courier New",monospace;background:#0f1419;color:#d3b8ff;border-radius:7px;padding:9px 12px;font-size:13.5px;margin-bottom:8px;overflow-x:auto;white-space:pre-wrap;}
+  .f .line{font-size:13.5px;margin:3px 0;padding-left:64px;position:relative;}
+  .f .line .lab{position:absolute;left:0;top:0;font-weight:bold;font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:#5a6169;}
+  .f .line.ex{background:#f4f1fb;border-left:3px solid #7a4cc4;border-radius:5px;padding:7px 10px 7px 64px;margin-top:6px;}
+  .f .line.ex .lab{left:10px;color:#5b34a3;}
+  .f .line.trap{background:#fbeae8;border-left:3px solid #c1392b;border-radius:5px;padding:7px 10px 7px 64px;margin-top:6px;}
+  .f .line.trap .lab{left:10px;color:#c1392b;}
+  .f code{background:#eef1f4;border-radius:3px;padding:0 4px;font-family:"Consolas",monospace;font-size:12.8px;}
+  .foot{text-align:center;color:#9aa0a6;font-size:12px;margin-top:24px;}
+  .foot a{color:#2d6fd4;text-decoration:none;}
+  @media(max-width:560px){.f .line,.f .line.ex,.f .line.trap{padding-left:12px;padding-top:22px;}.f .line .lab{position:static;display:block;margin-bottom:2px;}.f .line.ex .lab,.f .line.trap .lab{left:10px;}}
+</style>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-theme-base="light">
+<div class="top">
+  <div class="brand">🟪 Formula Sheet — Generating Entrepreneurial Resources</div>
+  <div class="sub">Every calculation · meaning · when · worked example · the off-by-one trap</div>
+  <div class="nav"><a href="#cap">Cap Table</a><a href="#val">Valuation Ratios</a><a href="#cash">Cash</a><a href="#prot">Investor Protection</a><a href="#share">Share Capital</a><a href="discuss_ger.html">Drill →</a><a href="index.html">← Portal</a></div>
+</div>
+<div class="wrap">
+  <div class="intro"><b>GER is a maths exam in disguise.</b> Every distractor is a named slip — wrong denominator, missing add-on, reversed dilution. <span class="neg">With −1 negative marking, one mis-keyed formula is a 3-mark swing (−1 vs +2).</span> Lock the form and the ⚠ line, then drill the <a href="discuss_ger.html" style="color:#5b34a3;font-weight:bold;">situations</a> and <a href="test_ger.html" style="color:#5b34a3;font-weight:bold;">module tests</a>.</div>
+
+  <h2 class="sect" id="cap">📊 Cap-Table &amp; Valuation Arithmetic</h2>
+
+  <div class="f">
+    <div class="name">Pre-money, post-money &amp; %stake</div>
+    <div class="formula">post-money = investment / %stake
+pre-money  = post-money − investment
+%stake     = investment / (pre-money + investment)</div>
+    <div class="line"><span class="lab">Means</span>Post-money INCLUDES the new cash; pre-money EXCLUDES it. Stake is share of the post-money pie.</div>
+    <div class="line ex"><span class="lab">Eg</span>Pre ₹60cr, raise ₹15cr → %stake = 15/(60+15) = 15/75 = <b>20%</b>. Invest ₹25cr for 25% → post = 25/0.25 = ₹100cr.</div>
+    <div class="line trap"><span class="lab">Trap</span>Divide by <b>POST</b>-money, not pre (15/60 = 25% is the planted error). Don't swap pre/post.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Dilution</div>
+    <div class="formula">new % = old % × (1 − dilution fraction)
+absolute share count is UNCHANGED in a primary round</div>
+    <div class="line"><span class="lab">Means</span>Issuing new shares cuts your <b>percentage</b>, not your share count. Can still raise your wealth if value rises.</div>
+    <div class="line ex"><span class="lab">Eg</span>Founder 800 of 1,000; issue 250 new → 800/1,250 = 64% (still owns 800 shares).</div>
+    <div class="line trap"><span class="lab">Trap</span>Dilution does NOT reduce absolute shares, and is not always value-destroying.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">% equity at exit &amp; exit multiple</div>
+    <div class="formula">required realisation = investment × target multiple
+%equity at exit = required realisation / exit valuation
+exit multiple = (%stake × exit valuation) / investment
+annual return = multiple^(1/n) − 1</div>
+    <div class="line"><span class="lab">Means</span>Work from the investor's realisation (their slice), not the whole company.</div>
+    <div class="line ex"><span class="lab">Eg</span>Invest ₹20cr for 25%, exit ₹200cr → realisation 0.25×200 = ₹50cr → multiple 50/20 = <b>2.5x</b>.</div>
+    <div class="line trap"><span class="lab">Trap</span>Multiple uses the investor's <b>realisation</b>, not exit valuation (200/20 = 10x is wrong). A multiple ≠ an annual rate.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Required stake from a target annual return</div>
+    <div class="formula">required %stake = investment × (1 + r)^n / exit equity value</div>
+    <div class="line"><span class="lab">Means</span>Grow the investment to its future value at the target return, then divide by exit equity.</div>
+    <div class="line ex"><span class="lab">Eg</span>₹10cr at 30% for 5 yrs → FV = 10×1.3⁵ ≈ ₹37.13cr; exit equity ₹186cr → stake ≈ <b>20%</b>.</div>
+    <div class="line trap"><span class="lab">Trap</span>Don't skip the <code>(1+r)ⁿ</code> compounding. A 16× multiple over 4 yrs = 100% p.a., not 16%.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Adjusting entry equity for later-round dilution</div>
+    <div class="formula">entry % = exit % / (1 − next-round dilution)
+the final cap table must sum to 100%</div>
+    <div class="line"><span class="lab">Means</span>An early investor needs a bigger entry stake because later rounds dilute them.</div>
+    <div class="line ex"><span class="lab">Eg</span>Need 34.7% at exit, round 2 takes 35% → entry = 34.7/(1−0.35) = 53.3%.</div>
+    <div class="line trap"><span class="lab">Trap</span>Gross UP for dilution (entry &gt; exit %); always check the cap table sums to 100%.</div>
+  </div>
+
+  <h2 class="sect" id="val">📐 Valuation Ratios</h2>
+
+  <div class="f">
+    <div class="name">P/E and EPS</div>
+    <div class="formula">EPS = PAT / shares ;   P/E = price / EPS</div>
+    <div class="line"><span class="lab">Means</span>Price per ₹1 of earnings. Within an industry, firms share similar P/E (an industry characteristic).</div>
+    <div class="line trap"><span class="lab">Trap</span>P/E is meaningless for <b>loss-making</b> firms (no PAT) — use EV/EBITDA instead.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">P/B and book value per share</div>
+    <div class="formula">net worth = share capital + reserves &amp; surplus
+BVPS = net worth / shares ;   P/B = price / BVPS</div>
+    <div class="line"><span class="lab">Means</span>Price relative to book equity. P/B &lt; 1 may signal undervaluation.</div>
+    <div class="line ex"><span class="lab">Eg</span>Price ₹200; 10,000 sh × ₹100 + ₹5,00,000 reserves = ₹15,00,000 → BVPS 150 → P/B = 200/150 = <b>1.33</b>.</div>
+    <div class="line trap"><span class="lab">Trap</span>Use <b>book</b> value (incl. reserves), not face value (200/100 = 2 is the trap).</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Enterprise value (EV) &amp; EV/EBITDA</div>
+    <div class="formula">EV = equity market value + debt − cash
+equity value = EV − debt (− preference)</div>
+    <div class="line"><span class="lab">Means</span>Value of the whole firm. EV/EBITDA is independent of capital structure → best for loss-makers.</div>
+    <div class="line ex"><span class="lab">Eg</span>Equity ₹800cr + debt ₹300cr − cash ₹100cr = EV <b>₹1,000cr</b>.</div>
+    <div class="line trap"><span class="lab">Trap</span><b>Add</b> debt, <b>subtract</b> cash (adding cash → ₹1,200cr is wrong). EV ≠ equity value.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Comparables (multiples) method</div>
+    <div class="formula">justified price = target metric (EPS / EBITDA / sales) × industry-average multiple</div>
+    <div class="line"><span class="lab">Means</span>Value relative to similar listed firms or recent comparable transactions.</div>
+    <div class="line trap"><span class="lab">Trap</span>P/E fails for loss-makers or firms with very different growth — switch to EV/EBITDA or EV/sales.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Unit economics &amp; CLV</div>
+    <div class="formula">contribution margin = (price − variable cost) / price
+CLV = (revenue per period × contribution-margin %) / churn
+compare via CLV / CAC  (healthy ≫ 1)</div>
+    <div class="line"><span class="lab">Means</span>Per-customer value vs the cost to acquire/serve. Positive contribution = strong unit economics.</div>
+    <div class="line ex"><span class="lab">Eg</span>Earn ₹500/customer, spend ₹600 → <b>negative</b> unit economics.</div>
+    <div class="line trap"><span class="lab">Trap</span>Unit economics ≠ revenue scale; CLV falls as churn rises (churn is the denominator).</div>
+  </div>
+
+  <h2 class="sect" id="cash">💸 Cash Planning</h2>
+
+  <div class="f">
+    <div class="name">Cash budget (closing balance)</div>
+    <div class="formula">closing cash = opening cash + cash RECEIPTS − cash PAYMENTS
+(cash basis, NOT accrual P&amp;L)</div>
+    <div class="line"><span class="lab">Means</span>Tracks money actually in/out each period; its purpose is to estimate the funding requirement.</div>
+    <div class="line ex"><span class="lab">Eg</span>Revenue ₹5L (only ₹2L in cash), pay ₹3L, open ₹1.5L → 2 + 1.5 − 3 = <b>+₹0.5L surplus</b>.</div>
+    <div class="line trap"><span class="lab">Trap</span>Use cash received (₹2L), not accrual revenue (₹5L); and don't drop the opening balance.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Net cash burn &amp; runway</div>
+    <div class="formula">net cash burn = cash payments − cash receipts
+runway = cash balance / monthly burn</div>
+    <div class="line"><span class="lab">Means</span>How fast cash is consumed and how long until it runs out.</div>
+    <div class="line ex"><span class="lab">Eg</span>Receipts ₹2L, payments ₹5L → net burn = <b>₹3L</b>.</div>
+    <div class="line trap"><span class="lab">Trap</span>Burn nets off receipts (not total spend); high burn ≠ profitability.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Total funding requirement</div>
+    <div class="formula">total funding = peak cumulative operational cash deficit + CapEx (infra + technology)</div>
+    <div class="line"><span class="lab">Means</span>Hold the worst cumulative cash hole as a buffer, plus one-off capital spend, so you never run dry.</div>
+    <div class="line ex"><span class="lab">Eg</span>Outflow ₹100L + tech ₹50L − inflow ₹80L = <b>₹70L</b> deficit to fund.</div>
+    <div class="line trap"><span class="lab">Trap</span>Include CapEx and use the <b>peak cumulative</b> deficit (not a single month, not accrual profit).</div>
+  </div>
+
+  <h2 class="sect" id="prot">🛡️ Investor Protection Maths</h2>
+
+  <div class="f">
+    <div class="name">Liquidation preference (the investor picks the higher)</div>
+    <div class="formula">non-participating = max( multiple × investment , ownership% × proceeds )
+participating     = multiple × investment + ownership% × (proceeds − multiple × investment)</div>
+    <div class="line"><span class="lab">Means</span>Priority payout. Non-participating: take the preference OR convert. Participating: take it AND share the rest.</div>
+    <div class="line ex"><span class="lab">Eg</span>₹10cr/20%, exit ₹100cr, 1× participating → 10 + 0.2×90 = <b>₹28cr</b>. 2× non-participating, exit ₹200cr → max(40, 40) = ₹40cr.</div>
+    <div class="line trap"><span class="lab">Trap</span>Participating: don't forget the pro-rata add-on. Non-participating: take the <b>max</b> (convert when equity beats the preference).</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Anti-dilution: full ratchet vs weighted average</div>
+    <div class="formula">full ratchet: early-investor shares = investment / new (lower) price   ← max protection
+weighted average: conversion re-prices BETWEEN old & new
+   broad-based (incl. options/ESOP) &lt; narrow-based protection (more founder-friendly)</div>
+    <div class="line"><span class="lab">Means</span>Protects an early investor in a DOWN round (price below the prior round).</div>
+    <div class="line ex"><span class="lab">Eg</span>Series A ₹2.5L at ₹1 → full ratchet to ₹0.50 → 5,00,000 shares; cap table 52.6% / 26.3% / 21.1% (sums to 100%).</div>
+    <div class="line trap"><span class="lab">Trap</span>Full ratchet = most protection (resets to new price); broad-based weighted avg = least. Cap table must total 100%.</div>
+  </div>
+
+  <h2 class="sect" id="share">🧱 Share-Capital Hierarchy</h2>
+
+  <div class="f">
+    <div class="name">Terms of share capital (descending)</div>
+    <div class="formula">authorised ≥ issued ≥ subscribed ≥ paid-up
+face value = nominal value/share (any multiple of ₹1); premium above it → securities-premium account</div>
+    <div class="line"><span class="lab">Means</span>Authorised = ceiling in the MOA; paid-up = money actually called and paid.</div>
+    <div class="line ex"><span class="lab">Eg</span>10% dividend on a ₹10 face value = ₹1/share (dividend % is on face value).</div>
+    <div class="line trap"><span class="lab">Trap</span>Authorised (a ceiling) ≠ paid-up (actual); face value ≠ market or book value.</div>
+  </div>
+
+  <div class="f">
+    <div class="name">Net worth &amp; market cap</div>
+    <div class="formula">net worth = share capital + reserves & surplus
+market cap = market price × shares</div>
+    <div class="line"><span class="lab">Means</span>Net worth is book equity; market cap is the market's value of equity.</div>
+    <div class="line trap"><span class="lab">Trap</span>Net worth includes <b>reserves</b> (not just share capital); BVPS uses net worth, not face value.</div>
+  </div>
+
+  <div class="foot">GER formula sheet · pair with the <a href="discuss_ger.html">situational drill</a> &amp; <a href="test_ger.html">module tests</a> · <a href="index.html">← back to portal</a></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,2411 @@
+{
+  "header": {
+    "subject": "BEHECON",
+    "subject_name": "Behavioural Economics",
+    "professor": "Prof. Ritwik Banerjee",
+    "extracted_on": "2026-06-02",
+    "extracted_by": "Claude Opus 4.8 (engine v1.1)",
+    "source_modules_count": 4,
+    "node_count": 58,
+    "exam_format": "30 MCQ, 5 marks each, no negative marking, 90 min, normal calculator allowed",
+    "style_profile": "CLA (BE.docx) is scenario-first: a full setup with EXPLICIT β and δ values, then a chain of sub-questions computing U^t(x) for an agent. Exam style mixes (a) computation (discounted/expected utility, prospect-theory value, risk premium, agent's chosen action) with (b) concept identification (name the bias/heuristic/discrimination-type from a vignette) and (c) policy application (is this a nudge? taste vs statistical? which fix?). Always state β, δ and agent type in any intertemporal stem; never ask the student to infer the agent type.",
+    "confirmed_by_student": true
+  },
+  "nodes": [
+    {
+      "id": "be_m1_heuristics",
+      "subject": "BEHECON",
+      "concept": "Heuristics & dual-system thinking (System 1/2)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Heuristics are fast rule-of-thumb shortcuts (System 1 / reflexive) that cut cognitive load; they speed decisions but systematically produce errors called biases. Kahneman contrasts System 1 (automatic) with System 2 (effortful, deliberate). The four core judgement heuristics are representativeness, availability, anchoring and affect.",
+      "distractors": [
+        {
+          "wrong": "Heuristics are always irrational",
+          "why": "they are usually adaptive and efficient; they only sometimes mislead"
+        },
+        {
+          "wrong": "System 2 is the fast intuitive system",
+          "why": "System 1 is fast/automatic; System 2 is slow/effortful"
+        }
+      ],
+      "sample_question": "A manager hires the candidate who 'feels right' in 5 seconds. Which system of thinking dominates this judgement?",
+      "failure_mode": "Treating 'heuristic' and 'bias' as the same thing — a heuristic is the shortcut, a bias is the predictable error it causes.",
+      "source_ref": "BEHECON/M1/C01",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [],
+      "connects_to": [
+        "be_m1_representativeness",
+        "be_m1_availability",
+        "be_m1_anchoring",
+        "be_m1_affect"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_representativeness",
+      "subject": "BEHECON",
+      "concept": "Representativeness heuristic (Linda problem)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Judging probability by similarity to a mental prototype rather than by the laws of probability. In the Linda problem people rank 'bank teller AND feminist' as more likely than 'bank teller', though the conjunction must be ≤ the single event. It is the parent heuristic behind base-rate neglect, sample-size neglect, misconceptions of chance, regression neglect and the conjunction fallacy.",
+      "distractors": [
+        {
+          "wrong": "P(teller & feminist) > P(teller)",
+          "why": "conjunction can never exceed its components — conjunction fallacy"
+        },
+        {
+          "wrong": "It relies on how easily examples come to mind",
+          "why": "that is availability, not representativeness"
+        }
+      ],
+      "sample_question": "Linda is described as an activist. Ranking 'feminist bank teller' above 'bank teller' violates which rule, and which heuristic causes it?",
+      "failure_mode": "Letting a vivid, detailed, 'representative' description override the base rate or the conjunction rule.",
+      "source_ref": "BEHECON/M1/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [
+        "be_m1_base_rate",
+        "be_m1_sample_size",
+        "be_m1_misconceptions_chance",
+        "be_m1_regression_mean",
+        "be_m1_conjunction_fallacy"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_base_rate",
+      "subject": "BEHECON",
+      "concept": "Insensitivity to base rates (Dick the engineer)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "When given an uninformative description, people ignore the prior probability (base rate) and answer ~50% regardless of whether the pool was 70 engineers/30 lawyers or 30/70. Caused by representativeness — the description seems to 'fit' so the base rate is discarded.",
+      "distractors": [
+        {
+          "wrong": "People over-weight the base rate",
+          "why": "the bias is under-weighting / ignoring it"
+        },
+        {
+          "wrong": "This is the gambler's fallacy",
+          "why": "that is misconceptions of chance, a different child of representativeness"
+        }
+      ],
+      "sample_question": "A profile is drawn from a pool of 30 engineers and 70 lawyers but the description is neutral. People still say ~50% engineer — name the bias.",
+      "failure_mode": "Ignoring the population proportion when a description feels diagnostic (even when it isn't).",
+      "source_ref": "BEHECON/M1/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_representativeness"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_sample_size",
+      "subject": "BEHECON",
+      "concept": "Insensitivity to sample size (two hospitals)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Small samples deviate from the population proportion far more than large samples, yet people judge a 60%-boys day equally likely at a 45-bed and a 15-bed hospital. The smaller hospital records more extreme days. 'X out of 5 dentists' ads exploit this.",
+      "distractors": [
+        {
+          "wrong": "Both hospitals equally likely",
+          "why": "ignores that small samples vary more — this is the error itself"
+        },
+        {
+          "wrong": "The larger hospital has more extreme days",
+          "why": "larger samples are closer to the mean, fewer extremes"
+        }
+      ],
+      "sample_question": "Which hospital records MORE days where >60% of babies are boys: the 45-bed or the 15-bed? Why?",
+      "failure_mode": "Forgetting that variance is larger in small samples, so extreme proportions are more likely there.",
+      "source_ref": "BEHECON/M1/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_representativeness"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_misconceptions_chance",
+      "subject": "BEHECON",
+      "concept": "Misconceptions of chance / gambler's fallacy",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Belief that a short random sequence must 'look random' and self-correct, so after 5 tails a head is 'due'. Sampling with replacement is independent. Drives gambler's fallacy, lottery-number switching, son-preference fertility decisions and 'law of averages' in cricket.",
+      "distractors": [
+        {
+          "wrong": "After 5 tails, heads is more likely",
+          "why": "each toss is independent; p stays 1/2 — that belief IS the fallacy"
+        },
+        {
+          "wrong": "This is regression to the mean",
+          "why": "RTM is about extreme values moving toward average, not 'due' outcomes"
+        }
+      ],
+      "sample_question": "A fair coin shows 5 tails in a row. Is the 6th toss more likely heads? Name the bias if you said yes.",
+      "failure_mode": "Expecting independent random events to balance out in the short run.",
+      "source_ref": "BEHECON/M1/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_representativeness"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_regression_mean",
+      "subject": "BEHECON",
+      "concept": "Regression to the mean (flight instructors)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Extreme outcomes are partly luck, so they tend to be followed by less extreme ones regardless of intervention. Kahneman's instructors wrongly concluded praise hurts and criticism helps. Also: sophomore jinx, beginner's luck, firms' star years.",
+      "distractors": [
+        {
+          "wrong": "Punishment genuinely improves performance more than praise",
+          "why": "the improvement is regression to the mean, not the punishment"
+        },
+        {
+          "wrong": "This is confirmation bias",
+          "why": "RTM is a statistical artefact, not motivated reasoning"
+        }
+      ],
+      "sample_question": "An instructor praises a great landing; the next is worse. He concludes praise hurts. What's the real explanation?",
+      "failure_mode": "Assigning a causal story (reward/punishment worked) to what is just statistical regression of a noisy outcome.",
+      "source_ref": "BEHECON/M1/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_representativeness"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_conjunction_fallacy",
+      "subject": "BEHECON",
+      "concept": "Conjunction fallacy",
+      "formula": "P(A∩B) ≤ P(A) and ≤ P(B)",
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Judging the joint occurrence of two events as more probable than one of them alone, because the conjunction is more representative. P(A∩B) ≤ P(A) always. The Linda and Uttaranchal-earthquake items both demonstrate it.",
+      "distractors": [
+        {
+          "wrong": "More detailed scenarios are more probable",
+          "why": "more detail = more conjuncts = lower probability"
+        },
+        {
+          "wrong": "P(A∩B) can exceed P(A)",
+          "why": "mathematically impossible"
+        }
+      ],
+      "sample_question": "Why is 'massive earthquake in Uttaranchal causing avalanches' judged more likely than 'massive earthquake in India'?",
+      "failure_mode": "Adding a plausible detail and treating the more specific (less probable) event as more likely.",
+      "source_ref": "BEHECON/M1/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_representativeness"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_confirmation_bias",
+      "subject": "BEHECON",
+      "concept": "Confirmation bias (Yes-Man vs Devil's Advocate)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Seeking, interpreting and recalling evidence that confirms prior beliefs; the mental cost of processing contrary views is higher (Fischer 2008: fatigue increases it). Ross & Lepper death-penalty study: both sides found opposing evidence 'flawed'. The Devil's-Advocate firm adds more value but the Yes-Man pleases biased managers.",
+      "distractors": [
+        {
+          "wrong": "People weigh confirming and disconfirming evidence equally",
+          "why": "the bias is asymmetric processing in favour of confirming"
+        },
+        {
+          "wrong": "This is the affect heuristic",
+          "why": "affect is emotional valence, not belief-consistent search"
+        }
+      ],
+      "sample_question": "Two groups read identical death-penalty studies; each finds the opposing evidence flawed. Name the bias.",
+      "failure_mode": "Evaluating evidence by whether it fits your prior, not by its quality.",
+      "source_ref": "BEHECON/M1/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_availability",
+      "subject": "BEHECON",
+      "concept": "Availability heuristic",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Judging frequency/probability by how easily instances come to mind. Salient, recent, vivid or media-covered events are over-weighted (deaths from war vs disease; famous-names lists; words starting with 'r' vs r-as-third-letter). Drives performance reviews skewed to recent/vivid incidents.",
+      "distractors": [
+        {
+          "wrong": "It judges by similarity to a prototype",
+          "why": "that is representativeness"
+        },
+        {
+          "wrong": "Rare vivid events are under-weighted",
+          "why": "they are over-weighted because easily recalled"
+        }
+      ],
+      "sample_question": "People think more English words start with 'r' than have 'r' as the third letter (the opposite is true). Which heuristic explains this?",
+      "failure_mode": "Mistaking ease of recall (salience/recency) for true frequency.",
+      "source_ref": "BEHECON/M1/C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_anchoring",
+      "subject": "BEHECON",
+      "concept": "Anchoring & adjustment",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Estimates start from an initial value (the anchor) and adjust insufficiently. 1×2×…×8 guessed ~512 vs 8×7×…×1 guessed ~2250 (true 40320). Telephone-year and car-price anchors shift guesses. Used in negotiation and salary-history bargaining.",
+      "distractors": [
+        {
+          "wrong": "Adjustment from the anchor is usually sufficient",
+          "why": "it is insufficient — that's the bias"
+        },
+        {
+          "wrong": "Only uninformed people anchor",
+          "why": "even experts anchor; information reduces but doesn't remove it"
+        }
+      ],
+      "sample_question": "One group estimates 1×2×…×8, another 8×7×…×1. Why do the medians differ so much, and which heuristic is it?",
+      "failure_mode": "Letting an arbitrary starting number drag the final estimate, with too-small adjustment.",
+      "source_ref": "BEHECON/M1/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_affect",
+      "subject": "BEHECON",
+      "concept": "Affect heuristic",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A quick 'good/bad' emotional response that precedes and shapes reasoning (System 1). Positive affect (Marlboro Man) lowered perceived smoking risk; later gory warning images created negative affect to deter it. Risk and benefit judgements move inversely with affect.",
+      "distractors": [
+        {
+          "wrong": "Affect is a System 2 deliberative process",
+          "why": "it is a System 1 automatic emotional response"
+        },
+        {
+          "wrong": "It only applies to consumer ads",
+          "why": "it shapes recruitment, risk perception, politics, etc."
+        }
+      ],
+      "sample_question": "Cigarette packs moved from lifestyle imagery to gory warnings. Which heuristic are both strategies exploiting?",
+      "failure_mode": "Letting an emotional gut reaction stand in for a reasoned risk/benefit assessment.",
+      "source_ref": "BEHECON/M1/C10",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_overconfidence",
+      "subject": "BEHECON",
+      "concept": "Overconfidence: over-precision, overestimation, over-placement",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Three forms: (1) over-precision — confidence bands too narrow (Alpert-Raiffa: only 3-7 of 10 '98%' ranges contain truth); (2) overestimation — thinking we're better/faster than we are (planning fallacy, optimism bias); (3) over-placement — better-than-average effect (93% of drivers above median). Fixes: consider the opposite, ask 'chance of failure?', average multiple estimates (crowd-within).",
+      "distractors": [
+        {
+          "wrong": "Over-placement = bands too narrow",
+          "why": "that's over-precision; over-placement is 'better than others'"
+        },
+        {
+          "wrong": "Optimism bias is a form of under-confidence",
+          "why": "it is a form of overestimation"
+        }
+      ],
+      "sample_question": "93% of drivers rate themselves above the median driver. Which specific form of overconfidence is this?",
+      "failure_mode": "Confusing the three forms, or assuming familiarity removes over-precision (it reduces it but bias remains).",
+      "source_ref": "BEHECON/M1/C11",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_exponential_growth_bias",
+      "subject": "BEHECON",
+      "concept": "Exponential growth bias (EGB)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Tendency to linearise exponential processes, under-estimating future values (Sissa's chess-grain doubling; COVID case forecasts; compound interest/debt). High EGB → under-estimating debt, lower precautionary saving, and (in Banerjee's COVID work) lower compliance with safety norms. Stepwise prediction and feedback nudges reduce it.",
+      "distractors": [
+        {
+          "wrong": "EGB over-estimates compound growth",
+          "why": "it under-estimates it"
+        },
+        {
+          "wrong": "EGB raises precautionary savings",
+          "why": "under-estimating future debt lowers precautionary saving"
+        }
+      ],
+      "sample_question": "People asked to forecast week-4/5 COVID totals from weeks 1-3 systematically under-predict. Name the bias and one policy consequence.",
+      "failure_mode": "Forecasting an exponential series as if it were linear, badly under-shooting the future total.",
+      "source_ref": "BEHECON/M1/C12",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_hindsight_curse",
+      "subject": "BEHECON",
+      "concept": "Hindsight bias & curse of knowledge",
+      "formula": null,
+      "variables": {},
+      "context_tag": "heuristics_biases",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Hindsight bias: after an outcome, people believe it was more predictable than it was ('I knew it'); it limits learning and unfairly judges past decisions (Fischhoff 1975 Gurkha-war study). Curse of knowledge: once you know something you can't model a mind that doesn't (David's restaurant note read sincerely/sarcastically depending on what the reader knew).",
+      "distractors": [
+        {
+          "wrong": "Hindsight bias improves learning from the past",
+          "why": "it impairs it by making outcomes seem inevitable"
+        },
+        {
+          "wrong": "Curse of knowledge = forgetting facts",
+          "why": "it's the inability to un-know when modelling others"
+        }
+      ],
+      "sample_question": "A jury judges a doctor negligent because the patient died, ignoring that the surgery was low-risk ex ante. Which bias?",
+      "failure_mode": "Judging a past decision by the known outcome rather than by the information available at the time.",
+      "source_ref": "BEHECON/M1/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_changes_vs_levels",
+      "subject": "BEHECON",
+      "concept": "Prospect theory P1: changes, not levels (reference dependence)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Value is felt over CHANGES relative to a reference point, not absolute levels (like temperature/adaptation). Ali (₹500→₹1cr) is happier than Rani (₹1cr→₹1cr+₹500) at the same level. Reference points come from expectations, status quo, fairness, goals. First of three prospect-theory principles.",
+      "distractors": [
+        {
+          "wrong": "Utility depends only on final wealth level",
+          "why": "prospect theory: it depends on the change from the reference"
+        },
+        {
+          "wrong": "The reference point is always zero wealth",
+          "why": "it's set by expectations/status quo/goals"
+        }
+      ],
+      "sample_question": "Two people both end at ₹1cr+₹500, but one started at ₹500 and one at ₹1cr. Who is happier and what principle explains it?",
+      "failure_mode": "Evaluating outcomes by final wealth level (classical utility) instead of by gain/loss from a reference point.",
+      "source_ref": "BEHECON/M1/C14",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [
+        "be_m1_loss_aversion",
+        "be_m1_reflection_effect",
+        "be_m1_value_function"
+      ],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_loss_aversion",
+      "subject": "BEHECON",
+      "concept": "Prospect theory P2: loss aversion & endowment effect (λ≈2)",
+      "formula": "v(loss) = -λ·v(equal gain), λ≈2",
+      "variables": {
+        "λ": "loss-aversion coefficient (~2)",
+        "WTA": "willingness to accept (sell)",
+        "WTP": "willingness to pay (buy)"
+      },
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Losses loom larger than equivalent gains — roughly twice as painful (loss-aversion coefficient λ≈2). Generates the endowment effect: WTA > WTP (Cornell mugs ~$7 vs ~$3; Carmon-Ariely Duke tickets sell ~$2400 vs buy ~$170). Owners are in the loss domain when selling.",
+      "distractors": [
+        {
+          "wrong": "WTP > WTA",
+          "why": "reversed — endowment effect makes WTA exceed WTP"
+        },
+        {
+          "wrong": "λ ≈ 1 (gains and losses symmetric)",
+          "why": "empirically λ≈2, losses hurt ~2× as much"
+        }
+      ],
+      "sample_question": "Lottery winners of a ticket demand ~$2400 to sell; losers will pay only ~$170. Name the effect and the parameter involved.",
+      "failure_mode": "Treating the pain of a loss as equal to the pleasure of an equal gain (ignoring λ>1).",
+      "source_ref": "BEHECON/M1/C15",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_changes_vs_levels"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_reflection_effect",
+      "subject": "BEHECON",
+      "concept": "Prospect theory P3: risk-averse in gains, risk-seeking in losses",
+      "formula": null,
+      "variables": {},
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The value function is concave for gains (risk-averse) and convex for losses (risk-seeking). The Asian/American disease problem: framed as lives SAVED people pick the sure option (A/200 saved); framed as DEATHS they gamble (D), though A=C and B=D. Same outcomes, framing flips the reference and the choice.",
+      "distractors": [
+        {
+          "wrong": "People are risk-seeking in gains and risk-averse in losses",
+          "why": "reversed — risk-averse in gains, risk-seeking in losses"
+        },
+        {
+          "wrong": "Framing 'saved' vs 'die' shouldn't change choice for identical outcomes",
+          "why": "behaviourally it does — that's the point"
+        }
+      ],
+      "sample_question": "Program A saves 200; B is 1/3 chance all 600 saved. Most pick A. Reframed as deaths, most gamble. Which principle and effect?",
+      "failure_mode": "Missing that the SAME outcomes framed as gains vs losses reverse risk preference (framing effect).",
+      "source_ref": "BEHECON/M1/C16D",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_changes_vs_levels"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_value_function",
+      "subject": "BEHECON",
+      "concept": "Prospect theory value function (full form)",
+      "formula": "v(x)=x^β (gains); v(x)=−λ(−x)^β (losses); β≈0.88, λ≈2.25",
+      "variables": {
+        "β": "diminishing-sensitivity exponent (~0.88)",
+        "λ": "loss aversion (~2.25)",
+        "x": "gain(+)/loss(−) vs reference"
+      },
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Combines the three principles: v is defined over gains/losses from a reference point, is steeper for losses (λ), concave in gains and convex in losses. A common parametric form is v(x)=x^β for gains and v(x)=−λ(−x)^β for losses, with β≈0.88 and λ≈2.25 (used in bundling calculations).",
+      "distractors": [
+        {
+          "wrong": "v(x)=x^β for both gains and losses",
+          "why": "losses carry the −λ multiplier"
+        },
+        {
+          "wrong": "β>1 (increasing sensitivity)",
+          "why": "β<1 — diminishing sensitivity gives the S-shape"
+        }
+      ],
+      "sample_question": "Using v(x)=x^0.88 for gains and −2.25(−x)^0.88 for losses, compute v(+50) and v(−50) and state which is larger in magnitude.",
+      "failure_mode": "Forgetting to anchor at the reference point, or applying λ to gains.",
+      "source_ref": "BEHECON/M1/C16D",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_changes_vs_levels",
+        "be_m1_loss_aversion",
+        "be_m1_reflection_effect"
+      ],
+      "connects_to": [
+        "be_m1_bundling"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_expected_utility_risk_aversion",
+      "subject": "BEHECON",
+      "concept": "Expected utility, risk aversion & certainty equivalent",
+      "formula": "EU = Σ pᵢ·u(xᵢ);  risk averse ⇔ u concave ⇔ E[u(X)] < u(E[X])",
+      "variables": {
+        "pᵢ": "probability of outcome i",
+        "u": "utility function",
+        "CE": "certainty equivalent, u(CE)=E[u(X)]"
+      },
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Expected utility = probability-weighted average of utilities of outcomes (von Neumann-Morgenstern). A concave utility function (diminishing marginal utility) implies risk aversion: a sure amount equal to the lottery's expected value is preferred because E[u(X)] < u(E[X]) (Jensen). The certainty equivalent (CE) is the sure amount with u(CE)=E[u(X)].",
+      "distractors": [
+        {
+          "wrong": "Risk aversion comes from a convex utility function",
+          "why": "concave, not convex, gives risk aversion"
+        },
+        {
+          "wrong": "E[u(X)] > u(E[X]) for a risk-averse person",
+          "why": "reversed — it's <, by Jensen's inequality"
+        }
+      ],
+      "sample_question": "A lottery pays ₹10k or ₹30k with equal chance (EV ₹20k). With concave u, will a risk-averse person prefer ₹20k sure or the lottery? Why?",
+      "failure_mode": "Confusing expected VALUE (average payoff) with expected UTILITY (average of utilities); forgetting concavity ⇒ risk aversion.",
+      "source_ref": "BEHECON/M1/C16B",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [
+        "be_m1_risk_premium",
+        "be_m1_st_petersburg"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_risk_premium",
+      "subject": "BEHECON",
+      "concept": "Risk premium",
+      "formula": "Risk premium = E[X] − CE",
+      "variables": {
+        "E[X]": "expected value of the gamble",
+        "CE": "certainty equivalent (sure amount giving same utility)"
+      },
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The maximum amount a risk-averse person will pay to avoid risk = expected value − certainty equivalent. In the prof's example a lottery with EV ₹20,000 has CE ₹16,000, so the risk premium = ₹20,000 − ₹16,000 = ₹4,000. This is what insurers extract.",
+      "distractors": [
+        {
+          "wrong": "Risk premium = CE",
+          "why": "it is EV minus CE, not CE itself"
+        },
+        {
+          "wrong": "Risk premium = CE − EV",
+          "why": "sign reversed; for risk aversion EV>CE so premium is positive"
+        }
+      ],
+      "sample_question": "A gamble has EV ₹20,000 and certainty equivalent ₹16,000. What is the risk premium, and who would charge it?",
+      "failure_mode": "Computing risk premium from EV alone, or confusing it with the certainty equivalent itself.",
+      "source_ref": "BEHECON/M1/C16B",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_expected_utility_risk_aversion"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_st_petersburg",
+      "subject": "BEHECON",
+      "concept": "St Petersburg paradox",
+      "formula": "EV = Σ (1/2ⁿ)·2ⁿ = ∞;  EU = Σ (1/2ⁿ)·u(2ⁿ) finite when u concave (e.g. log)",
+      "variables": {},
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A gamble paying 2ⁿ with probability 1/2ⁿ has infinite expected value (Σ 1/2ⁿ·2ⁿ = 1+1+…), yet people pay very little. Resolved by expected UTILITY with a concave (e.g. log) utility, which converges to a small finite number — early evidence for diminishing marginal utility and risk aversion.",
+      "distractors": [
+        {
+          "wrong": "People pay little because the expected value is small",
+          "why": "EV is infinite; the resolution is concave utility"
+        },
+        {
+          "wrong": "Expected utility is also infinite",
+          "why": "with log utility it converges to a small finite value"
+        }
+      ],
+      "sample_question": "The St Petersburg gamble has infinite expected value but people pay little. What concept resolves the paradox?",
+      "failure_mode": "Using expected value (which is infinite) to explain choice instead of expected utility (finite).",
+      "source_ref": "BEHECON/M1/C16A",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_expected_utility_risk_aversion"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_probability_weighting",
+      "subject": "BEHECON",
+      "concept": "Probability weighting (possibility & certainty effects)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The 2nd component of prospect theory: people use decision weights, not objective probabilities. Small probabilities are over-weighted (possibility effect — 0→5% feels bigger than 60→65%); near-certain ones are under-weighted relative to certainty (certainty effect, 95→100%). The weighting curve is S-shaped. Explains Allais paradox, Russian-roulette WTP, lottery play, aspiring actors/cricketers.",
+      "distractors": [
+        {
+          "wrong": "Small probabilities are under-weighted",
+          "why": "they are OVER-weighted (possibility effect)"
+        },
+        {
+          "wrong": "Decision weights equal objective probabilities",
+          "why": "prospect theory: weights ≠ probabilities (that's the point)"
+        }
+      ],
+      "sample_question": "People pay more to cut Russian-roulette bullets from 1→0 than from 4→3 (same Δprob). Which effect and which prospect-theory component?",
+      "failure_mode": "Assuming decision weights equal objective probabilities (the 'expectation principle'), which prospect theory rejects.",
+      "source_ref": "BEHECON/M1/C17",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_expected_utility_risk_aversion"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_mental_accounting",
+      "subject": "BEHECON",
+      "concept": "Mental accounting",
+      "formula": null,
+      "variables": {},
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "People assign money to separate non-fungible mental 'accounts' and evaluate gains/losses within each (Thaler). Violates fungibility: a per-diem windfall buys a camera more readily than an equal salary raise; Heath-Soll show spending in one category crowds out same-category spending. Explains envelope budgeting and borrowing-high-while-saving-low.",
+      "distractors": [
+        {
+          "wrong": "Money is fully fungible across uses",
+          "why": "mental accounting violates fungibility — the core idea"
+        },
+        {
+          "wrong": "This is the sunk-cost fallacy",
+          "why": "related but distinct; sunk cost is about past unrecoverable spend"
+        }
+      ],
+      "sample_question": "Ali spends a ₹50k travel windfall on a camera but wouldn't spend an equal salary raise on it. Which concept and which assumption does it violate?",
+      "failure_mode": "Assuming money is fungible — ignoring that the mental 'source/category' of money changes how it's spent.",
+      "source_ref": "BEHECON/M1/C18",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_changes_vs_levels"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_bundling",
+      "subject": "BEHECON",
+      "concept": "Bundling of gains and losses (hedonic editing)",
+      "formula": "use v(x)=x^β gains, −λ(−x)^β losses (β≈0.88, λ≈2.25) to compare v(a)+v(b) vs v(a+b)",
+      "variables": {},
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Apply the value function to decide whether to combine or separate outcomes: SEGREGATE gains (two gains feel better than one combined, since the curve is concave), INTEGRATE losses (one big loss hurts less than two), integrate a small loss into a larger gain (cancellation), but SEGREGATE a small gain from a large loss (silver lining). Design bonuses (split) vs penalties (combine) accordingly.",
+      "distractors": [
+        {
+          "wrong": "Always integrate gains and segregate losses",
+          "why": "reversed — segregate gains, integrate losses"
+        },
+        {
+          "wrong": "Silver lining means integrate a small gain with a large loss",
+          "why": "silver lining = SEGREGATE the small gain from the large loss"
+        }
+      ],
+      "sample_question": "Should a firm pay one large annual bonus or several smaller ones to maximise felt value? Justify with the value function.",
+      "failure_mode": "Applying the wrong rule — e.g. integrating gains or segregating losses — because you didn't check the value-function curvature.",
+      "source_ref": "BEHECON/M1/C19",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_value_function"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_transaction_utility",
+      "subject": "BEHECON",
+      "concept": "Acquisition vs transaction utility",
+      "formula": "Purchase utility = acquisition utility + transaction utility (transaction utility = reference price − actual price)",
+      "variables": {},
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Total purchase utility = acquisition utility (value of the good vs price, classical) + transaction utility (price vs a reference 'fair' price). Thaler's beer-on-the-beach: people pay more for the SAME beer from a fancy hotel than a grocery, because the reference price differs. Explains MRP/coupons (JC Penney's removal of fake-discount coupons crashed sales).",
+      "distractors": [
+        {
+          "wrong": "People pay the same for identical beer regardless of seller",
+          "why": "reference price differs ⇒ transaction utility differs"
+        },
+        {
+          "wrong": "Transaction utility = value of consuming the good",
+          "why": "that's acquisition utility; transaction utility is about the deal"
+        }
+      ],
+      "sample_question": "Why will the same beer fetch a higher acceptable price if bought from a resort than from a grocery store?",
+      "failure_mode": "Reducing willingness-to-pay to acquisition utility only, ignoring the 'deal' (transaction) component and its reference price.",
+      "source_ref": "BEHECON/M1/C20",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_changes_vs_levels"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m1_sunk_cost",
+      "subject": "BEHECON",
+      "concept": "Sunk-cost fallacy",
+      "formula": null,
+      "variables": {},
+      "context_tag": "prospect_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Letting past, unrecoverable spending drive current decisions (Vince keeps playing tennis through pain because he prepaid). Classical Econs ignore sunk costs. Explained via mental accounting: the account must be 'closed' with value. Payment depreciation: attendance fades as the membership-fee memory fades (Gourville-Soman). Higher price → wear painful shoes longer.",
+      "distractors": [
+        {
+          "wrong": "A rational Econ also honours sunk costs",
+          "why": "Econs ignore sunk costs; only humans fall for it"
+        },
+        {
+          "wrong": "Sunk cost = opportunity cost",
+          "why": "distinct — opportunity cost is forward-looking and relevant"
+        }
+      ],
+      "sample_question": "You prepaid ₹2000 for a concert; it's pouring rain and you feel sick. You go anyway 'because I paid'. Which fallacy?",
+      "failure_mode": "Continuing a losing course because 'I've already invested', instead of comparing only future costs and benefits.",
+      "source_ref": "BEHECON/M1/C21",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_mental_accounting"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_time_preference",
+      "subject": "BEHECON",
+      "concept": "Time preference & the discount factor δ",
+      "formula": "U = u₀ + δ·u₁ ;  δ∈(0,1)",
+      "variables": {
+        "δ": "per-period discount factor (↑δ = more patient)"
+      },
+      "context_tag": "intertemporal_choice",
+      "agent_type": "Econ",
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "People value future utility less than present utility; the discount factor δ∈(0,1) is the weight on tomorrow vs today. High δ = patient, low δ = impatient. Total utility of dinner today + next week = u_today + δ·u_nextweek. The marshmallow test measures patience and predicts life outcomes.",
+      "distractors": [
+        {
+          "wrong": "Low δ means a patient person",
+          "why": "low δ = impatient; high δ = patient"
+        },
+        {
+          "wrong": "δ can exceed 1",
+          "why": "δ is bounded in (0,1) for a positive but discounted future"
+        }
+      ],
+      "sample_question": "If δ=0.9, what is the present value of a dinner worth 100 utils next week? What does a high δ say about the person?",
+      "failure_mode": "Confusing δ direction: a HIGHER δ means MORE patience, not less.",
+      "source_ref": "BEHECON/M2/C01",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [
+        "be_m2_exponential_discounting"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_exponential_discounting",
+      "subject": "BEHECON",
+      "concept": "Exponential discounting & time consistency (Econ)",
+      "formula": "U⁰ = u₀ + δu₁ + δ²u₂ + … = Σ_{t≥0} δᵗ·uₜ",
+      "variables": {},
+      "context_tag": "intertemporal_choice",
+      "agent_type": "Econ",
+      "beta_value": "1",
+      "delta_value": "0<δ<1 (e.g. 0.9)",
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "The standard (Samuelson) model: present value of a utility stream is U⁰ = u₀ + δu₁ + δ²u₂ + … = Σ δᵗuₜ. An Econ using exponential discounting is dynamically time-CONSISTENT: plans made today are still optimal tomorrow because the discount ratio between any two periods is constant. IPL example (league 100, semi 150, final 180, δ=0.9): waits for the final and never switches.",
+      "distractors": [
+        {
+          "wrong": "Exponential discounters reverse their plans over time",
+          "why": "no — they are time-consistent; only present-biased agents reverse"
+        },
+        {
+          "wrong": "PV of u₂ is δ·u₂",
+          "why": "it is δ²·u₂ — discounting compounds each period"
+        }
+      ],
+      "sample_question": "With δ=0.9 and payoffs league=100 (now), semi=150 (yr1), final=180 (yr2), what does an Econ choose at t=0, and will the choice hold at t=1?",
+      "failure_mode": "Thinking exponential discounters are present-biased — they are time-consistent; β is implicitly 1.",
+      "source_ref": "BEHECON/M2/C01C",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_time_preference"
+      ],
+      "connects_to": [],
+      "shared_with": [
+        "GER.dcf_time_value",
+        "MACRO.time_value_of_money"
+      ],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_present_bias",
+      "subject": "BEHECON",
+      "concept": "Present-biased (quasi-hyperbolic / β-δ) discounting",
+      "formula": "U⁰ = u₀ + β·Σ_{t≥1} δᵗ·uₜ ;  β<1",
+      "variables": {
+        "β": "present-bias factor (<1), applied to all future periods",
+        "δ": "long-run discount factor"
+      },
+      "context_tag": "intertemporal_choice",
+      "agent_type": "Naive/Sophisticated",
+      "beta_value": "1/2 (also 3/5)",
+      "delta_value": "1",
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Humans discount the immediate future more steeply than later periods: U⁰ = u₀ + β(δu₁ + δ²u₂ + …). The extra factor β<1 applies to ALL future periods (not the present), making people patient in the long run but impatient now. Example values β=3/5 or 1/2, δ=1. Produces dynamically INCONSISTENT plans (Rani plans the IPL final, then switches to the semi).",
+      "distractors": [
+        {
+          "wrong": "β multiplies the current-period utility u₀ too",
+          "why": "β applies only to FUTURE periods; u₀ is undiscounted"
+        },
+        {
+          "wrong": "β<1 makes people impatient in the long run",
+          "why": "it makes them impatient NOW but patient across distant periods"
+        }
+      ],
+      "sample_question": "Write the β-δ present value of a stream (u₀,u₁,u₂) and explain why β sits outside the bracket of future terms.",
+      "failure_mode": "Putting β on u₀ (it isn't), or applying β only to t=1 instead of all future periods.",
+      "source_ref": "BEHECON/M2/C03A",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_exponential_discounting"
+      ],
+      "connects_to": [
+        "be_m2_preference_reversal",
+        "be_m2_naifs_sophisticates"
+      ],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_preference_reversal",
+      "subject": "BEHECON",
+      "concept": "Preference reversals: vices vs virtues",
+      "formula": "Vice now: U=B−βδC | Virtue now: U=−C+βδB | Either, planned: U=β(B−C)  (δ=1)",
+      "variables": {
+        "B": "benefit",
+        "C": "cost",
+        "β": "present bias",
+        "δ": "long-run factor"
+      },
+      "context_tag": "intertemporal_choice",
+      "agent_type": null,
+      "beta_value": "1/2",
+      "delta_value": "1",
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Present bias preponds VICES (immediate benefit, delayed cost) and postpones VIRTUES (immediate cost, delayed benefit). Egg roll (β=½,δ=1, B=3,C=4): eat-today utility = B−βC = 3−2 = +1 (eats), but plan-for-tomorrow = β(B−C) = ½(3−4) = −0.5 (won't) → reversal. Gym (B=10,C=8): go-today = −C+βB = −8+5 = −3 (skips), plan-tomorrow = β(B−C) = +1 (intends) → reversal.",
+      "distractors": [
+        {
+          "wrong": "Plan-for-tomorrow utility of the egg roll = B−βC",
+          "why": "when BOTH benefit and cost are future, it's β(B−C), not B−βC"
+        },
+        {
+          "wrong": "Virtues get preponed and vices postponed",
+          "why": "reversed — vices preponed, virtues postponed"
+        }
+      ],
+      "sample_question": "With β=½, δ=1, an egg roll gives benefit 3 (now) and cost 4 (future). Compute eat-today vs plan-tomorrow utility and explain the reversal.",
+      "failure_mode": "Mis-placing β: for a present action, only the DELAYED side is multiplied by β (and δ); when both are in the future, β multiplies the whole (B−C).",
+      "source_ref": "BEHECON/M2/C03C",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_present_bias"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_naifs_sophisticates",
+      "subject": "BEHECON",
+      "concept": "Naïfs vs Sophisticates (β̂ and backward induction)",
+      "formula": null,
+      "variables": {
+        "β": "true present-bias factor",
+        "β̂": "believed future-self β (Naïf: 1, Sophisticate: β)"
+      },
+      "context_tag": "intertemporal_choice",
+      "agent_type": "Naive vs Sophisticated",
+      "beta_value": "1/2",
+      "delta_value": "1",
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Both are present-biased (real β<1) but differ in the BELIEF about the future self, β̂. A NAÏF assumes future selves will be patient (β̂=1) and re-optimises each period, so plans fail. A SOPHISTICATE knows the future self is also present-biased (β̂=β) and solves by BACKWARD INDUCTION (subgame-perfect equilibrium among selves), often pre-committing. Partial naïf: β<β̂<1. Movie example (a=3,b=5,c=8,d=13; β=½,δ=1; watch 3 of 4): Econ skips a; Naïf ends up skipping c; Sophisticate plans-and-executes skipping b.",
+      "distractors": [
+        {
+          "wrong": "A Naïf correctly predicts its own future impatience",
+          "why": "that's the Sophisticate; the Naïf believes the future self will be patient"
+        },
+        {
+          "wrong": "In the movie game all three skip the same movie",
+          "why": "Econ skips a, Naïf skips c, Sophisticate skips b — same β,δ,payoffs"
+        }
+      ],
+      "sample_question": "Movies a=3,b=5,c=8,d=13 over 4 weekends, β=½, δ=1, watch 3 of 4. Which movie does a Naïf skip vs a Sophisticate, and why does backward induction matter?",
+      "failure_mode": "Treating Naïf and Sophisticate as identical, or solving the Sophisticate forward instead of by backward induction; β and δ are the SAME across the two — only β̂ differs.",
+      "source_ref": "BEHECON/M2/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_present_bias",
+        "be_m2_nash_equilibrium"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_commitment_contracts",
+      "subject": "BEHECON",
+      "concept": "Commitment contracts & devices",
+      "formula": null,
+      "variables": {},
+      "context_tag": "intertemporal_choice",
+      "agent_type": "Sophisticated",
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Sophisticates, knowing their self-control problem, restrict their own future choices or raise the cost of lapsing. Ulysses & the Sirens (wax + mast); stickk / Clocky / 'save-more-tomorrow'; CARES smoking-cessation savings account; Kremer's dominated red piece-rate contract chosen 35% of the time; Royer gym-stake study. Devices: remove cues, limit choice, add penalties.",
+      "distractors": [
+        {
+          "wrong": "Naïfs are the ones who buy commitment devices",
+          "why": "Naïfs don't foresee the lapse; Sophisticates do and pre-commit"
+        },
+        {
+          "wrong": "A dominated contract is never chosen",
+          "why": "Kremer: ~35% chose the dominated red contract as commitment"
+        }
+      ],
+      "sample_question": "Why would a worker rationally choose a piece-rate contract that pays less for low output (a dominated contract)?",
+      "failure_mode": "Expecting only Naïfs to use commitment devices — it's Sophisticates (who foresee the lapse) who demand them.",
+      "source_ref": "BEHECON/M2/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_naifs_sophisticates"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_patience_wealth",
+      "subject": "BEHECON",
+      "concept": "Patience and the wealth of nations",
+      "formula": null,
+      "variables": {},
+      "context_tag": "intertemporal_choice",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Falk et al. (2018) measured patience across 76 countries (Global Preference Survey). Patience correlates strongly with GDP per capita (PPP), economic growth, net adjusted savings and years of schooling — a key macro correlate of cross-country development.",
+      "distractors": [
+        {
+          "wrong": "Patience is uncorrelated with national income",
+          "why": "it is strongly positively correlated"
+        },
+        {
+          "wrong": "The study covered only Europe",
+          "why": "76 countries across all continents"
+        }
+      ],
+      "sample_question": "Across 76 countries, which national outcomes does measured patience predict?",
+      "failure_mode": "Reading the cross-country patience–GDP link as proven causation rather than a strong correlation.",
+      "source_ref": "BEHECON/M2/C05B",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_time_preference"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_game_theory_basics",
+      "subject": "BEHECON",
+      "concept": "Game theory basics: players, strategies, payoffs",
+      "formula": null,
+      "variables": {},
+      "context_tag": "game_theory",
+      "agent_type": "Econ",
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A strategic environment needs players, strategies (a complete plan of action for every contingency) and payoffs (utility from each combination). Games are simultaneous (players move without knowing others') or sequential. Standard assumptions: rationality (choose to maximise welfare with correct beliefs) and common knowledge of rationality and payoffs.",
+      "distractors": [
+        {
+          "wrong": "In a simultaneous game players see others' moves first",
+          "why": "they move without observing others"
+        },
+        {
+          "wrong": "Common knowledge means only the analyst knows the payoffs",
+          "why": "it means every player knows, knows others know, etc."
+        }
+      ],
+      "sample_question": "Define a 'strategy' (vs an action) and state the two key assumptions underlying game-theoretic predictions.",
+      "failure_mode": "Confusing an 'action' with a 'strategy' (a strategy specifies an action for every contingency).",
+      "source_ref": "BEHECON/M2/C06A",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [
+        "be_m2_dominant_strategy_pd",
+        "be_m2_nash_equilibrium"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_dominant_strategy_pd",
+      "subject": "BEHECON",
+      "concept": "Prisoner's Dilemma & dominant strategies",
+      "formula": null,
+      "variables": {},
+      "context_tag": "game_theory",
+      "agent_type": "Econ",
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A dominant strategy is best regardless of the opponent's choice. In the Prisoner's Dilemma both confess (dominant), reaching (−5,−5) though (−1,−1) is jointly better — individual rationality yields a Pareto-inferior outcome. Iterated deletion of dominated strategies solves more complex games.",
+      "distractors": [
+        {
+          "wrong": "The PD equilibrium is mutual cooperation",
+          "why": "it's mutual defection (confess), the dominant strategy"
+        },
+        {
+          "wrong": "A dominant strategy depends on what the opponent does",
+          "why": "by definition it's best irrespective of the opponent"
+        }
+      ],
+      "sample_question": "In the Prisoner's Dilemma, why do both rational players confess even though both staying silent is better for them?",
+      "failure_mode": "Calling the cooperative outcome the equilibrium — the dominant-strategy equilibrium is mutual defection, even though cooperation is better for both.",
+      "source_ref": "BEHECON/M2/C06B",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_game_theory_basics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_nash_equilibrium",
+      "subject": "BEHECON",
+      "concept": "Nash equilibrium & subgame-perfect equilibrium",
+      "formula": null,
+      "variables": {},
+      "context_tag": "game_theory",
+      "agent_type": "Econ",
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A Nash equilibrium is a strategy profile where no player can gain by unilaterally deviating; it is self-enforcing. Stag Hunt has TWO pure Nash equilibria, (Stag,Stag) and (Hare,Hare). In sequential (extensive-form) games the refined prediction is the subgame-perfect Nash equilibrium (SPNE), found by backward induction; it rules out non-credible threats.",
+      "distractors": [
+        {
+          "wrong": "Every game has exactly one Nash equilibrium",
+          "why": "Stag Hunt has two pure-strategy NE"
+        },
+        {
+          "wrong": "SPNE is found by forward reasoning",
+          "why": "it's found by backward induction"
+        }
+      ],
+      "sample_question": "The Stag Hunt has payoffs (Stag,Stag)=(5,5), (Hare,Hare)=(2,2), off-diagonals (2,0)/(0,2). Find all pure-strategy Nash equilibria.",
+      "failure_mode": "Treating any 'good' outcome as Nash, or forgetting a game can have multiple Nash equilibria; not using backward induction for SPNE.",
+      "source_ref": "BEHECON/M2/C06C",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_dominant_strategy_pd"
+      ],
+      "connects_to": [
+        "be_m2_naifs_sophisticates",
+        "be_m2_centipede"
+      ],
+      "shared_with": [
+        "NABM.platform_competition_nash"
+      ],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_level_k",
+      "subject": "BEHECON",
+      "concept": "Level-K thinking (beauty contest)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "game_theory",
+      "agent_type": "Naive",
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Boundedly-rational strategic reasoning. In the 2/3-of-the-average guessing game the Nash equilibrium is 0 (iterated dominance), but real players reason in steps: level-0 ~ random (avg 50), level-1 → 2/3·50 ≈ 33, level-2 → 22, level-∞ → 0. FT readers clustered at 22 and 33; winning guess ~13. People do finitely many steps of reasoning, not the full equilibrium.",
+      "distractors": [
+        {
+          "wrong": "Most people guess the Nash value of 0",
+          "why": "masses cluster at ~33 and ~22 (levels 1-2)"
+        },
+        {
+          "wrong": "Level-0 players guess 0",
+          "why": "level-0 is essentially random (~50); 0 is the level-∞/Nash guess"
+        }
+      ],
+      "sample_question": "In a 2/3-of-average game, what numbers do level-0, level-1, level-2 and level-∞ thinkers pick, and where is the Nash equilibrium?",
+      "failure_mode": "Assuming everyone plays the Nash (0); real masses sit at level-1/level-2 (≈33/22).",
+      "source_ref": "BEHECON/M2/C07A",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_nash_equilibrium"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_centipede",
+      "subject": "BEHECON",
+      "concept": "Centipede game",
+      "formula": null,
+      "variables": {},
+      "context_tag": "game_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A sequential game where the SPNE (by backward induction) is to STOP at the very first node, yet payoffs to continuing grow large. Experiments show stronger strategic players (chess grandmasters) stop earlier (closer to SPNE) than students; outcomes depend on whom you play against.",
+      "distractors": [
+        {
+          "wrong": "The SPNE is to continue to the last node",
+          "why": "backward induction says stop at the first node"
+        },
+        {
+          "wrong": "Chess masters continue longer than students",
+          "why": "masters stop earlier, closer to the SPNE"
+        }
+      ],
+      "sample_question": "What is the subgame-perfect prediction in the centipede game, and how do chess masters' choices compare to students'?",
+      "failure_mode": "Assuming people continue because the pie grows — the backward-induction prediction is to stop immediately.",
+      "source_ref": "BEHECON/M2/C07B",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_nash_equilibrium"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_cognitive_hierarchy",
+      "subject": "BEHECON",
+      "concept": "Cognitive hierarchy model (Poisson-τ)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "game_theory",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Camerer-Ho-Chong generalisation of level-K: each type-k best-responds to a belief that others are distributed across lower types 0..k−1, with the type frequencies following a Poisson distribution with mean τ (typically τ≈2). Goldfarb-Yang estimated τ≈2.66 for ISP managers; higher-τ firms were more profitable and more likely to survive — strategic sophistication has business value.",
+      "distractors": [
+        {
+          "wrong": "In cognitive hierarchy each type assumes all others are exactly one level below",
+          "why": "that's level-K; CH uses a Poisson distribution over all lower types"
+        },
+        {
+          "wrong": "Higher-τ firms performed worse",
+          "why": "higher τ → higher profits and survival"
+        }
+      ],
+      "sample_question": "How does the cognitive-hierarchy model differ from level-K, and what does the parameter τ capture?",
+      "failure_mode": "Confusing cognitive hierarchy (a distribution over types, Poisson-τ) with plain level-K (everyone assumes others are exactly one level below).",
+      "source_ref": "BEHECON/M2/C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_level_k"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_fairness",
+      "subject": "BEHECON",
+      "concept": "Fairness, dual entitlement & reference transactions",
+      "formula": null,
+      "variables": {},
+      "context_tag": "social_preferences",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "People judge prices against a reference 'fair' transaction and punish perceived gouging even when standard economics says raise prices in shortage. Snow-shovel price hike after a storm: 82% call it unfair. Cabbage-patch-doll auction: 74% unfair — but FAIR if proceeds go to UNICEF. Monkey (de Waal) cucumber-vs-grape experiment shows fairness concerns are deep. Firms (Uber surge, Coca-Cola, Whitney-Houston iTunes) risk reputational backlash.",
+      "distractors": [
+        {
+          "wrong": "Consumers see shortage price rises as efficient and fair",
+          "why": "majorities judge them unfair (dual entitlement)"
+        },
+        {
+          "wrong": "Fairness is purely a human concept absent in animals",
+          "why": "capuchin monkeys also reject unequal pay"
+        }
+      ],
+      "sample_question": "A hardware store raises snow-shovel prices after a blizzard. Most call it unfair. What principle explains this and why might the firm still avoid it?",
+      "failure_mode": "Assuming consumers accept any market-clearing price; fairness/reference-dependence makes shortage pricing feel unfair.",
+      "source_ref": "BEHECON/M2/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_changes_vs_levels"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m2_framing_money_illusion",
+      "subject": "BEHECON",
+      "concept": "Framing, surcharge-vs-discount & money illusion",
+      "formula": null,
+      "variables": {},
+      "context_tag": "social_preferences",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Logically equivalent options are judged differently by frame. A 'surcharge above list' feels more unfair than a 'forgone discount' (status-quo/endowment). Money illusion / nominal wage rigidity: a 7% raise with 0% inflation is judged unfair vs a 5% raise with 12% inflation judged fair, though the latter is a real wage CUT — people react to nominal not real changes (Kahneman-Knetsch-Thaler).",
+      "distractors": [
+        {
+          "wrong": "A 5% nominal raise with 12% inflation is seen as a pay cut by most",
+          "why": "people judge it fair — money illusion masks the real cut"
+        },
+        {
+          "wrong": "Surcharges and forgone discounts feel identical",
+          "why": "the surcharge frame feels more unfair (status-quo dependence)"
+        }
+      ],
+      "sample_question": "Why is a 5% raise under 12% inflation judged 'fair' while a 7% raise under 0% inflation is judged 'unfair', despite the former being a real cut?",
+      "failure_mode": "Evaluating fairness/wages in real terms when people actually respond to the nominal framing.",
+      "source_ref": "BEHECON/M2/C09C",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m2_fairness"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_discrimination_intro",
+      "subject": "BEHECON",
+      "concept": "Discrimination defined",
+      "formula": null,
+      "variables": {},
+      "context_tag": "discrimination",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Discrimination = treating an identifiable minority group (women, Blacks, Muslims, Dalits, immigrants) less favourably than the majority despite IDENTICAL relevant characteristics. Persistent group gaps in employment/leadership are NOT explained by instrumental channels (education, experience, health) — the unexplained residual is discrimination. Framed by Article 15 (India) and the 14th Amendment (US).",
+      "distractors": [
+        {
+          "wrong": "Group gaps are fully explained by education and experience",
+          "why": "empirically a large unexplained residual remains"
+        },
+        {
+          "wrong": "Discrimination requires different qualifications",
+          "why": "it's unequal treatment of IDENTICALLY-qualified people"
+        }
+      ],
+      "sample_question": "Define discrimination in the economic sense and explain why the 'instrumental channels' explanation is rejected.",
+      "failure_mode": "Attributing all group gaps to 'instrumental' differences (education/experience) when the residual gap is the discrimination of interest.",
+      "source_ref": "BEHECON/M3/C01",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [
+        "be_m3_taste_based",
+        "be_m3_statistical_discrimination"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_post_hoc_justification",
+      "subject": "BEHECON",
+      "concept": "Post-hoc justification",
+      "formula": null,
+      "variables": {},
+      "context_tag": "discrimination",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "People decide first (often on a biased preference) then construct a justification that fits. Zeo-Norton magazine study: the stated reason (coverage vs features) flips depending on which dimension favours the pre-chosen magazine. Norton's construction-hiring study: subjects re-rank 'education vs experience' to justify hiring the man. A technique to UNCOVER hidden discriminatory attitudes.",
+      "distractors": [
+        {
+          "wrong": "Stated criteria reliably reveal true preferences",
+          "why": "post-hoc justification shows criteria shift to fit the choice"
+        },
+        {
+          "wrong": "This is statistical discrimination",
+          "why": "it's a method to expose discrimination, not a type of it"
+        }
+      ],
+      "sample_question": "In Norton's hiring study, how does flipping which candidate is more educated reveal post-hoc justification?",
+      "failure_mode": "Taking people's stated reasons at face value; the justification is constructed after the choice.",
+      "source_ref": "BEHECON/M3/C02",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_discrimination_intro"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_taste_based",
+      "subject": "BEHECON",
+      "concept": "Taste-based discrimination (Becker)",
+      "formula": "effective cost of out-group labour = w(1+d), d = psychic cost of discrimination",
+      "variables": {},
+      "context_tag": "discrimination",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Becker (1957): the discriminator has a 'taste' (distaste) for the out-group, bearing a psychic cost d to hire/interact, so the effective wage is w(1+d). On a downward-sloping demand curve this means fewer out-group workers hired at a lower effective wage. Optimal policy: forced intermixing / contact to erode the distaste (education alone won't fix a taste).",
+      "distractors": [
+        {
+          "wrong": "Taste-based discrimination arises from incomplete information",
+          "why": "that's statistical; taste-based is a preference/psychic cost"
+        },
+        {
+          "wrong": "More information eliminates taste-based discrimination",
+          "why": "information fixes statistical; taste needs contact/intermixing"
+        }
+      ],
+      "sample_question": "An employer hires fewer Black workers despite equal productivity because of a psychic cost. Which theory, and what policy attacks its root?",
+      "failure_mode": "Confusing taste-based (a preference/psychic cost) with statistical (an information problem) — they need different policies.",
+      "source_ref": "BEHECON/M3/C03A",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_discrimination_intro"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_statistical_discrimination",
+      "subject": "BEHECON",
+      "concept": "Statistical discrimination (Phelps-Arrow)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "discrimination",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Discrimination from INCOMPLETE INFORMATION: lacking individual data, the decision-maker assigns the group average to the individual (a signal-extraction shortcut/heuristic). If group averages differ, identical individuals are treated differently. Optimal policy: reduce information asymmetry (provide credible individual signals), unlike taste-based which needs contact.",
+      "distractors": [
+        {
+          "wrong": "Statistical discrimination is driven by a psychic cost",
+          "why": "that's taste-based; statistical is driven by incomplete information"
+        },
+        {
+          "wrong": "The fix is forced intermixing",
+          "why": "intermixing targets taste; statistical is fixed by better information"
+        }
+      ],
+      "sample_question": "A recruiter judges an applicant by their group's average because individual data is missing. Name the theory and the policy that addresses it.",
+      "failure_mode": "Treating statistical discrimination as malice; it's an information shortcut — and it needs a different remedy than taste-based.",
+      "source_ref": "BEHECON/M3/C03B",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_discrimination_intro"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_evidence_discrimination",
+      "subject": "BEHECON",
+      "concept": "Evidence: audit & correspondence studies",
+      "formula": null,
+      "variables": {},
+      "context_tag": "discrimination",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Field methods to detect and separate discrimination types. Goldin-Rouse blind orchestra auditions: female hires jumped from ~10% (visible) to ~35% (blind). Bertrand-Mullainathan: identical CVs with White-sounding names got ~9.65% callbacks vs ~6.45% for Black-sounding names (>3pp gap) — interpreted as predominantly taste-based since information was identical.",
+      "distractors": [
+        {
+          "wrong": "Blind auditions reduced female hiring",
+          "why": "they raised it from ~10% to ~35%"
+        },
+        {
+          "wrong": "Equal callback rates across names",
+          "why": "White-sounding names got a ~3pp higher callback rate"
+        }
+      ],
+      "sample_question": "Bertrand-Mullainathan sent identical CVs with White- vs Black-sounding names. What did callback rates show, and which discrimination type does identical info implicate?",
+      "failure_mode": "Forgetting that identical-information designs (blind audition / matched CVs) are what let you attribute the gap to taste rather than statistics.",
+      "source_ref": "BEHECON/M3/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_taste_based",
+        "be_m3_statistical_discrimination"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_consequences_stereotype_threat",
+      "subject": "BEHECON",
+      "concept": "Consequences: stereotype threat & self-fulfilling prophecy",
+      "formula": null,
+      "variables": {},
+      "context_tag": "discrimination",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Discrimination harms outcomes directly. Stereotype threat: making a stigmatised identity salient depresses performance (Hoff-Pandey: revealing caste cut Dalit maze scores ~20%; vanished when graded by random chance, isolating expectation-of-discrimination). Self-fulfilling prophecy / Pygmalion effect (Rosenthal-Jacobson): teachers' false beliefs about randomly-chosen 'bloomers' raised those pupils' measured IQ.",
+      "distractors": [
+        {
+          "wrong": "Making identity salient has no effect on performance",
+          "why": "Hoff-Pandey: revealing caste cut Dalit scores ~20%"
+        },
+        {
+          "wrong": "The Pygmalion effect shows beliefs don't matter",
+          "why": "it shows teacher beliefs causally raised pupil IQ"
+        }
+      ],
+      "sample_question": "When caste was publicly revealed, Dalit students' maze scores fell ~20% but recovered when a machine graded. What does this isolate?",
+      "failure_mode": "Assuming gaps are fixed ability differences; salience and others' expectations causally move performance.",
+      "source_ref": "BEHECON/M3/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_discrimination_intro"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_combatting_discrimination",
+      "subject": "BEHECON",
+      "concept": "Combatting discrimination: quotas, role models, contact",
+      "formula": null,
+      "variables": {},
+      "context_tag": "discrimination",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Policies: (1) diversity/quotas in leadership and evaluation; (2) minority role models that shift majority beliefs and minority aspirations (Hoff-Pandey, Cheryan); (3) Allport's intergroup-contact hypothesis — contact reduces prejudice when there is equal status, common goals, cooperation and institutional support (Pettigrew-Tropp: prejudice fell in 94% of 515 studies; Gautam Rao's Delhi RTE schools; cricket-team study).",
+      "distractors": [
+        {
+          "wrong": "Any contact between groups reduces prejudice",
+          "why": "only contact meeting Allport's four conditions reliably does"
+        },
+        {
+          "wrong": "Role models affect only the minority's aspirations",
+          "why": "they also shift the majority's beliefs/stereotypes"
+        }
+      ],
+      "sample_question": "State Allport's four conditions for intergroup contact to reduce prejudice, and give one study supporting it.",
+      "failure_mode": "Assuming any contact reduces prejudice — it must meet Allport's four conditions (equal status, common goal, cooperation, authority support).",
+      "source_ref": "BEHECON/M3/C06",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_consequences_stereotype_threat"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_gender_gaps",
+      "subject": "BEHECON",
+      "concept": "Gender gaps in wages and representation",
+      "formula": null,
+      "variables": {},
+      "context_tag": "gender",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Even after adjusting for education/experience/age, an UNEXPLAINED gender wage gap remains (US: women earned ~62% of men's income in 1980, ~79% by 2010; gap widest at the top). Severe representation gap in leadership (small % of Fortune-500 CEOs/board members). Candidate explanations: trait/preference differences, confidence/bargaining differences, and discrimination.",
+      "distractors": [
+        {
+          "wrong": "Education and experience fully close the gender wage gap",
+          "why": "an unexplained residual remains, largest at the top"
+        },
+        {
+          "wrong": "Representation is equal at senior levels",
+          "why": "women are a small share of CEOs/boards"
+        }
+      ],
+      "sample_question": "What is the 'unexplained' gender wage gap, and where in the distribution is it largest?",
+      "failure_mode": "Assuming the adjusted gap is zero — the residual (unexplained) gap is the behavioural/discrimination puzzle.",
+      "source_ref": "BEHECON/M3/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_discrimination_intro"
+      ],
+      "connects_to": [
+        "be_m3_gender_competition",
+        "be_m3_low_promotability"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_gender_competition",
+      "subject": "BEHECON",
+      "concept": "Gender differences in competition (performance & entry)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "gender",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Two findings. (1) Performance: Gneezy-Niederle-Rustichini — the gender gap widens under MIXED-gender tournaments; iterative treatments rule out effort/uncertainty/max-out, leaving 'women compete less against MEN' (belief-driven); in single-sex tournaments the gap shrinks. (2) Entry: Niederle-Vesterlund — with equal math performance, far more men than women CHOOSE the tournament over piece-rate, driven largely by self-confidence differences.",
+      "distractors": [
+        {
+          "wrong": "Women perform worse on the underlying math task",
+          "why": "performance is statistically similar; the gap is in competition entry"
+        },
+        {
+          "wrong": "Women avoid competition because they dislike payoff uncertainty",
+          "why": "ruled out by the random-pay treatment; it's belief/confidence about competing vs men"
+        }
+      ],
+      "sample_question": "In Niederle-Vesterlund, men and women solve equally many problems but men enter tournaments far more. What drives the entry gap?",
+      "failure_mode": "Concluding women are worse at the task — performance is equal; the gap is in competing against men and in choosing to enter competition (confidence).",
+      "source_ref": "BEHECON/M3/C08",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_gender_gaps"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 3,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_low_promotability",
+      "subject": "BEHECON",
+      "concept": "Gender & low-promotability tasks",
+      "formula": null,
+      "variables": {},
+      "context_tag": "gender",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Babcock et al.: women are ~15pp more likely to volunteer for (and be asked to do) NON-PROMOTABLE tasks (committee work, note-taking) that don't advance careers. In a 3-person investment game where someone must 'volunteer', women volunteer more — but the gap VANISHES in single-sex groups, so it is belief-driven (each expects men won't volunteer). Mustafi-Banerjee: positive social recognition raises volunteering and narrows the gap.",
+      "distractors": [
+        {
+          "wrong": "The volunteering gap persists in single-sex groups",
+          "why": "it vanishes — showing it's belief-driven, not a pure preference"
+        },
+        {
+          "wrong": "Paying for non-promotable tasks is the recommended fix",
+          "why": "social recognition, not pay, is the effective lever"
+        }
+      ],
+      "sample_question": "Why does the gender gap in volunteering for non-promotable tasks disappear in single-sex groups, and which intervention narrows it?",
+      "failure_mode": "Reading higher female volunteering as a free preference; it's belief-driven (vanishes in single-sex groups) and harms promotion.",
+      "source_ref": "BEHECON/M3/C10",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_gender_gaps"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_nudges",
+      "subject": "BEHECON",
+      "concept": "Nudges & libertarian paternalism",
+      "formula": null,
+      "variables": {},
+      "context_tag": "nudges_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "A nudge alters the CHOICE ARCHITECTURE to steer behaviour WITHOUT forbidding options or significantly changing economic incentives (it must be easy and cheap to avoid). 'Libertarian paternalism' (Thaler-Sunstein): free choice preserved, but designed toward the chooser's own interests. Examples: smart lunchrooms (fruit at eye level), Schiphol urinal fly, Madrian-Shea auto-enrolment default (participation jumped to ~86%), Save-More-Tomorrow, UK BIT tax-norm letters.",
+      "distractors": [
+        {
+          "wrong": "A tax on sugary drinks is a nudge",
+          "why": "it changes economic incentives, so it's not a nudge"
+        },
+        {
+          "wrong": "Banning fries is a nudge",
+          "why": "removing an option violates the 'don't forbid' criterion"
+        }
+      ],
+      "sample_question": "Define a nudge by its two criteria, and explain why a soda tax and an outright ban each fail to qualify.",
+      "failure_mode": "Calling any intervention a nudge — bans (remove options) and price/tax changes (alter incentives) are NOT nudges.",
+      "source_ref": "BEHECON/M3/C11",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_changes_vs_levels"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m3_choice_architecture",
+      "subject": "BEHECON",
+      "concept": "Designing choice architecture",
+      "formula": null,
+      "variables": {},
+      "context_tag": "nudges_policy",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Principles for good design: align visual cues with function (door pulls/push, gas-stove knobs, Stroop), exploit DEFAULTS (status-quo bias — auto-renewal, organ donation, No-Child-Left-Behind opt-in vs opt-out), expect and tolerate ERROR (post-completion errors: ATM returns card before cash; Gmail 'attachment' check), and improve the MAPPING from choices to welfare. Nudges work best for rare, difficult, low-feedback, hard-to-map decisions.",
+      "distractors": [
+        {
+          "wrong": "Defaults rarely affect outcomes",
+          "why": "status-quo bias makes defaults extremely powerful"
+        },
+        {
+          "wrong": "Nudges are most useful for frequent, well-practised choices",
+          "why": "they help most for rare, difficult, low-feedback decisions"
+        }
+      ],
+      "sample_question": "Why are nudges most effective for decisions like mortgage or pension choice rather than buying groceries?",
+      "failure_mode": "Designing for ideal users; good architecture assumes human limits, errors and default-following.",
+      "source_ref": "BEHECON/M3/C13",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m3_nudges"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m4_experiment_basics",
+      "subject": "BEHECON",
+      "concept": "What an experiment is; control & causality",
+      "formula": null,
+      "variables": {},
+      "context_tag": "methods",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "An experiment holds the environment fixed and changes ONE thing at a time to measure a causal effect. Two advantages over observational data: (1) precise control of data collection (capture psychological variables), and (2) identification of CAUSALITY (via randomisation). Behavioural economics is a sub-discipline (the subject); experimental economics is a method (the tool) — they overlap but aren't identical.",
+      "distractors": [
+        {
+          "wrong": "Experiments and observational studies identify causality equally well",
+          "why": "randomised experiments uniquely identify causal effects"
+        },
+        {
+          "wrong": "Behavioural economics and experimental economics are the same thing",
+          "why": "one is a field, the other a method"
+        }
+      ],
+      "sample_question": "What two advantages does a controlled experiment have over observational data, and what does randomisation buy you?",
+      "failure_mode": "Equating correlation with causation, or conflating 'behavioural' (a field) with 'experimental' (a method).",
+      "source_ref": "BEHECON/M4/C03",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m1_heuristics"
+      ],
+      "connects_to": [
+        "be_m4_lab_experiments",
+        "be_m4_field_rct"
+      ],
+      "shared_with": [],
+      "difficulty": 1,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m4_lab_experiments",
+      "subject": "BEHECON",
+      "concept": "Lab experiments (games & critiques)",
+      "formula": null,
+      "variables": {},
+      "context_tag": "methods",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Tightly controlled lab studies with monetary incentives test heuristics, risk/time/social preferences. Canonical games: Ultimatum (proposer splits, responder accepts/rejects — offers average ~40-50%, sub-20% offers rejected, contradicting the tiny-offer Nash prediction), Dictator, Trust, Prisoner's Dilemma, public-goods. Strength: clean causal identification. Weakness: external validity — WEIRD student subject pools (Western, Educated, Industrialised, Rich, Democratic).",
+      "distractors": [
+        {
+          "wrong": "In the ultimatum game responders accept any positive offer (Nash)",
+          "why": "empirically low (<20%) offers are routinely rejected"
+        },
+        {
+          "wrong": "Lab samples are highly representative of the population",
+          "why": "they're typically WEIRD students — the external-validity critique"
+        }
+      ],
+      "sample_question": "What does the ultimatum game's average ~40% offer and rejection of low offers reveal, and what is the main critique of lab studies?",
+      "failure_mode": "Over-generalising lab results from WEIRD student samples; and mis-stating the ultimatum result (people reject unfair low offers).",
+      "source_ref": "BEHECON/M4/C04",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m4_experiment_basics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m4_field_rct",
+      "subject": "BEHECON",
+      "concept": "Field experiments & RCTs",
+      "formula": null,
+      "variables": {},
+      "context_tag": "methods",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Subjects are studied in their natural environment. Field experiments test theory in the field; RCTs (randomised control trials) are policy-oriented (Kremer-Miguel bed-nets/deworming; Banerjee-Cole-Duflo-Linden Balsakhi & computer-assisted learning; List charitable-giving; Bertrand-Mullainathan callbacks). Strength: external validity, less social-desirability/Hawthorne bias. Weakness: expensive, logistically hard, less control over the precise mechanism.",
+      "distractors": [
+        {
+          "wrong": "Field experiments give the cleanest mechanism",
+          "why": "lab gives mechanism clarity; field gives external validity"
+        },
+        {
+          "wrong": "RCTs are cheap and easy to run",
+          "why": "they are expensive and logistically challenging"
+        }
+      ],
+      "sample_question": "Contrast the strengths and weaknesses of a field RCT vs a lab experiment, with one example of each.",
+      "failure_mode": "Assuming field/RCT evidence is mechanism-clear — it's externally valid but the precise mechanism is often unclear (a lab strength).",
+      "source_ref": "BEHECON/M4/C07",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m4_experiment_basics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m4_experiment_types",
+      "subject": "BEHECON",
+      "concept": "Typology: lab-in-field, online & non-randomised",
+      "formula": null,
+      "variables": {},
+      "context_tag": "methods",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Other formats trade control for generalisability. Lab-in-the-field (artefactual, List-Harrison): lab tasks with non-standard subjects (villagers, farmers) — more generalisable, costlier. Online/survey experiments (MTurk/Prolific/Qualtrics): cheap, large, quota-representative, but limited control, short attention, bot/AI-response concerns (Stantcheva's policy-attitude surveys). Non-randomised experiments: use experimental TOOLS without randomisation (Blouin-Mukand Rwanda trust; matrilineal-vs-patriarchal gender; Gautam Rao schools).",
+      "distractors": [
+        {
+          "wrong": "Online experiments give more control than the lab",
+          "why": "they give less control but greater scale/generalisability"
+        },
+        {
+          "wrong": "Every experiment must randomise",
+          "why": "experimental tools are used in non-randomised designs too"
+        }
+      ],
+      "sample_question": "Rank lab, lab-in-field and online experiments on the control vs external-validity trade-off, and give one example of a non-randomised experiment.",
+      "failure_mode": "Assuming an 'experiment' always means randomisation — experimental tools are also used in non-randomised designs.",
+      "source_ref": "BEHECON/M4/C05",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m4_experiment_basics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    },
+    {
+      "id": "be_m4_ethics",
+      "subject": "BEHECON",
+      "concept": "Research ethics: Belmont Report, IRB, informed consent",
+      "formula": null,
+      "variables": {},
+      "context_tag": "methods",
+      "agent_type": null,
+      "beta_value": null,
+      "delta_value": null,
+      "timeframe": null,
+      "startup_stage": null,
+      "business_model_type": null,
+      "stage_in_funnel": null,
+      "example_from_source": null,
+      "teaching_note": "Modern protocols arose from historical abuses (Tuskegee, Nazi twin experiments, Stanford Prison, Milgram). The Belmont Report (1979) sets three pillars: respect for persons (autonomy → informed consent), beneficence (maximise benefit, minimise harm; risk-benefit), and justice (fair distribution of burdens; protect vulnerable groups — children, prisoners, pregnant women). An IRB (≥5 members, scientists + community) reviews protocols (exempt / expedited / full). In ECONOMICS deception is not allowed (it would destroy research credibility).",
+      "distractors": [
+        {
+          "wrong": "Deception is acceptable in economics experiments if debriefed",
+          "why": "economics bans deception outright — unlike psychology"
+        },
+        {
+          "wrong": "The three Belmont pillars are honesty, profit and speed",
+          "why": "they are respect for persons, beneficence and justice"
+        }
+      ],
+      "sample_question": "Name the three Belmont pillars and state the rule on deception that is specific to economics experiments.",
+      "failure_mode": "Forgetting deception is banned in economics specifically, or mixing up the three Belmont pillars.",
+      "source_ref": "BEHECON/M4/C09",
+      "needs_manual_review": false,
+      "needs_review": false,
+      "flag_count": 0,
+      "prerequisites": [
+        "be_m4_experiment_basics"
+      ],
+      "connects_to": [],
+      "shared_with": [],
+      "difficulty": 2,
+      "cross_subject_confirmed": false
+    }
+  ]
+}

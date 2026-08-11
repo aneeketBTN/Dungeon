@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Exam — Macroeconomics</title>
+<meta name="description" content="Macroeconomics mock — MCQ + short + case + subjective, with examiner rubrics for written answers.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Macroeconomics Mock — 4 sections">
+<meta property="og:description" content="Principles of Macroeconomics practice exam. MCQs auto-grade; written answers come with a marker's rubric.">
+<link rel="icon" href="data:,">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, "Segoe UI", sans-serif; background: #e9eaec; color: #222; font-size: 14px; }
+  .topbar { background: #1c1c1c; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; flex-wrap: wrap; gap: 6px; }
+  .topbar .brand { color: #f0a429; font-weight: bold; font-size: 15px; }
+  .topbar .links a { color: #fff; text-decoration: none; margin-left: 18px; cursor: pointer; font-size: 13px; }
+  .topbar .links a:hover { color: #f0a429; }
+  .topbar .links a.notes { color: #f0a429; font-weight: bold; }
+  .sectionbar { background: #fff; display: flex; align-items: flex-start; justify-content: space-between; padding: 8px 16px 0; border-bottom: 1px solid #ccc; flex-wrap: wrap; gap: 8px; }
+  .sectionbar .label { font-weight: bold; padding-top: 6px; margin-right: 12px; }
+  .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tab { padding: 6px 14px; background: #d4d6da; cursor: pointer; font-weight: bold; border-radius: 3px 3px 0 0; font-size: 12px; }
+  .tab.active { background: #2d6fd4; color: #fff; }
+  .timers { text-align: right; padding-top: 4px; font-size: 13px; }
+  .timers b { color: #c0392b; }
+  .examband { background: #3b7ddd; color: #fff; padding: 7px 16px; font-weight: bold; font-size: 14px; }
+  .layout { display: flex; align-items: stretch; min-height: calc(100vh - 210px); }
+  .main { flex: 1; background: #fff; padding: 14px 22px 90px; position: relative; }
+  .qhead { display:flex; align-items:center; gap:10px; margin-bottom: 14px; }
+  .qno { font-weight: bold; font-size: 15px; }
+  .mkbadge { background:#eef3fb; color:#2560bd; border:1px solid #cfe0f5; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:10px; }
+  .qtext { font-size: 16px; line-height: 1.6; margin-bottom: 22px; }
+  .qtext .formula { display: inline-block; background: #f4f6f8; border: 1px solid #dde2e7; padding: 2px 8px; border-radius: 4px; font-family: Consolas, monospace; font-size: 13px; color: #2d4a66; margin-top: 8px; }
+  .options { display: flex; flex-direction: column; gap: 10px; max-width: 820px; }
+  .option { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1px solid #cfd4da; border-radius: 6px; cursor: pointer; background: #fff; transition: background .12s, border-color .12s; }
+  .option:hover { background: #f3f7fd; border-color: #9cc0f0; }
+  .option.selected { background: #e7f0fd; border-color: #2d6fd4; }
+  .option .radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #888; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .option.selected .radio { border-color: #2d6fd4; }
+  .option.selected .radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #2d6fd4; }
+  .option .key { font-weight: bold; color: #555; }
+  .wordhint { font-size:12px; color:#888; margin-bottom:8px; font-style:italic; }
+  textarea.answer { width:100%; max-width:820px; min-height:170px; padding:12px; border:1px solid #bbb; border-radius:6px; font-family:inherit; font-size:14px; line-height:1.55; resize:vertical; }
+  .choicebox { display:flex; flex-direction:column; gap:10px; max-width:820px; margin-bottom:14px; }
+  .choiceopt { border:1px solid #cfd4da; border-radius:6px; padding:12px 14px; cursor:pointer; background:#fff; }
+  .choiceopt:hover { background:#f3f7fd; border-color:#9cc0f0; }
+  .choiceopt.picked { background:#e7f0fd; border-color:#2d6fd4; }
+  .choiceopt .lab { font-weight:bold; color:#2560bd; margin-right:6px; }
+  .sidebar { width: 290px; background: #fafbfc; border-left: 1px solid #d2d6da; padding: 12px; }
+  .profile { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .profile .avatar { width: 54px; height: 54px; border-radius: 4px; background: #cdd6e0; display: flex; align-items: center; justify-content: center; font-size: 28px; color:#7a8ba0; }
+  .profile .name { font-weight: bold; }
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 6px; margin-bottom: 16px; font-size: 11px; }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .badge { width: 24px; height: 24px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 12px; }
+  .b-ans { background: #34a853; border-radius: 4px 4px 14px 14px; }
+  .b-notans { background: #d14836; border-radius: 14px 14px 4px 4px; }
+  .b-notvis { background: #fff; color: #444; border: 1px solid #aaa; border-radius: 4px; }
+  .b-marked { background: #6f42c1; border-radius: 50%; }
+  .b-ansmarked { background: #6f42c1; border-radius: 50%; position: relative; }
+  .b-ansmarked::after { content: "✓"; position: absolute; right: -3px; bottom: -3px; background: #34a853; border-radius: 50%; width: 13px; height: 13px; font-size: 9px; display: flex; align-items: center; justify-content: center; }
+  .palette-title { background: #3b7ddd; color: #fff; padding: 6px 10px; font-weight: bold; border-radius: 3px; margin-bottom: 4px; font-size:12px; }
+  .choose { font-weight: bold; margin: 8px 0; font-size: 13px; }
+  .palette { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+  .pcell { height: 34px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 1px solid #aaa; background: #fff; border-radius: 4px; color: #444; position: relative; font-size:13px; }
+  .pcell.answered { background: #34a853; color: #fff; border-color: #2d8c46; border-radius: 4px 4px 16px 16px; }
+  .pcell.notans { background: #d14836; color: #fff; border-color: #b03a2b; border-radius: 16px 16px 4px 4px; }
+  .pcell.marked { background: #6f42c1; color: #fff; border-color: #5a36a0; border-radius: 50%; }
+  .pcell.ansmarked { background: #6f42c1; color: #fff; border-color: #5a36a0; border-radius: 50%; }
+  .pcell.ansmarked::after { content: "✓"; position: absolute; right: -2px; bottom: -2px; background: #34a853; border-radius: 50%; width: 14px; height: 14px; font-size: 9px; display: flex; align-items: center; justify-content: center; color:#fff; }
+  .pcell.current { outline: 3px solid #f0a429; outline-offset: 1px; }
+  .bottombar { position: fixed; bottom: 0; left: 0; right: 0; background: #f0f1f3; border-top: 1px solid #c8ccd0; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 50; flex-wrap: wrap; gap: 8px; }
+  .bottombar .group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { padding: 9px 14px; border: 1px solid #b5bcc4; background: #fff; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; }
+  .btn:hover { background: #eef1f5; }
+  .btn-primary { background: #2d6fd4; color: #fff; border-color: #2560bd; }
+  .btn-primary:hover { background: #2560bd; }
+  .btn-submit { background: #1a8a4a; color: #fff; border-color: #157038; }
+  .btn-submit:hover { background: #157038; }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+  .overlay.show { display: flex; }
+  .modal { background: #fff; border-radius: 8px; max-width: 820px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 22px 26px; }
+  .modal h2 { margin-bottom: 12px; color: #2d6fd4; }
+  .modal h3 { margin: 18px 0 6px; color:#1a3a5c; border-bottom:2px solid #eaeef3; padding-bottom:4px; }
+  .modal h4 { margin: 12px 0 4px; color:#2560bd; }
+  .modal p, .modal li { line-height: 1.6; margin-bottom: 6px; }
+  .modal ul, .modal ol { padding-left: 20px; }
+  .modal table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
+  .modal th, .modal td { border: 1px solid #d6dbe0; padding: 6px 9px; text-align: left; vertical-align: top; }
+  .modal th { background: #eef3fb; }
+  .modal .close { float: right; cursor: pointer; font-size: 26px; color: #888; line-height: 1; }
+  .modal code, .ncode { background:#f4f6f8; border:1px solid #e0e5ea; padding:1px 6px; border-radius:4px; font-family:Consolas,monospace; font-size:13px; color:#2d4a66; }
+  .callout { background:#fff8e6; border-left:4px solid #f0a429; padding:8px 12px; border-radius:4px; margin:8px 0; }
+  .scorebig { font-size: 40px; font-weight: bold; color: #1a8a4a; }
+  .review-q { border: 1px solid #e0e4e8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+  .review-q.wrong { border-left: 5px solid #d14836; }
+  .review-q.right { border-left: 5px solid #34a853; }
+  .review-q.skip { border-left: 5px solid #999; }
+  .review-q.written { border-left: 5px solid #2d6fd4; }
+  .review-q .tag { font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 10px; color: #fff; }
+  .tag.tw { background: #d14836; } .tag.tr { background: #34a853; } .tag.ts { background: #999; } .tag.tb { background:#2d6fd4; }
+  .review-q .exp { background: #f6f8fa; padding: 8px 10px; border-radius: 4px; margin-top: 8px; font-size: 13px; color: #333; }
+  .model { background:#eef7ef; border:1px solid #cfe6d2; padding:10px 12px; border-radius:5px; margin-top:8px; font-size:13px; line-height:1.55; }
+  .youranswer { background:#f4f6f8; border:1px solid #e0e5ea; padding:10px 12px; border-radius:5px; margin-top:8px; font-size:13px; white-space:pre-wrap; min-height:20px; }
+  .rubric { background:#fff4e6; border:1px solid #f0d8a8; border-radius:5px; padding:10px 12px; margin-top:8px; font-size:13px; }
+  .rubric > b { display:block; margin-bottom:6px; color:#b06a00; }
+  .rubric .ritem { display:flex; gap:8px; align-items:flex-start; margin:5px 0; cursor:pointer; line-height:1.45; }
+  .rubric .ritem input { margin-top:3px; flex-shrink:0; width:16px; height:16px; }
+  .rverdict { margin-top:8px; font-weight:bold; color:#b06a00; }
+  .ss-btn.suggest { box-shadow:0 0 0 2px #f0a429; }
+  .modelwrap summary { cursor:pointer; color:#2d6fd4; font-size:12px; font-weight:bold; margin-top:10px; }
+  .modelwrap .model { margin-top:6px; }
+  .selfscore { margin-top:8px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .ss-btn { padding:5px 12px; border:1px solid #bbb; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold; background:#fff; }
+  .ss-btn.on { background:#2d6fd4; color:#fff; border-color:#2560bd; }
+  #calc { display: none; position: fixed; top: 120px; right: 40px; width: 220px; background: #2b2b2b; border-radius: 8px; padding: 12px; z-index: 90; box-shadow: 0 8px 30px rgba(0,0,0,.4); }
+  #calc.show { display: block; }
+  #calc .disp { background: #111; color: #6f6; font-family: monospace; font-size: 20px; padding: 8px; text-align: right; border-radius: 4px; margin-bottom: 8px; min-height: 38px; overflow:hidden; }
+  #calc .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  #calc button { padding: 10px; background: #444; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+  #calc button:hover { background: #555; }
+  #calc .op { background: #f0a429; } #calc .eq { background: #2d6fd4; }
+  #calc .drag { cursor: move; color:#aaa; font-size: 11px; text-align:center; margin-bottom:6px; }
+  @media (max-width: 820px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; border-left: none; border-top: 1px solid #d2d6da; }
+    .palette { grid-template-columns: repeat(8, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">Open Mock</div>
+  <div class="links">
+    <a class="notes" onclick="openModal('notes')">📖 Revision Notes</a>
+    <a onclick="openModal('instr')">View Instructions</a>
+    <a onclick="openModal('paper')">Question Paper</a>
+    <a onclick="toggleCalc()">Calculator</a>
+    <a onclick="clearSaved()" title="Clear saved progress">↺ Reset</a>
+  </div>
+</div>
+
+<div class="sectionbar">
+  <div style="display:flex; flex-wrap:wrap">
+    <div class="label">Sections</div>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <div class="timers">
+    Time Left: <b id="timeLeft">60:00</b><br>
+    Time Spent (Question): <span id="qtime">00:00</span>
+  </div>
+</div>
+
+<div class="examband" id="examband">Mock Exam — Principles of Macroeconomics</div>
+
+<div class="layout">
+  <div class="main">
+    <div class="qhead"><div class="qno" id="qno">Question No. 1</div><span class="mkbadge" id="mkbadge"></span></div>
+    <div class="qtext" id="qtext"></div>
+    <div id="answerArea"></div>
+  </div>
+  <div class="sidebar">
+    <div class="profile"><div class="avatar">👤</div><div class="name">Aneecake</div></div>
+    <div class="legend">
+      <div class="item"><span class="badge b-ans" id="cAns">0</span> Answered</div>
+      <div class="item"><span class="badge b-notans" id="cNotans">0</span> Not Answered</div>
+      <div class="item"><span class="badge b-notvis" id="cNotvis">0</span> Not Visited</div>
+      <div class="item"><span class="badge b-marked" id="cMarked">0</span> Marked</div>
+      <div class="item" style="grid-column:1/3"><span class="badge b-ansmarked" id="cAnsmarked">0</span> Answered &amp; Marked</div>
+    </div>
+    <div class="palette-title" id="palTitle">Section Palette</div>
+    <div class="choose">Choose a Question</div>
+    <div class="palette" id="palette"></div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <div class="group">
+    <button class="btn" onclick="markReviewNext()">Mark for Review &amp; Next</button>
+    <button class="btn" onclick="clearResponse()">Clear Response</button>
+  </div>
+  <div class="group">
+    <button class="btn" onclick="prevQ()">Previous</button>
+    <button class="btn btn-primary" onclick="saveNext()">Save &amp; Next</button>
+    <button class="btn btn-submit" onclick="confirmSubmit()">Submit</button>
+  </div>
+</div>
+
+<div class="overlay" id="m-instr"><div class="modal">
+  <span class="close" onclick="closeModal('instr')">&times;</span>
+  <h2>Instructions — Principles of Macroeconomics</h2>
+  <ul>
+    <li><b>4 sections, 60 minutes, no negative marking.</b> (This mock subsets the real paper but mirrors its structure.)</li>
+    <li><b>Sec A</b> — MCQs, 2 marks each. Click an option, then Save &amp; Next.</li>
+    <li><b>Sec B</b> — Short conceptual, 5 marks each. Type your answer (50–80 words).</li>
+    <li><b>Sec C</b> — Case-based, 10 marks. Choose (a) OR (b), then write 100–150 words.</li>
+    <li><b>Sec D</b> — Higher-order subjective, 10 marks. Choose (a) OR (b), 100–150 words.</li>
+    <li><b>Be specific. Quality of reasoning matters more than length.</b></li>
+    <li>On <b>Submit</b>: MCQs auto-grade; written answers show a model answer for you to self-score.</li>
+    <li>Hit <b>📖 Revision Notes</b> (top-left, orange) any time — that's your break-study sheet.</li>
+  </ul>
+</div></div>
+
+<div class="overlay" id="m-paper"><div class="modal">
+  <span class="close" onclick="closeModal('paper')">&times;</span>
+  <h2>Question Paper</h2><div id="paperList"></div>
+</div></div>
+
+<div class="overlay" id="m-score"><div class="modal">
+  <span class="close" onclick="closeModal('score')">&times;</span>
+  <h2>Result</h2><div id="scoreBody"></div>
+</div></div>
+
+<div class="overlay" id="m-notes"><div class="modal">
+  <span class="close" onclick="closeModal('notes')">&times;</span>
+  <div id="notesBody"></div>
+</div></div>
+
+<div id="calc">
+  <div class="drag" id="calcDrag">Calculator — drag</div>
+  <div class="disp" id="calcDisp">0</div>
+  <div class="grid">
+    <button onclick="calcC()">C</button><button onclick="calcBack()">⌫</button>
+    <button class="op" onclick="calcIn('%')">%</button><button class="op" onclick="calcIn('/')">÷</button>
+    <button onclick="calcIn('7')">7</button><button onclick="calcIn('8')">8</button><button onclick="calcIn('9')">9</button><button class="op" onclick="calcIn('*')">×</button>
+    <button onclick="calcIn('4')">4</button><button onclick="calcIn('5')">5</button><button onclick="calcIn('6')">6</button><button class="op" onclick="calcIn('-')">−</button>
+    <button onclick="calcIn('1')">1</button><button onclick="calcIn('2')">2</button><button onclick="calcIn('3')">3</button><button class="op" onclick="calcIn('+')">+</button>
+    <button onclick="calcIn('0')">0</button><button onclick="calcIn('.')">.</button><button class="eq" onclick="calcEq()" style="grid-column:span 2">=</button>
+  </div>
+</div>
+
+<script>
+/* ===================== EXAM DATA ===================== */
+const EXAM = {
+  durationMin: 60,
+  sections: [
+    { id:'A', label:'Sec A · MCQ', perMark:2, type:'mcq', qs:[
+      {t:"India's <b>nominal GDP</b> grew 15% while <b>real GDP</b> grew 7%. The gap of ~8% primarily represents:",
+       o:["Export growth","Inflation (the GDP deflator)","Population growth","The fiscal deficit"], c:1,
+       e:"Nominal − Real growth ≈ inflation. Nominal is valued at current prices (contaminated by price changes); real fixes the price vector. The wedge is the deflator."},
+      {t:"CRR = 4%. RBI injects ₹500 crore of base money. Maximum deposit creation? <span class='formula'>Money multiplier = 1 ÷ CRR</span>",
+       o:["₹2,000 crore","₹5,000 crore","₹12,500 crore","₹500 crore"], c:2,
+       e:"Multiplier = 1/0.04 = 25. 500 × 25 = ₹12,500 crore. Fractional reserve banking turns 'seed' outside money into 'fruit' inside money."},
+      {t:"A ₹1,000 G-Sec with an 8% coupon trades at ₹800 in the secondary market. Current yield? <span class='formula'>Yield = Annual coupon ÷ Price</span>",
+       o:["8%","10%","12.5%","6.4%"], c:1,
+       e:"Coupon = ₹80/yr (fixed). Yield = 80/800 = 10%. Price fell, so yield rose — bond price and yield move inversely. Yield is the market-discovered true cost of money."},
+      {t:"Nominal loan rate = 9%. Inflation = 9%. Real cost of borrowing? <span class='formula'>Real ≈ Nominal − Inflation</span>",
+       o:["18%","9%","0%","−9%"], c:2,
+       e:"Fisher identity: 9 − 9 = 0%. The money is 'essentially free' in real terms — the real rate is the true economic cost."},
+      {t:"MPC = 0.8. Government raises spending by ₹100 crore. Total impact on GDP? <span class='formula'>Fiscal multiplier = 1 ÷ (1 − MPC)</span>",
+       o:["₹100 crore","₹400 crore","₹500 crore","₹800 crore"], c:2,
+       e:"Multiplier = 1/(1−0.8) = 5. 100 × 5 = ₹500 crore. Each rupee spent is re-spent down the chain at rate MPC."},
+      {t:"Oil prices spike from a global supply shock. RBI raises rates to fight inflation. Most likely outcome?",
+       o:["Inflation falls, output rises","Inflation eases but output also falls — the stagflation trap worsens","Inflation and output both rise","The output gap closes neatly"], c:1,
+       e:"A supply (cost-push) shock shifts AS left. Rate hikes only crush demand; they cannot 'grow tomatoes' or pump oil. Monetary policy is near-powerless against supply shocks."},
+      {t:"India runs a Current Account Deficit financed mainly by FPI. Why is this fragile?",
+       o:["FPI raises domestic interest rates","FPI is 'hot money' that can exit overnight in a global risk-off shock","FPI permanently appreciates the rupee","FPI reduces the fiscal deficit"], c:1,
+       e:"FPI (portfolio flows into stocks/bonds) is finicky. FDI (factories) is 'patient'. Financing a CAD with hot money is borrowing from a nervous friend — exactly the 1991 setup."},
+      {t:"Real exchange rate <span class='formula'>e = E × (P_foreign ÷ P_domestic)</span>. If e > 1, the rupee is:",
+       o:["Overvalued","Undervalued — Indian goods are cheap for foreigners, creating appreciation pressure","Pegged","In surplus"], c:1,
+       e:"e>1 means a US Big Mac buys more than one Indian Big Mac. Global buyers flock to cheaper India, demand rupees → 'gravitational pull' back toward PPP (e→1)."},
+      {t:"The US raises interest rates sharply; Indian rates stay flat. By Interest Rate Parity, the rupee will:",
+       o:["Appreciate — India looks attractive","Depreciate — capital exits India chasing higher US yields","Stay fixed — IRP only applies to pegs","Be unaffected"], c:1,
+       e:"Capital flight to higher US returns → excess supply of rupees in forex → depreciation. IRP is the no-arbitrage condition: the rupee must depreciate by roughly the rate gap."},
+      {t:"The Impossible Trinity (Trilemma) says a country cannot simultaneously have all three of:",
+       o:["Low inflation, high growth, low unemployment","A fixed exchange rate, free capital mobility, and independent monetary policy","Fiscal surplus, trade surplus, low debt","High FDI, low FPI, stable rupee"], c:1,
+       e:"Pick any two. India runs a managed float — a deliberate 'middle ground' rather than a corner solution."},
+      {t:"Private savings = ₹800 cr; Public savings = −₹200 cr (deficit); Foreign savings = ₹100 cr. Investment = ? <span class='formula'>S_priv + S_pub + S_for = I</span>",
+       o:["₹600 crore","₹700 crore","₹1,100 crore","₹500 crore"], c:1,
+       e:"800 + (−200) + 100 = ₹700 crore. This is the rearranged GDP identity: the three savings pools must fund investment."},
+      {t:"Which best describes India's current exchange-rate regime?",
+       o:["A fully fixed peg to the USD","A completely free float","A managed float — mostly market-driven, with RBI intervening to smooth volatility","A currency board"], c:2,
+       e:"Post-1991, India chose the Trilemma middle ground: capital mobility + some monetary independence, with a managed (not fixed) rupee."},
+      {t:"The root cause of the 1991 crisis (gold airlifted to the Bank of England) was:",
+       o:["RBI ran out of printing capacity","High fiscal deficits funded by short-term hot money + the Gulf War shock drained reserves to ~2 weeks of imports","A World Bank gold-collateral rule","Liberalisation required a gold entry fee"], c:1,
+       e:"Deficits funded by finicky flows + an oil/remittance shock = reserves to ~$1bn. The trauma birthed the Managed Float and Liberalisation."},
+      {t:"Which monetary aggregate includes time deposits (fixed deposits)?",
+       o:["M0","M1","M3","Only M0 and M1"], c:2,
+       e:"M0 = base/seed money. M1 = currency + demand deposits (spendable now). M3 (broad money) adds time deposits/FDs — money saved for later."},
+      {t:"Actual GDP = ₹180 lakh cr; Potential GDP = ₹200 lakh cr. The output gap is: <span class='formula'>Gap = Actual − Potential</span>",
+       o:["+₹20 lakh cr (positive gap, overheating)","−₹20 lakh cr (negative gap, spare capacity)","Zero — within tolerance","Indeterminate without inflation"], c:1,
+       e:"180 − 200 = −20. A negative gap means the economy runs below its '8-hour-sleep' capacity — demand is insufficient, calling for stimulus."},
+      {t:"Which statement about price indices is correct?",
+       o:["CPI tracks wholesale prices; WPI tracks retail","CPI tracks retail/consumer prices, WPI tracks wholesale; 'core' inflation strips volatile food &amp; fuel out of 'headline'","Core inflation includes food and fuel","Headline and core are identical"], c:1,
+       e:"RBI's legal target is CPI headline (4% ±2%), but it watches core (ex food &amp; fuel) for the underlying trend, since food/fuel are often supply-driven and volatile."},
+      {t:"Match the banking ratio to its meaning:",
+       o:["CRR = cash reserves kept with the RBI; SLR = liquid assets (govt securities) banks must hold; CAR = capital-adequacy (bank's own capital buffer)","CRR = capital adequacy; CAR = cash ratio","SLR = cash with RBI; CRR = securities held","All three mean the same thing"], c:0,
+       e:"CRR (cash with RBI) and SLR (govt-security holdings) are liquidity tools; CAR is a solvency buffer of the bank's own capital against risk-weighted assets."},
+      {t:"Heavy government borrowing can 'crowd out' private investment because:",
+       o:["it directly bans private firms from borrowing","it pushes up interest rates, making private borrowing costlier and displacing private investment","it always lowers interest rates","it increases exports automatically"], c:1,
+       e:"More public borrowing competes for loanable funds → rates rise → some private investment is displaced. The classic crowding-out channel."},
+      {t:"The FRBM Act primarily concerns:",
+       o:["the RBI's inflation target","fiscal discipline — legislated limits on the government's fiscal deficit to preserve 'fiscal space'","foreign-exchange reserve management","bank capital adequacy"], c:1,
+       e:"The Fiscal Responsibility and Budget Management Act caps deficits to keep debt sustainable and leave room ('fiscal space') to spend countercyclically in downturns."},
+      {t:"In long-run growth theory, sustained per-capita growth ultimately comes from:",
+       o:["adding more labour","technological progress / productivity — which escapes the Malthusian trap and diminishing returns to capital","accumulating more land","raising the price level"], c:1,
+       e:"Capital deepening alone hits diminishing returns; technology shifts the production frontier outward, the true engine of sustained growth."},
+      {t:"Why do central banks work hard to 'anchor' inflation expectations?",
+       o:["Expectations have no real effect","If people expect high inflation they pre-emptively demand higher wages/prices, making inflation self-fulfilling","Expectations only affect exports","They don't — only actual inflation matters"], c:1,
+       e:"Un-anchored expectations trigger a wage-price spiral. Credible forward guidance keeps expectations near target, which helps deliver the target."},
+    ]},
+    { id:'B', label:'Sec B · Short (5M)', perMark:5, type:'written', wordHint:'50–80 words. Be specific.', qs:[
+      {t:"Explain why raising interest rates cannot control inflation caused by a <b>supply shock</b>.",
+       rubric:["Monetary policy acts on the DEMAND side (raises borrowing cost, cuts C and I, lowers AD)","A supply shock shifts AS left — the price rise is cost-driven, not demand-driven","Rate hikes cannot increase supply ('can't grow tomatoes' / pump oil)","Net effect: output falls without fixing the cause → stagflation / policy dilemma"],
+       model:"Monetary policy works on the demand side: higher rates raise borrowing costs, cooling C and I and pulling aggregate demand down. A supply shock (oil, failed monsoon) shifts the AS curve left — prices rise for cost reasons, not excess demand. Raising rates does nothing to increase supply ('can't grow tomatoes'); it only suppresses already-weak demand, worsening output. The result is stagflation, where the RBI faces a dilemma rather than a clean fix."},
+      {t:"Distinguish between <b>M0, M1 and M3</b> money.",
+       rubric:["M0 = base / high-powered money (bank reserves + currency)","M1 = narrow money: currency + demand deposits (spendable immediately)","M3 = broad money: M1 + time deposits / fixed deposits","Liquidity falls from M0 to M3; the multiplier (1/CRR) links base to broad"],
+       model:"M0 (monetary base / high-powered money) is the RBI's 'seed': currency in circulation plus bank reserves. M1 (narrow money) is what can be spent immediately — currency with the public plus demand deposits. M3 (broad money) adds time deposits / fixed deposits — money saved for later, less liquid. Liquidity falls as you move M0→M1→M3; the money multiplier (1/CRR) links the base M0 to the broader aggregates created by bank lending."},
+      {t:"Explain the <b>inverse relationship between bond prices and yields</b> with a numerical example.",
+       rubric:["The coupon is fixed in rupees, so the realised return depends on the price paid","State yield = coupon / price","Give a worked number showing price down → yield up","Yield (not the coupon) signals the true current cost of borrowing"],
+       model:"A bond's coupon is fixed in rupees, so the return an investor earns depends on the price paid. Take a ₹1,000 G-Sec with an 8% coupon = ₹80/year. At face value, yield = 80/1000 = 8%. If it sells for ₹800 in the secondary market, yield = 80/800 = 10%. Price fell, yield rose — they move inversely. The yield, not the coupon, signals the market's true cost of borrowing today."},
+      {t:"What is the <b>Output Gap</b> and why does the RBI care about it?",
+       rubric:["Definition: Output gap = Actual GDP − Potential GDP","Potential = sustainable capacity (the long-run supply trend)","Positive gap = overheating / inflation; negative gap = slack / unemployment","RBI cares because of its dual mandate — it guides tightening vs easing"],
+       model:"The output gap = Actual GDP − Potential GDP. Potential is the economy's sustainable 'capacity' (the long-run supply trend); actual is short-run demand-driven output. A positive gap means overheating (demand > capacity → inflation pressure), prompting tightening. A negative gap means spare capacity and unemployment, prompting stimulus. The RBI watches it to balance its dual mandate — keeping CPI near 4% ±2% without needlessly sacrificing growth."},
+    ]},
+    { id:'C', label:'Sec C · Case (10M)', perMark:10, type:'choice', wordHint:'Attempt (a) OR (b). 100–150 words.', qs:[
+      {t:"<b>Case 1.</b> Attempt either (a) or (b).",
+       a:{prompt:"Oil prices surge, the rupee depreciates 8%, and the trade deficit widens. A minister claims the depreciation will 'automatically correct' the deficit. Critically evaluate this claim.",
+          rubric:["Acknowledge it is only partly true","Mechanism: depreciation makes exports cheaper and imports dearer","J-curve: the deficit worsens first, then improves","Elasticities / Marshall-Lerner — oil imports are price-inelastic","Pass-through inflation can offset the competitiveness gain","Verdict: helps eventually, not automatic or immediate"],
+          model:"Partially true, with important caveats. Depreciation makes exports cheaper abroad and imports dearer, which should narrow the deficit over time. But three frictions apply: (1) The J-curve — in the short run the deficit worsens because existing import contracts cost more in rupee terms before volumes adjust. (2) Elasticities — correction only works if export/import demand is price-elastic (the Marshall-Lerner condition); India's oil imports are inelastic, so a higher oil bill persists. (3) Pass-through inflation — a weaker rupee imports inflation, which can offset competitiveness gains. So depreciation helps eventually but is neither automatic nor immediate, and an oil-driven shock blunts the mechanism."},
+       b:{prompt:"The RBI turns hawkish and hikes the repo rate 50 bps. Trace the full transmission to household consumption, and name one channel that may fail to fire.",
+          rubric:["Mechanism: repo up → bank funding cost up → lending rates / EMIs up","Higher EMIs cut disposable income → C falls → AD and inflation ease","Mention reinforcing channels (asset-price / wealth effect, expectations)","Identify a channel that may fail — e.g. the credit channel (sticky transmission)","Note the policy works with lags"],
+          model:"Transmission: a repo hike raises banks' cost of funds, which (via the arbitrage 'connected tanks') lifts G-Sec yields, lending rates and EMIs. Higher EMIs cut household disposable income and make borrowing for cars/homes costlier → consumption (C) falls → aggregate demand and inflation ease (with lags). Reinforcing channels: the asset-price channel (rates up → stocks/real estate down → negative wealth effect → less spending) and the expectations channel (hawkish forward guidance dampens demand pre-emptively). A channel that may fail: the credit channel — if banks are risk-averse or the transmission is sticky, they may not pass rate changes through, so household borrowing costs barely move and the policy underperforms."}},
+    ]},
+    { id:'D', label:'Sec D · Subjective (10M)', perMark:10, type:'choice', wordHint:'Attempt (a) OR (b). 100–150 words.', qs:[
+      {t:"<b>Higher-order. </b>Attempt either (a) or (b).",
+       a:{prompt:"The Impossible Trinity forces a choice of two from three. Argue which two India should prioritise and what it sacrifices.",
+          rubric:["State the trilemma — only two of the three are possible","India's pick: monetary independence + capital mobility (managed float)","Justify monetary sovereignty (target domestic inflation / cycle)","Justify capital mobility (fund the CAD / growth via FDI-FPI)","Name the sacrifice: exchange-rate volatility, intervention, reserves","Say why not the alternatives (a peg → imported policy / speculative attacks)"],
+          model:"India prioritises independent monetary policy and (largely) free capital mobility, sacrificing a fixed exchange rate — operating a managed float. Reasoning: monetary sovereignty lets the RBI target domestic inflation (CPI 4% ±2%) and respond to local cycles, essential for a large, diverse economy. Capital mobility attracts FDI/FPI to fund the investment-savings gap and a chronic current-account deficit. The cost is exchange-rate volatility: the rupee swings with global risk sentiment and rate differentials (IRP), forcing periodic RBI intervention and reserve buffers. A hard peg would import others' monetary policy and invite speculative attacks (the 1991/Asian-crisis lesson), while closing the capital account would starve growth. The managed-float middle ground accepts smoothing costs to keep the two more valuable corners."},
+       b:{prompt:"'UPI created new money in the economy.' Critically evaluate this claim.",
+          rubric:["The claim is false — UPI is a wrapper on existing bank deposits","Real money creation = RBI base money OR bank lending (the multiplier)","UPI raises velocity and financial inclusion, not the money stock","Core error: conflating speed of circulation with quantity of money"],
+          model:"False as stated. UPI is a payments 'wrapper' on existing commercial-bank deposit infrastructure — it moves inside money (bank IOUs) faster and more cheaply; it does not create it. New money enters only when (a) the RBI expands the monetary base (outside money), or (b) banks create deposits through lending under fractional reserves (multiplier = 1/CRR). UPI raises velocity (the speed money circulates) and financial inclusion, which can support more transactions and nominal activity, but the stock of money is set by RBI policy and bank credit, not by the payment rail. Conflating faster circulation with money creation is the core error; UPI changes how money moves, not how much exists."}},
+    ]},
+  ]
+};
+
+/* ===================== REVISION NOTES ===================== */
+const NOTES = `
+<h2>📖 Macroeconomics — Break Revision Sheet</h2>
+<div class="callout"><b>Answer reflex for Sec B/C/D (the 4-beat):</b> Identify the shock → name what shifts (AD or AS) → state the consequence → recommend the policy tool <i>and its limit</i>. The 'limit' is what earns the top band — every tool has a condition where it fails.</div>
+
+<h3>The 5 formulas to know cold</h3>
+<table>
+<tr><th>Formula</th><th>Use</th></tr>
+<tr><td><span class="ncode">Y = C + I + G + NX</span></td><td>GDP identity. NX = Exports − Imports</td></tr>
+<tr><td><span class="ncode">Money multiplier = 1 ÷ CRR</span></td><td>Deposit creation = Base × (1/CRR)</td></tr>
+<tr><td><span class="ncode">Fiscal multiplier = 1 ÷ (1 − MPC)</span></td><td>Impact of ↑G on GDP</td></tr>
+<tr><td><span class="ncode">Real rate = Nominal − Inflation</span></td><td>Fisher identity — true cost of money</td></tr>
+<tr><td><span class="ncode">Yield = Coupon ÷ Price</span></td><td>Bond price ↑ ⇒ yield ↓ (inverse)</td></tr>
+</table>
+<p>Savings identity (rearranged GDP): <span class="ncode">S_private + S_public + S_foreign = I</span></p>
+
+<h3>Situation → Term → Remedy (the core map)</h3>
+<table>
+<tr><th>You see…</th><th>Name it</th><th>Remedy (+ limit)</th></tr>
+<tr><td>Prices ↑ + economy growing</td><td>Demand-pull inflation (positive output gap)</td><td>Contractionary: raise repo → cool C, I → AD falls</td></tr>
+<tr><td>Prices ↑ + economy slowing</td><td>Stagflation / supply (cost-push) shock</td><td>No clean fix — rate hikes hurt output; need supply-side reform</td></tr>
+<tr><td>Below potential, unemployment ↑</td><td>Negative output gap / deflationary gap</td><td>Expansionary fiscal (↑G, ↓T) or monetary (↓repo)</td></tr>
+<tr><td>Rupee falling, capital leaving</td><td>Capital flight / CAD pressure (IRP)</td><td>Raise rates, sell USD reserves, attract FDI not FPI</td></tr>
+<tr><td>Banks won't lend despite low rates</td><td>Liquidity trap / Zero Lower Bound</td><td>QE, LTRO, fiscal stimulus to bypass banks</td></tr>
+<tr><td>Deficit large &amp; growing</td><td>Debt sustainability (r vs g)</td><td>If r &gt; g debt spirals; raise growth or consolidate</td></tr>
+</table>
+
+<h3>Money &amp; Banking</h3>
+<ul>
+<li><b>Money is debt (IOU).</b> Outside money = RBI cash (~5%). Inside money = bank deposits (~95%).</li>
+<li><b>UPI is a wrapper</b> on existing deposits — it moves money faster, does <i>not</i> create new money.</li>
+<li><b>M0</b> = base (reserves + currency). <b>M1</b> = currency + demand deposits (spend now). <b>M3</b> = M1 + time deposits/FDs.</li>
+<li><b>RBI legal target:</b> CPI 4% ±2%. Miss for 3 straight quarters → formal explanation to govt.</li>
+<li><b>5 transmission channels:</b> Interest rate · Credit · Asset price (wealth effect) · Balance sheet (collateral) · Expectations (forward guidance / hawkish vs dovish).</li>
+<li><b>Bank ratios:</b> CRR (cash with RBI) · SLR (liquid govt securities held) · CAR (capital-adequacy buffer).</li>
+<li><b>CPI</b> = retail (RBI targets headline 4% ±2%); <b>WPI</b> = wholesale; <b>core</b> strips volatile food &amp; fuel.</li>
+<li><b>Limits:</b> supply shocks &amp; the Zero Lower Bound (→ QE) break conventional monetary policy.</li>
+</ul>
+
+<h3>Fiscal &amp; Growth</h3>
+<ul>
+<li><b>Crowding out:</b> heavy govt borrowing ↑ rates → displaces private investment.</li>
+<li><b>FRBM Act:</b> legislated deficit limits → preserves 'fiscal space' for downturns.</li>
+<li><b>Debt sustainability:</b> stable if g &gt; r; spirals if r &gt; g.</li>
+<li><b>Long-run growth engine = technology / productivity</b> — capital alone hits diminishing returns (escapes the Malthusian trap).</li>
+<li><b>Inflation expectations:</b> if un-anchored they turn self-fulfilling (wage-price spiral).</li>
+</ul>
+
+<h3>Open Economy</h3>
+<ul>
+<li><b>IRP (asset market):</b> if India 7%, US 3%, rupee must depreciate ~4% (no-arbitrage).</li>
+<li><b>PPP (product market):</b> real rate <span class="ncode">e = E×(P_for/P_dom)</span> → converges to 1 long-run (Big Mac Index). e&gt;1 ⇒ rupee undervalued.</li>
+<li><b>Impossible Trinity:</b> pick 2 of {fixed FX, free capital, independent monetary policy}. India = <b>managed float</b>.</li>
+<li><b>BOP:</b> Current Account + Capital Account = 0. FDI = patient (good); FPI = hot money (fragile).</li>
+<li><b>Appreciation/Depreciation</b> = market-driven; <b>Revaluation/Devaluation</b> = policy-driven.</li>
+<li><b>1991 crisis:</b> deficits funded by hot money + Gulf War shock → reserves ~2 weeks → gold airlifted → birthed managed float + liberalisation.</li>
+<li><b>J-curve:</b> after depreciation the trade deficit worsens first, then improves (if elasticities allow — Marshall-Lerner).</li>
+</ul>
+
+<h3>Nominal vs Real (the apples-and-oranges fix)</h3>
+<ul>
+<li><b>Nominal GDP</b> = current prices (contaminated by inflation). <b>Real GDP</b> = constant base-year prices (fixes the price vector, isolates quantity).</li>
+<li>Nominal growth − Real growth ≈ inflation (the GDP deflator).</li>
+<li><b>Long run</b> = supply-driven smooth trend (your 8-hr sleep capacity). <b>Short run</b> = demand-driven choppiness (Sunday vs Monday).</li>
+</ul>
+`;
+
+const HAS_CALC = true;
+
+/* ===================== ENGINE ===================== */
+const FLAT = [];
+EXAM.sections.forEach((s, si) => s.qs.forEach((q, qi) => { if(!q.type) q.type = s.type; FLAT.push({ si, qi, q, sec: s }); }));
+let cur = 0;
+const N = FLAT.length;
+const resp = FLAT.map(f => f.q.type === 'mcq' ? null : (f.q.type === 'choice' ? {pick:null, text:''} : ''));
+const marked = new Array(N).fill(false);
+const visited = new Array(N).fill(false);
+const selfScore = new Array(N).fill(null); // ratio 0 / 0.5 / 1
+let totalSecs = EXAM.durationMin*60, qSecs = 0;
+
+const SKEY='ab_macro_v1';
+function saveState(){ try{ localStorage.setItem(SKEY, JSON.stringify({resp:resp,marked:marked,visited:visited,selfScore:selfScore,cur:cur,totalSecs:totalSecs})); }catch(e){} }
+function loadState(){ try{ var raw=localStorage.getItem(SKEY); if(!raw) return; var s=JSON.parse(raw); if(!s||!Array.isArray(s.resp)||s.resp.length!==N) return; for(var i=0;i<N;i++){ resp[i]=s.resp[i]; marked[i]=s.marked[i]; visited[i]=s.visited[i]; selfScore[i]=s.selfScore[i]; } if(typeof s.cur==='number'&&s.cur<N) cur=s.cur; if(typeof s.totalSecs==='number') totalSecs=s.totalSecs; }catch(e){} }
+function clearSaved(){ if(confirm('Clear saved progress and restart this paper?')){ try{ localStorage.removeItem(SKEY); }catch(e){} location.reload(); } }
+document.addEventListener('click', function(){ setTimeout(saveState,0); });
+document.addEventListener('input', saveState);
+window.addEventListener('beforeunload', saveState);
+
+function isAnswered(i){
+  const f=FLAT[i];
+  if(f.q.type==='mcq') return resp[i]!==null;
+  if(f.q.type==='choice') return resp[i].pick!==null && resp[i].text.trim()!=='';
+  return resp[i].trim()!=='';
+}
+
+function buildTabs(){
+  const tabs=document.getElementById('tabs'); tabs.innerHTML='';
+  EXAM.sections.forEach((s,si)=>{
+    const d=document.createElement('div');
+    d.className='tab'+(FLAT[cur].si===si?' active':'');
+    d.textContent=s.label;
+    d.onclick=()=>{ const first=FLAT.findIndex(f=>f.si===si); cur=first; render(); };
+    tabs.appendChild(d);
+  });
+}
+
+function render(){
+  const f=FLAT[cur], q=f.q, sec=f.sec;
+  visited[cur]=true;
+  // local index within section
+  const within = FLAT.filter(x=>x.si===f.si).findIndex(x=>x===f)+1;
+  document.getElementById('qno').textContent = sec.label.split('·')[0].trim()+" — Q"+within;
+  document.getElementById('mkbadge').textContent = sec.perMark+" mark"+(sec.perMark>1?'s':'');
+  document.getElementById('qtext').innerHTML = q.t;
+  const area=document.getElementById('answerArea'); area.innerHTML='';
+
+  if(q.type==='mcq'){
+    const wrap=document.createElement('div'); wrap.className='options';
+    q.o.forEach((opt,i)=>{
+      const d=document.createElement('div');
+      d.className='option'+(resp[cur]===i?' selected':'');
+      d.innerHTML="<span class='radio'></span><span class='key'>"+"ABCD"[i]+".</span><span>"+opt+"</span>";
+      d.onclick=()=>{ resp[cur]=i; render(); };
+      wrap.appendChild(d);
+    });
+    area.appendChild(wrap);
+  } else if(q.type==='written'){
+    area.innerHTML="<div class='wordhint'>"+(q.wordHint||sec.wordHint||'')+"</div>";
+    const ta=document.createElement('textarea'); ta.className='answer'; ta.value=resp[cur];
+    ta.placeholder="Type your answer here…";
+    ta.oninput=()=>{ resp[cur]=ta.value; updateCounts(); buildPalette(); };
+    area.appendChild(ta);
+  } else if(q.type==='choice'){
+    area.innerHTML="<div class='wordhint'>"+(q.wordHint||sec.wordHint||'')+"</div>";
+    const box=document.createElement('div'); box.className='choicebox';
+    [['a',q.a],['b',q.b]].forEach(([key,sub])=>{
+      const c=document.createElement('div');
+      c.className='choiceopt'+(resp[cur].pick===key?' picked':'');
+      c.innerHTML="<span class='lab'>("+key+")</span>"+sub.prompt;
+      c.onclick=()=>{ resp[cur].pick=key; render(); };
+      box.appendChild(c);
+    });
+    area.appendChild(box);
+    if(resp[cur].pick){
+      const ta=document.createElement('textarea'); ta.className='answer';
+      ta.value=resp[cur].text; ta.placeholder="Writing your answer to ("+resp[cur].pick+")…";
+      ta.oninput=()=>{ resp[cur].text=ta.value; updateCounts(); buildPalette(); };
+      area.appendChild(ta);
+    }
+  }
+  buildTabs(); buildPalette(); updateCounts(); qSecs=0;
+  document.getElementById('palTitle').textContent = sec.label.split('·')[0].trim()+" Palette";
+}
+
+function buildPalette(){
+  const p=document.getElementById('palette'); p.innerHTML='';
+  const si=FLAT[cur].si;
+  FLAT.forEach((f,i)=>{
+    if(f.si!==si) return;
+    const within=FLAT.filter(x=>x.si===si).indexOf(f)+1;
+    const c=document.createElement('div');
+    let cls='pcell';
+    if(marked[i]&&isAnswered(i)) cls+=' ansmarked';
+    else if(marked[i]) cls+=' marked';
+    else if(isAnswered(i)) cls+=' answered';
+    else if(visited[i]) cls+=' notans';
+    if(i===cur) cls+=' current';
+    c.className=cls; c.textContent=within;
+    c.onclick=()=>{ cur=i; render(); };
+    p.appendChild(c);
+  });
+}
+
+function updateCounts(){
+  let a=0,na=0,nv=0,m=0,am=0;
+  for(let i=0;i<N;i++){
+    if(marked[i]&&isAnswered(i)) am++;
+    else if(marked[i]) m++;
+    else if(isAnswered(i)) a++;
+    else if(visited[i]) na++;
+    else nv++;
+  }
+  cAns.textContent=a; cNotans.textContent=na; cNotvis.textContent=nv; cMarked.textContent=m; cAnsmarked.textContent=am;
+}
+
+function saveNext(){ if(cur<N-1)cur++; render(); }
+function prevQ(){ if(cur>0)cur--; render(); }
+function clearResponse(){ const t=FLAT[cur].q.type; resp[cur]= t==='mcq'?null:(t==='choice'?{pick:null,text:''}:''); render(); }
+function markReviewNext(){ marked[cur]=true; if(cur<N-1)cur++; render(); }
+
+setInterval(()=>{
+  if(totalSecs>0) totalSecs--; qSecs++;
+  const m=String(Math.floor(totalSecs/60)).padStart(2,'0'), s=String(totalSecs%60).padStart(2,'0');
+  document.getElementById('timeLeft').textContent=m+":"+s;
+  const qm=String(Math.floor(qSecs/60)).padStart(2,'0'), qs=String(qSecs%60).padStart(2,'0');
+  document.getElementById('qtime').textContent=qm+":"+qs;
+  if(totalSecs%10===0) saveState();
+  if(totalSecs===0) submitExam();
+},1000);
+
+function confirmSubmit(){
+  const un=[...Array(N).keys()].filter(i=>!isAnswered(i)).length;
+  if(confirm("Submit the exam?\n\nAnswered: "+(N-un)+" / "+N+(un?"\nUnanswered: "+un:""))) submitExam();
+}
+
+let maxMarks=0; FLAT.forEach(f=>maxMarks+=f.sec.perMark);
+
+function recalcTotal(){
+  let mcq=0, written=0;
+  FLAT.forEach((f,i)=>{
+    if(f.q.type==='mcq'){ if(resp[i]===f.q.c) mcq+=f.sec.perMark; }
+    else { if(selfScore[i]!==null) written+=selfScore[i]*f.sec.perMark; }
+  });
+  const total=mcq+written;
+  const el=document.getElementById('runTotal');
+  if(el) el.innerHTML="<span class='scorebig'>"+total.toFixed(1)+" / "+maxMarks+"</span> "+
+    "<span style='font-size:13px;color:#555'>(MCQ auto: "+mcq+" · Written self-scored: "+written.toFixed(1)+")</span>";
+}
+function setSelf(i,ratio,btnEl){
+  selfScore[i]=ratio;
+  const wrap=btnEl.parentElement;
+  [...wrap.querySelectorAll('.ss-btn')].forEach(b=>b.classList.remove('on'));
+  btnEl.classList.add('on');
+  recalcTotal();
+}
+
+function rubricHtml(arr,label){
+  if(!arr||!arr.length) return "";
+  let h="<div class='rubric'><b>"+label+" — tick what you covered:</b>";
+  arr.forEach(pt=>{ h+="<label class='ritem'><input type='checkbox' onchange='tick(this)'><span>"+pt+"</span></label>"; });
+  h+="<div class='rverdict'>Covered 0 / "+arr.length+"</div></div>";
+  return h;
+}
+function tick(cb){
+  const box=cb.closest('.rubric');
+  const items=[...box.querySelectorAll('.ritem input')];
+  const total=items.length, done=items.filter(x=>x.checked).length;
+  const frac=total?done/total:0;
+  const band= frac>=0.7?'Full': frac>=0.35?'Half':'None';
+  box.querySelector('.rverdict').textContent='Covered '+done+' / '+total+' — suggested band: '+band;
+  const card=cb.closest('.review-q');
+  const ss=[...card.querySelectorAll('.selfscore .ss-btn')];
+  ss.forEach(b=>b.classList.remove('suggest'));
+  const map={Full:0,Half:1,None:2};
+  if(ss[map[band]]) ss[map[band]].classList.add('suggest');
+}
+function submitExam(){
+  let html="<div id='runTotal' style='margin:6px 0 14px'></div>";
+  EXAM.sections.forEach((s,si)=>{
+    html+="<h3>"+s.label+"</h3>";
+    FLAT.forEach((f,i)=>{
+      if(f.si!==si) return;
+      const q=f.q;
+      const within=FLAT.filter(x=>x.si===si).indexOf(f)+1;
+      if(q.type==='mcq'){
+        let cls,tag,tagtxt;
+        if(resp[i]===null){cls='skip';tag='ts';tagtxt='SKIPPED';}
+        else if(resp[i]===q.c){cls='right';tag='tr';tagtxt='CORRECT';}
+        else {cls='wrong';tag='tw';tagtxt='WRONG';}
+        const yours=resp[i]===null?"—":"ABCD"[resp[i]]+". "+q.o[resp[i]];
+        html+="<div class='review-q "+cls+"'><div><span class='tag "+tag+"'>"+tagtxt+"</span> <b style='margin-left:8px'>Q"+within+"</b></div>"+
+          "<div style='margin:8px 0'>"+q.t+"</div>"+
+          "<div><b>Your answer:</b> "+yours+"</div><div><b>Correct:</b> "+"ABCD"[q.c]+". "+q.o[q.c]+"</div>"+
+          "<div class='exp'>💡 "+q.e+"</div></div>";
+      } else {
+        const yours = q.type==='choice' ? (resp[i].pick? "("+resp[i].pick+") "+resp[i].text : "—") : (resp[i]||"—");
+        let modelHtml, rubricH;
+        if(q.type==='choice'){
+          modelHtml="<details class='modelwrap'><summary>Show a reference answer (optional)</summary><div class='model'><b>Reference (a):</b><br>"+q.a.model+"<br><br><b>Reference (b):</b><br>"+q.b.model+"</div></details>";
+          if(resp[i].pick==='a') rubricH=rubricHtml(q.a.rubric,"(a) What the examiner is looking for");
+          else if(resp[i].pick==='b') rubricH=rubricHtml(q.b.rubric,"(b) What the examiner is looking for");
+          else rubricH=rubricHtml(q.a.rubric,"(a) What the examiner is looking for")+rubricHtml(q.b.rubric,"(b) What the examiner is looking for");
+        } else {
+          modelHtml="<details class='modelwrap'><summary>Show a reference answer (optional)</summary><div class='model'>"+q.model+"</div></details>";
+          rubricH=rubricHtml(q.rubric,"What the examiner is looking for");
+        }
+        html+="<div class='review-q written'><div><span class='tag tb'>SELF-ASSESS</span> <b style='margin-left:8px'>Q"+within+"</b> <span style='color:#888;font-size:12px'>("+f.sec.perMark+" marks)</span></div>"+
+          "<div style='margin:8px 0'>"+q.t+"</div>"+
+          "<div><b>Your answer:</b></div><div class='youranswer'>"+(yours.replace(/</g,'&lt;'))+"</div>"+
+          rubricH+
+          "<div class='selfscore'><b style='font-size:12px'>Score yourself:</b>"+
+          "<span class='ss-btn' onclick='setSelf("+i+",1,this)'>Full</span>"+
+          "<span class='ss-btn' onclick='setSelf("+i+",0.5,this)'>Half</span>"+
+          "<span class='ss-btn' onclick='setSelf("+i+",0,this)'>None</span></div>"+
+          modelHtml+"</div>";
+      }
+    });
+  });
+  document.getElementById('scoreBody').innerHTML=html;
+  recalcTotal();
+  openModal('score');
+}
+
+function openModal(id){ if(id==='paper')buildPaper(); if(id==='notes')document.getElementById('notesBody').innerHTML=NOTES; document.getElementById('m-'+id).classList.add('show'); }
+function closeModal(id){ document.getElementById('m-'+id).classList.remove('show'); }
+function buildPaper(){
+  let h="";
+  EXAM.sections.forEach(s=>{
+    h+="<h3>"+s.label+" — "+s.perMark+" marks each</h3><ol style='padding-left:20px;line-height:1.7'>";
+    s.qs.forEach(q=>{
+      if(q.type==='choice') h+="<li>"+q.t.replace(/<br>/g,' ')+" <i>(a)</i> "+q.a.prompt+" <i>(b)</i> "+q.b.prompt+"</li>";
+      else h+="<li>"+q.t.replace(/<br>/g,' ')+"</li>";
+    });
+    h+="</ol>";
+  });
+  document.getElementById('paperList').innerHTML=h;
+}
+
+/* calculator */
+let calcVal="0";
+function toggleCalc(){ document.getElementById('calc').classList.toggle('show'); }
+function calcRefresh(){ document.getElementById('calcDisp').textContent=calcVal; }
+function calcIn(x){ calcVal=(calcVal==="0"&&"0123456789.".includes(x))?x:calcVal+x; calcRefresh(); }
+function calcC(){ calcVal="0"; calcRefresh(); }
+function calcBack(){ calcVal=calcVal.length>1?calcVal.slice(0,-1):"0"; calcRefresh(); }
+function calcEq(){ try{ calcVal=String(Function('"use strict";return ('+calcVal.replace(/%/g,'/100')+')')()); }catch(e){ calcVal="Error"; } calcRefresh(); }
+(function(){ const c=document.getElementById('calc'),h=document.getElementById('calcDrag'); let dx,dy,drag=false;
+  h.onmousedown=e=>{drag=true;dx=e.clientX-c.offsetLeft;dy=e.clientY-c.offsetTop;};
+  document.onmousemove=e=>{ if(drag){c.style.left=(e.clientX-dx)+'px';c.style.top=(e.clientY-dy)+'px';c.style.right='auto';} };
+  document.onmouseup=()=>drag=false; })();
+if(!HAS_CALC){ document.querySelector('.links a[onclick*="Calc"]').style.display='none'; }
+
+loadState();
+render();
+</script>
+</body>
+</html>

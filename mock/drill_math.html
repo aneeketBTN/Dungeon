@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10-Minute Math Drill — GER &amp; Beh-Econ</title>
+<meta name="description" content="Fast recipe + try-it sums for every calculation archetype in GER and Behavioural Economics. Short steps, one sum each, step-by-step breakdown of what went right vs wrong.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:,">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,"Segoe UI",sans-serif;background:#eef0f2;color:#1f2328;font-size:15px;line-height:1.5;}
+  .top{position:sticky;top:0;z-index:20;background:#1c1c1c;padding:11px 14px;border-bottom:2px solid #f0a429;}
+  .top .brand{color:#f0a429;font-weight:bold;font-size:16px;}
+  .top .sub{color:#9aa0a6;font-size:12px;margin-top:2px;}
+  .nav{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap;}
+  .nav a{padding:6px 9px;background:#2a2f35;color:#e8eaed;text-decoration:none;border-radius:6px;font-size:12px;font-weight:bold;}
+  .nav a:hover{background:#2d6fd4;}
+  .wrap{max-width:840px;margin:0 auto;padding:14px 12px 80px;}
+  .intro{background:#fff8e6;border-left:4px solid #f0a429;border-radius:6px;padding:10px 13px;margin-bottom:14px;font-size:13.5px;}
+  .intro b{color:#b06a00;}
+  .bar{position:sticky;top:96px;z-index:15;display:flex;gap:8px;align-items:center;justify-content:space-between;background:#fff;border:1px solid #cfd6de;border-radius:9px;padding:9px 13px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+  .bar .timer{font-weight:bold;font-size:18px;color:#15171a;letter-spacing:.5px;}
+  .bar .timer.low{color:#c1392b;}
+  .bar .grp{display:flex;gap:6px;}
+  .bar button{border:1px solid #cfd6de;background:#f4f6f8;color:#3a4047;border-radius:7px;padding:6px 11px;font-size:12.5px;font-weight:bold;cursor:pointer;}
+  .bar button.go{background:#1a8a4a;color:#fff;border-color:#1a8a4a;}
+  h2.subj{font-size:18px;color:#15171a;margin:20px 0 4px;padding-top:8px;border-top:3px solid #1c1c1c;scroll-margin-top:150px;}
+  h2.subj:first-of-type{border-top:none;}
+  .mnote{color:#5a6169;font-size:12.5px;margin-bottom:10px;}
+  .q{background:#fff;border:1px solid #dde1e5;border-radius:10px;margin-bottom:11px;padding:12px 14px;}
+  .qhead{display:flex;gap:8px;align-items:center;margin-bottom:6px;}
+  .num{font-weight:bold;color:#9aa0a6;font-size:12px;}
+  .chip{font-size:11px;font-weight:bold;letter-spacing:.2px;border-radius:9px;padding:2px 9px;color:#2560bd;background:#eef3fb;border:1px solid #cfe0f5;}
+  .recipe{font-size:13.5px;margin:2px 0 9px;}
+  .recipe b{color:#b06a00;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}
+  .recipe ol{margin:3px 0 0 0;padding-left:20px;}
+  .recipe li{margin:2px 0;}
+  .recipe code{background:#eef1f4;border-radius:3px;padding:0 4px;font-family:"Consolas",monospace;font-size:12.6px;}
+  .try{font-size:14px;font-weight:bold;margin:8px 0 7px;}
+  .try .lab{display:inline-block;font-size:10.5px;font-weight:bold;color:#fff;background:#1a8a4a;border-radius:9px;padding:1px 8px;margin-right:6px;letter-spacing:.4px;vertical-align:middle;}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+  .opt{display:flex;gap:8px;align-items:center;text-align:left;background:#f7f9fb;border:1px solid #d7dde3;border-radius:8px;padding:9px 11px;font-size:13.7px;cursor:pointer;}
+  .opt:hover{background:#eef3f8;border-color:#9bb6d8;}
+  .opt .lk{font-weight:bold;color:#5a6169;}
+  .opt .mk{margin-left:auto;font-weight:bold;}
+  .answered .opt{cursor:default;}
+  .answered .opt.correct{background:#e7f6ec;border-color:#46b56e;}
+  .answered .opt.wrong{background:#fdecea;border-color:#e07d6e;}
+  .answered .opt.correct .mk{color:#1a8a4a;} .answered .opt.wrong .mk{color:#c1392b;}
+  .reveal{display:none;margin-top:10px;}
+  .answered .reveal{display:block;}
+  .work{background:#f4f1fb;border-left:3px solid #7a4cc4;border-radius:5px;padding:7px 10px;font-size:13px;font-family:"Consolas",monospace;}
+  .work b{color:#5b34a3;font-family:Arial;}
+  .whys{margin-top:7px;font-size:13.2px;}
+  .whys .t{margin:3px 0;padding-left:17px;position:relative;}
+  .whys .t::before{content:"✗";position:absolute;left:0;color:#c1392b;font-weight:bold;}
+  .whys .t.ok::before{content:"✓";color:#1a8a4a;}
+  .foot{text-align:center;color:#9aa0a6;font-size:12px;margin-top:24px;}
+  .foot a{color:#2d6fd4;text-decoration:none;}
+  @media(max-width:560px){.opts{grid-template-columns:1fr;}}
+</style>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-theme-base="light">
+<div class="top">
+  <div class="brand">⚡ 10-Minute Math Drill</div>
+  <div class="sub">GER &amp; Beh-Econ · one recipe + one sum each · do, don't read</div>
+  <div class="nav"><a href="#ger">🟪 GER</a><a href="#be">🟦 Beh-Econ</a><a href="formulas_ger.html">GER formulas</a><a href="formulas_behecon.html">BE formulas</a><a href="index.html">← Portal</a></div>
+</div>
+<div class="wrap">
+  <div class="intro"><b>Do it, don't read it.</b> Each card: a short <b>recipe</b>, then one <b>sum to solve</b>. Pick an answer → see the worked steps and exactly which step each wrong option slipped on. Clear all in ten minutes.</div>
+  <div class="bar">
+    <span class="timer" id="timer">10:00</span>
+    <span class="grp">
+      <button class="go" id="startBtn" onclick="startTimer()">Start</button>
+      <button onclick="resetTimer()">Reset</button>
+      <button onclick="showAll()" id="allBtn">Show answers</button>
+    </span>
+  </div>
+  <div id="deck"></div>
+  <div class="foot">Recipe drill · pairs with the <a href="formulas_ger.html">GER</a> &amp; <a href="formulas_behecon.html">BE</a> formula sheets · <a href="index.html">← back to portal</a></div>
+</div>
+<script>
+/* c=archetype, steps=[recipe], q=sum, o=[4 opts], correct=idx (scattered!), work=worked steps, why=[per-option] */
+const GER=[
+{c:"Pre / Post / %stake",steps:["<code>post = investment ÷ stake%</code>","<code>pre = post − investment</code>"],
+ q:"Invest ₹30cr for 20%. Pre-money?",o:["₹6cr","₹150cr","₹120cr","₹180cr"],correct:2,
+ work:"post = 30 ÷ 0.20 = 150. pre = 150 − 30 = ₹120cr.",
+ why:["30 × 0.2 — multiplied instead of dividing.","that's post-money — you didn't subtract the ₹30cr raise.","post 150 − raise 30 = pre ₹120cr.","added the raise instead of subtracting."]},
+{c:"%stake from pre + raise",steps:["denominator is the POST pie = pre + raise","<code>stake% = raise ÷ (pre + raise)</code>"],
+ q:"Pre ₹80cr, raises ₹20cr. Stake?",o:["20%","25%","16.7%","30%"],correct:0,
+ work:"post = 80 + 20 = 100. stake = 20 ÷ 100 = 20%.",
+ why:["raise ÷ post = 20/100 = 20%.","20/80 — divided by pre (the classic slip), inflates it.","20/120 — denominator too big.","doesn't follow."]},
+{c:"Exit multiple",steps:["realisation = stake% × exit value","<code>multiple = realisation ÷ investment</code>","annual = multiple^(1/n) − 1"],
+ q:"Invest ₹40cr for 25%, exit ₹400cr. Multiple?",o:["10x","4x","5x","2.5x"],correct:3,
+ work:"realisation = 0.25 × 400 = 100. multiple = 100 ÷ 40 = 2.5x.",
+ why:["400/40 — used the whole exit, skipped your 25% slice.","100/25 — divided by the % not the ₹ invested.","doesn't follow.","slice ₹100cr ÷ ₹40cr in = 2.5x."]},
+{c:"Required stake (target return)",steps:["grow the money first: <code>FV = inv × (1+r)ⁿ</code>","<code>stake% = FV ÷ exit-equity</code>"],
+ q:"Invest ₹10cr at 20%/yr for 3 yrs; exit equity ₹86.4cr. Stake?",o:["11.6%","17.3%","20%","25%"],correct:2,
+ work:"FV = 10 × 1.2³ = 17.28. stake = 17.28 ÷ 86.4 = 20%.",
+ why:["10/86.4 — forgot to compound first.","that's the future value in ₹cr, not the %.","FV 17.28 ÷ exit equity 86.4 = 20%.","over-asks."]},
+{c:"Adjust entry for dilution",steps:["start higher to survive a later cut","<code>entry% = exit% ÷ (1 − dilution)</code>"],
+ q:"Need 18% at exit; next round dilutes 25%. Entry stake?",o:["13.5%","22.5%","18%","24%"],correct:3,
+ work:"entry = 18% ÷ (1 − 0.25) = 18 / 0.75 = 24%.",
+ why:["18 × 0.75 — multiplied, wrong direction.","wrong factor.","ignores the coming dilution.","18 ÷ 0.75 grosses it up to 24%."]},
+{c:"Dilution (new %)",steps:["<code>new% = old% × (1 − dilution)</code>","share COUNT stays; only the % drops"],
+ q:"Founder 75%; a round dilutes 20%. New %?",o:["55%","60%","80%","95%"],correct:1,
+ work:"75% × (1 − 0.20) = 75 × 0.8 = 60%.",
+ why:["75 − 20 — subtracted points, wrong.","75 × 0.8 = 60%.","that's the (1−d) factor, not the result.","added."]},
+{c:"P/B ratio",steps:["net worth = (shares × face) + reserves","BVPS = net worth ÷ shares","<code>P/B = price ÷ BVPS</code>"],
+ q:"Price ₹240; 50,000 shares of ₹100 face; reserves ₹40,00,000. P/B?",o:["2.4","1.5","1.33","0.75"],correct:2,
+ work:"net worth = 50,00,000 + 40,00,000 = 90,00,000. BVPS = 90,00,000/50,000 = 180. P/B = 240/180 = 1.33.",
+ why:["240/100 — used face value, ignored reserves.","wrong base.","book value (incl. reserves) → BVPS 180; 240/180 = 1.33.","inverted the ratio."]},
+{c:"Enterprise value",steps:["<code>EV = equity + debt − cash</code>","add what's owed, subtract idle cash"],
+ q:"Equity ₹700cr, debt ₹400cr, cash ₹150cr. EV?",o:["₹1,250cr","₹950cr","₹450cr","₹700cr"],correct:1,
+ work:"700 + 400 − 150 = ₹950cr.",
+ why:["added cash instead of subtracting.","700 + 400 − 150 = ₹950cr.","subtracted debt by mistake.","equity only — forgot debt and cash."]},
+{c:"Net burn & runway",steps:["burn = payments − receipts","<code>runway = cash ÷ monthly burn</code>"],
+ q:"Receipts ₹4L, payments ₹10L, cash ₹54L. Runway (months)?",o:["5.4","6","9","13.5"],correct:2,
+ work:"burn = 10 − 4 = ₹6L. runway = 54 ÷ 6 = 9 months.",
+ why:["54/10 — used total payments, not net burn.","that's the burn, not the runway.","net burn 6 → 54 ÷ 6 = 9.","54/4 — used receipts."]},
+{c:"Cash budget (closing)",steps:["count CASH received only (not accrual revenue)","<code>closing = opening + cash-in − cash-out</code>"],
+ q:"Revenue ₹7L (₹3L in cash); pays ₹4L cash; opening ₹2L. Closing?",o:["+₹5L","−₹1L","+₹3L","+₹1L"],correct:3,
+ work:"cash-in 3 + opening 2 − out 4 = +₹1L.",
+ why:["used accrual revenue ₹7L instead of ₹3L cash.","dropped the ₹2L opening balance.","missed an outflow.","3 + 2 − 4 = +₹1L."]},
+{c:"Funding requirement",steps:["<code>funding = peak cumulative deficit + CapEx</code>","add the one-off CapEx; deficit is cumulative"],
+ q:"Inflow ₹100L, outflow ₹140L, plus ₹50L one-off equipment. Fund?",o:["₹40L","₹90L","₹50L","₹190L"],correct:1,
+ work:"out 140 + CapEx 50 = 190; − inflow 100 = ₹90L.",
+ why:["forgot the ₹50L CapEx.","deficit 40 + CapEx 50 = ₹90L.","only the CapEx.","forgot to net the inflow."]},
+{c:"Liquidation — participating",steps:["take preference first: mult × inv","THEN add your % of the leftover","<code>= mult·inv + %·(proceeds − mult·inv)</code>"],
+ q:"Invest ₹15cr for 25%, 1× participating, exit ₹95cr. Payout?",o:["₹23.75cr","₹15cr","₹35cr","₹95cr"],correct:2,
+ work:"pref 1×15 = 15. leftover 95 − 15 = 80. 0.25 × 80 = 20. total = ₹35cr.",
+ why:["0.25×95 — pro-rata only, ignored the preference.","preference only — forgot the participation add-on.","15 + 0.25×(95−15) = 15 + 20 = 35.","that's the whole exit."]},
+{c:"Liquidation — non-participating",steps:["it's OR, not AND — take the GREATER","compare  <code>mult·inv</code>  vs  <code>%·proceeds</code>"],
+ q:"Invest ₹20cr for 30%, 2× non-participating, exit ₹120cr. Optimal payout?",o:["₹36cr","₹76cr","₹24cr","₹40cr"],correct:3,
+ work:"preference 2×20 = 40. convert 0.30×120 = 36. max(40, 36) = ₹40cr.",
+ why:["that's converting — but the preference is higher here.","added both — that's participating, not this.","wrong.","max(2×20=40, 0.30×120=36) = 40."]},
+{c:"Full ratchet (down round)",steps:["reset the early investor to the new LOW price","<code>shares = their money ÷ new price</code>","recount everyone → total 100%"],
+ q:"Series A: ₹3,00,000 at ₹1 (300,000 sh). Down round at ₹0.50. A's shares after full ratchet?",o:["300,000","600,000","150,000","450,000"],correct:1,
+ work:"A re-prices to ₹0.50 → 3,00,000 ÷ 0.50 = 600,000 shares.",
+ why:["no reset applied.","₹3,00,000 ÷ new ₹0.50 = 600,000.","multiplied by 0.50 instead of dividing.","wrong."]},
+{c:"CLV",steps:["margin per period = revenue × margin%","<code>CLV = margin ÷ churn</code>","then compare to CAC"],
+ q:"₹2,000 revenue/yr, 40% margin, 20% churn. CLV?",o:["₹10,000","₹800","₹4,000","₹1,600"],correct:2,
+ work:"margin = 2000 × 0.4 = 800. CLV = 800 ÷ 0.2 = ₹4,000.",
+ why:["2000/0.2 — skipped the margin.","that's the per-period margin, not lifetime.","margin 800 ÷ churn 0.2 = ₹4,000.","wrong."]},
+{c:"Ownership & wealth (numeric)",steps:["<code>wealth = (your shares ÷ total) × sale value</code>","votes track the same ratio"],
+ q:"You hold 450 of 1,500 shares; firm sells for ₹3cr. Your cash?",o:["₹1cr","₹90L","₹45L","₹1.35cr"],correct:1,
+ work:"450/1500 = 30%. 30% × ₹3cr = ₹90L.",
+ why:["ignores your fraction.","30% × ₹3cr = ₹90L.","halved by mistake.","wrong fraction."]}
+];
+const BE=[
+{c:"Exponential U^t (Econ)",steps:["Econ → β=1 (no present-bias kink)","value of a week-T prize seen from t = δ^(T−t)·u","δ=1 → just u, flat across t"],
+ q:"Prize d = 12 at week 3; β=1, δ=1. U⁰(d)?",o:["3","12","6","4"],correct:1,
+ work:"δ=1, β=1 → U⁰(d) = δ³·12 = 12.",
+ why:["unrelated.","δ=1 means no discounting → 12.","wrongly applied β=½.","unrelated."]},
+{c:"β-δ present value",steps:["β multiplies the WHOLE future, never u₀","<code>U = u₀ + β(δu₁ + δ²u₂ + …)</code>"],
+ q:"u₀=0, u₁=6, u₂=10; β=½, δ=1. Value today?",o:["16","11","8","5"],correct:2,
+ work:"0 + ½(6 + 10) = ½ × 16 = 8.",
+ why:["no β applied.","½×6 + 10 — put β on only t=1.","½ × (6+10) = 8.","wrong."]},
+{c:"Vice / virtue (act now?)",steps:["present action → β discounts ONLY the delayed side","vice: <code>B − βC</code> · virtue: <code>−C + βB</code>"],
+ q:"Gym: cost now C=8, benefit later B=10, β=½. 'Go today' value?",o:["+2","−3","+6","−8"],correct:1,
+ work:"virtue, act now = −C + βB = −8 + ½×10 = −3 → skips.",
+ why:["that's the 'plan for later' value ½(10−8) — different question.","−8 + ½·10 = −3.","wrong.","forgot the discounted future benefit."]},
+{c:"Naïf outcome",steps:["each week: now-prize vs β × best-future","naïf plans to wait, then caves when the halved future loses"],
+ q:"a=2,b=4,c=7,d=12 (wk0-3); β=½, δ=1, watch one. The naïf watches?",o:["Mediocre (a)","Good (b)","Marvel (d)","Great (c)"],correct:3,
+ work:"wk0: 2 vs ½·12=6 → wait. wk1: 4 vs 6 → wait. wk2: 7 vs ½·12=6 → 7 wins → watch c.",
+ why:["the Econ is the one who skips a.","the sophisticate's pick.","what the naïf plans but never reaches.","caves at week 2 (7 beats 6) → Great (c)."]},
+{c:"δ from indifference",steps:["<code>value_now = δⁿ × value_future</code>","δ = (now/future)^(1/n) — mind the root"],
+ q:"Indifferent: ₹60 today vs ₹240 in 2 yrs. δ?",o:["0.5","0.25","0.71","2"],correct:0,
+ work:"δ² = 60/240 = 0.25 → δ = √0.25 = 0.5.",
+ why:["√0.25 = 0.5.","that's δ² — forgot the square root.","√0.5 — wrong ratio.","the inverse."]},
+{c:"Prospect value v(x)",steps:["gains: <code>v = x^β</code>","losses: <code>v = −λ(−x)^β</code> (λ heavier)","average them"],
+ q:"v(x)=x^0.5 gains, −2(−x)^0.5 losses. 50/50 of +₹900 or −₹100?",o:["0","+5","+10","−5"],correct:1,
+ work:"v(900)=30; v(−100)=−2×10=−20. E[v]=½·30 + ½·(−20) = +5.",
+ why:["0 if you forgot λ on the loss.","½·30 + ½·(−20) = +5.","ignored the loss entirely.","sign error."]},
+{c:"Expected utility",steps:["average the UTILITIES, not the ₹","concave u (√, log) → risk averse"],
+ q:"u=√w. Sure ₹81 vs 50/50 of ₹0 / ₹400. Pick?",o:["Sure ₹81","Indifferent","The gamble","Can't tell"],correct:2,
+ work:"E[u(gamble)] = ½·√400 = 10. u(81) = 9. 10 > 9 → gamble.",
+ why:["₹81 gives u = 9, below 10.","not equal.","gamble's E[u]=10 beats u(81)=9 (its EV ₹200 is higher too).","it's computable."]},
+{c:"Risk premium",steps:["EV first","<code>risk premium = EV − CE</code>"],
+ q:"50/50 of ₹0 / ₹80,000; CE = ₹30,000. Premium?",o:["₹40,000","₹30,000","₹70,000","₹10,000"],correct:3,
+ work:"EV = ½·80,000 = 40,000. premium = 40,000 − 30,000 = ₹10,000.",
+ why:["that's the EV — forgot to subtract the CE.","that's the CE itself.","added EV + CE.","EV 40,000 − CE 30,000 = ₹10,000."]},
+{c:"Level-k",steps:["L0 ≈ 50 (random)","each level = ⅔ × previous → L1≈33, L2≈22"],
+ q:"⅔-of-average game. A Level-1 thinker guesses?",o:["33","50","22","0"],correct:0,
+ work:"L1 = ⅔ × 50 ≈ 33.",
+ why:["⅔ × 50 ≈ 33.","that's level-0 (random).","that's level-2.","that's Nash / level-∞."]},
+{c:"Level-2 vs a mix",steps:["expected avg = Σ(share × that level's guess)","your guess = ⅔ × expected avg"],
+ q:"Rivals: 40% L0 (~50), 60% L1 (~33). Your level-2 guess?",o:["33","27","22","40"],correct:1,
+ work:"E = 0.4·50 + 0.6·33 ≈ 39.8. guess = ⅔ × 39.8 ≈ 27.",
+ why:["⅔×50 — ignored the mix.","weight the mix (≈39.8), then ⅔ → 27.","pure level-2 of 50.","that's the average, not your ⅔ guess."]},
+{c:"Cognitive hierarchy τ",steps:["lower average guess = deeper reasoning = higher τ","rank: smallest guess → biggest τ"],
+ q:"Groups average 32, 24, 16. Which τ-ordering fits?",o:["32 → highest τ","all groups equal τ","16 → highest τ, 32 → lowest","τ is random"],correct:2,
+ work:"Lower guess = more reasoning steps = higher τ → the 16-group has the highest τ, the 32-group the lowest.",
+ why:["reversed — a high guess is shallow (low τ).","they differ — that's the point.","low guess = high τ.","τ maps to the average guess, not random."]}
+];
+
+const deck=document.getElementById('deck');
+let idx=0;
+function section(id,name,note,arr){
+  const h=document.createElement('h2'); h.className='subj'; h.id=id; h.innerHTML=name; deck.appendChild(h);
+  const n=document.createElement('div'); n.className='mnote'; n.textContent=note; deck.appendChild(n);
+  arr.forEach(d=>deck.appendChild(card(d)));
+}
+const state={};
+function card(d){
+  const i=idx++;
+  const el=document.createElement('div'); el.className='q'; el.dataset.i=i;
+  let h='<div class="qhead"><span class="num">'+(i+1)+'</span><span class="chip topic">'+d.c+'</span></div>';
+  h+='<div class="recipe"><b>Recipe</b><ol>'+d.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol></div>';
+  h+='<div class="try"><span class="lab">TRY IT</span>'+d.q+'</div>';
+  h+='<div class="opts">';
+  d.o.forEach((o,k)=>{ h+='<button class="opt" data-k="'+k+'"><span class="lk">'+'ABCD'[k]+'.</span><span>'+o+'</span><span class="mk"></span></button>'; });
+  h+='</div>';
+  h+='<div class="reveal"><div class="work"><b>Worked.</b> '+d.work+'</div><div class="whys">'+
+     d.why.map((w,k)=>'<div class="t'+(k===d.correct?' ok':'')+'"><b>'+'ABCD'[k]+'.</b> '+w+'</div>').join('')+'</div></div>';
+  el.innerHTML=h;
+  el.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>pick(el,d,+b.dataset.k)));
+  return el;
+}
+function pick(el,d,k){
+  if(el.classList.contains('answered')) return;
+  if(!started) startTimer();
+  el.classList.add('answered');
+  el.querySelectorAll('.opt').forEach((b,j)=>{
+    if(j===d.correct){ b.classList.add('correct'); b.querySelector('.mk').textContent='✓'; }
+    else if(j===k){ b.classList.add('wrong'); b.querySelector('.mk').textContent='✗'; }
+  });
+}
+function showAll(){
+  document.querySelectorAll('.q').forEach(el=>{
+    if(el.classList.contains('answered')) return;
+    el.classList.add('answered');
+    const corr=el.querySelector('.whys .t.ok');
+    // mark correct option green using the ok index
+    const okIdx=[...el.querySelectorAll('.whys .t')].findIndex(t=>t.classList.contains('ok'));
+    const opts=el.querySelectorAll('.opt');
+    if(opts[okIdx]){ opts[okIdx].classList.add('correct'); opts[okIdx].querySelector('.mk').textContent='✓'; }
+  });
+}
+section('ger','🟪 GER — cap table, valuation &amp; cash','16 sums · scattered answers (it isn\'t always B).',GER);
+section('be','🟦 Behavioural Economics — discounting, utility &amp; games','11 sums · solve alongside the recipe.',BE);
+
+/* 10-minute clock */
+let left=600, tid=null, started=false;
+function fmt(){const m=Math.floor(left/60),s=left%60;const el=document.getElementById('timer');el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;el.classList.toggle('low',left<=60);}
+function startTimer(){ if(tid) return; started=true; document.getElementById('startBtn').textContent='Running…';
+  tid=setInterval(function(){ left--; if(left<=0){ left=0; fmt(); clearInterval(tid); tid=null; document.getElementById('startBtn').textContent='Time!'; return; } fmt(); },1000); }
+function resetTimer(){ if(tid){clearInterval(tid);tid=null;} left=600; started=false; fmt(); document.getElementById('startBtn').textContent='Start'; }
+fmt();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluate & Discuss — NPD</title>
+<meta name="description" content="Statement-and-evaluate prompts for NPD: the verdict, what to weigh both ways, and the edge case — for Sec B/C/D opinion questions.">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="og:title" content="Evaluate & Discuss — NPD">
+<meta property="og:description" content="Every debatable NPD statement, sorted by module: verdict · what to weigh · the edge case.">
+<link rel="icon" href="data:,">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,"Segoe UI",sans-serif;background:#eef0f2;color:#1f2328;font-size:15px;line-height:1.55;}
+  .top{position:sticky;top:0;z-index:20;background:#1c1c1c;padding:11px 14px;border-bottom:2px solid #f0a429;}
+  .top .brand{color:#f0a429;font-weight:bold;font-size:16px;}
+  .top .sub{color:#9aa0a6;font-size:12px;margin-top:2px;}
+  .nav{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap;}
+  .nav a{padding:6px 9px;background:#2a2f35;color:#e8eaed;text-decoration:none;border-radius:6px;font-size:12px;font-weight:bold;}
+  .nav a:hover{background:#2d6fd4;}
+  .wrap{max-width:840px;margin:0 auto;padding:16px 12px 70px;}
+  .intro{background:#fff8e6;border-left:4px solid #f0a429;border-radius:6px;padding:11px 13px;margin-bottom:18px;font-size:13.5px;}
+  .intro b{color:#b06a00;}
+  h2.subj{font-size:19px;color:#15171a;margin:24px 0 4px;padding-top:8px;border-top:3px solid #1c1c1c;}
+  h2.subj:first-of-type{border-top:none;}
+  .mnote{color:#5a6169;font-size:13px;margin-bottom:10px;}
+  details.s{background:#fff;border:1px solid #dde1e5;border-radius:9px;margin-bottom:9px;overflow:hidden;}
+  summary.q{cursor:pointer;padding:13px 40px 13px 14px;font-size:15px;list-style:none;position:relative;line-height:1.45;}
+  summary.q::-webkit-details-marker{display:none;}
+  summary.q::after{content:"▸";position:absolute;right:14px;top:13px;color:#f0a429;}
+  details.s[open] summary.q::after{content:"▾";}
+  .verb{display:inline-block;font-size:10.5px;font-weight:bold;letter-spacing:.4px;color:#2560bd;background:#eef3fb;border:1px solid #cfe0f5;border-radius:9px;padding:1px 7px;margin-right:7px;vertical-align:middle;}
+  .verb.d{color:#7a4cc4;background:#f1ecfa;border-color:#ddd0f0;}
+  .stmt{font-style:italic;}
+  .ans{padding:0 14px 14px;border-top:1px solid #eef0f2;}
+  .verdict{display:inline-block;font-size:12px;font-weight:bold;color:#fff;padding:3px 11px;border-radius:12px;margin:12px 0 8px;}
+  .vfalse{background:#d14836;} .vdepends{background:#c47e0a;} .vtrue{background:#1a8a4a;}
+  .ans b.h{display:block;color:#15171a;margin:8px 0 3px;}
+  .ans ul{padding-left:18px;margin:3px 0;}
+  .ans li{margin-bottom:4px;}
+  .edge{background:#eef3fb;border-left:3px solid #2d6fd4;border-radius:5px;padding:8px 11px;margin-top:9px;font-size:13.5px;}
+  .edge b{color:#2560bd;}
+  .move{background:#eef7ef;border-left:3px solid #34a853;border-radius:5px;padding:8px 11px;margin-top:8px;font-size:13px;}
+  .move b{color:#1a8a4a;}
+  .foot{text-align:center;color:#9aa0a6;font-size:12px;margin-top:24px;}
+  .foot a{color:#2d6fd4;text-decoration:none;}
+</style>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-theme-base="light">
+<div class="top">
+  <div class="brand">🗣️ Evaluate &amp; Discuss — NPD</div>
+  <div class="sub">Statement → verdict → what to weigh → the edge case</div>
+  <div class="nav"><a href="#m1">Foundations</a><a href="#m2">Ideas/Testing</a><a href="#m3">Design/Teams</a><a href="#m4">Test/Demand/IP</a><a href="#m5">Strategy/BlueOcean</a><a href="#m6">Launch/Policy</a><a href="index.html">← Portal</a></div>
+</div>
+<div class="wrap">
+  <div class="intro"><b>How to use:</b> read the statement, decide your own verdict and reasons first, <i>then</i> expand to check. In the exam, structure every "evaluate/discuss" answer as <b>Verdict → 2–3 reasons (both sides) → the edge case that qualifies it</b>. Naming the condition where your answer flips is what lifts you into the top band. Tap a statement to reveal.</div>
+
+  <!-- ===================== M1 ===================== -->
+  <h2 class="subj" id="m1">🟧 M1 · Foundations &amp; Process</h2>
+  <div class="mnote">Why we innovate, the kinds of "new", the PM, the funnel and the portfolio.</div>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"A market-leading firm has no need for new products."</span></summary>
+  <div class="ans"><span class="verdict vfalse">Mostly false</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>NPD is the engine that <b>renews competitive advantage</b>; rivals copy and catch up, eroding any edge.</li>
+      <li>Leaders that treated NPD as optional were overtaken (Kodak, Nokia) — leadership decays without renewal.</li>
+      <li>Technology, tastes and competition keep shifting the target.</li></ul>
+    <div class="edge"><b>Edge case:</b> a firm protected by strong patents, regulation or network effects can <i>delay</i> — but even then a discontinuity (digital photography, smartphones) eventually erodes the moat, so renewal is deferred, not avoided.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Repositioning requires changing the physical product."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Repositioning changes the <b>perceived use/segment, not the product</b> (aspirin: painkiller → daily heart-attack preventative, same pill).</li>
+      <li>It is one of the six new-product categories precisely because no R&amp;D change is needed.</li></ul>
+    <div class="edge"><b>Edge case:</b> don't confuse it with a <b>line extension</b> or <b>improvement</b>, which DO alter the product. The trap is labelling a marketing change as a product change.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"To count as innovation, it must be radical/breakthrough."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Innovation operates at three levels: <b>incremental, architectural, and radical (discontinuous)</b>.</li>
+      <li>Most commercial value comes from incremental and architectural innovation, not moonshots.</li></ul>
+    <div class="edge"><b>Edge case:</b> a portfolio that chases <i>only</i> radical bets starves cash flow and usually fails — balance is the point (support/derivative/platform/breakthrough).</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"The product manager is essentially a marketing specialist."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>The PM is a <b>general manager</b>, not a functional specialist — bridging marketing, operations and finance.</li>
+      <li>The role is cross-functional and risk-taking; products die in the gap between "cool design" and "viable cost".</li></ul>
+    <div class="edge"><b>Edge case:</b> a brilliant idea is necessary but not sufficient — without cross-functional integration it never reaches a profitable shelf.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"A business model passes if it tells a compelling story."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Every model must pass <b>two tests</b>: the Narrative test (who's the customer, why pay?) AND the Numbers test (does the math profit?).</li>
+      <li>A model is more than pricing — it's how you create, deliver AND capture value.</li></ul>
+    <div class="edge"><b>Edge case (Uber):</b> <b>creating value</b> (the model) is distinct from <b>capturing value</b> (the strategy). Surge pricing is dynamic value <i>capture</i>, not mere gouging.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"The NPD process must run strictly stage-by-stage, like a waterfall."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>The stages are <b>fluid and overlapping</b>, not a rigid linear sequence — teams iterate and run activities in parallel.</li>
+      <li>Post-launch service is part of the process, not outside it.</li></ul>
+    <div class="edge"><b>Edge case:</b> overlap ≠ chaos — stage gates still impose Go/No-Go discipline on a deliberately flexible funnel.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"More flexibility in product development is always better."</span></summary>
+  <div class="ans"><span class="verdict vdepends">It depends</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Flexibility (delaying commitment) is valuable <b>where uncertainty is high</b> — it preserves options.</li>
+      <li>But it is an <b>economic trade-off</b>, not free upside: open requirements cost time, money and quality.</li></ul>
+    <div class="edge"><b>Edge case:</b> for a stable, well-understood project, locking specs <i>early</i> is better — front-end loading (the 10/100 rule) beats endless openness.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"The development funnel should be as narrow as possible from the very start."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Maximum <b>flexibility and breadth belong early</b> — generate many concepts before selecting.</li>
+      <li>Narrowing too soon locks you into inferior concepts before better ones surface.</li></ul>
+    <div class="edge"><b>Edge case:</b> concept <i>generation</i> precedes concept <i>selection</i> — reverse them and you optimise the wrong idea.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"A new product should always reuse the parent brand."</span></summary>
+  <div class="ans"><span class="verdict vdepends">It depends</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Reusing the brand leverages existing equity and lowers launch cost — when there's strong fit.</li>
+      <li>But it risks <b>brand devaluation and cannibalisation</b>; a poor-fit extension dilutes the parent.</li></ul>
+    <div class="edge"><b>Edge case:</b> a premium parent moving down-market (or vice-versa) often needs a <i>new</i> brand to protect positioning.</div>
+  </div></details>
+
+  <!-- ===================== M2 ===================== -->
+  <h2 class="subj" id="m2">🟧 M2 · Ideas, Research &amp; Concept Testing</h2>
+  <div class="mnote">Where ideas come from, Kano/QFD, concept testing and evaluation.</div>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"New product ideas come mainly from internal R&amp;D."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Opportunities come from many sources: customers, <b>lead users, product frustrations</b>, competitors, suppliers, trends.</li>
+      <li>Treating it as purely internal misses the richest, cheapest signals.</li></ul>
+    <div class="edge"><b>Edge case:</b> don't discard dropped ideas — shelved concepts are revisited as technology or the market shifts.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Lead users are just early adopters."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Lead users face needs <b>ahead of the market AND benefit from solving them</b>, so they innovate first — early adopters merely buy early.</li>
+      <li>Three types: leading edge of the target market, analogous/advanced markets, extreme users.</li></ul>
+    <div class="edge"><b>Edge case:</b> lead-user research is <i>not</i> a full substitute for market research — their specs can over-fit and not generalise to the mass market.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"New-product research needs large samples, like existing-product surveys."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>New-product research is about <b>discovering gaps/needs</b>, where ~30 qualitative interviews often suffice (diminishing returns).</li>
+      <li>Large-sample logic suits tracking known existing-product metrics, not exploratory discovery.</li></ul>
+    <div class="edge"><b>Edge case:</b> individual interviews and focus groups don't yield identical insight — pick by whether you need depth or group dynamics.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Adding more of a must-have feature keeps raising satisfaction."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Kano must-haves <b>saturate</b> — beyond "present", more adds nothing; absence causes anger.</li>
+      <li>One-dimensional attributes scale linearly; attractive (delighters) create surprise.</li></ul>
+    <div class="edge"><b>Edge case:</b> delighters <b>decay into must-haves</b> over time (today's wow = tomorrow's baseline), so the pipeline must refresh.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Concept testing gives a precise demand forecast."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Concept testing is <b>directional</b> — it screens and improves concepts, it does not forecast precisely.</li>
+      <li>There's a price-tag trade-off: stating a price adds realism but dampens stated intent.</li></ul>
+    <div class="edge"><b>Edge case:</b> stated intent overstates behaviour (hypothetical bias); a behaviour-based simulated test market predicts real trial far better.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"ATAR demand is the sum of awareness, trial, availability and repeat."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>ATAR <b>multiplies</b> the fractions, it doesn't add them: Demand = Market × A × T × Av × R.</li>
+      <li>Because it's multiplicative, the <b>weakest link caps demand</b> — a 20% trial drags everything down.</li></ul>
+    <div class="edge"><b>Edge case:</b> repeat is near-irrelevant only for genuine one-time big-ticket buys (a mattress) — there the trap is ignoring repeat's absence (Casper).</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"The roof of the House of Quality shows customer-vs-competitor comparison."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>The <b>roof</b> shows <b>technical correlations</b> among the HOWs — conflicts and synergies (lighter vs stronger).</li>
+      <li>The competitor benchmark sits in the <b>right-side planning matrix</b>, not the roof.</li></ul>
+    <div class="edge"><b>Edge case:</b> QFD <i>reduces</i> late design changes by front-loading — but it's overkill for trivially simple products.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"Stopping a project is always the safe, error-free choice."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>The risk-payoff matrix has <b>two errors</b>: continue-and-fail (commission) AND <b>stop-a-winner</b> (omission).</li>
+      <li>Killing a future winner is the invisible, often costlier error.</li></ul>
+    <div class="edge"><b>Edge case:</b> the four risk-handling strategies (avoid/reduce/transfer/accept) — note transferring risk (e.g. insurance) doesn't <i>eliminate</i> it.</div>
+  </div></details>
+
+  <!-- ===================== M3 ===================== -->
+  <h2 class="subj" id="m3">🟧 M3 · Design, Prototyping, Teams &amp; Services</h2>
+  <div class="mnote">Architecture, prototyping, NPD organisation, integrity and services/PSS.</div>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Integral architecture gives more flexibility for upgrades."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False (reversed)</span>
+    <b class="h">Weigh this:</b><ul>
+      <li><b>Modular</b> gives flexibility, variety and easy upgrades (mix-and-match interfaces).</li>
+      <li><b>Integral</b> gives the most <b>compact, highest-performance</b> product — at the cost of changeability.</li></ul>
+    <div class="edge"><b>Edge case:</b> Swatch (modular style) vs Shimano (integral gears) — the same industry splits by whether customers value variety or peak performance.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"Computer/analytical prototypes can fully replace physical prototyping."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Simulation is cheap and fast but cannot reproduce all real-world physics, materials and usage.</li>
+      <li><b>Physical, real-condition testing</b> is still required — analytical prototypes complement, not replace.</li></ul>
+    <div class="edge"><b>Edge case:</b> prototypes aren't a final-stage formality — Gillette's multi-year "Manx" prototyping shows disciplined iteration drives breakthroughs.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Outsourcing prototyping to a vendor maximises secrecy."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li><b>In-house</b> prototyping protects secrecy; vendors add leakage risk but bring speed and cost advantages.</li></ul>
+    <div class="edge"><b>Edge case:</b> in-house doesn't always transfer smoothly to mass production — vendor involvement can improve production-readiness. It's a secrecy-vs-scalability trade-off.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Product integrity just means the product works."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li><b>Internal integrity</b> = coherence between function and internal structure (engineering/org).</li>
+      <li><b>External integrity</b> = fit between the product's character and customers' expectations/lifestyle.</li></ul>
+    <div class="edge"><b>Edge case:</b> the two are independent — a flawlessly engineered product (high internal) can still misread the customer (low external). Great products need both, via a heavyweight PM.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"A matrix NPD structure means a single, clear reporting line."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>A matrix has <b>dual reporting</b> (functional + project), with heavyweight vs lightweight PM variants.</li>
+      <li>Match structure to project: functional → incremental; heavyweight/autonomous → breakthrough.</li></ul>
+    <div class="edge"><b>Edge case:</b> a small <b>derivative</b> project does NOT need a heavyweight structure — over-structuring wastes resources.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Services are easy to sell because they carry no inventory."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Services are <b>intangible, perishable and co-produced</b> — that makes them <i>harder</i>, not easier, to sell and evaluate.</li>
+      <li><b>Productizing</b> them (a name, fixed price, defined process, set time) makes them tangible and saleable.</li></ul>
+    <div class="edge"><b>Edge case:</b> productizing a service ≠ making a physical product — it's about packaging the intangible into a concrete offer.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"An acquirer should absorb a creative NPD team into its own bureaucracy."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Synergy isn't each member doing their own job well — it's protected collaboration and a distinct innovation culture (Pixar).</li>
+      <li>Bureaucratic absorption destroys the very culture that made the team valuable.</li></ul>
+    <div class="edge"><b>Edge case:</b> leadership style must also <b>change across stages</b> (visionary early → disciplined later); one style doesn't fit all phases.</div>
+  </div></details>
+
+  <!-- ===================== M4 ===================== -->
+  <h2 class="subj" id="m4">🟧 M4 · Use-Testing, Demand Creation &amp; IP</h2>
+  <div class="mnote">Alpha/beta/gamma, building markets, differentiation and intellectual property.</div>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Beta testing is done internally with employees."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False (reversed)</span>
+    <b class="h">Weigh this:</b><ul>
+      <li><b>Alpha</b> = internal team, controlled conditions, on an early/incomplete product.</li>
+      <li><b>Beta</b> = real external users in natural conditions, on a near-complete product. (<b>Gamma</b> = final spec conformance.)</li></ul>
+    <div class="edge"><b>Edge case:</b> gamma is not a rushed final check — in regulated/medical industries it is full-product, ample-time verification.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"If a good product isn't selling, you must redesign it."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>First <b>diagnose why</b> it isn't selling — awareness? availability? price? positioning? — then build the market.</li>
+      <li>Redesign is a last resort, not the first reflex.</li></ul>
+    <div class="edge"><b>Edge case:</b> building a market relies on diagnosis and qualitative insight, not large-sample quantitative data.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Vertical differentiation means offering different colours/styles at the same price."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False (reversed)</span>
+    <b class="h">Weigh this:</b><ul>
+      <li><b>Vertical</b> differentiation = quality/price <b>tiers</b> everyone ranks the same way (good/better/best).</li>
+      <li><b>Horizontal</b> differentiation = <b>taste</b> at the same tier (red vs blue) — no agreed ranking.</li></ul>
+    <div class="edge"><b>Edge case:</b> horizontal targets <i>tastes</i>, not income segments; mixing the two is the classic reversal trap.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"With no latent demand, you should spend heavily on advertising upfront."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>When the market isn't ready (no latent need), front-loaded advertising burns money on people who can't yet value the product.</li>
+      <li>Per Balasubramanian: <b>seed and educate</b> the market gradually; let understanding build before scaling spend.</li></ul>
+    <div class="edge"><b>Edge case:</b> market research is unreliable for a no-latent-need launch — customers can't evaluate what they don't yet understand.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"A patent guarantees a market monopoly."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>A patent is a <b>time-limited, disclosed</b> right that rivals can design around or challenge; it must be enforced.</li>
+      <li>Patent <b>strategy</b> matters: provisional filing early, licensing, and using patents as a deterrent.</li></ul>
+    <div class="edge"><b>Edge case:</b> filing reveals your invention to competitors — sometimes a <b>trade secret</b> (secrecy, no disclosure) protects better.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Copyright must be registered/filed to be valid."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li><b>Copyright</b> arises automatically on creation (no registration needed). <b>Trade secret</b> relies on secrecy.</li>
+      <li><b>Patents and trademarks</b> require registration; a trade secret is <b>not</b> a type of patent.</li></ul>
+    <div class="edge"><b>Edge case:</b> registration can still help enforcement/evidence even where it isn't required for validity.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"Litigation is the most effective remedy against piracy."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Litigation is slow, costly and often whack-a-mole. Better levers: <b>continuous enhancement</b> (stay ahead), technical protection, and low-price deterrence.</li></ul>
+    <div class="edge"><b>Edge case:</b> simply <i>raising</i> price doesn't defeat piracy — it widens the gap pirates exploit. For digital goods, convenience + fair price beats enforcement.</div>
+  </div></details>
+
+  <!-- ===================== M5 ===================== -->
+  <h2 class="subj" id="m5">🟧 M5 · Strategy, Blue Ocean &amp; Emerging Markets</h2>
+  <div class="mnote">Strategy canvas, ERRC, emerging/BoP markets, design thinking, soft innovation.</div>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Blue ocean strategy means out-competing rivals on price in the existing market."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Blue ocean <b>creates new, uncontested market space</b> and demand from non-customers — it doesn't fight the existing price war (that's red ocean).</li>
+      <li>It <b>breaks</b> the value-cost trade-off (differentiated AND lower-cost), via ERRC (Southwest, IPL, iPhone).</li></ul>
+    <div class="edge"><b>Edge case:</b> blue oceans don't stay uncontested forever — imitators arrive, so the firm must keep moving.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"In the ERRC grid, eliminating and reducing factors lowers buyer value."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li><b>Eliminate &amp; Reduce</b> cut <b>cost</b>; <b>Raise &amp; Create</b> lift buyer <b>value</b>.</li>
+      <li>Removing factors customers don't actually value frees resources to raise what they do.</li></ul>
+    <div class="edge"><b>Edge case:</b> the skill is knowing <i>which</i> taken-for-granted factors to drop — eliminate something customers care about and you destroy value.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"More features make a product more appropriate for an emerging market."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Appropriateness = <b>market-fit and low in-use cost</b>, not feature count (AMD's feature-rich PIC failed; Nokia's rugged, low-cost design won).</li>
+      <li>Design awards ≠ market success.</li></ul>
+    <div class="edge"><b>Edge case:</b> emerging-market buyers are <b>value-sensitive, not simply cheap</b> — a "too cheap" product signals low quality and can backfire (BoP).</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Base-of-pyramid customers just want the absolute cheapest product."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>BoP customers seek <b>value</b> within tight budgets, shaped by infrastructure and cultural constraints — not the cheapest at any quality.</li>
+      <li>Western designs rarely transfer unchanged; design for the context.</li></ul>
+    <div class="edge"><b>Edge case:</b> a price that's "too cheap" can hurt — it signals poor quality and undermines trust.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"A new-product business plan should be an exhaustive, detailed report."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>An effective plan is <b>concise and decision-focused</b> (market, model, financials, go-to-market) — drowning it in detail obscures the case.</li></ul>
+    <div class="edge"><b>Edge case:</b> the other common mistake is <b>underpricing</b> to win customers — use value-based pricing; cheap is not safe.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"Design thinking is a purely linear, logical (left-brain) process."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Design thinking is <b>human-centred, empathy-led and iterative</b>, drawing on right-brain abilities (empathy, pattern, story, play).</li>
+      <li>You loop — empathise, prototype, test, refine — rather than march in a straight line.</li></ul>
+    <div class="edge"><b>Edge case:</b> "soft innovation" (aesthetics, meaning, brand) differs from functional innovation — and is usually <b>not</b> patent-protected (Luxottica's edge came from vertical integration, not tech).</div>
+  </div></details>
+
+  <!-- ===================== M6 ===================== -->
+  <h2 class="subj" id="m6">🟧 M6 · Launch, Diffusion &amp; Public Policy</h2>
+  <div class="mnote">Launch strategy, diffusion, positioning, brand, liability and ethics.</div>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"Launch planning should begin only near the launch date."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Launch is <b>strategic</b> and starts early — strategic platform decisions (demand type, permanence, aggressiveness) shape everything downstream.</li>
+      <li>Tactical mix decisions are separate from, and follow, the strategic ones.</li></ul>
+    <div class="edge"><b>Edge case:</b> firms should sometimes <b>cannibalise</b> their own products deliberately — refusing to is how incumbents get disrupted.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"A new product should target the whole market at launch."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Target a focused <b>beachhead</b> (innovators/early adopters) you can win, then expand across adopter categories.</li>
+      <li>Diffusion depends on relative advantage, compatibility, complexity, trialability, observability — not blanket reach.</li></ul>
+    <div class="edge"><b>Edge case:</b> the hard jump is the <b>chasm</b> between early adopters and the pragmatic early majority — cross it with references and a whole-product offer.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"A feature and a benefit are the same thing."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Positioning runs <b>feature → function → benefit</b>; customers buy the <b>benefit</b>, not the spec.</li>
+      <li>"Contains fluoride" (feature) → "strengthens enamel" (function) → "fewer cavities, confidence" (benefit).</li></ul>
+    <div class="edge"><b>Edge case:</b> brand, price and promotion must be positioned <i>consistently with</i> the product position — not independently.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"A brand and a trademark are the same thing."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>A <b>brand</b> is the perception/promise in customers' minds; a <b>trademark</b> is its legal protection.</li></ul>
+    <div class="edge"><b>Edge case:</b> a strong name can't be chosen at the last minute — watch cross-language and meaning pitfalls (naming &amp; extension decisions carry real risk).</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"A brand community should be tightly controlled by the company."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Communities are <b>member-owned</b>; trying to over-control or suppress negative feedback backfires.</li>
+      <li>They exist to serve members, not (directly) the business — the business benefits indirectly through loyalty.</li></ul>
+    <div class="edge"><b>Edge case:</b> Lego's revival leaned on genuine community engagement — co-creation, not control.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"Pre-announcing a product works well for everything and has no downside."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Pre-announcement can shape expectations and freeze buyers — but it <b>gives rivals lead time</b> and can stall your <i>own</i> current sales (the Osborne effect).</li></ul>
+    <div class="edge"><b>Edge case:</b> it works best where anticipation/switching costs help you and the competitive lead-time risk is low.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"A lean launch means stocking lots of inventory upfront to be safe."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>A <b>lean launch</b> enters narrowly at the beachhead with <b>minimal commitment</b>, learning before scaling — the opposite of heavy upfront inventory.</li>
+      <li>Waiting for "perfect conditions" forfeits learning and first-mover position.</li></ul>
+    <div class="edge"><b>Edge case:</b> over-committing inventory early is exactly the risk lean launch avoids (Peloton's pandemic over-build).</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Evaluate</span><span class="stmt">"Strict liability requires proving the firm was negligent."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li><b>Strict liability</b> needs <b>no proof of negligence</b> — a defect that causes harm is enough.</li>
+      <li>It's one of four legal bases: negligence, strict liability, express warranty, implied warranty (express ≠ implied).</li></ul>
+    <div class="edge"><b>Edge case:</b> firms often <b>settle rather than litigate</b>, and good <b>recall</b> practice (fast, transparent) limits damage — they don't always fight in court.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"A failing product must be scrapped immediately."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Deletion is a <b>staged process</b> (identify → analyse → decide → implement), with revitalise / harvest / sell options before scrapping.</li></ul>
+    <div class="edge"><b>Edge case:</b> a "failing" product may be repositioned or sold to another firm that can run it profitably — scrapping destroys recoverable value.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"Public-policy issues appear suddenly, with no warning."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Issues move through a <b>4-phase life cycle</b> (stirring → media → political/legislative → regulation) — there are early signals.</li>
+      <li>Once an issue reaches the political arena, the firm can't easily shut it down.</li></ul>
+    <div class="edge"><b>Edge case:</b> anticipate the stirring phase (safety, environment) and act before concerns harden into binding rules.</div>
+  </div></details>
+
+  <details class="s"><summary class="q"><span class="verb">Discuss</span><span class="stmt">"Sustainable design just means using recycled packaging, and it's cost-free."</span></summary>
+  <div class="ans"><span class="verdict vfalse">False</span>
+    <b class="h">Weigh this:</b><ul>
+      <li>Sustainable design spans the <b>whole lifecycle</b> — materials, manufacture, use, disposal — not just packaging.</li>
+      <li>It carries a real <b>cost/profit tension</b>; it isn't free, though it can become a source of advantage.</li></ul>
+    <div class="edge"><b>Edge case:</b> ethics in NPD can't be reduced to "zero defects" — they're <b>managed</b> with principles and controls, not eliminated entirely.</div>
+  </div></details>
+
+  <div class="foot">~45 statement-prompts · built around NPD's most-tested traps &amp; misconceptions · <a href="index.html">← back to portal</a> · GER &amp; Beh-Econ now live</div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
