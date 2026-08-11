@@ -35,10 +35,11 @@
         </div>
         <p>Add an email here to grant immediate website access. The tester enters that email—no code is sent. Revoking removes access, sessions, and saved progress for that tester.</p>
         <form class="tester-form" id="tester-form">
-          <label for="tester-email">Tester email</label>
-          <div class="tester-entry">
-            <input id="tester-email" name="email" type="email" autocomplete="off" inputmode="email" maxlength="254" placeholder="tester@example.com" required>
-            <button class="button primary" id="add-tester" type="submit">Add tester</button>
+          <label for="tester-email">Tester emails</label>
+          <textarea id="tester-email" name="email" rows="2" maxlength="2000" placeholder="tester@example.com — or paste several, separated by commas, spaces, or new lines" required></textarea>
+          <div class="tester-entry-actions">
+            <button class="button primary" id="add-tester" type="submit">Add testers</button>
+            <span class="hint" id="tester-parse-hint">Up to 25 at a time.</span>
           </div>
         </form>
         <div class="tester-toolbar">
@@ -49,12 +50,32 @@
           <button class="button quiet" id="refresh-testers" type="button">Refresh list</button>
         </div>
         <ul class="tester-list" id="tester-list" aria-label="Approved testers"></ul>
-        <p class="hint">A country-change lock appears in this list. Revoke and re-add only after you have checked with the tester; revoking also deletes their saved progress.</p>
+        <p class="hint">Use <b>Clear lock</b> to forgive a country-change lock: it keeps their saved progress. <b>Revoke</b> removes access and deletes their progress permanently.</p>
         <div class="callout">
           <b>Light security boundary</b>
           <p>An approved email acts as the password. Anyone who knows it can enter that tester's account, so keep this cohort free of sensitive personal or academic data.</p>
         </div>
         <a class="button secondary" href="https://one.dash.cloudflare.com/" target="_blank" rel="noreferrer">Open Cloudflare Access</a>
+      </section>
+
+      <section class="panel" aria-labelledby="participation-title">
+        <div class="panel-heading">
+          <div><p class="eyebrow">Cohort</p><h2 id="participation-title">Participation</h2></div>
+          <span class="state" id="participation-state">Checking</span>
+        </div>
+        <p>Who has actually started, and who has gone quiet. Read from real saved progress, not self-report.</p>
+        <ul class="signal-list" id="participation-list" aria-label="Participation by tester"></ul>
+        <p class="hint">Quiet is not the same as failing. Nudge in the group before revoking anyone, and never remove someone for low accuracy.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="insight-title">
+        <div class="panel-heading">
+          <div><p class="eyebrow">Learning signal</p><h2 id="insight-title">Where testers struggle</h2></div>
+          <span class="state" id="insight-state">Checking</span>
+        </div>
+        <p>Concepts ranked by first-attempt difficulty across the cohort. Small samples are labelled, not hidden.</p>
+        <ul class="signal-list" id="insight-list" aria-label="Hardest concepts"></ul>
+        <p class="hint">Under 10 attempts is noise, not evidence. Bring a concept here into a session with Claude to rewrite its items.</p>
       </section>
 
       <section class="panel" aria-labelledby="release-title">

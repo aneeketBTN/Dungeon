@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {createWorker, RequestError} from "../cloudflare/src/index.mjs";
+import {createWorker, RequestError, summarizeCohort} from "../cloudflare/src/index.mjs";
 
 const owner = "owner@example.com";
 const baseEnv = {
@@ -286,6 +286,48 @@ test("unlocking a country lock keeps the tester's saved progress", async () => {
   }), baseEnv);
   assert.equal(progressResponse.status, 200);
   assert.deepEqual((await progressResponse.json()).state, sampleState);
+});
+
+test("cohort insights rank by unassisted first attempts and exclude the owner", () => {
+  const progressRow = (email, attempts) => ({
+    email,
+    state_json: JSON.stringify({
+      version: 2,
+      selectedCourse: "BRGSA",
+      completed: {},
+      conceptAttempts: {BRGSA: attempts}
+    })
+  });
+  const attempt = (correct, extra = {}) => ({correct, scored: true, isReattempt: false, at: 1770000000000, ...extra});
+
+  const summary = summarizeCohort([
+    progressRow("alpha@example.com", {
+      C1: [attempt(false), attempt(false), attempt(true, {hintUsed: true})],
+      C2: [attempt(true), attempt(true)]
+    }),
+    progressRow("beta@example.com", {
+      C1: [attempt(false)],
+      // Retries and unscored work must never count as evidence of what a tester knows.
+      C2: [attempt(false, {isReattempt: true}), attempt(false, {scored: false})]
+    }),
+    progressRow(owner, {C1: [attempt(false), attempt(false), attempt(false)]}),
+    {email: "corrupt@example.com", state_json: "{not json"}
+  ], owner);
+
+  const hardest = summary.hardest.find((row) => row.concept === "C1");
+  assert.equal(hardest.attempts, 4, "owner attempts and bad rows are excluded");
+  assert.equal(hardest.accuracy, 25);
+  assert.equal(hardest.testers, 2);
+  assert.equal(hardest.assistedRate, 25);
+  assert.equal(hardest.lowSample, true);
+  assert.equal(summary.hardest[0].concept, "C1", "hardest concept sorts first");
+
+  const beta = summary.participation.find((row) => row.email === "beta@example.com");
+  assert.equal(beta.attempts, 3, "every recorded attempt counts as activity");
+  assert.equal(beta.firstAttempts, 1, "only unassisted first attempts score accuracy");
+  assert.equal(beta.accuracy, 0);
+  assert.equal(summary.participation.some((row) => row.email === owner), false);
+  assert.equal(summary.participation.some((row) => row.email === "corrupt@example.com"), false);
 });
 
 test("unlock refuses an address that is not an approved tester", async () => {

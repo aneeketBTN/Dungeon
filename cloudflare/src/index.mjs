@@ -366,6 +366,16 @@ export function createD1Store() {
       }]));
     },
 
+    async allProgress(env) {
+      const db = requireDatabase(env);
+      const result = await db.prepare(`SELECT learner_progress.email, learner_progress.state_json,
+          learner_progress.updated_at, testers.last_seen_at, testers.last_login_at
+        FROM learner_progress
+        INNER JOIN testers ON testers.email = learner_progress.email
+        WHERE testers.active = 1`).all();
+      return result.results || [];
+    },
+
     async getProgress(env, email) {
       const db = requireDatabase(env);
       return db.prepare("SELECT state_json, revision, updated_at FROM learner_progress WHERE email = ?")
@@ -478,6 +488,98 @@ async function manageProgress(request, env, store) {
   if (stateJson.length > 700000) throw new RequestError(413, "REQUEST_TOO_LARGE", "Progress data is too large.");
   const saved = await store.saveProgress(env, email, stateJson);
   return json({status: "saved", ...saved});
+}
+
+const LOW_SAMPLE_ATTEMPTS = 10;
+
+export function summarizeCohort(rows, ownerEmail) {
+  const concepts = new Map();
+  const participation = [];
+
+  for (const row of rows) {
+    if (!row?.email || row.email === ownerEmail) continue;
+    let state;
+    try {
+      state = JSON.parse(row.state_json);
+    } catch (error) {
+      continue;
+    }
+    if (!validProgressState(state)) continue;
+
+    let attempts = 0;
+    let firstAttempts = 0;
+    let firstCorrect = 0;
+    let lastActivity = 0;
+    const touched = new Set();
+
+    for (const [courseId, courseConcepts] of Object.entries(state.conceptAttempts || {})) {
+      if (!courseConcepts || typeof courseConcepts !== "object") continue;
+      for (const [conceptId, conceptAttempts] of Object.entries(courseConcepts)) {
+        if (!Array.isArray(conceptAttempts)) continue;
+        for (const attempt of conceptAttempts) {
+          if (!attempt || typeof attempt !== "object") continue;
+          attempts += 1;
+          touched.add(`${courseId}::${conceptId}`);
+          const at = Number(attempt.at) || 0;
+          if (at > lastActivity) lastActivity = at;
+          // Only unassisted first attempts are evidence of what a tester actually knows.
+          if (attempt.scored === false || attempt.isReattempt) continue;
+          firstAttempts += 1;
+          if (attempt.correct) firstCorrect += 1;
+
+          const key = `${courseId}::${conceptId}`;
+          const stat = concepts.get(key) || {
+            course: courseId, concept: conceptId, attempts: 0, correct: 0, assisted: 0, testers: new Set()
+          };
+          stat.attempts += 1;
+          if (attempt.correct) stat.correct += 1;
+          if (attempt.hintUsed || attempt.assistanceUsed) stat.assisted += 1;
+          stat.testers.add(row.email);
+          concepts.set(key, stat);
+        }
+      }
+    }
+
+    participation.push({
+      email: row.email,
+      attempts,
+      firstAttempts,
+      conceptsTouched: touched.size,
+      accuracy: firstAttempts ? Math.round((firstCorrect / firstAttempts) * 100) : null,
+      lastActivityAt: lastActivity ? new Date(lastActivity).toISOString() : (row.updated_at || null),
+      lastSeenAt: row.last_seen_at || null
+    });
+  }
+
+  const hardest = [...concepts.values()]
+    .map((stat) => ({
+      course: stat.course,
+      concept: stat.concept,
+      attempts: stat.attempts,
+      accuracy: Math.round((stat.correct / stat.attempts) * 100),
+      assistedRate: Math.round((stat.assisted / stat.attempts) * 100),
+      testers: stat.testers.size,
+      lowSample: stat.attempts < LOW_SAMPLE_ATTEMPTS
+    }))
+    .sort((a, b) => a.accuracy - b.accuracy || b.attempts - a.attempts)
+    .slice(0, 12);
+
+  participation.sort((a, b) => (b.attempts - a.attempts) || a.email.localeCompare(b.email));
+  return {hardest, participation, lowSampleThreshold: LOW_SAMPLE_ATTEMPTS};
+}
+
+async function cohortInsights(request, env, verifyAdmin, store) {
+  requireBindings(env, REQUIRED_ADMIN_BINDINGS);
+  requireDatabase(env);
+  await verifyAdmin(request, env);
+  if (request.method.toUpperCase() !== "GET") {
+    return json({code: "METHOD_NOT_ALLOWED", message: "Use GET."}, 405);
+  }
+  if (typeof store.allProgress !== "function") {
+    throw new RequestError(503, "BACKEND_UNAVAILABLE", "Progress storage is temporarily unavailable.");
+  }
+  const rows = await store.allProgress(env);
+  return json(summarizeCohort(rows, normalizeEmail(env.OWNER_EMAIL)));
 }
 
 async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
@@ -630,6 +732,9 @@ export function createWorker({
 
         if (url.pathname === `${prefix}/admin/api/testers`) {
           return await manageTesters(request, env, fetchImpl, verifyAdmin, store);
+        }
+        if (url.pathname === `${prefix}/admin/api/insights`) {
+          return await cohortInsights(request, env, verifyAdmin, store);
         }
         if (url.pathname === `${prefix}/admin` || url.pathname.startsWith(`${prefix}/admin/`)) {
           await verifyAdmin(request, env);
