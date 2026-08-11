@@ -333,3 +333,31 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   packaging helpers. Keep the resulting archive outside the repository.
 - **Verify:** Package from a path containing spaces, inspect the archive file count and hosting
   metadata, and confirm the saved version references the same pushed commit.
+
+### LAW-27 🟡 — Owner-visible release metadata must live in the served asset root
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 production Control Room pass: the packager retained
+  `dist/release-manifest.json`, but the static asset service exposed only `dist/client`, so health
+  passed while the dashboard truthfully reported the release manifest unavailable.
+- **Why:** Metadata can exist in an archive and still be unreachable to the production UI that
+  depends on it.
+- **Comply:** Write owner-visible metadata into the static client root as well as any packager root
+  location. Keep the file private-cacheable and free of credentials or tester identities.
+- **Verify:** Open the deployed owner dashboard, confirm health and manifest both pass, inspect the
+  exact asset count, and request the manifest through the production origin rather than the local
+  filesystem.
+
+### LAW-28 🔴 — Prepared agents stay inert until every consent and authority gate passes
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 cohort-agent scaffold: useful roles could be described before their
+  consented backend, retention/deletion flow, owner review queue, or external-action adapters
+  existed.
+- **Why:** A polished charter can conceal that an agent has no lawful data source or authorised
+  action path.
+- **Comply:** Keep `enabled: false`, create no schedule, accept only versioned pseudonymous events,
+  reject undeclared identity/raw-response fields, emit proposals rather than external actions, and
+  fail activation until every declared gate plus explicit owner approval passes.
+- **Verify:** `npm run agents:check` passes scaffold health; `npm run agents:activation-check`
+  fails; no automation ID exists; synthetic events validate; personal/raw fields are rejected.

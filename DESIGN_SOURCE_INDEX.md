@@ -302,6 +302,15 @@ one side.
   and a higher-priority owner-only policy on `/dungeon/admin*`. Do not publish a bypass credential
   in source, client code, URLs, evidence, or hosting metadata.
 
+### C22 — Helpful cohort agents versus consent and owner authority
+
+- Learning-signal, question-bank, and cohort review could reduce owner workload, but no consented
+  event backend, retention/deletion flow, review queue, or access adapter exists yet.
+- Resolution (2026-08-11): keep all three agents prepared but disabled. Contracts exclude direct
+  identity, IP, user agent, raw text, and written responses; outputs are proposals only. Activation
+  checks fail closed until every gate in `.agents/deployment.json` is true and the owner explicitly
+  approves activation. No schedule or automation is created during scaffold preparation.
+
 ### C20 — Confidence as diagnosis versus confidence as punishment
 
 - The owner initially explored reducing confidence after confident errors. The research review

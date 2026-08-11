@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dungeon.local/contracts/agent-output.schema.json",
+  "title": "Dungeon agent evidence packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "agent_id", "generated_at", "status", "cursor", "sample", "findings", "external_actions"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "run_id": { "type": "string", "pattern": "^run_[A-Za-z0-9_-]{8,100}$" },
+    "agent_id": {
+      "enum": ["learning-signal-auditor", "question-bank-steward", "tester-cohort-steward"]
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "status": {
+      "enum": [
+        "WAITING_BACKEND",
+        "WAITING_CONSENT",
+        "WAITING_REVIEWER",
+        "NO_NEW_DATA",
+        "INSUFFICIENT_EVIDENCE",
+        "OBSERVATIONS_ONLY",
+        "PROPOSALS_READY",
+        "REMOVAL_REVIEW_READY"
+      ]
+    },
+    "cursor": { "type": ["string", "null"], "maxLength": 240 },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["events", "testers", "sessions", "first_attempts", "synthetic_events_excluded"],
+      "properties": {
+        "events": { "type": "integer", "minimum": 0 },
+        "testers": { "type": "integer", "minimum": 0 },
+        "sessions": { "type": "integer", "minimum": 0 },
+        "first_attempts": { "type": "integer", "minimum": 0 },
+        "synthetic_events_excluded": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["finding_id", "kind", "severity", "summary", "evidence_strength", "sample_size", "event_ids", "question_ids", "alternative_explanations", "recommendation"],
+        "properties": {
+          "finding_id": { "type": "string", "pattern": "^finding_[A-Za-z0-9_-]{6,100}$" },
+          "kind": {
+            "enum": ["correctness", "ambiguity", "difficulty", "distractor", "misconception", "repair", "retention", "boss", "presentation", "accessibility", "participation", "security", "data-quality"]
+          },
+          "severity": { "enum": ["info", "watch", "high", "urgent"] },
+          "summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "evidence_strength": { "enum": ["insufficient", "provisional", "reproduced", "threshold-met"] },
+          "sample_size": { "type": "integer", "minimum": 0 },
+          "event_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "question_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "alternative_explanations": { "type": "array", "items": { "type": "string" } },
+          "recommendation": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        }
+      }
+    },
+    "external_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["action", "status", "owner_approval_required", "evidence_ids"],
+        "properties": {
+          "action": { "enum": ["message", "suspend", "remove", "publish-question", "change-algorithm"] },
+          "status": { "const": "proposed-not-executed" },
+          "owner_approval_required": { "const": true },
+          "evidence_ids": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+        }
+      }
+    }
+  }
+}
+

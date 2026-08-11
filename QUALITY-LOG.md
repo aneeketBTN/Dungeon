@@ -196,6 +196,18 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   template, and an announcement composer that copies but never sends automatically. It shows
   unavailable dependencies as failures instead of fabricating usage or tester counts. Evidence:
   `evidence/2026-08-11/tester-access-admin/verification.md`.
+- **I23 (2026-08-11)** — Issue: the private production Control Room reported Healthy but could not
+  load its release manifest. Cause: the build wrote owner-visible metadata to the package root
+  while the static service exposed only the client root. Fix: emit the same secret-free manifest
+  into both locations and verify it through the deployed dashboard. Evidence:
+  `evidence/2026-08-11/tester-access-admin/verification.md`; prevention: `BUG-LAWS.md` LAW-27.
+- **I24 (2026-08-11)** — Issue: cohort scale suggests useful automated review, but activating
+  agents before consented data, retention/deletion, owner review, and access adapters would create
+  unsafe invisible authority. Cause: agent roles were easier to name than their data and action
+  boundaries. Fix: added three paused charters, versioned pseudonymous contracts, synthetic-only
+  fixtures, forbidden personal/raw-response fields, and an activation check that intentionally
+  fails until every backend/consent/review/owner gate is true. No automation was created. Evidence:
+  `evidence/2026-08-11/tester-agent-readiness/verification.md`; prevention: `BUG-LAWS.md` LAW-28.
 
 ## Watch Items
 

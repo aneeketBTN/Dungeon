@@ -28,6 +28,15 @@ changed, decisions, verification/evidence, and deferrals.
 - Admin JavaScript/worker syntax, the ten-asset build, five release tests, desktop Browser layout,
   truthful unavailable-service states, announcement preview, and no horizontal overflow passed.
   Evidence: `evidence/2026-08-11/tester-access-admin/verification.md`.
+- Production Browser acceptance caught the manifest outside the served asset root: health passed
+  but release status stayed unavailable. The build now emits secret-free release metadata into the
+  served client root as well, with `BUG-LAWS.md` LAW-27 preventing recurrence.
+- Added a deliberately inert three-agent cohort control plane: Learning Signal Auditor, Question
+  Bank Steward, and Tester Cohort Steward. All remain disabled with no automation IDs; versioned
+  contracts reject direct identity/raw responses and the activation check fails until backend,
+  consent, retention/deletion, owner review, adapters, synthetic acceptance, and explicit owner
+  approval are complete. Evidence:
+  `evidence/2026-08-11/tester-agent-readiness/verification.md`.
 
 ## 2026-08-11 — Research-review integration and confidence-safe adaptation
 

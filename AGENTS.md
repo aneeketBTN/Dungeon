@@ -98,6 +98,8 @@ Rules:
   brief here or index its connected-source location in `DESIGN_SOURCE_INDEX.md`.
 - `mock/` — active T6 revision route, legacy static prototypes, content sets, and local server.
 - `.openai/` — Sites project binding; contains no runtime secrets.
+- `.agents/` — paused tester-agent charters, consent-safe data contracts, synthetic fixtures, and
+  fail-closed activation gates; no automation is created or running.
 - `scripts/` — deterministic public-release build scripts.
 - `site/` — production worker entrypoint, health route, and response security policy.
 - `tests/` — release-boundary, routing, and security-header checks.
@@ -142,10 +144,14 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `SECURITY.md` | Private vulnerability-reporting and release-safety policy. | 2026-08-11 |
 | `COMMUNITY_PLAYBOOK.md` | WhatsApp community structure, moderation, announcements, and feedback triage. | 2026-08-11 |
 | `.openai/hosting.json` | Opaque Sites project binding only; runtime credentials never belong here. | 2026-08-11 |
+| `.agents/README.md` | Paused tester-agent control plane, authority boundary, and activation order. | 2026-08-11 |
+| `.agents/deployment.json` | Fail-closed activation gates and non-running agent declarations. | 2026-08-11 |
 | `package.json` | Dependency-free release build, validation, and test commands. | 2026-08-11 |
 | `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
+| `scripts/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
 | `site/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
 | `tests/site-release.test.mjs` | Automated release-boundary, privacy, routing, and header checks. | 2026-08-11 |
+| `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
 | `mock/admin.html` | Owner control room for access workflow, release health, feedback triage, and announcement drafting. | 2026-08-11 |
 | `mock/admin.css` | Responsive, accessible control-room layout and status presentation. | 2026-08-11 |
 | `mock/admin.js` | Health/manifest checks, structured copy helpers, and announcement preview without autonomous sending. | 2026-08-11 |
@@ -260,6 +266,10 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - [ ] The identity-gated client bundle prevents anonymous/casual harvesting but cannot stop an
   approved technical tester from downloading visible bank scripts. Server-side item delivery is
   `UNSTARTED`; do not claim perfect anti-scraping or DRM.
+- [ ] Tester agents are `PREPARED_NOT_ACTIVATED`. Backend events, explicit tester consent,
+  pseudonymous identity mapping, retention/deletion, owner review queues, notification/access
+  adapters, synthetic end-to-end acceptance, and owner activation are all required before any
+  schedule may be created or unpaused.
 - [ ] `WAITING_REAL_BROWSER`: the legacy cinematic/Ari/economy route still has no complete
   real-Browser new-player acceptance. This gate no longer applies to the verified T6 BRGSA route.
 - [ ] `WAITING_COMPUTER_USE`: Computer Use instructions are installed, but the control runtime was

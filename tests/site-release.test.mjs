@@ -63,4 +63,5 @@ test("release build includes only the allowlisted active app", async () => {
   assert.doesNotMatch(buildScript, /state\//);
   assert.doesNotMatch(buildScript, /history\//);
   assert.doesNotMatch(buildScript, /mock\/CLAs\//);
+  assert.match(buildScript, /client.*release-manifest\.json|release-manifest\.json.*client/s);
 });

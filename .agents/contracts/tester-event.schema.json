@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dungeon.local/contracts/tester-event.schema.json",
+  "title": "Dungeon consented pseudonymous tester event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "occurred_at",
+    "received_at",
+    "tester_id",
+    "session_id",
+    "app_version",
+    "consent_scope",
+    "synthetic"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "event_id": { "type": "string", "pattern": "^evt_[A-Za-z0-9_-]{8,80}$" },
+    "event_type": {
+      "enum": [
+        "session_started",
+        "question_viewed",
+        "response_committed",
+        "confidence_recorded",
+        "feedback_opened",
+        "reattempt_scheduled",
+        "reattempt_completed",
+        "boss_step_committed",
+        "session_abandoned",
+        "session_resumed",
+        "practice_completed",
+        "consent_changed"
+      ]
+    },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "received_at": { "type": "string", "format": "date-time" },
+    "tester_id": { "type": "string", "pattern": "^tester_[A-Za-z0-9_-]{6,64}$" },
+    "session_id": { "type": "string", "pattern": "^session_[A-Za-z0-9_-]{6,64}$" },
+    "app_version": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "consent_scope": { "const": "tester-learning-events-v1" },
+    "synthetic": { "type": "boolean" },
+    "course_id": { "enum": ["BRGSA", "IBM", "SCLM", "SPMS"] },
+    "question_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "question_version": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "concept_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 120 },
+      "uniqueItems": true,
+      "maxItems": 8
+    },
+    "format": {
+      "enum": ["mcq", "cloze", "case-cloze", "match", "short-answer", "boss"]
+    },
+    "variant_family": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "attempt_kind": {
+      "enum": ["first", "immediate-retry", "different-family-repair", "delayed-retrieval"]
+    },
+    "scored": { "type": "boolean" },
+    "correct": { "type": ["boolean", "null"] },
+    "selected_response_id": { "type": ["string", "null"], "maxLength": 120 },
+    "misconception_tag": { "type": ["string", "null"], "maxLength": 240 },
+    "confidence": { "enum": ["low", "medium", "high", "skipped", "not-asked"] },
+    "confidence_prompted": { "type": "boolean" },
+    "boss_steps_passed": { "type": "integer", "minimum": 0, "maximum": 20 },
+    "boss_steps_failed": { "type": "integer", "minimum": 0, "maximum": 20 },
+    "boss_steps_total": { "type": "integer", "minimum": 0, "maximum": 20 },
+    "constructed_criteria_selected": { "type": "integer", "minimum": 0, "maximum": 20 },
+    "constructed_criteria_total": { "type": "integer", "minimum": 0, "maximum": 20 },
+    "constructed_length_bucket": {
+      "enum": ["empty", "1-19", "20-99", "100-299", "300-plus", "not-applicable"]
+    },
+    "duration_bucket": {
+      "enum": ["under-5s", "5-15s", "15-30s", "30-60s", "1-3m", "3-10m", "over-10m", "unknown"]
+    },
+    "device_class": { "enum": ["narrow", "desktop", "unknown"] },
+    "input_mode": { "enum": ["keyboard", "pointer", "touch", "mixed", "unknown"] },
+    "feedback_mode": { "enum": ["immediate", "held-until-end"] },
+    "practice_shape": { "enum": ["mixed", "recognition", "application", "generation"] },
+    "reason_code": { "type": ["string", "null"], "maxLength": 160 }
+  }
+}
+

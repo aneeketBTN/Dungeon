@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-not-activated",
+  "projectId": "local-f755b8a4a580ba38d8941e4d086ae150",
+  "dataContract": ".agents/contracts/tester-event.schema.json",
+  "outputContract": ".agents/contracts/agent-output.schema.json",
+  "activationGates": {
+    "backendEventStream": false,
+    "testerConsentFlow": false,
+    "pseudonymousIdentityMap": false,
+    "retentionAndDeletionPolicy": false,
+    "reviewerQueue": false,
+    "notificationAdapter": false,
+    "accessRevocationAdapter": false,
+    "syntheticEndToEndAcceptance": false,
+    "ownerActivation": false
+  },
+  "agents": [
+    {
+      "id": "learning-signal-auditor",
+      "name": "Dungeon Learning Signal Auditor",
+      "charter": ".agents/learning-signal-auditor.md",
+      "model": "gpt-5.6-terra",
+      "reasoningEffort": "medium",
+      "desiredSchedule": "hourly",
+      "executionEnvironment": "worktree",
+      "enabled": false,
+      "automationId": null,
+      "automationStatus": "not-created",
+      "writeRoot": "work/tester-signals"
+    },
+    {
+      "id": "question-bank-steward",
+      "name": "Dungeon Question Bank Steward",
+      "charter": ".agents/question-bank-steward.md",
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "high",
+      "desiredSchedule": "daily-02:00-local",
+      "executionEnvironment": "worktree",
+      "enabled": false,
+      "automationId": null,
+      "automationStatus": "not-created",
+      "writeRoot": "work/question-proposals"
+    },
+    {
+      "id": "tester-cohort-steward",
+      "name": "Dungeon Tester Cohort Steward",
+      "charter": ".agents/tester-cohort-steward.md",
+      "model": "gpt-5.6-terra",
+      "reasoningEffort": "medium",
+      "desiredSchedule": "daily-09:00-local",
+      "executionEnvironment": "worktree",
+      "enabled": false,
+      "automationId": null,
+      "automationStatus": "not-created",
+      "writeRoot": "work/cohort-reviews"
+    }
+  ]
+}
+

@@ -71,6 +71,18 @@ handling; that source inspection is secondary evidence only.
 - The next protected build includes the owner dashboard and header hardening; its version and URL
   are recorded after the deployment step below.
 
+### Production dashboard pass
+
+Owner-only version 2 deployed successfully at `https://dungeon-term6.aneeket.chatgpt.site` and
+required Sign in with ChatGPT before `/admin` could load. The owner selected the existing account
+and accepted the profile-sharing prompt for this owner-controlled site. The deployed Control Room
+then reported Healthy and preserved no horizontal overflow at a 698-pixel Browser panel.
+
+That pass caught a real packaging error: `release-manifest.json` existed at the archive root but
+not the served client root, so release status correctly showed Unavailable. The build now writes
+the same secret-free manifest to both locations. Final production re-verification is recorded after
+the corrected deployment.
+
 ## Remaining gates
 
 - Owner acceptance of Cloudflare Zero Trust terms and overage-card authorisation.

@@ -39,10 +39,8 @@ const releaseManifest = {
   files: publicFiles
 };
 
-await writeFile(
-  join(dist, "release-manifest.json"),
-  `${JSON.stringify(releaseManifest, null, 2)}\n`,
-  "utf8"
-);
+const serializedManifest = `${JSON.stringify(releaseManifest, null, 2)}\n`;
+await writeFile(join(dist, "release-manifest.json"), serializedManifest, "utf8");
+await writeFile(join(dist, "client", "release-manifest.json"), serializedManifest, "utf8");
 
 console.log(`Prepared ${publicFiles.length} public assets and the production worker.`);

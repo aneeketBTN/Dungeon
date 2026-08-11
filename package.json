@@ -7,7 +7,9 @@
   },
   "scripts": {
     "build": "node scripts/build-site.mjs",
-    "test": "node --test tests/site-release.test.mjs",
-    "validate:bank": "node mock/validate_t6_bank.js"
+    "test": "node --test tests/site-release.test.mjs tests/agent-readiness.test.mjs",
+    "validate:bank": "node mock/validate_t6_bank.js",
+    "agents:check": "node scripts/validate-agent-readiness.mjs",
+    "agents:activation-check": "node scripts/validate-agent-readiness.mjs --activation"
   }
 }
