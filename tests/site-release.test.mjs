@@ -80,3 +80,10 @@ test("release build includes only the allowlisted active app", async () => {
   assert.doesNotMatch(buildScript, /mock\/CLAs\//);
   assert.match(buildScript, /client.*release-manifest\.json|release-manifest\.json.*client/s);
 });
+
+test("anonymous login assets do not disclose the private WhatsApp invite", async () => {
+  const loginHtml = await readFile(new URL("../mock/login.html", import.meta.url), "utf8");
+  const loginJs = await readFile(new URL("../mock/login.js", import.meta.url), "utf8");
+  assert.doesNotMatch(loginHtml, /E9RThdcAzqFDTiWPUYcE3I/);
+  assert.doesNotMatch(loginJs, /E9RThdcAzqFDTiWPUYcE3I/);
+});

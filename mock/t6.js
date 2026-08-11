@@ -8,6 +8,7 @@
   var BACKEND_ACTIVE = window.location.pathname.indexOf("/dungeon") === 0;
   var SESSION_ENDPOINT = "api/session";
   var PROGRESS_ENDPOINT = "api/progress";
+  var COMMUNITY_ENDPOINT = "api/community";
   var STATUS_ORDER = {unseen: 0, needs: 1, developing: 2, strong: 3};
   var STATUS_LABEL = {unseen: "Not started", needs: "Needs practice", developing: "Developing", strong: "Strong"};
   var profile;
@@ -25,6 +26,7 @@
   var serverRevision = 0;
   var localChangeSequence = 0;
   var saveChain = Promise.resolve();
+  var communityState = {joined:true, inviteOpenedAt:null, reminderAt:null};
   var DASHBOARD_VIEWS = ["overview", "concepts", "plan"];
   var HORIZON_PLANS = {
     today: {
@@ -58,7 +60,8 @@
       active: null,
       totalAnswers: 0,
       blockSequence: 0,
-      horizon: "today"
+      horizon: "today",
+      primerState: {}
     };
   }
 
@@ -70,6 +73,18 @@
   function validSession(candidate) {
     return candidate && COURSES[candidate.courseId] && Array.isArray(candidate.queue) &&
       typeof candidate.index === "number" && Array.isArray(candidate.responses);
+  }
+
+  function normalizeProfileShape(candidate) {
+    candidate.primerState = candidate.primerState && typeof candidate.primerState === "object" ? candidate.primerState : {};
+    if (candidate.active) {
+      candidate.active.baseCount = candidate.active.baseCount || candidate.active.queue.filter(function (item) {
+        var question = getQuestion(candidate.active.courseId, item.id);
+        return question && question.type !== "primer";
+      }).length;
+      candidate.active.supportCount = candidate.active.queue.length - candidate.active.baseCount;
+    }
+    return candidate;
   }
 
   function profileStorageKey() {
@@ -118,7 +133,7 @@
         parsed.active.title = "Mixed-format practice";
         parsed.active.kicker = "Learning mode · feedback after each answer";
       }
-      return parsed;
+      return normalizeProfileShape(parsed);
     } catch (error) {
       return defaultProfile();
     }
@@ -170,6 +185,7 @@
     }
     var identity = await sessionResponse.json();
     learnerEmail = identity.email;
+    communityState = identity.community || {joined:false, inviteOpenedAt:null, reminderAt:null};
     backendReady = true;
     $("account-controls").hidden = false;
 
@@ -183,6 +199,7 @@
       var localIsUnsynced = meta && meta.email === learnerEmail && meta.dirty === true && Number(meta.serverRevision || 0) === serverRevision;
 
       if (remote.state && validProfile(remote.state) && !localIsUnsynced) {
+        remote.state = normalizeProfileShape(remote.state);
         writeLocalProfile(remote.state);
         writeSyncMeta(false);
         setSyncStatus("Saved online");
@@ -203,6 +220,7 @@
   function showScreen(id) {
     $all(".screen").forEach(function (screen) { screen.classList.toggle("active", screen.id === id); });
     window.scrollTo(0, 0);
+    if (id === "dashboard-screen") window.requestAnimationFrame(renderMasteryRadar);
   }
 
   function getCourse(courseId) { return COURSES[courseId]; }
@@ -406,7 +424,7 @@
   function questionSurfaces(courseId, conceptId) {
     var surfaces = Object.keys(getCourse(courseId).questions).map(function (id) { return getCourse(courseId).questions[id]; })
       .filter(function (question) {
-        return question.conceptId === conceptId || (question.supportingConceptIds || []).indexOf(conceptId) >= 0;
+        return !question.primerOnly && (question.conceptId === conceptId || (question.supportingConceptIds || []).indexOf(conceptId) >= 0);
       });
     var activeSurfaces = surfaces.filter(function (question) { return !question.optionShapeRisk; });
     return activeSurfaces.length ? activeSurfaces : surfaces;
@@ -485,8 +503,66 @@
         at: item && item.at ? item.at : Date.now()
       });
       profile.conceptAttempts[courseId][conceptId] = attempts.slice(-60);
+      updatePrimerFromChallenge(courseId, conceptId, question, scored ? !!conceptCorrect : null);
     });
     profile.totalAnswers += 1;
+  }
+
+  function primerStateFor(courseId, conceptId) {
+    profile.primerState = profile.primerState || {};
+    profile.primerState[courseId] = profile.primerState[courseId] || {};
+    profile.primerState[courseId][conceptId] = profile.primerState[courseId][conceptId] || {
+      support: 1,
+      easyStreak: 0,
+      shown: 0,
+      correct: 0,
+      wrong: 0,
+      lastAt: 0
+    };
+    return profile.primerState[courseId][conceptId];
+  }
+
+  function primerQuestionFor(courseId, conceptId) {
+    return getQuestion(courseId, conceptId + "_primer");
+  }
+
+  function primerSupportLevel(courseId, conceptId) {
+    var state = primerStateFor(courseId, conceptId);
+    var attempts = attemptsFor(courseId, conceptId).filter(function (attempt) { return attempt.scored !== false; });
+    var recent = attempts.slice(-2);
+    if (conceptStatus(courseId, conceptId) === "strong" || state.easyStreak >= 2 || (recent.length === 2 && recent.every(function (attempt) { return attempt.correct && attempt.difficulty >= 3; }))) return 0;
+    if (!attempts.length) return Math.max(1, Math.min(3, state.support || 1));
+    var misses = recent.filter(function (attempt) { return !attempt.correct; }).length;
+    if (misses === 2) return 3;
+    if (misses === 1 || conceptStatus(courseId, conceptId) === "needs") return Math.max(2, Math.min(3, state.support || 1));
+    return Math.max(0, Math.min(3, state.support || 0));
+  }
+
+  function recordPrimerAttempt(courseId, question, correct) {
+    var state = primerStateFor(courseId, question.conceptId);
+    state.shown += 1;
+    state.lastAt = Date.now();
+    if (correct) {
+      state.correct += 1;
+      state.easyStreak += 1;
+      state.support = Math.max(0, state.support - 1);
+    } else {
+      state.wrong += 1;
+      state.easyStreak = 0;
+      state.support = Math.min(3, Math.max(2, state.support + 1));
+    }
+  }
+
+  function updatePrimerFromChallenge(courseId, conceptId, question, correct) {
+    if (correct === null || question.primerOnly) return;
+    var state = primerStateFor(courseId, conceptId);
+    if (!correct) {
+      state.easyStreak = 0;
+      state.support = Math.min(3, Math.max(2, state.support + 1));
+      return;
+    }
+    if ((question.difficulty || 2) >= 3) state.easyStreak += 1;
+    state.support = state.easyStreak >= 2 ? 0 : Math.max(0, state.support - 1);
   }
 
   function renderDashboard(options) {
@@ -500,9 +576,97 @@
     $("overall-unseen").textContent = String(overall.unseen);
     $("calibration-summary").textContent = overallConfidenceSummary();
     renderCourseCards();
+    renderMasteryRadar();
     renderSelectedSubject();
     renderRecommendation();
+    renderCommunityReminder();
     setDashboardView(dashboardView);
+  }
+
+  function renderMasteryRadar() {
+    var canvas = $("mastery-radar");
+    if (!canvas) return;
+    var connections = 0;
+    var conceptCount = 0;
+    var axes = COURSE_IDS.map(function (courseId) {
+      return {label:getCourse(courseId).shortTitle, value:courseStats(courseId).weighted};
+    });
+    COURSE_IDS.forEach(function (courseId) {
+      getCourse(courseId).concepts.forEach(function (concept) {
+        conceptCount += 1;
+        if (conceptEvidence(courseId, concept.id).integrativeEvidence) connections += 1;
+      });
+    });
+    axes.push({label:"Connections", value:Math.round(connections / Math.max(1, conceptCount) * 100)});
+    var size = Math.max(240, Math.min(340, canvas.clientWidth || 320));
+    var ratio = window.devicePixelRatio || 1;
+    canvas.width = Math.round(size * ratio);
+    canvas.height = Math.round(size * ratio);
+    canvas.style.height = size + "px";
+    var context = canvas.getContext("2d");
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    context.clearRect(0, 0, size, size);
+    var center = size / 2;
+    var radius = size * .34;
+    function point(index, scale) {
+      var angle = -Math.PI / 2 + index * Math.PI * 2 / axes.length;
+      return {x:center + Math.cos(angle) * radius * scale, y:center + Math.sin(angle) * radius * scale};
+    }
+    function polygon(scale, fill, stroke, width) {
+      context.beginPath();
+      axes.forEach(function (_, index) {
+        var vertex = point(index, scale);
+        if (!index) context.moveTo(vertex.x, vertex.y); else context.lineTo(vertex.x, vertex.y);
+      });
+      context.closePath();
+      if (fill) { context.fillStyle = fill; context.fill(); }
+      context.strokeStyle = stroke;
+      context.lineWidth = width;
+      context.stroke();
+    }
+    [1,.75,.5,.25].forEach(function (scale) { polygon(scale, null, "#d6ddd6", 1); });
+    axes.forEach(function (_, index) {
+      var vertex = point(index, 1);
+      context.beginPath();
+      context.moveTo(center, center);
+      context.lineTo(vertex.x, vertex.y);
+      context.strokeStyle = "#e2e6e0";
+      context.lineWidth = 1;
+      context.stroke();
+    });
+    context.beginPath();
+    axes.forEach(function (axis, index) {
+      var vertex = point(index, Math.max(.02, axis.value / 100));
+      if (!index) context.moveTo(vertex.x, vertex.y); else context.lineTo(vertex.x, vertex.y);
+    });
+    context.closePath();
+    context.fillStyle = "rgba(23,107,120,.18)";
+    context.fill();
+    context.strokeStyle = "#176b78";
+    context.lineWidth = 3;
+    context.stroke();
+    axes.forEach(function (axis, index) {
+      var vertex = point(index, Math.max(.02, axis.value / 100));
+      context.beginPath();
+      context.arc(vertex.x, vertex.y, 4, 0, Math.PI * 2);
+      context.fillStyle = "#176b78";
+      context.fill();
+    });
+    $("mastery-values").innerHTML = axes.map(function (axis) {
+      return "<li><span>" + escapeHtml(axis.label) + "</span><b>" + axis.value + "%</b></li>";
+    }).join("");
+    $("mastery-radar-copy").textContent = "Subject values reflect Strong and Developing evidence. Connections shows concepts already used in a case, link, or reasoning step.";
+  }
+
+  function renderCommunityReminder() {
+    var reminder = $("community-reminder");
+    if (!reminder) return;
+    reminder.hidden = !BACKEND_ACTIVE || !!communityState.joined;
+    if (reminder.hidden) return;
+    $("community-reminder-title").textContent = communityState.reminderAt ? "Aneeket bumped this reminder" : "Join the tester group to keep testing";
+    $("community-reminder-copy").textContent = "Open the WhatsApp invite, join the group, and share feedback during testing. Testers who do not join and participate will be removed from the cohort.";
+    $("community-joined").disabled = !communityState.inviteOpenedAt;
+    $("community-joined").textContent = communityState.inviteOpenedAt ? "I joined the group" : "Open the invite first";
   }
 
   function setDashboardView(view, options) {
@@ -819,9 +983,41 @@
     return selectQuestionsFromPool(courseId, definition.questionPoolIds, count, required);
   }
 
+  function layeredQueue(courseId, questionIds, mode) {
+    var queue = [];
+    var introduced = [];
+    var previousConceptId = null;
+    questionIds.forEach(function (id) {
+      var question = getQuestion(courseId, id);
+      if (!question) return;
+      var conceptIds = [question.conceptId];
+      if (mode !== "simulation") conceptIds.forEach(function (conceptId) {
+        if (introduced.indexOf(conceptId) >= 0 || primerSupportLevel(courseId, conceptId) <= 0) return;
+        var primer = primerQuestionFor(courseId, conceptId);
+        if (!primer) return;
+        queue.push({
+          id: primer.id,
+          initial: false,
+          isReattempt: false,
+          origin: null,
+          primer: true,
+          primerLevel: primerSupportLevel(courseId, conceptId),
+          previousConceptId: previousConceptId
+        });
+        introduced.push(conceptId);
+        previousConceptId = conceptId;
+      });
+      queue.push({id:id, initial:true, isReattempt:false, origin:null});
+      if (introduced.indexOf(question.conceptId) < 0) introduced.push(question.conceptId);
+      previousConceptId = question.conceptId;
+    });
+    return queue;
+  }
+
   function createSession(courseId, details, questionIds) {
     var initialStatuses = {};
     getCourse(courseId).concepts.forEach(function (concept) { initialStatuses[concept.id] = conceptStatus(courseId, concept.id); });
+    var queue = layeredQueue(courseId, questionIds, details.mode || "learning");
     return {
       courseId: courseId,
       kind: details.kind,
@@ -831,8 +1027,9 @@
       conceptId: details.conceptId || null,
       title: details.title,
       kicker: details.kicker,
-      queue: questionIds.map(function (id) { return {id: id, initial: true, isReattempt: false, origin: null}; }),
+      queue: queue,
       baseCount: questionIds.length,
+      supportCount: queue.length - questionIds.length,
       index: 0,
       answered: false,
       selected: null,
@@ -854,7 +1051,7 @@
 
   function practiceShapeQuestionIds(courseId, shape) {
     var questions = Object.keys(getCourse(courseId).questions).map(function (id) { return getQuestion(courseId, id); })
-      .filter(function (question) { return !question.optionShapeRisk; });
+      .filter(function (question) { return !question.optionShapeRisk && !question.primerOnly; });
     var pool = questions;
     var required = [];
     var count = 12;
@@ -976,6 +1173,7 @@
   function currentQuestion() { return getQuestion(session.courseId, currentItem().id); }
 
   function shouldAskConfidence(question, item) {
+    if (question.type === "primer") return false;
     if (typeof item.askConfidence === "boolean") return item.askConfidence;
     var attempts = attemptsFor(session.courseId, question.conceptId).filter(function (attempt) { return attempt.scored !== false; });
     var latest = attempts[attempts.length - 1];
@@ -1026,23 +1224,26 @@
     shouldAskConfidence(question, item);
     selected = session.answered ? session.selected : (session.selected === undefined ? null : session.selected);
     confidence = session.answered ? (session.confidence || (session.responses.length && session.responses[session.responses.length - 1].confidence) || null) : (session.confidence || null);
-    $("question-card").classList.remove("is-correct", "is-wrong");
-    $("question-pattern").textContent = item.isReattempt ? "Re-attempt · new perspective" : question.pattern;
-    $("question-count").textContent = "Question " + (session.index + 1) + " of " + session.queue.length;
+    var isPrimer = question.type === "primer";
+    $("question-card").classList.remove("is-correct", "is-wrong", "is-primer");
+    $("question-card").classList.toggle("is-primer", isPrimer);
+    $("question-pattern").textContent = isPrimer ? "Adaptive primer" : item.isReattempt ? "Re-attempt · new perspective" : question.pattern;
+    $("question-count").textContent = isPrimer ? "Primer before the next challenge" : "Question " + challengePosition() + " of " + session.baseCount;
     $("question-node").textContent = question.node;
     var status = conceptStatus(session.courseId, question.conceptId);
     $("question-status").className = "status-pill " + status;
     $("question-status").textContent = STATUS_LABEL[status];
     $("question-title").textContent = question.stem;
     $("source-ref").textContent = unique(question.sourceIds || [question.source]).join(" + ") + " · supplied Term 6 course pack";
-    $("case-block").hidden = !question.caselet;
+    $("case-block").hidden = isPrimer || !question.caselet;
     $("caselet").textContent = question.caselet || "";
-    $("prompt-flow").classList.toggle("has-case", !!question.caselet);
+    $("prompt-flow").classList.toggle("has-case", !isPrimer && !!question.caselet);
+    renderPrimerPanel(question, item);
     $("task-kicker").textContent = question.caselet ? "Then decide" : "Your task";
     $("feedback").className = "feedback";
     $("feedback").innerHTML = "";
     $("commit-answer").hidden = false;
-    $("commit-answer").textContent = question.type === "short-answer" && session.mode === "simulation" ? "Save response" : question.type === "short-answer" && session.subjectiveStage === "rubric" ? "Compare with exemplar" : question.type === "short-answer" ? "Review with rubric" : "Check answer";
+    $("commit-answer").textContent = isPrimer ? "Check primer" : question.type === "short-answer" && session.mode === "simulation" ? "Save response" : question.type === "short-answer" && session.subjectiveStage === "rubric" ? "Compare with exemplar" : question.type === "short-answer" ? "Review with rubric" : "Check answer";
     $("commit-answer").disabled = !hasCompleteResponse(question) || !confidenceReady() || session.answered;
     $("next-question").hidden = true;
     renderResponseControl(question);
@@ -1052,9 +1253,33 @@
     updatePracticeProgress();
   }
 
+  function challengePosition() {
+    return session.queue.slice(0, session.index + 1).filter(function (item) {
+      return getQuestion(session.courseId, item.id).type !== "primer";
+    }).length;
+  }
+
+  function renderPrimerPanel(question, item) {
+    var panel = $("primer-panel");
+    var visible = question.type === "primer";
+    panel.hidden = !visible;
+    if (!visible) return;
+    var level = Math.max(1, Math.min(3, item.primerLevel || 1));
+    $("primer-level").textContent = level === 1 ? "Layer 1 · minimum to carry" : level === 2 ? "Primer returning · use it" : "Primer strengthened · repair the mix-up";
+    var parts = ["<p><b>Know this:</b> " + escapeHtml(question.primerFact) + "</p>"];
+    if (item.previousConceptId) {
+      var previous = getConcept(session.courseId, item.previousConceptId);
+      if (previous) parts.unshift("<p class='primer-carry'><b>Carry forward:</b> " + escapeHtml(previous.name) + ". Now add " + escapeHtml(question.node) + ".</p>");
+    }
+    if (level >= 2) parts.push("<p><b>Use it like this:</b> " + escapeHtml(question.primerApplication) + "</p>");
+    if (level >= 3) parts.push("<p><b>Do not confuse it with:</b> " + escapeHtml(question.primerMisconception) + "</p>");
+    parts.push("<p class='primer-connection'><b>Connection to keep:</b> " + escapeHtml(question.primerConnection) + "</p>");
+    $("primer-content").innerHTML = parts.join("");
+  }
+
   function hasCompleteResponse(question) {
     if (question.type === "short-answer") return session.subjectiveStage === "rubric" ? true : typeof selected === "string" && selected.trim().length >= 20;
-    if (question.type === "mcq" || !question.type) return typeof selected === "number";
+    if (question.type === "mcq" || question.type === "primer" || !question.type) return typeof selected === "number";
     var count = question.type === "boss" ? question.steps.length : question.type === "match" ? question.rows.length : question.blanks.length;
     return Array.isArray(selected) && selected.length === count && selected.every(function (value) { return typeof value === "number" && value >= 0; });
   }
@@ -1385,7 +1610,7 @@
   }
 
   function evaluateResponse(question) {
-    if (question.type === "mcq" || !question.type) {
+    if (question.type === "mcq" || question.type === "primer" || !question.type) {
       var mcqCorrect = selected === question.answer;
       return {correct: mcqCorrect, partial: mcqCorrect ? 1 : 0, partResults: [mcqCorrect], conceptResults: {}, misconception: mcqCorrect ? null : (question.misconceptions || [])[selected] || "wrong-option"};
     }
@@ -1509,12 +1734,13 @@
     var evaluation = evaluateResponse(question);
     var correct = evaluation.correct;
     var before = conceptStatus(session.courseId, question.conceptId);
-    if (session.mode !== "simulation") recordAttempt(session.courseId, question, evaluation, confidence, item, session.blockId);
+    if (question.type === "primer") recordPrimerAttempt(session.courseId, question, correct);
+    else if (session.mode !== "simulation") recordAttempt(session.courseId, question, evaluation, confidence, item, session.blockId);
     var after = conceptStatus(session.courseId, question.conceptId);
     var afterEvidence = conceptEvidence(session.courseId, question.conceptId);
     var scheduled = false;
-    if (session.mode !== "simulation" && !correct) scheduled = ensureReattempt(question, confidence === "high" ? "confident-error" : confidence === "low" ? "uncertain-error" : "missed");
-    else if (session.mode !== "simulation" && after !== "strong" && (confidence === "low" || afterEvidence.correct < 3)) scheduled = ensureReattempt(question, confidence === "low" ? "low-confidence-correct" : "developing");
+    if (question.type !== "primer" && session.mode !== "simulation" && !correct) scheduled = ensureReattempt(question, confidence === "high" ? "confident-error" : confidence === "low" ? "uncertain-error" : "missed");
+    else if (question.type !== "primer" && session.mode !== "simulation" && after !== "strong" && (confidence === "low" || afterEvidence.correct < 3)) scheduled = ensureReattempt(question, confidence === "low" ? "low-confidence-correct" : "developing");
 
     var response = {
       id: question.id,
@@ -1526,7 +1752,9 @@
       confidence: confidence,
       confidencePrompted: !!item.askConfidence,
       correct: correct,
-      scored: true,
+      scored: question.type !== "primer",
+      primer: question.type === "primer",
+      primerLevel: item.primerLevel || null,
       partial: evaluation.partial,
       partResults: evaluation.partResults,
       conceptResults: evaluation.conceptResults,
@@ -1553,7 +1781,7 @@
   }
 
   function correctAnswerKey(question) {
-    if (question.type === "mcq" || !question.type) return [question.options[question.answer]];
+    if (question.type === "mcq" || question.type === "primer" || !question.type) return [question.options[question.answer]];
     if (question.type === "match") return question.rows.map(function (row) { return row.label + " → " + question.choices[row.answer]; });
     if (question.type === "boss") return question.steps.map(function (step) { return step.label + ": " + step.options[step.answer]; });
     if (question.type === "short-answer") return [question.exemplar];
@@ -1561,7 +1789,7 @@
   }
 
   function selectedAnswerCopy(question, response) {
-    if (question.type === "mcq" || !question.type) return question.options[response.selected] || "the selected option";
+    if (question.type === "mcq" || question.type === "primer" || !question.type) return question.options[response.selected] || "the selected option";
     var failedIndex = (response.partResults || []).indexOf(false);
     if (failedIndex < 0) return "the selected response";
     if (question.type === "boss") return question.steps[failedIndex].options[response.selected[failedIndex]];
@@ -1610,6 +1838,7 @@
     renderConfidenceControl();
     $("question-status").className = "status-pill " + response.statusAfter;
     $("question-status").textContent = STATUS_LABEL[response.statusAfter];
+    if (response.primer) return renderPrimerResolved(question, response);
     if (session.mode === "simulation") return renderDeferred(question, response);
     if (response.subjective) return renderSubjectiveResolved(question, response);
     var feedback = $("feedback");
@@ -1638,6 +1867,17 @@
     $("next-question").innerHTML = session.index + 1 >= session.queue.length ? "Finish this set <span aria-hidden='true'>→</span>" : "Continue <span aria-hidden='true'>→</span>";
   }
 
+  function renderPrimerResolved(question, response) {
+    var feedback = $("feedback");
+    feedback.className = "feedback visible" + (response.correct ? " primer-pass" : " wrong");
+    feedback.innerHTML = response.correct
+      ? "<span class='feedback-label'>Primer ready to use</span><p>Good. The next question will ask you to use this idea, not repeat the definition.</p>"
+      : "<span class='feedback-label'>Primer strengthened</span><p>Keep the precise principle active: " + escapeHtml(question.primerFact) + "</p><p class='bridge'><b>Connection:</b> " + escapeHtml(question.primerConnection) + "</p>";
+    $("commit-answer").hidden = true;
+    $("next-question").hidden = false;
+    $("next-question").innerHTML = "Use it in the next challenge <span aria-hidden='true'>→</span>";
+  }
+
   function nextQuestion() {
     if (!session || !session.answered) return;
     session.index += 1;
@@ -1659,8 +1899,9 @@
     if (!session) return;
     var answered = session.responses.length;
     var total = session.queue.length;
-    $("practice-progress-text").textContent = Math.min(session.index + 1, total) + " of " + total;
-    $("question-count").textContent = "Question " + Math.min(session.index + 1, total) + " of " + total;
+    var question = session.index < total ? currentQuestion() : null;
+    $("practice-progress-text").textContent = Math.min(answered, total) + " of " + total + " steps";
+    $("question-count").textContent = question && question.type === "primer" ? "Primer before the next challenge" : "Question " + Math.min(challengePosition(), session.baseCount) + " of " + session.baseCount;
     $("practice-progress-fill").style.width = (total ? answered / total * 100 : 0) + "%";
     $("due-count").textContent = String(session.queue.slice(session.index + 1).filter(function (item) { return item.isReattempt; }).length);
   }
@@ -1705,7 +1946,8 @@
     var initialCorrect = scoredInitial.filter(function (response) { return response.correct; }).length;
     var initialMissed = scoredInitial.filter(function (response) { return !response.correct; }).length;
     var reattempts = completedSession.responses.filter(function (response) { return response.isReattempt && response.correct; }).length;
-    var touched = unique(completedSession.responses.reduce(function (values, response) { return values.concat(response.conceptIds || [response.conceptId]); }, []));
+    var evidenceResponses = completedSession.responses.filter(function (response) { return !response.primer; });
+    var touched = unique(evidenceResponses.reduce(function (values, response) { return values.concat(response.conceptIds || [response.conceptId]); }, []));
     var improved = touched.filter(function (conceptId) {
       return STATUS_ORDER[conceptStatus(completedSession.courseId, conceptId)] > STATUS_ORDER[completedSession.initialStatuses[conceptId]];
     }).length;
@@ -1726,7 +1968,7 @@
     review.innerHTML = "";
     touched.forEach(function (conceptId) {
       var concept = getConcept(completedSession.courseId, conceptId);
-      var response = completedSession.responses.filter(function (item) { return (item.conceptIds || [item.conceptId]).indexOf(conceptId) >= 0; }).slice(-1)[0];
+      var response = evidenceResponses.filter(function (item) { return (item.conceptIds || [item.conceptId]).indexOf(conceptId) >= 0; }).slice(-1)[0];
       var status = conceptStatus(completedSession.courseId, conceptId);
       var evidence = conceptEvidence(completedSession.courseId, conceptId);
       var confidenceCopy = evidence.openConfidentError ? evidence.confidenceLabel : evidence.confidenceCount ? evidence.confidenceCount + " diagnostic confidence check" + (evidence.confidenceCount === 1 ? "" : "s") + " recorded" : "No confidence inference from this concept";
@@ -1745,7 +1987,7 @@
 
   function selectedAnswerList(question, response) {
     if (response.subjective) return [response.selected];
-    if (question.type === "mcq" || !question.type) return [question.options[response.selected] || "No answer recorded"];
+    if (question.type === "mcq" || question.type === "primer" || !question.type) return [question.options[response.selected] || "No answer recorded"];
     if (question.type === "match") return question.rows.map(function (row, index) { return row.label + " → " + question.choices[response.selected[index]]; });
     if (question.type === "boss") return question.steps.map(function (step, index) { return step.label + ": " + step.options[response.selected[index]]; });
     return question.blanks.map(function (blank, index) { return blank.label + ": " + blank.options[response.selected[index]]; });
@@ -1827,6 +2069,51 @@
     window.location.replace("./");
   }
 
+  async function markCommunityOpened() {
+    if (!BACKEND_ACTIVE || communityState.joined) return;
+    $("community-joined").disabled = true;
+    $("community-joined").textContent = "Recording invite click…";
+    try {
+      var response = await fetch(COMMUNITY_ENDPOINT, {
+        method:"PATCH",
+        credentials:"same-origin",
+        cache:"no-store",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({action:"opened"})
+      });
+      var payload = await response.json();
+      if (!response.ok) throw new Error(payload.message || "The invite click could not be recorded.");
+      communityState = payload.community;
+      renderCommunityReminder();
+    } catch (error) {
+      $("community-joined").textContent = "Open the invite again";
+      toast(error.message || "The invite click could not be recorded.");
+    }
+  }
+
+  async function acknowledgeCommunity() {
+    if (!BACKEND_ACTIVE || communityState.joined || !communityState.inviteOpenedAt) return;
+    $("community-joined").disabled = true;
+    $("community-joined").textContent = "Saving…";
+    try {
+      var response = await fetch(COMMUNITY_ENDPOINT, {
+        method:"PATCH",
+        credentials:"same-origin",
+        cache:"no-store",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({action:"acknowledge"})
+      });
+      var payload = await response.json();
+      if (!response.ok) throw new Error(payload.message || "The acknowledgement could not be saved.");
+      communityState = payload.community;
+      renderCommunityReminder();
+      toast("WhatsApp group acknowledgement saved.");
+    } catch (error) {
+      renderCommunityReminder();
+      toast(error.message || "The acknowledgement could not be saved.");
+    }
+  }
+
   function toast(copy) {
     var node = $("toast");
     node.textContent = copy;
@@ -1862,7 +2149,7 @@
 
   function demoSelection(question, shouldBeCorrect) {
     if (question.type === "short-answer") return "I would name the governing idea, make a recommendation from the case evidence, and explain the causal reason behind that decision.";
-    if (question.type === "mcq" || !question.type) return shouldBeCorrect ? question.answer : (question.answer + 1) % question.options.length;
+    if (question.type === "mcq" || question.type === "primer" || !question.type) return shouldBeCorrect ? question.answer : (question.answer + 1) % question.options.length;
     var parts = question.type === "boss" ? question.steps : question.type === "match" ? question.rows : question.blanks;
     return parts.map(function (part, index) {
       if (shouldBeCorrect || index > 0) return part.answer;
@@ -1943,6 +2230,24 @@
     }
     if (name === "simulation-results") return renderSimulationResultsScenario();
     if (name === "question") return startStudySet("SPMS", 1);
+    if (name === "question-primer" || name === "question-primer-recovery") {
+      var primerTarget = getQuestion("SPMS", getStudySet("SPMS", 1).questionIds[0]);
+      var primerConcept = getConcept("SPMS", primerTarget.conceptId);
+      profile.primerState.SPMS = {};
+      profile.primerState.SPMS[primerConcept.id] = {support:3,easyStreak:0,shown:1,correct:0,wrong:1,lastAt:Date.now() - 1000};
+      startStudySet("SPMS", 1);
+      if (currentQuestion().type === "primer") {
+        session.queue[0].primerLevel = 3;
+        renderQuestion();
+      }
+      if (name === "question-primer-recovery") {
+        var primerQuestion = currentQuestion();
+        selected = (primerQuestion.answer + 1) % primerQuestion.options.length;
+        session.selected = selected;
+        commitAnswer();
+      }
+      return;
+    }
     if (name === "question-routine") return openRoutineQuestionScenario();
     if (name === "question-mcq") return openQuestionScenario("BRGSA", Object.keys(getCourse("BRGSA").questions).map(function (id) { return getQuestion("BRGSA", id); }).filter(function (question) { return question.type === "mcq"; })[0], false);
     if (name === "question-cloze") return openQuestionScenario("IBM", Object.keys(getCourse("IBM").questions).map(function (id) { return getQuestion("IBM", id); }).filter(function (question) { return question.type === "case-cloze"; })[0], false);
@@ -2000,6 +2305,8 @@
     $("cancel-reset").addEventListener("click", function () { $("reset-dialog").close(); });
     $("confirm-reset").addEventListener("click", confirmReset);
     $("sign-out").addEventListener("click", signOut);
+    $("community-link").addEventListener("click", markCommunityOpened);
+    $("community-joined").addEventListener("click", acknowledgeCommunity);
     $("skip-confidence").addEventListener("click", function () { setConfidence("skipped"); renderConfidenceControl(); });
     $all(".horizon-choice").forEach(function (button) {
       button.addEventListener("click", function () {
@@ -2026,7 +2333,7 @@
       if (event.target && /^(SELECT|INPUT|TEXTAREA)$/.test(event.target.tagName)) return;
       if (event.target && event.target.tagName === "BUTTON" && (!event.target.classList.contains("option") || event.key === "Enter")) return;
       var question = currentQuestion();
-      var isMcq = !question.type || question.type === "mcq";
+      var isMcq = !question.type || question.type === "mcq" || question.type === "primer";
       if (!session.answered && isMcq && /^(ArrowRight|ArrowDown|ArrowLeft|ArrowUp)$/.test(event.key)) {
         event.preventDefault();
         var direction = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1;
@@ -2045,6 +2352,9 @@
         event.preventDefault();
         nextQuestion();
       }
+    });
+    window.addEventListener("resize", function () {
+      if ($("dashboard-screen").classList.contains("active")) renderMasteryRadar();
     });
   }
 

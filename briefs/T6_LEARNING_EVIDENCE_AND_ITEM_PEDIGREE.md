@@ -28,7 +28,8 @@ an explanation of what the evidence changes.
 - The owner-supplied T6 pack contains 283 traceable lecture chunks across 32 modules and four
   courses. It is the correctness boundary for T6 authoring.
 - The baseline product tracked 64 visible concepts and 216 questions. The implemented augmentation
-  now contains 728 tagged items, including 64 constructed responses; every item has a stable ID,
+  now contains 792 tagged surfaces: 728 scored challenges, including 64 constructed responses,
+  plus 64 adaptive primers. Every surface has a stable ID,
   course, concept, lecture source,
   explanation, and causal link.
 - Locally held previous-term BEHECON and GER CLA material gives a useful assessment-style sample.
@@ -244,8 +245,9 @@ Every authored or generated item must declare:
 
 - `source` and any additional `sourceIds`;
 - `conceptId` and `supportingConceptIds`;
-- `type`: currently `mcq`, `cloze`, `match`, `case-cloze`, `short-answer`, or `boss`; `multi-select` and `sequence`
-  remain reserved future formats and do not count as implemented coverage;
+- `type`: currently `primer`, `mcq`, `cloze`, `match`, `case-cloze`, `short-answer`, or `boss`;
+  primer is support-only and does not count as scored format coverage, while `multi-select` and
+  `sequence` remain reserved future formats;
 - `skills`: recognise, distinguish, explain, apply, calculate, diagnose, connect, or evaluate;
 - `difficulty` from 1 to 5;
 - `variantFamily`, so wording variants do not masquerade as independent evidence;
@@ -283,6 +285,26 @@ Each taught module needs at least one boss family. Full mocks mix boss families 
 - **Accessibility:** drag interactions are never drag-only. Every word bank also supports keyboard
   selection and labelled select controls; order and matching tasks expose complete instructions
   and a non-pointer path.
+
+### Adaptive primer contract
+
+A `primer` is a source-traceable teaching surface, not a seventh scored format and not mastery
+evidence. Each concept has one primer family with four parts: the minimum fact, a concrete use,
+the nearest named misconception, and a causal connection to carry into the next challenge.
+
+- Learning runs insert at most one new primary-concept primer immediately before that concept's
+  first challenge. They never front-load a bundle of prerequisites.
+- Level 1 shows the minimum fact and connection. One recent miss or Needs practice raises support
+  to level 2 and adds the application. Two recent misses raise level 3 and add the misconception.
+- A correct primer answer reduces support immediately. Two successful difficulty-3-or-harder
+  challenges, or Strong concept evidence, suppress future primers for that concept.
+- Any later scored miss can restore support. The original response history remains untouched.
+- Primer answers are stored only in `primerState`; they never enter `conceptAttempts`, correctness
+  totals, Strong gates, result percentages, or cohort difficulty analytics.
+- Generic held-feedback simulations contain no primers. A teaching aid cannot leak an answer or
+  mutate evidence inside an assessment-shaped check.
+- The next challenge must apply, distinguish, or connect the primed idea instead of simply asking
+  the same definition again. Later primers explicitly name the prior concept to carry forward.
 
 ## Seven-day practice protocol
 
@@ -330,9 +352,11 @@ independent Strong evidence within a practice block.
 
 ## Implemented bank and learner-facing hierarchy
 
-`mock/sets/t6_challenges.js` expands the 216-item baseline to 728 tagged items, including five
+`mock/sets/t6_challenges.js` expands the 216-item baseline to 792 tagged surfaces: 728 scored
+challenges, including five
 boss variants for each of 32 modules and one source-grounded constructed-response surface for each
-of 64 concepts. Active scheduling contains 565 items after excluding 163 retained legacy MCQs
+of 64 concepts, plus one source-traceable adaptive primer per concept. Active scored scheduling
+contains 565 items after excluding 163 retained legacy MCQs
 whose correct answer can be cued by length. Every visible concept has at least eleven active
 surfaces, five active formats, seven active variant families, and a boss family.
 Question selection prefers unseen IDs, families, and types, then the least-recently used surface.

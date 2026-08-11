@@ -33,6 +33,14 @@ not make it authoritative.
    - Prepared tester-agent operations (2026-08-11): `.agents/README.md`, the three charters and
      `.agents/deployment.json` own data contracts, evidence thresholds, review authority and the
      activation sequence. Registered schedules are paused and do not supersede privacy gates.
+   - Adaptive primer and evidence-first dashboard (2026-08-11): learning runs introduce one
+     minimum source-traceable concept layer before its first challenge, fade that support after
+     success, strengthen it after misses, and keep it outside mastery evidence. The next-action
+     hero is followed by a four-subject-plus-connections matrix and selected-subject trend.
+   - WhatsApp participation (2026-08-11): opening the supplied invite must precede a tester's
+     explicit membership acknowledgement. The page records those actions but never claims it can
+     independently verify WhatsApp membership; the owner can record in-app bumps and manually send
+     the copied reminder before removing a non-participating tester.
 
 2. **Project operating system**
    - `AGENTS.md`
@@ -288,8 +296,9 @@ one side.
 - Superseding owner decision (2026-08-11, same day): testers must keep their revision progress
   across devices and a cleared browser, and the owner must be able to see obvious account sharing.
   A minimal shared backend is now justified and built: per-email tester records, opaque
-  session-token hashes, progress rows, first-login country, and agreement version/time in
-  Cloudflare D1. It stays minimal on purpose — no analytics, no academic records, no raw responses
+  session-token hashes, progress rows, first-login country, agreement version/time, and community
+  invite-opened, membership-acknowledged, and owner-reminder timestamps in Cloudflare D1. It stays
+  minimal on purpose — no analytics, no academic records, no raw responses
   beyond the learner's own saved revision state, no precise location. The browser copy remains an
   offline fallback, revocation deletes a tester's sessions and progress, and the collection notice
   is stated in `PRIVACY.md` and the tester agreement. Telemetry and the paused cohort agents remain
@@ -341,6 +350,36 @@ one side.
   or secretly changes difficulty. Aggregate language requires 20 judgments across three blocks
   and two formats before any provisional overall summary.
 
+### C24 — Primer support versus false mastery
+
+- Showing minimum information before a first challenge can make a run learnable, but awarding
+  mastery for rereading that information would turn assistance into false evidence.
+- Resolution (2026-08-11): generate one source-traceable primer per concept and interleave only the
+  next new primary concept before its challenge. Primer state fades after easy success, disappears
+  after two harder correct challenges or Strong evidence, and returns at applied/misconception
+  levels after misses. Primer answers never enter scored attempts, result percentages, cohort
+  analytics, or Strong gates, and held-feedback simulations contain no primers.
+
+### C25 — Required WhatsApp membership versus unverifiable external state
+
+- Group membership is required for updates and feedback, but the browser has no truthful WhatsApp
+  membership API and must not present a link click as proof of joining.
+- Resolution (2026-08-11): disable the join acknowledgement until the actual invite link is opened,
+  then require a separate explicit self-attestation. Store the open, acknowledgement, and bump
+  timestamps; say plainly that membership cannot be independently verified. The Control Room can
+  bump all missing acknowledgements or one tester, but only records the in-app reminder and copies
+  a message for manual sending. Removal remains an owner action after reminders and never uses
+  academic accuracy.
+
+### C26 — Concept inventory versus first-two-scroll decision evidence
+
+- Subject cards, module controls, concept details, and the trend competed with the next learning
+  action, while placing the trend under Concepts hid the evidence learners need to orient quickly.
+- Resolution (2026-08-11): keep the next-action hero first, then show a five-axis Term 6 mastery
+  matrix (BRGSA, IBM, SCLM, SPMS, Connections) and the selected-subject evidence trend. Preserve an
+  accessible value list beside the canvas. Subject selection follows and concept inspection stays
+  lower in the staged dashboard.
+
 ## Conflict handling protocol
 
 Before implementing a slice:
@@ -382,5 +421,5 @@ real-Browser evidence are at `evidence/2026-08-11/t6-evidence-challenges/verific
 On 2026-08-11 the owner directed a controlled potential-user launch with backend infrastructure,
 an owner-GitHub repository, and an owner-administered WhatsApp tester community. The privacy-first
 release boundary is recorded in C19 and the launch evidence at
-`evidence/2026-08-11/tester-launch/verification.md`; public access and the two external creation
-actions remain subject to the owner's explicit confirmation.
+`evidence/2026-08-11/tester-launch/verification.md`. The private repository and WhatsApp group are
+active for the nine-address cohort; broader public access remains outside the closed-test scope.

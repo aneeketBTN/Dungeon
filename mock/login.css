@@ -60,6 +60,7 @@ button:disabled { cursor: wait; opacity: .65; }
 .group-step { margin: 20px 0 0; padding: 18px; background: rgba(31,117,84,.06); border: 1px solid rgba(31,117,84,.28); border-radius: 14px; }
 .group-step h3 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: 20px; letter-spacing: -.01em; }
 .group-step p { margin: 0 0 14px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.group-step .group-proof { margin: 11px 0 0; font-size: 12px; }
 .group-step .eyebrow { margin-bottom: 7px; }
 .button-link { display: flex; justify-content: center; align-items: center; min-height: 48px; padding: 0 16px; color: white; background: var(--green); border-radius: 10px; font-size: 15px; font-weight: 850; text-decoration: none; }
 .button-link:hover { background: var(--green-dark); }
@@ -72,6 +73,7 @@ button:disabled { cursor: wait; opacity: .65; }
 .agreement-check:has(input:checked) { background: rgba(31,117,84,.06); border-color: var(--green); }
 .agreement-check:has(input:focus-visible) { border-color: var(--green); box-shadow: 0 0 0 3px rgba(31,117,84,.16); }
 .agreement-check input { width: 20px; min-height: 20px; margin: 1px 0 0; accent-color: var(--green); cursor: pointer; }
+.agreement-check:has(input:disabled) { color: var(--muted); cursor: not-allowed; opacity: .72; }
 #agreement-message { margin-top: 10px; }
 #agreement-submit { margin-top: 6px; }
 

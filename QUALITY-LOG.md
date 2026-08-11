@@ -284,6 +284,34 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   not touch any real tester account. Evidence:
   `evidence/2026-08-11/learner-backend-and-agreement/verification.md`.
 
+- **I33 (2026-08-11)** — Issue: a one-click learning run could begin with a concept the learner had
+  never seen, while dumping all prerequisite information up front would make the run another study
+  page. Cause: scheduling had repair and rotation but no temporary knowledge-layer state. Fix:
+  added 64 source-traceable, support-only primers interleaved one new primary concept at a time;
+  level 1 gives the minimum fact/connection, misses restore applied and misconception layers, and
+  two harder successes or Strong evidence suppress support. Primer responses never create mastery
+  evidence or enter held-feedback checks. Learning-integrity axis: assistance is explicit and
+  intentionally fickle. Evidence: `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`;
+  prevention: `BUG-LAWS.md` LAW-37.
+- **I34 (2026-08-11)** — Issue: the most important evidence was split between the hero, subject
+  cards, and a trend hidden under Concepts. Cause: the staged dashboard treated the trend as
+  inspection detail rather than orientation. Fix: placed a five-axis Term 6 mastery matrix and the
+  selected-subject trend directly after the next-action hero, with an accessible value list and
+  concepts lower in the page. Visual/accessibility axis: the first two scrolls now carry action,
+  breadth, and direction without making canvas the only representation. Evidence:
+  `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`.
+- **I35 (2026-08-11)** — Issue: required WhatsApp participation needed a reminder workflow, but the
+  web app cannot verify external membership and the first draft exposed the private invite inside
+  anonymous HTML. Cause: link-opening, membership, reminder, and message-sending were initially
+  collapsed into one implied state. Fix: disclose the invite only after approved-email admission,
+  gate a separate self-attestation on opening it, record three minimal timestamps, show signed-in
+  reminders, and add per-person/bulk Control Room bumps that copy rather than send. The 390-pixel
+  tester rows were also changed to stack actions after Browser review exposed character-by-
+  character email wrapping. Truthful interaction/privacy axis: no click is called verification and
+  no copied reminder is called sent. Evidence:
+  `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`; prevention: `BUG-LAWS.md`
+  LAW-38 and LAW-39.
+
 ## Watch Items
 
 - Painterly production target is confirmed; current pixel-like Door media remains interim.

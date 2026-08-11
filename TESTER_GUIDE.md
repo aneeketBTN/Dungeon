@@ -12,6 +12,11 @@ Read and accept the closed-tester participation agreement. Access is personal: t
 acts as the password. Do not give it to another person or let another person practise in your
 account. Use one browser at a time and sign out before moving to another device.
 
+The first-login agreement shows the private WhatsApp invite only after your email is approved.
+Open it, join the group, return to Dungeon, and confirm truthfully. Joining and giving useful
+feedback during the test are conditions of continued tester access; low scores or difficulty with
+the material are not grounds for removal.
+
 A login from a different country than the first login locks the account for owner review. Travel,
 a VPN, or a mobile-network change can cause this; contact Aneeket rather than repeatedly retrying.
 If a friend would benefit, ask Aneeket to invite them separately.
@@ -19,8 +24,9 @@ If a friend would benefit, ask Aneeket to invite them separately.
 ## What to try
 
 1. Open each subject and check whether the next action is immediately understandable.
-2. Complete at least one short study set and one mixed-format full mock.
-3. Deliberately miss one answer, then complete the later re-attempt.
+2. Complete at least one short study set and one mixed-format practice check.
+3. Watch how a minimum primer leads into its first challenge; deliberately miss one answer and
+   check that later primer support becomes more explicit before a varied re-attempt.
 4. Reload during a set and confirm that you return to the same place.
 5. Try the dashboard on both a phone and laptop only after signing out of the first browser.
 
@@ -43,8 +49,10 @@ authorised tester group.
 
 Dungeon saves progress against the approved email in Cloudflare D1 and keeps a browser recovery
 copy. It also stores an opaque session hash, first-login country, and account-lock state. It does
-not request precise GPS location. Cloudflare may process ordinary network and security metadata.
-Revocation deletes the tester's server-side Dungeon progress and sessions.
+not request precise GPS location. The site also records invite-opened, group-acknowledgement, and
+owner-reminder timestamps; it cannot independently verify WhatsApp membership. Cloudflare may
+process ordinary network and security metadata. Revocation deletes the tester's server-side
+Dungeon progress and sessions.
 
 ## Known limits
 

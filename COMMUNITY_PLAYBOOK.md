@@ -22,6 +22,20 @@ owner.
 - Remove spam, harassment, leaked personal data, and copyrighted course-pack uploads.
 - Record product decisions outside WhatsApp so important feedback is not lost in chat history.
 
+## Join and bump protocol
+
+- The invite is disclosed in Dungeon only after an approved email reaches first-login agreement;
+  existing signed-in testers also see the protected in-app reminder.
+- Opening the invite enables a separate self-attestation. Dungeon records the open and
+  acknowledgement but cannot independently verify WhatsApp membership.
+- Use **Bump missing group joins** in the Control Room to record an in-app reminder for everyone
+  still missing the acknowledgement and copy one message for manual sending. A tester row also has
+  a one-person **Bump** action.
+- The message should state that continued tester access requires joining and giving useful feedback,
+  and that non-participation after reminders may lead to removal.
+- Never remove or threaten removal for low accuracy, slow learning, or critical feedback. Review
+  non-participation manually; bumping never revokes access automatically.
+
 ## Announcement template
 
 Dungeon tester update — [date]
@@ -34,4 +48,3 @@ Known limitation: [what is still not verified]
 
 Feedback: post in Dungeon Feedback with your device/browser and what you expected versus what
 happened.
-

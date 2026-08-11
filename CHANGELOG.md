@@ -3,6 +3,33 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-11 — Adaptive primers, evidence-first dashboard, and tester group bumps
+
+- Added one source-traceable primer per T6 concept. Learning runs introduce only the next new
+  primary concept before its challenge; correct work fades support quickly, harder successful
+  challenges suppress it, and misses restore applied/misconception layers. Primer responses are
+  unscored, excluded from the 565-item mastery pool and held-feedback practice, and stored in a
+  separate per-concept support state. The complete bank is now 792 tagged surfaces: 728 scored
+  challenges plus 64 adaptive primers.
+- Reordered the dashboard's first two scrolls around the next-action hero, a five-axis Term 6
+  mastery matrix (four subjects plus Connections), and the selected-subject evidence trend. Subject
+  choice and concept inspection follow. Canvas values have a complete text equivalent.
+- Added the approved-email WhatsApp gate and owner bump workflow. The private invite is absent from
+  anonymous login assets and returned only after the allowlist check; the join tick stays disabled
+  until the invite opens and remains an explicit self-attestation, not claimed verification.
+  Signed-in missing testers receive an in-app reminder. The Control Room can bump one or every
+  missing tester, record the reminder, and copy a firm message for manual sending without
+  autonomous messaging or removal.
+- Added D1 migration `0004_community_acknowledgement.sql`, applied it remotely, and confirmed no
+  migrations remain. Updated the privacy notice, tester guide, community playbook, agreement source,
+  two-page DOCX/PDF deliverables, Cloudflare contract, and owner/learning briefs.
+- Verification: 31 automated release/access/agent tests, syntax checks, the 792-surface source/bank
+  validator, allowlisted build, Wrangler dry run, standalone bundle, real-Browser desktop and
+  390-pixel primer/dashboard/login/admin paths, and Word-native PDF render inspection all pass.
+  Evidence: `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`. Remaining boundary:
+  the changed agreement version intentionally requires a live tester re-acceptance after deploy;
+  WhatsApp membership remains self-attested and owner-reviewed.
+
 ## 2026-08-11 — Closed tester agreement verified end to end on production
 
 - Deployed the current agreement-enabled Worker and confirmed the active D1 migration history

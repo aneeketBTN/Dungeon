@@ -4,6 +4,7 @@ import test from "node:test";
 import {createWorker, RequestError, summarizeCohort} from "../cloudflare/src/index.mjs";
 
 const owner = "owner@example.com";
+const currentAgreement = "2026-08-11-community-v2";
 const baseEnv = {
   DUNGEON_PREFIX: "/dungeon",
   DB: {prepare() {}},
@@ -29,12 +30,18 @@ function createMemoryStore({agreementAccepted = true} = {}) {
   const countries = new Map();
   const locked = new Set();
   const agreements = new Map();
+  const communityOpened = new Map();
+  const communityJoined = new Map();
+  const communityReminders = new Map();
   return {
     sessions,
     active,
     progress,
     locked,
     agreements,
+    communityOpened,
+    communityJoined,
+    communityReminders,
     async checkLogin(env, email, country) {
       if (locked.has(email)) throw new RequestError(403, "ACCOUNT_LOCKED", "This tester account is locked. Ask Aneeket for help.");
       if (countries.has(email) && country && countries.get(email) !== country) {
@@ -63,14 +70,60 @@ function createMemoryStore({agreementAccepted = true} = {}) {
     async endSession(env, tokenHash) { sessions.delete(tokenHash); },
     async activateTester(env, email) { active.add(email); },
     async agreementVersion(env, email) {
-      return agreements.get(email) || (agreementAccepted ? "2026-08-11" : null);
+      return agreements.get(email) || (agreementAccepted ? currentAgreement : null);
     },
-    async acceptAgreement(env, email, version) { agreements.set(email, version); },
+    async acceptAgreement(env, email, version) {
+      const now = new Date().toISOString();
+      agreements.set(email, version);
+      communityOpened.set(email, now);
+      communityJoined.set(email, now);
+      communityReminders.delete(email);
+    },
+    async communityStatus(env, email) {
+      return {
+        joined: agreementAccepted ? communityJoined.has(email) || !agreements.has(email) : communityJoined.has(email),
+        inviteOpenedAt: communityOpened.get(email) || null,
+        joinedAt: communityJoined.get(email) || (agreementAccepted && !agreements.has(email) ? "accepted-before-test" : null),
+        reminderAt: communityReminders.get(email) || null
+      };
+    },
+    async markCommunityOpened(env, email) {
+      if (!communityOpened.has(email)) communityOpened.set(email, new Date().toISOString());
+    },
+    async acknowledgeCommunity(env, email) {
+      if (!communityOpened.has(email)) return false;
+      communityJoined.set(email, new Date().toISOString());
+      communityReminders.delete(email);
+      return true;
+    },
+    async remindCommunity(env, emails) {
+      const now = new Date().toISOString();
+      emails.forEach((email) => {
+        if (!communityJoined.has(email)) communityReminders.set(email, now);
+      });
+      return emails;
+    },
+    async listTesterSecurity(env, emails) {
+      return Object.fromEntries(emails.map((email) => [email, {
+        agreementAccepted: agreementAccepted || agreements.get(email) === currentAgreement,
+        communityJoined: agreementAccepted ? communityJoined.has(email) || !agreements.has(email) : communityJoined.has(email),
+        communityInviteOpenedAt: communityOpened.get(email) || null,
+        communityJoinedAt: communityJoined.get(email) || null,
+        communityReminderAt: communityReminders.get(email) || null,
+        activeSession: [...sessions.values()].includes(email),
+        locked: locked.has(email),
+        hasProgress: progress.has(email)
+      }]));
+    },
     async revokeTester(env, email) {
       active.delete(email);
       countries.delete(email);
       locked.delete(email);
       progress.delete(email);
+      agreements.delete(email);
+      communityOpened.delete(email);
+      communityJoined.delete(email);
+      communityReminders.delete(email);
       for (const [tokenHash, sessionEmail] of sessions) if (sessionEmail === email) sessions.delete(tokenHash);
     },
     async unlockTester(env, email) {
@@ -147,7 +200,8 @@ test("first approved login requires and records the current tester agreement", a
     code: "AGREEMENT_REQUIRED",
     message: "Review and accept the closed tester agreement to continue.",
     agreementRequired: true,
-    agreementVersion: "2026-08-11"
+    agreementVersion: currentAgreement,
+    communityInviteUrl: "https://chat.whatsapp.com/E9RThdcAzqFDTiWPUYcE3I"
   });
 
   const accepted = await worker.fetch(request("/dungeon/api/session", {
@@ -156,11 +210,58 @@ test("first approved login requires and records the current tester agreement", a
     body: JSON.stringify({
       email: "alpha@example.com",
       acceptAgreement: true,
-      agreementVersion: "2026-08-11"
+      agreementVersion: currentAgreement,
+      communityInviteOpened: true,
+      communityJoinedAcknowledged: true
     })
   }), baseEnv);
   assert.equal(accepted.status, 200);
-  assert.equal(store.agreements.get("alpha@example.com"), "2026-08-11");
+  assert.equal(store.agreements.get("alpha@example.com"), currentAgreement);
+  assert.equal(store.communityJoined.has("alpha@example.com"), true);
+});
+
+test("agreement acceptance fails closed until the WhatsApp invite was opened and membership acknowledged", async () => {
+  const worker = workerWithGroup(["alpha@example.com"], {store: createMemoryStore({agreementAccepted: false})});
+  const response = await worker.fetch(request("/dungeon/api/session", {
+    method: "POST",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com"},
+    body: JSON.stringify({
+      email: "alpha@example.com",
+      acceptAgreement: true,
+      agreementVersion: currentAgreement
+    })
+  }), baseEnv);
+  assert.equal(response.status, 400);
+  assert.equal((await response.json()).code, "COMMUNITY_ACK_REQUIRED");
+});
+
+test("signed-in testers must open the invite before acknowledging the group", async () => {
+  const store = createMemoryStore();
+  const worker = workerWithGroup(["alpha@example.com"], {store});
+  const approved = await login(worker, "alpha@example.com");
+  const cookie = cookieFrom(approved);
+  store.communityJoined.delete("alpha@example.com");
+
+  const early = await worker.fetch(request("/dungeon/api/community", {
+    method: "PATCH",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com", Cookie: cookie},
+    body: JSON.stringify({action: "acknowledge"})
+  }), baseEnv);
+  assert.equal(early.status, 409);
+  assert.equal((await early.json()).code, "INVITE_NOT_OPENED");
+
+  const opened = await worker.fetch(request("/dungeon/api/community", {
+    method: "PATCH",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com", Cookie: cookie},
+    body: JSON.stringify({action: "opened"})
+  }), baseEnv);
+  assert.equal(opened.status, 200);
+  const joined = await worker.fetch(request("/dungeon/api/community", {
+    method: "PATCH",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com", Cookie: cookie},
+    body: JSON.stringify({action: "acknowledge"})
+  }), baseEnv);
+  assert.equal((await joined.json()).community.joined, true);
 });
 
 test("tester endpoint requires owner authentication", async () => {
@@ -339,6 +440,23 @@ test("unlock refuses an address that is not an approved tester", async () => {
   }), baseEnv);
   assert.equal(response.status, 404);
   assert.equal((await response.json()).code, "NOT_APPROVED");
+});
+
+test("owner can bump every approved tester still missing the WhatsApp group", async () => {
+  const store = createMemoryStore({agreementAccepted: false});
+  await store.markCommunityOpened(baseEnv, "beta@example.com");
+  await store.acknowledgeCommunity(baseEnv, "beta@example.com");
+  const worker = workerWithGroup(["alpha@example.com", "beta@example.com"], {store});
+  const response = await worker.fetch(request("/dungeon/admin/api/testers", {
+    method: "PATCH",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com"},
+    body: JSON.stringify({action: "bump-unjoined"})
+  }), baseEnv);
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.deepEqual(payload.reminded, ["alpha@example.com"]);
+  assert.equal(store.communityReminders.has("alpha@example.com"), true);
+  assert.equal(store.communityReminders.has("beta@example.com"), false);
 });
 
 test("revoke invalidates sessions and deletes saved progress", async () => {

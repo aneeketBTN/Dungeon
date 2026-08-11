@@ -47,10 +47,13 @@
             <b id="tester-count">Loading approved testers…</b>
             <p class="hint" id="tester-status" role="status" aria-live="polite">Checking the protected allowlist.</p>
           </div>
-          <button class="button quiet" id="refresh-testers" type="button">Refresh list</button>
+          <div class="tester-toolbar-actions">
+            <button class="button secondary" id="bump-unjoined" type="button">Bump missing group joins</button>
+            <button class="button quiet" id="refresh-testers" type="button">Refresh list</button>
+          </div>
         </div>
         <ul class="tester-list" id="tester-list" aria-label="Approved testers"></ul>
-        <p class="hint">Use <b>Clear lock</b> to forgive a country-change lock: it keeps their saved progress. <b>Revoke</b> removes access and deletes their progress permanently.</p>
+        <p class="hint"><b>Bump</b> records an in-app reminder and copies a WhatsApp message for you to send; it does not message anyone automatically. Use <b>Clear lock</b> to forgive a country-change lock. <b>Revoke</b> removes access and progress permanently.</p>
         <div class="callout">
           <b>Light security boundary</b>
           <p>An approved email acts as the password. Anyone who knows it can enter that tester's account, so keep this cohort free of sensitive personal or academic data.</p>

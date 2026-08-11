@@ -39,8 +39,11 @@ code on the learner path:
    and set as an `HttpOnly; Secure; SameSite=Lax` cookie scoped to `/dungeon` for one day.
 3. An unapproved email receives one fixed private denial, `Ask Aneeket to add you in.`, which never
    distinguishes a missing address from a wrong one and never returns the allowlist.
-4. A first approved login is held at a one-time agreement step. Acceptance stores only the agreement
-   version and timestamp; a returning tester on the same version enters directly.
+4. A first approved login is held at a one-time agreement step. Only after the email passes the
+   allowlist check does the `428` response disclose the WhatsApp invite. The join acknowledgement
+   stays disabled until that invite is opened. Acceptance stores the agreement version/time plus
+   the invite-opened and membership-acknowledged timestamps; a returning tester on the same
+   version enters directly.
 5. `aneeketdas.com/dungeon/admin*` keeps the narrower owner-only Cloudflare Access policy. Owner
    authority is unchanged and stronger than learner admission by design.
 6. Learner progress is stored per email in Cloudflare D1. The browser copy remains an offline
@@ -70,7 +73,11 @@ code on the learner path:
 two acknowledgement ticks at first login, not a signature. The document carries no name, email, or
 signature blanks. One acknowledgement accepts the closed-test terms; the other confirms membership
 in the private WhatsApp tester group. The in-app step shows a short summary plus the full terms in a
-disclosure, and the system records only which version was accepted and when.
+disclosure. The system records the agreement version/time and the invite-opened and membership-
+acknowledged times. The page says plainly that it cannot independently verify WhatsApp membership;
+the second tick is self-attestation after the actual invite was opened. The current agreement also
+states that testers who neither join nor participate after reminders may be removed, while low
+academic accuracy is never a reason for removal.
 
 The Worker serves the allowlisted build directly from its self-contained Cloudflare deployment
 (embedded in the current API version, or through the equivalent Wrangler Assets binding) and
@@ -82,7 +89,9 @@ remains owner-only as a backup, but no origin bypass credential is needed or sto
 The production build exposes only thirteen allowlisted assets: the login HTML/CSS/application, the
 learner HTML/CSS/application, the three embedded T6 banks, the owner dashboard
 HTML/CSS/application, and `robots.txt`. It excludes live `state/`, `history/`, owner source packs,
-CLA analysis, work files, transfer material, credentials, and community invite links.
+CLA analysis, work files, transfer material, credentials, and the private community invite. The
+invite is returned dynamically only after an approved email reaches the agreement gate; the same
+link appears inside the session-protected learner dashboard for existing testers.
 
 Only the login page and its assets are anonymous. Every learner asset, including the bank scripts,
 requires a valid session cookie and returns `401 LOGIN_REQUIRED` without one.
@@ -101,6 +110,8 @@ must be completed before claiming strong resistance to harvesting by authorised 
 - cohort paste-onboarding, current tester list, refresh, clear-lock recovery, and
   confirmation-backed one-person revocation;
 - per-tester session, agreement, progress, country, and last-active signals;
+- per-tester WhatsApp-acknowledgement and bump state, one-person Bump, and a bulk **Bump missing
+  group joins** action;
 - Participation and Where testers struggle panels computed from real saved state, with small
   learning samples labelled as low evidence;
 - a truthful connected/setup-needed state based on the live Cloudflare edge controller;
@@ -109,6 +120,10 @@ must be completed before claiming strong resistance to harvesting by authorised 
 - a structured feedback template for WhatsApp triage;
 - a change-announcement composer that copies a draft but never sends without another explicit
   action.
+
+A bump writes an in-app reminder timestamp and copies a firm WhatsApp reminder for the owner. It
+does not message anyone automatically and does not revoke access. The owner reviews participation
+and sends the copied message manually before any separate revoke action.
 
 The dashboard does not display a fake tester count, feedback inbox, or deployment status that no
 connected backend can support. Cloudflare remains the authority for admission,
@@ -136,6 +151,7 @@ or ownerless group.
 - Keep the owner-only application for `aneeketdas.com/dungeon/admin*`; it remains the stronger
   boundary and is unchanged by learner admission.
 - `dungeon-learner-state` is the D1 database bound as `DB`. Apply `cloudflare/migrations/` in order;
+  migration `0004_community_acknowledgement.sql` adds the three community timestamps and
   `db/schema.ts` mirrors the current shape.
 - Route `/dungeon` and `/dungeon/*` through Worker-owned allowlisted asset delivery with explicit
   learner/admin aliases, private cache controls, and no direct public admin-asset path.

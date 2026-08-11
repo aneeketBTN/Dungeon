@@ -12,6 +12,8 @@ data used to provide access, save progress, and detect obvious account sharing.
   confidence choices, completion state, and the time the state was last saved;
 - an opaque, hashed browser-session token and its expiry time;
 - the closed-test agreement version and acceptance time;
+- the time the private WhatsApp invite was opened, the time the tester acknowledged joining, and
+  the time an owner bump was recorded, if any;
 - the coarse Cloudflare country code observed at first login and on later requests; and
 - account-security state, including whether an active session exists or a country-change lock was
   triggered.
@@ -23,8 +25,9 @@ and protecting the site.
 ## Why it is used
 
 The data is used only to grant or revoke closed-test access, restore revision progress across
-visits, operate the learning experience, support the tester, and detect obvious use of one account
-from multiple browsers or countries. It is not used for advertising or sold to another party.
+visits, operate the learning experience, support the tester, track the required community
+acknowledgement/reminder workflow, and detect obvious use of one account from multiple browsers or
+countries. It is not used for advertising or sold to another party.
 
 ## Important security limits
 
@@ -51,6 +54,10 @@ WhatsApp community participation is separate from the web app. Testers who join 
 profile name, phone-number visibility, messages, and other information that WhatsApp makes
 available under its own settings and policies. Testers should not post sensitive academic or
 personal information.
+
+Dungeon can record that the invite was opened and that a tester explicitly acknowledged joining.
+It cannot independently inspect or verify WhatsApp membership. The owner may record and manually
+send a reminder when the acknowledgement is missing; no message is sent automatically by Dungeon.
 
 ## Contact
 

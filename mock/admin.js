@@ -4,6 +4,7 @@
   var toastTimer;
   var testersConnected = false;
   var testersEndpoint = "../admin/api/testers";
+  var whatsappInvite = "https://chat.whatsapp.com/E9RThdcAzqFDTiWPUYcE3I";
 
   function $(id) { return document.getElementById(id); }
 
@@ -34,6 +35,7 @@
   function setTesterControls(connected, busy) {
     testersConnected = connected;
     $("add-tester").disabled = !connected || busy;
+    $("bump-unjoined").disabled = !connected || busy;
     $("refresh-testers").disabled = busy;
     $("tester-email").setAttribute("aria-disabled", String(!connected || busy));
   }
@@ -98,6 +100,8 @@
       if (status.locked) chips.append(chip("Locked", "alert"));
       else if (status.activeSession) chips.append(chip("Signed in", "good"));
       chips.append(chip(status.agreementAccepted ? "Agreed" : "Not agreed yet", status.agreementAccepted ? "good" : "warn"));
+      chips.append(chip(status.communityJoined ? "Group joined" : "Group missing", status.communityJoined ? "good" : "warn"));
+      if (status.communityReminderAt && !status.communityJoined) chips.append(chip("Bumped", "alert"));
       if (status.hasProgress) chips.append(chip("Has progress", "good"));
       else chips.append(chip("Not started", "warn"));
       if (status.firstCountry) chips.append(chip(status.firstCountry));
@@ -109,6 +113,15 @@
         : (seen ? "Last active " + seen : "No activity recorded yet");
 
       actions.className = "tester-actions";
+      if (!status.communityJoined) {
+        var bump = document.createElement("button");
+        bump.className = "button secondary";
+        bump.type = "button";
+        bump.textContent = "Bump";
+        bump.setAttribute("aria-label", "Bump " + email + " to join the WhatsApp group and give feedback");
+        bump.addEventListener("click", function () { bumpTester(email); });
+        actions.append(bump);
+      }
       if (status.locked) {
         var unlock = document.createElement("button");
         unlock.className = "button secondary";
@@ -335,6 +348,62 @@
     }
   }
 
+  function communityReminderCopy(email) {
+    return "Dungeon tester reminder" + (email ? " for " + email : "") +
+      "\n\nPlease join the tester WhatsApp group and keep sharing feedback throughout testing. " +
+      "Continued tester access depends on joining and participating; people who do not join or respond after reminders may be removed.\n\nJoin here: " + whatsappInvite;
+  }
+
+  async function bumpTester(email) {
+    if (!testersConnected) return;
+    setTesterControls(true, true);
+    try {
+      var response = await fetch(testersEndpoint, {
+        method: "PATCH",
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({email: email, action: "bump"})
+      });
+      var payload = await readJson(response);
+      if (!response.ok) throw new Error(payload.message || "The reminder could not be recorded.");
+      renderTesters(Array.isArray(payload.testers) ? payload.testers : [], payload.security);
+      await copyText(communityReminderCopy(email), "Reminder recorded and WhatsApp message copied for " + email + ".");
+    } catch (error) {
+      showToast(error.message || "The reminder could not be recorded.");
+    } finally {
+      setTesterControls(testersConnected, false);
+    }
+  }
+
+  async function bumpUnjoined() {
+    if (!testersConnected) return;
+    setTesterControls(true, true);
+    try {
+      var response = await fetch(testersEndpoint, {
+        method: "PATCH",
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({action: "bump-unjoined"})
+      });
+      var payload = await readJson(response);
+      if (!response.ok) throw new Error(payload.message || "The reminders could not be recorded.");
+      var reminded = Array.isArray(payload.reminded) ? payload.reminded : [];
+      renderTesters(Array.isArray(payload.testers) ? payload.testers : [], payload.security);
+      if (!reminded.length) {
+        showToast("Everyone currently approved has confirmed the group.");
+      } else {
+        await copyText(communityReminderCopy("the " + reminded.length + " missing tester" + (reminded.length === 1 ? "" : "s")),
+          reminded.length + " in-app reminder" + (reminded.length === 1 ? "" : "s") + " recorded; group message copied.");
+      }
+    } catch (error) {
+      showToast(error.message || "The reminders could not be recorded.");
+    } finally {
+      setTesterControls(testersConnected, false);
+    }
+  }
+
   async function revokeTester(email) {
     if (!testersConnected || !window.confirm("Revoke website access for " + email + "?")) return;
     setTesterControls(true, true);
@@ -399,6 +468,7 @@
 
   $("refresh-status").addEventListener("click", refreshStatus);
   $("refresh-testers").addEventListener("click", function () { loadTesters(); loadInsights(); });
+  $("bump-unjoined").addEventListener("click", bumpUnjoined);
   $("tester-form").addEventListener("submit", addTester);
   $("tester-email").addEventListener("input", updateParseHint);
   $("copy-feedback").addEventListener("click", function () {
@@ -412,6 +482,17 @@
 
   renderAnnouncement();
   refreshStatus();
-  loadTesters();
-  loadInsights();
+  if (new URLSearchParams(window.location.search).get("scenario") === "community") {
+    renderTesters(["joined@example.com", "missing@example.com"], {
+      "joined@example.com": {agreementAccepted:true, communityJoined:true, hasProgress:true, lastSeenAt:new Date().toISOString()},
+      "missing@example.com": {agreementAccepted:true, communityJoined:false, communityReminderAt:new Date().toISOString(), hasProgress:false}
+    });
+    setTesterState("Connected", "Scenario: community participation controls.", "passed");
+    setTesterControls(true, false);
+    renderParticipation([]);
+    renderInsights([], 10);
+  } else {
+    loadTesters();
+    loadInsights();
+  }
 }());

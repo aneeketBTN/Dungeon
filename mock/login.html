@@ -32,19 +32,21 @@
           <li>Do not give anyone your approved email or let them practise in your account.</li>
           <li>Do not scrape, reproduce, plagiarise, or help copy the private product.</li>
           <li>If a friend wants access, ask Aneeket to invite them separately.</li>
+          <li>Join the WhatsApp tester group and give feedback during the test; access is removed when a tester does neither.</li>
         </ul>
 
         <div class="group-step">
           <p class="eyebrow">Required</p>
           <h3>Join the tester group</h3>
-          <p>Feedback, updates, and questions all live in the WhatsApp group. Testing happens there as much as it happens here.</p>
-          <a class="button-link" id="group-link" href="https://chat.whatsapp.com/E9RThdcAzqFDTiWPUYcE3I" target="_blank" rel="noopener noreferrer">Open the WhatsApp group</a>
+          <p>Feedback, updates, and questions all live in the WhatsApp group. Open the invite first; only confirm membership after you have actually joined.</p>
+          <a class="button-link" id="group-link" target="_blank" rel="noopener noreferrer">Open the WhatsApp group</a>
+          <p class="group-proof" id="group-proof" role="status">Dungeon can record that you opened this invite, but WhatsApp does not expose group membership to this page.</p>
         </div>
         <details>
           <summary>Read the full agreement</summary>
           <div class="agreement-terms">
             <h3>Tester group membership</h3>
-            <p>Closed testing runs through the private WhatsApp tester group. Join it and stay in it for the duration of the test: updates, feedback requests, and questions all happen there. Treat everything posted in that group as private test material under the confidentiality terms below. If you leave the group or ask to stop testing, tell Aneeket so your access can be closed cleanly.</p>
+            <p>Closed testing runs through the private WhatsApp tester group. Join it, stay in it, and provide good-faith feedback for the duration of the test: updates, feedback requests, and questions all happen there. A tester who does not join and does not participate after reminders will be removed from the cohort. Treat everything posted in that group as private test material under the confidentiality terms below. If you leave the group or ask to stop testing, tell Aneeket so your access can be closed cleanly.</p>
             <h3>Personal use and confidentiality</h3>
             <p>You may use Dungeon personally, give feedback, discuss it with authorised testers in the private group, and recommend it in broad terms. Outside that group, do not share literal or substantially similar questions, options, answers, explanations, passages, caselets, prompts, question-bank structure, screenshots, recordings, photographs, copied text, dashboard or progress views, detailed feature behaviour, private workflows, scoring, difficulty or recommendation logic, unreleased designs, access links, security details, or private feedback.</p>
             <h3>Personal access only</h3>
@@ -63,8 +65,8 @@
             <span>I have read and agree to the closed tester terms.</span>
           </label>
           <label class="agreement-check" for="agreement-group">
-            <input id="agreement-group" type="checkbox" required>
-            <span>I have joined the WhatsApp tester group.</span>
+            <input id="agreement-group" type="checkbox" required disabled>
+            <span>I opened the invite and have joined the WhatsApp tester group.</span>
           </label>
           <p class="form-message" id="agreement-message" role="status" aria-live="polite"></p>
           <button id="agreement-submit" type="submit">Accept and enter</button>

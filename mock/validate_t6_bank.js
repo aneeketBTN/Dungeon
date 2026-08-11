@@ -56,10 +56,11 @@ courseIds.forEach(function (courseId) {
     seenIds.add(question.id);
     if (!Array.isArray(question.skills) || !question.skills.length) errors.push(question.id + " has no skill tags");
     if (!Array.isArray(question.sourceIds) || !question.sourceIds.length) errors.push(question.id + " has no sourceIds");
-    if (question.type === "mcq") {
+    if (question.type === "mcq" || question.type === "primer") {
       if (!Array.isArray(question.options) || question.options.length < 3 || question.options.length > 4) errors.push(question.id + " must use three or four plausible MCQ options");
       checkOptionShape(question, "MCQ answer", question.options, question.answer, true);
       if (!Array.isArray(question.misconceptions) || question.misconceptions.length !== question.options.length) errors.push(question.id + " lacks option-level misconception tags");
+      if (question.type === "primer" && (!question.primerOnly || !question.primerFact || !question.primerApplication || !question.primerConnection)) errors.push(question.id + " lacks adaptive primer content");
     } else if (question.type === "cloze" || question.type === "case-cloze") {
       if (!Array.isArray(question.blanks) || !question.blanks.length || !Array.isArray(question.template) || question.template.length !== question.blanks.length + 1) errors.push(question.id + " has an invalid cloze structure");
       (question.blanks || []).forEach(function (blank, index) { checkOptionShape(question, "blank " + (index + 1), blank.options, blank.answer, false); });
@@ -79,7 +80,7 @@ courseIds.forEach(function (courseId) {
 
   course.concepts.forEach(function (concept) {
     var surfaces = questions.filter(function (question) { return questionConceptIds(question).indexOf(concept.id) >= 0; });
-    var activeSurfaces = surfaces.filter(function (question) { return !question.optionShapeRisk; });
+    var activeSurfaces = surfaces.filter(function (question) { return !question.optionShapeRisk && !question.primerOnly; });
     var types = new Set(surfaces.map(function (question) { return question.type; }));
     var families = new Set(surfaces.map(function (question) { return question.variantFamily; }));
     var activeTypes = new Set(activeSurfaces.map(function (question) { return question.type; }));
@@ -124,7 +125,7 @@ if (packPath) {
 } else warnings.push("Lecture-source existence was not checked; pass the T6 pack path to enable it.");
 
 var total = courseIds.reduce(function (sum, courseId) { return sum + Object.keys(courses[courseId].questions).length; }, 0);
-if (total !== 728) errors.push("Expected 728 bank items, found " + total);
+if (total !== 792) errors.push("Expected 792 bank items (728 challenges + 64 adaptive primers), found " + total);
 
 console.log(JSON.stringify({
   ok: errors.length === 0,

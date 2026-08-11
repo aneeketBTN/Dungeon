@@ -29,6 +29,18 @@
   <main id="main-content">
     <section class="screen dashboard-screen active" id="dashboard-screen" aria-labelledby="next-step-title">
       <div class="dashboard-wrap">
+        <aside class="community-reminder" id="community-reminder" aria-labelledby="community-reminder-title" hidden>
+          <div>
+            <p class="eyebrow">Tester requirement</p>
+            <h2 id="community-reminder-title">Join the tester group to keep testing</h2>
+            <p id="community-reminder-copy">Open the WhatsApp invite, join the group, and share feedback during testing.</p>
+          </div>
+          <div class="community-actions">
+            <a class="button secondary" id="community-link" href="https://chat.whatsapp.com/E9RThdcAzqFDTiWPUYcE3I" target="_blank" rel="noopener noreferrer">Open WhatsApp invite</a>
+            <button class="button primary" id="community-joined" type="button" disabled>Open the invite first</button>
+          </div>
+        </aside>
+
         <section class="focus-panel">
           <div class="focus-copy">
             <p class="eyebrow"><span id="selected-course-code">BRGSA</span></p>
@@ -48,6 +60,21 @@
             <p id="subject-progress-copy">Choose any concept or begin the next study set.</p>
             <small>Strong requires repeated evidence across types, blocks, and an applied check.</small>
           </aside>
+        </section>
+
+        <section class="evidence-summary" aria-labelledby="mastery-matrix-title">
+          <article class="mastery-matrix">
+            <div class="summary-heading"><div><p class="eyebrow">Your evidence</p><h2 id="mastery-matrix-title">Term 6 mastery matrix</h2></div><span>Four subjects + connections</span></div>
+            <div class="radar-layout">
+              <canvas id="mastery-radar" role="img" aria-describedby="mastery-radar-copy"></canvas>
+              <div><ul class="mastery-values" id="mastery-values" aria-label="Mastery matrix values"></ul><p id="mastery-radar-copy"></p></div>
+            </div>
+          </article>
+          <section class="trend-card" aria-labelledby="trend-title">
+            <div class="trend-heading"><div><small>Selected subject</small><h3 id="trend-title">Evidence trend</h3></div><b id="trend-current">0%</b></div>
+            <svg id="progress-trend" class="progress-trend" role="img" aria-labelledby="trend-title trend-description" viewBox="0 0 760 220" preserveAspectRatio="none"></svg>
+            <p id="trend-description">Complete a practice block to create the first evidence point.</p>
+          </section>
         </section>
 
         <section class="course-switcher" aria-labelledby="subjects-title">
@@ -102,14 +129,9 @@
 
           <section class="stage-panel" id="panel-concepts" role="tabpanel" aria-labelledby="tab-concepts" tabindex="-1" hidden>
             <div class="section-heading">
-              <div><p class="eyebrow" id="concepts-course-label">BRGSA · Concept evidence</p><h2>See your understanding grow over time</h2></div>
-              <p class="section-note">The line moves with demonstrated understanding, not the number of questions attempted.</p>
+              <div><p class="eyebrow" id="concepts-course-label">BRGSA · Concept evidence</p><h2>Inspect the concepts underneath the trend</h2></div>
+              <p class="section-note">Open one concept to see the exact evidence still missing.</p>
             </div>
-            <section class="trend-card" aria-labelledby="trend-title">
-              <div class="trend-heading"><div><small>Selected subject</small><h3 id="trend-title">Evidence trend</h3></div><b id="trend-current">0%</b></div>
-              <svg id="progress-trend" class="progress-trend" role="img" aria-labelledby="trend-title trend-description" viewBox="0 0 760 220" preserveAspectRatio="none"></svg>
-              <p id="trend-description">Complete a practice block to create the first evidence point.</p>
-            </section>
             <section class="module-browser" aria-labelledby="module-browser-title">
               <div class="module-stepper">
                 <button class="icon-button" id="previous-module" type="button" aria-label="Previous module">←</button>
@@ -176,6 +198,10 @@
           <div class="question-meta"><span id="question-pattern">Concept check</span><span id="question-count">Question 1 of 4</span></div>
           <div class="concept-label"><span id="question-status" class="status-pill unseen">Not started</span><b id="question-node">Concept</b></div>
           <div class="prompt-flow" id="prompt-flow">
+            <section class="primer-panel" id="primer-panel" aria-labelledby="primer-level" hidden>
+              <p class="primer-level" id="primer-level">Layer 1 · minimum to carry</p>
+              <div id="primer-content"></div>
+            </section>
             <section class="case-block" id="case-block" aria-labelledby="case-label" tabindex="-1" hidden>
               <p class="case-label" id="case-label">Case</p>
               <p class="caselet" id="caselet"></p>

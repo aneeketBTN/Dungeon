@@ -5,6 +5,12 @@ allowlisted release directly from Cloudflare static assets and exposes an owner-
 allowlist endpoint used by the Dungeon Control Room. The private Sites deployment remains an
 owner-only backup and is not an origin dependency for the public domain.
 
+Learner endpoints under the prefix are `/api/session`, `/api/progress`, and `/api/community`.
+The community endpoint records invite-opened and explicit join acknowledgements for an authenticated
+tester. The owner `/admin/api/testers` endpoint supports single and bulk `bump` actions in addition
+to add, list, unlock, and revoke. A bump records an in-app timestamp; the browser copies a reminder
+for manual WhatsApp sending and never claims an automatic message was sent.
+
 ## Required runtime bindings
 
 Non-secret values in `wrangler.jsonc`:
@@ -29,6 +35,10 @@ bootstrap member.
 The owner-only `/dungeon/admin*` Access application must be evaluated before the broader tester
 application. The Worker validates the admin application JWT and the owner email again before any
 list, grant, or revoke operation.
+
+Apply all D1 migrations before deploying a Worker version that uses them. In particular,
+`0004_community_acknowledgement.sql` adds the invite-opened, membership-acknowledged, and reminder
+timestamps required by the current agreement version.
 
 The normal release path is `npm run build` from the project root, followed by
 `npm --prefix cloudflare run check`. `npm --prefix cloudflare run build:standalone` creates a

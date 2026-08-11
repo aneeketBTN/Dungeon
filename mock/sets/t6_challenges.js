@@ -161,6 +161,44 @@
     });
   }
 
+  function addPrimer(course, concept, data, allData) {
+    var nearby = comparableWrong(data.summary, allData.filter(function (entry) {
+      return entry.id !== concept.id;
+    }).map(function (entry) { return entry.summary; }));
+    var choices = choiceSet(data.summary, nearby, stableNumber(concept.id + "primer"));
+    addQuestion(course, {
+      id: concept.id + "_primer",
+      courseId: course.id,
+      conceptId: concept.id,
+      supportingConceptIds: [],
+      module: concept.module,
+      source: data.source,
+      sourceIds: [data.source],
+      node: data.name,
+      pattern: "Primer",
+      perspective: "primer",
+      type: "primer",
+      skills: ["recognise"],
+      difficulty: 1,
+      variantFamily: concept.id + "_primer",
+      boss: false,
+      primerOnly: true,
+      primerFact: data.summary,
+      primerApplication: data.application,
+      primerConnection: data.bridge,
+      primerMisconception: (data.confusions || [])[0] || "A nearby idea can look similar without using the same rule.",
+      caselet: "",
+      stem: "Which principle should you carry into the next question?",
+      options: choices.options,
+      answer: choices.answer,
+      explanation: data.summary,
+      link: data.bridge,
+      misconceptions: choices.options.map(function (option, index) {
+        return index === choices.answer ? null : "primer-neighbour:" + option;
+      })
+    });
+  }
+
   function addBridgeCloze(course, concept, data, allData) {
     var otherBridges = comparableWrong(data.bridge, allData.filter(function (entry) { return entry.id !== concept.id; }).map(function (entry) { return entry.bridge; }));
     var choices = balancedChoiceSet(data.bridge, otherBridges, stableNumber(concept.id + "bridge"), concept.id + "_bridge_choice");
@@ -401,7 +439,7 @@
 
   function configureRuns(course) {
     var questions = Object.keys(course.questions).map(function (id) { return course.questions[id]; });
-    var activeQuestions = questions.filter(function (question) { return !question.optionShapeRisk; });
+    var activeQuestions = questions.filter(function (question) { return !question.optionShapeRisk && !question.primerOnly; });
     var bossIds = activeQuestions.filter(function (question) { return question.boss; }).map(function (question) { return question.id; });
     course.runs.forEach(function (run) {
       if (run.module >= 1 && run.module <= 8) {
@@ -439,6 +477,7 @@
       return data;
     });
     course.concepts.forEach(function (concept) {
+      addPrimer(course, concept, dataById[concept.id], allData);
       addTermCloze(course, concept, dataById[concept.id]);
       addBridgeCloze(course, concept, dataById[concept.id], allData);
       addMisconceptionRepair(course, concept, dataById[concept.id], allData);

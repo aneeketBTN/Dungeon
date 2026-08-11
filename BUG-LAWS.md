@@ -479,3 +479,44 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   carry `[hidden] { display: none !important; }` near the reset. `mock/t6.css` is the reference.
 - **Verify:** After any screen-swap change, assert in a real Browser that each element toggled
   `hidden` measures `getBoundingClientRect().height === 0`. Property state alone is not evidence.
+
+### LAW-37 REDLINE — Teaching support must never masquerade as mastery evidence
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-11 adaptive-primer integration: the first implementation path called the
+  ordinary attempt recorder before the primer-only branch was corrected.
+- **Why:** A learner can select an answer immediately beside the supplied fact. Counting that as
+  correctness would inflate progress, cohort accuracy, and Strong evidence from assistance rather
+  than retrieval.
+- **Comply:** Store primer state separately; exclude primer-only surfaces from active scored pools,
+  concept attempts, result percentages, cohort analytics, and held-feedback simulations. A primer
+  may change only how much support appears next time.
+- **Verify:** Bank validation keeps 565 active scored items while accepting 64 support-only primers;
+  Browser acceptance follows primer -> challenge; source/tests confirm `recordPrimerAttempt` is the
+  only primer mutation and simulation queues contain no primers.
+
+### LAW-38 REDLINE — A private external invite cannot be embedded in anonymous assets or called proof
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-11 WhatsApp-gate review: the supplied invite was initially hard-coded in
+  anonymous `login.html`, even though only approved testers should receive it.
+- **Why:** Hidden markup is still public source, and a browser click cannot prove membership in an
+  external WhatsApp group.
+- **Comply:** Return the invite only after an approved email reaches the agreement `428`; keep it
+  absent from anonymous login HTML/JS. Disable join acknowledgement until the link opens, require a
+  separate self-attestation, and label the limitation. Bump records state and copies a message; it
+  never claims to send or verify membership.
+- **Verify:** Release tests scan anonymous login assets for the invite token; Worker tests require
+  open-before-acknowledge; Browser checks the disabled/enabled transition and limitation copy.
+
+### LAW-39 WATCH — Randomised pools can invalidate a deterministic scenario's assumed first item
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-11 primer Browser acceptance: the level-3 fixture seeded the catalogue's
+  first concept, but the study-set selector chose a different first item and rendered level 1.
+- **Why:** A green-looking URL fixture can silently stop representing the state named in its URL as
+  pool selection evolves.
+- **Comply:** Bind scenario overrides to the queue item selected at runtime, after randomised or
+  least-recent selection has completed.
+- **Verify:** Reload `?scenario=question-primer-recovery` and require the visible level-3
+  application and misconception layers, not merely the scenario parameter.

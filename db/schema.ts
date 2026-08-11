@@ -10,7 +10,10 @@ CREATE TABLE IF NOT EXISTS testers (
   location_locked_at TEXT,
   lock_reason TEXT,
   agreement_version TEXT,
-  agreement_accepted_at TEXT
+  agreement_accepted_at TEXT,
+  community_invite_opened_at TEXT,
+  community_join_acknowledged_at TEXT,
+  community_reminder_at TEXT
 )`;
 
 export const learnerSessionSchema = `

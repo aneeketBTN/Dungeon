@@ -12,7 +12,8 @@
 
 Dungeon is a small, private exam-season test. You are being trusted with unfinished product ideas,
 learning content, and access that is not available to the public. You may recommend Dungeon in
-general terms. You may not reveal, copy, or help another person access the private test.
+general terms. You may not reveal, copy, or help another person access the private test. Joining
+the tester group and giving useful feedback throughout the test are conditions of continued access.
 
 ## 1. What you may do
 
@@ -45,6 +46,12 @@ duration of the test: updates, feedback requests, and questions all happen there
 posted in that group as private test material under these confidentiality terms. If you leave the
 group or ask to stop testing, tell Aneeket so your access can be closed cleanly.
 
+Join at: <https://chat.whatsapp.com/E9RThdcAzqFDTiWPUYcE3I>
+
+Respond to reasonable tester check-ins and share good-faith feedback as you use Dungeon. If you do
+not join the group or do not participate after reminders, Aneeket may remove you from the closed
+test. Low accuracy or difficulty with the material is never a reason for removal.
+
 ## 4. Personal access only
 
 Your approved email acts as your Dungeon password. Do not give that email to another person for
@@ -63,7 +70,8 @@ are allowed.
 
 To provide access, save progress, and identify obvious account sharing, Dungeon stores your
 approved email, revision progress and attempts, an opaque session-token hash, timestamps, your
-first-login Cloudflare country code, agreement version and acceptance time, and account-lock state.
+first-login Cloudflare country code, agreement version and acceptance time, the times you opened
+the group invite, acknowledged joining, or were sent an in-app reminder, and account-lock state.
 It does not request precise GPS
 location. Cloudflare may process ordinary network and security metadata.
 
@@ -75,7 +83,8 @@ is not by itself proof of misconduct.
 ## 7. Access and consequences
 
 Access is a revocable invitation, not a purchase or permanent entitlement. Aneeket may suspend
-access while investigating a security signal. A confirmed material breach - including credential
+access while investigating a security signal. Aneeket may also remove a tester who does not join
+the private group or participate after reminders. A confirmed material breach - including credential
 sharing, giving unauthorised access, publishing private materials, or attempting to copy the
 product - may result in immediate permanent removal from Dungeon, future closed tests, and other
 Aneeket-controlled services, subject to applicable law. Revocation deletes the tester's active
@@ -92,7 +101,8 @@ materials, instructions, or academic judgement.
 No signature is needed. The first time you sign in with your approved email, Dungeon shows a short
 version of these terms. You tick **"I have read and agree to the closed tester terms"** and
 **"I have joined the WhatsApp tester group"**, then choose **Accept and enter**. Dungeon records
-only which agreement version you accepted and when.
+the agreement version and time, plus the invite-opened and group-acknowledgement times. The webpage
+can record these actions, but cannot independently verify WhatsApp membership.
 
 Those acknowledgements confirm you understand the boundaries above, will keep your access personal, and will
 ask Aneeket before sharing anything that may reveal the private test. If you would rather not

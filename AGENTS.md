@@ -8,7 +8,8 @@
 > and response steps; only controls and feedback introduce nested boundaries. It uses a staged Overview →
 > Concepts → Study plan path, an evidence-over-time graph with one module visible at a time,
 > confidence-aware and inspectable four-state progress, weak-first varied re-attempts, and a
-> 728-item source-traceable bank. Active scheduling has 565 items after excluding 163 older MCQs
+> 792-surface source-traceable bank: 728 scored challenges plus 64 support-only primers. Active
+> scheduling has 565 scored items after excluding 163 older MCQs
 > whose answer length could cue correctness; every concept retains at least eleven active surfaces,
 > five formats, seven independent families, and module boss coverage. Case, cloze, match, MCQ,
 > short-answer, and three-step boss paths are responsive and keyboard-operable, with local
@@ -18,6 +19,12 @@
 > constructed-response, priority, and practice-path revision is verified at
 > `evidence/2026-08-11/t6-research-integration/verification.md`; the privacy-scoped release boundary
 > remains verified at `evidence/2026-08-11/tester-launch/verification.md`.
+> The adaptive-primer revision is `VERIFIED(LOCAL_BROWSER + AUTOMATED + REMOTE_D1)` at
+> `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`: a one-click run introduces
+> only the next new concept, the support fades after easy or harder success, misses restore applied
+> and misconception layers, and primers never create mastery evidence. The first two scrolls now
+> prioritize the next-action hero, a five-axis Term 6 mastery matrix, and the selected-subject trend;
+> subject and concept lists follow below. Production publish remains the final acceptance step.
 > Student-facing game/proprietary vocabulary and diagnostic question metadata are removed from the
 > learning view. Sixty-four constructed-response surfaces use transparent self-review without
 > automatic correctness or Strong credit. Exact final-paper structure is
@@ -40,16 +47,22 @@
 > only admission check: an approved email enters immediately with an opaque server-side session, an
 > unapproved email receives one fixed private `Ask Aneeket to add you in.` denial that never
 > discloses the allowlist, and a first approved login is held at a one-time agreement step that
-> records only version and acceptance time. Progress is stored per email in Cloudflare D1 with the
+> records version, acceptance time, and minimal WhatsApp invite-open/join-acknowledgement/reminder
+> timestamps. Progress is stored per email in Cloudflare D1 with the
 > browser copy kept as an offline fallback. One active browser per email is enforced, and a country
 > change locks the account for owner review; city and region changes are deliberately unused.
-> Onboarding also requires joining the private WhatsApp tester group: the step gates on both
-> acknowledgements. Admission, denial, the agreement gate, and the 390-pixel agreement layout are
+> Onboarding also requires joining the private WhatsApp tester group. The invite is disclosed only
+> after approved-email admission, and the join tick stays disabled until the actual invite opens;
+> membership then remains an explicit self-attestation because WhatsApp exposes no membership proof
+> to the page. Admission, denial, the agreement gate, and the 390-pixel agreement layout are
 > `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` at
 > `evidence/2026-08-11/learner-backend-and-agreement/verification.md`. The Control Room adds cohort
 > paste-onboarding, a `Clear lock` recovery that forgives a country lock without deleting progress,
 > per-tester state chips, and two panels computed from real saved progress: Participation and
 > Where testers struggle. Authoring replacement questions stays out of the dashboard by design.
+> The Control Room now adds per-person and bulk `Bump` actions for missing group acknowledgements;
+> a bump records an in-app reminder and copies a firm manual message, but never claims to send it or
+> removes access automatically. D1 migration `0004_community_acknowledgement.sql` is applied.
 > A fresh temporary approved address has now completed the live agreement, entered the learner
 > dashboard with `Saved online`, signed out, and been revoked; the Control Room returned to the
 > original nine approved testers. The built `[hidden]` repair is live, so the earlier
@@ -66,9 +79,9 @@
 > reference and still lacks complete real-Browser route acceptance.
 >
 > Static HTML/CSS/JavaScript prototypes in `mock/`; procedural learning engine and state in root
-> JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: observe the
-> active cohort without over-reading small samples, continue owner/faculty content acceptance, and
-> calibrate the learning model from genuine use.
+> JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: publish the
+> finished primer/community revision, observe the active cohort without over-reading small samples,
+> continue owner/faculty content acceptance, and calibrate the learning model from genuine use.
 
 ## Start Here — Required Order
 
@@ -161,10 +174,10 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `CLAUDE.md` | Claude compatibility entry; points to this operating index and preserves engine startup facts. | 2026-07-16 |
 | `DESIGN_SOURCE_INDEX.md` | Authority order, brief inventory, and unresolved product conflicts. | 2026-08-11 |
 | `briefs/PROJECT_OPERATING_SYSTEM.md` | Durable requirements and Codex adaptation of the owner-supplied admin-system brief. | 2026-07-16 |
-| `briefs/T6_REVISION_FALLBACK.md` | Active plain-language dashboard contract, T6 source boundary, mastery/repetition model, and acceptance. | 2026-08-11 |
-| `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Research-grounded confidence, evidence-state, boss, mixed-format, rotation, and short-horizon retest contract. | 2026-08-11 |
+| `briefs/T6_REVISION_FALLBACK.md` | Active dashboard, adaptive-primer, source-boundary, mastery/repetition, and acceptance contract. | 2026-08-11 |
+| `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Confidence, evidence-state, adaptive-primer, boss, mixed-format, rotation, and retest contract. | 2026-08-11 |
 | `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
-| `briefs/TESTER_ACCESS_AND_ADMIN.md` | Live admission gate, anti-harvesting limits, exact-domain routing, owner dashboard, active-cohort operations, and remaining boundaries. | 2026-08-11 |
+| `briefs/TESTER_ACCESS_AND_ADMIN.md` | Admission, private group-invite disclosure, community acknowledgements/bumps, owner operations, and remaining boundaries. | 2026-08-11 |
 | `BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
 | `QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
 | `CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-11 |
@@ -176,10 +189,10 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `REVIEW_LOG.md` | Historical engineering rationale for the learning engine. | 2026-07-16 |
 | `personalities.md` | Historical reinforcement/persona design brief; `PROMPT.md` wins when implemented behavior differs. | 2026-07-16 |
 | `README.md` | Student-facing active T6 launch, loop, exam-pattern boundary, progress isolation, scenarios, and legacy paths. | 2026-08-11 |
-| `TESTER_GUIDE.md` | Controlled-cohort entry, personal-access rules, structured feedback, privacy boundary, and known limits. | 2026-08-11 |
-| `PRIVACY.md` | Tester-facing D1/browser data, agreement, location-security, retention, and telemetry boundary. | 2026-08-11 |
+| `TESTER_GUIDE.md` | Controlled-cohort entry, primer expectations, group participation, structured feedback, and known limits. | 2026-08-11 |
+| `PRIVACY.md` | Tester-facing D1/browser data, community timestamps, location security, retention, and telemetry boundary. | 2026-08-11 |
 | `SECURITY.md` | Private vulnerability-reporting and release-safety policy. | 2026-08-11 |
-| `COMMUNITY_PLAYBOOK.md` | WhatsApp community structure, moderation, announcements, and feedback triage. | 2026-08-11 |
+| `COMMUNITY_PLAYBOOK.md` | WhatsApp structure, join/bump protocol, human removal review, announcements, and feedback triage. | 2026-08-11 |
 | `.openai/hosting.json` | Opaque Sites project binding only; runtime credentials never belong here. | 2026-08-11 |
 | `.agents/README.md` | Paused tester-agent control plane, authority boundary, and activation order. | 2026-08-11 |
 | `.agents/deployment.json` | Fail-closed activation gates, paused automation IDs, models, cadence, and non-running declarations. | 2026-08-11 |
@@ -187,31 +200,31 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
 | `scripts/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
 | `site/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
-| `cloudflare/src/index.mjs` | Exact-path static router, approved-email admission, opaque learner sessions, agreement gate, single-browser and country locks, D1 progress API, signed owner Access validation, and owner-only tester management. | 2026-08-11 |
-| `cloudflare/migrations/` | Applied D1 migrations: learner auth and progress, country and single-session columns, then agreement version and acceptance time. | 2026-08-11 |
-| `db/schema.ts` | Readable mirror of the current tester, session, and progress table shapes. | 2026-08-11 |
-| `mock/login.html` | Approved-email entry, the one-time agreement step, its full-terms disclosure, and both acknowledgement controls. | 2026-08-11 |
+| `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, and tester management. | 2026-08-11 |
+| `cloudflare/migrations/` | Applied D1 history for auth/progress, browser/country locks, agreement acceptance, and community timestamps. | 2026-08-11 |
+| `db/schema.ts` | Readable mirror of tester, session, progress, agreement, and community-state table shapes. | 2026-08-11 |
+| `mock/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. | 2026-08-11 |
 | `mock/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
-| `mock/login.js` | Admission request, the `428` agreement branch, acceptance submission, and back-to-email recovery. | 2026-08-11 |
-| `DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Source text of the closed tester agreement; acceptance uses two first-login acknowledgements, not a signature. | 2026-08-11 |
-| `work/build_tester_agreement.py` | Builds the deliverable agreement document from that text. | 2026-08-11 |
+| `mock/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery. | 2026-08-11 |
+| `DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
+| `work/build_tester_agreement.py` | Builds the verified two-page agreement DOCX for Word/PDF delivery. | 2026-08-11 |
 | `cloudflare/scripts/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
 | `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
 | `cloudflare/README.md` | Live route, runtime-secret, Access-policy, owner-bootstrap, and rate-limit contract. | 2026-08-11 |
 | `cloudflare/scripts/build-standalone.mjs` | Builds the same protected allowlist as an embedded-asset fallback when an Assets upload path is unavailable. | 2026-08-11 |
-| `tests/site-release.test.mjs` | Automated release-boundary, privacy, routing, header, and setup-required checks. | 2026-08-11 |
-| `tests/cloudflare-access.test.mjs` | Owner authentication, group invariants, grant/revoke, static allowlist, admin isolation, owner-path status, health, and private-cache checks. | 2026-08-11 |
+| `tests/site-release.test.mjs` | Release-boundary, anonymous-invite secrecy, privacy, routing, header, and setup checks. | 2026-08-11 |
+| `tests/cloudflare-access.test.mjs` | Owner auth, tester management, agreement/community state, bump, routing, health, and cache checks. | 2026-08-11 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
-| `mock/admin.html` | Owner control room for direct tester management, release health, feedback triage, and announcement drafting. | 2026-08-11 |
-| `mock/admin.css` | Responsive, accessible control-room layout and status presentation. | 2026-08-11 |
-| `mock/admin.js` | Owner-path health/manifest checks, cohort paste-onboarding, revoke, lock clearing, per-tester state chips, participation and learning-signal panels, copy helpers, and announcement preview without autonomous sending. | 2026-08-11 |
-| `mock/t6.html` | Staged dashboard, time-horizon plan, generic practice setup, evidence graph, feedback, results, reset, and exam-boundary surfaces. | 2026-08-11 |
-| `mock/t6.css` | Flat single-surface question hierarchy plus low-density, responsive, accessible desktop/narrow revision presentation. | 2026-08-11 |
-| `mock/t6.js` | Evidence-gated mastery, time-horizon plans, selectable practice shapes, held-feedback checks, constructed self-review, rotation, persistence, and scenarios. | 2026-08-11 |
+| `mock/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
+| `mock/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
+| `mock/admin.js` | Cohort onboarding, revoke/unlock, community bumps, tester chips, learning signals, and manual copy helpers. | 2026-08-11 |
+| `mock/t6.html` | Next-action dashboard, mastery matrix/trend, community reminder, layered questions, plans, and results. | 2026-08-11 |
+| `mock/t6.css` | Evidence-first dashboard and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-11 |
+| `mock/t6.js` | Adaptive primer scheduling, evidence-gated mastery, matrix/trend, practice paths, persistence, and scenarios. | 2026-08-11 |
 | `mock/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
 | `mock/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
-| `mock/sets/t6_challenges.js` | Tagged mixed-format augmentation, 160 boss items, 64 constructed responses, 565-item active pools, option-shape exclusions, and rotation configuration. | 2026-08-11 |
-| `mock/validate_t6_bank.js` | Four-course schema, source, breadth, format, boss, option-shape, and active-pool validator. | 2026-08-11 |
+| `mock/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, and 565-item scored pools. | 2026-08-11 |
+| `mock/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, and scored-pool validator. | 2026-08-11 |
 | `mock/rogue.html` | Legacy character → Hall → run → failure/results product-flow markup. | 2026-08-10 |
 | `mock/rogue.js` | Legacy product-slice state transitions, questions, rewards, quest, and outcome behavior. | 2026-08-10 |
 | `mock/rogue.css` | Legacy product-slice responsive presentation, feedback states, and animation behavior. | 2026-08-10 |
@@ -304,9 +317,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   blueprint. This is a standing claim boundary, not a work-blocking gate. Practise the documented
   assessment envelope; do not claim exact sections, duration, marks, options, negative marking,
   likely score, or pass probability. The first real final can inform later cohorts.
-- [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 728 questions are source-traceable and structurally
-  verified, but transcript-derived content and the 64 constructed-response rubrics/exemplars still
-  need owner/faculty acceptance before `DONE`.
+- [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 792 surfaces are source-traceable and structurally
+  verified, but transcript-derived content, the 64 support-only primers, and the 64 constructed-
+  response rubrics/exemplars still need owner/faculty acceptance before `DONE`.
 - [ ] Push to `main` now publishes to the live domain through Workers Builds. Do not commit
   work-in-progress to `main` while testers are active; finish a change, then push. A bad version can
   be rolled back from Workers → Deployments.
@@ -316,15 +329,17 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - [ ] Approved-email admission, the private denial, agreement acceptance, dashboard entry, online
   progress status, sign-out, and revocation are verified end to end on the live domain. Keep the
   agreement version fixed until the terms actually change; a new version intentionally asks every
-  tester to accept again.
+  tester to accept again. The community-participation version is a real terms change and therefore
+  requires the current cohort to re-accept after this revision reaches production.
 - [ ] Approved-email entry is a binary admission check, not identity proof. Anyone holding an
   approved address can enter as that tester. Country locking is country-level only and can fire on
   legitimate travel, VPNs, mobile networks, or routing; keep it an owner review prompt with a human
   unlock path and never automate a permanent ban from it alone.
 - [ ] The first cohort is active with nine approved tester addresses. Send
   `outputs/Dungeon_Closed_Tester_Agreement.pdf` with any future invitation; the tester also accepts
-  the current version in-app at first login. Treat the current dashboard samples as observational,
-  not conclusive, until the per-concept attempt thresholds are met.
+  the current version in-app at first login. WhatsApp membership is self-attested because the web
+  app can only record invite-open and acknowledgement timestamps. Treat the current dashboard
+  samples as observational, not conclusive, until the per-concept attempt thresholds are met.
 - [ ] The identity-gated client bundle prevents anonymous/casual harvesting but cannot stop an
   approved technical tester from downloading visible bank scripts. Server-side item delivery is
   `UNSTARTED`; do not claim perfect anti-scraping or DRM.
@@ -342,9 +357,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   recorded in C11 and `briefs/T6_REVISION_FALLBACK.md`.
 - [ ] Deterministic T6 and legacy URL scenarios cover main fixtures, but no checked-in automated
   interaction suite validates all 40 study sets. Add one before broad student release.
-- [ ] Sampled confidence cadence, fixed thresholds, practice-shape weights, confidence recovery,
-  and any future mastery model remain product hypotheses until real learner data and cognitive
-  interviews support calibration.
+- [ ] Primer fade/recovery thresholds, the Connections matrix axis, sampled confidence cadence,
+  fixed thresholds, practice-shape weights, confidence recovery, and any future mastery model
+  remain product hypotheses until real learner data and cognitive interviews support calibration.
 
 ## Self-Maintenance Rules
 
@@ -366,16 +381,19 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 ## Metadata
 
 - Generated: 2026-07-16
-- Last verified: 2026-08-11 (728-item T6 bank and source IDs, 565 active items, evidence-gated
-  progress, sampled optional confidence, boss-step/whole-chain separation, constructed
+- Last verified: 2026-08-11 (792 source-traceable T6 surfaces, 64 support-only adaptive primers,
+  565 active scored items, evidence-gated progress, sampled optional confidence, boss-step/whole-
+  chain separation, constructed
   self-review, selectable practice shapes, held feedback,
   mixed formats and boss grading, staged dashboard, evidence graph, real-Browser desktop/narrow
   interaction, isolated save/resume, live-state preservation, release-boundary tests, no-index and
-  private-cache controls, the desktop owner control room, 23 passing release/access/agent tests,
+  private-cache controls, the evidence-first matrix/trend dashboard, the desktop owner control
+  room and group-bump workflow, 31 passing release/access/agent tests,
   the live Cloudflare Worker route, the owner admin Access audience, anonymous edge denial,
   a least-privilege group secret, rapid-request rate limiting, approved-email admission with its
   private denial, the first-login agreement gate, per-email D1 progress, single-browser and
-  country locks, and the acknowledgement-based tester agreement document)
+  country locks, approved-only group-invite disclosure, community timestamps, and the verified
+  two-page acknowledgement-based tester agreement document)
 - Confidence: high for file inventory, operating rules, all-subject implementation, structural
   grounding, and observed Browser behavior; medium for transcript-derived content pending
   owner/faculty acceptance; low for exact exam-paper structure

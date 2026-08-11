@@ -29,6 +29,12 @@ next after every answer.
 - Make progress and remaining work equally visible so the student can see a finish line.
 - Stage information as Overview, Concepts, and Study plan; do not show every control and metric at
   once.
+- Put the selected next action first, then the four-subject mastery matrix and selected-subject
+  evidence trend. Subject cards and concept inspection follow; the first two scrolls carry the
+  decision and evidence summary.
+- Start learning runs with only the minimum concept primer the learner currently needs. Interleave
+  one new-concept primer immediately before its first challenge, then layer later questions on
+  earlier concepts. Primer support must fade quickly after easy success and strengthen after misses.
 - Every visible pixel must earn its place. Question metadata may remain available for audit, but
   must not compete with the case, task, response, confidence, or feedback.
 - A case and the answer instruction that depends on it are one prompt object: place both in one
@@ -83,14 +89,17 @@ All four subjects now have:
 - at least eleven actively scheduled surfaces, five formats, seven independent variant families, and
   boss coverage for every tracked concept.
 
-The complete embedded bank contains 728 unique tagged questions:
+The complete embedded bank contains 792 unique tagged learning surfaces: 728 scored challenges
+plus one adaptive, source-traceable primer for each of the 64 concepts. The scored challenge totals
+remain:
 
 - BRGSA: 188, including 40 bosses and 16 constructed responses;
 - IBM: 180, including 40 bosses and 16 constructed responses;
 - SCLM: 180, including 40 bosses and 16 constructed responses;
 - SPMS: 180, including 40 bosses and 16 constructed responses.
 
-Active scheduling contains 565 questions. It excludes 163 retained legacy MCQs where the
+Active scored scheduling contains 565 questions. Primer-only surfaces are inserted by the support
+layer and never enter ordinary mastery selection. The scored pool excludes 163 retained legacy MCQs where the
 correct response is materially longer than every distractor: BRGSA 37, IBM 40, SCLM 43, and SPMS
 43. These items remain source/audit evidence but cannot appear in learner practice until rewritten.
 The active bank uses MCQ, cloze, case-cloze, four-way match, short-answer, and three-step boss
@@ -129,6 +138,13 @@ A correct but uncertain answer schedules a new-family confirmation. A confident 
 different-family diagnostic after intervening questions and closes only after two independent
 repairs. A per-concept session limit prevents endless loops.
 
+Primer state is separate from mastery evidence. An unseen concept begins with a level-1 fact and
+connection. A primer answer can reduce or strengthen future support but cannot mark a concept
+Developing or Strong. One miss raises the next primer to applied support; repeated misses add the
+named misconception. Two successful harder challenges or Strong evidence suppress the primer.
+Generic held-feedback simulations never insert primers because they are assessment-shaped checks,
+not teaching runs.
+
 ## Student-facing progress contract
 
 The dashboard must always answer four questions without requiring interpretation of a game system:
@@ -138,6 +154,9 @@ The dashboard must always answer four questions without requiring interpretation
 3. What is the best next short action?
 4. How much remains before all 64 tracked concepts are Strong?
 
+The Overview places a five-axis mastery matrix directly after the next-action hero: BRGSA, IBM,
+SCLM, SPMS, and cross-concept Connections. A text list exposes the same values without relying on
+canvas, colour, or shape. The selected-subject evidence trend sits beside or immediately below it.
 The Concepts view uses an evidence-over-time trend, not a raw-attempt graph. Needs practice adds no
 upward credit, Developing adds partial credit, and Strong adds full credit, so misses can create an
 honest plateau or dip. Only one two-concept module is shown at a time; selecting a concept opens an
@@ -183,8 +202,9 @@ Deterministic `?scenario=` fixtures do not save normal progress.
 The route is `VERIFIED` because the following passed:
 
 - syntax checks for the application, catalogue, BRGSA bank, and Python server;
-- 728 unique tagged questions and 565 actively scheduled questions, valid
-  answers/explanations/bridges, 64 constructed responses, at least eleven active surfaces per
+- 792 unique tagged surfaces (728 scored challenges plus 64 adaptive primers) and 565 actively
+  scheduled scored questions, valid answers/explanations/bridges, 64 constructed responses,
+  at least eleven active scored surfaces per
   concept, 160 bosses, zero missing
   cited lecture IDs, and no option-shape-risk item in any active pool;
 - HTTP root redirect, asset loading, and no-cache development headers;
@@ -193,6 +213,8 @@ The route is `VERIFIED` because the following passed:
 - all four subject cards, sixteen concepts, ten available sets, and four generic practice shapes;
 - a real adaptive journey from a miss through a different-perspective re-attempt and updated
   dashboard state;
+- an unscored primer-to-challenge handoff, quick primer fade after success, stronger level-3 repair
+  after misses, and zero primer credit in mastery or held-feedback practice;
 - unchanged hashes for all nine files under `state/` and `history/` after Browser practice and
   reset.
 

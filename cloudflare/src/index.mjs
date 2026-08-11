@@ -3,7 +3,8 @@ import { createRemoteJWKSet, jwtVerify } from "jose";
 const ACCESS_API = "https://api.cloudflare.com/client/v4";
 const SESSION_COOKIE = "dungeon_session";
 const SESSION_DAYS = 1;
-const AGREEMENT_VERSION = "2026-08-11";
+const AGREEMENT_VERSION = "2026-08-11-community-v2";
+const COMMUNITY_INVITE_URL = "https://chat.whatsapp.com/E9RThdcAzqFDTiWPUYcE3I";
 const REQUIRED_ACCESS_BINDINGS = ["ACCESS_ACCOUNT_ID", "ACCESS_GROUP_ID", "OWNER_EMAIL", "CF_API_TOKEN"];
 const REQUIRED_ADMIN_BINDINGS = [
   ...REQUIRED_ACCESS_BINDINGS,
@@ -320,8 +321,53 @@ export function createD1Store() {
     async acceptAgreement(env, email, version) {
       const db = requireDatabase(env);
       const now = new Date().toISOString();
-      await db.prepare("UPDATE testers SET agreement_version = ?, agreement_accepted_at = ?, updated_at = ? WHERE email = ? AND active = 1")
-        .bind(version, now, now, email).run();
+      await db.prepare(`UPDATE testers
+        SET agreement_version = ?, agreement_accepted_at = ?, community_invite_opened_at = ?,
+          community_join_acknowledged_at = ?, community_reminder_at = NULL, updated_at = ?
+        WHERE email = ? AND active = 1`)
+        .bind(version, now, now, now, now, email).run();
+    },
+
+    async communityStatus(env, email) {
+      const db = requireDatabase(env);
+      const row = await db.prepare(`SELECT community_invite_opened_at, community_join_acknowledged_at,
+          community_reminder_at
+        FROM testers WHERE email = ? AND active = 1`).bind(email).first();
+      return {
+        joined: Boolean(row?.community_join_acknowledged_at),
+        inviteOpenedAt: row?.community_invite_opened_at || null,
+        joinedAt: row?.community_join_acknowledged_at || null,
+        reminderAt: row?.community_reminder_at || null
+      };
+    },
+
+    async markCommunityOpened(env, email) {
+      const db = requireDatabase(env);
+      const now = new Date().toISOString();
+      await db.prepare(`UPDATE testers
+        SET community_invite_opened_at = COALESCE(community_invite_opened_at, ?), updated_at = ?
+        WHERE email = ? AND active = 1`).bind(now, now, email).run();
+    },
+
+    async acknowledgeCommunity(env, email) {
+      const db = requireDatabase(env);
+      const now = new Date().toISOString();
+      const result = await db.prepare(`UPDATE testers
+        SET community_join_acknowledged_at = ?, community_reminder_at = NULL, updated_at = ?
+        WHERE email = ? AND active = 1 AND community_invite_opened_at IS NOT NULL`)
+        .bind(now, now, email).run();
+      return Number(result?.meta?.changes || 0) > 0;
+    },
+
+    async remindCommunity(env, emails) {
+      if (!emails.length) return [];
+      const db = requireDatabase(env);
+      const now = new Date().toISOString();
+      const placeholders = emails.map(() => "?").join(", ");
+      await db.prepare(`UPDATE testers SET community_reminder_at = ?, updated_at = ?
+        WHERE active = 1 AND community_join_acknowledged_at IS NULL AND email IN (${placeholders})`)
+        .bind(now, now, ...emails).run();
+      return emails;
     },
 
     async revokeTester(env, email) {
@@ -344,6 +390,7 @@ export function createD1Store() {
       const placeholders = emails.map(() => "?").join(", ");
       const result = await db.prepare(`SELECT testers.email, testers.first_country, testers.location_locked_at,
           testers.lock_reason, testers.agreement_version, testers.agreement_accepted_at, testers.last_seen_at,
+          testers.community_invite_opened_at, testers.community_join_acknowledged_at, testers.community_reminder_at,
           COUNT(learner_sessions.token_hash) AS active_sessions,
           MAX(learner_progress.updated_at) AS progress_updated_at
         FROM testers
@@ -351,7 +398,8 @@ export function createD1Store() {
         LEFT JOIN learner_progress ON learner_progress.email = testers.email
         WHERE testers.email IN (${placeholders})
         GROUP BY testers.email, testers.first_country, testers.location_locked_at, testers.lock_reason,
-          testers.agreement_version, testers.agreement_accepted_at, testers.last_seen_at`)
+          testers.agreement_version, testers.agreement_accepted_at, testers.last_seen_at,
+          testers.community_invite_opened_at, testers.community_join_acknowledged_at, testers.community_reminder_at`)
         .bind(new Date().toISOString(), ...emails).all();
       return Object.fromEntries((result.results || []).map((row) => [row.email, {
         firstCountry: row.first_country || null,
@@ -360,6 +408,10 @@ export function createD1Store() {
         activeSession: Number(row.active_sessions || 0) > 0,
         agreementAccepted: row.agreement_version === AGREEMENT_VERSION,
         agreementAcceptedAt: row.agreement_accepted_at || null,
+        communityInviteOpenedAt: row.community_invite_opened_at || null,
+        communityJoined: Boolean(row.community_join_acknowledged_at),
+        communityJoinedAt: row.community_join_acknowledged_at || null,
+        communityReminderAt: row.community_reminder_at || null,
         lastSeenAt: row.last_seen_at || null,
         hasProgress: Boolean(row.progress_updated_at),
         progressUpdatedAt: row.progress_updated_at || null
@@ -414,7 +466,10 @@ async function manageSession(request, env, fetchImpl, store) {
   if (method === "GET") {
     const email = await authenticateLearner(request, env, store);
     if (!email) throw new RequestError(401, "LOGIN_REQUIRED", "Enter your approved email to continue.");
-    return json({email});
+    const community = typeof store.communityStatus === "function"
+      ? await store.communityStatus(env, email)
+      : {joined: false, inviteOpenedAt: null, joinedAt: null, reminderAt: null};
+    return json({email, community});
   }
 
   requireSameOrigin(request);
@@ -442,20 +497,51 @@ async function manageSession(request, env, fetchImpl, store) {
   const expiresAt = new Date(Date.now() + SESSION_DAYS * 86400 * 1000).toISOString();
   const country = requestCountry(request);
   const acceptedVersion = await store.agreementVersion(env, email);
-  const acceptanceRequested = body?.acceptAgreement === true && body?.agreementVersion === AGREEMENT_VERSION;
-  if (acceptedVersion !== AGREEMENT_VERSION && !acceptanceRequested) {
-    return json({
-      code: "AGREEMENT_REQUIRED",
-      message: "Review and accept the closed tester agreement to continue.",
-      agreementRequired: true,
-      agreementVersion: AGREEMENT_VERSION
-    }, 428);
+  const acceptanceRequested = body?.acceptAgreement === true;
+  if (acceptedVersion !== AGREEMENT_VERSION) {
+    if (!acceptanceRequested) {
+      return json({
+        code: "AGREEMENT_REQUIRED",
+        message: "Review and accept the closed tester agreement to continue.",
+        agreementRequired: true,
+        agreementVersion: AGREEMENT_VERSION,
+        communityInviteUrl: COMMUNITY_INVITE_URL
+      }, 428);
+    }
+    if (body?.agreementVersion !== AGREEMENT_VERSION) {
+      throw new RequestError(400, "AGREEMENT_VERSION_MISMATCH", "Reload and review the current tester agreement.");
+    }
+    if (body?.communityInviteOpened !== true || body?.communityJoinedAcknowledged !== true) {
+      throw new RequestError(400, "COMMUNITY_ACK_REQUIRED", "Open the WhatsApp invite and confirm membership before entering.");
+    }
   }
   await store.checkLogin(env, email, country);
   if (acceptedVersion !== AGREEMENT_VERSION) await store.acceptAgreement(env, email, AGREEMENT_VERSION);
   await store.issueSession(env, email, await hashToken(token), expiresAt, country);
   console.log(JSON.stringify({event: "learner_login", status: "approved"}));
   return json({status: "approved", email}, 200, {"Set-Cookie": sessionCookie(token)});
+}
+
+async function manageCommunity(request, env, store) {
+  const email = await authenticateLearner(request, env, store);
+  if (!email) throw new RequestError(401, "LOGIN_REQUIRED", "Enter your approved email to continue.");
+  if (typeof store.communityStatus !== "function") {
+    throw new RequestError(503, "BACKEND_UNAVAILABLE", "Community acknowledgement is temporarily unavailable.");
+  }
+  const method = request.method.toUpperCase();
+  if (method === "GET") return json({community: await store.communityStatus(env, email)});
+  if (method !== "PATCH") return json({code: "METHOD_NOT_ALLOWED", message: "Use GET or PATCH."}, 405);
+  requireSameOrigin(request);
+  const body = await readBoundedJson(request);
+  if (body?.action === "opened") {
+    await store.markCommunityOpened(env, email);
+  } else if (body?.action === "acknowledge") {
+    const recorded = await store.acknowledgeCommunity(env, email);
+    if (!recorded) throw new RequestError(409, "INVITE_NOT_OPENED", "Open the WhatsApp invite before confirming membership.");
+  } else {
+    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use opened or acknowledge.");
+  }
+  return json({community: await store.communityStatus(env, email)});
 }
 
 function validProgressState(state) {
@@ -608,15 +694,34 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
 
   if (method === "PATCH") {
     const body = await readBoundedJson(request);
-    if (body?.action !== "unlock") throw new RequestError(400, "UNSUPPORTED_ACTION", "Only unlock is supported here.");
+    if (body?.action === "bump-unjoined") {
+      if (typeof store.remindCommunity !== "function" || typeof store.listTesterSecurity !== "function") {
+        throw new RequestError(503, "BACKEND_UNAVAILABLE", "Community reminders are temporarily unavailable.");
+      }
+      const testers = emails.filter((email) => email !== ownerEmail);
+      const security = await store.listTesterSecurity(env, testers);
+      const targets = testers.filter((email) => !security[email]?.communityJoined);
+      await store.remindCommunity(env, targets);
+      console.log(JSON.stringify({event: "tester_community_reminder", reminded: targets.length}));
+      return json(await responseBody(emails, {reminded: targets}));
+    }
     const targetEmail = normalizeEmail(body?.email);
     if (!targetEmail) throw new RequestError(400, "INVALID_EMAIL", "Enter a valid tester email.");
     if (targetEmail === ownerEmail) throw new RequestError(400, "OWNER_PROTECTED", "Owner access cannot be changed here.");
     if (!emails.includes(targetEmail)) throw new RequestError(404, "NOT_APPROVED", "That email is not an approved tester.");
-    if (typeof store.unlockTester !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Progress storage is temporarily unavailable.");
-    await store.unlockTester(env, targetEmail);
-    console.log(JSON.stringify({event: "tester_lock_change", action: "unlock"}));
-    return json(await responseBody(emails, {unlocked: targetEmail}));
+    if (body?.action === "unlock") {
+      if (typeof store.unlockTester !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Progress storage is temporarily unavailable.");
+      await store.unlockTester(env, targetEmail);
+      console.log(JSON.stringify({event: "tester_lock_change", action: "unlock"}));
+      return json(await responseBody(emails, {unlocked: targetEmail}));
+    }
+    if (body?.action === "bump") {
+      if (typeof store.remindCommunity !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Community reminders are temporarily unavailable.");
+      await store.remindCommunity(env, [targetEmail]);
+      console.log(JSON.stringify({event: "tester_community_reminder", reminded: 1}));
+      return json(await responseBody(emails, {reminded: [targetEmail]}));
+    }
+    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use unlock, bump, or bump-unjoined.");
   }
 
   if (method === "DELETE") {
@@ -724,6 +829,7 @@ export function createWorker({
         if (url.pathname === `${prefix}/login.css`) return await serveAsset(request, env, "/mock/login.css", embeddedAssets);
         if (url.pathname === `${prefix}/login.js`) return await serveAsset(request, env, "/mock/login.js", embeddedAssets);
         if (url.pathname === `${prefix}/api/session`) return await manageSession(request, env, fetchImpl, store);
+        if (url.pathname === `${prefix}/api/community`) return await manageCommunity(request, env, store);
         if (url.pathname === `${prefix}/api/progress`) return await manageProgress(request, env, store);
         if (url.pathname === `${prefix}/health`) {
           requireDatabase(env);
