@@ -27,10 +27,15 @@
 > security/no-index/private-cache headers, release tests, owner control room, and community
 > operating documents are verified at
 > `evidence/2026-08-11/tester-access-admin/verification.md`. The current Sites production remains
-> owner-only. Exact `aneeketdas.com/dungeon` routing and individual tester email access are
+> owner-only. Exact `aneeketdas.com/dungeon` routing is
 > `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS` because Cloudflare requires terms acceptance and
-> saved-card overage authorisation; neither was accepted. GitHub and WhatsApp creation remain
-> staged owner-confirmed actions. The earlier
+> saved-card overage authorisation; neither was accepted. Individual grants are additionally
+> `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
+> staged owner-confirmed actions. The Learning Signal Auditor, Question Bank Steward, and Tester
+> Cohort Steward are `PREPARED_NOT_ACTIVATED`: their project schedules are registered and verified
+> `PAUSED`, repository declarations remain disabled, activation preflight intentionally fails, no
+> run history exists, and no tester data or external action was touched. Evidence:
+> `evidence/2026-08-11/tester-agent-readiness/verification.md`. The earlier
 > cinematic/Ari/economy product slice remains at `mock/rogue.html` as an `IMPLEMENTED` legacy
 > reference and still lacks complete real-Browser route acceptance.
 >
@@ -99,7 +104,8 @@ Rules:
 - `mock/` — active T6 revision route, legacy static prototypes, content sets, and local server.
 - `.openai/` — Sites project binding; contains no runtime secrets.
 - `.agents/` — paused tester-agent charters, consent-safe data contracts, synthetic fixtures, and
-  fail-closed activation gates; no automation is created or running.
+  fail-closed activation gates; three project schedules are registered `PAUSED` and none is
+  running.
 - `scripts/` — deterministic public-release build scripts.
 - `site/` — production worker entrypoint, health route, and response security policy.
 - `tests/` — release-boundary, routing, and security-header checks.
@@ -145,7 +151,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `COMMUNITY_PLAYBOOK.md` | WhatsApp community structure, moderation, announcements, and feedback triage. | 2026-08-11 |
 | `.openai/hosting.json` | Opaque Sites project binding only; runtime credentials never belong here. | 2026-08-11 |
 | `.agents/README.md` | Paused tester-agent control plane, authority boundary, and activation order. | 2026-08-11 |
-| `.agents/deployment.json` | Fail-closed activation gates and non-running agent declarations. | 2026-08-11 |
+| `.agents/deployment.json` | Fail-closed activation gates, paused automation IDs, models, cadence, and non-running declarations. | 2026-08-11 |
 | `package.json` | Dependency-free release build, validation, and test commands. | 2026-08-11 |
 | `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
 | `scripts/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
@@ -269,7 +275,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - [ ] Tester agents are `PREPARED_NOT_ACTIVATED`. Backend events, explicit tester consent,
   pseudonymous identity mapping, retention/deletion, owner review queues, notification/access
   adapters, synthetic end-to-end acceptance, and owner activation are all required before any
-  schedule may be created or unpaused.
+  registered schedule may be unpaused. Their repository declarations must also be enabled in the
+  same reviewed activation change.
 - [ ] `WAITING_REAL_BROWSER`: the legacy cinematic/Ari/economy route still has no complete
   real-Browser new-player acceptance. This gate no longer applies to the verified T6 BRGSA route.
 - [ ] `WAITING_COMPUTER_USE`: Computer Use instructions are installed, but the control runtime was

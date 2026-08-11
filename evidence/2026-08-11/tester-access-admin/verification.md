@@ -3,7 +3,8 @@
 Date: 2026-08-11  
 Status: `VERIFIED` for the allowlisted build, private-cache/no-index worker policy, owner-dashboard
 desktop interaction, announcement generation, and Sites owner-only access. Exact Cloudflare path
-routing and per-tester email access are `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS`.
+routing is `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS`; per-tester grants are additionally
+`WAITING_OWNER_TESTER_EMAILS`.
 
 ## Automated checks
 
@@ -68,8 +69,8 @@ handling; that source inspection is secondary evidence only.
 - `https://dungeon-term6.aneeket.chatgpt.site` has a successful production version.
 - Access was returned to custom owner-only after the owner requested a tester gate; only the owner
   remains allowed and no tester has been invited.
-- The next protected build includes the owner dashboard and header hardening; its version and URL
-  are recorded after the deployment step below.
+- The deployed protected build includes the owner dashboard and header hardening; its production
+  re-verification is recorded below.
 
 ### Production dashboard pass
 
@@ -80,8 +81,21 @@ then reported Healthy and preserved no horizontal overflow at a 698-pixel Browse
 
 That pass caught a real packaging error: `release-manifest.json` existed at the archive root but
 not the served client root, so release status correctly showed Unavailable. The build now writes
-the same secret-free manifest to both locations. Final production re-verification is recorded after
-the corrected deployment.
+the same secret-free manifest to both locations.
+
+Owner-only version 3, built from commit `9c9e322a2e8a920a0101681faaad88e42b9928c5`, then deployed
+successfully. An unauthenticated request to `/admin` showed `Sign in required`; after the owner
+completed ChatGPT authentication, the final refresh reported:
+
+- health: `Healthy`;
+- release: `Allowlisted`;
+- detail: `10 public assets; no learner state`;
+- release state: `Automated checks passed`.
+
+The production document measured 872 CSS pixels inside an 887-pixel Browser panel with no
+horizontal overflow. No Dungeon application error appeared in the Browser log. One warning came
+from the authentication provider's Datadog SDK and was not emitted by the Dungeon application.
+Version 3 remains the current owner-only Sites origin; no tester was invited.
 
 ## Remaining gates
 

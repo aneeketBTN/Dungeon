@@ -23,10 +23,10 @@
       "model": "gpt-5.6-terra",
       "reasoningEffort": "medium",
       "desiredSchedule": "hourly",
-      "executionEnvironment": "worktree",
+      "executionEnvironment": "local",
       "enabled": false,
-      "automationId": null,
-      "automationStatus": "not-created",
+      "automationId": "dungeon-learning-signal-auditor",
+      "automationStatus": "paused",
       "writeRoot": "work/tester-signals"
     },
     {
@@ -36,10 +36,10 @@
       "model": "gpt-5.6-sol",
       "reasoningEffort": "high",
       "desiredSchedule": "daily-02:00-local",
-      "executionEnvironment": "worktree",
+      "executionEnvironment": "local",
       "enabled": false,
-      "automationId": null,
-      "automationStatus": "not-created",
+      "automationId": "dungeon-question-bank-steward",
+      "automationStatus": "paused",
       "writeRoot": "work/question-proposals"
     },
     {
@@ -49,12 +49,11 @@
       "model": "gpt-5.6-terra",
       "reasoningEffort": "medium",
       "desiredSchedule": "daily-09:00-local",
-      "executionEnvironment": "worktree",
+      "executionEnvironment": "local",
       "enabled": false,
-      "automationId": null,
-      "automationStatus": "not-created",
+      "automationId": "dungeon-tester-cohort-steward",
+      "automationStatus": "paused",
       "writeRoot": "work/cohort-reviews"
     }
   ]
 }
-

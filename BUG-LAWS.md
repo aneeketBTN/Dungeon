@@ -356,8 +356,24 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   existed.
 - **Why:** A polished charter can conceal that an agent has no lawful data source or authorised
   action path.
-- **Comply:** Keep `enabled: false`, create no schedule, accept only versioned pseudonymous events,
-  reject undeclared identity/raw-response fields, emit proposals rather than external actions, and
-  fail activation until every declared gate plus explicit owner approval passes.
+- **Comply:** Keep `enabled: false`; any deployment-ready schedule must remain stored as `PAUSED`.
+  Accept only versioned pseudonymous events, reject undeclared identity/raw-response fields, emit
+  proposals rather than external actions, and fail activation until every declared gate plus
+  explicit owner approval passes.
 - **Verify:** `npm run agents:check` passes scaffold health; `npm run agents:activation-check`
-  fails; no automation ID exists; synthetic events validate; personal/raw fields are rejected.
+  fails; every stored scheduler status is `PAUSED`; no run record exists; synthetic events
+  validate; personal/raw fields are rejected.
+
+### LAW-29 🔴 — Requested automation status is not evidence of persisted status
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 agent registration: the automation create call accepted `PAUSED` but the
+  first persisted TOML definitions were `ACTIVE`.
+- **Why:** Trusting requested arguments can start a consequential schedule while the product still
+  lacks consent, data and authority gates.
+- **Comply:** Immediately read the stored automation definition after create/update. If it differs,
+  explicitly update the existing automation to `PAUSED`, re-read it, and confirm no run artifact
+  exists. Repository preflight remains a second independent lock.
+- **Verify:** All three stored definitions say `status = "PAUSED"`, `.agents/deployment.json` says
+  `enabled: false`, `npm run agents:activation-check` exits nonzero, and the automation directory
+  contains no run output.

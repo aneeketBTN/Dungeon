@@ -18,6 +18,12 @@ learner profiles, central leaderboard, or cross-device sync. Cloudflare may prov
 traffic/security logs for operating the protected route. The production health endpoint reports
 only whether the service is available and does not receive learner answers.
 
+Three future tester-agent schedules are registered in a paused state. They have not run and have
+no event endpoint to read. Their presence does not change this privacy notice: no learning
+telemetry, identity mapping, automated participation review, messaging, suspension, or removal is
+active. Those capabilities require a new tester consent flow, retention/deletion policy, backend
+acceptance, and explicit owner activation before this notice may be revised for a live cohort.
+
 ## WhatsApp community
 
 WhatsApp community participation is separate from the web app. Testers who join will share the

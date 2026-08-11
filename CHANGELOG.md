@@ -31,11 +31,18 @@ changed, decisions, verification/evidence, and deferrals.
 - Production Browser acceptance caught the manifest outside the served asset root: health passed
   but release status stayed unavailable. The build now emits secret-free release metadata into the
   served client root as well, with `BUG-LAWS.md` LAW-27 preventing recurrence.
+- Owner-only Sites version 3, built from `9c9e322a2e8a920a0101681faaad88e42b9928c5`, passed the
+  corrected production re-check: unauthenticated `/admin` required sign-in; the authenticated
+  dashboard reported Healthy, Allowlisted, ten public assets/no learner state, and automated checks
+  passed, with no overflow or Dungeon application errors.
 - Added a deliberately inert three-agent cohort control plane: Learning Signal Auditor, Question
-  Bank Steward, and Tester Cohort Steward. All remain disabled with no automation IDs; versioned
-  contracts reject direct identity/raw responses and the activation check fails until backend,
-  consent, retention/deletion, owner review, adapters, synthetic acceptance, and explicit owner
-  approval are complete. Evidence:
+  Bank Steward, and Tester Cohort Steward. Registered their intended hourly/daily project
+  schedules, models, and prompts, then verified all three persisted as `PAUSED`; repository
+  declarations remain disabled. The scheduler initially stored ACTIVE despite the paused create
+  request, so the definitions were explicitly corrected and re-read before any interval elapsed.
+  Versioned contracts reject direct identity/raw responses and the activation check fails until
+  backend, consent, retention/deletion, owner review, adapters, synthetic acceptance, and explicit
+  owner approval are complete. No run or external action occurred. Evidence:
   `evidence/2026-08-11/tester-agent-readiness/verification.md`.
 
 ## 2026-08-11 — Research-review integration and confidence-safe adaptation

@@ -206,8 +206,11 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   unsafe invisible authority. Cause: agent roles were easier to name than their data and action
   boundaries. Fix: added three paused charters, versioned pseudonymous contracts, synthetic-only
   fixtures, forbidden personal/raw-response fields, and an activation check that intentionally
-  fails until every backend/consent/review/owner gate is true. No automation was created. Evidence:
-  `evidence/2026-08-11/tester-agent-readiness/verification.md`; prevention: `BUG-LAWS.md` LAW-28.
+  fails until every backend/consent/review/owner gate is true. Three deployment schedules are now
+  registered but paused; the initial create operation persisted them as ACTIVE despite a paused
+  request, so they were explicitly corrected and re-read before any interval elapsed. No run or
+  external action occurred. Evidence: `evidence/2026-08-11/tester-agent-readiness/verification.md`;
+  prevention: `BUG-LAWS.md` LAW-28–29.
 
 ## Watch Items
 

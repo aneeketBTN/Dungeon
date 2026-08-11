@@ -27,9 +27,12 @@ not make it authoritative.
      learner progress browser-local, publish privacy/security/tester guidance, create a private
      GitHub source repository, and operate tester discussion, feedback, and announcements through
      an owner-administered WhatsApp community.
-   - Protected domain and owner operations (2026-08-11):
+- Protected domain and owner operations (2026-08-11):
      `briefs/TESTER_ACCESS_AND_ADMIN.md` owns the exact `aneeketdas.com/dungeon` route, per-email
      access, anti-harvesting claim boundary, private origin, and owner control room.
+   - Prepared tester-agent operations (2026-08-11): `.agents/README.md`, the three charters and
+     `.agents/deployment.json` own data contracts, evidence thresholds, review authority and the
+     activation sequence. Registered schedules are paused and do not supersede privacy gates.
 
 2. **Project operating system**
    - `AGENTS.md`
@@ -309,9 +312,11 @@ one side.
 - Resolution (2026-08-11): keep all three agents prepared but disabled. Contracts exclude direct
   identity, IP, user agent, raw text, and written responses; outputs are proposals only. Activation
   checks fail closed until every gate in `.agents/deployment.json` is true and the owner explicitly
-  approves activation. No schedule or automation is created during scaffold preparation.
+  approves activation. Three schedules may be registered for deployment readiness only when both
+  their stored Codex status is `PAUSED` and the repository declaration remains `enabled: false`.
+  Registration is not activation.
 
-### C20 — Confidence as diagnosis versus confidence as punishment
+### C23 — Confidence as diagnosis versus confidence as punishment
 
 - The owner initially explored reducing confidence after confident errors. The research review
   found support for precise correction and later transfer checks, not humiliation, artificial
