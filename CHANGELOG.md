@@ -12,9 +12,9 @@ changed, decisions, verification/evidence, and deferrals.
   delivery; the private Sites release remains an owner-only backup and no origin bypass token is
   needed.
 - Created one-time-code tester identity, the email-only `Dungeon Testers` group, a broader learner
-  Access application, and a more-specific owner-only `/dungeon/admin*` application. Only the owner
-  bootstrap email is present; no potential user was granted access without an address from the
-  owner.
+  Access application, and a more-specific owner-only `/dungeon/admin*` application. The protected
+  bootstrap address and the owner's browser/learner address are present; no external tester was
+  granted access without an address from the owner.
 - Stored a least-privilege Access-group read/write credential as the Worker `CF_API_TOKEN` secret.
   A temporary deployment credential was used once and deleted immediately after the route and
   secret were deployed.
@@ -28,8 +28,9 @@ changed, decisions, verification/evidence, and deferrals.
   it uses the same allowlist and still runs the Worker authentication checks.
 - Public DNS, Worker/secret/API configuration, and anonymous edge checks pass. Anonymous learner,
   bank-script, and admin requests all redirect to the correct Access audience. A production
-  Browser pass now loads the exact-domain owner Control Room as Healthy, Connected, Allowlisted,
-  with zero testers. The learner path reaches the emailed-code login and remains
+  Browser pass now loads the exact-domain owner Control Room as Healthy, Connected, and
+  Allowlisted. It reports the registered owner/browser learner address as one approved tester. The
+  learner path reaches the emailed-code login and remains
   `WAITING_OWNER_LEARNER_SIGNIN`. Tester grants remain
   `WAITING_OWNER_TESTER_EMAILS`. Evidence:
   `evidence/2026-08-11/cloudflare-protected-domain/verification.md`.
@@ -39,6 +40,10 @@ changed, decisions, verification/evidence, and deferrals.
   Access app; both now stay under `/dungeon/admin/*` and use the owner audience. `npm test` passes
   21/21, the 728-item bank validator has no errors, both Worker packaging paths pass, and the
   repaired production upload is version `bb7ead71-46e6-4fd3-a2d6-ab25498cdcec`.
+- Diagnosed the owner's failed learner sign-in: the second known owner/browser address had never
+  been added to the dedicated learner group. Registered it through the same group used by the
+  Control Room and added a short custom denial message for verified but unapproved emails. The
+  policy still withholds allowlist status until inbox ownership is proven.
 
 ## 2026-08-11 — Direct tester management in the Control Room
 

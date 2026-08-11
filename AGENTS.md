@@ -37,10 +37,12 @@
 > `evidence/2026-08-11/cloudflare-protected-domain/verification.md`. The private Sites version 5
 > remains an owner-only backup and is no longer an origin dependency. The owner Control Room is
 > `VERIFIED(BROWSER)` on the exact domain: health is Healthy, Access is Connected, the release is
-> Allowlisted, and the live group has zero testers. The learner route is verified through its
+> Allowlisted, and the live group has one approved owner/browser learner address in addition to
+> its protected bootstrap address. The learner route is verified through its
 > emailed-code challenge; post-code learner UI acceptance is `WAITING_OWNER_LEARNER_SIGNIN`.
-> Individual
-> grants are `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
+> Unapproved verified emails receive a concise ask-for-access denial without exposing the
+> allowlist before inbox ownership is proven. External tester grants remain
+> `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
 > staged owner-confirmed actions. The Learning Signal Auditor, Question Bank Steward, and Tester
 > Cohort Steward are `PREPARED_NOT_ACTIVATED`: their project schedules are registered and verified
 > `PAUSED`, repository declarations remain disabled, activation preflight intentionally fails, no
@@ -286,8 +288,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   verified. The exact-domain owner Control Room is Browser-verified Healthy, Connected, Allowlisted,
   and empty. Complete the learner's emailed-code challenge in the owner's browser before claiming
   the post-login learner dashboard verified on the custom domain.
-- [ ] `WAITING_OWNER_TESTER_EMAILS`: no tester should receive access until the owner supplies the
-  addresses. GitHub and WhatsApp community creation remain staged pending confirmation.
+- [ ] `WAITING_OWNER_TESTER_EMAILS`: one owner/browser address is approved for learner access; no
+  external tester should receive access until the owner supplies the address. GitHub and WhatsApp
+  community creation remain staged pending confirmation.
 - [ ] The identity-gated client bundle prevents anonymous/casual harvesting but cannot stop an
   approved technical tester from downloading visible bank scripts. Server-side item delivery is
   `UNSTARTED`; do not claim perfect anti-scraping or DRM.

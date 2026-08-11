@@ -28,11 +28,15 @@ is `WAITING_OWNER_LEARNER_SIGNIN`.
 - Zero Trust team: `dawn-unit-8689.cloudflareaccess.com`; plan reported `Zero Trust Free`.
 - Tester IdP: `Dungeon one-time email code`
   (`9c4f0251-b98f-4438-a4c4-be4df2ae3dcf`).
-- Tester group: `Dungeon Testers` (`e74be54f-b714-44ea-95cb-11ed66777f18`). It contains one
-  exact-email bootstrap rule for the owner and no tester address.
+- Tester group: `Dungeon Testers` (`e74be54f-b714-44ea-95cb-11ed66777f18`). It contains the
+  protected bootstrap address plus the owner's browser/learner address. No external tester address
+  is present.
 - Learner application: `Dungeon Testers`, domain `aneeketdas.com/dungeon*`, one-time-code IdP,
   allow policy bound to the dedicated group, audience
   `56d9461adc8ecc52a110cc47c664c4db3c36ea5439616a9e6372f55974209263`.
+- The learner application auto-selects only the one-time-code IdP. Its API-read custom denial is
+  “This email is not approved. Ask Aneeket to add it, then try again.” Cloudflare evaluates this
+  only after email ownership is verified, avoiding pre-verification allowlist enumeration.
 - Admin application: `Dungeon Owner Dashboard`, domain `aneeketdas.com/dungeon/admin*`, Cloudflare
   account IdP, exact owner-email allow policy, audience
   `4835199408cc2b98c8ece55b29877e4bc98411a2e052b011fe0b19512f307105`.
@@ -71,8 +75,8 @@ Zone ruleset `efaf5d34bb8e41649accaf0c4e7d90a9`, rule
 - `https://aneeketdas.com/dungeon/admin/` loaded the owner Control Room on the exact domain.
 - Current launch status reported Healthy, Connected, Private cohort, and Allowlisted; the release
   reported ten public assets and no learner state.
-- Tester management reported Connected and zero approved testers; the owner bootstrap address is
-  intentionally not counted as a tester.
+- After registration, tester management reported Connected and one approved learner address; the
+  protected bootstrap address is intentionally not counted as a tester.
 - The first pass exposed health/manifest requests crossing into the learner Access application.
   The repaired routes keep both checks under `/dungeon/admin/*`; the second pass reported both
   checks healthy.
@@ -99,8 +103,8 @@ Zone ruleset `efaf5d34bb8e41649accaf0c4e7d90a9`, rule
 
 ## Remaining acceptance
 
-- `WAITING_OWNER_TESTER_EMAILS`: only the owner bootstrap email is present; no potential user was
-  granted access without an owner-supplied address.
+- `WAITING_OWNER_TESTER_EMAILS`: the owner/browser learner address is present; no external tester
+  was granted access without an owner-supplied address.
 - `WAITING_OWNER_LEARNER_SIGNIN`: the exact learner route reaches the one-time-code screen. Do not
   claim the post-login learner dashboard verified on the custom domain until the owner completes
   that emailed-code challenge.

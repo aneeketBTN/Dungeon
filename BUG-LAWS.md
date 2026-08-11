@@ -449,3 +449,15 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   outside the production prefix.
 - **Verify:** Unit tests assert both owner status routes use the admin audience, and the real
   Control Room reports Healthy, Connected, and Allowlisted after deployment.
+
+### LAW-35 🟡 — Access denial copy must fit the provider and resist email enumeration
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 learner-login repair: Cloudflare rejected the first custom denial because
+  it exceeded the provider's 75-character limit.
+- **Why:** An overlong message silently blocks configuration progress, while pre-verification
+  “registered/not registered” feedback would expose the private allowlist to arbitrary visitors.
+- **Comply:** Keep the Access custom denial at 75 characters or fewer. Let every visitor request an
+  inbox code, and reveal the ask-for-access result only after they prove email ownership.
+- **Verify:** Read back the configured message, allowed IdP, auto-redirect setting, group policy,
+  and exact-email selectors; confirm the Control Room lists only intended non-bootstrap addresses.

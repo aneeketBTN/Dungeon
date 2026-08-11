@@ -3,9 +3,11 @@
 Status: `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` for exact `aneeketdas.com/dungeon` routing,
 one-time-code tester Access, owner-only admin Access, direct static-asset delivery, private caching,
 no-index controls, rapid-request rate limiting, and the dedicated email group/management secret.
-The owner Control Room is `VERIFIED(BROWSER)` Healthy, Connected, Allowlisted, and empty on the
-exact domain. The learner route reaches its one-time-code challenge; post-code learner acceptance
-is `WAITING_OWNER_LEARNER_SIGNIN`. Individual tester grants remain `WAITING_OWNER_TESTER_EMAILS`.
+The owner Control Room is `VERIFIED(BROWSER)` Healthy, Connected, and Allowlisted on the exact
+domain. One owner/browser address is approved for learner access in addition to the non-counted
+bootstrap address. The learner route reaches its one-time-code challenge; post-code learner
+acceptance is `WAITING_OWNER_LEARNER_SIGNIN`. External tester grants remain
+`WAITING_OWNER_TESTER_EMAILS`.
 
 Decision date: 2026-08-11
 
@@ -84,6 +86,9 @@ or ownerless group.
 - Zero Trust Free is active.
 - `Dungeon one-time email code` is the tester identity provider.
 - `Dungeon Testers` is an exact-email allowlist; add only owner-supplied addresses.
+- The learner application auto-selects the one-time-code provider. After inbox verification, an
+  unapproved email receives: “This email is not approved. Ask Aneeket to add it, then try again.”
+  Do not reveal allowlist membership before inbox ownership is proven.
 - Seed the dedicated group with the owner email as the protected bootstrap member; the dashboard
   hides that member from the tester count and cannot revoke it.
 - Create an Access application for `aneeketdas.com/dungeon*` using that group.
@@ -100,7 +105,8 @@ or ownerless group.
 
 ## Gates
 
-- `WAITING_OWNER_TESTER_EMAILS`: no tester access is granted until the owner supplies addresses.
+- `WAITING_OWNER_TESTER_EMAILS`: the owner/browser learner address is approved; no external tester
+  access is granted until the owner supplies addresses.
 - `WAITING_OWNER_LEARNER_SIGNIN`: the learner route reaches the emailed-code challenge; the owner
   must complete it before post-login learner UI interaction can be accepted on the exact domain.
 - GitHub and WhatsApp creation remain separately staged pending action-time confirmation.

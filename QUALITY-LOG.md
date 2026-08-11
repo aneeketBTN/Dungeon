@@ -243,6 +243,14 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   Connected, Allowlisted, and zero testers. Evidence:
   `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
   LAW-34.
+- **I28 (2026-08-11)** — Issue: the owner could reach the learner login but not enter the site.
+  Cause: the learner group contained only the protected Cloudflare bootstrap address; the separate
+  owner/browser address had never been registered. Fix: added the known owner/browser address to
+  the same exact-email group managed by the Control Room and configured a concise ask-for-access
+  denial for verified but unapproved emails. The dashboard now reports one intended approved
+  learner address, and allowlist status remains hidden until inbox verification. Evidence:
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
+  LAW-35.
 
 ## Watch Items
 
