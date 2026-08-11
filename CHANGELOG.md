@@ -27,17 +27,18 @@ changed, decisions, verification/evidence, and deferrals.
 - Added and verified an embedded-asset fallback build for upload paths without an Assets binding;
   it uses the same allowlist and still runs the Worker authentication checks.
 - Public DNS, Worker/secret/API configuration, and anonymous edge checks pass. Anonymous learner,
-  bank-script, and admin requests all redirect to the correct Access audience. The declared
-  Browser now resolves the domain and reaches the more-specific Cloudflare owner login challenge;
-  automated completion is disallowed, so live dashboard interaction is
-  `WAITING_OWNER_ACCESS_SIGNIN`. Tester grants remain
+  bank-script, and admin requests all redirect to the correct Access audience. A production
+  Browser pass now loads the exact-domain owner Control Room as Healthy, Connected, Allowlisted,
+  with zero testers. The learner path reaches the emailed-code login and remains
+  `WAITING_OWNER_LEARNER_SIGNIN`. Tester grants remain
   `WAITING_OWNER_TESTER_EMAILS`. Evidence:
   `evidence/2026-08-11/cloudflare-protected-domain/verification.md`.
 - Added a reproducible standalone packaging path for authenticated API deployment when a
   non-interactive Wrangler shell lacks credentials; the bundle embeds only the same allowlisted
-  client assets. `npm test` passes 20/20, the 728-item bank validator has no errors, both Worker
-  packaging paths pass, and the production upload is version
-  `72708eb2-dc76-4987-bad1-238b7ac8313c`.
+  client assets. Production acceptance caught health/manifest checks crossing into the learner
+  Access app; both now stay under `/dungeon/admin/*` and use the owner audience. `npm test` passes
+  21/21, the 728-item bank validator has no errors, both Worker packaging paths pass, and the
+  repaired production upload is version `bb7ead71-46e6-4fd3-a2d6-ab25498cdcec`.
 
 ## 2026-08-11 — Direct tester management in the Control Room
 

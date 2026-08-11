@@ -2,18 +2,17 @@
 
 Date: 2026-08-11
 
-Status: `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` for deployment, DNS, route, Access policy,
-anonymous denial, direct-bank denial, rate limiting, secret presence, and least-privilege group
-access. Production owner/tester UI interaction is `WAITING_REAL_BROWSER_DNS_CACHE`: public DNS and
-pinned Cloudflare-edge HTTPS pass, but the declared Browser resolver remained inconsistent after a
-pre-deployment negative lookup and returned `ERR_NAME_NOT_RESOLVED` on the final retry.
+Status: `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE + BROWSER_OWNER)` for deployment, DNS, routing,
+Access policies, anonymous denial, direct-bank denial, rate limiting, secret presence, least-
+privilege group access, and the exact-domain owner Control Room. Post-code learner UI interaction
+is `WAITING_OWNER_LEARNER_SIGNIN`.
 
 ## Deployed boundary
 
 - URL: `https://aneeketdas.com/dungeon/`
 - Owner dashboard: `https://aneeketdas.com/dungeon/admin/`
 - Worker: `dungeon-access-edge`
-- Worker version: `72708eb2-dc76-4987-bad1-238b7ac8313c`
+- Worker version: `bb7ead71-46e6-4fd3-a2d6-ab25498cdcec`
 - Route: `aneeketdas.com/dungeon*`
 - Static delivery: the current API deployment embeds 11 files from the ten-file allowlist plus the generated release
   manifest; no `state/`, `history/`, credentials, tester addresses, source packs, or working files.
@@ -67,16 +66,30 @@ Zone ruleset `efaf5d34bb8e41649accaf0c4e7d90a9`, rule
 40 requests in 10 seconds for 10 seconds. The free plan exposes a 10-second period, so the initial
 60-second attempt was rejected and no stale rule was created.
 
+## Real Browser acceptance
+
+- `https://aneeketdas.com/dungeon/admin/` loaded the owner Control Room on the exact domain.
+- Current launch status reported Healthy, Connected, Private cohort, and Allowlisted; the release
+  reported ten public assets and no learner state.
+- Tester management reported Connected and zero approved testers; the owner bootstrap address is
+  intentionally not counted as a tester.
+- The first pass exposed health/manifest requests crossing into the learner Access application.
+  The repaired routes keep both checks under `/dungeon/admin/*`; the second pass reported both
+  checks healthy.
+- `https://aneeketdas.com/dungeon/` reached the `Dungeon Testers` one-time-code email screen. No
+  code was entered automatically, so the post-login learner dashboard remains owner acceptance.
+
 ## Local verification
 
 - `npm run build`: prepared the allowlisted release.
-- `npm test`: 20/20 pass, including fail-closed bindings/auth, email-only group invariants,
+- `npm test`: 21/21 pass, including fail-closed bindings/auth, email-only group invariants,
   protected owner membership, same-origin mutations, static route allowlist, private cache/no-index
-  headers, health, manifest, out-of-prefix denial, method rejection, and embedded-asset fallback.
+  headers, owner-audience status checks, health, manifest, out-of-prefix denial, method rejection,
+  and embedded-asset fallback.
 - `node mock/validate_t6_bank.js`: 728 items, no validator errors.
 - `npx wrangler deploy --dry-run`: 13 build-directory files read and Worker bundle succeeded before
   production deployment.
-- `npm run build:standalone`: embedded the same 11 served files in a 383,738-byte fallback bundle;
+- `npm run build:standalone`: embedded the same 11 served files in a 384,238-byte fallback bundle;
   the unit suite proves this path retains private-cache headers and the Worker authentication gate.
 - `npm --prefix cloudflare run build:standalone`: prepares the same 11 allowlisted client files in
   a self-contained bundle for authenticated API deployment.
@@ -88,10 +101,8 @@ Zone ruleset `efaf5d34bb8e41649accaf0c4e7d90a9`, rule
 
 - `WAITING_OWNER_TESTER_EMAILS`: only the owner bootstrap email is present; no potential user was
   granted access without an owner-supplied address.
-- `WAITING_REAL_BROWSER_DNS_CACHE`: the declared Browser resolver was inconsistent after its
-  pre-propagation negative lookup and returned `ERR_NAME_NOT_RESOLVED` on the final retry. Do not
-  claim production owner/tester interaction verified until the Browser reaches the URL, the owner
-  signs in, the Control Room reports Connected, and a real add/revoke pass is performed with an
-  owner-approved tester email.
+- `WAITING_OWNER_LEARNER_SIGNIN`: the exact learner route reaches the one-time-code screen. Do not
+  claim the post-login learner dashboard verified on the custom domain until the owner completes
+  that emailed-code challenge.
 - Identity and rate limiting prevent anonymous/casual harvesting, not copying by an approved
   technical tester. Server-side per-session item delivery remains the stronger future boundary.

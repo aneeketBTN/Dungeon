@@ -218,8 +218,8 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   add/list/revoke controls and a prepared edge endpoint with owner JWT/email validation,
   same-origin writes, email-only group invariants, protected owner membership, credential-free
   browser code, and truthful setup/unavailable states. The edge secret and group are now live;
-  exact-domain owner interaction remains waiting on a stable declared-Browser resolver and a real
-  owner-approved tester address. Evidence:
+  exact-domain owner interaction remains waiting on the owner's Access sign-in and a real owner-
+  approved tester address. Evidence:
   `evidence/2026-08-11/tester-dashboard-access-management/verification.md` and
   `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
   LAW-30.
@@ -230,11 +230,19 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   Worker, kept every owner asset/API under the more-specific admin Access application, blocked
   legacy admin aliases, stored only the group credential as an edge secret, deleted the temporary
   deployment token, and added rapid-request containment. Anonymous learner, bank, and admin denial
-  are verified at the edge; the declared Browser resolver remained inconsistent after its initial
-  negative lookup, so exact-domain authenticated interaction stays
-  `WAITING_REAL_BROWSER_DNS_CACHE` rather than being overstated. Evidence:
+  are verified at the edge; the exact-domain owner Control Room is Browser-verified Healthy,
+  Connected, Allowlisted, and empty. The learner route reaches its emailed-code screen; post-code
+  learner acceptance remains explicit. Evidence:
   `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
   LAW-25, LAW-30, and LAW-31.
+- **I27 (2026-08-11)** — Issue: the live owner dashboard showed health and release metadata as
+  unavailable even while tester management was connected. Cause: relative requests escaped the
+  owner Access path and entered the learner application's distinct sign-in audience. Fix: added
+  owner-path health and manifest routes, selected them only on `/dungeon/admin`, preserved local
+  fallbacks, and redeployed the embedded allowlist. The second Browser pass reported Healthy,
+  Connected, Allowlisted, and zero testers. Evidence:
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
+  LAW-34.
 
 ## Watch Items
 

@@ -3,10 +3,9 @@
 Status: `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` for exact `aneeketdas.com/dungeon` routing,
 one-time-code tester Access, owner-only admin Access, direct static-asset delivery, private caching,
 no-index controls, rapid-request rate limiting, and the dedicated email group/management secret.
-Production owner/tester interaction in the declared Browser is `WAITING_OWNER_ACCESS_SIGNIN`;
-public DNS and direct edge requests pass, and the Browser reaches the Cloudflare owner login
-challenge, but automated completion of that challenge is disallowed. Individual tester grants
-remain `WAITING_OWNER_TESTER_EMAILS`.
+The owner Control Room is `VERIFIED(BROWSER)` Healthy, Connected, Allowlisted, and empty on the
+exact domain. The learner route reaches its one-time-code challenge; post-code learner acceptance
+is `WAITING_OWNER_LEARNER_SIGNIN`. Individual tester grants remain `WAITING_OWNER_TESTER_EMAILS`.
 
 Decision date: 2026-08-11
 
@@ -102,8 +101,7 @@ or ownerless group.
 ## Gates
 
 - `WAITING_OWNER_TESTER_EMAILS`: no tester access is granted until the owner supplies addresses.
-- `WAITING_OWNER_ACCESS_SIGNIN`: the production Browser resolves the URL and reaches the owner
-  Cloudflare login challenge; the owner must complete it before live Control Room interaction can
-  be accepted.
+- `WAITING_OWNER_LEARNER_SIGNIN`: the learner route reaches the emailed-code challenge; the owner
+  must complete it before post-login learner UI interaction can be accepted on the exact domain.
 - GitHub and WhatsApp creation remain separately staged pending action-time confirmation.
 - Server-side item delivery remains `UNSTARTED`; do not claim perfect anti-scraping.

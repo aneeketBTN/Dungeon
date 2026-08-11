@@ -435,3 +435,17 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 - **Verify:** The normal dry run and standalone bundle both pass; the live script version, exact
   route, Access applications, DNS record, disabled workers.dev surface, and anonymous denial are
   read back after deployment.
+
+### LAW-34 🟡 — Owner status checks must stay inside the owner Access path
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 exact-domain Browser pass: the Control Room loaded under the admin Access
+  application, but its `../health` and `../release-manifest.json` requests crossed into the broader
+  learner application and appeared unavailable.
+- **Why:** Two valid Access sessions can still use different audiences; crossing policy paths can
+  make a healthy release look broken or prompt the owner for the learner login unexpectedly.
+- **Comply:** Keep owner dashboard assets, APIs, health, and release metadata under
+  `/dungeon/admin/*`; validate the admin audience at the Worker; retain local fallback URLs only
+  outside the production prefix.
+- **Verify:** Unit tests assert both owner status routes use the admin audience, and the real
+  Control Room reports Healthy, Connected, and Allowlisted after deployment.

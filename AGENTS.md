@@ -35,10 +35,11 @@
 > least-privilege group secret, and rapid-request rate limiting are
 > `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` at
 > `evidence/2026-08-11/cloudflare-protected-domain/verification.md`. The private Sites version 5
-> remains an owner-only backup and is no longer an origin dependency. The declared Browser now
-> resolves the production URL and reaches the more-specific Cloudflare owner login challenge;
-> production dashboard interaction is `WAITING_OWNER_ACCESS_SIGNIN` because Browser automation is
-> not permitted to complete that authentication challenge. Individual
+> remains an owner-only backup and is no longer an origin dependency. The owner Control Room is
+> `VERIFIED(BROWSER)` on the exact domain: health is Healthy, Access is Connected, the release is
+> Allowlisted, and the live group has zero testers. The learner route is verified through its
+> emailed-code challenge; post-code learner UI acceptance is `WAITING_OWNER_LEARNER_SIGNIN`.
+> Individual
 > grants are `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
 > staged owner-confirmed actions. The Learning Signal Auditor, Question Bank Steward, and Tester
 > Cohort Steward are `PREPARED_NOT_ACTIVATED`: their project schedules are registered and verified
@@ -167,17 +168,17 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
 | `scripts/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
 | `site/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
-| `cloudflare/src/index.mjs` | Deployed exact-path static router plus owner-JWT-verified, same-origin, email-only tester group management. | 2026-08-11 |
+| `cloudflare/src/index.mjs` | Exact-path static router, signed learner/admin Access validation, owner-path status routes, and owner-only tester management. | 2026-08-11 |
 | `cloudflare/scripts/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
 | `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
 | `cloudflare/README.md` | Live route, runtime-secret, Access-policy, owner-bootstrap, and rate-limit contract. | 2026-08-11 |
 | `cloudflare/scripts/build-standalone.mjs` | Builds the same protected allowlist as an embedded-asset fallback when an Assets upload path is unavailable. | 2026-08-11 |
 | `tests/site-release.test.mjs` | Automated release-boundary, privacy, routing, header, and setup-required checks. | 2026-08-11 |
-| `tests/cloudflare-access.test.mjs` | Synthetic owner authentication, group invariant, grant, revoke, static allowlist, admin-isolation, health, and private-cache checks. | 2026-08-11 |
+| `tests/cloudflare-access.test.mjs` | Owner authentication, group invariants, grant/revoke, static allowlist, admin isolation, owner-path status, health, and private-cache checks. | 2026-08-11 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
 | `mock/admin.html` | Owner control room for direct tester management, release health, feedback triage, and announcement drafting. | 2026-08-11 |
 | `mock/admin.css` | Responsive, accessible control-room layout and status presentation. | 2026-08-11 |
-| `mock/admin.js` | Health/manifest checks, tester add/list/revoke flow, copy helpers, and announcement preview without autonomous sending. | 2026-08-11 |
+| `mock/admin.js` | Owner-path health/manifest checks, tester add/list/revoke flow, copy helpers, and announcement preview without autonomous sending. | 2026-08-11 |
 | `mock/t6.html` | Staged dashboard, time-horizon plan, generic practice setup, evidence graph, feedback, results, reset, and exam-boundary surfaces. | 2026-08-11 |
 | `mock/t6.css` | Flat single-surface question hierarchy plus low-density, responsive, accessible desktop/narrow revision presentation. | 2026-08-11 |
 | `mock/t6.js` | Evidence-gated mastery, time-horizon plans, selectable practice shapes, held-feedback checks, constructed self-review, rotation, persistence, and scenarios. | 2026-08-11 |
@@ -280,11 +281,11 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 728 questions are source-traceable and structurally
   verified, but transcript-derived content and the 64 constructed-response rubrics/exemplars still
   need owner/faculty acceptance before `DONE`.
-- [ ] `WAITING_OWNER_ACCESS_SIGNIN`: exact routing, Access applications, anonymous denial,
+- [ ] `WAITING_OWNER_LEARNER_SIGNIN`: exact routing, Access applications, anonymous denial,
   direct-bank denial, static delivery, group authority, and rate limiting are live and edge/API
-  verified. The declared Browser resolves the production URL and reached the owner Cloudflare login
-  challenge, but its security policy prevents automated completion. The owner must sign in in the
-  open tab, then the live Control Room connected/list pass can be verified.
+  verified. The exact-domain owner Control Room is Browser-verified Healthy, Connected, Allowlisted,
+  and empty. Complete the learner's emailed-code challenge in the owner's browser before claiming
+  the post-login learner dashboard verified on the custom domain.
 - [ ] `WAITING_OWNER_TESTER_EMAILS`: no tester should receive access until the owner supplies the
   addresses. GitHub and WhatsApp community creation remain staged pending confirmation.
 - [ ] The identity-gated client bundle prevents anonymous/casual harvesting but cannot stop an

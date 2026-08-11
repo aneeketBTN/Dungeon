@@ -172,6 +172,20 @@ test("health and release routes stay under the protected prefix", async () => {
   assert.equal(outside.status, 404);
 });
 
+test("owner status checks stay inside the owner Access boundary", async () => {
+  const audiences = [];
+  const worker = createWorker({
+    verifyRequest: async (input, env, audience) => audiences.push(audience)
+  });
+  const health = await worker.fetch(request("/dungeon/admin/health"), baseEnv);
+  assert.equal(health.status, 200);
+  assert.equal((await health.json()).status, "ok");
+
+  const manifest = await worker.fetch(request("/dungeon/admin/release-manifest.json"), baseEnv);
+  assert.equal(await manifest.text(), "asset:/release-manifest.json");
+  assert.deepEqual(audiences, ["admin-audience", "admin-audience"]);
+});
+
 test("protected routes fail closed without a valid Access JWT", async () => {
   const worker = createWorker();
   const response = await worker.fetch(request("/dungeon/"), baseEnv);

@@ -296,6 +296,12 @@ export function createWorker({
         if (url.pathname === `${prefix}/admin/admin.css`) return await serveAsset(request, env, "/mock/admin.css", embeddedAssets);
         if (url.pathname === `${prefix}/admin/admin.js`) return await serveAsset(request, env, "/mock/admin.js", embeddedAssets);
         if (url.pathname === `${prefix}/admin/t6.html`) return redirect(`${prefix}/`);
+        if (url.pathname === `${prefix}/admin/health`) {
+          return json({status: "ok", storage: "browser-local", access: "cloudflare-zero-trust"});
+        }
+        if (url.pathname === `${prefix}/admin/release-manifest.json`) {
+          return await serveAsset(request, env, "/release-manifest.json", embeddedAssets);
+        }
         if (url.pathname === `${prefix}/health`) {
           return json({status: "ok", storage: "browser-local", access: "cloudflare-zero-trust"});
         }

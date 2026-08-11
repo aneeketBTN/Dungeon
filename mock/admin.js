@@ -164,7 +164,8 @@
     var manifestPassed = false;
 
     try {
-      var healthResponse = await fetch("../health", {cache: "no-store"});
+      var productionAdmin = window.location.pathname.indexOf("/dungeon/admin") === 0;
+      var healthResponse = await fetch(productionAdmin ? "health" : "../health", {cache: "no-store"});
       var health = await healthResponse.json();
       healthPassed = healthResponse.ok && health.status === "ok";
       $("health-value").textContent = healthPassed ? "Healthy" : "Attention needed";
@@ -175,7 +176,7 @@
     }
 
     try {
-      var manifestResponse = await fetch("../release-manifest.json", {cache: "no-store"});
+      var manifestResponse = await fetch(productionAdmin ? "release-manifest.json" : "../release-manifest.json", {cache: "no-store"});
       var manifest = await manifestResponse.json();
       manifestPassed = manifestResponse.ok && Array.isArray(manifest.files) && manifest.files.length === 10;
       $("release-value").textContent = manifestPassed ? "Allowlisted" : "Review build";
