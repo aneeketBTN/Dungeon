@@ -24,9 +24,8 @@
       </form>
 
       <section class="agreement" id="agreement" aria-labelledby="agreement-title" hidden>
-        <button class="back-button" id="agreement-back" type="button">← Use a different email</button>
         <p class="eyebrow">One-time agreement</p>
-        <h2 id="agreement-title">Keep the closed test private</h2>
+        <h2 id="agreement-title" tabindex="-1">Keep the closed test private</h2>
         <p class="agreement-lede">A broad recommendation is fine. Private content and personal access stay inside the tester group.</p>
         <ul class="agreement-summary">
           <li>Do not share literal questions, answers, screenshots, dashboard views, or detailed product behaviour.</li>
@@ -57,6 +56,7 @@
           <p class="form-message" id="agreement-message" role="status" aria-live="polite"></p>
           <button id="agreement-submit" type="submit">Accept and enter</button>
         </form>
+        <button class="back-button" id="agreement-back" type="button">Use a different email</button>
       </section>
 
       <p class="privacy-note" id="privacy-note">Your email is used to check access, save progress, and protect this closed test.</p>

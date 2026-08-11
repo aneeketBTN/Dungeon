@@ -46,7 +46,7 @@
         document.getElementById("login-title").hidden = true;
         agreement.hidden = false;
         privacyNote.hidden = true;
-        agreementBack.focus();
+        document.getElementById("agreement-title").focus();
         return;
       }
       if (!response.ok) throw new Error(payload.message || "Access could not be checked. Try again.");
