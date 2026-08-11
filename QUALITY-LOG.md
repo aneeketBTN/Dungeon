@@ -185,10 +185,11 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   revoke safely. Cause: the local prototype had no cohort identity boundary and the current
   browser scheduler loads complete bank scripts. Fix: selected one-time email Access with
   individual revocation, owner-only administration, no-index responses, private caching, edge rate
-  limiting, and an explicit no-DRM claim boundary. The current owner-only deployment stays closed
-  until Cloudflare terms/overage authorisation and tester emails are supplied. Evidence:
-  `evidence/2026-08-11/tester-access-admin/verification.md`; prevention: `DESIGN_SOURCE_INDEX.md`
-  C20–C21 and `BUG-LAWS.md` LAW-25.
+  limiting, and an explicit no-DRM claim boundary. The exact protected route is now live and the
+  allowlist contains only the owner bootstrap address; tester access still waits for owner-supplied
+  emails. Evidence: `evidence/2026-08-11/tester-access-admin/verification.md` and
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention:
+  `DESIGN_SOURCE_INDEX.md` C20–C21 and `BUG-LAWS.md` LAW-25.
 - **I22 (2026-08-11)** — Issue: tester access, release health, feedback instructions, and
   announcements were scattered across provider dashboards and documents. Cause: the release had
   no truthful owner operations surface. Fix: added the Dungeon Control Room with live
@@ -216,10 +217,12 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   connected an owner-only control to the dedicated Access group. Fix: added direct email
   add/list/revoke controls and a prepared edge endpoint with owner JWT/email validation,
   same-origin writes, email-only group invariants, protected owner membership, credential-free
-  browser code, and truthful setup/unavailable states. Live interaction remains gated by
-  Cloudflare activation. Evidence:
-  `evidence/2026-08-11/tester-dashboard-access-management/verification.md`; prevention:
-  `BUG-LAWS.md` LAW-30.
+  browser code, and truthful setup/unavailable states. The edge secret and group are now live;
+  exact-domain owner interaction remains waiting on a stable declared-Browser resolver and a real
+  owner-approved tester address. Evidence:
+  `evidence/2026-08-11/tester-dashboard-access-management/verification.md` and
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
+  LAW-30.
 - **I26 (2026-08-11)** — Issue: the prepared Cloudflare proxy still depended on a private hosting
   origin and bypass credential, while tester and owner paths needed different identity boundaries.
   Cause: the first deployment design reused the existing Sites artifact instead of making the
@@ -227,8 +230,9 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   Worker, kept every owner asset/API under the more-specific admin Access application, blocked
   legacy admin aliases, stored only the group credential as an edge secret, deleted the temporary
   deployment token, and added rapid-request containment. Anonymous learner, bank, and admin denial
-  are verified at the edge; the production Browser reached the owner login challenge and remains
-  explicitly `WAITING_OWNER_ACCESS_SIGNIN` rather than being overstated. Evidence:
+  are verified at the edge; the declared Browser resolver remained inconsistent after its initial
+  negative lookup, so exact-domain authenticated interaction stays
+  `WAITING_REAL_BROWSER_DNS_CACHE` rather than being overstated. Evidence:
   `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
   LAW-25, LAW-30, and LAW-31.
 

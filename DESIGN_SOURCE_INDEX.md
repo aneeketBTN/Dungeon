@@ -29,7 +29,7 @@ not make it authoritative.
      an owner-administered WhatsApp community.
 - Protected domain and owner operations (2026-08-11):
      `briefs/TESTER_ACCESS_AND_ADMIN.md` owns the exact `aneeketdas.com/dungeon` route, per-email
-     access, anti-harvesting claim boundary, private origin, and owner control room.
+     access, anti-harvesting claim boundary, self-contained protected edge, and owner control room.
    - Prepared tester-agent operations (2026-08-11): `.agents/README.md`, the three charters and
      `.agents/deployment.json` own data contracts, evidence thresholds, review authority and the
      activation sequence. Registered schedules are paused and do not supersede privacy gates.

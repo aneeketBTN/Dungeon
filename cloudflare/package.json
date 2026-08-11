@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build:standalone": "node scripts/build-standalone.mjs",
     "check": "wrangler deploy --dry-run --outdir dist",
     "types": "wrangler types"
   },
@@ -12,6 +13,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
+    "esbuild": "0.28.1",
     "wrangler": "4.120.1"
   }
 }

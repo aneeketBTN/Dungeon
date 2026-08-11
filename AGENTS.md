@@ -171,6 +171,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `cloudflare/scripts/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
 | `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
 | `cloudflare/README.md` | Live route, runtime-secret, Access-policy, owner-bootstrap, and rate-limit contract. | 2026-08-11 |
+| `cloudflare/scripts/build-standalone.mjs` | Builds the same protected allowlist as an embedded-asset fallback when an Assets upload path is unavailable. | 2026-08-11 |
 | `tests/site-release.test.mjs` | Automated release-boundary, privacy, routing, header, and setup-required checks. | 2026-08-11 |
 | `tests/cloudflare-access.test.mjs` | Synthetic owner authentication, group invariant, grant, revoke, static allowlist, admin-isolation, health, and private-cache checks. | 2026-08-11 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
@@ -332,7 +333,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   self-review, selectable practice shapes, held feedback,
   mixed formats and boss grading, staged dashboard, evidence graph, real-Browser desktop/narrow
   interaction, isolated save/resume, live-state preservation, release-boundary tests, no-index and
-  private-cache controls, the desktop owner control room, 18 passing release/access/agent tests,
+  private-cache controls, the desktop owner control room, 20 passing release/access/agent tests,
   the live Cloudflare Worker route, distinct learner/admin Access audiences, anonymous edge denial,
   a least-privilege group secret, and rapid-request rate limiting)
 - Confidence: high for file inventory, operating rules, all-subject implementation, structural

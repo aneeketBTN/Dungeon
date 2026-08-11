@@ -36,7 +36,9 @@ Use identity-based access rather than a shared password:
 6. Cloudflare rate limiting blocks more than 40 `/dungeon` requests per IP/colo pair in 10 seconds
    for 10 seconds without penalising a normal page load.
 
-The Worker serves the allowlisted build directly from Cloudflare static assets. The Sites release
+The Worker serves the allowlisted build directly from its self-contained Cloudflare deployment
+(embedded in the current API version, or through the equivalent Wrangler Assets binding) and
+validates the signed learner/admin Access token against the matching application audience. The Sites release
 remains owner-only as a backup, but no origin bypass credential is needed or stored.
 
 ## Content-delivery boundary
@@ -87,7 +89,7 @@ or ownerless group.
   hides that member from the tester count and cannot revoke it.
 - Create an Access application for `aneeketdas.com/dungeon*` using that group.
 - Create an owner-only application for `aneeketdas.com/dungeon/admin*` with higher precedence.
-- Route `/dungeon` and `/dungeon/*` through the Worker-owned static asset binding with explicit
+- Route `/dungeon` and `/dungeon/*` through Worker-owned allowlisted asset delivery with explicit
   learner/admin aliases, private cache controls, and no direct public admin-asset path.
 - The zone rate-limit rule blocks above 40 requests per IP/colo pair per 10 seconds for 10 seconds.
 - Verify anonymous denial, approved-tester entry, owner admin entry, individual revocation, and

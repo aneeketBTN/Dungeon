@@ -420,3 +420,18 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   its final exit code.
 - **Verify:** The final evidence names each command, working directory, and individual result; the
   root build/test/bank commands and the Cloudflare dry run all pass in their correct directories.
+
+### LAW-33 🟡 — A dry-run-capable Wrangler shell may still be unable to deploy
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 exact-domain release: Wrangler built and dry-ran successfully, but its
+  non-interactive production deploy exited before mutation because `CLOUDFLARE_API_TOKEN` was not
+  available to that process.
+- **Why:** Build success does not prove deployment authority, and improvising with a temporary
+  workers.dev URL could create an unintended public surface or make a release irreproducible.
+- **Comply:** Check non-interactive deployment authentication before the live step. Never use
+  `--temporary` for production. Keep a checked-in standalone packager that embeds only the built
+  allowlist, and use an authenticated provider API path when Wrangler lacks authority.
+- **Verify:** The normal dry run and standalone bundle both pass; the live script version, exact
+  route, Access applications, DNS record, disabled workers.dev surface, and anonymous denial are
+  read back after deployment.

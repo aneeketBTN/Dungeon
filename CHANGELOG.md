@@ -5,6 +5,9 @@ changed, decisions, verification/evidence, and deferrals.
 
 ## 2026-08-11 — Protected Cloudflare domain deployed
 
+- Saved and deployed private Sites version 5 from commit
+  `bec2c2af7e1b9b4f9fcd854ee2e19f239e7fd131`; it remains an owner-only rollback surface while the
+  exact domain uses the self-contained Cloudflare edge.
 - Activated the exact `https://aneeketdas.com/dungeon/` Worker route with direct static-asset
   delivery; the private Sites release remains an owner-only backup and no origin bypass token is
   needed.
@@ -21,14 +24,20 @@ changed, decisions, verification/evidence, and deferrals.
 - Replaced the prepared private-origin proxy with an explicit static asset router: learner and
   admin paths are allowlisted, direct public admin aliases fail closed, assets are private/no-store
   and no-index, and the owner endpoint retains JWT, email, same-origin, size, and group invariants.
+- Added and verified an embedded-asset fallback build for upload paths without an Assets binding;
+  it uses the same allowlist and still runs the Worker authentication checks.
 - Public DNS, Worker/secret/API configuration, and anonymous edge checks pass. Anonymous learner,
   bank-script, and admin requests all redirect to the correct Access audience. The declared
-  Browser now resolves the domain and reaches the owner Cloudflare login challenge; automated
-  completion is disallowed by the Browser security policy, so live dashboard interaction is
-  `WAITING_OWNER_ACCESS_SIGNIN`. Tester grants remain `WAITING_OWNER_TESTER_EMAILS`. Evidence:
+  Browser now resolves the domain and reaches the more-specific Cloudflare owner login challenge;
+  automated completion is disallowed, so live dashboard interaction is
+  `WAITING_OWNER_ACCESS_SIGNIN`. Tester grants remain
+  `WAITING_OWNER_TESTER_EMAILS`. Evidence:
   `evidence/2026-08-11/cloudflare-protected-domain/verification.md`.
-- `npm test` passes 18/18, the 728-item bank validator has no errors, and the production upload
-  reports Worker startup in 6 ms.
+- Added a reproducible standalone packaging path for authenticated API deployment when a
+  non-interactive Wrangler shell lacks credentials; the bundle embeds only the same allowlisted
+  client assets. `npm test` passes 20/20, the 728-item bank validator has no errors, both Worker
+  packaging paths pass, and the production upload is version
+  `72708eb2-dc76-4987-bad1-238b7ac8313c`.
 
 ## 2026-08-11 — Direct tester management in the Control Room
 

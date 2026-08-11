@@ -9,6 +9,8 @@ dist/
 *.tgz
 .wrangler/
 cloudflare/worker-configuration.d.ts
+cloudflare/.generated/
+cloudflare/dist-standalone/
 
 # Real learner data and local runtime state
 state/

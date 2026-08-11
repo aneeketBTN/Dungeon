@@ -33,8 +33,10 @@ list, grant, or revoke operation.
 The normal release path is `npm run build` from the project root, followed by
 `npm --prefix cloudflare run check`. `npm --prefix cloudflare run build:standalone` creates a
 self-contained Worker bundle from the same allowlisted client directory for an authenticated API
-deployment when the non-interactive shell has no Wrangler API token. Never use a temporary
-workers.dev deployment for production or put a deployment credential in source.
+deployment when an Assets-binding upload is unavailable. The current production version uses
+this authenticated API fallback; `wrangler.jsonc` retains the equivalent `env.ASSETS` route. Both
+paths run the Worker JWT checks. Never use a temporary workers.dev deployment for production or
+put a deployment credential in source.
 
 Production also has a zone rate-limit rule for the `/dungeon` path: more than 40 requests from one
 IP/colo pair in 10 seconds is blocked for 10 seconds. This contains rapid automated collection

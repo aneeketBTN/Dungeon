@@ -4,20 +4,25 @@ Date: 2026-08-11
 
 Status: `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` for deployment, DNS, route, Access policy,
 anonymous denial, direct-bank denial, rate limiting, secret presence, and least-privilege group
-access. Production owner/tester UI interaction is `WAITING_OWNER_ACCESS_SIGNIN`: the declared
-Browser resolves the domain and reaches the owner Cloudflare login challenge, but the Browser
-security policy blocks automated completion of that authentication step.
+access. Production owner/tester UI interaction is `WAITING_REAL_BROWSER_DNS_CACHE`: public DNS and
+pinned Cloudflare-edge HTTPS pass, but the declared Browser resolver remained inconsistent after a
+pre-deployment negative lookup and returned `ERR_NAME_NOT_RESOLVED` on the final retry.
 
 ## Deployed boundary
 
 - URL: `https://aneeketdas.com/dungeon/`
 - Owner dashboard: `https://aneeketdas.com/dungeon/admin/`
 - Worker: `dungeon-access-edge`
-- Worker version: `3d3f79a9-0a66-4803-9ce6-56d459460255`
+- Worker version: `72708eb2-dc76-4987-bad1-238b7ac8313c`
 - Route: `aneeketdas.com/dungeon*`
-- Static delivery: 11 deployed files from the ten-file allowlist plus the generated release
+- Static delivery: the current API deployment embeds 11 files from the ten-file allowlist plus the generated release
   manifest; no `state/`, `history/`, credentials, tester addresses, source packs, or working files.
+- Latest deployment source: authenticated API; `has_assets: false` because this version uses the
+  verified embedded-asset fallback rather than the equivalent Wrangler Assets binding.
 - Sites remains an owner-only backup and is not a production-origin dependency.
+- Sites version 5 was saved from commit `bec2c2af7e1b9b4f9fcd854ee2e19f239e7fd131` and deployed
+  successfully at its private production URL. Its access policy contains one owner, no groups,
+  and no external visitors.
 
 ## Access configuration
 
@@ -65,22 +70,28 @@ Zone ruleset `efaf5d34bb8e41649accaf0c4e7d90a9`, rule
 ## Local verification
 
 - `npm run build`: prepared the allowlisted release.
-- `npm test`: 18/18 pass, including fail-closed bindings/auth, email-only group invariants,
+- `npm test`: 20/20 pass, including fail-closed bindings/auth, email-only group invariants,
   protected owner membership, same-origin mutations, static route allowlist, private cache/no-index
-  headers, health, manifest, and out-of-prefix denial.
+  headers, health, manifest, out-of-prefix denial, method rejection, and embedded-asset fallback.
 - `node mock/validate_t6_bank.js`: 728 items, no validator errors.
 - `npx wrangler deploy --dry-run`: 13 build-directory files read and Worker bundle succeeded before
   production deployment.
-- Production upload: 11 new/modified static files, Worker startup 6 ms, route deployed.
+- `npm run build:standalone`: embedded the same 11 served files in a 383,738-byte fallback bundle;
+  the unit suite proves this path retains private-cache headers and the Worker authentication gate.
+- `npm --prefix cloudflare run build:standalone`: prepares the same 11 allowlisted client files in
+  a self-contained bundle for authenticated API deployment.
+- The first non-interactive Wrangler live deploy exited before mutation because its process lacked
+  `CLOUDFLARE_API_TOKEN`; no temporary workers.dev deployment was used. The checked-in standalone
+  bundle was uploaded through the authenticated provider API and the exact route was read back.
 
 ## Remaining acceptance
 
 - `WAITING_OWNER_TESTER_EMAILS`: only the owner bootstrap email is present; no potential user was
   granted access without an owner-supplied address.
-- `WAITING_OWNER_ACCESS_SIGNIN`: after an initial pre-propagation negative DNS result, the declared
-  Browser resolved the production URL and reached the more-specific Cloudflare owner login
-  challenge. Its security policy disallows automated completion. Do not claim production
-  owner/tester interaction verified until the owner signs in, the Control Room reports Connected,
-  and a real add/revoke pass is performed with an owner-approved tester email.
+- `WAITING_REAL_BROWSER_DNS_CACHE`: the declared Browser resolver was inconsistent after its
+  pre-propagation negative lookup and returned `ERR_NAME_NOT_RESOLVED` on the final retry. Do not
+  claim production owner/tester interaction verified until the Browser reaches the URL, the owner
+  signs in, the Control Room reports Connected, and a real add/revoke pass is performed with an
+  owner-approved tester email.
 - Identity and rate limiting prevent anonymous/casual harvesting, not copying by an approved
   technical tester. Server-side per-session item delivery remains the stronger future boundary.
