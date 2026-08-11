@@ -329,22 +329,40 @@ export function createD1Store() {
       await db.prepare("DELETE FROM testers WHERE email = ?").bind(email).run();
     },
 
+    async unlockTester(env, email) {
+      const db = requireDatabase(env);
+      const now = new Date().toISOString();
+      const result = await db.prepare(`UPDATE testers
+        SET location_locked_at = NULL, lock_reason = NULL, first_country = NULL, updated_at = ?
+        WHERE email = ? AND active = 1`).bind(now, email).run();
+      return Number(result?.meta?.changes || 0) > 0;
+    },
+
     async listTesterSecurity(env, emails) {
       if (!emails.length) return {};
       const db = requireDatabase(env);
       const placeholders = emails.map(() => "?").join(", ");
       const result = await db.prepare(`SELECT testers.email, testers.first_country, testers.location_locked_at,
-          testers.lock_reason, COUNT(learner_sessions.token_hash) AS active_sessions
+          testers.lock_reason, testers.agreement_version, testers.agreement_accepted_at, testers.last_seen_at,
+          COUNT(learner_sessions.token_hash) AS active_sessions,
+          MAX(learner_progress.updated_at) AS progress_updated_at
         FROM testers
         LEFT JOIN learner_sessions ON learner_sessions.email = testers.email AND learner_sessions.expires_at > ?
+        LEFT JOIN learner_progress ON learner_progress.email = testers.email
         WHERE testers.email IN (${placeholders})
-        GROUP BY testers.email, testers.first_country, testers.location_locked_at, testers.lock_reason`)
+        GROUP BY testers.email, testers.first_country, testers.location_locked_at, testers.lock_reason,
+          testers.agreement_version, testers.agreement_accepted_at, testers.last_seen_at`)
         .bind(new Date().toISOString(), ...emails).all();
       return Object.fromEntries((result.results || []).map((row) => [row.email, {
         firstCountry: row.first_country || null,
         locked: Boolean(row.location_locked_at),
         lockReason: row.lock_reason || null,
-        activeSession: Number(row.active_sessions || 0) > 0
+        activeSession: Number(row.active_sessions || 0) > 0,
+        agreementAccepted: row.agreement_version === AGREEMENT_VERSION,
+        agreementAcceptedAt: row.agreement_accepted_at || null,
+        lastSeenAt: row.last_seen_at || null,
+        hasProgress: Boolean(row.progress_updated_at),
+        progressUpdatedAt: row.progress_updated_at || null
       }]));
     },
 
@@ -470,37 +488,83 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
   await verifyAdmin(request, env);
 
   const method = request.method.toUpperCase();
-  if (!["GET", "POST", "DELETE"].includes(method)) {
-    return json({code: "METHOD_NOT_ALLOWED", message: "Use GET, POST, or DELETE."}, 405);
+  if (!["GET", "POST", "PATCH", "DELETE"].includes(method)) {
+    return json({code: "METHOD_NOT_ALLOWED", message: "Use GET, POST, PATCH, or DELETE."}, 405);
   }
   const group = await accessApi(env, fetchImpl);
   const emails = parseEmailOnlyGroup(group, ownerEmail);
-  const responseBody = async (allEmails) => {
+  const responseBody = async (allEmails, extra = {}) => {
     const testers = allEmails.filter((email) => email !== ownerEmail);
     const security = typeof store.listTesterSecurity === "function"
       ? await store.listTesterSecurity(env, testers)
       : {};
-    return {status: "connected", testers, security};
+    return {status: "connected", testers, security, ...extra};
   };
   if (method === "GET") return json(await responseBody(emails));
 
   requireSameOrigin(request);
-  const targetEmail = method === "POST"
-    ? normalizeEmail((await readBoundedJson(request))?.email)
-    : normalizeEmail(new URL(request.url).searchParams.get("email"));
-  if (!targetEmail) throw new RequestError(400, "INVALID_EMAIL", "Enter a valid tester email.");
-  if (targetEmail === ownerEmail) throw new RequestError(400, "OWNER_PROTECTED", "Owner access cannot be changed here.");
 
-  const updated = method === "POST"
-    ? [...new Set([...emails, targetEmail])].sort()
-    : emails.filter((email) => email !== targetEmail);
+  if (method === "PATCH") {
+    const body = await readBoundedJson(request);
+    if (body?.action !== "unlock") throw new RequestError(400, "UNSUPPORTED_ACTION", "Only unlock is supported here.");
+    const targetEmail = normalizeEmail(body?.email);
+    if (!targetEmail) throw new RequestError(400, "INVALID_EMAIL", "Enter a valid tester email.");
+    if (targetEmail === ownerEmail) throw new RequestError(400, "OWNER_PROTECTED", "Owner access cannot be changed here.");
+    if (!emails.includes(targetEmail)) throw new RequestError(404, "NOT_APPROVED", "That email is not an approved tester.");
+    if (typeof store.unlockTester !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Progress storage is temporarily unavailable.");
+    await store.unlockTester(env, targetEmail);
+    console.log(JSON.stringify({event: "tester_lock_change", action: "unlock"}));
+    return json(await responseBody(emails, {unlocked: targetEmail}));
+  }
 
-  await writeGroup(env, fetchImpl, group, updated);
-  if (method === "POST") await store.activateTester(env, targetEmail);
-  else await store.revokeTester(env, targetEmail);
-  const testers = updated.filter((email) => email !== ownerEmail);
-  console.log(JSON.stringify({event: "tester_access_change", action: method === "POST" ? "grant" : "revoke", testerCount: testers.length}));
-  return json(await responseBody(updated));
+  if (method === "DELETE") {
+    const targetEmail = normalizeEmail(new URL(request.url).searchParams.get("email"));
+    if (!targetEmail) throw new RequestError(400, "INVALID_EMAIL", "Enter a valid tester email.");
+    if (targetEmail === ownerEmail) throw new RequestError(400, "OWNER_PROTECTED", "Owner access cannot be changed here.");
+    const updated = emails.filter((email) => email !== targetEmail);
+    await writeGroup(env, fetchImpl, group, updated);
+    await store.revokeTester(env, targetEmail);
+    console.log(JSON.stringify({event: "tester_access_change", action: "revoke", testerCount: updated.filter((email) => email !== ownerEmail).length}));
+    return json(await responseBody(updated));
+  }
+
+  const body = await readBoundedJson(request, 4096);
+  const requested = Array.isArray(body?.emails) ? body.emails : [body?.email];
+  if (!requested.length || requested.length > 25) {
+    throw new RequestError(400, "INVALID_EMAIL", "Add between one and 25 tester emails at a time.");
+  }
+  const accepted = [];
+  const rejected = [];
+  for (const candidate of requested) {
+    const email = normalizeEmail(candidate);
+    if (!email) {
+      const raw = typeof candidate === "string" ? candidate.trim().slice(0, 80) : "";
+      if (raw) rejected.push(raw);
+      continue;
+    }
+    if (email === ownerEmail) {
+      rejected.push(email);
+      continue;
+    }
+    if (!accepted.includes(email)) accepted.push(email);
+  }
+  if (!accepted.length) throw new RequestError(400, "INVALID_EMAIL", "Enter a valid tester email.");
+
+  const added = accepted.filter((email) => !emails.includes(email));
+  const alreadyApproved = accepted.filter((email) => emails.includes(email));
+  const updated = [...new Set([...emails, ...accepted])].sort();
+
+  if (added.length) {
+    await writeGroup(env, fetchImpl, group, updated);
+    for (const email of added) await store.activateTester(env, email);
+    console.log(JSON.stringify({
+      event: "tester_access_change",
+      action: "grant",
+      granted: added.length,
+      testerCount: updated.filter((email) => email !== ownerEmail).length
+    }));
+  }
+  return json(await responseBody(updated, {added, alreadyApproved, rejected}));
 }
 
 async function serveAsset(request, env, assetPath, embeddedAssets) {

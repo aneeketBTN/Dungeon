@@ -73,6 +73,11 @@ function createMemoryStore({agreementAccepted = true} = {}) {
       progress.delete(email);
       for (const [tokenHash, sessionEmail] of sessions) if (sessionEmail === email) sessions.delete(tokenHash);
     },
+    async unlockTester(env, email) {
+      const wasLocked = locked.delete(email);
+      countries.delete(email);
+      return wasLocked;
+    },
     async getProgress(env, email) { return progress.get(email) || null; },
     async saveProgress(env, email, stateJson) {
       const prior = progress.get(email);
@@ -200,6 +205,98 @@ test("grant preserves the owner and existing testers", async () => {
     {email: {email: owner}}
   ]);
   assert.equal(store.active.has("beta@example.com"), true);
+});
+
+test("one request onboards a whole cohort and reports duplicates and rejects", async () => {
+  let updateBody;
+  const store = createMemoryStore();
+  const worker = workerWithGroup(["alpha@example.com"], {
+    store,
+    fetchImpl: async (input, init = {}) => {
+      if (init.method === "PUT") {
+        updateBody = JSON.parse(init.body);
+        return Response.json(groupResult(["alpha@example.com"]));
+      }
+      return Response.json(groupResult(["alpha@example.com"]));
+    }
+  });
+  const response = await worker.fetch(request("/dungeon/admin/api/testers", {
+    method: "POST",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com"},
+    body: JSON.stringify({emails: ["Beta@Example.com", "gamma@example.com", "alpha@example.com", "not-an-email", owner]})
+  }), baseEnv);
+  const payload = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(payload.added, ["beta@example.com", "gamma@example.com"]);
+  assert.deepEqual(payload.alreadyApproved, ["alpha@example.com"]);
+  assert.deepEqual(payload.rejected, ["not-an-email", owner]);
+  assert.deepEqual(updateBody.include.map((rule) => rule.email.email), [
+    "alpha@example.com",
+    "beta@example.com",
+    "gamma@example.com",
+    owner
+  ]);
+  assert.equal(store.active.has("beta@example.com"), true);
+  assert.equal(store.active.has("gamma@example.com"), true);
+  assert.equal(store.active.has(owner), false);
+});
+
+test("unlocking a country lock keeps the tester's saved progress", async () => {
+  const sampleState = {version: 2, selectedCourse: "BRGSA", conceptAttempts: {BRGSA: {C1: [{correct: true}]}}, completed: {BRGSA: [1]}};
+  let wroteGroup = false;
+  const store = createMemoryStore();
+  const worker = workerWithGroup(["alpha@example.com"], {
+    store,
+    fetchImpl: async (input, init = {}) => {
+      if (init.method === "PUT") wroteGroup = true;
+      return Response.json(groupResult(["alpha@example.com"]));
+    }
+  });
+
+  const firstLogin = await login(worker, "alpha@example.com", baseEnv, "IN");
+  const cookie = cookieFrom(firstLogin);
+  await worker.fetch(request("/dungeon/api/progress", {
+    method: "PUT",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com", Cookie: cookie},
+    body: JSON.stringify({state: sampleState})
+  }), baseEnv);
+  await worker.fetch(request("/dungeon/api/session", {
+    method: "DELETE",
+    headers: {Origin: "https://aneeketdas.com", Cookie: cookie}
+  }), baseEnv);
+
+  const fromAbroad = await login(worker, "alpha@example.com", baseEnv, "US");
+  assert.equal(fromAbroad.status, 403);
+  assert.equal((await fromAbroad.json()).code, "LOCATION_LOCKED");
+
+  const unlock = await worker.fetch(request("/dungeon/admin/api/testers", {
+    method: "PATCH",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com"},
+    body: JSON.stringify({email: "alpha@example.com", action: "unlock"})
+  }), baseEnv);
+  assert.equal(unlock.status, 200);
+  assert.equal((await unlock.json()).unlocked, "alpha@example.com");
+  assert.equal(wroteGroup, false, "unlock must not rewrite the Access group");
+
+  const afterUnlock = await login(worker, "alpha@example.com", baseEnv, "US");
+  assert.equal(afterUnlock.status, 200);
+  const progressResponse = await worker.fetch(request("/dungeon/api/progress", {
+    headers: {Cookie: cookieFrom(afterUnlock)}
+  }), baseEnv);
+  assert.equal(progressResponse.status, 200);
+  assert.deepEqual((await progressResponse.json()).state, sampleState);
+});
+
+test("unlock refuses an address that is not an approved tester", async () => {
+  const worker = workerWithGroup(["alpha@example.com"]);
+  const response = await worker.fetch(request("/dungeon/admin/api/testers", {
+    method: "PATCH",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com"},
+    body: JSON.stringify({email: "stranger@example.com", action: "unlock"})
+  }), baseEnv);
+  assert.equal(response.status, 404);
+  assert.equal((await response.json()).code, "NOT_APPROVED");
 });
 
 test("revoke invalidates sessions and deletes saved progress", async () => {

@@ -57,7 +57,16 @@ button:disabled { cursor: wait; opacity: .65; }
 .agreement-terms h3:first-child { margin-top: 0; }
 .agreement-terms p { margin: 0; }
 
+.group-step { margin: 20px 0 0; padding: 18px; background: rgba(31,117,84,.06); border: 1px solid rgba(31,117,84,.28); border-radius: 14px; }
+.group-step h3 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: 20px; letter-spacing: -.01em; }
+.group-step p { margin: 0 0 14px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.group-step .eyebrow { margin-bottom: 7px; }
+.button-link { display: flex; justify-content: center; align-items: center; min-height: 48px; padding: 0 16px; color: white; background: var(--green); border-radius: 10px; font-size: 15px; font-weight: 850; text-decoration: none; }
+.button-link:hover { background: var(--green-dark); }
+.button-link:focus-visible { outline: 3px solid rgba(31,117,84,.3); outline-offset: 3px; }
+
 #agreement-form { gap: 0; margin-top: 20px; }
+#agreement-form .agreement-check + .agreement-check { margin-top: 10px; }
 .agreement-check { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; padding: 16px; background: var(--surface); border: 1px solid #aebdb5; border-radius: 12px; font-size: 14px; font-weight: 750; line-height: 1.45; cursor: pointer; transition: border-color .15s ease, background .15s ease; }
 .agreement-check:hover { border-color: var(--green); }
 .agreement-check:has(input:checked) { background: rgba(31,117,84,.06); border-color: var(--green); }

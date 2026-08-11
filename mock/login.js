@@ -8,6 +8,7 @@
   var agreement = document.getElementById("agreement");
   var agreementForm = document.getElementById("agreement-form");
   var agreementCheck = document.getElementById("agreement-accept");
+  var agreementGroup = document.getElementById("agreement-group");
   var agreementMessage = document.getElementById("agreement-message");
   var agreementSubmit = document.getElementById("agreement-submit");
   var agreementBack = document.getElementById("agreement-back");
@@ -64,6 +65,7 @@
     pendingEmail = "";
     agreementVersion = "";
     agreementCheck.checked = false;
+    agreementGroup.checked = false;
     agreement.hidden = true;
     form.hidden = false;
     document.querySelector(".login-panel > .lede").hidden = false;
@@ -78,6 +80,10 @@
     event.preventDefault();
     if (!agreementCheck.checkValidity()) {
       agreementCheck.reportValidity();
+      return;
+    }
+    if (!agreementGroup.checkValidity()) {
+      agreementGroup.reportValidity();
       return;
     }
     agreementSubmit.disabled = true;
