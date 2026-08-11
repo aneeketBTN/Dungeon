@@ -228,17 +228,25 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin) {
   return json({status: "connected", testers});
 }
 
-async function serveAsset(request, env, assetPath) {
-  if (!env?.ASSETS || typeof env.ASSETS.fetch !== "function") {
-    throw new RequestError(503, "SETUP_REQUIRED", "Dungeon assets are not configured.");
-  }
+async function serveAsset(request, env, assetPath, embeddedAssets) {
   if (!["GET", "HEAD"].includes(request.method.toUpperCase())) {
     return json({code: "METHOD_NOT_ALLOWED", message: "Use GET or HEAD."}, 405);
   }
-  const assetUrl = new URL(request.url);
-  assetUrl.pathname = assetPath;
-  assetUrl.search = "";
-  const response = await env.ASSETS.fetch(new Request(assetUrl, {method: request.method}));
+
+  let response;
+  if (env?.ASSETS && typeof env.ASSETS.fetch === "function") {
+    const assetUrl = new URL(request.url);
+    assetUrl.pathname = assetPath;
+    assetUrl.search = "";
+    response = await env.ASSETS.fetch(new Request(assetUrl, {method: request.method}));
+  } else if (embeddedAssets?.[assetPath]) {
+    const asset = embeddedAssets[assetPath];
+    response = new Response(request.method === "HEAD" ? null : asset.body, {
+      headers: {"Content-Type": asset.contentType}
+    });
+  } else {
+    throw new RequestError(503, "SETUP_REQUIRED", "Dungeon assets are not configured.");
+  }
   const headers = securityHeaders(new Headers(response.headers));
   headers.delete("Set-Cookie");
   return new Response(response.body, {status: response.status, statusText: response.statusText, headers});
@@ -262,7 +270,12 @@ function learnerAssetPath(pathname, prefix) {
   return null;
 }
 
-export function createWorker({fetchImpl = fetch, verifyAdmin = verifyOwner, verifyRequest = verifyAccess} = {}) {
+export function createWorker({
+  fetchImpl = fetch,
+  verifyAdmin = verifyOwner,
+  verifyRequest = verifyAccess,
+  embeddedAssets = null
+} = {}) {
   return {
     async fetch(request, env) {
       try {
@@ -279,9 +292,9 @@ export function createWorker({fetchImpl = fetch, verifyAdmin = verifyOwner, veri
         }
         if (url.pathname === prefix) return redirect(`${prefix}/${url.search}`);
         if (url.pathname === `${prefix}/admin`) return redirect(`${prefix}/admin/${url.search}`);
-        if (url.pathname === `${prefix}/admin/`) return await serveAsset(request, env, "/mock/admin.html");
-        if (url.pathname === `${prefix}/admin/admin.css`) return await serveAsset(request, env, "/mock/admin.css");
-        if (url.pathname === `${prefix}/admin/admin.js`) return await serveAsset(request, env, "/mock/admin.js");
+        if (url.pathname === `${prefix}/admin/`) return await serveAsset(request, env, "/mock/admin.html", embeddedAssets);
+        if (url.pathname === `${prefix}/admin/admin.css`) return await serveAsset(request, env, "/mock/admin.css", embeddedAssets);
+        if (url.pathname === `${prefix}/admin/admin.js`) return await serveAsset(request, env, "/mock/admin.js", embeddedAssets);
         if (url.pathname === `${prefix}/admin/t6.html`) return redirect(`${prefix}/`);
         if (url.pathname === `${prefix}/health`) {
           return json({status: "ok", storage: "browser-local", access: "cloudflare-zero-trust"});
@@ -290,7 +303,7 @@ export function createWorker({fetchImpl = fetch, verifyAdmin = verifyOwner, veri
           return json({code: "NOT_FOUND", message: "Not found."}, 404);
         }
         const assetPath = learnerAssetPath(url.pathname, prefix);
-        if (assetPath) return await serveAsset(request, env, assetPath);
+        if (assetPath) return await serveAsset(request, env, assetPath, embeddedAssets);
         return json({code: "NOT_FOUND", message: "Not found."}, 404);
       } catch (error) {
         if (error instanceof RequestError) return json({code: error.code, message: error.message}, error.status);

@@ -178,3 +178,25 @@ test("protected routes fail closed without a valid Access JWT", async () => {
   assert.equal(response.status, 403);
   assert.equal((await response.json()).code, "ACCESS_AUTH_REQUIRED");
 });
+
+test("static routes reject writes before asset lookup", async () => {
+  const worker = testWorker();
+  const {ASSETS, ...envWithoutAssets} = baseEnv;
+  const response = await worker.fetch(request("/dungeon/", {method: "POST"}), envWithoutAssets);
+  assert.equal(response.status, 405);
+  assert.equal((await response.json()).code, "METHOD_NOT_ALLOWED");
+});
+
+test("standalone delivery serves embedded allowlisted assets", async () => {
+  const worker = createWorker({
+    verifyRequest: async () => ({}),
+    embeddedAssets: {
+      "/mock/t6.html": {body: "embedded learner", contentType: "text/html; charset=utf-8"}
+    }
+  });
+  const {ASSETS, ...envWithoutAssets} = baseEnv;
+  const response = await worker.fetch(request("/dungeon/"), envWithoutAssets);
+  assert.equal(response.status, 200);
+  assert.equal(await response.text(), "embedded learner");
+  assert.equal(response.headers.get("cache-control"), "private, no-store, max-age=0");
+});

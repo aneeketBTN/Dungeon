@@ -18,14 +18,15 @@ owner-supplied source extracts, working media, evidence captures, and local envi
 excluded from deployment and source publication.
 
 The controlled cohort uses individual email access rather than a shared password. Search indexing
-is blocked, question-bearing responses use private cache controls, and the Cloudflare path will be
-rate-limited after Access activation. The owner dashboard must have a narrower owner-only policy
+is blocked, question-bearing responses use private cache controls, and the Cloudflare path blocks
+more than 40 requests per IP/colo pair in 10 seconds for 10 seconds. The owner dashboard has a
+narrower owner-only policy
 than the learner route.
 
 Tester-list changes use an owner-only edge endpoint. It validates the Access JWT and owner email,
 requires same-origin writes, protects the owner bootstrap rule, and rejects a group containing
-anything other than exact-email include rules. Cloudflare and private-origin credentials are edge
-secrets and must never be copied into the dashboard, source, logs, or release manifest.
+anything other than exact-email include rules. The Cloudflare group credential is an edge secret
+and must never be copied into the dashboard, source, logs, or release manifest.
 
 These controls do not create DRM. An approved tester can copy visible content, and the current
 browser-local scheduler downloads the embedded bank scripts after access. Do not describe the

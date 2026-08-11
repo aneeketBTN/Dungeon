@@ -300,13 +300,13 @@ one side.
 
 - `aneeketdas.com/dungeon` needs Cloudflare path routing, while exposing the Sites origin publicly
   would let visitors bypass the domain gate.
-- Resolution (2026-08-11): keep the Sites origin owner-only and let a Cloudflare Worker authenticate
-  to it with a secret stored only at the edge. Put the broader tester Access policy on `/dungeon*`
-  and a higher-priority owner-only policy on `/dungeon/admin*`. Do not publish a bypass credential
-  in source, client code, URLs, evidence, or hosting metadata. The owner dashboard may manage the
-  dedicated email-only Access group through an owner-JWT-verified edge endpoint; it must never call
-  the Cloudflare API directly from browser code. The owner bootstrap email is not revocable there,
-  and any mixed-selector group fails closed for manual review.
+- Resolution (2026-08-11, superseding the prepared origin proxy): deploy the allowlisted assets
+  directly with the Cloudflare Worker, so the Sites release can remain owner-only without any
+  origin bypass credential. Put the broader tester Access policy on `/dungeon*` and the more-
+  specific owner-only policy on `/dungeon/admin*`; the Worker blocks direct public admin asset
+  aliases. The owner dashboard manages the dedicated email-only Access group through an owner-JWT-
+  verified edge endpoint and never calls Cloudflare from browser code. The owner bootstrap email
+  is not revocable there, and any mixed-selector group fails closed for manual review.
 
 ### C22 — Helpful cohort agents versus consent and owner authority
 

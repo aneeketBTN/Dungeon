@@ -220,6 +220,17 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   Cloudflare activation. Evidence:
   `evidence/2026-08-11/tester-dashboard-access-management/verification.md`; prevention:
   `BUG-LAWS.md` LAW-30.
+- **I26 (2026-08-11)** — Issue: the prepared Cloudflare proxy still depended on a private hosting
+  origin and bypass credential, while tester and owner paths needed different identity boundaries.
+  Cause: the first deployment design reused the existing Sites artifact instead of making the
+  Cloudflare release self-contained. Fix: deployed the allowlisted assets directly with the
+  Worker, kept every owner asset/API under the more-specific admin Access application, blocked
+  legacy admin aliases, stored only the group credential as an edge secret, deleted the temporary
+  deployment token, and added rapid-request containment. Anonymous learner, bank, and admin denial
+  are verified at the edge; the production Browser reached the owner login challenge and remains
+  explicitly `WAITING_OWNER_ACCESS_SIGNIN` rather than being overstated. Evidence:
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
+  LAW-25, LAW-30, and LAW-31.
 
 ## Watch Items
 

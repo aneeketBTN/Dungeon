@@ -87,19 +87,22 @@ fixtures, credentials, tester addresses, and community invites. `npm test` check
 the health route, learner/admin redirects, private-cache policy, no-index rules, and security
 headers. No package installation is required.
 
-The intended tester gate uses one-time email sign-in through Cloudflare Access. A tester can be
+The live protected route is [https://aneeketdas.com/dungeon/](https://aneeketdas.com/dungeon/).
+Approved testers use one-time email sign-in through Cloudflare Access. A tester can be
 revoked individually; there is no cohort password to leak. The app stays out of search indexing
 and question-bearing scripts are not shared-cacheable. This prevents anonymous and casual bulk
 collection, not copying by an already approved tester. See
 `briefs/TESTER_ACCESS_AND_ADMIN.md` for the threat boundary.
 
-The owner dashboard is `/mock/admin.html` locally and will be `/dungeon/admin` on the protected
-domain. It checks production health and the release allowlist, explains tester add/revoke steps,
+The owner dashboard is `/mock/admin.html` locally and
+`https://aneeketdas.com/dungeon/admin/` on the protected domain. It checks production health and
+the release allowlist, provides direct tester add/list/revoke controls,
 provides a feedback template, and drafts—but never autonomously sends—change announcements.
 
-The current production Sites URL is owner-only. Exact `aneeketdas.com/dungeon` routing is paused
-before Cloudflare Zero Trust activation because that step requires accepting Cloudflare terms and
-authorising the saved card for any usage above the free limits.
+The Sites URL remains an owner-only backup. The Cloudflare route is live with separate tester and
+owner Access policies, signed-token verification at the Worker, private/no-index responses, and
+rapid-request rate limiting. The allowlist currently contains only the protected owner bootstrap
+address; no tester is granted access until the owner supplies tester addresses.
 
 Tester conduct and feedback live in `TESTER_GUIDE.md`; moderation and announcement procedures live
 in `COMMUNITY_PLAYBOOK.md`; private security reports follow `SECURITY.md`.

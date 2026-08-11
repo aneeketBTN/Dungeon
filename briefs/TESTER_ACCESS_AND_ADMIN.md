@@ -1,11 +1,12 @@
 # Tester Access, Anti-Harvesting, and Owner Operations
 
-Status: `IMPLEMENTED` for the owner dashboard, direct tester add/list/revoke controls, prepared
-fail-closed Cloudflare edge controller, release boundary, private-cache policy, no-index controls,
-and owner-only Sites deployment. Exact `aneeketdas.com/dungeon` routing and live per-tester
-Cloudflare Access remain `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS` because activating the
-nominally free plan requires accepting Cloudflare terms and authorising the saved card for usage
-above the free limits.
+Status: `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` for exact `aneeketdas.com/dungeon` routing,
+one-time-code tester Access, owner-only admin Access, direct static-asset delivery, private caching,
+no-index controls, rapid-request rate limiting, and the dedicated email group/management secret.
+Production owner/tester interaction in the declared Browser is `WAITING_OWNER_ACCESS_SIGNIN`;
+public DNS and direct edge requests pass, and the Browser reaches the Cloudflare owner login
+challenge, but automated completion of that challenge is disallowed. Individual tester grants
+remain `WAITING_OWNER_TESTER_EMAILS`.
 
 Decision date: 2026-08-11
 
@@ -32,11 +33,11 @@ Use identity-based access rather than a shared password:
    tester route.
 5. The edge records access identity and request metadata; the learning app still stores progress
    only in the learner's browser.
-6. Cloudflare rate limiting challenges or blocks high-volume automated requests without penalising
-   normal page loads.
+6. Cloudflare rate limiting blocks more than 40 `/dungeon` requests per IP/colo pair in 10 seconds
+   for 10 seconds without penalising a normal page load.
 
-The origin remains owner-only. The path proxy must use an origin credential kept only in
-Cloudflare secrets; it must never appear in source, the browser, deployment metadata, or a URL.
+The Worker serves the allowlisted build directly from Cloudflare static assets. The Sites release
+remains owner-only as a backup, but no origin bypass credential is needed or stored.
 
 ## Content-delivery boundary
 
@@ -57,7 +58,7 @@ must be completed before claiming strong resistance to harvesting by authorised 
 
 - production health and allowlisted-release checks;
 - an email form, current tester list, refresh, and confirmation-backed one-person revocation;
-- a truthful setup-needed state until the Cloudflare edge controller is configured;
+- a truthful connected/setup-needed state based on the live Cloudflare edge controller;
 - the tester access/revocation workflow and honest anti-copy limit;
 - a release checklist and links to Cloudflare operations;
 - a structured feedback template for WhatsApp triage;
@@ -69,36 +70,38 @@ status that no connected backend can support. Cloudflare remains the authority f
 access logs, traffic, and rate limits; WhatsApp remains the current cohort conversation and
 feedback surface.
 
-`cloudflare/src/index.mjs` is the prepared management and path-proxy boundary. The owner-only API
+`cloudflare/src/index.mjs` is the deployed management and static-delivery boundary. The owner-only API
 validates the Cloudflare Access JWT audience and exact owner email, requires same-origin mutations,
 accepts only a small JSON email payload, and refuses mixed-selector or owner-missing groups. The
-Cloudflare API token and private-origin bypass token are runtime secrets; neither is present in
-the dashboard, source configuration, release manifest, or logs. The dedicated group retains the
+Cloudflare group token is a runtime secret and is absent from the dashboard, source configuration,
+release manifest, and logs. The dedicated group retains the
 owner email as a non-removable bootstrap rule so revoking the last tester cannot produce an empty
 or ownerless group.
 
-## Cloudflare configuration after owner approval
+## Deployed Cloudflare configuration
 
-- Activate Zero Trust Free only after the owner accepts its terms and overage-card authorisation.
-- Create the one-time PIN identity provider.
-- Create `Dungeon Testers` as an email allowlist; begin empty and add only owner-supplied addresses.
+- Zero Trust Free is active.
+- `Dungeon one-time email code` is the tester identity provider.
+- `Dungeon Testers` is an exact-email allowlist; add only owner-supplied addresses.
 - Seed the dedicated group with the owner email as the protected bootstrap member; the dashboard
   hides that member from the tester count and cannot revoke it.
 - Create an Access application for `aneeketdas.com/dungeon*` using that group.
 - Create an owner-only application for `aneeketdas.com/dungeon/admin*` with higher precedence.
-- Route `/dungeon` and `/dungeon/*` through a Worker to the private Sites origin, preserving method,
-  query, content type, CSP, no-index, and cache headers.
-- Apply a rate-limit rule to the Dungeon path and verify that a normal first load, study set, and
-  admin refresh do not trigger it.
+- Route `/dungeon` and `/dungeon/*` through the Worker-owned static asset binding with explicit
+  learner/admin aliases, private cache controls, and no direct public admin-asset path.
+- The zone rate-limit rule blocks above 40 requests per IP/colo pair per 10 seconds for 10 seconds.
 - Verify anonymous denial, approved-tester entry, owner admin entry, individual revocation, and
   non-Dungeon routes on `aneeketdas.com`.
-- Configure the least-privilege Access organisation/group-write API token, admin audience/team
-  values, owner email, and Sites bypass token as Worker secrets; then verify the dashboard's add,
-  list, duplicate-add, revoke, and last-tester flows against the real group.
+- The least-privilege Access group read/write token is stored as `CF_API_TOKEN`; Access IDs,
+  audiences, team domain, and owner email are protected deployment bindings. Verify the dashboard's
+  add, list, duplicate-add, revoke, and last-tester flows against the real group after the owner
+  completes the open Access sign-in.
 
 ## Gates
 
-- `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS`: terms plus overage-card authorisation.
 - `WAITING_OWNER_TESTER_EMAILS`: no tester access is granted until the owner supplies addresses.
+- `WAITING_OWNER_ACCESS_SIGNIN`: the production Browser resolves the URL and reaches the owner
+  Cloudflare login challenge; the owner must complete it before live Control Room interaction can
+  be accepted.
 - GitHub and WhatsApp creation remain separately staged pending action-time confirmation.
 - Server-side item delivery remains `UNSTARTED`; do not claim perfect anti-scraping.

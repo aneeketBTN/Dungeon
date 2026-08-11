@@ -6,13 +6,13 @@ The active Term 6 dashboard stores progress only in the tester's browser under
 `term6.revision.v2`. The learning app does not create a learner profile on Dungeon's server and
 does not send answer history, confidence choices, written responses, or progress there.
 
-The planned access gate is separate from learning progress. Cloudflare Access uses an approved
-email address to send a one-time sign-in code and records ordinary security/request metadata so
-access can be audited and revoked. Dungeon does not use that identity to grade or personalise
-learning evidence.
+The live access gate is separate from learning progress. Approved testers use an emailed one-time
+sign-in code; the owner dashboard uses the owner's Cloudflare account. Cloudflare records ordinary
+security/request metadata so access can be audited and revoked. Dungeon does not use either
+identity to grade or personalise learning evidence.
 
-The owner Control Room can list approved tester emails and grant or revoke website access after
-the protected Cloudflare edge is activated. Those email addresses stay in the dedicated
+The owner Control Room can list approved tester emails and grant or revoke website access through
+the protected Cloudflare edge. Those email addresses stay in the dedicated
 Cloudflare Access group; the dashboard does not place them in learner storage, release metadata,
 application logs, or the WhatsApp community.
 

@@ -3,6 +3,33 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-11 — Protected Cloudflare domain deployed
+
+- Activated the exact `https://aneeketdas.com/dungeon/` Worker route with direct static-asset
+  delivery; the private Sites release remains an owner-only backup and no origin bypass token is
+  needed.
+- Created one-time-code tester identity, the email-only `Dungeon Testers` group, a broader learner
+  Access application, and a more-specific owner-only `/dungeon/admin*` application. Only the owner
+  bootstrap email is present; no potential user was granted access without an address from the
+  owner.
+- Stored a least-privilege Access-group read/write credential as the Worker `CF_API_TOKEN` secret.
+  A temporary deployment credential was used once and deleted immediately after the route and
+  secret were deployed.
+- Added an enabled zone rate-limit rule that blocks above 40 `/dungeon` requests per IP/colo pair
+  in 10 seconds for 10 seconds. The first 60-second rule attempt was rejected by the plan and did
+  not create a stale rule.
+- Replaced the prepared private-origin proxy with an explicit static asset router: learner and
+  admin paths are allowlisted, direct public admin aliases fail closed, assets are private/no-store
+  and no-index, and the owner endpoint retains JWT, email, same-origin, size, and group invariants.
+- Public DNS, Worker/secret/API configuration, and anonymous edge checks pass. Anonymous learner,
+  bank-script, and admin requests all redirect to the correct Access audience. The declared
+  Browser now resolves the domain and reaches the owner Cloudflare login challenge; automated
+  completion is disallowed by the Browser security policy, so live dashboard interaction is
+  `WAITING_OWNER_ACCESS_SIGNIN`. Tester grants remain `WAITING_OWNER_TESTER_EMAILS`. Evidence:
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`.
+- `npm test` passes 18/18, the 728-item bank validator has no errors, and the production upload
+  reports Worker startup in 6 ms.
+
 ## 2026-08-11 — Direct tester management in the Control Room
 
 - Added a full-width owner access panel with email entry, approved tester list, refresh, explicit

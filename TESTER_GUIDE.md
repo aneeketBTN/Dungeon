@@ -1,5 +1,8 @@
 # Dungeon tester guide
 
+The protected learner URL is `https://aneeketdas.com/dungeon/`. Use only the email address the
+owner approved; Cloudflare will send that address a one-time sign-in code.
+
 Dungeon's current tester release is a Term 6 revision dashboard for BRGSA, IBM, SCLM, and SPMS.
 It is an early learning-product test, not a prediction of exam performance or an exact replica of
 the final paper.

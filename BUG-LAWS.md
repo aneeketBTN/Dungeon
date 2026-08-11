@@ -392,3 +392,31 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 - **Verify:** Source/manifest scans contain no credential; missing bindings return 503; missing
   owner authentication returns 403; grant/revoke tests preserve the owner; unsafe-selector tests
   return 409; mutation logs contain only action and count.
+
+### LAW-31 🔴 — A broader Access app must never absorb owner routes
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 protected-domain deployment: `/dungeon*` serves testers while
+  `/dungeon/admin*` mutates the tester allowlist.
+- **Why:** A missing or less-specific owner application, or an admin asset that escapes the admin
+  path, could expose operational controls or issue the learner JWT where the Worker expects the
+  owner audience.
+- **Comply:** Keep a more-specific owner application with a distinct audience; keep all dashboard
+  HTML/CSS/JS/API paths under `/dungeon/admin*`; block legacy `/dungeon/mock/admin*` aliases; and
+  validate both the admin audience and exact owner email inside the Worker.
+- **Verify:** Anonymous edge redirects show different learner/admin audience IDs; routing tests
+  prove direct admin aliases return 404; missing/wrong owner authentication returns 403; real-
+  Browser acceptance confirms a tester cannot reach the owner surface.
+
+### LAW-32 🟡 — Compound verification must not hide an earlier native-command failure
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 deployment verification: root build/test commands were accidentally run
+  from `cloudflare/`, failed, and a later successful dry run made the compound shell exit zero.
+- **Why:** The final process exit can make a verification transcript look green while an earlier
+  required check never ran.
+- **Comply:** Run checks from their declared working directories and either execute them separately
+  or fail immediately after any non-zero native exit. Never infer a whole chain passed from only
+  its final exit code.
+- **Verify:** The final evidence names each command, working directory, and individual result; the
+  root build/test/bank commands and the Cloudflare dry run all pass in their correct directories.

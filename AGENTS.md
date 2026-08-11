@@ -29,13 +29,17 @@
 > `evidence/2026-08-11/tester-access-admin/verification.md`. Direct email add/list/revoke controls
 > and a fail-closed, owner-JWT-verified Cloudflare group controller are `IMPLEMENTED` and
 > synthetically verified at
-> `evidence/2026-08-11/tester-dashboard-access-management/verification.md`; private Sites version 4
-> contains the controls, but the live endpoint is not activated and reports setup required. The
-> current Sites production remains owner-only. Exact `aneeketdas.com/dungeon`
-> routing is
-> `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS` because Cloudflare requires terms acceptance and
-> saved-card overage authorisation; neither was accepted. Individual grants are additionally
-> `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
+> `evidence/2026-08-11/tester-dashboard-access-management/verification.md`. Exact
+> `https://aneeketdas.com/dungeon/` routing, direct Worker static assets, one-time-code tester
+> Access, the more-specific owner admin application, anonymous learner/bank/admin denial, the
+> least-privilege group secret, and rapid-request rate limiting are
+> `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` at
+> `evidence/2026-08-11/cloudflare-protected-domain/verification.md`. The private Sites version 5
+> remains an owner-only backup and is no longer an origin dependency. The declared Browser now
+> resolves the production URL and reaches the more-specific Cloudflare owner login challenge;
+> production dashboard interaction is `WAITING_OWNER_ACCESS_SIGNIN` because Browser automation is
+> not permitted to complete that authentication challenge. Individual
+> grants are `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
 > staged owner-confirmed actions. The Learning Signal Auditor, Question Bank Steward, and Tester
 > Cohort Steward are `PREPARED_NOT_ACTIVATED`: their project schedules are registered and verified
 > `PAUSED`, repository declarations remain disabled, activation preflight intentionally fails, no
@@ -45,8 +49,8 @@
 > reference and still lacks complete real-Browser route acceptance.
 >
 > Static HTML/CSS/JavaScript prototypes in `mock/`; procedural learning engine and state in root
-> JSON/Markdown structures; current phase: finish the identity-gated Cloudflare path after owner
-> billing-terms approval, collect tester emails, create the community/repository, then continue
+> JSON/Markdown structures; current phase: have the owner complete the open Access sign-in, finish
+> the production Browser pass, collect tester emails, create the community/repository, then continue
 > owner/faculty content acceptance and learner calibration.
 
 ## Start Here — Required Order
@@ -113,8 +117,8 @@ Rules:
   running.
 - `scripts/` — deterministic public-release build scripts.
 - `site/` — production worker entrypoint, health route, and response security policy.
-- `cloudflare/` — prepared, undeployed exact-path proxy and owner-only tester allowlist controller;
-  runtime credentials are external secrets, never source.
+- `cloudflare/` — deployed exact-path static edge, signed Access validation, owner-only tester
+  allowlist controller, standalone packaging fallback, and non-source runtime secrets.
 - `tests/` — release-boundary, routing, access-management, and security-header checks.
 - `graphs/` — generated subject concept graphs. Do not hand-edit during product/UI work.
 - `state/` — live game and learner state. Treat as real player data; do not clear for testing.
@@ -140,7 +144,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `briefs/T6_REVISION_FALLBACK.md` | Active plain-language dashboard contract, T6 source boundary, mastery/repetition model, and acceptance. | 2026-08-11 |
 | `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Research-grounded confidence, evidence-state, boss, mixed-format, rotation, and short-horizon retest contract. | 2026-08-11 |
 | `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
-| `briefs/TESTER_ACCESS_AND_ADMIN.md` | Identity gate, anti-harvesting limits, private origin, exact-domain routing, and owner-dashboard contract. | 2026-08-11 |
+| `briefs/TESTER_ACCESS_AND_ADMIN.md` | Live identity gate, anti-harvesting limits, exact-domain routing, owner dashboard, and remaining tester gates. | 2026-08-11 |
 | `BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
 | `QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
 | `CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-11 |
@@ -163,11 +167,12 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
 | `scripts/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
 | `site/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
-| `cloudflare/src/index.mjs` | Prepared exact-path proxy plus owner-JWT-verified, same-origin, email-only tester group management. | 2026-08-11 |
-| `cloudflare/wrangler.jsonc` | Current Worker compatibility, exact path/origin values, and structured observability configuration; no secrets. | 2026-08-11 |
-| `cloudflare/README.md` | Runtime-secret, Access-policy, owner-bootstrap, and activation contract for the undeployed edge. | 2026-08-11 |
+| `cloudflare/src/index.mjs` | Deployed exact-path static router plus owner-JWT-verified, same-origin, email-only tester group management. | 2026-08-11 |
+| `cloudflare/scripts/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
+| `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
+| `cloudflare/README.md` | Live route, runtime-secret, Access-policy, owner-bootstrap, and rate-limit contract. | 2026-08-11 |
 | `tests/site-release.test.mjs` | Automated release-boundary, privacy, routing, header, and setup-required checks. | 2026-08-11 |
-| `tests/cloudflare-access.test.mjs` | Synthetic owner authentication, group invariant, grant, revoke, proxy, and credential-stripping checks. | 2026-08-11 |
+| `tests/cloudflare-access.test.mjs` | Synthetic owner authentication, group invariant, grant, revoke, static allowlist, admin-isolation, health, and private-cache checks. | 2026-08-11 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
 | `mock/admin.html` | Owner control room for direct tester management, release health, feedback triage, and announcement drafting. | 2026-08-11 |
 | `mock/admin.css` | Responsive, accessible control-room layout and status presentation. | 2026-08-11 |
@@ -274,11 +279,11 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 728 questions are source-traceable and structurally
   verified, but transcript-derived content and the 64 constructed-response rubrics/exemplars still
   need owner/faculty acceptance before `DONE`.
-- [ ] `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS`: exact `aneeketdas.com/dungeon` routing and the
-  per-email tester gate require activation of Cloudflare Zero Trust Free. Activation asks the
-  owner to accept Cloudflare terms and authorise the saved card for usage above free limits; no
-  checkbox or activation was completed. The dashboard controls and edge controller are prepared
-  and fail closed; current production remains owner-only and cannot yet mutate a live tester list.
+- [ ] `WAITING_OWNER_ACCESS_SIGNIN`: exact routing, Access applications, anonymous denial,
+  direct-bank denial, static delivery, group authority, and rate limiting are live and edge/API
+  verified. The declared Browser resolves the production URL and reached the owner Cloudflare login
+  challenge, but its security policy prevents automated completion. The owner must sign in in the
+  open tab, then the live Control Room connected/list pass can be verified.
 - [ ] `WAITING_OWNER_TESTER_EMAILS`: no tester should receive access until the owner supplies the
   addresses. GitHub and WhatsApp community creation remain staged pending confirmation.
 - [ ] The identity-gated client bundle prevents anonymous/casual harvesting but cannot stop an
@@ -327,8 +332,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   self-review, selectable practice shapes, held feedback,
   mixed formats and boss grading, staged dashboard, evidence graph, real-Browser desktop/narrow
   interaction, isolated save/resume, live-state preservation, release-boundary tests, no-index and
-  private-cache controls, the desktop owner control room, and 16-test synthetic tester access
-  management with a successful Cloudflare Worker dry-run)
+  private-cache controls, the desktop owner control room, 18 passing release/access/agent tests,
+  the live Cloudflare Worker route, distinct learner/admin Access audiences, anonymous edge denial,
+  a least-privilege group secret, and rapid-request rate limiting)
 - Confidence: high for file inventory, operating rules, all-subject implementation, structural
   grounding, and observed Browser behavior; medium for transcript-derived content pending
   owner/faculty acceptance; low for exact exam-paper structure
