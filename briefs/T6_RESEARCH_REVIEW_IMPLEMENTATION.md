@@ -1,8 +1,9 @@
 # T6 Research Review — Product Decisions and Implementation Map
 
 Status: `IMPLEMENTED`; real-Browser acceptance is recorded at
-`evidence/2026-08-11/tester-launch/verification.md`. Exact-paper fidelity remains
-`WAITING_OWNER_EXAM_PATTERN` without blocking the generic first-cohort practice envelope.
+`evidence/2026-08-11/t6-research-integration/verification.md`.
+`EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` is a standing claim boundary, not a prerequisite this cohort
+can wait for.
 
 Decision date: 2026-08-11
 

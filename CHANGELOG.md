@@ -3,6 +3,62 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-11 — Identity-gated tester design and Dungeon Control Room
+
+- Selected per-email, one-time-code tester access with individual revocation instead of a shared
+  cohort password. Designed a higher-priority owner-only policy for `/dungeon/admin*`, a broader
+  tester policy for `/dungeon*`, a private origin, and edge rate limiting.
+- Added `briefs/TESTER_ACCESS_AND_ADMIN.md` and recorded the honest protection boundary: identity,
+  audit, no-index, private caching, and throttling prevent anonymous/casual harvesting, but an
+  approved technical tester can still download the current client bank. Server-side item delivery
+  is required before any stronger anti-scraping claim.
+- Added the responsive Dungeon Control Room with production health/release checks, tester
+  add/revoke guidance, a release checklist, structured feedback copy, and a change-announcement
+  composer. It never fabricates tester/usage counts or sends an announcement without another
+  explicit action.
+- Expanded the allowlisted release from six to ten assets for learner, admin, and `robots.txt`;
+  added learner/admin redirects, global no-index and same-origin headers, and private caching for
+  question-bearing scripts. Five release tests now cover the protected boundary.
+- Provisioned and deployed the Sites origin, then returned it to custom owner-only access after the
+  owner requested a tester gate. No tester was invited and no public domain route was left active.
+- Installed the Cloudflare connection and opened the authenticated account for `aneeketdas.com`.
+  Zero Trust Free advertises $0 and 50 seats, but activation requires terms acceptance and
+  authorisation to charge the saved card for over-limit usage. No checkbox or Activate action was
+  completed; exact `/dungeon` routing is `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS`.
+- Admin JavaScript/worker syntax, the ten-asset build, five release tests, desktop Browser layout,
+  truthful unavailable-service states, announcement preview, and no horizontal overflow passed.
+  Evidence: `evidence/2026-08-11/tester-access-admin/verification.md`.
+
+## 2026-08-11 — Research-review integration and confidence-safe adaptation
+
+- Read and mapped the owner-supplied substantive literature review into implemented, prototype,
+  wait-for-data, and prohibited decisions in `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md`.
+- Replaced universal confidence polling with sampled, staged, behavioural confidence on high-value
+  diagnostics. Added a penalty-free skip and prohibited confidence grinding, rewards, secret
+  difficulty changes, sparse personality labels, and fake probability scores.
+- Added contrastive confident-error feedback, prerequisite bridges for uncertain misses, one
+  new-family confirmation for uncertain correct answers, and two independent repair checks for a
+  confident error. Learner-facing priority copy now explains the evidence reason for practice.
+- Preserved valid unassisted boss steps as applied concept evidence while keeping failed steps and
+  whole-chain completion separate. A permanent universal boss gate is deferred until learner data
+  supports it.
+- Added 64 write-first, source-grounded short-answer items with transparent rubric self-review and
+  exemplars. They remain unscored, cannot independently create Strong, and expose no answer-shaped
+  cue before final review in held-feedback practice.
+- Added learner-selected recognition, application, generation, and mixed practice with immediate
+  learning feedback or fully deferred review; held responses remain session-local and do not
+  mutate dashboard evidence until completion. MCQs may use three or four plausible options.
+- Added optional one-, three-, and seven-day plans with breaks, sleep protection, and honest
+  same-day versus delayed-retrieval language. Reframed the absent first-cohort paper as
+  `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`, a claim boundary rather than a blocked dependency.
+- JavaScript syntax, the 728-item/source/breadth validator, release tests, desktop and 390-pixel
+  staged confidence, constructed self-review, boss partial evidence, practice setup, held review,
+  study horizon, accessibility labels, overflow, and Browser logs passed. Evidence:
+  `evidence/2026-08-11/t6-research-integration/verification.md`.
+- Deferred: faculty/owner item and rubric acceptance, real-learner calibration of confidence
+  cadence and mastery thresholds, cognitive interviews, psychometric models, and a checked-in
+  interaction suite across all 40 sets.
+
 ## 2026-08-11 — Controlled tester release, generic practice, and constructed self-review
 
 - Expanded the bank from 664 to 728 source-traceable items by adding one constructed-response
@@ -26,9 +82,9 @@ changed, decisions, verification/evidence, and deferrals.
   desktop learning and held-feedback paths, generation self-review, end-of-check answer review,
   and 390-pixel no-overflow checks passed in a real Browser. Evidence:
   `evidence/2026-08-11/tester-launch/verification.md`.
-- Deferred: exact final-paper fidelity (`WAITING_OWNER_EXAM_PATTERN`), faculty/owner content and
-  rubric acceptance, empirical cohort statistics, and a checked-in interaction suite for all 40
-  study sets.
+- Boundary/deferred: `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` prohibits exact-paper claims for this
+  cohort; faculty/owner content and rubric acceptance, empirical cohort statistics, and a checked-
+  in interaction suite for all 40 study sets remain deferred.
 
 ## 2026-08-11 — Unified neutral prompts and scoped subject actions
 
@@ -41,7 +97,8 @@ changed, decisions, verification/evidence, and deferrals.
   dividers now carry sequence; only controls and post-answer feedback retain boundaries.
 - Removed the misleading “Recommended now” label from the selected-subject focus. The UI now names
   BRGSA/IBM/SCLM/SPMS only and uses action-specific buttons: resume saved practice, start this study
-  set, practise these concepts, or open the full practice mock.
+  set, practise these concepts, or open what was then called the full practice mock. That label was
+  later replaced by the configurable generic practice check.
 - Neutralised unanswered practice: prompt groups, step labels, practice
   metadata, and focus metadata no longer use cyan as category decoration. Semantic color remains
   for selection, primary action, progress, accessibility focus, and answer/status feedback.
@@ -57,7 +114,8 @@ changed, decisions, verification/evidence, and deferrals.
 - Replaced the two-answer Strong shortcut with inspectable evidence gates: at least five attempts,
   four correct, three formats, two practice blocks, an unassisted boss pass, latest-answer success,
   and no unresolved high-confidence or boss error. Added low/fair/high confidence to every attempt,
-  honest same-day/delayed qualifiers, and dashboard reasons for every state.
+  honest same-day/delayed qualifiers, and dashboard reasons for every state. The research-review
+  revision above later replaced universal confidence polling and the permanent boss gate.
 - Reworked the dashboard into staged Overview, Concepts, and Study plan surfaces. Replaced the
   16-item concept list with an evidence-over-time trend that can plateau or dip, one two-concept
   module at a time, and an on-demand explanation/practice inspector.
@@ -84,14 +142,16 @@ changed, decisions, verification/evidence, and deferrals.
   partial-boss repair, isolated save/resume, console health, and unchanged hashes for all nine live
   `state/`/`history/` files passed. Evidence:
   `evidence/2026-08-11/t6-evidence-challenges/verification.md`.
-- Deferred: exact final-paper fidelity (`WAITING_OWNER_EXAM_PATTERN`), subjective-response practice,
-  empirical item statistics, owner/faculty content acceptance, and a checked-in end-to-end suite
-  across all 40 study sets.
+- At this stage, exact-paper fidelity and subjective-response practice were deferred. The research-
+  review revision above superseded that state with an explicit first-cohort uncertainty boundary
+  and transparent constructed self-review. Empirical item statistics, owner/faculty acceptance,
+  and a checked-in end-to-end suite across all 40 study sets remain deferred.
 
 ## 2026-08-10 — Plain all-subject T6 dashboard and adaptive concept practice
 
 - Replaced the active game-system wrapper with a student-readable revision dashboard: Strong,
-  Developing, Needs practice, Not started, study sets, full practice mocks, feedback, and
+  Developing, Needs practice, Not started, study sets, the then-named full practice mocks,
+  feedback, and
   re-attempts are now the complete active vocabulary. Recorded the precedence in
   `DESIGN_SOURCE_INDEX.md` C12 and rewrote `briefs/T6_REVISION_FALLBACK.md`.
 - Built a 64-concept dashboard across BRGSA, IBM, SCLM, and SPMS with all-subject and per-subject
@@ -115,9 +175,10 @@ changed, decisions, verification/evidence, and deferrals.
   maps and mocks, real adaptive practice, keyboard flow, desktop/390px layouts, save/resume/reset,
   console health, and nine-file live-data isolation passed. Evidence:
   `evidence/2026-08-10/t6-dashboard-all-subjects/verification.md`.
-- Deferred: exact final-paper fidelity (`WAITING_OWNER_EXAM_PATTERN`), grounded subjective
-  responses, owner/faculty question acceptance, and a checked-in interaction suite for all 40
-  study sets.
+- At this stage, exact-paper fidelity and grounded subjective responses were deferred; the current
+  research-review revision supersedes those two points with the first-cohort uncertainty boundary
+  and transparent constructed self-review. Owner/faculty acceptance and a checked-in interaction
+  suite for all 40 study sets remain deferred.
 
 ## 2026-08-10 — T6 exam-season fallback and verified BRGSA route
 
@@ -132,7 +193,8 @@ changed, decisions, verification/evidence, and deferrals.
 - Rewrote `README.md` and updated `MAC_TRANSFER.md` for the T6 launch, browser-storage boundary,
   deterministic scenarios, and legacy routes.
 - Kept IBM, SCLM, and SPMS visibly unavailable instead of filling them with placeholder questions;
-  exact T6 paper structure is `WAITING_OWNER_EXAM_PATTERN` and subjective practice remains deferred.
+  at that stage exact-paper fidelity and subjective practice were deferred. Later all-subject and
+  research-review revisions superseded both points.
 - Fixed two state-truth bugs found in Browser acceptance—stale repair status and lagging completed
   count—and added `BUG-LAWS.md` LAW-11 plus `QUALITY-LOG.md` I6–I7.
 - Syntax, 60-question structure, 44 lecture-ID references, local HTTP, pointer/keyboard flows,

@@ -4,7 +4,8 @@ Status: `VERIFIED(evidence/2026-08-11/tester-launch/verification.md)` for sample
 confidence, contrastive repair, boss-step evidence, constructed self-review, generic practice
 shapes, first-cohort uncertainty language, and the earlier evidence model and question hierarchy.
 No same-course final exists, so generic practice can proceed without inventing its blueprint;
-exact paper fidelity remains `WAITING_OWNER_EXAM_PATTERN` and is not a permitted product claim.
+`EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` is the standing boundary against exact-paper claims, not a
+work-blocking gate.
 
 Decision date: 2026-08-11
 

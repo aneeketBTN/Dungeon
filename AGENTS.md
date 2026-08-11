@@ -14,22 +14,30 @@
 > short-answer, and three-step boss paths are responsive and keyboard-operable, with local
 > save/resume/reset. Generic practice can vary recognition, application, generation, or mixed
 > work and can show feedback immediately or hold it until the end; time-horizon plans distinguish
-> same-day current evidence from delayed retrieval. Those new practice paths and the privacy-scoped
-> release boundary are verified at `evidence/2026-08-11/tester-launch/verification.md`.
+> same-day current evidence from delayed retrieval. The report-backed confidence, boss-step,
+> constructed-response, priority, and practice-path revision is verified at
+> `evidence/2026-08-11/t6-research-integration/verification.md`; the privacy-scoped release boundary
+> remains verified at `evidence/2026-08-11/tester-launch/verification.md`.
 > Student-facing game/proprietary vocabulary and diagnostic question metadata are removed from the
 > learning view. Sixty-four constructed-response surfaces use transparent self-review without
 > automatic correctness or Strong credit. Exact final-paper structure is
-> `WAITING_OWNER_EXAM_PATTERN`; owner/faculty content acceptance remains open, so the route is not
+> `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`: it is an explicit claim boundary, not a prerequisite this
+> cohort can wait for. Owner/faculty content acceptance remains open, so the route is not
 > `DONE` or an exam-score prediction. A privacy-scoped tester release wrapper, worker health route,
-> security headers, release tests, and community operating documents are `IMPLEMENTED`; external
-> access and community creation remain owner-confirmed launch actions. The earlier
+> security/no-index/private-cache headers, release tests, owner control room, and community
+> operating documents are verified at
+> `evidence/2026-08-11/tester-access-admin/verification.md`. The current Sites production remains
+> owner-only. Exact `aneeketdas.com/dungeon` routing and individual tester email access are
+> `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS` because Cloudflare requires terms acceptance and
+> saved-card overage authorisation; neither was accepted. GitHub and WhatsApp creation remain
+> staged owner-confirmed actions. The earlier
 > cinematic/Ari/economy product slice remains at `mock/rogue.html` as an `IMPLEMENTED` legacy
 > reference and still lacks complete real-Browser route acceptance.
 >
 > Static HTML/CSS/JavaScript prototypes in `mock/`; procedural learning engine and state in root
-> JSON/Markdown structures; current phase: controlled tester launch, owner/faculty content and
-> constructed-rubric acceptance, then audit a supplied final-paper blueprint before claiming exact
-> exam fidelity.
+> JSON/Markdown structures; current phase: finish the identity-gated Cloudflare path after owner
+> billing-terms approval, collect tester emails, create the community/repository, then continue
+> owner/faculty content acceptance and learner calibration.
 
 ## Start Here — Required Order
 
@@ -69,7 +77,7 @@ or `WAITING_<GATE>`, such as:
 - `WAITING_OWNER_DECISION`
 - `WAITING_OWNER_ASSETS`
 - `WAITING_PROD_DATA`
-- `WAITING_OWNER_EXAM_PATTERN`
+- `WAITING_OWNER_CONTENT_ACCEPTANCE`
 
 Rules:
 
@@ -117,6 +125,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `briefs/T6_REVISION_FALLBACK.md` | Active plain-language dashboard contract, T6 source boundary, mastery/repetition model, and acceptance. | 2026-08-11 |
 | `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Research-grounded confidence, evidence-state, boss, mixed-format, rotation, and short-horizon retest contract. | 2026-08-11 |
 | `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
+| `briefs/TESTER_ACCESS_AND_ADMIN.md` | Identity gate, anti-harvesting limits, private origin, exact-domain routing, and owner-dashboard contract. | 2026-08-11 |
 | `BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
 | `QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
 | `CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-11 |
@@ -134,9 +143,12 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `COMMUNITY_PLAYBOOK.md` | WhatsApp community structure, moderation, announcements, and feedback triage. | 2026-08-11 |
 | `.openai/hosting.json` | Opaque Sites project binding only; runtime credentials never belong here. | 2026-08-11 |
 | `package.json` | Dependency-free release build, validation, and test commands. | 2026-08-11 |
-| `scripts/build-site.mjs` | Allowlists the six active public learning assets and produces the deployment artifact. | 2026-08-11 |
-| `site/worker.mjs` | Production root redirect, health response, static delivery, security headers, and cache policy. | 2026-08-11 |
+| `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
+| `site/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
 | `tests/site-release.test.mjs` | Automated release-boundary, privacy, routing, and header checks. | 2026-08-11 |
+| `mock/admin.html` | Owner control room for access workflow, release health, feedback triage, and announcement drafting. | 2026-08-11 |
+| `mock/admin.css` | Responsive, accessible control-room layout and status presentation. | 2026-08-11 |
+| `mock/admin.js` | Health/manifest checks, structured copy helpers, and announcement preview without autonomous sending. | 2026-08-11 |
 | `mock/t6.html` | Staged dashboard, time-horizon plan, generic practice setup, evidence graph, feedback, results, reset, and exam-boundary surfaces. | 2026-08-11 |
 | `mock/t6.css` | Flat single-surface question hierarchy plus low-density, responsive, accessible desktop/narrow revision presentation. | 2026-08-11 |
 | `mock/t6.js` | Evidence-gated mastery, time-horizon plans, selectable practice shapes, held-feedback checks, constructed self-review, rotation, persistence, and scenarios. | 2026-08-11 |
@@ -232,15 +244,22 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 
 ## Known Gaps
 
-- [ ] `WAITING_OWNER_EXAM_PATTERN`: the public programme policy names MCQs, caselets, and
-  subjective assessment families, but no owner-supplied T6 final paper/instruction sheet has been
-  indexed. Do not claim exact section, duration, marks, option, or negative-marking fidelity.
+- [ ] `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`: no same-course final exists to supply an exact
+  blueprint. This is a standing claim boundary, not a work-blocking gate. Practise the documented
+  assessment envelope; do not claim exact sections, duration, marks, options, negative marking,
+  likely score, or pass probability. The first real final can inform later cohorts.
 - [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 728 questions are source-traceable and structurally
   verified, but transcript-derived content and the 64 constructed-response rubrics/exemplars still
   need owner/faculty acceptance before `DONE`.
-- [ ] Controlled tester hosting is owner-only until the owner explicitly approves public access or
-  supplies tester email addresses. GitHub and WhatsApp community creation remain staged pending
-  the owner's confirmation of those external create actions.
+- [ ] `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS`: exact `aneeketdas.com/dungeon` routing and the
+  per-email tester gate require activation of Cloudflare Zero Trust Free. Activation asks the
+  owner to accept Cloudflare terms and authorise the saved card for usage above free limits; no
+  checkbox or activation was completed. Current production remains owner-only.
+- [ ] `WAITING_OWNER_TESTER_EMAILS`: no tester should receive access until the owner supplies the
+  addresses. GitHub and WhatsApp community creation remain staged pending confirmation.
+- [ ] The identity-gated client bundle prevents anonymous/casual harvesting but cannot stop an
+  approved technical tester from downloading visible bank scripts. Server-side item delivery is
+  `UNSTARTED`; do not claim perfect anti-scraping or DRM.
 - [ ] `WAITING_REAL_BROWSER`: the legacy cinematic/Ari/economy route still has no complete
   real-Browser new-player acceptance. This gate no longer applies to the verified T6 BRGSA route.
 - [ ] `WAITING_COMPUTER_USE`: Computer Use instructions are installed, but the control runtime was
@@ -250,6 +269,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   recorded in C11 and `briefs/T6_REVISION_FALLBACK.md`.
 - [ ] Deterministic T6 and legacy URL scenarios cover main fixtures, but no checked-in automated
   interaction suite validates all 40 study sets. Add one before broad student release.
+- [ ] Sampled confidence cadence, fixed thresholds, practice-shape weights, confidence recovery,
+  and any future mastery model remain product hypotheses until real learner data and cognitive
+  interviews support calibration.
 
 ## Self-Maintenance Rules
 
@@ -272,9 +294,11 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 
 - Generated: 2026-07-16
 - Last verified: 2026-08-11 (728-item T6 bank and source IDs, 565 active items, evidence-gated
-  progress, confidence, constructed self-review, selectable practice shapes, held feedback,
+  progress, sampled optional confidence, boss-step/whole-chain separation, constructed
+  self-review, selectable practice shapes, held feedback,
   mixed formats and boss grading, staged dashboard, evidence graph, real-Browser desktop/narrow
-  interaction, isolated save/resume, live-state preservation, and release-boundary tests)
+  interaction, isolated save/resume, live-state preservation, release-boundary tests, no-index and
+  private-cache controls, and the desktop owner control room)
 - Confidence: high for file inventory, operating rules, all-subject implementation, structural
   grounding, and observed Browser behavior; medium for transcript-derived content pending
   owner/faculty acceptance; low for exact exam-paper structure

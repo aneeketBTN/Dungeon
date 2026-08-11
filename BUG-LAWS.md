@@ -162,17 +162,19 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   subject, set, question number, queue length, due re-attempts, selected answer, and feedback. Then
   confirm reset removes only the intended browser profile.
 
-### LAW-14 🔴 — Partial multi-step success never satisfies a whole-chain mastery gate
+### LAW-14 🔴 — Partial multi-step evidence must neither disappear nor become a whole-chain pass
 
 - **Tier/Status:** 🔴 · ACTIVE
-- **Origin:** 2026-08-11 boss-question Browser pass: two correct steps initially credited each
-  covered concept with boss success even though the reasoning chain failed.
-- **Why:** A dashboard can call a concept Strong from the very failure a boss item was designed to
-  expose.
-- **Comply:** Record step-level evidence for explanation, but award boss/mastery credit only when
-  the entire required chain is correct without a revealed step or hint.
-- **Verify:** Submit every one-step-wrong permutation; confirm partial feedback remains visible,
-  the concept is Needs practice, and the boss gate remains open.
+- **Origin:** 2026-08-11 boss-question Browser pass: two correct steps initially credited a whole
+  boss pass; the first repair then risked discarding those valid steps entirely.
+- **Why:** Either error lies about the learner: a broken chain is not complete, but a valid
+  unassisted reasoning step is still applied evidence for the concept it actually tests.
+- **Comply:** Record passed and failed steps separately from the whole-chain result. A valid
+  unassisted applied step may contribute concept evidence; a failed relevant step remains an open
+  check, and only an all-step success closes the whole-chain state.
+- **Verify:** Submit every one-step-wrong permutation; confirm valid steps remain visible, the
+  whole chain remains open, the failed concept is not Strong, and no passed step is relabelled as
+  a full boss success.
 
 ### LAW-15 🟡 — Native selects must not inherit the width of their longest option
 
@@ -260,3 +262,74 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   not change package-wide semantics unless every existing script is intentionally migrated.
 - **Verify:** Run syntax checks, the legacy bank validator, the release build, and release tests
   together after any package or module-loader change.
+
+### LAW-22 🔴 — Confidence is diagnostic evidence, never a punishment or reward
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 research integration: an early direction considered grinding down
+  confidence after confident errors, while universal confidence prompts also created ritual noise.
+- **Why:** Humiliation, artificial difficulty, confidence rewards, and personality labels can
+  distort reporting, reduce trust, and confuse metacognition with correctness.
+- **Comply:** Sample confidence only on high-value diagnostic work after a response exists. Use
+  behavioural anchors plus a penalty-free skip. Confidence may alter explanation and later
+  diagnostic selection, never correctness, score, rewards, secret difficulty, or learner identity.
+  Require at least 20 judgments across three blocks and two formats before provisional aggregate
+  language.
+- **Verify:** Confirm a routine item has no prompt; a sampled item stages the prompt after the
+  response; skip enables checking with no penalty; and a confident error receives contrastive
+  feedback plus later independent repair without difficulty or reward mutation.
+
+### LAW-23 🔴 — Constructed self-review must not masquerade as automatic grading
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 research integration: adding short answers created pressure to convert
+  browser keyword matching or rubric ticks into a correctness score.
+- **Why:** A transparent practice aid becomes false precision when a thin client claims to judge
+  reasoning quality it cannot validly assess.
+- **Comply:** Require a substantive written response before showing criteria. Show the rubric
+  before the exemplar in learning mode, record selected criteria as self-review, keep the response
+  unscored, and exclude it from correctness percentages and independent Strong evidence. In
+  held-feedback mode, reveal neither rubric nor exemplar until the final review.
+- **Verify:** Try empty and short responses, complete rubric self-review, inspect results and the
+  concept dashboard, and confirm no automatic correct/incorrect label or Strong promotion exists.
+
+### LAW-24 🔴 — Held-feedback practice must not mutate learning evidence before review
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 research integration: hiding answer explanations was insufficient because
+  early attempt persistence could still reveal correctness through dashboard state.
+- **Why:** A learner can leak the answer or mastery result by leaving a supposedly held-feedback
+  check before its final review.
+- **Comply:** Stage all selected and constructed responses inside the active session. Before the
+  final screen, show neutral save confirmation only and do not write attempt evidence, correctness
+  classes, rubrics, exemplars, or explanations to the learner profile.
+- **Verify:** Save right and wrong answers, leave before completion, inspect dashboard evidence,
+  resume, then finish; no answer-shaped cue or progress mutation may appear before final review,
+  and the complete review must appear afterward.
+
+### LAW-25 🔴 — A client-side bank is never perfect anti-scraping
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 tester-protection design: the owner wanted to prevent unrelated students
+  scraping the authored bank, while the browser-local scheduler necessarily downloads its bank
+  scripts after access.
+- **Why:** Obfuscation, `robots.txt`, cache headers, or login language can create a false DRM claim;
+  an approved technical user can still save any bytes their browser receives.
+- **Comply:** Prevent anonymous access with individual identity, revocation, no-index responses,
+  private caching, audit logs, and rate limits. State the authorised-user limit plainly. Require
+  server-side per-session item delivery before claiming stronger scrape resistance.
+- **Verify:** Confirm anonymous denial, approved access, one-person revocation, no-index/private-
+  cache headers, and rate-limit behavior; inspect the shipped assets and document every complete
+  content bundle still delivered to an authorised browser.
+
+### LAW-26 🟡 — Git Bash packaging requires POSIX-style absolute paths
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 Sites packaging on Windows: passing `C:/...` to a Bash/tar helper made tar
+  parse `C:` as a remote host and fail; `/c/...` succeeded.
+- **Why:** A valid Windows path can change meaning inside a Unix-compatible tool and block a
+  release after its build has already passed.
+- **Comply:** Convert project and archive paths to Git-Bash `/c/...` form before invoking Bash
+  packaging helpers. Keep the resulting archive outside the repository.
+- **Verify:** Package from a path containing spaces, inspect the archive file count and hosting
+  metadata, and confirm the saved version references the same pushed commit.

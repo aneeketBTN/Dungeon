@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Dungeon Control Room</title>
+  <meta name="description" content="Owner-only tester access, release, feedback, and site-health dashboard for Dungeon.">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to dashboard</a>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Owner only</p>
+      <h1>Dungeon Control Room</h1>
+      <p class="lede">Tester access, release health, feedback operations, and change announcements in one place.</p>
+    </div>
+    <a class="button primary" href="t6.html">Open learner view</a>
+  </header>
+
+  <main id="main-content">
+    <section class="status-grid" aria-label="Current launch status">
+      <article><span>Site health</span><strong id="health-value">Checking…</strong><small id="health-detail">Production health route</small></article>
+      <article><span>Access</span><strong id="access-value">Identity gate</strong><small>One-time email sign-in; individual revocation</small></article>
+      <article><span>Question delivery</span><strong>Private cohort</strong><small>Not indexed; shared caches disabled</small></article>
+      <article><span>Release</span><strong id="release-value">Reading…</strong><small id="release-detail">Allowlisted production artifact</small></article>
+    </section>
+
+    <div class="dashboard-grid">
+      <section class="panel" aria-labelledby="access-title">
+        <div class="panel-heading">
+          <div><p class="eyebrow">Protection</p><h2 id="access-title">Tester access</h2></div>
+          <span class="state secure">Controlled</span>
+        </div>
+        <p>Approve testers by email. They receive a one-time sign-in code; there is no shared password to leak. Remove one email to revoke one person.</p>
+        <ol class="steps">
+          <li>Add the tester to the <b>Dungeon Testers</b> Cloudflare Access group.</li>
+          <li>Send the tester URL privately through the WhatsApp community.</li>
+          <li>Remove access after the cohort or immediately after misuse.</li>
+        </ol>
+        <div class="callout">
+          <b>Honest limit</b>
+          <p>Approved users can still copy what they can see. Identity, throttling, no-index rules, and individual auditability reduce casual harvesting; they do not create perfect DRM.</p>
+        </div>
+        <a class="button secondary" href="https://one.dash.cloudflare.com/" target="_blank" rel="noreferrer">Manage approved testers</a>
+      </section>
+
+      <section class="panel" aria-labelledby="release-title">
+        <div class="panel-heading">
+          <div><p class="eyebrow">Operations</p><h2 id="release-title">Release checklist</h2></div>
+          <span class="state" id="release-state">Checking</span>
+        </div>
+        <ul class="checklist" id="release-checklist">
+          <li data-check="health"><span aria-hidden="true">○</span> Production health responds</li>
+          <li data-check="manifest"><span aria-hidden="true">○</span> Allowlisted release manifest loads</li>
+          <li class="manual"><span aria-hidden="true">•</span> Verify desktop and 390-pixel learner paths</li>
+          <li class="manual"><span aria-hidden="true">•</span> Add the changelog entry and evidence link</li>
+          <li class="manual"><span aria-hidden="true">•</span> Announce only after the release URL passes</li>
+        </ul>
+        <div class="actions">
+          <button class="button secondary" id="refresh-status" type="button">Refresh status</button>
+          <a class="button quiet" href="https://dash.cloudflare.com/" target="_blank" rel="noreferrer">Open Cloudflare</a>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="feedback-title">
+        <div class="panel-heading">
+          <div><p class="eyebrow">Cohort</p><h2 id="feedback-title">Feedback triage</h2></div>
+          <span class="state">WhatsApp</span>
+        </div>
+        <p>Use one structured post per issue so fixes can be reproduced and closed without exposing private academic records.</p>
+        <div class="feedback-template" id="feedback-template">
+          <p><b>Subject / screen:</b></p>
+          <p><b>What I tried:</b></p>
+          <p><b>What happened:</b></p>
+          <p><b>What I expected:</b></p>
+          <p><b>Device / browser:</b></p>
+          <p><b>Screenshot, if safe:</b></p>
+        </div>
+        <button class="button secondary" id="copy-feedback" type="button">Copy feedback template</button>
+        <p class="hint">Privacy or security reports go privately to the owner, never into the group.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="announcement-title">
+        <div class="panel-heading">
+          <div><p class="eyebrow">Communication</p><h2 id="announcement-title">Change announcement</h2></div>
+          <span class="state">Draft</span>
+        </div>
+        <label for="announcement-change">What changed?</label>
+        <textarea id="announcement-change" rows="3" placeholder="Example: Written practice now keeps the rubric hidden until the end of a practice check."></textarea>
+        <label for="announcement-impact">What should testers do?</label>
+        <textarea id="announcement-impact" rows="3" placeholder="Example: Try one Explain in your own words check and report anything unclear."></textarea>
+        <div class="announcement-preview" id="announcement-preview" aria-live="polite"></div>
+        <button class="button secondary" id="copy-announcement" type="button">Copy announcement</button>
+        <p class="hint">Copying prepares the message; it does not send on your behalf without a separate send action.</p>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="admin.js"></script>
+</body>
+</html>

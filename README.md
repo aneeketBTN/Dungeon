@@ -80,11 +80,26 @@ analytics, advertising trackers, or a server-side learner database. See `PRIVACY
 
 ## Controlled tester release
 
-`npm run build` creates a deployment artifact containing only the active T6 page, stylesheet,
-application, and three course-bank scripts. It excludes live `state/`, `history/`, local CLA
-analysis, owner source packs, transfer notes, work files, and test fixtures. `npm test` checks that
-boundary, the health route, redirects, cache policy, and security headers. No package installation
-is required.
+`npm run build` creates a ten-asset deployment artifact containing only the active T6 learner
+route, three course-bank scripts, the owner control room, and `robots.txt`. It excludes live
+`state/`, `history/`, local CLA analysis, owner source packs, transfer notes, work files, test
+fixtures, credentials, tester addresses, and community invites. `npm test` checks that boundary,
+the health route, learner/admin redirects, private-cache policy, no-index rules, and security
+headers. No package installation is required.
+
+The intended tester gate uses one-time email sign-in through Cloudflare Access. A tester can be
+revoked individually; there is no cohort password to leak. The app stays out of search indexing
+and question-bearing scripts are not shared-cacheable. This prevents anonymous and casual bulk
+collection, not copying by an already approved tester. See
+`briefs/TESTER_ACCESS_AND_ADMIN.md` for the threat boundary.
+
+The owner dashboard is `/mock/admin.html` locally and will be `/dungeon/admin` on the protected
+domain. It checks production health and the release allowlist, explains tester add/revoke steps,
+provides a feedback template, and drafts—but never autonomously sends—change announcements.
+
+The current production Sites URL is owner-only. Exact `aneeketdas.com/dungeon` routing is paused
+before Cloudflare Zero Trust activation because that step requires accepting Cloudflare terms and
+authorising the saved card for any usage above the free limits.
 
 Tester conduct and feedback live in `TESTER_GUIDE.md`; moderation and announcement procedures live
 in `COMMUNITY_PLAYBOOK.md`; private security reports follow `SECURITY.md`.
@@ -122,7 +137,6 @@ Append one scenario to `/mock/t6.html`:
 - `?scenario=feedback`
 - `?scenario=priority`
 - `?scenario=results`
-- `?scenario=simulation-results`
 
 Scenario routes do not save normal browser progress.
 

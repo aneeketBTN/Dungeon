@@ -27,6 +27,9 @@ not make it authoritative.
      learner progress browser-local, publish privacy/security/tester guidance, create a private
      GitHub source repository, and operate tester discussion, feedback, and announcements through
      an owner-administered WhatsApp community.
+   - Protected domain and owner operations (2026-08-11):
+     `briefs/TESTER_ACCESS_AND_ADMIN.md` owns the exact `aneeketdas.com/dungeon` route, per-email
+     access, anti-harvesting claim boundary, private origin, and owner control room.
 
 2. **Project operating system**
    - `AGENTS.md`
@@ -96,7 +99,7 @@ not make it authoritative.
 | Persistence/stats | `PROMPT.md`, `state/` | resume, results, recommendations, player history |
 | Prototype interaction | `mock/rogue.*` | current Hall/run/results behavior |
 | T6 exam fallback | `briefs/T6_REVISION_FALLBACK.md`; `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`; `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md`; owner-supplied T6 AI-ready pack | four-subject dashboard, evidence-based progress, adaptive repetition, mixed formats, confidence, constructed response, first-cohort boundary |
-| Controlled tester release | current owner direction; `TESTER_GUIDE.md`; `PRIVACY.md`; `SECURITY.md`; `COMMUNITY_PLAYBOOK.md` | hosting boundary, source publication, feedback, moderation, announcements, incident intake |
+| Controlled tester release | current owner direction; `briefs/TESTER_ACCESS_AND_ADMIN.md`; `TESTER_GUIDE.md`; `PRIVACY.md`; `SECURITY.md`; `COMMUNITY_PLAYBOOK.md` | hosting boundary, identity access, source publication, feedback, moderation, announcements, incident intake |
 | Legacy practice portal | `mock/index.html` and other mock pages | content inventory and old navigation |
 
 ## Conflict register
@@ -181,7 +184,7 @@ one side.
 - Current owner direction requires a last-minute T6 revision tool whose learning path earns the
   product layers later.
 - Resolution (2026-08-10): the T6 fallback is the active default route. It removes all non-learning
-  gates from the critical path, keeps the full practice mock one click away, and preserves the broad product
+  gates from the critical path, keeps configurable generic practice one click away, and preserves the broad product
   slice at `mock/rogue.html` as a legacy reference rather than deleting it.
 
 ### C12 — Game-system vocabulary versus student comprehension
@@ -190,7 +193,8 @@ one side.
   active revision path.
 - Current owner direction requires a student who knows nothing about the product to understand
   their progress and next action immediately.
-- Resolution (2026-08-10): the active route uses only study sets, full practice mocks, concepts,
+- Resolution (2026-08-10; revised 2026-08-11): the active route uses only study sets, configurable
+  practice checks, concepts,
   Strong, Developing, Needs practice, Not started, feedback, and re-attempts. The useful learning
   properties remain underneath: cumulative module order, causal explanations, priority scheduling,
   and a later different-perspective question after a miss. Legacy vocabulary may remain only in
@@ -255,8 +259,8 @@ one side.
 - Resolution (2026-08-11): let learners choose recognition, application, generation, or mixed
   generic practice and immediate or end-held feedback. Label every such route as practice, never
   a final-paper simulation or score prediction. The absence of a first-cohort paper does not block
-  useful generic practice; exact-paper claims remain `WAITING_OWNER_EXAM_PATTERN` and are not a
-  truthful current product claim.
+  useful generic practice. Exact-paper uncertainty is the standing
+  `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` boundary, not a prerequisite this cohort can wait for.
 
 ### C18 — Constructed practice versus opaque automatic grading
 
@@ -278,6 +282,25 @@ one side.
   source and deployment; use WhatsApp for voluntary cohort conversation and structured feedback.
   Any telemetry or account backend requires a separate purpose, consent, retention, and deletion
   decision.
+
+### C20 — Anti-harvesting intent versus the limits of a client-side bank
+
+- The owner does not want unrelated students scraping the authored bank, but approved testers must
+  still receive learning content in a browser and the current scheduler loads three bank scripts.
+- Resolution (2026-08-11): use individual one-time email access, owner-only administration,
+  revocation, no-index responses, private cache controls, and edge rate limiting to prevent
+  anonymous/casual collection and contain abuse. Never call this perfect anti-scraping or DRM: an
+  approved technical tester can still download visible client assets. Stronger protection requires
+  a separate server-side, per-session item-delivery architecture.
+
+### C21 — Exact path routing versus a private origin
+
+- `aneeketdas.com/dungeon` needs Cloudflare path routing, while exposing the Sites origin publicly
+  would let visitors bypass the domain gate.
+- Resolution (2026-08-11): keep the Sites origin owner-only and let a Cloudflare Worker authenticate
+  to it with a secret stored only at the edge. Put the broader tester Access policy on `/dungeon*`
+  and a higher-priority owner-only policy on `/dungeon/admin*`. Do not publish a bypass credential
+  in source, client code, URLs, evidence, or hosting metadata.
 
 ### C20 — Confidence as diagnosis versus confidence as punishment
 
@@ -318,8 +341,9 @@ On 2026-08-10 the owner supplied the external `Term 6 AI-Ready Pack` as the acti
 evidence layer and explicitly reprioritised the product around last-minute exam readiness. The
 durable product and source mapping is recorded in `briefs/T6_REVISION_FALLBACK.md`. BRGSA, IBM,
 SCLM, and SPMS now have source-traceable ten-set banks and a shared verified dashboard. Exact
-paper structure remains `WAITING_OWNER_EXAM_PATTERN`, and transcript-derived question quality
-still requires owner/faculty acceptance before `DONE`.
+paper structure is `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`; that boundary does not block generic
+practice. Transcript-derived question quality still requires owner/faculty acceptance before
+`DONE`.
 
 On 2026-08-11 the owner rejected quick Strong classifications and requested confidence-aware,
 explainable progress plus harder boss and mixed-format questions. The uncertainty audit, primary

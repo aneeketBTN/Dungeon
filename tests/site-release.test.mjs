@@ -31,6 +31,13 @@ test("health endpoint reports the privacy-preserving storage model", async () =>
   });
 });
 
+test("admin uses its canonical owner dashboard route", async () => {
+  const response = await worker.fetch(new Request("https://dungeon.test/admin"), env);
+  assert.equal(response.status, 302);
+  assert.equal(response.headers.get("location"), "/mock/admin.html");
+  assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow, noarchive");
+});
+
 test("static responses receive launch security and cache headers", async () => {
   const response = await worker.fetch(
     new Request("https://dungeon.test/mock/t6.js"),
@@ -40,10 +47,9 @@ test("static responses receive launch security and cache headers", async () => {
   assert.equal(response.headers.get("x-content-type-options"), "nosniff");
   assert.equal(response.headers.get("x-frame-options"), "DENY");
   assert.match(response.headers.get("content-security-policy"), /frame-ancestors 'none'/);
-  assert.equal(
-    response.headers.get("cache-control"),
-    "public, max-age=300, must-revalidate"
-  );
+  assert.equal(response.headers.get("cache-control"), "private, max-age=0, must-revalidate");
+  assert.equal(response.headers.get("cross-origin-resource-policy"), "same-origin");
+  assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow, noarchive");
 });
 
 test("release build includes only the allowlisted active app", async () => {
@@ -52,6 +58,8 @@ test("release build includes only the allowlisted active app", async () => {
     "utf8"
   );
   assert.match(buildScript, /mock\/t6\.html/);
+  assert.match(buildScript, /mock\/admin\.html/);
+  assert.match(buildScript, /mock\/robots\.txt/);
   assert.doesNotMatch(buildScript, /state\//);
   assert.doesNotMatch(buildScript, /history\//);
   assert.doesNotMatch(buildScript, /mock\/CLAs\//);

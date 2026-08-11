@@ -33,7 +33,14 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 - Promote a concept only from answer evidence; never use set completion alone as mastery.
 - A held-feedback practice check must withhold every answer-shaped cue—including constructed
   rubrics and exemplars—until the result review.
+- Confidence is optional diagnostic evidence. Never reduce it through humiliation, manipulate it
+  with secret difficulty, or turn it into a reward currency.
+- A valid reasoning step and a valid whole chain are separate facts; preserve both.
+- Constructed browser practice is transparent self-review unless a separately validated human or
+  model-grading contract exists.
 - Opening a tester cohort does not justify collecting learner data that the product does not need.
+- Access control must be individual and revocable; never market an identity-gated client bundle as
+  impossible for an approved user to copy.
 
 ## Issue → Cause → Fix
 
@@ -82,15 +89,16 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   full mocks for every subject, consistent result states, narrow layouts, and automatic resume.
   Evidence: `evidence/2026-08-10/t6-dashboard-all-subjects/verification.md`; prevention:
   `DESIGN_SOURCE_INDEX.md` C12 and `BUG-LAWS.md` LAW-11 through LAW-13.
-- **I9 (2026-08-11)** — Issue: two quick correct answers could produce Strong, confidence was
-  unknown, and conventional MCQs exposed answer-shape cues while offering little framework
-  construction. Cause: the first dashboard optimised visible movement before defining a durable
-  evidence threshold or item pedigree. Fix: installed confidence-tagged attempts, five-attempt /
-  four-correct / three-type / two-block / unassisted-boss Strong gates, time qualifiers, complete
-  status reasons, whole-chain boss grading, mixed formats, least-recent rotation, and a 728-item
-  tagged bank whose 565 active items quarantine every detected legacy option-shape risk. Evidence:
-  `evidence/2026-08-11/t6-evidence-challenges/verification.md`; prevention: `BUG-LAWS.md` LAW-14
-  and LAW-16.
+- **I9 (2026-08-11; revised 2026-08-11)** — Issue: two quick correct answers could produce Strong,
+  confidence was unknown, and conventional MCQs exposed answer-shape cues while offering little
+  framework construction. Cause: the first dashboard optimised visible movement before defining a
+  durable evidence threshold or item pedigree. Fix: installed five-attempt / four-correct /
+  three-type / two-block gates, sampled confidence, time qualifiers, mixed formats, least-recent
+  rotation, and a 728-item bank whose 565 active items quarantine every detected legacy
+  option-shape risk. Applied evidence can now come from a new case or a valid unassisted reasoning
+  step; whole-chain completion remains separately visible instead of being a permanent universal
+  gate. Evidence: `evidence/2026-08-11/t6-research-integration/verification.md`; prevention:
+  `BUG-LAWS.md` LAW-14, LAW-16, and LAW-22.
 - **I10 (2026-08-11)** — Issue: the dashboard showed too many surfaces at once, the concept list
   felt like inventory, and question cards duplicated internal metadata and decorative accents;
   one hierarchy pass also made the case larger than the actual task. Cause: information and visual
@@ -145,6 +153,49 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   headers, release tests, privacy/security/tester policies, and a moderated WhatsApp community
   playbook while keeping progress browser-local. Evidence:
   `evidence/2026-08-11/tester-launch/verification.md`; prevention: `DESIGN_SOURCE_INDEX.md` C19.
+- **I17 (2026-08-11)** — Issue: confidence appeared after every scored question and an early
+  direction considered deliberately reducing confidence after a confident error. Cause:
+  metacognitive diagnosis, motivational feedback, and punishment were treated as one mechanism.
+  Fix: sample behavioural confidence only on high-value diagnostic events, reveal it only after a
+  response exists, allow a penalty-free skip, and route confident errors to contrastive correction
+  plus independent repairs. Confidence changes neither correctness, score, rewards, secret
+  difficulty, nor identity. Evidence: `evidence/2026-08-11/t6-research-integration/verification.md`;
+  prevention: `BUG-LAWS.md` LAW-22.
+- **I18 (2026-08-11)** — Issue: boss grading either promoted a broken chain or risked erasing valid
+  steps. Cause: one boolean represented both concept-level reasoning and whole-chain completion.
+  Fix: persist passed and failed steps separately, allow a valid unassisted applied step to count
+  for the concept it tests, keep failed steps open, and display whole-chain completion separately.
+  Evidence: `evidence/2026-08-11/t6-research-integration/verification.md`; prevention:
+  `BUG-LAWS.md` LAW-14.
+- **I19 (2026-08-11)** — Issue: short-answer practice could imply an automatic grade and leak its
+  rubric during held-feedback practice. Cause: generation, scoring, and feedback timing were
+  coupled. Fix: require writing before criteria, expose criteria before the exemplar only in
+  learning mode, store self-review as unscored, exclude it from Strong and percentages, and defer
+  all answer-shaped material to final review in a held-feedback check. Evidence:
+  `evidence/2026-08-11/t6-research-integration/verification.md`; prevention: `BUG-LAWS.md` LAW-20
+  and LAW-23.
+- **I20 (2026-08-11)** — Issue: a first-cohort practice check could leak correctness through the
+  dashboard before the final review even when explanations were hidden. Cause: attempts were
+  written to the learner profile as each response was saved. Fix: stage every held-feedback
+  response in the active session, show neutral save confirmation, and commit evidence only when
+  the final review opens. Evidence: `evidence/2026-08-11/t6-research-integration/verification.md`;
+  prevention: `BUG-LAWS.md` LAW-24.
+- **I21 (2026-08-11)** — Issue: opening the app to testers could expose the complete client bank to
+  anonymous students, shared caches, and search indexing, while a shared password would be hard to
+  revoke safely. Cause: the local prototype had no cohort identity boundary and the current
+  browser scheduler loads complete bank scripts. Fix: selected one-time email Access with
+  individual revocation, owner-only administration, no-index responses, private caching, edge rate
+  limiting, and an explicit no-DRM claim boundary. The current owner-only deployment stays closed
+  until Cloudflare terms/overage authorisation and tester emails are supplied. Evidence:
+  `evidence/2026-08-11/tester-access-admin/verification.md`; prevention: `DESIGN_SOURCE_INDEX.md`
+  C20–C21 and `BUG-LAWS.md` LAW-25.
+- **I22 (2026-08-11)** — Issue: tester access, release health, feedback instructions, and
+  announcements were scattered across provider dashboards and documents. Cause: the release had
+  no truthful owner operations surface. Fix: added the Dungeon Control Room with live
+  health/manifest checks, an access/revocation workflow, release checklist, structured feedback
+  template, and an announcement composer that copies but never sends automatically. It shows
+  unavailable dependencies as failures instead of fabricating usage or tester counts. Evidence:
+  `evidence/2026-08-11/tester-access-admin/verification.md`.
 
 ## Watch Items
 
@@ -152,14 +203,17 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 - The first slice now uses two Resolve; future modes must not reintroduce a conflicting default.
 - Economy, cosmetics, quests, and power-ups are defined locally for the product slice but not yet
   part of the core learning engine.
-- The first slice exposes Immediate feedback only; other timing modes remain deferred.
+- The T6 learning path supports immediate feedback; generic practice checks can hold every
+  answer-shaped cue until a complete end review.
 - Persona and rank must not display before engine evidence thresholds are met.
 - Large frame/output directories need manifests/contact sheets rather than individual index rows.
 - URL scenarios isolate major states, but no checked-in automated interaction suite covers all 40
   study sets.
 - All four course banks are source-traceable, but transcript-derived question content needs
   owner/faculty acceptance before the route is `DONE`.
-- Exact T6 final-paper structure is not public in the consulted policy; do not convert the current
-  pattern-family mock into an exam replica without an owner-supplied paper/instruction source.
+- This is a first-cohort final with no same-course paper to await. Keep the current assessment
+  envelope explicit; do not convert generic practice into an exam replica or score prediction.
 - Constructed prompts, rubrics, and exemplars are source-traceable but still require owner/faculty
   acceptance; self-review must never be described as an automatic grade.
+- Identity gating prevents anonymous access, not copying by approved testers. Server-side item
+  delivery remains necessary before claiming stronger authorised-user scrape resistance.

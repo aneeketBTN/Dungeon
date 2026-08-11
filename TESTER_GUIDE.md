@@ -4,6 +4,10 @@ Dungeon's current tester release is a Term 6 revision dashboard for BRGSA, IBM, 
 It is an early learning-product test, not a prediction of exam performance or an exact replica of
 the final paper.
 
+Access is personal. Use the one-time code sent to your approved email address; do not forward the
+tester URL, code, screenshots of questions, or course content outside the cohort. Access can be
+revoked individually.
+
 ## What to try
 
 1. Open each subject and check whether the next action is immediately understandable.
@@ -28,10 +32,11 @@ test requests appear in the community's announcement group.
 
 ## Privacy and progress
 
-The release has no learner account or analytics. Your answers and progress stay in the browser on
-the device you use. Clearing that browser's site data, using private browsing, or switching device
-will start a separate profile. Do not post private academic records, passwords, phone numbers, or
-other sensitive information in feedback.
+The learning app does not create a server-side learner profile or collect your answers as
+analytics. Cloudflare uses your approved email for access and may retain ordinary security/request
+logs. Your answers and progress stay in the browser on the device you use. Clearing that browser's
+site data, using private browsing, or switching device will start a separate profile. Do not post
+private academic records, passwords, phone numbers, or other sensitive information in feedback.
 
 ## Known limits
 

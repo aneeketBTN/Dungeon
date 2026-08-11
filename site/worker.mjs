@@ -1,4 +1,5 @@
 const ACTIVE_ROUTE = "/mock/t6.html";
+const ADMIN_ROUTE = "/mock/admin.html";
 
 const SECURITY_HEADERS = {
   "Content-Security-Policy": [
@@ -15,10 +16,12 @@ const SECURITY_HEADERS = {
     "upgrade-insecure-requests"
   ].join("; "),
   "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-origin",
   "Permissions-Policy": "camera=(), geolocation=(), microphone=()",
   "Referrer-Policy": "no-referrer",
   "X-Content-Type-Options": "nosniff",
-  "X-Frame-Options": "DENY"
+  "X-Frame-Options": "DENY",
+  "X-Robots-Tag": "noindex, nofollow, noarchive"
 };
 
 function withHeaders(response, pathname) {
@@ -28,7 +31,9 @@ function withHeaders(response, pathname) {
   }
   headers.set(
     "Cache-Control",
-    pathname.endsWith(".html") ? "no-store" : "public, max-age=300, must-revalidate"
+    pathname.endsWith(".css") || pathname.endsWith("robots.txt")
+      ? "public, max-age=300, must-revalidate"
+      : "private, max-age=0, must-revalidate"
   );
   return new Response(response.body, {
     status: response.status,
@@ -48,6 +53,17 @@ const worker = {
           ...SECURITY_HEADERS,
           "Cache-Control": "no-store",
           Location: ACTIVE_ROUTE
+        }
+      });
+    }
+
+    if (url.pathname === "/admin") {
+      return new Response(null, {
+        status: 302,
+        headers: {
+          ...SECURITY_HEADERS,
+          "Cache-Control": "no-store",
+          Location: ADMIN_ROUTE
         }
       });
     }
@@ -83,4 +99,3 @@ const worker = {
 };
 
 export default worker;
-

@@ -3,14 +3,20 @@
 ## What the web app stores
 
 The active Term 6 dashboard stores progress only in the tester's browser under
-`term6.revision.v2`. The release does not require an account and does not send answer history,
-confidence choices, or progress to Dungeon's server.
+`term6.revision.v2`. The learning app does not create a learner profile on Dungeon's server and
+does not send answer history, confidence choices, written responses, or progress there.
+
+The planned access gate is separate from learning progress. Cloudflare Access uses an approved
+email address to send a one-time sign-in code and records ordinary security/request metadata so
+access can be audited and revoked. Dungeon does not use that identity to grade or personalise
+learning evidence.
 
 ## What the web app does not collect
 
-The first tester release has no analytics, advertising, tracking pixels, learner profiles,
-central leaderboard, or cross-device sync. The production health endpoint reports only whether
-the service is available and does not receive learner answers.
+The first tester release has no product analytics, advertising, tracking pixels, server-side
+learner profiles, central leaderboard, or cross-device sync. Cloudflare may provide aggregate
+traffic/security logs for operating the protected route. The production health endpoint reports
+only whether the service is available and does not receive learner answers.
 
 ## WhatsApp community
 
@@ -23,4 +29,3 @@ academic or personal information.
 
 Use **Progress settings → Reset local progress** in the dashboard, or clear the site's browser
 data. This affects only that browser profile.
-

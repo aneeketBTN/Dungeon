@@ -4,8 +4,8 @@ Status: `VERIFIED(evidence/2026-08-11/tester-launch/verification.md)` for the st
 all-subject dashboard, evidence graph, sampled optional confidence, constructed self-review,
 generic practice shapes, boss-step evidence, adaptive repair, persistence, and responsive Browser
 paths. No same-course final exists, so the product targets a documented assessment envelope and
-does not claim an exact first-final blueprint; exact fidelity remains
-`WAITING_OWNER_EXAM_PATTERN` without blocking generic practice.
+does not claim an exact first-final blueprint. `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` is a standing
+claim boundary, not a prerequisite this cohort can wait for.
 
 Decision date: 2026-08-10
 

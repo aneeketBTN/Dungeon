@@ -17,3 +17,12 @@ The public build is generated from an explicit allowlist. Real learner state, qu
 owner-supplied source extracts, working media, evidence captures, and local environment files are
 excluded from deployment and source publication.
 
+The controlled cohort uses individual email access rather than a shared password. Search indexing
+is blocked, question-bearing responses use private cache controls, and the Cloudflare path will be
+rate-limited after Access activation. The owner dashboard must have a narrower owner-only policy
+than the learner route.
+
+These controls do not create DRM. An approved tester can copy visible content, and the current
+browser-local scheduler downloads the embedded bank scripts after access. Do not describe the
+release as resistant to harvesting by authorised technical users until server-side item delivery
+has replaced that client-bundle boundary.
