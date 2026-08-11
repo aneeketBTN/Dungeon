@@ -95,6 +95,36 @@ that directory are superseded drafts that still carry signature lines; send the 
 - An approved technical tester can still download the client-side question bank. Server-side item
   delivery remains `UNSTARTED`.
 
+## Follow-up pass: onboarding, dashboard, and push-to-deploy
+
+Deployed and verified after the original pass above.
+
+- **WhatsApp group requirement.** The agreement step gates on two acknowledgements. Verified live
+  that ticking only the terms box leaves the second required and blocks entry, and that the group
+  link carries `target="_blank"` with `rel="noopener"`.
+- **Cohort onboarding.** `POST /dungeon/admin/api/testers` accepts an `emails` array, writes the
+  Access group once, and returns `added`, `alreadyApproved`, and `rejected`. Test asserts the owner
+  address and malformed entries are rejected while valid ones are granted.
+- **Lock recovery.** `PATCH` with `action: "unlock"` clears the lock and re-baselines the country.
+  Test signs a tester in from `IN`, saves progress, signs out, triggers the `US` lock, unlocks, signs
+  back in from `US`, and asserts the saved state is byte-identical. It also asserts the Access group
+  was never rewritten, so unlocking cannot widen access.
+- **Cohort aggregation.** `summarizeCohort` counts only `scored`, non-`isReattempt` records, so
+  retries and self-review practice cannot inflate apparent knowledge. Test covers owner exclusion,
+  an unparseable `state_json` row, a retry, and an unscored attempt.
+- **Owner boundary.** `GET /dungeon/admin/api/insights` returns `302` to Cloudflare Access
+  anonymously — the new endpoint is not publicly reachable.
+- **Real Browser.** The Control Room was driven with stubbed API responses at desktop and 390 px:
+  four tester rows, `Clear lock` present only on the locked tester, three participation rows, four
+  ranked concepts, and `0` horizontal overflow at both widths.
+- **Push-to-deploy.** `aneeketBTN/Dungeon` connected to Workers Builds with root directory
+  `cloudflare`, build `npm --prefix .. run build`, deploy `npx wrangler deploy`. The dashboard's
+  auto-filled root of `/` was corrected: wrangler would not have found `cloudflare/wrangler.jsonc`,
+  and the worker's `jose` dependency would not have been installed. First Git-triggered build is
+  version `6ebc486b`, attributed to the commit rather than `Manually deployed`.
+
+`npm test` passes 27/27.
+
 ## Remaining
 
 - `WAITING_OWNER_DEPLOY`: publish the `login.css` repair to the live edge.

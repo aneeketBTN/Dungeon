@@ -43,11 +43,15 @@
 > records only version and acceptance time. Progress is stored per email in Cloudflare D1 with the
 > browser copy kept as an offline fallback. One active browser per email is enforced, and a country
 > change locks the account for owner review; city and region changes are deliberately unused.
-> Admission, denial, the agreement gate, and the 390-pixel agreement layout are
+> Onboarding also requires joining the private WhatsApp tester group: the step gates on both
+> acknowledgements. Admission, denial, the agreement gate, and the 390-pixel agreement layout are
 > `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-11/learner-backend-and-agreement/verification.md`. That pass also found and
-> repaired a `mock/login.css` `[hidden]` defect that left the email form painted beneath the
-> agreement step; the repair is in source and both release builds and is `WAITING_OWNER_DEPLOY`.
+> `evidence/2026-08-11/learner-backend-and-agreement/verification.md`. The Control Room adds cohort
+> paste-onboarding, a `Clear lock` recovery that forgives a country lock without deleting progress,
+> per-tester state chips, and two panels computed from real saved progress: Participation and
+> Where testers struggle. Authoring replacement questions stays out of the dashboard by design.
+> `aneeketBTN/Dungeon` (private) is connected to Workers Builds, so a push to `main` builds and
+> deploys; the first Git-triggered version is `6ebc486b`.
 > External tester grants remain
 > `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
 > staged owner-confirmed actions. The Learning Signal Auditor, Question Bank Steward, and Tester
@@ -197,7 +201,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
 | `mock/admin.html` | Owner control room for direct tester management, release health, feedback triage, and announcement drafting. | 2026-08-11 |
 | `mock/admin.css` | Responsive, accessible control-room layout and status presentation. | 2026-08-11 |
-| `mock/admin.js` | Owner-path health/manifest checks, tester add/list/revoke flow, copy helpers, and announcement preview without autonomous sending. | 2026-08-11 |
+| `mock/admin.js` | Owner-path health/manifest checks, cohort paste-onboarding, revoke, lock clearing, per-tester state chips, participation and learning-signal panels, copy helpers, and announcement preview without autonomous sending. | 2026-08-11 |
 | `mock/t6.html` | Staged dashboard, time-horizon plan, generic practice setup, evidence graph, feedback, results, reset, and exam-boundary surfaces. | 2026-08-11 |
 | `mock/t6.css` | Flat single-surface question hierarchy plus low-density, responsive, accessible desktop/narrow revision presentation. | 2026-08-11 |
 | `mock/t6.js` | Evidence-gated mastery, time-horizon plans, selectable practice shapes, held-feedback checks, constructed self-review, rotation, persistence, and scenarios. | 2026-08-11 |
@@ -300,10 +304,12 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 728 questions are source-traceable and structurally
   verified, but transcript-derived content and the 64 constructed-response rubrics/exemplars still
   need owner/faculty acceptance before `DONE`.
-- [ ] `WAITING_OWNER_DEPLOY`: the `mock/login.css` `[hidden]` repair (LAW-36) is in source and in
-  both release builds but not on the live edge; this session had no Cloudflare deployment
-  credential. Run `npx wrangler deploy` from `cloudflare/` with the owner's Cloudflare login, then
-  re-check the agreement step on the live domain.
+- [ ] Push to `main` now publishes to the live domain through Workers Builds. Do not commit
+  work-in-progress to `main` while testers are active; finish a change, then push. A bad version can
+  be rolled back from Workers → Deployments.
+- [ ] The two new dashboard panels are verified against sample and synthetic data only. Their real
+  numbers stay empty until testers save progress; re-read them once the cohort is active, and treat
+  anything under ten first attempts as noise.
 - [ ] Approved-email admission, the private denial, the agreement gate, and progress storage are
   verified from the live edge, a real Browser, and 23 automated tests. The owner has not yet walked
   one approved email all the way through the agreement into the dashboard on the live domain; do

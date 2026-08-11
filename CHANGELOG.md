@@ -3,6 +3,42 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-11 — Cohort onboarding, lock recovery, learning signal, and push-to-deploy
+
+- Connected `aneeketBTN/Dungeon` (private) to Workers Builds. Root directory `cloudflare`, build
+  `npm --prefix .. run build`, deploy `npx wrangler deploy`, production branch `main`. The
+  dashboard's auto-filled config was wrong for this repo: root `/` would have left wrangler unable
+  to find `cloudflare/wrangler.jsonc` and the worker's `jose` dependency uninstalled. Verified the
+  corrected shape locally first — `build-site.mjs` resolves from `import.meta.url`, so it is
+  location-independent. First Git-triggered build deployed version `6ebc486b` and is attributed to
+  the commit rather than `Manually deployed`.
+- Owner accepted that push now equals publish, after the tradeoff was stated twice: a
+  work-in-progress commit reaches testers. Mitigation in practice is to hold commits until a change
+  is complete.
+- Required the WhatsApp tester group at onboarding. The agreement step now gates on two
+  acknowledgements — the closed tester terms and confirmation of joining the group — and the full
+  terms gained a membership clause. Verified live that ticking only the terms still blocks entry.
+- Replaced the single-email tester field with a paste area accepting a whole cohort separated by
+  commas, spaces, or newlines. `POST` takes an `emails` array, writes the Access group once
+  atomically, and reports added, already-approved, and rejected addresses separately.
+- Added lock recovery. `PATCH` with `action: "unlock"` clears a country lock and re-baselines
+  `first_country` without touching the Access group or the tester's saved progress. Before this the
+  only remedy was revoke-and-re-add, which deletes progress — the wrong answer for a signal that
+  fires on ordinary travel, VPNs, and mobile routing. A test asserts progress survives.
+- Added two dashboard panels that replace what was previously scoped as scheduled agents, both
+  reading real saved progress rather than inferring from reports: Participation (answers, concepts
+  touched, first-attempt accuracy, time since last answer) and Where testers struggle (concepts
+  ranked by unassisted first-attempt accuracy, with hint rate and tester count). Aggregation counts
+  only scored, non-reattempt records, excludes the owner, skips unparseable rows, and labels
+  samples under ten attempts as low rather than hiding them.
+- Deliberately did not build a Question Bank Steward panel. Authoring replacement question families
+  is generative work that needs the source checked; the dashboard surfaces which concepts are weak
+  and the rewriting stays a reviewed session.
+- Tester rows now show signed-in, agreement-accepted, has-progress, first-login country, and last
+  activity. `npm test` passes 27/27, including a new aggregation test covering owner exclusion,
+  corrupt rows, retries, and unscored practice. Evidence:
+  `evidence/2026-08-11/learner-backend-and-agreement/verification.md`.
+
 ## 2026-08-11 — Approved-email entry, shared learner backend, and the closed tester agreement
 
 - Replaced the emailed-code learner challenge with a single binary admission check. The Control
