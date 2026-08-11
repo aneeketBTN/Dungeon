@@ -1,0 +1,17 @@
+{
+  "name": "dungeon-access-edge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "wrangler deploy --dry-run --outdir dist",
+    "types": "wrangler types"
+  },
+  "dependencies": {
+    "jose": "6.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "wrangler": "4.120.1"
+  }
+}

@@ -8,6 +8,7 @@ node_modules/
 dist/
 *.tgz
 .wrangler/
+cloudflare/worker-configuration.d.ts
 
 # Real learner data and local runtime state
 state/

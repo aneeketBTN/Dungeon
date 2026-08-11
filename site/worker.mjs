@@ -86,6 +86,24 @@ const worker = {
       );
     }
 
+    if (url.pathname === "/admin/api/testers") {
+      return new Response(
+        JSON.stringify({
+          status: "setup-required",
+          code: "SETUP_REQUIRED",
+          message: "Activate Cloudflare Access to manage testers from the dashboard."
+        }),
+        {
+          status: 503,
+          headers: {
+            ...SECURITY_HEADERS,
+            "Cache-Control": "no-store",
+            "Content-Type": "application/json; charset=utf-8"
+          }
+        }
+      );
+    }
+
     if (!env?.ASSETS?.fetch) {
       return new Response("Static asset service unavailable", {
         status: 503,

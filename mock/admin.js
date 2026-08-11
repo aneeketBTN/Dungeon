@@ -2,6 +2,8 @@
   "use strict";
 
   var toastTimer;
+  var testersConnected = false;
+  var testersEndpoint = "../admin/api/testers";
 
   function $(id) { return document.getElementById(id); }
 
@@ -27,6 +29,132 @@
     if (!item) return;
     item.classList.toggle("passed", passed);
     item.querySelector("span").textContent = passed ? "✓" : "×";
+  }
+
+  function setTesterControls(connected, busy) {
+    testersConnected = connected;
+    $("add-tester").disabled = !connected || busy;
+    $("refresh-testers").disabled = busy;
+    $("tester-email").setAttribute("aria-disabled", String(!connected || busy));
+  }
+
+  function setTesterState(label, detail, className) {
+    $("access-value").textContent = label;
+    $("access-detail").textContent = detail;
+    $("tester-access-state").textContent = label;
+    $("tester-access-state").classList.toggle("passed", className === "passed");
+    $("tester-access-state").classList.toggle("secure", className === "passed");
+    $("tester-status").textContent = detail;
+  }
+
+  function renderTesters(testers) {
+    var list = $("tester-list");
+    list.replaceChildren();
+    $("tester-count").textContent = testers.length === 1 ? "1 approved tester" : testers.length + " approved testers";
+
+    if (!testers.length) {
+      var empty = document.createElement("li");
+      empty.className = "empty";
+      empty.textContent = "No testers have website access yet.";
+      list.appendChild(empty);
+      return;
+    }
+
+    testers.forEach(function (email) {
+      var item = document.createElement("li");
+      var address = document.createElement("span");
+      var revoke = document.createElement("button");
+      address.className = "tester-email";
+      address.textContent = email;
+      revoke.className = "button danger";
+      revoke.type = "button";
+      revoke.textContent = "Revoke";
+      revoke.setAttribute("aria-label", "Revoke website access for " + email);
+      revoke.addEventListener("click", function () { revokeTester(email); });
+      item.append(address, revoke);
+      list.appendChild(item);
+    });
+  }
+
+  async function readJson(response) {
+    try {
+      return await response.json();
+    } catch (error) {
+      return {};
+    }
+  }
+
+  async function loadTesters() {
+    setTesterControls(testersConnected, true);
+    $("tester-count").textContent = "Loading approved testers…";
+    try {
+      var response = await fetch(testersEndpoint, {cache: "no-store", credentials: "same-origin"});
+      var payload = await readJson(response);
+      if (!response.ok) {
+        var setup = response.status === 503 || payload.code === "SETUP_REQUIRED";
+        setTesterState(setup ? "Setup needed" : "Unavailable", setup ? "Activate Cloudflare Access to enable add and revoke here." : "The protected tester list could not be loaded.", "attention");
+        renderTesters([]);
+        setTesterControls(false, false);
+        return;
+      }
+      var testers = Array.isArray(payload.testers) ? payload.testers : [];
+      renderTesters(testers);
+      setTesterState("Connected", "Cloudflare Access is ready for individual grants and revocation.", "passed");
+      setTesterControls(true, false);
+    } catch (error) {
+      setTesterState("Unavailable", "The protected tester list could not be reached.", "attention");
+      renderTesters([]);
+      setTesterControls(false, false);
+    }
+  }
+
+  async function addTester(event) {
+    event.preventDefault();
+    if (!testersConnected) return;
+    var email = $("tester-email").value.trim().toLowerCase();
+    if (!email || !$("tester-email").checkValidity()) {
+      $("tester-email").reportValidity();
+      return;
+    }
+    setTesterControls(true, true);
+    try {
+      var response = await fetch(testersEndpoint, {
+        method: "POST",
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({email: email})
+      });
+      var payload = await readJson(response);
+      if (!response.ok) throw new Error(payload.message || "Access could not be granted.");
+      renderTesters(Array.isArray(payload.testers) ? payload.testers : []);
+      $("tester-email").value = "";
+      showToast("Website access granted to " + email + ".");
+    } catch (error) {
+      showToast(error.message || "Access could not be granted.");
+    } finally {
+      setTesterControls(testersConnected, false);
+    }
+  }
+
+  async function revokeTester(email) {
+    if (!testersConnected || !window.confirm("Revoke website access for " + email + "?")) return;
+    setTesterControls(true, true);
+    try {
+      var response = await fetch(testersEndpoint + "?email=" + encodeURIComponent(email), {
+        method: "DELETE",
+        cache: "no-store",
+        credentials: "same-origin"
+      });
+      var payload = await readJson(response);
+      if (!response.ok) throw new Error(payload.message || "Access could not be revoked.");
+      renderTesters(Array.isArray(payload.testers) ? payload.testers : []);
+      showToast("Website access revoked for " + email + ".");
+    } catch (error) {
+      showToast(error.message || "Access could not be revoked.");
+    } finally {
+      setTesterControls(testersConnected, false);
+    }
   }
 
   async function refreshStatus() {
@@ -71,6 +199,8 @@
   }
 
   $("refresh-status").addEventListener("click", refreshStatus);
+  $("refresh-testers").addEventListener("click", loadTesters);
+  $("tester-form").addEventListener("submit", addTester);
   $("copy-feedback").addEventListener("click", function () {
     copyText($("feedback-template").innerText.trim(), "Feedback template copied.");
   });
@@ -82,4 +212,5 @@
 
   renderAnnouncement();
   refreshStatus();
+  loadTesters();
 }());

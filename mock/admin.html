@@ -22,28 +22,39 @@
   <main id="main-content">
     <section class="status-grid" aria-label="Current launch status">
       <article><span>Site health</span><strong id="health-value">Checking…</strong><small id="health-detail">Production health route</small></article>
-      <article><span>Access</span><strong id="access-value">Identity gate</strong><small>One-time email sign-in; individual revocation</small></article>
+      <article><span>Access</span><strong id="access-value">Checking…</strong><small id="access-detail">Tester allowlist connection</small></article>
       <article><span>Question delivery</span><strong>Private cohort</strong><small>Not indexed; shared caches disabled</small></article>
       <article><span>Release</span><strong id="release-value">Reading…</strong><small id="release-detail">Allowlisted production artifact</small></article>
     </section>
 
     <div class="dashboard-grid">
-      <section class="panel" aria-labelledby="access-title">
+      <section class="panel access-manager" aria-labelledby="access-title">
         <div class="panel-heading">
           <div><p class="eyebrow">Protection</p><h2 id="access-title">Tester access</h2></div>
-          <span class="state secure">Controlled</span>
+          <span class="state" id="tester-access-state">Checking</span>
         </div>
-        <p>Approve testers by email. They receive a one-time sign-in code; there is no shared password to leak. Remove one email to revoke one person.</p>
-        <ol class="steps">
-          <li>Add the tester to the <b>Dungeon Testers</b> Cloudflare Access group.</li>
-          <li>Send the tester URL privately through the WhatsApp community.</li>
-          <li>Remove access after the cohort or immediately after misuse.</li>
-        </ol>
+        <p>Add an email here to grant website access. Revoke it here to remove that person's access without changing anything for other testers.</p>
+        <form class="tester-form" id="tester-form">
+          <label for="tester-email">Tester email</label>
+          <div class="tester-entry">
+            <input id="tester-email" name="email" type="email" autocomplete="off" inputmode="email" maxlength="254" placeholder="tester@example.com" required>
+            <button class="button primary" id="add-tester" type="submit">Add tester</button>
+          </div>
+        </form>
+        <div class="tester-toolbar">
+          <div>
+            <b id="tester-count">Loading approved testers…</b>
+            <p class="hint" id="tester-status" role="status" aria-live="polite">Checking the protected allowlist.</p>
+          </div>
+          <button class="button quiet" id="refresh-testers" type="button">Refresh list</button>
+        </div>
+        <ul class="tester-list" id="tester-list" aria-label="Approved testers"></ul>
+        <p class="hint">Website access and WhatsApp membership are separate. Adding someone here does not add them to the community.</p>
         <div class="callout">
           <b>Honest limit</b>
           <p>Approved users can still copy what they can see. Identity, throttling, no-index rules, and individual auditability reduce casual harvesting; they do not create perfect DRM.</p>
         </div>
-        <a class="button secondary" href="https://one.dash.cloudflare.com/" target="_blank" rel="noreferrer">Manage approved testers</a>
+        <a class="button secondary" href="https://one.dash.cloudflare.com/" target="_blank" rel="noreferrer">Open Cloudflare Access</a>
       </section>
 
       <section class="panel" aria-labelledby="release-title">

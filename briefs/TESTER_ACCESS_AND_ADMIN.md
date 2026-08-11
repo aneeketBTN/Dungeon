@@ -1,7 +1,8 @@
 # Tester Access, Anti-Harvesting, and Owner Operations
 
-Status: `IMPLEMENTED` for the owner dashboard, release boundary, private-cache policy, no-index
-controls, and owner-only Sites deployment. Exact `aneeketdas.com/dungeon` routing and per-tester
+Status: `IMPLEMENTED` for the owner dashboard, direct tester add/list/revoke controls, prepared
+fail-closed Cloudflare edge controller, release boundary, private-cache policy, no-index controls,
+and owner-only Sites deployment. Exact `aneeketdas.com/dungeon` routing and live per-tester
 Cloudflare Access remain `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS` because activating the
 nominally free plan requires accepting Cloudflare terms and authorising the saved card for usage
 above the free limits.
@@ -55,6 +56,8 @@ must be completed before claiming strong resistance to harvesting by authorised 
 `mock/admin.html` provides:
 
 - production health and allowlisted-release checks;
+- an email form, current tester list, refresh, and confirmation-backed one-person revocation;
+- a truthful setup-needed state until the Cloudflare edge controller is configured;
 - the tester access/revocation workflow and honest anti-copy limit;
 - a release checklist and links to Cloudflare operations;
 - a structured feedback template for WhatsApp triage;
@@ -66,11 +69,21 @@ status that no connected backend can support. Cloudflare remains the authority f
 access logs, traffic, and rate limits; WhatsApp remains the current cohort conversation and
 feedback surface.
 
+`cloudflare/src/index.mjs` is the prepared management and path-proxy boundary. The owner-only API
+validates the Cloudflare Access JWT audience and exact owner email, requires same-origin mutations,
+accepts only a small JSON email payload, and refuses mixed-selector or owner-missing groups. The
+Cloudflare API token and private-origin bypass token are runtime secrets; neither is present in
+the dashboard, source configuration, release manifest, or logs. The dedicated group retains the
+owner email as a non-removable bootstrap rule so revoking the last tester cannot produce an empty
+or ownerless group.
+
 ## Cloudflare configuration after owner approval
 
 - Activate Zero Trust Free only after the owner accepts its terms and overage-card authorisation.
 - Create the one-time PIN identity provider.
 - Create `Dungeon Testers` as an email allowlist; begin empty and add only owner-supplied addresses.
+- Seed the dedicated group with the owner email as the protected bootstrap member; the dashboard
+  hides that member from the tester count and cannot revoke it.
 - Create an Access application for `aneeketdas.com/dungeon*` using that group.
 - Create an owner-only application for `aneeketdas.com/dungeon/admin*` with higher precedence.
 - Route `/dungeon` and `/dungeon/*` through a Worker to the private Sites origin, preserving method,
@@ -79,6 +92,9 @@ feedback surface.
   admin refresh do not trigger it.
 - Verify anonymous denial, approved-tester entry, owner admin entry, individual revocation, and
   non-Dungeon routes on `aneeketdas.com`.
+- Configure the least-privilege Access organisation/group-write API token, admin audience/team
+  values, owner email, and Sites bypass token as Worker secrets; then verify the dashboard's add,
+  list, duplicate-add, revoke, and last-tester flows against the real group.
 
 ## Gates
 
@@ -86,4 +102,3 @@ feedback surface.
 - `WAITING_OWNER_TESTER_EMAILS`: no tester access is granted until the owner supplies addresses.
 - GitHub and WhatsApp creation remain separately staged pending action-time confirmation.
 - Server-side item delivery remains `UNSTARTED`; do not claim perfect anti-scraping.
-

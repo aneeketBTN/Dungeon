@@ -377,3 +377,18 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 - **Verify:** All three stored definitions say `status = "PAUSED"`, `.agents/deployment.json` says
   `enabled: false`, `npm run agents:activation-check` exits nonzero, and the automation directory
   contains no run output.
+
+### LAW-30 🔴 — Tester access credentials and authority never enter browser code
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-11 direct tester-management implementation: making add/revoke convenient
+  could tempt a browser-side Cloudflare API call or a merely hidden token.
+- **Why:** Any tester or page visitor could extract a client credential and grant themselves or
+  others access, revoke the owner, or widen the cohort policy.
+- **Comply:** Keep Cloudflare and private-origin credentials in edge secrets only. Protect the
+  management endpoint with the narrower admin Access application, validate its JWT audience and
+  exact owner email, require same-origin writes, retain the owner bootstrap rule, and reject
+  mixed-selector groups instead of editing them.
+- **Verify:** Source/manifest scans contain no credential; missing bindings return 503; missing
+  owner authentication returns 403; grant/revoke tests preserve the owner; unsafe-selector tests
+  return 409; mutation logs contain only action and count.

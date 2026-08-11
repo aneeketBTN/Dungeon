@@ -3,6 +3,24 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-11 — Direct tester management in the Control Room
+
+- Added a full-width owner access panel with email entry, approved tester list, refresh, explicit
+  tester count, and confirmation-backed one-person revocation. Website access is kept visibly
+  separate from WhatsApp membership.
+- Added the prepared `aneeketdas.com/dungeon` edge controller. It validates the admin Access JWT
+  and exact owner email, requires same-origin mutations, bounds JSON input, edits only a dedicated
+  exact-email group, protects the owner bootstrap member, and strips access/origin credentials
+  while proxying to the private Sites origin.
+- Kept the browser credential-free. Cloudflare and Sites tokens are runtime bindings only; missing
+  bindings, unsafe group selectors, a missing owner rule, or failed authentication all fail closed.
+- Added seven focused edge tests plus a Sites setup-required test. Sixteen tests pass overall;
+  Wrangler 4.120.1 generated current types and a successful dry-run bundle; the Sites release
+  remains the same ten-file allowlist. Evidence:
+  `evidence/2026-08-11/tester-dashboard-access-management/verification.md`.
+- Live route, secrets, group, tester grants, and revocation remain
+  `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS`; no tester or access policy changed in this session.
+
 ## 2026-08-11 — Identity-gated tester design and Dungeon Control Room
 
 - Selected per-email, one-time-code tester access with individual revocation instead of a shared

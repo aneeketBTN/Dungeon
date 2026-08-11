@@ -11,6 +11,11 @@ email address to send a one-time sign-in code and records ordinary security/requ
 access can be audited and revoked. Dungeon does not use that identity to grade or personalise
 learning evidence.
 
+The owner Control Room can list approved tester emails and grant or revoke website access after
+the protected Cloudflare edge is activated. Those email addresses stay in the dedicated
+Cloudflare Access group; the dashboard does not place them in learner storage, release metadata,
+application logs, or the WhatsApp community.
+
 ## What the web app does not collect
 
 The first tester release has no product analytics, advertising, tracking pixels, server-side

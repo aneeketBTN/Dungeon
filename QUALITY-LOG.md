@@ -211,6 +211,15 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   request, so they were explicitly corrected and re-read before any interval elapsed. No run or
   external action occurred. Evidence: `evidence/2026-08-11/tester-agent-readiness/verification.md`;
   prevention: `BUG-LAWS.md` LAW-28–29.
+- **I25 (2026-08-11)** — Issue: the owner dashboard explained tester access but still sent the
+  owner to Cloudflare for every grant and revocation. Cause: no server-side authority boundary
+  connected an owner-only control to the dedicated Access group. Fix: added direct email
+  add/list/revoke controls and a prepared edge endpoint with owner JWT/email validation,
+  same-origin writes, email-only group invariants, protected owner membership, credential-free
+  browser code, and truthful setup/unavailable states. Live interaction remains gated by
+  Cloudflare activation. Evidence:
+  `evidence/2026-08-11/tester-dashboard-access-management/verification.md`; prevention:
+  `BUG-LAWS.md` LAW-30.
 
 ## Watch Items
 

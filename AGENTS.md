@@ -26,8 +26,12 @@
 > `DONE` or an exam-score prediction. A privacy-scoped tester release wrapper, worker health route,
 > security/no-index/private-cache headers, release tests, owner control room, and community
 > operating documents are verified at
-> `evidence/2026-08-11/tester-access-admin/verification.md`. The current Sites production remains
-> owner-only. Exact `aneeketdas.com/dungeon` routing is
+> `evidence/2026-08-11/tester-access-admin/verification.md`. Direct email add/list/revoke controls
+> and a fail-closed, owner-JWT-verified Cloudflare group controller are `IMPLEMENTED` and
+> synthetically verified at
+> `evidence/2026-08-11/tester-dashboard-access-management/verification.md`; the live endpoint is
+> not activated. The current Sites production remains owner-only. Exact `aneeketdas.com/dungeon`
+> routing is
 > `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS` because Cloudflare requires terms acceptance and
 > saved-card overage authorisation; neither was accepted. Individual grants are additionally
 > `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
@@ -108,7 +112,9 @@ Rules:
   running.
 - `scripts/` — deterministic public-release build scripts.
 - `site/` — production worker entrypoint, health route, and response security policy.
-- `tests/` — release-boundary, routing, and security-header checks.
+- `cloudflare/` — prepared, undeployed exact-path proxy and owner-only tester allowlist controller;
+  runtime credentials are external secrets, never source.
+- `tests/` — release-boundary, routing, access-management, and security-header checks.
 - `graphs/` — generated subject concept graphs. Do not hand-edit during product/UI work.
 - `state/` — live game and learner state. Treat as real player data; do not clear for testing.
 - `history/` — real question and flag history. Do not repurpose as test fixtures.
@@ -156,11 +162,15 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
 | `scripts/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
 | `site/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
-| `tests/site-release.test.mjs` | Automated release-boundary, privacy, routing, and header checks. | 2026-08-11 |
+| `cloudflare/src/index.mjs` | Prepared exact-path proxy plus owner-JWT-verified, same-origin, email-only tester group management. | 2026-08-11 |
+| `cloudflare/wrangler.jsonc` | Current Worker compatibility, exact path/origin values, and structured observability configuration; no secrets. | 2026-08-11 |
+| `cloudflare/README.md` | Runtime-secret, Access-policy, owner-bootstrap, and activation contract for the undeployed edge. | 2026-08-11 |
+| `tests/site-release.test.mjs` | Automated release-boundary, privacy, routing, header, and setup-required checks. | 2026-08-11 |
+| `tests/cloudflare-access.test.mjs` | Synthetic owner authentication, group invariant, grant, revoke, proxy, and credential-stripping checks. | 2026-08-11 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
-| `mock/admin.html` | Owner control room for access workflow, release health, feedback triage, and announcement drafting. | 2026-08-11 |
+| `mock/admin.html` | Owner control room for direct tester management, release health, feedback triage, and announcement drafting. | 2026-08-11 |
 | `mock/admin.css` | Responsive, accessible control-room layout and status presentation. | 2026-08-11 |
-| `mock/admin.js` | Health/manifest checks, structured copy helpers, and announcement preview without autonomous sending. | 2026-08-11 |
+| `mock/admin.js` | Health/manifest checks, tester add/list/revoke flow, copy helpers, and announcement preview without autonomous sending. | 2026-08-11 |
 | `mock/t6.html` | Staged dashboard, time-horizon plan, generic practice setup, evidence graph, feedback, results, reset, and exam-boundary surfaces. | 2026-08-11 |
 | `mock/t6.css` | Flat single-surface question hierarchy plus low-density, responsive, accessible desktop/narrow revision presentation. | 2026-08-11 |
 | `mock/t6.js` | Evidence-gated mastery, time-horizon plans, selectable practice shapes, held-feedback checks, constructed self-review, rotation, persistence, and scenarios. | 2026-08-11 |
@@ -266,7 +276,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - [ ] `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS`: exact `aneeketdas.com/dungeon` routing and the
   per-email tester gate require activation of Cloudflare Zero Trust Free. Activation asks the
   owner to accept Cloudflare terms and authorise the saved card for usage above free limits; no
-  checkbox or activation was completed. Current production remains owner-only.
+  checkbox or activation was completed. The dashboard controls and edge controller are prepared
+  and fail closed; current production remains owner-only and cannot yet mutate a live tester list.
 - [ ] `WAITING_OWNER_TESTER_EMAILS`: no tester should receive access until the owner supplies the
   addresses. GitHub and WhatsApp community creation remain staged pending confirmation.
 - [ ] The identity-gated client bundle prevents anonymous/casual harvesting but cannot stop an
@@ -315,7 +326,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   self-review, selectable practice shapes, held feedback,
   mixed formats and boss grading, staged dashboard, evidence graph, real-Browser desktop/narrow
   interaction, isolated save/resume, live-state preservation, release-boundary tests, no-index and
-  private-cache controls, and the desktop owner control room)
+  private-cache controls, the desktop owner control room, and 16-test synthetic tester access
+  management with a successful Cloudflare Worker dry-run)
 - Confidence: high for file inventory, operating rules, all-subject implementation, structural
   grounding, and observed Browser behavior; medium for transcript-derived content pending
   owner/faculty acceptance; low for exact exam-paper structure

@@ -303,7 +303,10 @@ one side.
 - Resolution (2026-08-11): keep the Sites origin owner-only and let a Cloudflare Worker authenticate
   to it with a secret stored only at the edge. Put the broader tester Access policy on `/dungeon*`
   and a higher-priority owner-only policy on `/dungeon/admin*`. Do not publish a bypass credential
-  in source, client code, URLs, evidence, or hosting metadata.
+  in source, client code, URLs, evidence, or hosting metadata. The owner dashboard may manage the
+  dedicated email-only Access group through an owner-JWT-verified edge endpoint; it must never call
+  the Cloudflare API directly from browser code. The owner bootstrap email is not revocable there,
+  and any mixed-selector group fails closed for manual review.
 
 ### C22 — Helpful cohort agents versus consent and owner authority
 

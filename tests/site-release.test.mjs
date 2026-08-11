@@ -38,6 +38,20 @@ test("admin uses its canonical owner dashboard route", async () => {
   assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow, noarchive");
 });
 
+test("tester management fails closed until the Cloudflare edge is connected", async () => {
+  const response = await worker.fetch(
+    new Request("https://dungeon.test/admin/api/testers"),
+    env
+  );
+  assert.equal(response.status, 503);
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.deepEqual(await response.json(), {
+    status: "setup-required",
+    code: "SETUP_REQUIRED",
+    message: "Activate Cloudflare Access to manage testers from the dashboard."
+  });
+});
+
 test("static responses receive launch security and cache headers", async () => {
   const response = await worker.fetch(
     new Request("https://dungeon.test/mock/t6.js"),
