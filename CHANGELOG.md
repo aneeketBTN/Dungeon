@@ -26,8 +26,13 @@ changed, decisions, verification/evidence, and deferrals.
 - Verification: 31 automated release/access/agent tests, syntax checks, the 792-surface source/bank
   validator, allowlisted build, Wrangler dry run, standalone bundle, real-Browser desktop and
   390-pixel primer/dashboard/login/admin paths, and Word-native PDF render inspection all pass.
-  Evidence: `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`. Remaining boundary:
-  the changed agreement version intentionally requires a live tester re-acceptance after deploy;
+  Commit `475837f` deployed as Cloudflare version `98f1bb5b-e5f5-4f08-9340-e102dc79be50`; the exact
+  live health/login/admin paths passed and the Control Room showed the bump workflow. It listed
+  eight approved external testers; verification did not change any tester state. The configured
+  owner-only Sites project was not visible to the current connector, so private backup version 5
+  was not refreshed and remains non-origin. Evidence:
+  `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`. Remaining boundary: the
+  changed agreement version intentionally requires each tester to re-accept on next login;
   WhatsApp membership remains self-attested and owner-reviewed.
 
 ## 2026-08-11 — Closed tester agreement verified end to end on production

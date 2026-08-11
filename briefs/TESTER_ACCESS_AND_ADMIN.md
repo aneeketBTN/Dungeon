@@ -8,7 +8,8 @@ admission, the private denial, the first-login agreement gate, per-email progres
 narrow agreement layout are `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` at
 `evidence/2026-08-11/learner-backend-and-agreement/verification.md`. The `mock/login.css` repair is
 live and a fresh approved address has completed agreement -> dashboard -> sign-out -> revocation
-on the production domain. The first external cohort is active with nine approved addresses.
+on the production domain. The first external cohort has eight approved addresses at the latest
+Control Room read.
 
 Decision date: 2026-08-11 (superseding the same day's emailed-code learner design)
 
@@ -165,7 +166,8 @@ or ownerless group.
 
 ## Gates
 
-- The first cohort is active with nine approved tester addresses; small participation samples are
+- The first cohort has eight approved tester addresses at the latest Control Room read; small
+  participation samples are
   operational signals, not evidence for punitive or learning-quality conclusions.
 - The live `[hidden]` repair and a complete fresh-account agreement flow are verified. A changed
   agreement version must repeat the same live acceptance check before release.

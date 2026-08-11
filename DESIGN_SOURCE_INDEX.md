@@ -422,4 +422,5 @@ On 2026-08-11 the owner directed a controlled potential-user launch with backend
 an owner-GitHub repository, and an owner-administered WhatsApp tester community. The privacy-first
 release boundary is recorded in C19 and the launch evidence at
 `evidence/2026-08-11/tester-launch/verification.md`. The private repository and WhatsApp group are
-active for the nine-address cohort; broader public access remains outside the closed-test scope.
+active for the eight-address cohort at the latest Control Room read; broader public access remains
+outside the closed-test scope.

@@ -2,9 +2,7 @@
 
 **Date:** 2026-08-11
 
-**Status before production publish:** `VERIFIED(LOCAL_BROWSER + AUTOMATED + REMOTE_D1)`
-
-**Production status:** pending the Git-triggered Worker deployment recorded below
+**Status:** `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED + REMOTE_D1)`
 
 ## Accepted scope
 
@@ -96,6 +94,20 @@ The project-owned live state and history files were not used as fixtures and ret
 
 ## Production publish
 
-To be completed after the finished change is pushed to `main`: record the deployed commit, exact
-edge checks, live Control Room/learner Browser observations, and whether the private Sites backup
-was refreshed.
+- Commit `475837fd857125dd7a4891e68e99f58cecd06f99` was pushed to `main` and the configured Workers
+  Build deployed Cloudflare version `98f1bb5b-e5f5-4f08-9340-e102dc79be50` at
+  `2026-08-11T16:28:21.979Z`.
+- `https://aneeketdas.com/dungeon/health` returned `200` with Cloudflare D1 storage and dashboard-
+  allowlist health. The anonymous production `login.js` returned `200`, contained the new approved-
+  response invite validator, did not contain the private invite token, and retained
+  `Cache-Control: private, no-store, max-age=0`.
+- In a real Browser on `https://aneeketdas.com/dungeon/admin/`, release health was Healthy, Access
+  was Connected, release scope was Allowlisted with 13 assets, and the bulk/per-person bump
+  controls and group state chips were present. The changed agreement version truthfully displayed
+  the existing testers as `Not agreed yet`; they will re-accept on their next learner login.
+- The live Control Room listed eight approved external testers at this check. No tester grant,
+  revoke, bump, agreement acknowledgement, or progress record was changed during verification.
+- The configured owner-only Sites backup could not be refreshed because project
+  `appgprj_6a7ae01a2c6481918c77e6842be2003a` was not visible to the current Sites connector account.
+  The private version 5 remains the backup; the exact-domain Worker is healthy and has no Sites
+  origin dependency.

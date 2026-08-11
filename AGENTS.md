@@ -19,12 +19,13 @@
 > constructed-response, priority, and practice-path revision is verified at
 > `evidence/2026-08-11/t6-research-integration/verification.md`; the privacy-scoped release boundary
 > remains verified at `evidence/2026-08-11/tester-launch/verification.md`.
-> The adaptive-primer revision is `VERIFIED(LOCAL_BROWSER + AUTOMATED + REMOTE_D1)` at
+> The adaptive-primer revision is `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED + REMOTE_D1)` at
 > `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`: a one-click run introduces
 > only the next new concept, the support fades after easy or harder success, misses restore applied
 > and misconception layers, and primers never create mastery evidence. The first two scrolls now
 > prioritize the next-action hero, a five-axis Term 6 mastery matrix, and the selected-subject trend;
-> subject and concept lists follow below. Production publish remains the final acceptance step.
+> subject and concept lists follow below. Production version
+> `98f1bb5b-e5f5-4f08-9340-e102dc79be50` serves the revision from commit `475837f`.
 > Student-facing game/proprietary vocabulary and diagnostic question metadata are removed from the
 > learning view. Sixty-four constructed-response surfaces use transparent self-review without
 > automatic correctness or Strong credit. Exact final-paper structure is
@@ -69,7 +70,8 @@
 > `WAITING_OWNER_DEPLOY` and end-to-end onboarding gaps are closed.
 > `aneeketBTN/Dungeon` (private) is connected to Workers Builds, so a push to `main` builds and
 > deploys; the first Git-triggered version is `6ebc486b`.
-> The first external cohort is active with nine approved tester addresses. GitHub and the private
+> The first external cohort is active with eight approved tester addresses at the latest Control
+> Room read. GitHub and the private
 > WhatsApp tester group are active. The Learning Signal Auditor, Question Bank Steward, and Tester
 > Cohort Steward are `PREPARED_NOT_ACTIVATED`: their project schedules are registered and verified
 > `PAUSED`, repository declarations remain disabled, activation preflight intentionally fails, no
@@ -79,8 +81,8 @@
 > reference and still lacks complete real-Browser route acceptance.
 >
 > Static HTML/CSS/JavaScript prototypes in `mock/`; procedural learning engine and state in root
-> JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: publish the
-> finished primer/community revision, observe the active cohort without over-reading small samples,
+> JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: observe the
+> active cohort without over-reading small samples,
 > continue owner/faculty content acceptance, and calibrate the learning model from genuine use.
 
 ## Start Here — Required Order
@@ -335,7 +337,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   approved address can enter as that tester. Country locking is country-level only and can fire on
   legitimate travel, VPNs, mobile networks, or routing; keep it an owner review prompt with a human
   unlock path and never automate a permanent ban from it alone.
-- [ ] The first cohort is active with nine approved tester addresses. Send
+- [ ] The first cohort is active with eight approved tester addresses at the latest Control Room
+  read. Send
   `outputs/Dungeon_Closed_Tester_Agreement.pdf` with any future invitation; the tester also accepts
   the current version in-app at first login. WhatsApp membership is self-attested because the web
   app can only record invite-open and acknowledgement timestamps. Treat the current dashboard
