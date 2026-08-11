@@ -564,3 +564,65 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   to the destination on the next animation frame after focus.
 - **Verify:** From the top of the dashboard, activate the control and assert `window.scrollY`
   actually changed after the animation, not merely that focus moved.
+
+### LAW-43 REDLINE — A machine tag that reaches a learner must read as a sentence
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-12 diagnosis audit: `question.misconceptions` held internal strings of the
+  form `"selected-belief:" + optionText`, and `evidence.reasons` interpolates that tag into learner
+  copy rendered in the concept inspector. A learner repeating an error across two variant families
+  read `The same misconception returned across independent evidence: selected-belief:It estimates
+  the total market before speaking to buyers.`
+- **Why:** It leaks internal vocabulary into the learning view, which the standing owner rule
+  forbids, and it makes a correct diagnostic signal look like a bug at the exact moment the learner
+  most needs to trust the feedback.
+- **Comply:** Any field that can be interpolated into learner-visible copy is written as a readable
+  noun phrase, never `prefix:payload`. Where a field must serve as both a machine key and display
+  text — as the diagnosis `tag` does — the readable form is the key. Keep it stable once shipped: a
+  reworded tag silently resets recurrence detection.
+- **Verify:** Grep learner-facing render paths for interpolated identifier fields, then answer the
+  same question wrongly twice across two variant families and read the concept inspector.
+
+### LAW-44 REDLINE — Index a per-option value by the option, not by the part
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-12: multi-part evaluation read `misconceptions[partResults.indexOf(false)]`,
+  mixing two coordinate systems. `misconceptions` was built per option, but was indexed by failing
+  part. For a single-blank cloze that index is always `0`, so all four wrong options reported the
+  same diagnosis.
+- **Why:** It fails silently and plausibly. Feedback still appears, still looks specific, and is
+  simply about a different mistake than the one made — which is worse than no feedback, because the
+  learner has no reason to doubt it.
+- **Comply:** Reaching a per-option value in a multi-part item takes two coordinates: the failing
+  part, then the option selected within it (`partDiagnoses(question, part)[selected[part]]`). Never
+  index an option-keyed array with a part index.
+- **Verify:** Answer a single-blank cloze wrongly with each distractor in turn and assert the
+  rendered diagnosis differs each time.
+
+### LAW-45 🟡 — A draggable object must not be wider than the target it drops into
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-12 UI pass: match label tablets were sized by their own text
+  (`193/268/191/266`px) while every slot was `162px`, so the object being picked up was visibly
+  larger than the hole it belonged in, and the tray wrapped 3-then-1 into a ragged block.
+- **Why:** The affordance contradicts the interaction it is teaching, and content-sized controls in
+  a wrapped flex row will always look accidental when the content varies in length.
+- **Comply:** Give a drag source and its drop target the same grid track. Share the track variable
+  from a common ancestor (here `--statement-count` on `.match-board`) and match the gaps, so the
+  columns compute identically instead of merely looking similar.
+- **Verify:** Measure both sets in the browser: each source's width must equal its target's, and
+  their left edges must be equal to the pixel at desktop and at 375px.
+
+### LAW-46 🟡 — A layout probe must prove a defect on a settled layout before it is fixed
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-12 UI pass: a row-detecting audit flagged `.momentum-figure` as wrapping
+  because `align-items: baseline` gives items of different heights different `top` values on one
+  visual row, and reported sub-44px touch targets that existed only in mid-render states.
+- **Why:** Acting on an artifact damages a working layout, and the change is hard to argue back out
+  because it was made in the name of an audit.
+- **Comply:** Detect rows by baseline-corrected geometry rather than raw `top`, and re-measure any
+  finding on a settled layout before changing anything. Record rejected findings alongside accepted
+  ones so the reasoning survives.
+- **Verify:** Re-run the probe after the layout settles; a real finding reproduces, an artifact does
+  not.

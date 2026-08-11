@@ -5,9 +5,9 @@ var path = require("path");
 var vm = require("vm");
 
 var root = __dirname;
-var context = {window: {}};
+var context = {window: {}, atob: function (value) { return Buffer.from(value, "base64").toString("binary"); }};
 vm.createContext(context);
-["sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_challenges.js"].forEach(function (relative) {
+["sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_challenges.js"].forEach(function (relative) {
   var filename = path.join(root, relative);
   vm.runInContext(fs.readFileSync(filename, "utf8"), context, {filename: filename});
 });
@@ -39,6 +39,72 @@ function checkOptionShape(question, label, options, answer, allowExcludedLegacy)
 
 function questionConceptIds(question) {
   return [question.conceptId].concat(question.supportingConceptIds || []);
+}
+
+/*
+ * Every distractor a scheduled question can present must be able to say what
+ * choosing it revealed. This gate is what keeps that true for questions that do
+ * not exist yet: a new item with an undiagnosed wrong option fails the build
+ * rather than shipping a "Not yet" verdict with no reason behind it.
+ */
+var DIAGNOSIS_FIELDS = ["tag", "label", "why", "cue"];
+
+function checkDiagnoses(question, label, options, answer, diagnoses) {
+  var questionId = question.id + " / " + label;
+  if (!Array.isArray(diagnoses) || diagnoses.length !== options.length) {
+    errors.push(questionId + " has no option-level diagnoses");
+    return;
+  }
+  options.forEach(function (option, index) {
+    var diagnosis = diagnoses[index];
+    if (index === answer) {
+      if (diagnosis) errors.push(questionId + " diagnoses its own correct answer at option " + index);
+      return;
+    }
+    if (!diagnosis || typeof diagnosis !== "object") {
+      errors.push(questionId + " is missing a diagnosis for option " + index);
+      return;
+    }
+    DIAGNOSIS_FIELDS.forEach(function (field) {
+      if (typeof diagnosis[field] !== "string" || !diagnosis[field].trim()) {
+        errors.push(questionId + " option " + index + " has an empty diagnosis " + field);
+      }
+    });
+    if (typeof diagnosis.why === "string" && answer >= 0 && options[answer]) {
+      // A diagnosis that only restates the correct answer explains the verdict,
+      // not the error. Name the wrong belief first.
+      if (diagnosis.why.trim() === String(options[answer]).trim()) {
+        errors.push(questionId + " option " + index + " restates the correct answer instead of diagnosing the error");
+      }
+    }
+    // Diagnose the reasoning, not the person. This targets blame directed at the
+    // learner; describing what a choice did ("this choice assumed") is the point.
+    if (typeof diagnosis.why === "string" && /\byou (?:failed|forgot|should have|were wrong|misunderstood|clearly|obviously)\b/i.test(diagnosis.why)) {
+      errors.push(questionId + " option " + index + " addresses the learner rather than the reasoning");
+    }
+  });
+}
+
+function checkQuestionDiagnoses(question) {
+  // Support-only primers and self-reviewed constructed responses never present a
+  // scored wrong option, so neither carries a diagnosis obligation.
+  if (question.primerOnly || question.type === "short-answer") return;
+  if (question.optionShapeRisk) return;
+  if (question.type === "mcq") {
+    checkDiagnoses(question, "MCQ", question.options || [], question.answer, question.diagnoses);
+  } else if (question.type === "cloze" || question.type === "case-cloze") {
+    (question.blanks || []).forEach(function (blank, index) {
+      checkDiagnoses(question, "blank " + (index + 1), blank.options || [], blank.answer, blank.diagnoses);
+    });
+  } else if (question.type === "boss") {
+    (question.steps || []).forEach(function (step, index) {
+      checkDiagnoses(question, "step " + (index + 1), step.options || [], step.answer, step.diagnoses);
+    });
+  } else if (question.type === "match") {
+    (question.rows || []).forEach(function (row, index) {
+      checkDiagnoses(question, "row " + (index + 1), question.choices || [], row.answer, row.diagnoses);
+    });
+  }
 }
 
 courseIds.forEach(function (courseId) {
@@ -76,6 +142,7 @@ courseIds.forEach(function (courseId) {
     } else {
       errors.push(question.id + " has unsupported type " + question.type);
     }
+    checkQuestionDiagnoses(question);
   });
 
   course.concepts.forEach(function (concept) {

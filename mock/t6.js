@@ -1742,7 +1742,10 @@
     board.className = "match-board";
     columns.className = "match-columns";
     // One row, one column per statement: the comparison is the task, so they must be side by side.
-    columns.style.setProperty("--statement-count", String(question.choices.length));
+    // The count lives on the board so the tray can share the same column track as the
+    // statements above it — a tablet then sits directly under the slot it can fill,
+    // and every tablet is the same width instead of sized by its own text.
+    board.style.setProperty("--statement-count", String(question.choices.length));
     tray.className = "match-tray";
     trayLabel.className = "tray-label";
     trayItems.className = "tray-items";
@@ -1751,9 +1754,16 @@
 
     question.choices.forEach(function (statement, choiceIndex) {
       var column = document.createElement("div");
+      var index = document.createElement("span");
       var text = document.createElement("p");
       var slot = document.createElement("button");
       column.className = "match-column";
+      // Statements are numbered and labels are lettered, so the task reads as
+      // "put a letter under each number" instead of four equally weighted blocks
+      // with no stated order to work through them.
+      index.className = "statement-index";
+      index.setAttribute("aria-hidden", "true");
+      index.textContent = String(choiceIndex + 1);
       text.className = "match-statement";
       text.textContent = statement;
       slot.type = "button";
@@ -1763,6 +1773,7 @@
       slot.addEventListener("click", function () { dropOnSlot(choiceIndex); });
       slot.addEventListener("dragover", function (event) { if (liftedLabel !== null) event.preventDefault(); });
       slot.addEventListener("drop", function (event) { event.preventDefault(); dropOnSlot(choiceIndex); });
+      column.appendChild(index);
       column.appendChild(text);
       column.appendChild(slot);
       columns.appendChild(column);
@@ -2114,10 +2125,33 @@
     updateCommitState();
   }
 
+  // The diagnosis for a wrong response lives on the option the learner actually
+  // chose, so it must be looked up by selected option index within the failing
+  // part — not by the part index, which for a single-blank cloze is always 0 and
+  // would report the same diagnosis whichever wrong option was picked.
+  function partDiagnoses(question, partIndex) {
+    if (question.type === "boss") return (question.steps[partIndex] || {}).diagnoses;
+    if (question.type === "match") return (question.rows[partIndex] || {}).diagnoses;
+    if (question.type === "cloze" || question.type === "case-cloze") return (question.blanks[partIndex] || {}).diagnoses;
+    return question.diagnoses;
+  }
+
+  function diagnosisFor(question, response) {
+    if (!question || !response || response.correct) return null;
+    if (question.type === "mcq" || question.type === "primer" || !question.type) {
+      return (question.diagnoses || [])[response.selected] || null;
+    }
+    var failedIndex = (response.partResults || []).indexOf(false);
+    if (failedIndex < 0) return null;
+    var chosen = (response.selected || [])[failedIndex];
+    return (partDiagnoses(question, failedIndex) || [])[chosen] || null;
+  }
+
   function evaluateResponse(question) {
     if (question.type === "mcq" || question.type === "primer" || !question.type) {
       var mcqCorrect = selected === question.answer;
-      return {correct: mcqCorrect, partial: mcqCorrect ? 1 : 0, partResults: [mcqCorrect], conceptResults: {}, misconception: mcqCorrect ? null : (question.misconceptions || [])[selected] || "wrong-option"};
+      var mcqDiagnosis = mcqCorrect ? null : (question.diagnoses || [])[selected];
+      return {correct: mcqCorrect, partial: mcqCorrect ? 1 : 0, partResults: [mcqCorrect], conceptResults: {}, misconception: mcqCorrect ? null : (mcqDiagnosis ? mcqDiagnosis.tag : (question.misconceptions || [])[selected] || "wrong-option")};
     }
     var parts = question.type === "boss" ? question.steps : question.type === "match" ? question.rows : question.blanks;
     var partResults = parts.map(function (part, index) { return selected[index] === part.answer; });
@@ -2130,12 +2164,14 @@
       else relevant = partResults.slice();
       conceptResults[conceptId] = relevant.length ? relevant.every(Boolean) : partResults.every(Boolean);
     });
+    var failedPart = partResults.indexOf(false);
+    var partDiagnosis = failedPart < 0 ? null : (partDiagnoses(question, failedPart) || [])[selected[failedPart]];
     return {
       correct: partResults.every(Boolean),
       partial: correctCount / Math.max(1, partResults.length),
       partResults: partResults,
       conceptResults: conceptResults,
-      misconception: partResults.every(Boolean) ? null : (question.misconceptions || [])[partResults.indexOf(false)] || "broken-reasoning-step"
+      misconception: partResults.every(Boolean) ? null : (partDiagnosis ? partDiagnosis.tag : (question.misconceptions || [])[failedPart] || "broken-reasoning-step")
     };
   }
 
@@ -2293,18 +2329,8 @@
     return question.blanks.map(function (blank) { return blank.label + ": " + blank.options[blank.answer]; });
   }
 
-  function selectedAnswerCopy(question, response) {
-    if (question.type === "mcq" || question.type === "primer" || !question.type) return question.options[response.selected] || "the selected option";
-    var failedIndex = (response.partResults || []).indexOf(false);
-    if (failedIndex < 0) return "the selected response";
-    if (question.type === "boss") return question.steps[failedIndex].options[response.selected[failedIndex]];
-    if (question.type === "match") return question.choices[response.selected[failedIndex]];
-    return question.blanks[failedIndex].options[response.selected[failedIndex]];
-  }
-
-  function contrastiveFeedback(question, response) {
-    return "Your choice treated “" + selectedAnswerCopy(question, response) + "” as the deciding rule. Here the governing distinction is: " + question.explanation + " Look for this cue next time: " + question.link;
-  }
+  // Superseded by the per-option diagnosis in `diagnosisFor`, which names the
+  // specific belief a chosen option encodes rather than quoting the option back.
 
   function bossStepFeedback(question, response) {
     if (!question.boss || response.correct || !Array.isArray(response.partResults)) return "";
@@ -2360,12 +2386,36 @@
     else if (response.scheduled) returnCopy = "A different question on the same idea is placed later in this set—not immediately after this one.";
     else returnCopy = evidence.reasons.filter(function (reason) { return /needed|required|retest|block|type/i.test(reason); })[0] || "This remains in the next practice block for this subject.";
     var answerKey = correctAnswerKey(question);
-    var explanationCopy = !response.correct && response.confidence === "high" ? contrastiveFeedback(question, response) : !response.correct && response.confidence === "low" ? "Start from this connection: " + question.link + " The governing distinction is: " + question.explanation : question.explanation;
+    var diagnosis = diagnosisFor(question, response);
     var bossCopy = bossStepFeedback(question, response);
-    feedback.innerHTML = "<span class='feedback-label'>" + escapeHtml(label) + "</span><p>" + escapeHtml(explanationCopy) + "</p>" +
-      (bossCopy ? "<p><b>What remains valid:</b> " + escapeHtml(bossCopy) + "</p>" : "") +
+
+    // A wrong answer is explained in the order a learner needs it: what this
+    // choice assumed, then what actually governs the case, then the full answer,
+    // then the wider connection. The complete answer is no longer collapsed —
+    // hiding it behind a disclosure was the gap that made this panel feel like a
+    // verdict without a reason.
+    var body;
+    if (response.correct) {
+      body = "<p>" + escapeHtml(question.explanation) + "</p>";
+    } else if (diagnosis) {
+      // For a repair cloze the correct option is the governing principle itself, so
+      // the answer key already states it. Printing both says the same sentence twice.
+      var governingIsInAnswer = answerKey.join(" ").indexOf(String(question.explanation).trim()) >= 0;
+      body =
+        "<div class='diagnosis'>" +
+          "<p class='diagnosis-head'>" + escapeHtml(diagnosis.label) + "</p>" +
+          "<p>" + escapeHtml(diagnosis.why) + "</p>" +
+          (diagnosis.cue ? "<p class='diagnosis-cue'><b>Catch it earlier:</b> " + escapeHtml(diagnosis.cue) + "</p>" : "") +
+        "</div>" +
+        (governingIsInAnswer ? "" : "<p class='governing'><b>What governs this question:</b> " + escapeHtml(question.explanation) + "</p>");
+    } else {
+      body = "<p>" + escapeHtml(question.explanation) + "</p>";
+    }
+
+    feedback.innerHTML = "<span class='feedback-label'>" + escapeHtml(label) + "</span>" + body +
+      (bossCopy ? "<p class='still-valid'><b>What remains valid:</b> " + escapeHtml(bossCopy) + "</p>" : "") +
+      (!response.correct ? "<div class='answer-key'><p class='answer-key-head'>The complete answer</p><ul>" + answerKey.map(function (answer) { return "<li>" + escapeHtml(answer) + "</li>"; }).join("") + "</ul></div>" : "") +
       "<p class='bridge'><b>Why it connects:</b> " + escapeHtml(question.link) + "</p>" +
-      (!response.correct ? "<details class='answer-key'><summary>Show the complete answer</summary><ul>" + answerKey.map(function (answer) { return "<li>" + escapeHtml(answer) + "</li>"; }).join("") + "</ul></details>" : "") +
       "<p class='return-note'>" + escapeHtml(returnCopy) + "</p>";
     $("commit-answer").hidden = true;
     $("next-question").hidden = false;

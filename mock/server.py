@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Mock Portal server: static files + a tiny shared leaderboard API (stdlib only).
 
-Run:  python server.py [port]      (default 8099)
+Run:  python server.py [port]      (argv, else $PORT, else 8099)
 Serves the project root so the mock can use the approved output assets.
 Leaderboard persists beside this file in leaderboard.json.
 
@@ -14,7 +14,7 @@ import json, os, sys, threading
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
 
-PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8099
+PORT = int(sys.argv[1]) if len(sys.argv) > 1 else int(os.environ.get("PORT") or 8099)
 MOCK_ROOT = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(MOCK_ROOT)
 LB_FILE = os.path.join(MOCK_ROOT, "leaderboard.json")

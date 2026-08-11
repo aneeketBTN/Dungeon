@@ -16,6 +16,7 @@ const publicFiles = [
   "mock/admin.css",
   "mock/admin.js",
   "mock/robots.txt",
+  "mock/sets/t6_diagnoses.js",
   "mock/sets/t6_brgsa.js",
   "mock/sets/t6_catalog.js",
   "mock/sets/t6_challenges.js"

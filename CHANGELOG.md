@@ -3,6 +3,103 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Measured UI alignment pass and the Access login loop fixed at source
+
+- **Fixed the Cloudflare Access login loop locking the owner out of the Control Room.** The
+  Worker was cleared first — its admin path has no redirect loop. Inspection of the account found
+  a single Access application, so the overlapping-application theory was wrong. The real cause: the
+  app accepted only the `- cloudflare` identity provider, `Apply instant authentication` was on, and
+  **no Google provider exists on the account at all**. With one accepted method and instant auth on,
+  Access skipped the chooser and redirected straight into a flow a Google session can never satisfy,
+  then redirected again — no chooser, no error, bouncing until timeout. With owner approval: enabled
+  the existing `Dungeon one-time email code` provider alongside `- cloudflare` and turned instant
+  authentication off. `Accept all available identity providers` deliberately left off so the gate
+  does not auto-accept future providers. Destination, policy, and session duration unchanged.
+- **Ran the UI pass against measurements rather than impressions.** An audit probe was injected per
+  screen at 1280×800 and 375×812, reporting overflow, ragged wrap containers, sub-44px touch
+  targets, and clipped text. Two candidate findings were rejected as artifacts: `.momentum-figure`
+  reports two rows only because `align-items: baseline` gives differently-sized items different
+  tops, and several sub-44px hits appeared only in mid-render states.
+- **Match label tray** — the reported defect. Tablets measured `193/268/191/266`px wrapping
+  3-then-1, and a tablet was *wider than the 162px slot it drops into*. `--statement-count` moved to
+  `.match-board` so the tray shares the statements' grid track, with gaps matched. All four tablets
+  are now `162px` on one row, each left edge exactly on its slot's.
+- **Match reading order** — four equally weighted 7-line columns gave the eye no entry point.
+  Statements are now numbered `1–4` against lettered `A–D` labels, so the task reads as "put a
+  letter under each number". The badge reuses the existing `.option-key` treatment rather than
+  inventing a shape. Not fixed: match choices span 13–179 characters, which layout cannot reconcile;
+  that is a generator constraint for the bank work.
+- **Mastery key legend** — widths `444/332/383/81`px each on its own row; now a two-column grid with
+  the status dots aligned, collapsing to one column on mobile.
+- **Subject actions** — two buttons at `257`/`187`px wrapping ragged inside a 370px column at
+  desktop width; now an `auto-fit minmax(200px,1fr)` grid, equal width stacked or side by side.
+- **Touch targets** — `brand-home` (38px), `skip-link` (43.3px) and `label-tablet` (40px) raised to
+  44px. Zero sub-44px targets remain on the audited screens.
+- Verification: 0 findings on dashboard, primer/MCQ, cloze, match, and feedback at both viewports;
+  no horizontal overflow; `npm test` 34 passing; validator `ok: true`; build 14 assets. Evidence:
+  `evidence/2026-08-12/t6-ui-alignment-pass/verification.md`.
+- Deferred and stated plainly: boss, case-cloze, and constructed-response surfaces were not reached
+  in a driven session (synthetic label clicks do not register with the app's selection handler), so
+  they carry only a static check. The results screen, `login.html`, and `admin.html` were not
+  audited in this pass.
+
+## 2026-08-12 — Option-level diagnoses, a wrong-answer panel that explains itself, and an Access self-check
+
+- **Rebuilt the wrong-answer panel.** It printed a verdict and no reason: `Not yet — this idea will
+  return`, the concept explanation, and the correct answer hidden behind a `Show the complete answer`
+  disclosure, with nothing referring to what the learner had chosen. For `match` questions the
+  explanation is just the two principles concatenated, so the panel restated both answers and
+  diagnosed nothing. The panel now reads verdict → what this choice assumed → catch it earlier →
+  what governs this question → the complete answer → why it connects → return note. The complete
+  answer is no longer collapsed, and the governing line is suppressed when the answer key already
+  states it verbatim.
+- **Every distractor now diagnoses a specific gap.** Audited all 3,240 distractor slots. The bank is
+  generated, so distractors are borrowed from other concepts and the generator already knew what each
+  wrong option meant — it was discarding that. `mock/sets/t6_challenges.js` now builds a provenance
+  index from the derived concept data and runs a diagnosis pass over every question after generation.
+  Six recognised families: another concept's principle, decision, causal chain, or label; the same
+  concept's wrong facet; and the three constructed boss-integration errors. Provenance was checked
+  for collisions across all 256 indexed concept texts — zero ambiguous, so each diagnosis is true by
+  construction rather than inferred.
+- **Added `mock/sets/t6_diagnoses.js`** with 78 hand-authored diagnoses for the distractors carrying
+  no machine-knowable provenance: 3 shared across the catalogue `connect` questions covering 84
+  slots, and 75 across 25 MCQs. Result: **2,943 diagnoses across the active bank with zero generic
+  fallbacks — 100% specific.** The 90 remaining fallbacks sit inside the 163 legacy MCQs already
+  excluded from scheduling.
+- **Fixed a live user-visible defect.** `evidence.reasons` is rendered in the concept inspector and
+  interpolated the raw misconception tag, so a learner repeating an error across two variant families
+  saw `The same misconception returned across independent evidence: selected-belief:It estimates the
+  total market before speaking to buyers.` Tags are now readable noun phrases.
+- **Fixed a latent indexing bug.** Multi-part items read the misconception as
+  `misconceptions[partResults.indexOf(false)]` — the part index, not the chosen option. For a
+  single-blank cloze that is always `0`, so every wrong option reported the same misconception.
+  `diagnosisFor` now indexes by the selected option within the failing part.
+- **Made the contract enforceable rather than advisory.** `mock/validate_t6_bank.js` fails the build
+  when a scheduled distractor lacks a diagnosis, when any of `tag`/`label`/`why`/`cue` is empty, when
+  a `why` restates the correct answer, or when a `why` addresses the learner instead of the reasoning.
+  A question added through any path picks this up automatically, because the diagnosis pass runs over
+  the whole course rather than inside each generator. The authoring contract is recorded in
+  `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. The gate caught two of this session's own
+  strings before they shipped.
+- **Added an Access self-check for the admin login loop.** The owner reported the Control Room
+  bouncing between the site and Cloudflare until timeout. The Worker's admin path contains no
+  redirect loop — the bounce is at the Access layer, where the Worker had no way to report anything.
+  `GET /dungeon/admin/access-check` now returns booleans and a coarse reason
+  (`NO_JWT_AT_ORIGIN`, `AUDIENCE_MISMATCH`, `ISSUER_MISMATCH`, `TOKEN_EXPIRED`,
+  `SIGNATURE_OR_JWKS_FAILURE`, `OWNER_EMAIL_MISMATCH`, `OK`). It sits outside the owner gate by
+  design, since requiring the gate to diagnose the gate would be useless, and never echoes the
+  audience tag, team domain, or any address. This is a diagnostic, not a fix: the root cause is in
+  the Access application configuration and needs the dashboard.
+- `mock/server.py` now falls back to `$PORT` when no port argument is given, so the preview harness
+  can run it alongside another session's server. `argv` still wins and the default is still 8099.
+- Verification: `node mock/validate_t6_bank.js` → `ok: true`, 0 errors over 792 questions;
+  `npm test` → 34 passing; `npm run build` → 14 allowlisted assets; real-browser acceptance of the
+  rebuilt panel and of the `sclm_m1_match` question from the owner's report. Evidence:
+  `evidence/2026-08-12/t6-option-diagnoses/verification.md`.
+- Deferred: the 78 authored diagnoses are new learning content and carry the existing
+  `WAITING_OWNER_CONTENT_ACCEPTANCE` boundary. The 163 excluded legacy MCQs keep generic fallbacks.
+  A bank-volume audit run this session is reported separately and no expansion was built.
+
 ## 2026-08-11 — Dynamic homepage, practice builder, enforced agreement version, and readable matching
 
 - Rebuilt the dashboard around the owner's direction: subjects move to the top as a compact

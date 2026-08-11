@@ -127,6 +127,209 @@
     return same.concat(other).slice(0, 3);
   }
 
+  /* ---------------------------------------------------------------------
+   * Option-level diagnosis
+   *
+   * Distractors in this bank are not invented: they are borrowed from other
+   * concepts. `comparableWrong(data.summary, otherSummaries)` hands the learner
+   * another concept's principle. Because the generator knows exactly where each
+   * wrong option came from, it can state exactly what selecting it assumed —
+   * truthfully, by construction rather than by guess.
+   *
+   * Every diagnosis carries:
+   *   tag   — stable identity used by the scheduler to detect a recurring
+   *           misconception, and shown to the learner in the concept inspector.
+   *   label — headline of the gap.
+   *   why   — the belief the choice assumed, then what the source holds instead.
+   *   cue   — what to look for so the distinction is caught earlier next time.
+   * ------------------------------------------------------------------- */
+
+  var ROLE_LABEL = {summary: "governing principle", application: "decision", bridge: "causal explanation", name: "label"};
+
+  function buildProvenance(allData) {
+    var index = {};
+    allData.forEach(function (data) {
+      ["summary", "application", "bridge", "name"].forEach(function (role) {
+        var value = data[role];
+        if (!value) return;
+        var key = String(value).trim();
+        // First writer wins: concept fields are unique across the bank, and a
+        // collision must not silently rewrite an earlier concept's provenance.
+        if (!index[key]) index[key] = {conceptId: data.id, name: data.name, role: role, module: data.module};
+      });
+    });
+    return index;
+  }
+
+  function sameModule(owner, self) {
+    return owner.module && self.module && owner.module === self.module;
+  }
+
+  /*
+   * The panel already carries the governing principle and the wider connection
+   * below the diagnosis. These strings therefore name the confusion and the
+   * contrast only — repeating the full principle here made the panel read as the
+   * same sentence three times.
+   */
+  function crossConceptDiagnosis(owner, self) {
+    var neighbour = sameModule(owner, self) ? "a neighbouring idea in the same module" : "an idea from another module";
+    if (owner.role === "name") {
+      return {
+        tag: "Confused " + self.name + " with " + owner.name,
+        label: "Named a different concept",
+        why: "This choice named " + owner.name + ", " + neighbour + ". The description given here belongs to " + self.name + ".",
+        cue: "Match the description to the idea it uniquely fits. " + owner.name + " and " + self.name + " sit close together, so read for the detail only one of them explains."
+      };
+    }
+    if (owner.role === "application") {
+      return {
+        tag: "Applied the decision rule of " + owner.name,
+        label: "Right kind of move, wrong governing idea",
+        why: "This is the decision " + owner.name + " calls for. This case is governed by " + self.name + ", and the defensible move has to follow from that rule instead.",
+        cue: "Name the governing idea before choosing an action. The action follows the rule; picking a plausible action first is what lets a neighbouring framework slip in."
+      };
+    }
+    if (owner.role === "bridge") {
+      return {
+        tag: "Used the causal chain of " + owner.name,
+        label: "Borrowed another idea's reasoning",
+        why: "This choice explains why " + owner.name + " matters. The chain that makes " + self.name + " matter runs through a different step.",
+        cue: "Follow the causal step this case actually depends on rather than one that sounds correct about a related idea."
+      };
+    }
+    return {
+      tag: "Confused " + self.name + " with " + owner.name,
+      label: "Used another idea's governing principle",
+      why: "This choice states the principle behind " + owner.name + ", " + neighbour + ". This question turns on " + self.name + ", which is a different rule answering a different question.",
+      cue: "Ask which idea the case is testing before selecting a principle. " + owner.name + " and " + self.name + " are easy to swap when only the topic is read and not the claim."
+    };
+  }
+
+  /*
+   * Same concept, different facet. A match board offers an idea's principle and its
+   * decision side by side, so a learner can hold the right concept and still place
+   * what it claims where what it tells you to do belongs. That is a precise gap and
+   * deserves a precise answer, not the generic fallback.
+   */
+  var FACET_QUESTION = {
+    summary: "what the idea claims is true",
+    application: "what the idea tells you to do",
+    bridge: "why the idea changes the outcome",
+    name: "what the idea is called"
+  };
+
+  function facetMixDiagnosis(owner, self, targetRole) {
+    return {
+      tag: "Confused the " + ROLE_LABEL[owner.role] + " of " + self.name + " with its " + ROLE_LABEL[targetRole],
+      label: "Right idea, wrong part of it",
+      why: "This choice is genuinely part of " + self.name + " — it states " + FACET_QUESTION[owner.role] + " — but the slot asks for " + FACET_QUESTION[targetRole] + ". Both belong to the same idea and answer different questions, so one cannot stand in for the other.",
+      cue: "Read what the slot is asking for before matching content to it. A principle states what holds; a decision states what to do because it holds."
+    };
+  }
+
+  function selfErrorDiagnosis(option, self, kind) {
+    if (kind === "application") {
+      return {
+        tag: "Chose an action the case does not support",
+        label: "Picked a move the evidence does not justify",
+        why: "This choice recommends an action the case gives no support for. It is about the right idea, but " + self.name + " does not license this particular move on these facts.",
+        cue: "Point to the fact in the case that would have to be true for this action to be right. If it is not there, the action is not supported."
+      };
+    }
+    return {
+      tag: "Held a claim the source corrects",
+      label: "Stated a belief the source rejects",
+      why: "This choice states a claim about " + self.name + " that the source material specifically contradicts. It is a common way to describe the idea, and it is the version being corrected here.",
+      cue: "Check the claim word by word against the precise definition rather than against the general sense of the topic."
+    };
+  }
+
+  function fallbackDiagnosis(self) {
+    return {
+      tag: "Departed from " + self.name,
+      label: "Answered from a different rule",
+      why: "This choice does not follow from " + self.name + ", which is the idea this question is testing.",
+      cue: "Return to the governing idea and check the option against it directly before selecting."
+    };
+  }
+
+  function diagnoseOption(option, self, provenance, hints, authored, questionId, optionIndex, targetRole) {
+    var text = String(option).trim();
+    if (hints && hints[text]) return hints[text];
+    var byQuestion = authored.byQuestion[questionId];
+    if (byQuestion && byQuestion[optionIndex]) return byQuestion[optionIndex];
+    if (authored.byText[text]) return authored.byText[text];
+    var owner = provenance[text];
+    if (owner && owner.conceptId !== self.id) return crossConceptDiagnosis(owner, self);
+    if (owner && targetRole && owner.role !== targetRole) return facetMixDiagnosis(owner, self, targetRole);
+    if ((self.applicationWrong || []).indexOf(option) >= 0) return selfErrorDiagnosis(option, self, "application");
+    if ((self.confusions || []).indexOf(option) >= 0) return selfErrorDiagnosis(option, self, "summary");
+    return fallbackDiagnosis(self);
+  }
+
+  // The correct option's own provenance tells us which facet the slot is asking
+  // for, which is what makes a same-concept wrong-facet choice diagnosable.
+  function targetRoleFor(options, answer, provenance) {
+    if (answer < 0 || !options[answer]) return null;
+    return (provenance[String(options[answer]).trim()] || {}).role || null;
+  }
+
+  function diagnoseGroup(options, answer, self, provenance, hints, authored, questionId) {
+    var targetRole = targetRoleFor(options, answer, provenance);
+    return options.map(function (option, index) {
+      if (index === answer) return null;
+      return diagnoseOption(option, self, provenance, hints, authored, questionId, index, targetRole);
+    });
+  }
+
+  function attachDiagnoses(question, dataById, provenance, authored) {
+    var self = dataById[question.conceptId];
+    if (!self) return;
+    var hints = question.diagnosisHints || null;
+    if (question.type === "match") {
+      // A match is an assignment problem: the same choice means something
+      // different depending on which row it lands in, so each row carries its
+      // own diagnosis for every choice it could wrongly receive.
+      question.rows.forEach(function (row) {
+        var rowSelf = dataById[row.conceptId] || self;
+        var rowRole = targetRoleFor(question.choices, row.answer, provenance);
+        row.diagnoses = question.choices.map(function (choice, index) {
+          if (index === row.answer) return null;
+          return diagnoseOption(choice, rowSelf, provenance, hints, authored, question.id, index, rowRole);
+        });
+      });
+      question.misconceptions = question.rows.map(function (row) {
+        return (row.diagnoses.filter(Boolean)[0] || {}).tag || "match-mismatch";
+      });
+      return;
+    }
+    if (question.type === "boss") {
+      question.steps.forEach(function (step) {
+        var stepSelf = dataById[(step.conceptIds || [])[0]] || self;
+        step.diagnoses = diagnoseGroup(step.options, step.answer, stepSelf, provenance, step.diagnosisHints || hints, authored, question.id);
+      });
+      question.misconceptions = question.steps.map(function (step) {
+        return (step.diagnoses.filter(Boolean)[0] || {}).tag || "broken-reasoning-step";
+      });
+      return;
+    }
+    if (question.type === "cloze" || question.type === "case-cloze") {
+      question.blanks.forEach(function (blank) {
+        blank.diagnoses = diagnoseGroup(blank.options, blank.answer, self, provenance, hints, authored, question.id);
+      });
+      question.misconceptions = question.blanks.map(function (blank) {
+        return (blank.diagnoses.filter(Boolean)[0] || {}).tag || "wrong-blank";
+      });
+      return;
+    }
+    if (Array.isArray(question.options)) {
+      question.diagnoses = diagnoseGroup(question.options, question.answer, self, provenance, hints, authored, question.id);
+      question.misconceptions = question.diagnoses.map(function (diagnosis) {
+        return diagnosis ? diagnosis.tag : null;
+      });
+    }
+  }
+
   function addQuestion(course, question) {
     if (course.questions[question.id]) throw new Error("Duplicate T6 challenge question ID: " + question.id);
     course.questions[question.id] = question;
@@ -386,11 +589,31 @@
     var firstChoices = choiceSet(first.application, firstWrong, stableNumber(course.id + module + "a" + variant));
     var secondChoices = choiceSet(second.application, secondWrong, stableNumber(course.id + module + "b" + variant));
     var integrationCorrect = "Use " + first.name + " for the first decision and " + second.name + " for the second; neither result replaces the other.";
-    var integration = choiceSet(integrationCorrect, [
-      "Use " + second.name + " for the first decision and " + first.name + " for the second; the labels can be swapped without changing the logic.",
-      "Use " + first.name + " for both decisions; once the first issue is solved, the second can be treated as the same problem.",
-      "Use " + second.name + " for both decisions; the later issue should determine the earlier diagnosis as well."
-    ], stableNumber(course.id + module + "c" + variant));
+    var integrationSwap = "Use " + second.name + " for the first decision and " + first.name + " for the second; the labels can be swapped without changing the logic.";
+    var integrationForward = "Use " + first.name + " for both decisions; once the first issue is solved, the second can be treated as the same problem.";
+    var integrationBackward = "Use " + second.name + " for both decisions; the later issue should determine the earlier diagnosis as well.";
+    var integration = choiceSet(integrationCorrect, [integrationSwap, integrationForward, integrationBackward], stableNumber(course.id + module + "c" + variant));
+    // The integration step's three wrong options are constructed here, so their
+    // meaning is known exactly rather than inferred from provenance.
+    var integrationHints = {};
+    integrationHints[integrationSwap] = {
+      tag: "Swapped " + first.name + " and " + second.name,
+      label: "Applied both frameworks to the wrong decisions",
+      why: "This choice assumed the two labels are interchangeable. They are not: the first decision is governed by " + first.name + " and the second by " + second.name + ", and swapping them changes what each decision is allowed to conclude.",
+      cue: "Anchor each framework to the decision it answers before integrating. Ask what question each half of the case is asking."
+    };
+    integrationHints[integrationForward] = {
+      tag: "Stretched " + first.name + " over both decisions",
+      label: "Let the first framework settle the second decision",
+      why: "This choice assumed solving the first issue makes the second the same problem. " + first.name + " does not answer the second decision; " + second.name + " does, and collapsing them drops the distinction the case is built on.",
+      cue: "Check whether the second decision would change if the first had gone the other way. If it would not, they are separate questions."
+    };
+    integrationHints[integrationBackward] = {
+      tag: "Let the later decision determine the earlier one",
+      label: "Reversed the order of the reasoning chain",
+      why: "This choice assumed the second issue governs the first diagnosis. The chain runs forward: " + first.name + " settles the first decision, and " + second.name + " then applies to what follows — reading it backwards makes the earlier diagnosis depend on its own consequence.",
+      cue: "Establish the order of the decisions before joining them. The earlier diagnosis cannot rest on a later result."
+    };
     var frames = [
       "One recommendation must resolve two linked decisions. First: " + ensureSentence(first.caselet) + " Then: " + ensureSentence(second.caselet),
       "A draft answer recommends “" + ensureSentence(first.applicationWrong[0] || first.confusions[0]) + "” It also recommends “" + ensureSentence(second.applicationWrong[0] || second.confusions[0]) + "” Test both claims against these facts: " + ensureSentence(first.caselet) + " " + ensureSentence(second.caselet),
@@ -427,7 +650,7 @@
       steps: [
         {label: "Step 1 · Diagnose the first decision", prompt: "What should happen first?", options: firstChoices.options, answer: firstChoices.answer, conceptIds: [pair[0].id]},
         {label: "Step 2 · Apply the second framework", prompt: "What should happen next?", options: secondChoices.options, answer: secondChoices.answer, conceptIds: [pair[1].id]},
-        {label: "Step 3 · Join the reasoning", prompt: "Which final explanation keeps both decisions consistent?", options: integration.options, answer: integration.answer, conceptIds: [pair[0].id, pair[1].id]}
+        {label: "Step 3 · Join the reasoning", prompt: "Which final explanation keeps both decisions consistent?", options: integration.options, answer: integration.answer, conceptIds: [pair[0].id, pair[1].id], diagnosisHints: integrationHints}
       ],
       frameworkSteps: ["diagnose", "apply", "integrate"],
       explanation: "The first decision uses " + first.name + "; the second uses " + second.name + ". A strong answer preserves both distinctions before integrating them.",
@@ -466,6 +689,8 @@
     });
   }
 
+  var authoredDiagnoses = window.T6_AUTHORED_DIAGNOSES || {byQuestion: {}, byText: {}};
+
   courseIds.forEach(function (courseId) {
     var course = courses[courseId];
     if (!course) return;
@@ -490,6 +715,14 @@
       addModuleMatch(course, module, pair.slice(0, 2), dataById);
       for (var bossVariant = 1; bossVariant <= 5; bossVariant += 1) addModuleBoss(course, module, pair.slice(0, 2), dataById, bossVariant);
     }
+
+    // Runs last, over every question in the course — authored MCQs included — so a
+    // question added by any path is diagnosed without its author wiring anything up.
+    var provenance = buildProvenance(allData);
+    Object.keys(course.questions).forEach(function (id) {
+      attachDiagnoses(course.questions[id], dataById, provenance, authoredDiagnoses);
+    });
+
     configureRuns(course);
   });
 

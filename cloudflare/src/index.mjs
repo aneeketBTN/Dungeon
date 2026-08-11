@@ -135,6 +135,90 @@ async function verifyOwner(request, env) {
   return authenticatedEmail;
 }
 
+/*
+ * Unauthenticated Access self-check.
+ *
+ * When Cloudflare Access and this Worker disagree — a mismatched audience tag, an
+ * overlapping application, a session that expires on issue — the browser bounces
+ * between the login domain and the site until it gives up, and the Worker never gets
+ * to say why. This endpoint answers that question in one request.
+ *
+ * It returns booleans and a coarse reason only. It never echoes the audience tag,
+ * the team domain, the owner address, or the authenticated address, so an anonymous
+ * caller learns nothing it could not already infer from the 403 on the admin route.
+ */
+function decodeJwtClaims(token) {
+  try {
+    const segment = String(token).split(".")[1];
+    if (!segment) return null;
+    const padded = segment.replace(/-/g, "+").replace(/_/g, "/");
+    return JSON.parse(atob(padded + "=".repeat((4 - (padded.length % 4)) % 4)));
+  } catch (error) {
+    return null;
+  }
+}
+
+async function accessSelfCheck(request, env) {
+  const token = request.headers.get("cf-access-jwt-assertion");
+  const audienceConfigured = typeof env?.ACCESS_ADMIN_AUD === "string" && !!env.ACCESS_ADMIN_AUD.trim();
+  const ownerConfigured = !!normalizeEmail(env?.OWNER_EMAIL);
+  let teamDomainConfigured = true;
+  try {
+    accessTeamUrl(env);
+  } catch (error) {
+    teamDomainConfigured = false;
+  }
+
+  const result = {
+    jwtPresent: !!token,
+    audienceConfigured,
+    ownerConfigured,
+    teamDomainConfigured,
+    audienceMatches: null,
+    issuerMatches: null,
+    expired: null,
+    emailMatchesOwner: null,
+    verified: false,
+    reason: "NO_JWT"
+  };
+
+  if (!token) {
+    // Access did not attach a token, so the request never passed through a
+    // protected application: the admin route is outside every Access app's path,
+    // or a more general application is answering for it.
+    result.reason = teamDomainConfigured && audienceConfigured ? "NO_JWT_AT_ORIGIN" : "SETUP_INCOMPLETE";
+    return json(result);
+  }
+
+  const claims = decodeJwtClaims(token);
+  if (claims) {
+    const audiences = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
+    result.audienceMatches = audienceConfigured && audiences.includes(env.ACCESS_ADMIN_AUD);
+    result.expired = typeof claims.exp === "number" ? claims.exp * 1000 <= Date.now() : null;
+    try {
+      result.issuerMatches = claims.iss === accessTeamUrl(env).origin;
+    } catch (error) {
+      result.issuerMatches = false;
+    }
+    result.emailMatchesOwner = !!normalizeEmail(claims.email) && normalizeEmail(claims.email) === normalizeEmail(env?.OWNER_EMAIL);
+  }
+
+  try {
+    await verifyAccess(request, env, env.ACCESS_ADMIN_AUD);
+    result.verified = true;
+    result.reason = result.emailMatchesOwner ? "OK" : "OWNER_EMAIL_MISMATCH";
+  } catch (error) {
+    result.reason = result.audienceMatches === false
+      ? "AUDIENCE_MISMATCH"
+      : result.issuerMatches === false
+        ? "ISSUER_MISMATCH"
+        : result.expired
+          ? "TOKEN_EXPIRED"
+          : "SIGNATURE_OR_JWKS_FAILURE";
+  }
+  return json(result);
+}
+
 async function readBoundedJson(request, maxBytes = 2048) {
   if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
     throw new RequestError(415, "JSON_REQUIRED", "Send a JSON request.");
@@ -848,6 +932,11 @@ export function createWorker({
         }
         if (url.pathname === `${prefix}/admin/api/insights`) {
           return await cohortInsights(request, env, verifyAdmin, store);
+        }
+        // Deliberately outside the gate below: this route exists to explain why the
+        // gate is failing, so requiring the gate to reach it would be useless.
+        if (url.pathname === `${prefix}/admin/access-check`) {
+          return await accessSelfCheck(request, env);
         }
         if (url.pathname === `${prefix}/admin` || url.pathname.startsWith(`${prefix}/admin/`)) {
           await verifyAdmin(request, env);

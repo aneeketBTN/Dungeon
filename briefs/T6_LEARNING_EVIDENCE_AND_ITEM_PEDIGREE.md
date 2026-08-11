@@ -252,8 +252,55 @@ Every authored or generated item must declare:
 - `difficulty` from 1 to 5;
 - `variantFamily`, so wording variants do not masquerade as independent evidence;
 - `misconceptions`, mapping each wrong response to a specific error;
+- `diagnoses`, the option-level diagnosis contract below;
 - `frameworkSteps` for multi-step items;
 - `estimatedMinutes` and whether a hint/revealed step was used.
+
+### Option-level diagnosis contract
+
+**Every distractor a scheduled question can present must be able to say what choosing it
+revealed.** A wrong answer that produces only a verdict — "Not yet, this idea will return" —
+tells a learner they were wrong and nothing about where their understanding broke. Each option
+is a hypothesis about the learner's model, so each wrong option carries the diagnosis of the
+specific gap it exposes.
+
+Every distractor slot carries four fields:
+
+| Field | Holds | Rule |
+| --- | --- | --- |
+| `tag` | Stable short identity | Scheduler recurrence key **and** learner-visible in the concept inspector. Keep it stable once shipped; a reworded tag silently resets recurrence detection. |
+| `label` | Headline of the gap | The learner's words, not the marker's. |
+| `why` | The belief the choice assumed, then what the source holds | Name the wrong belief **first**. A `why` that only restates the correct answer explains the verdict, not the error. |
+| `cue` | What to look for next time | A discriminating test, not a restatement of the principle. |
+
+Authoring rules:
+
+- **Diagnose the reasoning, never the learner.** "This choice assumed…" is the register.
+  No "you failed to", no praise, no blame.
+- **Do not repeat what the panel already prints.** The panel renders the governing principle
+  and the wider connection beneath the diagnosis; repeating either turns one explanation into
+  the same sentence three times.
+- **Stay inside the indexed lecture sources.** A diagnosis may not introduce a claim the
+  source material does not support.
+
+Most of the bank satisfies this without authoring. Distractors are borrowed from other concepts —
+`comparableWrong(data.summary, otherSummaries)` hands the learner another concept's principle — so
+`mock/sets/t6_challenges.js` derives the diagnosis from provenance it already holds, exactly rather
+than by inference. The recognised families are: another concept's principle, decision, causal chain,
+or label; the same concept's wrong facet (a match board offering an idea's principle and its decision
+side by side); and the three constructed boss-integration errors (framework swap, single-framework
+overreach, reversed determination). Hand-written distractors with no machine-knowable provenance are
+diagnosed in `mock/sets/t6_diagnoses.js`, keyed by question id and option index.
+
+**Enforcement.** `mock/validate_t6_bank.js` fails the build when any scheduled distractor lacks a
+diagnosis, when any of the four fields is empty, when a `why` restates the correct answer, or when a
+`why` addresses the learner instead of the reasoning. A new question cannot ship without this; adding
+one through any path picks the contract up automatically, because the diagnosis pass runs over every
+question in the course after generation rather than inside each generator.
+
+Support-only primers and self-reviewed constructed responses are exempt: neither presents a scored
+wrong option. Legacy items excluded from scheduling for option-shape risk are also exempt, since
+repairing them is a separate decision from scheduling them.
 
 ### Boss-question contract
 

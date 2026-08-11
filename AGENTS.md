@@ -1,4 +1,43 @@
 # Dungeon
+> **Diagnosis revision (2026-08-12; newest):** Every distractor a scheduled question can present now
+> states the specific gap choosing it reveals. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+> `evidence/2026-08-12/t6-option-diagnoses/verification.md`: 2,943 diagnoses across the active bank
+> with zero generic fallbacks, derived from generator provenance for 92.3% of slots and hand-authored
+> in `mock/sets/t6_diagnoses.js` for the remaining 78 texts. The wrong-answer panel was rebuilt as
+> verdict → what this choice assumed → catch it earlier → what governs this question → the complete
+> answer (no longer collapsed) → why it connects. `mock/validate_t6_bank.js` now fails the build when
+> a scheduled distractor lacks a diagnosis, so questions drafted later inherit the contract in
+> `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. Two defects were repaired: a raw
+> `selected-belief:` tag reaching learner copy in the concept inspector (LAW-43) and a per-option
+> value indexed by part rather than by option (LAW-44). The authored diagnoses are new content and
+> stay `WAITING_OWNER_CONTENT_ACCEPTANCE`. `GET /dungeon/admin/access-check` was added as an
+> unauthenticated, secret-free Access self-check for the reported Control Room login loop; it
+> diagnoses the loop but does not fix it, since the cause is in Access application configuration.
+> **UI alignment pass (2026-08-12):** `VERIFIED(REAL_BROWSER)` at
+> `evidence/2026-08-12/t6-ui-alignment-pass/verification.md`. Irregularity was measured with an
+> injected audit probe per screen at 1280×800 and 375×812, not eyeballed. Fixed: the match label
+> tray now shares the statements' grid track so every tablet is one width and sits on its slot's
+> left edge (was `193/268/191/266`px wrapping 3-then-1, with tablets wider than the 162px slot);
+> statements are numbered against lettered labels to give the board a reading order; the mastery key
+> is a two-column grid (was four ragged lines); `.subject-actions` is an equal-width grid track (was
+> `257`/`187`px stacked); and `brand-home`, `skip-link`, and `label-tablet` reach 44px on mobile.
+> Dashboard, primer/MCQ, cloze, match, and feedback report **0 findings at both viewports** with no
+> horizontal overflow. Two candidate findings were rejected as probe artifacts (LAW-46). Not
+> audited: boss, case-cloze, and constructed-response surfaces (static check only), the results
+> screen, `login.html`, and `admin.html`.
+>
+> **Access login loop fixed at source (2026-08-12):** the Control Room bounce was not in the Worker.
+> The `Dungeon Owner Dashboard` Access application accepted only the `- cloudflare` provider with
+> `Apply instant authentication` on, and **no Google provider exists on the account**, so Access
+> skipped the chooser and redirected into a flow a Google session could never satisfy. With owner
+> approval the existing one-time email-code provider was enabled alongside it and instant
+> authentication turned off; `Accept all available identity providers` was deliberately left off.
+> Owner action outstanding: confirm sign-in on the live domain.
+>
+> **Open, not yet acted on:** a bank-volume audit found only 32.5% of taught lectures carry any
+> question (IBM 20.5%, SCLM 22.5%, SPMS 19%, BRGSA 88%) — 191 of 283 lectures have none. Match
+> choices also span 13–179 characters, which layout cannot reconcile; both belong to the bank work.
+>
 > **Current status (2026-08-11; supersedes older status notes):** The active plain-language Term 6
 > dashboard for BRGSA, IBM, SCLM, and SPMS is `VERIFIED` in a real Browser at
 > `evidence/2026-08-11/t6-evidence-challenges/verification.md`, with the latest question hierarchy,
@@ -227,8 +266,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `mock/t6.js` | Adaptive primers, evidence-gated mastery, sparkline/momentum copy, builder pool rules, matching board, persistence, and scenarios. | 2026-08-11 |
 | `mock/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
 | `mock/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
-| `mock/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, and 565-item scored pools. | 2026-08-11 |
-| `mock/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, and scored-pool validator. | 2026-08-11 |
+| `mock/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, and the provenance-derived option-diagnosis pass. | 2026-08-12 |
+| `mock/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
+| `mock/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, scored-pool, and option-diagnosis validator. | 2026-08-12 |
 | `mock/rogue.html` | Legacy character → Hall → run → failure/results product-flow markup. | 2026-08-10 |
 | `mock/rogue.js` | Legacy product-slice state transitions, questions, rewards, quest, and outcome behavior. | 2026-08-10 |
 | `mock/rogue.css` | Legacy product-slice responsive presentation, feedback states, and animation behavior. | 2026-08-10 |

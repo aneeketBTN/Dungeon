@@ -341,6 +341,44 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   `Agreed`, `Older terms`, and `Never agreed`. Truthful-interaction and consent axes: a terms change
   now actually reaches the cohort, and the owner view stops implying a breach that never happened.
   Evidence: same file; prevention: `BUG-LAWS.md` LAW-40.
+- **I40 (2026-08-12)** — Issue: a wrong answer gave a verdict and no reason. The panel showed
+  `Not yet — this idea will return`, restated the concept explanation, and hid the correct answer
+  behind a disclosure, never referring to what the learner had chosen; on `match` questions the
+  explanation is the two principles concatenated, so it restated both answers and diagnosed nothing.
+  Cause: `question.misconceptions` was a per-option slot that was validated, captured, and used for
+  scheduling, but filled with placeholder strings and never rendered — three of four pipeline stages
+  were built and the last was missing. Fix: derive each distractor's meaning from provenance the
+  generator already holds (distractors are borrowed from other concepts), author the 78 with no
+  provenance, and rebuild the panel as verdict → what this choice assumed → catch it earlier → what
+  governs this → the complete answer → why it connects. Learning-integrity axis: feedback now names
+  the gap a specific choice reveals instead of reporting only correctness. 2,943 diagnoses on the
+  active bank, zero generic fallbacks. Evidence:
+  `evidence/2026-08-12/t6-option-diagnoses/verification.md`; prevention: `BUG-LAWS.md` LAW-43 and
+  LAW-44, plus a build gate in `mock/validate_t6_bank.js`.
+- **I41 (2026-08-12)** — Issue: rebuilding the panel to explain more made it repeat itself — the
+  governing principle appeared in the diagnosis, again as `What governs this question`, and again in
+  the answer key, with the causal chain appearing twice more. Cause: each block was written to stand
+  alone without accounting for what the surrounding panel already prints. Fix: diagnosis copy names
+  the confusion and contrast only, and the governing line is suppressed when the answer key already
+  states it verbatim. Readability axis: explaining more is not the same as printing more, and a
+  learner who reads the same sentence three times stops reading the panel. Evidence: same file.
+
+- **I42 (2026-08-12)** — Issue: the match board's label tray read as unfinished, and the board
+  gave no answer to "where do I look first". Cause: `.tray-items` wrapped `inline-grid` tablets
+  sized by their own text, producing `193/268/191/266`px across two ragged rows, with each tablet
+  wider than the 162px slot it drops into; and four equally weighted 7-line statement columns
+  carried no stated order. Fix: the tray now shares the statements' grid track via
+  `--statement-count` on `.match-board` with matched gaps, so every tablet is one width and sits
+  directly under its slot; statements are numbered against lettered labels. Visual-coherence axis:
+  an affordance that is visibly larger than its target contradicts the interaction it is teaching.
+  Evidence: `evidence/2026-08-12/t6-ui-alignment-pass/verification.md`; prevention: `BUG-LAWS.md`
+  LAW-45.
+- **I43 (2026-08-12)** — Issue: a UI audit run by impression would have "fixed" two things that
+  were not broken. Cause: `align-items: baseline` gives items of different heights different `top`
+  values, which a row-detecting probe reads as a wrap; and layouts measured mid-render report touch
+  targets that do not exist once settled. Fix: both were re-measured on a settled layout and
+  rejected before any change. Truthful-reporting axis: an audit that cannot distinguish its own
+  artifacts from defects will quietly damage a working layout. Evidence: same file.
 
 ## Watch Items
 

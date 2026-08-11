@@ -4,8 +4,9 @@
     {
       "name": "mock-server",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["mock/server.py", "8099"],
-      "port": 8099
+      "runtimeArgs": ["mock/server.py"],
+      "port": 8099,
+      "autoPort": true
     }
   ]
 }

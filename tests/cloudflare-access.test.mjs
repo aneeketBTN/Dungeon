@@ -623,6 +623,42 @@ test("owner routes retain the separate Cloudflare Access boundary", async () => 
   assert.equal(adminChecks, 2);
 });
 
+test("the Access self-check explains a login loop without leaking configuration", async () => {
+  let adminChecks = 0;
+  const worker = workerWithGroup([], {verifyAdmin: async () => { adminChecks += 1; return owner; }});
+
+  // Reachable without the owner gate: the route exists to explain why the gate fails.
+  const anonymous = await worker.fetch(request("/dungeon/admin/access-check"), baseEnv);
+  assert.equal(anonymous.status, 200);
+  const report = await anonymous.json();
+  assert.equal(adminChecks, 0, "the self-check must not require the gate it diagnoses");
+  assert.equal(report.jwtPresent, false);
+  assert.equal(report.reason, "NO_JWT_AT_ORIGIN");
+  assert.equal(report.audienceConfigured, true);
+
+  // Booleans only: no audience tag, team domain, or address may appear anywhere.
+  const serialized = JSON.stringify(report);
+  for (const secret of [baseEnv.ACCESS_ADMIN_AUD, baseEnv.ACCESS_TEAM_DOMAIN, owner, baseEnv.CF_API_TOKEN]) {
+    assert.ok(!serialized.includes(secret), `self-check leaked ${secret}`);
+  }
+
+  // A token issued for a different application is named as an audience mismatch
+  // rather than failing silently and bouncing the browser back to the login domain.
+  const claims = Buffer.from(JSON.stringify({
+    aud: ["some-other-application"], iss: "https://dungeon.cloudflareaccess.com",
+    email: owner, exp: Math.floor(Date.now() / 1000) + 600
+  })).toString("base64url");
+  const mismatched = await worker.fetch(
+    request("/dungeon/admin/access-check", {headers: {"cf-access-jwt-assertion": `header.${claims}.signature`}}),
+    baseEnv
+  );
+  const mismatchReport = await mismatched.json();
+  assert.equal(mismatchReport.jwtPresent, true);
+  assert.equal(mismatchReport.audienceMatches, false);
+  assert.equal(mismatchReport.reason, "AUDIENCE_MISMATCH");
+  assert.equal(mismatchReport.verified, false);
+});
+
 test("health and release routes stay under the Dungeon prefix", async () => {
   const worker = workerWithGroup();
   const health = await worker.fetch(request("/dungeon/health"), baseEnv);

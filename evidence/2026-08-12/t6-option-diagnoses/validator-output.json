@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "totals": {
+    "BRGSA": {
+      "questions": 204,
+      "bosses": 40,
+      "constructedResponses": 16,
+      "excludedLegacyMcqs": 37
+    },
+    "IBM": {
+      "questions": 196,
+      "bosses": 40,
+      "constructedResponses": 16,
+      "excludedLegacyMcqs": 40
+    },
+    "SCLM": {
+      "questions": 196,
+      "bosses": 40,
+      "constructedResponses": 16,
+      "excludedLegacyMcqs": 43
+    },
+    "SPMS": {
+      "questions": 196,
+      "bosses": 40,
+      "constructedResponses": 16,
+      "excludedLegacyMcqs": 43
+    }
+  },
+  "errors": [],
+  "warnings": [
+    "Lecture-source existence was not checked; pass the T6 pack path to enable it."
+  ]
+}
