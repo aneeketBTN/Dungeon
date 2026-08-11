@@ -21,13 +21,13 @@ test("root redirects to the canonical active route", async () => {
   assert.equal(response.headers.get("cache-control"), "no-store");
 });
 
-test("health endpoint reports the privacy-preserving storage model", async () => {
+test("health endpoint reports the shared progress storage model", async () => {
   const response = await worker.fetch(new Request("https://dungeon.test/health"), env);
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), {
     service: "dungeon-t6",
     status: "ok",
-    storage: "browser-local"
+    storage: "cloudflare-d1-with-browser-fallback"
   });
 });
 
@@ -72,6 +72,7 @@ test("release build includes only the allowlisted active app", async () => {
     "utf8"
   );
   assert.match(buildScript, /mock\/t6\.html/);
+  assert.match(buildScript, /mock\/login\.html/);
   assert.match(buildScript, /mock\/admin\.html/);
   assert.match(buildScript, /mock\/robots\.txt/);
   assert.doesNotMatch(buildScript, /state\//);

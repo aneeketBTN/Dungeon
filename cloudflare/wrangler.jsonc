@@ -19,13 +19,20 @@
     "not_found_handling": "none",
     "run_worker_first": true
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dungeon-learner-state",
+      "database_id": "8b1322ae-9016-4632-8f47-5fa15c64475f",
+      "migrations_dir": "migrations"
+    }
+  ],
   "vars": {
     "DUNGEON_PREFIX": "/dungeon",
     "ACCESS_ACCOUNT_ID": "c9ad5ea00fe0040b372163daf10ea235",
     "ACCESS_GROUP_ID": "e74be54f-b714-44ea-95cb-11ed66777f18",
     "ACCESS_TEAM_DOMAIN": "https://dawn-unit-8689.cloudflareaccess.com",
     "ACCESS_ADMIN_AUD": "4835199408cc2b98c8ece55b29877e4bc98411a2e052b011fe0b19512f307105",
-    "ACCESS_LEARNER_AUD": "56d9461adc8ecc52a110cc47c664c4db3c36ea5439616a9e6372f55974209263",
     "OWNER_EMAIL": "beyondthenoisestudios@gmail.com"
   },
   "observability": {

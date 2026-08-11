@@ -4,6 +4,10 @@
   var COURSES = window.T6_COURSES || {};
   var COURSE_IDS = ["BRGSA", "IBM", "SCLM", "SPMS"];
   var STORAGE_KEY = "term6.revision.v2";
+  var LEGACY_CLAIM_KEY = "term6.revision.v2.claimed-by";
+  var BACKEND_ACTIVE = window.location.pathname.indexOf("/dungeon") === 0;
+  var SESSION_ENDPOINT = "api/session";
+  var PROGRESS_ENDPOINT = "api/progress";
   var STATUS_ORDER = {unseen: 0, needs: 1, developing: 2, strong: 3};
   var STATUS_LABEL = {unseen: "Not started", needs: "Needs practice", developing: "Developing", strong: "Strong"};
   var profile;
@@ -16,6 +20,11 @@
   var dashboardView = "overview";
   var selectedModule = 1;
   var inspectedConceptId = null;
+  var learnerEmail = null;
+  var backendReady = false;
+  var serverRevision = 0;
+  var localChangeSequence = 0;
+  var saveChain = Promise.resolve();
   var DASHBOARD_VIEWS = ["overview", "concepts", "plan"];
   var HORIZON_PLANS = {
     today: {
@@ -63,9 +72,44 @@
       typeof candidate.index === "number" && Array.isArray(candidate.responses);
   }
 
+  function profileStorageKey() {
+    return learnerEmail ? STORAGE_KEY + "." + learnerEmail : STORAGE_KEY;
+  }
+
+  function syncMetaKey() {
+    return learnerEmail ? STORAGE_KEY + ".sync." + learnerEmail : null;
+  }
+
+  function readSyncMeta() {
+    var key = syncMetaKey();
+    if (!key) return null;
+    try { return JSON.parse(localStorage.getItem(key)); } catch (error) { return null; }
+  }
+
+  function writeSyncMeta(dirty) {
+    var key = syncMetaKey();
+    if (!key) return;
+    try {
+      localStorage.setItem(key, JSON.stringify({email:learnerEmail, serverRevision:serverRevision, dirty:Boolean(dirty)}));
+    } catch (error) {}
+  }
+
+  function writeLocalProfile(value) {
+    try { localStorage.setItem(profileStorageKey(), JSON.stringify(value)); } catch (error) {}
+  }
+
   function loadProfile() {
     try {
-      var parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      var raw = localStorage.getItem(profileStorageKey());
+      if (!raw && learnerEmail) {
+        var claimedBy = localStorage.getItem(LEGACY_CLAIM_KEY);
+        var legacy = localStorage.getItem(STORAGE_KEY);
+        if (legacy && (!claimedBy || claimedBy === learnerEmail)) {
+          raw = legacy;
+          localStorage.setItem(LEGACY_CLAIM_KEY, learnerEmail);
+        }
+      }
+      var parsed = JSON.parse(raw);
       if (!validProfile(parsed)) return defaultProfile();
       if (parsed.active && parsed.active.kind === "mock") {
         parsed.active.kind = "practice-shape";
@@ -80,9 +124,80 @@
     }
   }
 
+  function setSyncStatus(copy) {
+    var node = $("sync-status");
+    if (node) node.textContent = copy;
+  }
+
+  function queueBackendSave(snapshot) {
+    if (!backendReady || scenarioMode) return;
+    var sequence = ++localChangeSequence;
+    writeSyncMeta(true);
+    setSyncStatus("Saving…");
+    saveChain = saveChain.catch(function () {}).then(async function () {
+      var response = await fetch(PROGRESS_ENDPOINT, {
+        method: "PUT",
+        credentials: "same-origin",
+        cache: "no-store",
+        keepalive: true,
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({state:snapshot})
+      });
+      var payload = {};
+      try { payload = await response.json(); } catch (error) {}
+      if (!response.ok) throw new Error(payload.message || "Progress could not be saved online.");
+      serverRevision = Number(payload.revision || serverRevision);
+      if (sequence === localChangeSequence) {
+        writeSyncMeta(false);
+        setSyncStatus("Saved online");
+      }
+    }).catch(function () {
+      setSyncStatus("Saved on this device");
+    });
+  }
+
   function saveProfile() {
     if (scenarioMode) return;
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(profile)); } catch (error) {}
+    writeLocalProfile(profile);
+    queueBackendSave(clone(profile));
+  }
+
+  async function loadBackendProfile() {
+    var sessionResponse = await fetch(SESSION_ENDPOINT, {cache:"no-store", credentials:"same-origin"});
+    if (!sessionResponse.ok) {
+      window.location.replace("./");
+      return defaultProfile();
+    }
+    var identity = await sessionResponse.json();
+    learnerEmail = identity.email;
+    backendReady = true;
+    $("account-controls").hidden = false;
+
+    var localProfile = loadProfile();
+    try {
+      var progressResponse = await fetch(PROGRESS_ENDPOINT, {cache:"no-store", credentials:"same-origin"});
+      if (!progressResponse.ok) throw new Error("Progress could not be loaded.");
+      var remote = await progressResponse.json();
+      serverRevision = Number(remote.revision || 0);
+      var meta = readSyncMeta();
+      var localIsUnsynced = meta && meta.email === learnerEmail && meta.dirty === true && Number(meta.serverRevision || 0) === serverRevision;
+
+      if (remote.state && validProfile(remote.state) && !localIsUnsynced) {
+        writeLocalProfile(remote.state);
+        writeSyncMeta(false);
+        setSyncStatus("Saved online");
+        return remote.state;
+      }
+
+      profile = localProfile;
+      writeLocalProfile(localProfile);
+      queueBackendSave(clone(localProfile));
+      await saveChain;
+      return localProfile;
+    } catch (error) {
+      setSyncStatus("Saved on this device");
+      return localProfile;
+    }
   }
 
   function showScreen(id) {
@@ -1580,15 +1695,30 @@
   }
 
   function confirmReset() {
-    try { localStorage.removeItem(STORAGE_KEY); } catch (error) {}
+    try { localStorage.removeItem(profileStorageKey()); } catch (error) {}
     profile = defaultProfile();
     session = null;
     lastFinished = null;
     dashboardView = "overview";
+    saveProfile();
     $("reset-dialog").close();
     renderDashboard();
     showScreen("dashboard-screen");
-    toast("Local Term 6 progress reset.");
+    toast("Your Term 6 progress was reset.");
+  }
+
+  async function signOut() {
+    if (!BACKEND_ACTIVE) return;
+    setSyncStatus("Signing out…");
+    try { await saveChain; } catch (error) {}
+    try {
+      await fetch(SESSION_ENDPOINT, {
+        method:"DELETE",
+        credentials:"same-origin",
+        cache:"no-store"
+      });
+    } catch (error) {}
+    window.location.replace("./");
   }
 
   function toast(copy) {
@@ -1763,6 +1893,7 @@
     $("reset-progress").addEventListener("click", function () { $("reset-dialog").showModal(); });
     $("cancel-reset").addEventListener("click", function () { $("reset-dialog").close(); });
     $("confirm-reset").addEventListener("click", confirmReset);
+    $("sign-out").addEventListener("click", signOut);
     $("skip-confidence").addEventListener("click", function () { setConfidence("skipped"); renderConfidenceControl(); });
     $all(".horizon-choice").forEach(function (button) {
       button.addEventListener("click", function () {
@@ -1818,14 +1949,15 @@
     });
   }
 
-  function init() {
+  async function init() {
     if (COURSE_IDS.some(function (courseId) { return !COURSES[courseId] || !COURSES[courseId].questions || !COURSES[courseId].concepts; })) {
       document.body.innerHTML = "<main><h1>Term 6 content failed to load.</h1><p>Please restart the local server and refresh.</p></main>";
       return;
     }
-    profile = loadProfile();
-    bindEvents();
     var scenario = new URLSearchParams(window.location.search).get("scenario");
+    document.body.setAttribute("aria-busy", "true");
+    profile = BACKEND_ACTIVE && !scenario ? await loadBackendProfile() : loadProfile();
+    bindEvents();
     if (scenario) applyScenario(scenario);
     else if (profile.active) {
       resumeActive();
@@ -1833,7 +1965,15 @@
       renderDashboard();
       showScreen("dashboard-screen");
     }
+    document.body.removeAttribute("aria-busy");
   }
 
-  init();
+  init().catch(function () {
+    document.body.removeAttribute("aria-busy");
+    profile = loadProfile();
+    bindEvents();
+    renderDashboard();
+    showScreen("dashboard-screen");
+    setSyncStatus("Saved on this device");
+  });
 })();

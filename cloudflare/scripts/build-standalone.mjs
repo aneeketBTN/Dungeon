@@ -58,7 +58,7 @@ await build({
   platform: "browser",
   target: "es2022",
   sourcemap: false,
-  minify: false,
+  minify: true,
   legalComments: "none"
 });
 

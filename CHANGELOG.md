@@ -3,6 +3,49 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-11 — Approved-email entry, shared learner backend, and the closed tester agreement
+
+- Replaced the emailed-code learner challenge with a single binary admission check. The Control
+  Room allowlist is now the only gate: an approved email enters immediately with a signed opaque
+  session cookie, and an unapproved email receives one fixed private denial,
+  `Ask Aneeket to add you in.`, that never reveals the allowlist. The owner dashboard keeps its
+  separate, stronger Cloudflare Access boundary.
+- Added the shared learner backend. Cloudflare D1 stores per-email tester records, opaque
+  session-token hashes, and progress rows; `cloudflare/migrations/` holds the three applied
+  migrations and `db/schema.ts` mirrors the current shape. Progress now survives a cleared browser
+  and a device change, the browser copy remains an offline fallback, and a dirty-flag check stops a
+  staler server copy from overwriting an unsynced local run.
+- Added the anti-sharing controls the owner asked for, with one deliberate softening: one active
+  browser per approved email, and a hard lock when an account appears from a different country.
+  City and region changes are not used, because mobile networks, VPNs, travel, and routing make them
+  unreliable grounds for an automatic permanent ban. A lock is an owner review prompt in the Control
+  Room, which now shows active-session, first-country, and lock state per tester.
+- Held the first approved login at a one-time agreement step. Acceptance records only the agreement
+  version and time; a returning tester on the same version enters directly. Revocation deletes that
+  tester's sessions and server-side progress.
+- Owner direction during this session: the agreement is a gentlemen's agreement, not a signed
+  contract. Removed the tester-name, approved-email, and both signature blocks from
+  `DUNGEON_CLOSED_TESTER_AGREEMENT.md` and the document builder; section 8 now states that no
+  signature is needed and that ticking the acknowledgement box at first login is the acceptance.
+  Rebuilt `outputs/Dungeon_Closed_Tester_Agreement.docx` and exported the deliverable PDF; the
+  two-page render is read at
+  `evidence/2026-08-11/closed-tester-agreement/render-acknowledgement/`.
+- Live edge verified from both sides of the boundary: health reports `cloudflare-d1`, the anonymous
+  route serves only the login page, an anonymous bank fetch is `401`, an unapproved email is `403`
+  with the private denial, and the approved owner/browser address is held at `428
+  AGREEMENT_REQUIRED` with no session or state written. Deployed `login.js` and `login.css` are
+  byte-identical to source.
+- Found and repaired a real defect during the live Browser pass: `mock/login.css` set
+  `display: grid` on the `form` element selector, which outranks the user-agent `[hidden]` rule, so
+  the email form stayed 174 pixels tall under the agreement step while reporting `hidden === true`.
+  Added the `[hidden]` guard `mock/t6.css` already carried and confirmed the collapse live at
+  desktop and at 390 pixels. The repair is in source and both release builds but is
+  `WAITING_OWNER_DEPLOY`: this session had no Cloudflare deployment credential.
+- `npm test` passes 23/23, `npm run build` produces 13 allowlisted assets plus the worker, and the
+  standalone bundle embeds 14 assets in 391,652 bytes. Evidence:
+  `evidence/2026-08-11/learner-backend-and-agreement/verification.md`. Bugs: `BUG-LAWS.md` LAW-36
+  and the LAW-35 amendment. Quality: `QUALITY-LOG.md` I29, I30, and I31.
+
 ## 2026-08-11 — Protected Cloudflare domain deployed
 
 - Saved and deployed private Sites version 5 from commit

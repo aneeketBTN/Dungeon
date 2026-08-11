@@ -73,7 +73,7 @@ const worker = {
         JSON.stringify({
           service: "dungeon-t6",
           status: "ok",
-          storage: "browser-local"
+          storage: "cloudflare-d1-with-browser-fallback"
         }),
         {
           status: 200,

@@ -20,6 +20,10 @@
       <span><small>Strong concepts</small><b id="header-progress">0 of 64</b></span>
       <i aria-hidden="true"><span id="header-progress-fill"></span></i>
     </div>
+    <div class="account-controls" id="account-controls" hidden>
+      <span id="sync-status" role="status" aria-live="polite">Saved online</span>
+      <button id="sign-out" type="button">Sign out</button>
+    </div>
   </header>
 
   <main id="main-content">
@@ -146,8 +150,8 @@
 
         <details class="dashboard-tools">
           <summary>Progress settings</summary>
-          <p>Your progress stays in this browser. Resetting cannot be undone.</p>
-          <button class="text-button danger-text" id="reset-progress" type="button">Reset local progress</button>
+          <p>Your progress is saved to your approved email and kept locally as a backup. Resetting cannot be undone.</p>
+          <button class="text-button danger-text" id="reset-progress" type="button">Reset my progress</button>
         </details>
       </div>
     </section>
@@ -234,7 +238,7 @@
 
   <dialog class="reset-dialog" id="reset-dialog" aria-labelledby="reset-title">
     <h2 id="reset-title">Reset all Term 6 progress?</h2>
-    <p>This removes only this revision dashboard's local browser progress. It does not alter the supplied course pack or any other learner files in this project.</p>
+    <p>This clears your saved revision progress on this account and this browser. It does not alter the supplied course pack.</p>
     <div><button class="button secondary" id="cancel-reset" type="button">Keep progress</button><button class="button danger" id="confirm-reset" type="button">Reset progress</button></div>
   </dialog>
 

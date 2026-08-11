@@ -33,7 +33,7 @@
           <div><p class="eyebrow">Protection</p><h2 id="access-title">Tester access</h2></div>
           <span class="state" id="tester-access-state">Checking</span>
         </div>
-        <p>Add an email here to grant website access. Revoke it here to remove that person's access without changing anything for other testers.</p>
+        <p>Add an email here to grant immediate website access. The tester enters that email—no code is sent. Revoking removes access, sessions, and saved progress for that tester.</p>
         <form class="tester-form" id="tester-form">
           <label for="tester-email">Tester email</label>
           <div class="tester-entry">
@@ -49,10 +49,10 @@
           <button class="button quiet" id="refresh-testers" type="button">Refresh list</button>
         </div>
         <ul class="tester-list" id="tester-list" aria-label="Approved testers"></ul>
-        <p class="hint">Website access and WhatsApp membership are separate. Adding someone here does not add them to the community.</p>
+        <p class="hint">A country-change lock appears in this list. Revoke and re-add only after you have checked with the tester; revoking also deletes their saved progress.</p>
         <div class="callout">
-          <b>Honest limit</b>
-          <p>Approved users can still copy what they can see. Identity, throttling, no-index rules, and individual auditability reduce casual harvesting; they do not create perfect DRM.</p>
+          <b>Light security boundary</b>
+          <p>An approved email acts as the password. Anyone who knows it can enter that tester's account, so keep this cohort free of sensitive personal or academic data.</p>
         </div>
         <a class="button secondary" href="https://one.dash.cloudflare.com/" target="_blank" rel="noreferrer">Open Cloudflare Access</a>
       </section>

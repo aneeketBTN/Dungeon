@@ -252,6 +252,31 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
   LAW-35.
 
+- **I29 (2026-08-11)** — Issue: on the live first-login agreement step the email form was set
+  `hidden` in the DOM but still painted 174 pixels of operable controls under the agreement.
+  Cause: `mock/login.css` set `display: grid` on the `form` element selector, and an author type
+  selector outranks the user-agent `[hidden]` rule. Fix: added `[hidden] { display: none !important; }`
+  to `mock/login.css`, matching the guard `mock/t6.css` already carried, and confirmed on the live
+  page that the stale form collapses to zero height at desktop and at 390 pixels. Truthful
+  interaction axis: a gate that renders as partly dismissed invites the learner to bypass it.
+  Evidence: `evidence/2026-08-11/learner-backend-and-agreement/verification.md`; prevention:
+  `BUG-LAWS.md` LAW-36.
+- **I30 (2026-08-11)** — Change: learner progress moved from browser-only storage to per-email
+  Cloudflare D1 records, with the local copy retained as an offline fallback and a dirty-flag
+  reconciliation so an unsynced local run is never overwritten by a staler server copy. Persistence
+  safety axis: progress now survives a cleared browser and a device change, and revocation deletes
+  a tester's sessions and server-side progress in the same action. Sign-out flushes the pending save
+  chain before releasing the single-browser lock. Evidence:
+  `evidence/2026-08-11/learner-backend-and-agreement/verification.md`.
+- **I31 (2026-08-11)** — Change: admission is now a single binary allowlist check with no emailed
+  code, and the first approved login is held at a plain-language agreement step. Truthful
+  interaction axis: the denial states one fixed private message and never reveals whether an
+  address is on the list; the agreement records only version and acceptance time, and the owner
+  direction is an acknowledgement tick rather than a signature. Country locking is deliberately
+  country-level, is described to testers as an owner review prompt, and is never claimed as proof
+  of misconduct. Evidence:
+  `evidence/2026-08-11/learner-backend-and-agreement/verification.md`.
+
 ## Watch Items
 
 - Painterly production target is confirmed; current pixel-like Door media remains interim.
@@ -272,3 +297,8 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   acceptance; self-review must never be described as an automatic grade.
 - Identity gating prevents anonymous access, not copying by approved testers. Server-side item
   delivery remains necessary before claiming stronger authorised-user scrape resistance.
+- Approved-email entry is a binary admission check, not identity proof. Anyone holding an approved
+  address can enter as that tester; this is a deliberate exam-season trade and must never be
+  described to testers or in documents as verified identity.
+- Country locking can fire on legitimate travel, VPN, mobile-network, or routing changes. Keep it an
+  owner review prompt with a human unlock path; never automate a permanent ban from it alone.

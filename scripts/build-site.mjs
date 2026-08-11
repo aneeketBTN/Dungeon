@@ -9,6 +9,9 @@ const publicFiles = [
   "mock/t6.html",
   "mock/t6.css",
   "mock/t6.js",
+  "mock/login.html",
+  "mock/login.css",
+  "mock/login.js",
   "mock/admin.html",
   "mock/admin.css",
   "mock/admin.js",
@@ -35,7 +38,7 @@ const releaseManifest = {
   generatedAt: new Date().toISOString(),
   route: "/mock/t6.html",
   health: "/health",
-  storage: "browser-local",
+  storage: "cloudflare-d1-with-browser-fallback",
   files: publicFiles
 };
 

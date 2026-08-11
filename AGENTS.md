@@ -30,18 +30,25 @@
 > and a fail-closed, owner-JWT-verified Cloudflare group controller are `IMPLEMENTED` and
 > synthetically verified at
 > `evidence/2026-08-11/tester-dashboard-access-management/verification.md`. Exact
-> `https://aneeketdas.com/dungeon/` routing, direct Worker static assets, one-time-code tester
-> Access, the more-specific owner admin application, anonymous learner/bank/admin denial, the
-> least-privilege group secret, and rapid-request rate limiting are
-> `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` at
+> `https://aneeketdas.com/dungeon/` routing, direct Worker static assets, the more-specific owner
+> admin application, anonymous learner/bank/admin denial, the least-privilege group secret, and
+> rapid-request rate limiting are `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` at
 > `evidence/2026-08-11/cloudflare-protected-domain/verification.md`. The private Sites version 5
 > remains an owner-only backup and is no longer an origin dependency. The owner Control Room is
-> `VERIFIED(BROWSER)` on the exact domain: health is Healthy, Access is Connected, the release is
-> Allowlisted, and the live group has one approved owner/browser learner address in addition to
-> its protected bootstrap address. The learner route is verified through its
-> emailed-code challenge; post-code learner UI acceptance is `WAITING_OWNER_LEARNER_SIGNIN`.
-> Unapproved verified emails receive a concise ask-for-access denial without exposing the
-> allowlist before inbox ownership is proven. External tester grants remain
+> `VERIFIED(BROWSER)` on the exact domain: health is Healthy, Access is Connected, and the release
+> is Allowlisted. Learner entry no longer uses an emailed code. The Control Room allowlist is the
+> only admission check: an approved email enters immediately with a signed opaque session, an
+> unapproved email receives one fixed private `Ask Aneeket to add you in.` denial that never
+> discloses the allowlist, and a first approved login is held at a one-time agreement step that
+> records only version and acceptance time. Progress is stored per email in Cloudflare D1 with the
+> browser copy kept as an offline fallback. One active browser per email is enforced, and a country
+> change locks the account for owner review; city and region changes are deliberately unused.
+> Admission, denial, the agreement gate, and the 390-pixel agreement layout are
+> `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` at
+> `evidence/2026-08-11/learner-backend-and-agreement/verification.md`. That pass also found and
+> repaired a `mock/login.css` `[hidden]` defect that left the email form painted beneath the
+> agreement step; the repair is in source and both release builds and is `WAITING_OWNER_DEPLOY`.
+> External tester grants remain
 > `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
 > staged owner-confirmed actions. The Learning Signal Auditor, Question Bank Steward, and Tester
 > Cohort Steward are `PREPARED_NOT_ACTIVATED`: their project schedules are registered and verified
@@ -52,9 +59,9 @@
 > reference and still lacks complete real-Browser route acceptance.
 >
 > Static HTML/CSS/JavaScript prototypes in `mock/`; procedural learning engine and state in root
-> JSON/Markdown structures; current phase: have the owner complete the open Access sign-in, finish
-> the production Browser pass, collect tester emails, create the community/repository, then continue
-> owner/faculty content acceptance and learner calibration.
+> JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: deploy the
+> `login.css` repair, collect tester emails and send the agreement document, create the
+> community/repository, then continue owner/faculty content acceptance and learner calibration.
 
 ## Start Here — Required Order
 
@@ -120,8 +127,11 @@ Rules:
   running.
 - `scripts/` — deterministic public-release build scripts.
 - `site/` — production worker entrypoint, health route, and response security policy.
-- `cloudflare/` — deployed exact-path static edge, signed Access validation, owner-only tester
-  allowlist controller, standalone packaging fallback, and non-source runtime secrets.
+- `cloudflare/` — deployed exact-path static edge, approved-email learner sessions, the agreement
+  gate, signed owner Access validation, owner-only tester allowlist controller, applied D1
+  migrations, standalone packaging fallback, and non-source runtime secrets.
+- `db/` — the current shared learner-backend table shapes as one readable reference; the applied
+  change history lives in `cloudflare/migrations/`.
 - `tests/` — release-boundary, routing, access-management, and security-header checks.
 - `graphs/` — generated subject concept graphs. Do not hand-edit during product/UI work.
 - `state/` — live game and learner state. Treat as real player data; do not clear for testing.
@@ -170,7 +180,14 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
 | `scripts/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
 | `site/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
-| `cloudflare/src/index.mjs` | Exact-path static router, signed learner/admin Access validation, owner-path status routes, and owner-only tester management. | 2026-08-11 |
+| `cloudflare/src/index.mjs` | Exact-path static router, approved-email admission, opaque learner sessions, agreement gate, single-browser and country locks, D1 progress API, signed owner Access validation, and owner-only tester management. | 2026-08-11 |
+| `cloudflare/migrations/` | Applied D1 migrations: learner auth and progress, country and single-session columns, then agreement version and acceptance time. | 2026-08-11 |
+| `db/schema.ts` | Readable mirror of the current tester, session, and progress table shapes. | 2026-08-11 |
+| `mock/login.html` | Approved-email entry, the one-time agreement step, its full-terms disclosure, and the acknowledgement control. | 2026-08-11 |
+| `mock/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
+| `mock/login.js` | Admission request, the `428` agreement branch, acceptance submission, and back-to-email recovery. | 2026-08-11 |
+| `DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Source text of the closed tester agreement; acceptance is the first-login acknowledgement tick, not a signature. | 2026-08-11 |
+| `work/build_tester_agreement.py` | Builds the deliverable agreement document from that text. | 2026-08-11 |
 | `cloudflare/scripts/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
 | `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
 | `cloudflare/README.md` | Live route, runtime-secret, Access-policy, owner-bootstrap, and rate-limit contract. | 2026-08-11 |
@@ -283,14 +300,22 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 728 questions are source-traceable and structurally
   verified, but transcript-derived content and the 64 constructed-response rubrics/exemplars still
   need owner/faculty acceptance before `DONE`.
-- [ ] `WAITING_OWNER_LEARNER_SIGNIN`: exact routing, Access applications, anonymous denial,
-  direct-bank denial, static delivery, group authority, and rate limiting are live and edge/API
-  verified. The exact-domain owner Control Room is Browser-verified Healthy, Connected, Allowlisted,
-  and empty. Complete the learner's emailed-code challenge in the owner's browser before claiming
-  the post-login learner dashboard verified on the custom domain.
+- [ ] `WAITING_OWNER_DEPLOY`: the `mock/login.css` `[hidden]` repair (LAW-36) is in source and in
+  both release builds but not on the live edge; this session had no Cloudflare deployment
+  credential. Run `npx wrangler deploy` from `cloudflare/` with the owner's Cloudflare login, then
+  re-check the agreement step on the live domain.
+- [ ] Approved-email admission, the private denial, the agreement gate, and progress storage are
+  verified from the live edge, a real Browser, and 23 automated tests. The owner has not yet walked
+  one approved email all the way through the agreement into the dashboard on the live domain; do
+  that once after the deploy above to close the loop end to end.
+- [ ] Approved-email entry is a binary admission check, not identity proof. Anyone holding an
+  approved address can enter as that tester. Country locking is country-level only and can fire on
+  legitimate travel, VPNs, mobile networks, or routing; keep it an owner review prompt with a human
+  unlock path and never automate a permanent ban from it alone.
 - [ ] `WAITING_OWNER_TESTER_EMAILS`: one owner/browser address is approved for learner access; no
-  external tester should receive access until the owner supplies the address. GitHub and WhatsApp
-  community creation remain staged pending confirmation.
+  external tester should receive access until the owner supplies the address. Send
+  `outputs/Dungeon_Closed_Tester_Agreement.pdf` with the invitation; the tester also accepts it
+  in-app at first login. GitHub and WhatsApp community creation remain staged pending confirmation.
 - [ ] The identity-gated client bundle prevents anonymous/casual harvesting but cannot stop an
   approved technical tester from downloading visible bank scripts. Server-side item delivery is
   `UNSTARTED`; do not claim perfect anti-scraping or DRM.
@@ -337,9 +362,11 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   self-review, selectable practice shapes, held feedback,
   mixed formats and boss grading, staged dashboard, evidence graph, real-Browser desktop/narrow
   interaction, isolated save/resume, live-state preservation, release-boundary tests, no-index and
-  private-cache controls, the desktop owner control room, 20 passing release/access/agent tests,
-  the live Cloudflare Worker route, distinct learner/admin Access audiences, anonymous edge denial,
-  a least-privilege group secret, and rapid-request rate limiting)
+  private-cache controls, the desktop owner control room, 23 passing release/access/agent tests,
+  the live Cloudflare Worker route, the owner admin Access audience, anonymous edge denial,
+  a least-privilege group secret, rapid-request rate limiting, approved-email admission with its
+  private denial, the first-login agreement gate, per-email D1 progress, single-browser and
+  country locks, and the acknowledgement-based tester agreement document)
 - Confidence: high for file inventory, operating rules, all-subject implementation, structural
   grounding, and observed Browser behavior; medium for transcript-derived content pending
   owner/faculty acceptance; low for exact exam-paper structure

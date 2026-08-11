@@ -1,42 +1,57 @@
-# Privacy notice for the Dungeon tester release
+# Privacy notice for the Dungeon closed test
 
-## What the web app stores
+Effective: 11 August 2026
 
-The active Term 6 dashboard stores progress only in the tester's browser under
-`term6.revision.v2`. The learning app does not create a learner profile on Dungeon's server and
-does not send answer history, confidence choices, written responses, or progress there.
+Dungeon is a small, invite-only revision-product test. This notice explains the limited learner
+data used to provide access, save progress, and detect obvious account sharing.
 
-The live access gate is separate from learning progress. Approved testers use an emailed one-time
-sign-in code; the owner dashboard uses the owner's Cloudflare account. Cloudflare records ordinary
-security/request metadata so access can be audited and revoked. Dungeon does not use either
-identity to grade or personalise learning evidence.
+## What Dungeon stores
 
-The owner Control Room can list approved tester emails and grant or revoke website access through
-the protected Cloudflare edge. Those email addresses stay in the dedicated
-Cloudflare Access group; the dashboard does not place them in learner storage, release metadata,
-application logs, or the WhatsApp community.
+- the approved email address supplied to the owner;
+- revision progress and game state associated with that email, including answers, attempts,
+  confidence choices, completion state, and the time the state was last saved;
+- an opaque, hashed browser-session token and its expiry time;
+- the coarse Cloudflare country code observed at first login and on later requests; and
+- account-security state, including whether an active session exists or a country-change lock was
+  triggered.
 
-## What the web app does not collect
+Dungeon does not request precise GPS location. The application database does not store the raw IP
+address. Cloudflare may process ordinary network, request, and security metadata when delivering
+and protecting the site.
 
-The first tester release has no product analytics, advertising, tracking pixels, server-side
-learner profiles, central leaderboard, or cross-device sync. Cloudflare may provide aggregate
-traffic/security logs for operating the protected route. The production health endpoint reports
-only whether the service is available and does not receive learner answers.
+## Why it is used
 
-Three future tester-agent schedules are registered in a paused state. They have not run and have
-no event endpoint to read. Their presence does not change this privacy notice: no learning
-telemetry, identity mapping, automated participation review, messaging, suspension, or removal is
-active. Those capabilities require a new tester consent flow, retention/deletion policy, backend
-acceptance, and explicit owner activation before this notice may be revised for a live cohort.
+The data is used only to grant or revoke closed-test access, restore revision progress across
+visits, operate the learning experience, support the tester, and detect obvious use of one account
+from multiple browsers or countries. It is not used for advertising or sold to another party.
+
+## Important security limits
+
+The approved email acts as a lightweight password; Dungeon does not verify inbox ownership. One
+active browser session is allowed per email. A request from a different country than the first
+login locks the Dungeon account for owner review. Country detection can be affected by travel,
+VPNs, mobile networks, and network routing, so it is a risk signal rather than proof of misconduct.
+The system cannot reliably detect same-country sequential sharing, photographs taken with another
+device, or every form of copying.
+
+## Retention, removal, and correction
+
+Revoking a tester in the owner dashboard deletes that tester's active sessions and saved Dungeon
+progress from the application database. The owner should remove closed-test accounts when they
+are no longer required for the exam-season test. A tester may ask the owner to correct their
+approved email, explain a lock, withdraw from the test, or delete their Dungeon account data.
+
+Local browser storage remains as a recovery copy for the learner experience. A tester can remove
+that copy with **Progress settings -> Reset progress** or by clearing the site's browser data.
 
 ## WhatsApp community
 
-WhatsApp community participation is separate from the web app. Testers who join will share the
-profile name, phone-number visibility, messages, and other account information that WhatsApp makes
-available under its own product settings and policies. Testers should avoid posting sensitive
-academic or personal information.
+WhatsApp community participation is separate from the web app. Testers who join may share the
+profile name, phone-number visibility, messages, and other information that WhatsApp makes
+available under its own settings and policies. Testers should not post sensitive academic or
+personal information.
 
-## Removing local progress
+## Contact
 
-Use **Progress settings → Reset local progress** in the dashboard, or clear the site's browser
-data. This affects only that browser profile.
+Questions, access/correction requests, security concerns, or deletion requests should be sent
+privately to Aneeket through the contact channel used for onboarding.

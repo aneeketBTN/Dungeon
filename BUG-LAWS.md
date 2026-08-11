@@ -461,3 +461,21 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   inbox code, and reveal the ask-for-access result only after they prove email ownership.
 - **Verify:** Read back the configured message, allowed IdP, auto-redirect setting, group policy,
   and exact-email selectors; confirm the Control Room lists only intended non-bootstrap addresses.
+- **Amended 2026-08-11:** the learner path no longer uses an emailed code, so the provider
+  character limit applies to the owner application only. The enumeration half stands and now binds
+  the Worker: an unapproved email gets one fixed private denial that never distinguishes
+  “not on the list” from “wrong address”, and the allowlist is never returned to a learner.
+
+### LAW-36 🟡 — An author element selector can silently defeat the `hidden` attribute
+
+- **Tier/Status:** 🟡 · ACTIVE
+- **Origin:** 2026-08-11 live agreement-screen Browser pass: `mock/login.css` declared
+  `form { display: grid; }`, which outranks the user-agent `[hidden] { display: none }` rule. The
+  email form reported `hidden === true` while still painting 174 pixels of stale controls beneath
+  the agreement step.
+- **Why:** The DOM, the accessibility intent, and the pixels disagree. A screen that looks
+  dismissed is still operable, and a step meant to be a hard gate reads as optional.
+- **Comply:** Every stylesheet that sets `display` on an element or shared class selector must also
+  carry `[hidden] { display: none !important; }` near the reset. `mock/t6.css` is the reference.
+- **Verify:** After any screen-swap change, assert in a real Browser that each element toggled
+  `hidden` measures `getBoundingClientRect().height === 0`. Property state alone is not evidence.

@@ -47,8 +47,9 @@
     $("tester-status").textContent = detail;
   }
 
-  function renderTesters(testers) {
+  function renderTesters(testers, security) {
     var list = $("tester-list");
+    security = security && typeof security === "object" ? security : {};
     list.replaceChildren();
     $("tester-count").textContent = testers.length === 1 ? "1 approved tester" : testers.length + " approved testers";
 
@@ -62,16 +63,28 @@
 
     testers.forEach(function (email) {
       var item = document.createElement("li");
+      var identity = document.createElement("div");
       var address = document.createElement("span");
+      var detail = document.createElement("small");
       var revoke = document.createElement("button");
+      var status = security[email] || {};
+      var parts = [];
       address.className = "tester-email";
       address.textContent = email;
+      detail.className = status.locked ? "tester-security locked" : "tester-security";
+      if (status.locked) parts.push("Locked after country change");
+      else if (status.activeSession) parts.push("Active browser session");
+      else parts.push("No active session");
+      if (status.firstCountry) parts.push("first login: " + status.firstCountry);
+      detail.textContent = parts.join(" · ");
       revoke.className = "button danger";
       revoke.type = "button";
       revoke.textContent = "Revoke";
       revoke.setAttribute("aria-label", "Revoke website access for " + email);
       revoke.addEventListener("click", function () { revokeTester(email); });
-      item.append(address, revoke);
+      identity.className = "tester-identity";
+      identity.append(address, detail);
+      item.append(identity, revoke);
       list.appendChild(item);
     });
   }
@@ -98,7 +111,7 @@
         return;
       }
       var testers = Array.isArray(payload.testers) ? payload.testers : [];
-      renderTesters(testers);
+      renderTesters(testers, payload.security);
       setTesterState("Connected", "Cloudflare Access is ready for individual grants and revocation.", "passed");
       setTesterControls(true, false);
     } catch (error) {
@@ -127,7 +140,7 @@
       });
       var payload = await readJson(response);
       if (!response.ok) throw new Error(payload.message || "Access could not be granted.");
-      renderTesters(Array.isArray(payload.testers) ? payload.testers : []);
+      renderTesters(Array.isArray(payload.testers) ? payload.testers : [], payload.security);
       $("tester-email").value = "";
       showToast("Website access granted to " + email + ".");
     } catch (error) {
@@ -148,7 +161,7 @@
       });
       var payload = await readJson(response);
       if (!response.ok) throw new Error(payload.message || "Access could not be revoked.");
-      renderTesters(Array.isArray(payload.testers) ? payload.testers : []);
+      renderTesters(Array.isArray(payload.testers) ? payload.testers : [], payload.security);
       showToast("Website access revoked for " + email + ".");
     } catch (error) {
       showToast(error.message || "Access could not be revoked.");
@@ -169,7 +182,7 @@
       var health = await healthResponse.json();
       healthPassed = healthResponse.ok && health.status === "ok";
       $("health-value").textContent = healthPassed ? "Healthy" : "Attention needed";
-      $("health-detail").textContent = healthPassed ? "Browser-local learner storage" : "Health response was unexpected";
+      $("health-detail").textContent = healthPassed ? "Shared learner progress storage" : "Health response was unexpected";
     } catch (error) {
       $("health-value").textContent = "Unavailable";
       $("health-detail").textContent = "Could not reach the production health route";
@@ -178,9 +191,9 @@
     try {
       var manifestResponse = await fetch(productionAdmin ? "release-manifest.json" : "../release-manifest.json", {cache: "no-store"});
       var manifest = await manifestResponse.json();
-      manifestPassed = manifestResponse.ok && Array.isArray(manifest.files) && manifest.files.length === 10;
+      manifestPassed = manifestResponse.ok && Array.isArray(manifest.files) && manifest.files.length === 13;
       $("release-value").textContent = manifestPassed ? "Allowlisted" : "Review build";
-      $("release-detail").textContent = manifestPassed ? manifest.files.length + " public assets; no learner state" : "Manifest did not match the protected release";
+      $("release-detail").textContent = manifestPassed ? manifest.files.length + " private app assets; learner state stays in the database" : "Manifest did not match the protected release";
     } catch (error) {
       $("release-value").textContent = "Unavailable";
       $("release-detail").textContent = "Could not read the release manifest";

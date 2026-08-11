@@ -69,6 +69,9 @@ textarea:focus, input:focus, .button:focus, a:focus { outline: 3px solid #77bbc6
 .tester-list { display: grid; gap: 8px; padding: 0; margin: 14px 0 0; list-style: none; }
 .tester-list li { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-width: 0; padding: 11px 12px; background: #f6f7f3; border: 1px solid var(--line); border-radius: 10px; }
 .tester-list .tester-email { min-width: 0; overflow-wrap: anywhere; font-weight: 750; }
+.tester-identity { display: grid; min-width: 0; }
+.tester-security { color: var(--muted); font-size: 12px; }
+.tester-security.locked { color: #8a342c; font-weight: 800; }
 .tester-list .empty { display: block; color: var(--muted); text-align: center; }
 .toast { position: fixed; right: 18px; bottom: 18px; max-width: 340px; padding: 12px 15px; color: white; background: #253029; border-radius: 9px; box-shadow: 0 10px 28px rgba(0,0,0,.2); opacity: 0; transform: translateY(10px); pointer-events: none; transition: .18s ease; }
 .toast.visible { opacity: 1; transform: translateY(0); }

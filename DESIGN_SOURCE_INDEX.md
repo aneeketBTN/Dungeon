@@ -285,16 +285,27 @@ one side.
   source and deployment; use WhatsApp for voluntary cohort conversation and structured feedback.
   Any telemetry or account backend requires a separate purpose, consent, retention, and deletion
   decision.
+- Superseding owner decision (2026-08-11, same day): testers must keep their revision progress
+  across devices and a cleared browser, and the owner must be able to see obvious account sharing.
+  A minimal shared backend is now justified and built: per-email tester records, opaque
+  session-token hashes, progress rows, first-login country, and agreement version/time in
+  Cloudflare D1. It stays minimal on purpose — no analytics, no academic records, no raw responses
+  beyond the learner's own saved revision state, no precise location. The browser copy remains an
+  offline fallback, revocation deletes a tester's sessions and progress, and the collection notice
+  is stated in `PRIVACY.md` and the tester agreement. Telemetry and the paused cohort agents remain
+  separate, still-unmade decisions.
 
 ### C20 — Anti-harvesting intent versus the limits of a client-side bank
 
 - The owner does not want unrelated students scraping the authored bank, but approved testers must
   still receive learning content in a browser and the current scheduler loads three bank scripts.
-- Resolution (2026-08-11): use individual one-time email access, owner-only administration,
-  revocation, no-index responses, private cache controls, and edge rate limiting to prevent
-  anonymous/casual collection and contain abuse. Never call this perfect anti-scraping or DRM: an
-  approved technical tester can still download visible client assets. Stronger protection requires
-  a separate server-side, per-session item-delivery architecture.
+- Resolution (2026-08-11, amended the same day when the emailed code was dropped): use individual
+  approved-email admission, session-gated learner assets, owner-only administration, revocation,
+  no-index responses, private cache controls, edge rate limiting, one active browser per email, and
+  a country lock to prevent anonymous/casual collection and contain abuse. Never call this perfect
+  anti-scraping or DRM: an approved technical tester can still download visible client assets, and
+  the admission check proves possession of an approved address, not identity. Stronger protection
+  requires a separate server-side, per-session item-delivery architecture.
 
 ### C21 — Exact path routing versus a private origin
 

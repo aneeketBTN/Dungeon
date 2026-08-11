@@ -1,15 +1,20 @@
 # Dungeon tester guide
 
-The protected learner URL is `https://aneeketdas.com/dungeon/`. Use only the email address the
-owner approved; Cloudflare will send that address a one-time sign-in code.
+The protected learner URL is `https://aneeketdas.com/dungeon/`. Enter only the email Aneeket added
+to the tester dashboard. No sign-in email or code is sent.
 
-Dungeon's current tester release is a Term 6 revision dashboard for BRGSA, IBM, SCLM, and SPMS.
-It is an early learning-product test, not a prediction of exam performance or an exact replica of
-the final paper.
+Dungeon is an early Term 6 revision-product test for BRGSA, IBM, SCLM, and SPMS. It is not a
+prediction of exam performance or a verified replica of the final paper.
 
-Access is personal. Use the one-time code sent to your approved email address; do not forward the
-tester URL, code, screenshots of questions, or course content outside the cohort. Access can be
-revoked individually.
+## Before opening the site
+
+Read and accept the closed-tester participation agreement. Access is personal: the approved email
+acts as the password. Do not give it to another person or let another person practise in your
+account. Use one browser at a time and sign out before moving to another device.
+
+A login from a different country than the first login locks the account for owner review. Travel,
+a VPN, or a mobile-network change can cause this; contact Aneeket rather than repeatedly retrying.
+If a friend would benefit, ask Aneeket to invite them separately.
 
 ## What to try
 
@@ -17,29 +22,29 @@ revoked individually.
 2. Complete at least one short study set and one mixed-format full mock.
 3. Deliberately miss one answer, then complete the later re-attempt.
 4. Reload during a set and confirm that you return to the same place.
-5. Try the dashboard on both a phone and a laptop if you can.
+5. Try the dashboard on both a phone and laptop only after signing out of the first browser.
 
 ## How to give useful feedback
 
-Post in the **Dungeon Feedback** WhatsApp group using this short format:
+Post in the private **Dungeon Feedback** group using this format:
 
-- Device and browser:
-- Subject and screen:
-- What I expected:
-- What happened:
+- Device and browser
+- Subject and screen
+- What I expected
+- What happened
 - How much it got in the way: blocked / difficult / minor
-- Screenshot or screen recording, if useful:
+- A screenshot only when it is shared with Aneeket or inside the authorised tester group
 
-Use the general **Dungeon Testers** group for discussion with other testers. Product changes and
-test requests appear in the community's announcement group.
+Privacy or security reports go privately to Aneeket. Do not publish screenshots, literal
+questions, answers, explanations, dashboard views, or detailed feature descriptions outside the
+authorised tester group.
 
 ## Privacy and progress
 
-The learning app does not create a server-side learner profile or collect your answers as
-analytics. Cloudflare uses your approved email for access and may retain ordinary security/request
-logs. Your answers and progress stay in the browser on the device you use. Clearing that browser's
-site data, using private browsing, or switching device will start a separate profile. Do not post
-private academic records, passwords, phone numbers, or other sensitive information in feedback.
+Dungeon saves progress against the approved email in Cloudflare D1 and keeps a browser recovery
+copy. It also stores an opaque session hash, first-login country, and account-lock state. It does
+not request precise GPS location. Cloudflare may process ordinary network and security metadata.
+Revocation deletes the tester's server-side Dungeon progress and sessions.
 
 ## Known limits
 

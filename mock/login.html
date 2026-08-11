@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Enter Dungeon — Term 6 revision</title>
+  <meta name="description" content="Private entry to the Term 6 revision dashboard.">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <main class="login-shell">
+    <section class="login-panel" aria-labelledby="login-title">
+      <div class="brand-mark" aria-hidden="true">T6</div>
+      <p class="eyebrow">Private tester access</p>
+      <h1 id="login-title">Continue with your approved email</h1>
+      <p class="lede">Use the same email you gave Aneeket. Nothing will be emailed to you.</p>
+
+      <form id="login-form" novalidate>
+        <label for="login-email">Email</label>
+        <input id="login-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required autofocus>
+        <p class="form-message" id="login-message" role="status" aria-live="polite"></p>
+        <button id="login-submit" type="submit">Open revision dashboard</button>
+      </form>
+
+      <section class="agreement" id="agreement" aria-labelledby="agreement-title" hidden>
+        <button class="back-button" id="agreement-back" type="button">← Use a different email</button>
+        <p class="eyebrow">One-time agreement</p>
+        <h2 id="agreement-title">Keep the closed test private</h2>
+        <p class="agreement-lede">A broad recommendation is fine. Private content and personal access stay inside the tester group.</p>
+        <ul class="agreement-summary">
+          <li>Do not share literal questions, answers, screenshots, dashboard views, or detailed product behaviour.</li>
+          <li>Do not give anyone your approved email or let them practise in your account.</li>
+          <li>Do not scrape, reproduce, plagiarise, or help copy the private product.</li>
+          <li>If a friend wants access, ask Aneeket to invite them separately.</li>
+        </ul>
+        <details>
+          <summary>Read the full agreement</summary>
+          <div class="agreement-terms">
+            <h3>Personal use and confidentiality</h3>
+            <p>You may use Dungeon personally, give feedback, discuss it with authorised testers in the private group, and recommend it in broad terms. Outside that group, do not share literal or substantially similar questions, options, answers, explanations, passages, caselets, prompts, question-bank structure, screenshots, recordings, photographs, copied text, dashboard or progress views, detailed feature behaviour, private workflows, scoring, difficulty or recommendation logic, unreleased designs, access links, security details, or private feedback.</p>
+            <h3>Personal access only</h3>
+            <p>Your approved email acts as your Dungeon password. Do not give it to another person for access, let another person use your logged-in browser, or let anyone else practise in your account. Use one active browser at a time and sign out before changing devices.</p>
+            <h3>No copying</h3>
+            <p>Do not scrape, bulk-download, reverse engineer, plagiarise, republish, sell, adapt, or use private material to reproduce Dungeon or create a substantially similar question bank, dashboard, workflow, or product. Ordinary use and good-faith bug reports are allowed.</p>
+            <h3>Security and data</h3>
+            <p>Dungeon stores your approved email, revision progress and attempts, an opaque session-token hash, timestamps, first-login Cloudflare country code, agreement version, and account-lock state. It does not request precise GPS. Cloudflare may process ordinary network and security metadata. One active browser is permitted. A country change can lock the account for Aneeket to review; travel, VPNs, mobile networks, and routing can cause legitimate changes.</p>
+            <h3>Revocable access</h3>
+            <p>Access is a revocable invitation. A confirmed material breach may result in immediate permanent removal from Dungeon, future closed tests, and other Aneeket-controlled services, subject to applicable law. Revocation deletes active Dungeon sessions and server-side Dungeon progress. Dungeon is an early revision aid, may change or contain errors, and does not guarantee an exam result.</p>
+          </div>
+        </details>
+        <form id="agreement-form">
+          <label class="agreement-check" for="agreement-accept">
+            <input id="agreement-accept" type="checkbox" required>
+            <span>I have read and agree to the closed tester terms.</span>
+          </label>
+          <p class="form-message" id="agreement-message" role="status" aria-live="polite"></p>
+          <button id="agreement-submit" type="submit">Accept and enter</button>
+        </form>
+      </section>
+
+      <p class="privacy-note" id="privacy-note">Your email is used to check access, save progress, and protect this closed test.</p>
+    </section>
+  </main>
+  <script src="login.js"></script>
+</body>
+</html>
