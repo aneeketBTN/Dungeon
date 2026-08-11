@@ -18,6 +18,9 @@ changed, decisions, verification/evidence, and deferrals.
   Wrangler 4.120.1 generated current types and a successful dry-run bundle; the Sites release
   remains the same ten-file allowlist. Evidence:
   `evidence/2026-08-11/tester-dashboard-access-management/verification.md`.
+- Saved and deployed private Sites version 4 from commit
+  `8cf19b620013a4a75afa4aef5f445ddfa8234658`. The owner-only production dashboard now contains the
+  controls and truthfully reports setup required until its Cloudflare edge is activated.
 - Live route, secrets, group, tester grants, and revocation remain
   `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS`; no tester or access policy changed in this session.
 

@@ -29,8 +29,9 @@
 > `evidence/2026-08-11/tester-access-admin/verification.md`. Direct email add/list/revoke controls
 > and a fail-closed, owner-JWT-verified Cloudflare group controller are `IMPLEMENTED` and
 > synthetically verified at
-> `evidence/2026-08-11/tester-dashboard-access-management/verification.md`; the live endpoint is
-> not activated. The current Sites production remains owner-only. Exact `aneeketdas.com/dungeon`
+> `evidence/2026-08-11/tester-dashboard-access-management/verification.md`; private Sites version 4
+> contains the controls, but the live endpoint is not activated and reports setup required. The
+> current Sites production remains owner-only. Exact `aneeketdas.com/dungeon`
 > routing is
 > `WAITING_OWNER_CLOUDFLARE_ZERO_TRUST_TERMS` because Cloudflare requires terms acceptance and
 > saved-card overage authorisation; neither was accepted. Individual grants are additionally

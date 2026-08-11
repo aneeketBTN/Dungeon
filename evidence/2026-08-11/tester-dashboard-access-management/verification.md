@@ -51,6 +51,13 @@ the ten-file public allowlist. The tests cover setup failure, owner authenticati
 grant, revoke, protected owner access, unsafe group rejection, path stripping, credential-header
 removal, redirect rewriting, and the Sites fail-closed response.
 
+## Private production deployment
+
+Sites version 4 was saved from commit `8cf19b620013a4a75afa4aef5f445ddfa8234658` and deployed
+successfully at `https://dungeon-term6.aneeket.chatgpt.site`. The site remains owner-only. This
+version contains the tester-management controls and the origin's explicit `503 SETUP_REQUIRED`
+response; it does not contain Cloudflare credentials, a live Access group, or tester identities.
+
 ## Open acceptance
 
 - Cloudflare Zero Trust plan terms and saved-card overage authorisation are not accepted.
