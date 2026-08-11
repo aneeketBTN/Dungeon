@@ -13,6 +13,13 @@
 > stay `WAITING_OWNER_CONTENT_ACCEPTANCE`. `GET /dungeon/admin/access-check` was added as an
 > unauthenticated, secret-free Access self-check for the reported Control Room login loop; it
 > diagnoses the loop but does not fix it, since the cause is in Access application configuration.
+> **Deployed (2026-08-12):** commit `0cc2c6d` is live as Worker version `c602c4b3` at 100% traffic
+> with a 0% error rate, carrying the diagnosis revision and the UI alignment pass below. The earlier
+> claim that production served `475837f` was stale: `809fced` deployed as `4e9a3287` roughly an hour
+> before this release, so the dynamic homepage, practice builder, matching board, and the enforced
+> agreement version have all been live since then and the `WAITING_OWNER_DEPLOY` gate is closed.
+> Verify deployment state in Workers → Deployments rather than from this file.
+>
 > **UI alignment pass (2026-08-12):** `VERIFIED(REAL_BROWSER)` at
 > `evidence/2026-08-12/t6-ui-alignment-pass/verification.md`. Irregularity was measured with an
 > injected audit probe per screen at 1280×800 and 375×812, not eyeballed. Fixed: the match label
@@ -387,11 +394,10 @@ after the version is live, since a push to `main` deploys.
   progress status, sign-out, and revocation are verified end to end on the live domain. Keep the
   agreement version fixed until the terms actually change; a new version intentionally asks every
   tester to accept again.
-- [ ] `WAITING_OWNER_DEPLOY`: the accepted agreement version is now re-checked on every
-  authenticated request, so a session issued under older terms is rejected instead of running to
-  cookie expiry. Until this is deployed, testers who accepted `2026-08-11` keep using the site
-  without seeing `2026-08-11-community-v2`. Deploying it sends the active cohort back through the
-  agreement step once, which is the point of a terms change. Announce it when it goes live.
+- [x] `WAITING_OWNER_DEPLOY` — **closed 2026-08-12.** The agreement-version re-check shipped in
+  Worker version `4e9a3287`, so the active cohort has already been sent back through the agreement
+  step once. Confirm the announcement for that terms change was actually posted; the deploy happened
+  before this session and the gate had been recorded as still waiting.
 - [ ] Approved-email entry is a binary admission check, not identity proof. Anyone holding an
   approved address can enter as that tester. Country locking is country-level only and can fire on
   legitimate travel, VPNs, mobile networks, or routing; keep it an owner review prompt with a human
