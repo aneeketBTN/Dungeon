@@ -1117,6 +1117,67 @@
     updateCommitState();
   }
 
+  // A native select popup is sized by the operating system, so prose-length options overflow the
+  // card and run off screen. Anything beyond a short phrase becomes wrapping choice cards instead.
+  var LONG_OPTION_CHARS = 60;
+  var choiceGroupSeq = 0;
+
+  function hasLongOptions(options) {
+    return (options || []).some(function (copy) { return String(copy).length > LONG_OPTION_CHARS; });
+  }
+
+  function renderChoiceGroup(container, options, partIndex, groupLabel, correctAnswer) {
+    var group = document.createElement("div");
+    group.className = "choice-group";
+    group.setAttribute("role", "radiogroup");
+    group.setAttribute("aria-label", groupLabel);
+    var name = "choice-" + (choiceGroupSeq += 1);
+    (options || []).forEach(function (copy, index) {
+      var choice = document.createElement("label");
+      var input = document.createElement("input");
+      var key = document.createElement("span");
+      var text = document.createElement("span");
+      var chosen = Array.isArray(selected) && selected[partIndex] === index;
+      choice.className = "choice";
+      input.type = "radio";
+      input.name = name;
+      input.value = String(index);
+      input.checked = chosen;
+      input.disabled = !!session.answered;
+      key.className = "option-key";
+      key.textContent = String.fromCharCode(65 + index);
+      text.textContent = copy;
+      if (session.answered && session.mode !== "simulation") {
+        if (index === correctAnswer) choice.classList.add("correct");
+        if (chosen && index !== correctAnswer) choice.classList.add("wrong");
+      }
+      input.addEventListener("change", function () {
+        if (!input.checked) return;
+        selectResponsePart(partIndex, index);
+        var slot = $all(".blank-slot")[partIndex];
+        if (slot) slot.classList.add("filled");
+      });
+      choice.appendChild(input);
+      choice.appendChild(key);
+      choice.appendChild(text);
+      group.appendChild(choice);
+    });
+    container.appendChild(group);
+    return group;
+  }
+
+  function renderChoiceField(holder, label, options, partIndex, correctAnswer) {
+    var field = document.createElement("div");
+    var legend = document.createElement("p");
+    field.className = "choice-field";
+    legend.className = "choice-legend";
+    legend.textContent = label;
+    field.appendChild(legend);
+    renderChoiceGroup(field, options, partIndex, label, correctAnswer);
+    holder.appendChild(field);
+    return field;
+  }
+
   function renderSelectOptions(select, options, value) {
     var placeholder = document.createElement("option");
     placeholder.value = "";
@@ -1187,36 +1248,68 @@
 
   function renderCloze(question) {
     var holder = prepareResponseHolder("cloze-options");
+    var blanks = question.blanks || [];
+    var longForm = blanks.some(function (blank) { return hasLongOptions(blank.options); });
     var sentence = document.createElement("div");
     sentence.className = "cloze-sentence";
     (question.template || []).forEach(function (copy, index) {
       sentence.appendChild(document.createTextNode(copy));
-      if (!question.blanks[index]) return;
+      var blank = blanks[index];
+      if (!blank) return;
+
+      if (longForm) {
+        // The sentence keeps its shape; the choosing happens in readable cards below it.
+        var slot = document.createElement("span");
+        slot.className = "blank-slot";
+        slot.textContent = blank.label;
+        if (Array.isArray(selected) && typeof selected[index] === "number") slot.classList.add("filled");
+        sentence.appendChild(slot);
+        return;
+      }
+
       var label = document.createElement("label");
       label.className = "inline-blank";
       var hidden = document.createElement("span");
       hidden.className = "sr-only";
-      hidden.textContent = question.blanks[index].label + ": ";
+      hidden.textContent = blank.label + ": ";
       var select = document.createElement("select");
       select.disabled = !!session.answered;
-      select.setAttribute("aria-label", question.blanks[index].label);
-      renderSelectOptions(select, question.blanks[index].options, Array.isArray(selected) ? selected[index] : null);
-      if (session.answered && session.mode !== "simulation") select.classList.add(Array.isArray(selected) && selected[index] === question.blanks[index].answer ? "correct" : "wrong");
+      select.setAttribute("aria-label", blank.label);
+      renderSelectOptions(select, blank.options, Array.isArray(selected) ? selected[index] : null);
+      if (session.answered && session.mode !== "simulation") select.classList.add(Array.isArray(selected) && selected[index] === blank.answer ? "correct" : "wrong");
       select.addEventListener("change", function () { selectResponsePart(index, select.value); });
       label.appendChild(hidden);
       label.appendChild(select);
       sentence.appendChild(label);
     });
     holder.appendChild(sentence);
-    $("question-help").textContent = "Choose every blank before checking";
+
+    if (longForm) {
+      blanks.forEach(function (blank, index) {
+        renderChoiceField(holder, blank.label, blank.options, index, blank.answer);
+      });
+    }
+    $("question-help").textContent = blanks.length > 1
+      ? "Choose every blank before checking"
+      : "Choose an answer before checking";
   }
 
   function renderMatch(question) {
     var holder = prepareResponseHolder("match-options");
+    var longForm = hasLongOptions(question.choices);
     var intro = document.createElement("p");
     intro.className = "format-note";
-    intro.textContent = "Each answer is used once. Keyboard users can complete every row with the select controls.";
+    intro.textContent = longForm
+      ? "Each answer is used once. Choose one card per row."
+      : "Each answer is used once. Keyboard users can complete every row with the select controls.";
     holder.appendChild(intro);
+    if (longForm) {
+      question.rows.forEach(function (row, index) {
+        renderChoiceField(holder, row.label, question.choices, index, row.answer);
+      });
+      $("question-help").textContent = "Complete all matching rows before checking";
+      return;
+    }
     question.rows.forEach(function (row, index) {
       var label = document.createElement("label");
       label.className = "match-row";
@@ -1238,6 +1331,19 @@
   function renderBoss(question) {
     var holder = prepareResponseHolder("boss-options");
     question.steps.forEach(function (step, index) {
+      if (hasLongOptions(step.options)) {
+        var field = document.createElement("div");
+        field.className = "boss-step";
+        var stepHeading = document.createElement("b");
+        stepHeading.textContent = step.label;
+        var stepPrompt = document.createElement("span");
+        stepPrompt.textContent = step.prompt;
+        field.appendChild(stepHeading);
+        field.appendChild(stepPrompt);
+        renderChoiceGroup(field, step.options, index, step.label + ". " + step.prompt, step.answer);
+        holder.appendChild(field);
+        return;
+      }
       var label = document.createElement("label");
       label.className = "boss-step";
       var heading = document.createElement("b");
