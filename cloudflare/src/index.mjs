@@ -30,6 +30,19 @@ function json(payload, status = 200) {
   });
 }
 
+function securityHeaders(headers = new Headers()) {
+  headers.set("Cache-Control", "private, no-store, max-age=0");
+  headers.set("Referrer-Policy", "same-origin");
+  headers.set("X-Content-Type-Options", "nosniff");
+  headers.set("X-Frame-Options", "DENY");
+  headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+  return headers;
+}
+
+function redirect(location, status = 302) {
+  return new Response(null, {status, headers: securityHeaders(new Headers({Location: location}))});
+}
+
 function normalizeEmail(value) {
   if (typeof value !== "string") return null;
   const email = value.trim().toLowerCase();
@@ -49,36 +62,57 @@ function accessGroupUrl(env) {
   return `${ACCESS_API}/accounts/${encodeURIComponent(env.ACCESS_ACCOUNT_ID)}/access/groups/${encodeURIComponent(env.ACCESS_GROUP_ID)}`;
 }
 
-async function verifyOwner(request, env) {
-  const token = request.headers.get("cf-access-jwt-assertion");
-  if (!token) throw new RequestError(403, "OWNER_AUTH_REQUIRED", "Owner authentication is required.");
-
+function accessTeamUrl(env) {
   let teamUrl;
   try {
     teamUrl = new URL(env.ACCESS_TEAM_DOMAIN);
   } catch (error) {
-    throw new RequestError(503, "SETUP_REQUIRED", "Cloudflare Access management is not configured.");
+    throw new RequestError(503, "SETUP_REQUIRED", "Cloudflare Access is not configured.");
   }
   if (teamUrl.protocol !== "https:" || !teamUrl.hostname.endsWith(".cloudflareaccess.com")) {
-    throw new RequestError(503, "SETUP_REQUIRED", "Cloudflare Access management is not configured.");
+    throw new RequestError(503, "SETUP_REQUIRED", "Cloudflare Access is not configured.");
   }
+  return teamUrl;
+}
+
+async function verifyAccess(request, env, audience) {
+  const token = request.headers.get("cf-access-jwt-assertion");
+  if (!token) throw new RequestError(403, "ACCESS_AUTH_REQUIRED", "Cloudflare Access authentication is required.");
+  if (typeof audience !== "string" || !audience.trim()) {
+    throw new RequestError(503, "SETUP_REQUIRED", "Cloudflare Access is not configured.");
+  }
+
+  const teamUrl = accessTeamUrl(env);
 
   try {
     const jwks = createRemoteJWKSet(new URL("/cdn-cgi/access/certs", teamUrl));
-    const { payload } = await jwtVerify(token, jwks, {
+    const {payload} = await jwtVerify(token, jwks, {
       issuer: teamUrl.origin,
-      audience: env.ACCESS_ADMIN_AUD
+      audience
     });
-    const authenticatedEmail = normalizeEmail(payload.email);
-    const ownerEmail = normalizeEmail(env.OWNER_EMAIL);
-    if (!authenticatedEmail || !ownerEmail || authenticatedEmail !== ownerEmail) {
-      throw new RequestError(403, "OWNER_AUTH_REQUIRED", "Owner authentication is required.");
-    }
-    return authenticatedEmail;
+    return payload;
   } catch (error) {
     if (error instanceof RequestError) throw error;
+    throw new RequestError(403, "ACCESS_AUTH_REQUIRED", "Cloudflare Access authentication is required.");
+  }
+}
+
+async function verifyOwner(request, env) {
+  let payload;
+  try {
+    payload = await verifyAccess(request, env, env.ACCESS_ADMIN_AUD);
+  } catch (error) {
+    if (error instanceof RequestError && error.code === "ACCESS_AUTH_REQUIRED") {
+      throw new RequestError(403, "OWNER_AUTH_REQUIRED", "Owner authentication is required.");
+    }
+    throw error;
+  }
+  const authenticatedEmail = normalizeEmail(payload.email);
+  const ownerEmail = normalizeEmail(env.OWNER_EMAIL);
+  if (!authenticatedEmail || !ownerEmail || authenticatedEmail !== ownerEmail) {
     throw new RequestError(403, "OWNER_AUTH_REQUIRED", "Owner authentication is required.");
   }
+  return authenticatedEmail;
 }
 
 async function readBoundedJson(request) {
@@ -194,43 +228,41 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin) {
   return json({status: "connected", testers});
 }
 
-function rewriteLocation(location, origin, prefix) {
-  if (!location) return null;
-  if (location.startsWith("/")) return `${prefix}${location}`;
-  try {
-    const target = new URL(location);
-    if (target.origin === origin.origin) return `${prefix}${target.pathname}${target.search}${target.hash}`;
-  } catch (error) {
-    return location;
+async function serveAsset(request, env, assetPath) {
+  if (!env?.ASSETS || typeof env.ASSETS.fetch !== "function") {
+    throw new RequestError(503, "SETUP_REQUIRED", "Dungeon assets are not configured.");
   }
-  return location;
+  if (!["GET", "HEAD"].includes(request.method.toUpperCase())) {
+    return json({code: "METHOD_NOT_ALLOWED", message: "Use GET or HEAD."}, 405);
+  }
+  const assetUrl = new URL(request.url);
+  assetUrl.pathname = assetPath;
+  assetUrl.search = "";
+  const response = await env.ASSETS.fetch(new Request(assetUrl, {method: request.method}));
+  const headers = securityHeaders(new Headers(response.headers));
+  headers.delete("Set-Cookie");
+  return new Response(response.body, {status: response.status, statusText: response.statusText, headers});
 }
 
-async function proxyToPrivateOrigin(request, env, fetchImpl) {
-  requireBindings(env, ["SITES_BYPASS_TOKEN"]);
-  const inbound = new URL(request.url);
-  const prefix = env.DUNGEON_PREFIX || "/dungeon";
-  const origin = new URL(env.SITES_ORIGIN || "https://dungeon-term6.aneeket.chatgpt.site");
-  const strippedPath = inbound.pathname.slice(prefix.length) || "/";
-  origin.pathname = strippedPath.startsWith("/") ? strippedPath : `/${strippedPath}`;
-  origin.search = inbound.search;
-
-  const headers = new Headers(request.headers);
-  ["authorization", "cf-access-jwt-assertion", "cf-connecting-ip", "cookie", "host", "x-forwarded-for"].forEach((name) => headers.delete(name));
-  headers.set("OAI-Sites-Authorization", `Bearer ${env.SITES_BYPASS_TOKEN}`);
-
-  const init = {method: request.method, headers, redirect: "manual"};
-  if (request.method !== "GET" && request.method !== "HEAD") init.body = request.body;
-  const response = await fetchImpl(new Request(origin, init));
-  const responseHeaders = new Headers(response.headers);
-  responseHeaders.delete("set-cookie");
-  const rewrittenLocation = rewriteLocation(responseHeaders.get("location"), origin, prefix);
-  if (rewrittenLocation) responseHeaders.set("location", rewrittenLocation);
-  responseHeaders.set("X-Robots-Tag", "noindex, nofollow, noarchive");
-  return new Response(response.body, {status: response.status, statusText: response.statusText, headers: responseHeaders});
+function learnerAssetPath(pathname, prefix) {
+  const learnerFiles = new Map([
+    [`${prefix}/`, "/mock/t6.html"],
+    [`${prefix}/t6.html`, "/mock/t6.html"],
+    [`${prefix}/t6.css`, "/mock/t6.css"],
+    [`${prefix}/t6.js`, "/mock/t6.js"],
+    [`${prefix}/release-manifest.json`, "/release-manifest.json"],
+    [`${prefix}/robots.txt`, "/mock/robots.txt"]
+  ]);
+  if (learnerFiles.has(pathname)) return learnerFiles.get(pathname);
+  if (pathname.startsWith(`${prefix}/sets/`)) return `/mock${pathname.slice(prefix.length)}`;
+  if (pathname === `${prefix}/mock/t6.html` || pathname === `${prefix}/mock/t6.css` || pathname === `${prefix}/mock/t6.js`) {
+    return pathname.slice(prefix.length);
+  }
+  if (pathname.startsWith(`${prefix}/mock/sets/`)) return pathname.slice(prefix.length);
+  return null;
 }
 
-export function createWorker({fetchImpl = fetch, verifyAdmin = verifyOwner} = {}) {
+export function createWorker({fetchImpl = fetch, verifyAdmin = verifyOwner, verifyRequest = verifyAccess} = {}) {
   return {
     async fetch(request, env) {
       try {
@@ -240,8 +272,25 @@ export function createWorker({fetchImpl = fetch, verifyAdmin = verifyOwner} = {}
           return await manageTesters(request, env, fetchImpl, verifyAdmin);
         }
         if (url.pathname === prefix || url.pathname.startsWith(`${prefix}/`)) {
-          return await proxyToPrivateOrigin(request, env, fetchImpl);
+          const audience = url.pathname.startsWith(`${prefix}/admin`)
+            ? env?.ACCESS_ADMIN_AUD
+            : env?.ACCESS_LEARNER_AUD;
+          await verifyRequest(request, env, audience);
         }
+        if (url.pathname === prefix) return redirect(`${prefix}/${url.search}`);
+        if (url.pathname === `${prefix}/admin`) return redirect(`${prefix}/admin/${url.search}`);
+        if (url.pathname === `${prefix}/admin/`) return await serveAsset(request, env, "/mock/admin.html");
+        if (url.pathname === `${prefix}/admin/admin.css`) return await serveAsset(request, env, "/mock/admin.css");
+        if (url.pathname === `${prefix}/admin/admin.js`) return await serveAsset(request, env, "/mock/admin.js");
+        if (url.pathname === `${prefix}/admin/t6.html`) return redirect(`${prefix}/`);
+        if (url.pathname === `${prefix}/health`) {
+          return json({status: "ok", storage: "browser-local", access: "cloudflare-zero-trust"});
+        }
+        if (url.pathname.startsWith(`${prefix}/admin/`) || url.pathname.startsWith(`${prefix}/mock/admin`)) {
+          return json({code: "NOT_FOUND", message: "Not found."}, 404);
+        }
+        const assetPath = learnerAssetPath(url.pathname, prefix);
+        if (assetPath) return await serveAsset(request, env, assetPath);
         return json({code: "NOT_FOUND", message: "Not found."}, 404);
       } catch (error) {
         if (error instanceof RequestError) return json({code: error.code, message: error.message}, error.status);

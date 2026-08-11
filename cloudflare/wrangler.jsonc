@@ -4,9 +4,28 @@
   "main": "src/index.mjs",
   "compatibility_date": "2026-08-11",
   "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "aneeketdas.com/dungeon*",
+      "zone_name": "aneeketdas.com"
+    }
+  ],
+  "assets": {
+    "directory": "../dist/client",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "not_found_handling": "none",
+    "run_worker_first": true
+  },
   "vars": {
     "DUNGEON_PREFIX": "/dungeon",
-    "SITES_ORIGIN": "https://dungeon-term6.aneeket.chatgpt.site"
+    "ACCESS_ACCOUNT_ID": "c9ad5ea00fe0040b372163daf10ea235",
+    "ACCESS_GROUP_ID": "e74be54f-b714-44ea-95cb-11ed66777f18",
+    "ACCESS_TEAM_DOMAIN": "https://dawn-unit-8689.cloudflareaccess.com",
+    "ACCESS_ADMIN_AUD": "4835199408cc2b98c8ece55b29877e4bc98411a2e052b011fe0b19512f307105",
+    "ACCESS_LEARNER_AUD": "56d9461adc8ecc52a110cc47c664c4db3c36ea5439616a9e6372f55974209263"
   },
   "observability": {
     "enabled": true,
