@@ -46,6 +46,28 @@
     }
   };
 
+  var PRACTICE_SHAPES = [
+    {id: "mixed", label: "Mixed formats", hint: "Recognition, cases, writing, and reasoning", runTitle: "Mixed-format practice"},
+    {id: "recognition", label: "Recognition", hint: "Multiple choice and precise recall", runTitle: "Recognition practice"},
+    {id: "application", label: "Cases and application", hint: "Decisions, matching, and reasoning chains", runTitle: "Case and application practice"},
+    {id: "generation", label: "In your own words", hint: "Short answers with a visible rubric", runTitle: "Explain in your own words"}
+  ];
+  var PRACTICE_FOCUS = [
+    {id: "all", label: "Anything", hint: "Every concept in this subject", summary: "anything in the subject"},
+    {id: "weak", label: "What needs work", hint: "Open misses and missing evidence first", summary: "concepts that need work"},
+    {id: "new", label: "New ground", hint: "Concepts you have not started", summary: "concepts you have not started"}
+  ];
+  var PRACTICE_LENGTHS = [
+    {id: "quick", label: "Quick", target: 6},
+    {id: "standard", label: "Standard", target: 12},
+    {id: "deep", label: "Deep", target: 18}
+  ];
+  var PRACTICE_MODES = [
+    {id: "learning", label: "After each answer", hint: "Explanation and repair straight away"},
+    {id: "simulation", label: "Held to the end", hint: "Answers and rubrics wait for the review"}
+  ];
+  var DEFAULT_BUILDER = {shape: "mixed", focus: "all", length: "standard", mode: "learning"};
+
   function $(id) { return document.getElementById(id); }
   function $all(selector) { return Array.prototype.slice.call(document.querySelectorAll(selector)); }
   function clone(value) { return JSON.parse(JSON.stringify(value)); }
@@ -61,8 +83,19 @@
       totalAnswers: 0,
       blockSequence: 0,
       horizon: "today",
+      builder: clone(DEFAULT_BUILDER),
       primerState: {}
     };
+  }
+
+  function optionById(options, id) {
+    return options.filter(function (option) { return option.id === id; })[0] || null;
+  }
+
+  function validBuilder(candidate) {
+    return Boolean(candidate) && Boolean(optionById(PRACTICE_SHAPES, candidate.shape)) &&
+      Boolean(optionById(PRACTICE_FOCUS, candidate.focus)) && Boolean(optionById(PRACTICE_LENGTHS, candidate.length)) &&
+      Boolean(optionById(PRACTICE_MODES, candidate.mode));
   }
 
   function validProfile(candidate) {
@@ -77,6 +110,7 @@
 
   function normalizeProfileShape(candidate) {
     candidate.primerState = candidate.primerState && typeof candidate.primerState === "object" ? candidate.primerState : {};
+    if (!validBuilder(candidate.builder)) candidate.builder = clone(DEFAULT_BUILDER);
     if (candidate.active) {
       candidate.active.baseCount = candidate.active.baseCount || candidate.active.queue.filter(function (item) {
         var question = getQuestion(candidate.active.courseId, item.id);
@@ -568,19 +602,175 @@
   function renderDashboard(options) {
     options = options || {};
     var overall = overallStats();
-    $("header-progress").textContent = overall.strong + " of " + overall.total;
-    $("header-progress-fill").style.width = (overall.total ? overall.strong / overall.total * 100 : 0) + "%";
     $("overall-strong").textContent = String(overall.strong);
     $("overall-developing").textContent = String(overall.developing);
     $("overall-needs").textContent = String(overall.needs);
     $("overall-unseen").textContent = String(overall.unseen);
     $("calibration-summary").textContent = overallConfidenceSummary();
     renderCourseCards();
+    renderHeaderTrend(overall);
     renderMasteryRadar();
     renderSelectedSubject();
     renderRecommendation();
+    renderPracticeBuilder();
+    renderProgressStory();
     renderCommunityReminder();
     setDashboardView(dashboardView);
+  }
+
+  // Blocks are the honest unit of this line: one practice block moves it at most once, so repeating
+  // the same questions inside a block cannot inflate it.
+  function trendFromCourses(courseIds) {
+    var blocks = {};
+    var conceptTotal = 0;
+    courseIds.forEach(function (courseId) {
+      getCourse(courseId).concepts.forEach(function (concept) {
+        conceptTotal += 1;
+        attemptsFor(courseId, concept.id).forEach(function (attempt) {
+          var id = attemptBlock(attempt);
+          blocks[id] = blocks[id] || {id: id, at: attempt.at};
+          blocks[id].at = Math.max(blocks[id].at, attempt.at);
+        });
+      });
+    });
+    var ordered = Object.keys(blocks).map(function (id) { return blocks[id]; })
+      .sort(function (a, b) { return a.at - b.at; }).slice(-12);
+    return ordered.map(function (block) {
+      var total = 0;
+      courseIds.forEach(function (courseId) {
+        getCourse(courseId).concepts.forEach(function (concept) {
+          var past = attemptsFor(courseId, concept.id).filter(function (attempt) { return attempt.at <= block.at; });
+          var status = evidenceFromAttempts(past, block.at).status;
+          total += status === "strong" ? 1 : status === "developing" ? .5 : 0;
+        });
+      });
+      return {at: block.at, value: Math.round(total / Math.max(1, conceptTotal) * 100)};
+    });
+  }
+
+  // A fixed 0-100 scale: an autoscaled sparkline would make three points of evidence look like a
+  // steep climb.
+  function sparklineMarkup(points, width, height, pad) {
+    pad = pad || 4;
+    var innerWidth = width - pad * 2;
+    var innerHeight = height - pad * 2;
+    var baseline = height - pad;
+    if (!points.length) return "<path class='spark-empty' d='M" + pad + " " + baseline + " H" + (width - pad) + "'/>";
+    var plotted = points.map(function (point, index) {
+      var x = points.length === 1 ? width - pad : pad + index / (points.length - 1) * innerWidth;
+      return {x: x, y: baseline - Math.max(0, Math.min(100, point.value)) / 100 * innerHeight};
+    });
+    var last = plotted[plotted.length - 1];
+    if (plotted.length === 1) {
+      return "<path class='spark-empty' d='M" + pad + " " + last.y.toFixed(1) + " H" + (width - pad) + "'/>" +
+        "<circle class='spark-dot' cx='" + last.x.toFixed(1) + "' cy='" + last.y.toFixed(1) + "' r='4'/>";
+    }
+    var line = plotted.map(function (point, index) {
+      return (index ? "L" : "M") + point.x.toFixed(1) + " " + point.y.toFixed(1);
+    }).join(" ");
+    var area = line + " L" + last.x.toFixed(1) + " " + baseline + " L" + plotted[0].x.toFixed(1) + " " + baseline + " Z";
+    return "<path class='spark-area' d='" + area + "'/><path class='spark-line' d='" + line + "'/>" +
+      "<circle class='spark-dot' cx='" + last.x.toFixed(1) + "' cy='" + last.y.toFixed(1) + "' r='4'/>";
+  }
+
+  function trendDirectionCopy(points, upper, lower, level) {
+    if (!points.length) return null;
+    if (points.length === 1) return "first";
+    var change = points[points.length - 1].value - points[points.length - 2].value;
+    if (change > 0) return upper.replace("{n}", String(change));
+    if (change < 0) return lower.replace("{n}", String(Math.abs(change)));
+    return level;
+  }
+
+  function renderHeaderTrend(overall) {
+    var points = trendFromCourses(COURSE_IDS);
+    var current = Math.round((overall.strong + overall.developing * .5) / Math.max(1, overall.total) * 100);
+    $("header-trend-value").textContent = current + "%";
+    $("header-spark").innerHTML = sparklineMarkup(points, 96, 30, 3);
+    var direction = trendDirectionCopy(points, "Up {n} since the last block", "Down {n} since the last block", "Level since the last block");
+    $("header-trend-note").textContent = !direction ? "No practice block yet"
+      : direction === "first" ? "First block recorded" : direction;
+  }
+
+  function renderMomentum(courseId) {
+    var course = getCourse(courseId);
+    var stats = courseStats(courseId);
+    var points = courseTrend(courseId);
+    var delta = points.length > 1 ? points[points.length - 1].value - points[points.length - 2].value : null;
+    $("momentum-scope").textContent = course.shortTitle;
+    $("momentum-value").textContent = stats.weighted + "%";
+    var deltaNode = $("momentum-delta");
+    deltaNode.className = "momentum-delta " + (delta === null ? "flat" : delta > 0 ? "up" : delta < 0 ? "down" : "flat");
+    deltaNode.textContent = delta === null ? (points.length ? "first block" : "no block yet")
+      : delta > 0 ? "+" + delta + " points" : delta < 0 ? delta + " points" : "level";
+    $("hero-trend").innerHTML = sparklineMarkup(points, 320, 88, 6);
+    $("momentum-message").textContent = momentumMessage(course, stats, points, delta);
+  }
+
+  function momentumMessage(course, stats, points, delta) {
+    var short = course.shortTitle;
+    if (!points.length) return "Nothing is recorded for " + short + " yet. One short block is enough to put the first point on this line.";
+    if (points.length === 1) return "First block recorded for " + short + ". A second block is what turns one point into a direction.";
+    if (stats.strong === stats.total) return "Every " + short + " concept has broad current evidence. A delayed retrieval check keeps that honest better than more of the same.";
+    if (delta > 0) return "Up " + delta + " points in " + short + ". " + stats.strong + " concept" + (stats.strong === 1 ? " is" : "s are") + " Strong and " + stats.developing + " " + (stats.developing === 1 ? "is" : "are") + " still building.";
+    if (delta < 0) return "The last block cost " + Math.abs(delta) + " points, which is the signal worth having. The concepts that slipped now come first.";
+    if (stats.needs) return "Level since your last block. " + stats.needs + " concept" + (stats.needs === 1 ? " has" : "s have") + " an open miss, and those come first when you practise.";
+    return "Level since your last block. A different question type on the same concept is what moves it next.";
+  }
+
+  function progressStory() {
+    var seen = {};
+    var blocks = {};
+    var story = {answers: 0, blocks: 0, touched: 0, subjects: 0, latest: 0};
+    COURSE_IDS.forEach(function (courseId) {
+      var subjectTouched = false;
+      getCourse(courseId).concepts.forEach(function (concept) {
+        var attempts = attemptsFor(courseId, concept.id);
+        if (attempts.length) { story.touched += 1; subjectTouched = true; }
+        attempts.forEach(function (attempt) {
+          blocks[attemptBlock(attempt)] = true;
+          if (attempt.at > story.latest) story.latest = attempt.at;
+          // One question can carry several concepts; count the answer once.
+          var key = courseId + "|" + attempt.questionId + "|" + attemptBlock(attempt) + "|" + attempt.at;
+          if (seen[key]) return;
+          seen[key] = true;
+          story.answers += 1;
+        });
+      });
+      if (subjectTouched) story.subjects += 1;
+    });
+    story.blocks = Object.keys(blocks).length;
+    return story;
+  }
+
+  function relativeDay(timestamp) {
+    if (!timestamp) return "not yet";
+    var hours = Math.floor((Date.now() - timestamp) / 3600000);
+    if (hours < 1) return "within the hour";
+    if (hours < 24) return hours + (hours === 1 ? " hour ago" : " hours ago");
+    var days = Math.floor(hours / 24);
+    return days === 1 ? "yesterday" : days + " days ago";
+  }
+
+  function renderProgressStory() {
+    var story = progressStory();
+    var overall = overallStats();
+    $("story-title").textContent = story.answers
+      ? story.blocks + " practice block" + (story.blocks === 1 ? "" : "s") + " behind you"
+      : "Your record starts with one block";
+    $("story-note").textContent = story.answers
+      ? "A record of what you have done, not a verdict on you. Last answer " + relativeDay(story.latest) + "."
+      : "Nothing is recorded yet. The first short block fills in every number here.";
+    var cards = [
+      {label: "Answers recorded", value: String(story.answers), note: "Across every subject"},
+      {label: "Practice blocks", value: String(story.blocks), note: "Separate sittings, not repeats"},
+      {label: "Concepts with evidence", value: story.touched + " of " + overall.total, note: story.touched === overall.total ? "All of them are underway" : (overall.total - story.touched) + " still untouched"},
+      {label: "Subjects started", value: story.subjects + " of " + COURSE_IDS.length, note: story.subjects === COURSE_IDS.length ? "All four are underway" : story.subjects ? "Switch at the top to start another" : "Pick one at the top to begin"}
+    ];
+    $("story-stats").innerHTML = cards.map(function (card) {
+      return "<article class='story-stat'><span>" + escapeHtml(card.label) + "</span><b>" + escapeHtml(card.value) +
+        "</b><small>" + escapeHtml(card.note) + "</small></article>";
+    }).join("");
   }
 
   function renderMasteryRadar() {
@@ -746,6 +936,7 @@
     $("subject-progress-fill").style.width = stats.weighted + "%";
     $("subject-progress-copy").textContent = subjectProgressCopy(stats);
     $("practice-priority").textContent = stats.needs ? "Practise " + stats.needs + " concepts that need work" : stats.developing ? "Build stronger evidence" : stats.unseen ? "Start the next new concepts" : "Refresh strong concepts";
+    renderMomentum(courseId);
     renderTrend(courseId);
     renderConceptMap(courseId);
     renderSetList(courseId);
@@ -760,25 +951,7 @@
   }
 
   function courseTrend(courseId) {
-    var course = getCourse(courseId);
-    var allAttempts = course.concepts.reduce(function (values, concept) {
-      return values.concat(attemptsFor(courseId, concept.id));
-    }, []);
-    var blocks = {};
-    allAttempts.forEach(function (attempt) {
-      var id = attemptBlock(attempt);
-      blocks[id] = blocks[id] || {id: id, at: attempt.at};
-      blocks[id].at = Math.max(blocks[id].at, attempt.at);
-    });
-    var ordered = Object.keys(blocks).map(function (id) { return blocks[id]; }).sort(function (a, b) { return a.at - b.at; });
-    return ordered.map(function (block) {
-      var total = course.concepts.reduce(function (sum, concept) {
-        var past = attemptsFor(courseId, concept.id).filter(function (attempt) { return attempt.at <= block.at; });
-        var status = evidenceFromAttempts(past, block.at).status;
-        return sum + (status === "strong" ? 1 : status === "developing" ? .5 : 0);
-      }, 0);
-      return {at: block.at, value: Math.round(total / course.concepts.length * 100)};
-    }).slice(-12);
+    return trendFromCourses([courseId]);
   }
 
   function renderTrend(courseId) {
@@ -904,7 +1077,7 @@
       var firstModule = unseen[0].module;
       return {kind:"set",setId:firstModule,title:"Start the next part of the subject",copy:"Study Module " + firstModule + ": " + course.modules[firstModule - 1] + ". It is a short set and updates the map immediately.",minutes:"~7 minutes",questions:getStudySet(courseId, firstModule).questionIds.length + " questions"};
     }
-    return {kind:"mock",title:"All core concepts have strong current evidence",copy:"Choose a generic practice shape to check whether the subject still holds together. It is not a prediction of the final paper.",minutes:"8–24 minutes",questions:"Choose the mix"};
+    return {kind:"mock",title:"All core concepts have strong current evidence",copy:"Build your own check below to see whether the subject still holds together. It is practice, not a prediction of the final paper.",minutes:"8–24 minutes",questions:"Choose the mix"};
   }
 
   function renderRecommendation() {
@@ -919,7 +1092,7 @@
   function recommendationActionLabel(rec) {
     if (rec.kind === "resume") return "Resume saved practice";
     if (rec.kind === "set") return "Start this study set";
-    if (rec.kind === "mock") return "Choose a practice check";
+    if (rec.kind === "mock") return "Mix your own practice";
     return "Practise these concepts";
   }
 
@@ -1023,6 +1196,8 @@
       kind: details.kind,
       mode: details.mode || "learning",
       shape: details.shape || null,
+      focus: details.focus || null,
+      length: details.length || null,
       setId: details.setId || null,
       conceptId: details.conceptId || null,
       title: details.title,
@@ -1043,43 +1218,203 @@
     };
   }
 
+  // The homepage builder is the single place to configure generic practice, so every entry point
+  // that used to open a modal now brings the learner to those controls.
   function openPracticeSetup(courseId) {
-    var dialog = $("practice-setup-dialog");
-    dialog.dataset.courseId = courseId || profile.selectedCourse;
-    dialog.showModal();
+    if (courseId && courseId !== profile.selectedCourse) {
+      profile.selectedCourse = courseId;
+      selectedModule = 1;
+      inspectedConceptId = null;
+      saveProfile();
+      renderDashboard();
+    }
+    // showScreen resets the scroll position, and with smooth scrolling that animation would
+    // outlive and override the jump to the builder.
+    if (!$("dashboard-screen").classList.contains("active")) showScreen("dashboard-screen");
+    var builder = $("practice-builder");
+    if (!builder) return;
+    builder.classList.add("summoned");
+    window.setTimeout(function () { builder.classList.remove("summoned"); }, 1600);
+    builder.focus({preventScroll: true});
+    window.requestAnimationFrame(function () { builder.scrollIntoView({block: "center", behavior: "smooth"}); });
+  }
+
+  function conceptStatusMap(courseId) {
+    var statuses = {};
+    getCourse(courseId).concepts.forEach(function (concept) { statuses[concept.id] = conceptStatus(courseId, concept.id); });
+    return statuses;
+  }
+
+  function shapeMatches(shape, question) {
+    if (shape === "recognition") return question.type === "mcq" || question.type === "cloze";
+    if (shape === "application") return question.type === "case-cloze" || question.type === "match" || question.type === "boss" || question.perspective === "apply";
+    if (shape === "generation") return question.type === "short-answer" || question.type === "cloze" || question.type === "case-cloze";
+    return true;
+  }
+
+  function focusMatches(focus, question, statuses) {
+    if (focus === "weak") {
+      return [question.conceptId].concat(question.supportingConceptIds || []).some(function (conceptId) {
+        return statuses[conceptId] === "needs" || statuses[conceptId] === "developing";
+      });
+    }
+    if (focus === "new") return statuses[question.conceptId] === "unseen";
+    return true;
+  }
+
+  function practiceCandidates(courseId, shape, focus, statuses) {
+    statuses = statuses || conceptStatusMap(courseId);
+    var course = getCourse(courseId);
+    return Object.keys(course.questions).map(function (id) { return course.questions[id]; })
+      .filter(function (question) {
+        return !question.optionShapeRisk && !question.primerOnly &&
+          shapeMatches(shape, question) && focusMatches(focus, question, statuses);
+      });
+  }
+
+  function practiceAnchors(courseId, shape, pool) {
+    function oldestFirst(questions, limit) {
+      return questions.slice().sort(function (a, b) {
+        return questionLastAttemptAt(courseId, a.id) - questionLastAttemptAt(courseId, b.id);
+      }).slice(0, limit).map(function (question) { return question.id; });
+    }
+    if (shape === "application") return oldestFirst(pool.filter(function (question) { return question.boss; }), 2);
+    if (shape === "generation") return oldestFirst(pool.filter(function (question) { return question.type === "short-answer"; }), 4);
+    if (shape !== "mixed") return [];
+    var anchors = [];
+    ["mcq", "cloze", "case-cloze", "match", "short-answer", "boss"].forEach(function (type) {
+      var candidate = oldestFirst(pool.filter(function (question) { return question.type === type; }), 1)[0];
+      if (candidate) anchors.push(candidate);
+    });
+    return anchors;
+  }
+
+  function lengthTarget(id) {
+    return (optionById(PRACTICE_LENGTHS, id) || PRACTICE_LENGTHS[1]).target;
+  }
+
+  function estimateMinutes(count) {
+    return Math.max(3, Math.round(count * 1.25));
+  }
+
+  function practicePlan(courseId, settings, statuses) {
+    var pool = practiceCandidates(courseId, settings.shape, settings.focus, statuses);
+    var target = Math.min(lengthTarget(settings.length), pool.length);
+    var anchors = practiceAnchors(courseId, settings.shape, pool).slice(0, target);
+    var ids = target ? selectQuestionsFromPool(courseId, pool.map(function (question) { return question.id; }), target, anchors) : [];
+    return {ids: ids, poolSize: pool.length, count: ids.length};
   }
 
   function practiceShapeQuestionIds(courseId, shape) {
-    var questions = Object.keys(getCourse(courseId).questions).map(function (id) { return getQuestion(courseId, id); })
-      .filter(function (question) { return !question.optionShapeRisk && !question.primerOnly; });
-    var pool = questions;
-    var required = [];
-    var count = 12;
-    if (shape === "recognition") {
-      pool = questions.filter(function (question) { return question.type === "mcq" || question.type === "cloze"; });
-    } else if (shape === "application") {
-      pool = questions.filter(function (question) { return question.type === "case-cloze" || question.type === "match" || question.type === "boss" || question.perspective === "apply"; });
-      required = pool.filter(function (question) { return question.boss; }).sort(function (a, b) { return questionLastAttemptAt(courseId, a.id) - questionLastAttemptAt(courseId, b.id); }).slice(0, 2).map(function (question) { return question.id; });
-      count = 10;
-    } else if (shape === "generation") {
-      pool = questions.filter(function (question) { return question.type === "short-answer" || question.type === "cloze" || question.type === "case-cloze"; });
-      required = pool.filter(function (question) { return question.type === "short-answer"; }).sort(function (a, b) { return questionLastAttemptAt(courseId, a.id) - questionLastAttemptAt(courseId, b.id); }).slice(0, 4).map(function (question) { return question.id; });
-      count = 8;
-    } else {
-      ["mcq", "cloze", "case-cloze", "match", "short-answer", "boss"].forEach(function (type) {
-        var candidate = questions.filter(function (question) { return question.type === type; }).sort(function (a, b) { return questionLastAttemptAt(courseId, a.id) - questionLastAttemptAt(courseId, b.id); })[0];
-        if (candidate) required.push(candidate.id);
-      });
-    }
-    return selectQuestionsFromPool(courseId, pool.map(function (question) { return question.id; }), Math.min(count, pool.length), required);
+    return practicePlan(courseId, {shape: shape, focus: "all", length: "standard"}).ids;
   }
 
-  function startPracticeShape(courseId, shape, mode) {
-    var labels = {mixed:"Mixed-format practice", recognition:"Recognition practice", application:"Case and application practice", generation:"Explain in your own words"};
-    var ids = practiceShapeQuestionIds(courseId, shape);
-    if (!ids.length) return;
-    profile.selectedCourse = courseId;
-    session = createSession(courseId, {kind: mode === "simulation" ? "practice-check" : "practice-shape", mode:mode, shape:shape, title:labels[shape] || labels.mixed, kicker:mode === "simulation" ? "Generic practice check · feedback at the end" : "Learning mode · feedback after each answer"}, ids);
+  function builderSettings() {
+    if (!validBuilder(profile.builder)) profile.builder = clone(DEFAULT_BUILDER);
+    return profile.builder;
+  }
+
+  function renderChipGroup(holderId, options, selectedId, describe, onSelect) {
+    var holder = $(holderId);
+    holder.innerHTML = "";
+    options.forEach(function (option) {
+      var state = describe(option);
+      var chosen = option.id === selectedId;
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "chip-option" + (chosen ? " selected" : "");
+      button.disabled = !state.available && !chosen;
+      button.setAttribute("aria-pressed", String(chosen));
+      button.innerHTML = "<b>" + escapeHtml(state.label || option.label) + "</b><small>" + escapeHtml(state.note) + "</small>";
+      button.addEventListener("click", function () { if (!button.disabled && !chosen) onSelect(option.id); });
+      holder.appendChild(button);
+    });
+  }
+
+  // LAW-01: a builder choice must change the run. Unavailable combinations are disabled with the
+  // reason, and a length that cannot add questions collapses to the shorter one that matches it.
+  function renderPracticeBuilder() {
+    var courseId = profile.selectedCourse;
+    var settings = builderSettings();
+    var statuses = conceptStatusMap(courseId);
+    function poolSize(shape, focus) { return practiceCandidates(courseId, shape, focus, statuses).length; }
+
+    // A narrowing choice that selects the whole pool is not a real choice, so it collapses to
+    // "Anything" instead of pretending to filter.
+    var wholePool = poolSize(settings.shape, "all");
+    if (settings.focus !== "all" && poolSize(settings.shape, settings.focus) >= wholePool) settings.focus = "all";
+    if (!poolSize(settings.shape, settings.focus)) settings.focus = "all";
+    if (!poolSize(settings.shape, settings.focus)) settings.shape = "mixed";
+    var available = poolSize(settings.shape, settings.focus);
+    function achievable(lengthId) { return Math.min(lengthTarget(lengthId), available); }
+    PRACTICE_LENGTHS.forEach(function (option) {
+      if (option.target >= lengthTarget(settings.length)) return;
+      if (achievable(option.id) === achievable(settings.length)) settings.length = option.id;
+    });
+
+    renderChipGroup("builder-shape", PRACTICE_SHAPES, settings.shape, function (option) {
+      var size = poolSize(option.id, settings.focus);
+      return {available: size > 0, note: size ? option.hint : "None of these are left for the concepts you chose"};
+    }, function (id) { settings.shape = id; commitBuilderChange(); });
+
+    renderChipGroup("builder-focus", PRACTICE_FOCUS, settings.focus, function (option) {
+      var size = poolSize(settings.shape, option.id);
+      var whole = poolSize(settings.shape, "all");
+      if (option.id === "all") return {available: size > 0, note: size ? option.hint + " · " + size + " to draw from" : "No question matches this combination"};
+      if (!size) return {available: false, note: option.id === "weak" ? "Nothing in this subject needs work yet" : "No untouched concept is left here"};
+      if (size >= whole) return {available: false, note: option.id === "weak" ? "Every concept here needs work, so this is the same as anything" : "Nothing is started yet, so this is the same as anything"};
+      return {available: true, note: option.hint + " · " + size + " to draw from"};
+    }, function (id) { settings.focus = id; commitBuilderChange(); });
+
+    renderChipGroup("builder-length", PRACTICE_LENGTHS, settings.length, function (option) {
+      var count = achievable(option.id);
+      var duplicateOf = PRACTICE_LENGTHS.filter(function (other) {
+        return other.target < option.target && achievable(other.id) === count;
+      })[0];
+      return {
+        available: count > 0 && !duplicateOf,
+        note: !count ? "No questions available"
+          : duplicateOf ? "Only " + count + " here, the same run as " + duplicateOf.label.toLowerCase()
+          : count + " questions · about " + estimateMinutes(count) + " min"
+      };
+    }, function (id) { settings.length = id; commitBuilderChange(); });
+
+    renderChipGroup("builder-mode", PRACTICE_MODES, settings.mode, function (option) {
+      return {available: true, note: option.hint};
+    }, function (id) { settings.mode = id; commitBuilderChange(); });
+
+    var count = achievable(settings.length);
+    $("builder-start").disabled = !count;
+    $("builder-summary").textContent = !count
+      ? "No question matches this combination yet. Change one choice above."
+      : count + " question" + (count === 1 ? "" : "s") + " from " + getCourse(courseId).shortTitle + " · " +
+        optionById(PRACTICE_SHAPES, settings.shape).label.toLowerCase() + " · " +
+        optionById(PRACTICE_FOCUS, settings.focus).summary + " · explanations " +
+        optionById(PRACTICE_MODES, settings.mode).label.toLowerCase() + " · about " + estimateMinutes(count) + " minutes.";
+  }
+
+  function commitBuilderChange() {
+    saveProfile();
+    renderPracticeBuilder();
+  }
+
+  function startBuiltPractice(override) {
+    var courseId = profile.selectedCourse;
+    var settings = validBuilder(override) ? override : builderSettings();
+    var plan = practicePlan(courseId, settings);
+    if (!plan.ids.length) return toast("No question matches that combination yet.");
+    var shape = optionById(PRACTICE_SHAPES, settings.shape);
+    var focus = optionById(PRACTICE_FOCUS, settings.focus);
+    var simulation = settings.mode === "simulation";
+    session = createSession(courseId, {
+      kind: simulation ? "practice-check" : "practice-shape",
+      mode: settings.mode,
+      shape: settings.shape,
+      focus: settings.focus,
+      length: settings.length,
+      title: shape.runTitle + (settings.focus === "all" ? "" : " · " + focus.summary),
+      kicker: (simulation ? "Explanations held to the end" : "Explanations after each answer") + " · " + plan.count + " questions"
+    }, plan.ids);
     profile.active = clone(session);
     saveProfile();
     beginPractice();
@@ -1345,6 +1680,9 @@
   // A native select popup is sized by the operating system, so prose-length options overflow the
   // card and run off screen. Anything beyond a short phrase becomes wrapping choice cards instead.
   var LONG_OPTION_CHARS = 60;
+  var liftedLabel = null;
+  var matchLabels = [];
+  var matchAnswerRows = [];
   var choiceGroupSeq = 0;
 
   function hasLongOptions(options) {
@@ -1389,6 +1727,155 @@
     });
     container.appendChild(group);
     return group;
+  }
+
+  // Inverted match board. Statements sit side by side, each with a slot underneath, and the unused
+  // labels wait in a tray docked to the bottom of the board. The part index is still the row, so
+  // stored responses, grading, and the answer review keep the row-first shape.
+  function renderMatchBoard(question, labels, holder) {
+    liftedLabel = null;
+    var board = document.createElement("div");
+    var columns = document.createElement("div");
+    var tray = document.createElement("div");
+    var trayLabel = document.createElement("p");
+    var trayItems = document.createElement("div");
+    board.className = "match-board";
+    columns.className = "match-columns";
+    // One row, one column per statement: the comparison is the task, so they must be side by side.
+    columns.style.setProperty("--statement-count", String(question.choices.length));
+    tray.className = "match-tray";
+    trayLabel.className = "tray-label";
+    trayItems.className = "tray-items";
+    tray.appendChild(trayLabel);
+    tray.appendChild(trayItems);
+
+    question.choices.forEach(function (statement, choiceIndex) {
+      var column = document.createElement("div");
+      var text = document.createElement("p");
+      var slot = document.createElement("button");
+      column.className = "match-column";
+      text.className = "match-statement";
+      text.textContent = statement;
+      slot.type = "button";
+      slot.className = "match-slot";
+      slot.dataset.choiceIndex = String(choiceIndex);
+      slot.disabled = !!session.answered;
+      slot.addEventListener("click", function () { dropOnSlot(choiceIndex); });
+      slot.addEventListener("dragover", function (event) { if (liftedLabel !== null) event.preventDefault(); });
+      slot.addEventListener("drop", function (event) { event.preventDefault(); dropOnSlot(choiceIndex); });
+      column.appendChild(text);
+      column.appendChild(slot);
+      columns.appendChild(column);
+    });
+
+    board.appendChild(columns);
+    board.appendChild(tray);
+    holder.appendChild(board);
+    matchLabels = labels;
+    matchAnswerRows = question.choices.map(function (_, choiceIndex) {
+      var correctRow = null;
+      question.rows.forEach(function (row, rowIndex) { if (row.answer === choiceIndex) correctRow = rowIndex; });
+      return correctRow;
+    });
+    syncMatchBoard();
+  }
+
+  function labelTablet(rowIndex, inSlot) {
+    var tablet = document.createElement(inSlot ? "span" : "button");
+    var key = document.createElement("span");
+    var text = document.createElement("span");
+    tablet.className = "label-tablet" + (liftedLabel === rowIndex ? " lifted" : "");
+    key.className = "option-key";
+    key.textContent = String.fromCharCode(65 + rowIndex);
+    text.textContent = matchLabels[rowIndex];
+    tablet.appendChild(key);
+    tablet.appendChild(text);
+    if (inSlot) return tablet;
+    tablet.type = "button";
+    tablet.dataset.rowIndex = String(rowIndex);
+    tablet.disabled = !!session.answered;
+    tablet.setAttribute("aria-pressed", String(liftedLabel === rowIndex));
+    tablet.setAttribute("aria-label", matchLabels[rowIndex] + ". Choose this label, then choose the statement it belongs to.");
+    if (!session.answered) tablet.draggable = true;
+    tablet.addEventListener("click", function () {
+      liftedLabel = liftedLabel === rowIndex ? null : rowIndex;
+      syncMatchBoard();
+    });
+    tablet.addEventListener("dragstart", function (event) {
+      liftedLabel = rowIndex;
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+      syncMatchBoard();
+    });
+    tablet.addEventListener("dragend", function () { syncMatchBoard(); });
+    return tablet;
+  }
+
+  function dropOnSlot(choiceIndex) {
+    if (session.answered) return;
+    var occupant = selected.indexOf(choiceIndex);
+    if (liftedLabel === null) {
+      // An empty slot with nothing in hand does nothing; a full one returns its label to the tray.
+      if (occupant >= 0) { selected[occupant] = null; commitMatchSelection(); }
+      return;
+    }
+    if (occupant >= 0 && occupant !== liftedLabel) selected[occupant] = null;
+    selected[liftedLabel] = choiceIndex;
+    liftedLabel = null;
+    commitMatchSelection();
+  }
+
+  function commitMatchSelection() {
+    session.selected = selected.slice();
+    syncMatchBoard();
+    updateCommitState();
+  }
+
+  function syncMatchBoard() {
+    var trayItems = document.querySelector(".match-tray .tray-items");
+    var trayLabel = document.querySelector(".match-tray .tray-label");
+    if (!trayItems) return;
+    var resolved = session.answered && session.mode !== "simulation";
+    $all(".match-slot").forEach(function (slot) {
+      var choiceIndex = Number(slot.dataset.choiceIndex);
+      var holderRow = selected.indexOf(choiceIndex);
+      var correctRow = matchAnswerRows[choiceIndex];
+      slot.innerHTML = "";
+      slot.className = "match-slot" + (holderRow >= 0 ? " filled" : "") + (liftedLabel !== null && !session.answered ? " ready" : "");
+      if (holderRow >= 0) {
+        slot.appendChild(labelTablet(holderRow, true));
+        slot.setAttribute("aria-label", "Holds " + matchLabels[holderRow] + ". Choose again to take it back.");
+      } else {
+        var empty = document.createElement("span");
+        empty.className = "slot-empty";
+        empty.textContent = liftedLabel !== null && !session.answered ? "Place " + String.fromCharCode(65 + liftedLabel) + " here" : "No label yet";
+        slot.appendChild(empty);
+        slot.setAttribute("aria-label", liftedLabel !== null ? "Empty. Place " + matchLabels[liftedLabel] + " here." : "Empty slot. Choose a label first.");
+      }
+      if (resolved) {
+        slot.classList.add(holderRow === correctRow ? "correct" : "wrong");
+        if (holderRow !== correctRow) {
+          var truth = document.createElement("small");
+          truth.className = "slot-truth";
+          truth.textContent = "Belongs to " + matchLabels[correctRow];
+          slot.appendChild(truth);
+        }
+      }
+    });
+    // Rebuilding the tray destroys the button a keyboard user just activated, so put focus back on
+    // the same label if it is still there.
+    var focusedRow = document.activeElement && document.activeElement.parentNode === trayItems
+      ? document.activeElement.dataset.rowIndex : null;
+    trayItems.innerHTML = "";
+    var unused = matchLabels.map(function (_, rowIndex) { return rowIndex; })
+      .filter(function (rowIndex) { return selected[rowIndex] === null || selected[rowIndex] === undefined; });
+    unused.forEach(function (rowIndex) { trayItems.appendChild(labelTablet(rowIndex, false)); });
+    if (focusedRow !== null) {
+      var restored = trayItems.querySelector("[data-row-index='" + focusedRow + "']");
+      if (restored) restored.focus();
+    }
+    trayLabel.textContent = session.answered ? (unused.length ? "Never placed" : "Every label was placed")
+      : unused.length ? "Labels to place · " + unused.length + " left"
+      : "Every label is placed";
   }
 
   function renderChoiceField(holder, label, options, partIndex, correctAnswer) {
@@ -1520,15 +2007,33 @@
   }
 
   function renderMatch(question) {
-    var holder = prepareResponseHolder("match-options");
-    var longForm = hasLongOptions(question.choices);
+    var labels = question.rows.map(function (row) { return row.label; });
+    var longChoices = hasLongOptions(question.choices);
+    var longLabels = hasLongOptions(labels);
+    // When the answer cards carry the substance, listing all of them under every row makes the
+    // learner reread the same paragraphs once per row. Show each statement once instead and let
+    // them name the short label it belongs to.
+    var inverted = longChoices && !longLabels;
+    var holder = prepareResponseHolder("match-options" + (inverted ? " match-invert" : ""));
     var intro = document.createElement("p");
     intro.className = "format-note";
-    intro.textContent = longForm
-      ? "Each answer is used once. Choose one card per row."
-      : "Each answer is used once. Keyboard users can complete every row with the select controls.";
+    intro.textContent = inverted
+      ? "Each label is used once. Name the one that each statement belongs to."
+      : longChoices
+        ? "Each answer is used once. Choose one card per row."
+        : "Each answer is used once. Keyboard users can complete every row with the select controls.";
     holder.appendChild(intro);
-    if (longForm) {
+    if (inverted) {
+      if (!Array.isArray(selected) || selected.length !== question.rows.length) {
+        selected = question.rows.map(function () { return null; });
+        session.selected = selected.slice();
+      }
+      intro.textContent = "Place one label under each statement. Choose a label then a statement, or drag it across.";
+      renderMatchBoard(question, labels, holder);
+      $("question-help").textContent = "Every statement needs a label before checking";
+      return;
+    }
+    if (longChoices) {
       question.rows.forEach(function (row, index) {
         renderChoiceField(holder, row.label, question.choices, index, row.answer);
       });
@@ -2021,7 +2526,15 @@
     if (!lastFinished) return goDashboard();
     if (lastFinished.setId) return startStudySet(lastFinished.courseId, lastFinished.setId);
     if (lastFinished.kind === "concept") return startConceptPractice(lastFinished.courseId, lastFinished.conceptId);
-    if (lastFinished.kind === "practice-check" || lastFinished.kind === "practice-shape") return startPracticeShape(lastFinished.courseId, lastFinished.shape || "mixed", lastFinished.mode || "learning");
+    if (lastFinished.kind === "practice-check" || lastFinished.kind === "practice-shape") {
+      profile.selectedCourse = lastFinished.courseId;
+      return startBuiltPractice({
+        shape: lastFinished.shape || "mixed",
+        focus: lastFinished.focus || "all",
+        length: lastFinished.length || "standard",
+        mode: lastFinished.mode || "learning"
+      });
+    }
     startPriorityPractice(lastFinished.courseId);
   }
 
@@ -2223,7 +2736,7 @@
       return showScreen("dashboard-screen");
     }
     if (name === "practice-setup") {
-      dashboardView = "plan";
+      seedScenarioProgress();
       renderDashboard();
       showScreen("dashboard-screen");
       return openPracticeSetup("BRGSA");
@@ -2315,16 +2828,7 @@
         renderHorizonPlan(profile.horizon);
       });
     });
-    $("close-practice-setup").addEventListener("click", function (event) { event.preventDefault(); $("practice-setup-dialog").close(); });
-    $("begin-practice-shape").addEventListener("click", function (event) {
-      event.preventDefault();
-      var dialog = $("practice-setup-dialog");
-      var modeInput = document.querySelector("input[name='practice-mode']:checked");
-      var shapeInput = document.querySelector("input[name='practice-shape']:checked");
-      var courseId = dialog.dataset.courseId || profile.selectedCourse;
-      dialog.close();
-      startPracticeShape(courseId, shapeInput ? shapeInput.value : "mixed", modeInput ? modeInput.value : "learning");
-    });
+    $("builder-start").addEventListener("click", function () { startBuiltPractice(); });
     $all("input[name='confidence']").forEach(function (input) {
       input.addEventListener("change", function () { if (input.checked) { setConfidence(input.value); renderConfidenceControl(); } });
     });

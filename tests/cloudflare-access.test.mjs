@@ -65,7 +65,8 @@ function createMemoryStore({agreementAccepted = true} = {}) {
         sessions.delete(tokenHash);
         return null;
       }
-      return email && active.has(email) ? {email} : null;
+      if (!email || !active.has(email)) return null;
+      return {email, agreement_version: agreements.get(email) || (agreementAccepted ? currentAgreement : null)};
     },
     async endSession(env, tokenHash) { sessions.delete(tokenHash); },
     async activateTester(env, email) { active.add(email); },
@@ -106,6 +107,7 @@ function createMemoryStore({agreementAccepted = true} = {}) {
     async listTesterSecurity(env, emails) {
       return Object.fromEntries(emails.map((email) => [email, {
         agreementAccepted: agreementAccepted || agreements.get(email) === currentAgreement,
+        agreementEverAccepted: agreementAccepted || agreements.has(email),
         communityJoined: agreementAccepted ? communityJoined.has(email) || !agreements.has(email) : communityJoined.has(email),
         communityInviteOpenedAt: communityOpened.get(email) || null,
         communityJoinedAt: communityJoined.get(email) || null,
@@ -218,6 +220,43 @@ test("first approved login requires and records the current tester agreement", a
   assert.equal(accepted.status, 200);
   assert.equal(store.agreements.get("alpha@example.com"), currentAgreement);
   assert.equal(store.communityJoined.has("alpha@example.com"), true);
+});
+
+test("a session issued under older terms cannot keep using the learner backend", async () => {
+  const store = createMemoryStore();
+  const worker = workerWithGroup(["alpha@example.com"], {store});
+  const approved = await login(worker, "alpha@example.com");
+  const cookie = cookieFrom(approved);
+
+  const before = await worker.fetch(request("/dungeon/api/session", {headers: {Cookie: cookie}}), baseEnv);
+  assert.equal(before.status, 200);
+
+  // The owner publishes a real terms change; the live session predates it.
+  store.agreements.set("alpha@example.com", "2026-08-11");
+
+  const session = await worker.fetch(request("/dungeon/api/session", {headers: {Cookie: cookie}}), baseEnv);
+  assert.equal(session.status, 401);
+  assert.equal((await session.json()).code, "AGREEMENT_REQUIRED");
+
+  const progress = await worker.fetch(request("/dungeon/api/progress", {headers: {Cookie: cookie}}), baseEnv);
+  assert.equal(progress.status, 401);
+  assert.equal((await progress.json()).code, "AGREEMENT_REQUIRED");
+});
+
+test("the control room separates older-terms testers from testers who never agreed", async () => {
+  const store = createMemoryStore({agreementAccepted: false});
+  const worker = workerWithGroup(["alpha@example.com", "beta@example.com"], {store});
+  store.agreements.set("alpha@example.com", "2026-08-11");
+
+  const response = await worker.fetch(request("/dungeon/admin/api/testers", {
+    headers: {"CF-Access-Jwt-Assertion": "owner-token"}
+  }), baseEnv);
+  assert.equal(response.status, 200);
+  const security = (await response.json()).security;
+  assert.equal(security["alpha@example.com"].agreementAccepted, false);
+  assert.equal(security["alpha@example.com"].agreementEverAccepted, true);
+  assert.equal(security["beta@example.com"].agreementAccepted, false);
+  assert.equal(security["beta@example.com"].agreementEverAccepted, false);
 });
 
 test("agreement acceptance fails closed until the WhatsApp invite was opened and membership acknowledged", async () => {

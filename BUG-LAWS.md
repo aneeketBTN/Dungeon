@@ -520,3 +520,47 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   least-recent selection has completed.
 - **Verify:** Reload `?scenario=question-primer-recovery` and require the visible level-3
   application and misconception layers, not merely the scenario parameter.
+
+### LAW-40 REDLINE — A consent gate checked only at login is not enforced
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-11 Control Room read: six testers showed `Signed in`, `Has progress`, and
+  `Not agreed yet` at the same time. They had accepted agreement `2026-08-11`; the deployed version
+  required `2026-08-11-community-v2`. The version was compared only inside the login handler, so
+  live sessions kept full learner and progress access under superseded terms for up to a day.
+- **Why:** A terms change that the product never asks the current cohort to accept is not a terms
+  change. Session lifetime silently becomes the enforcement delay.
+- **Comply:** Carry the accepted version on the session lookup and re-check it on every
+  authenticated request. Reject a stale session with its own code so the learner returns to the
+  agreement step; never rely on cookie expiry to deliver a consent change.
+- **Verify:** Sign in, change the stored accepted version underneath the live session, then call
+  the identity and progress routes; both must fail with `AGREEMENT_REQUIRED`. `tests/cloudflare-access.test.mjs`
+  covers this.
+
+### LAW-41 WATCH — Answer feedback must outrank selection styling, including `:has()`
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-11 match-format Browser pass: a wrong selection kept the blue selected fill
+  because `.choice:has(input:checked)` inherits the specificity of its argument and outranks the
+  later `.choice.wrong` rule.
+- **Why:** The learner reads their incorrect answer as merely chosen. Correctness must never be
+  the weaker signal.
+- **Comply:** Restate the checked case on every resolved-state rule
+  (`.choice.wrong, .choice.wrong:has(input:checked)`), or keep selection styling at lower
+  specificity than feedback styling.
+- **Verify:** After answering a match, cloze, or boss question, read computed `backgroundColor` on
+  the selected wrong control; it must be the error fill, not the selection fill.
+
+### LAW-42 WATCH — A scroll reset and a scroll target cannot both be smooth
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-11 homepage builder: `showScreen` calls `window.scrollTo(0, 0)`, which
+  becomes an animation under `html { scroll-behavior: smooth }` and outlived the following
+  `scrollIntoView`, so "Mix your own practice" highlighted and focused the builder without moving
+  the page.
+- **Why:** The action looks broken while the DOM state says it worked, and the failure disappears
+  in synchronous tests.
+- **Comply:** Skip the screen reset when the target screen is already active, and issue the scroll
+  to the destination on the next animation frame after focus.
+- **Verify:** From the top of the dashboard, activate the control and assert `window.scrollY`
+  actually changed after the animation, not merely that focus moved.

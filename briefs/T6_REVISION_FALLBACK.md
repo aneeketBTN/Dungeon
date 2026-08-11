@@ -29,9 +29,19 @@ next after every answer.
 - Make progress and remaining work equally visible so the student can see a finish line.
 - Stage information as Overview, Concepts, and Study plan; do not show every control and metric at
   once.
-- Put the selected next action first, then the four-subject mastery matrix and selected-subject
-  evidence trend. Subject cards and concept inspection follow; the first two scrolls carry the
-  decision and evidence summary.
+- Order the homepage as subject rail, next-action hero with a live evidence trendline, practice
+  builder, distance travelled, then the holistic mastery matrix and Term 6 totals, then the staged
+  Subject focus / Concepts / Study plan panels. Subject switching is the first control on the page,
+  the header carries a Term 6 sparkline rather than a strong-concept counter, and no section hides
+  when a panel is opened. The detailed evidence graph sits beside concept inspection.
+- Generic practice is configured inline on the homepage, not in a dialog. Shape, concept focus,
+  length, and feedback timing each change the generated run; an option that cannot narrow or
+  lengthen the run is disabled with its reason before selection.
+- Reassurance is factual. Momentum and distance-travelled copy is computed from recorded attempts,
+  names a dip as a dip, and never becomes praise, a learner label, or a predicted result.
+- Long-form matching uses a board: statements side by side, one slot under each, and a docked tray
+  of short label tablets placed by click, drag, or keyboard. Never repeat the same long answer cards
+  under every row.
 - Start learning runs with only the minimum concept primer the learner currently needs. Interleave
   one new-concept primer immediately before its first challenge, then layer later questions on
   earlier concepts. Primer support must fade quickly after easy success and strengthen after misses.

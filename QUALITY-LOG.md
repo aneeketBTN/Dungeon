@@ -311,6 +311,36 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   no copied reminder is called sent. Evidence:
   `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`; prevention: `BUG-LAWS.md`
   LAW-38 and LAW-39.
+- **I36 (2026-08-11)** — Issue: the homepage opened on a static `0 of 64` counter, put subject
+  choice below the fold, and hid the most configurable part of the product inside a dialog. Cause:
+  the staged layout optimised for one next action and treated everything else as secondary. Fix:
+  subject rail first, a live evidence trendline and honest momentum sentence in the hero, an inline
+  mix-and-match builder, a factual distance-travelled strip, and the holistic matrix and totals
+  further down one continuous scroll. Truthful-interaction axis: momentum and story copy are
+  computed from recorded attempts, name a dip as a dip, and never predict a result. Evidence:
+  `evidence/2026-08-11/t6-dynamic-homepage/verification.md`.
+- **I37 (2026-08-11)** — Issue: every builder control has to change the run, but pool filters can
+  quietly collapse into each other. Cause: length targets clamp to the pool, and on a fresh profile
+  "new ground" selects the same questions as "anything". Fix: compute each option's pool before
+  rendering, disable an option that cannot narrow or lengthen anything with the reason shown, and
+  collapse a selection that has become identical to a shorter one. Truthful-interaction axis:
+  LAW-01 is enforced by construction rather than by copy. Evidence: same file.
+- **I38 (2026-08-11)** — Issue: long-form matching repeated four long answer cards under every row,
+  and a wrong selection painted as an ordinary selection after checking. Cause: the layout treated
+  the long side as options, and `.choice:has(input:checked)` inherits its argument's specificity, so
+  it outranked `.choice.wrong`. Fix: a matching board with statements side by side, one slot each,
+  and a docked tray of label tablets placed by click, drag, or keyboard; resolved-state rules now
+  restate the checked case. Readability and accessibility axes: reading load drops from four
+  repetitions to one, and correctness is never the weaker visual signal. Evidence: same file;
+  prevention: `BUG-LAWS.md` LAW-41.
+- **I39 (2026-08-11)** — Issue: six active testers read as `Signed in`, `Has progress`, and
+  `Not agreed yet` at once. Cause: the agreement version was compared only in the login handler, so
+  sessions issued under superseded terms kept working until the cookie expired, and the Control Room
+  chip could not tell "accepted older terms" from "never accepted". Fix: carry the accepted version
+  on the session lookup, reject stale sessions with `AGREEMENT_REQUIRED`, and split the chip into
+  `Agreed`, `Older terms`, and `Never agreed`. Truthful-interaction and consent axes: a terms change
+  now actually reaches the cohort, and the owner view stops implying a breach that never happened.
+  Evidence: same file; prevention: `BUG-LAWS.md` LAW-40.
 
 ## Watch Items
 
@@ -337,3 +367,9 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   described to testers or in documents as verified identity.
 - Country locking can fire on legitimate travel, VPN, mobile-network, or routing changes. Keep it an
   owner review prompt with a human unlock path; never automate a permanent ban from it alone.
+- Every tester-visible change now needs a change announcement when it reaches production. See
+  `COMMUNITY_PLAYBOOK.md`; a silent release is a quality failure, not only a communication one.
+- Builder practice stays inside one subject. A cross-subject run would need a course id on every
+  queue item; do not imply mixed-subject practice in copy until that exists.
+- The momentum and distance-travelled copy is generated. Any new sentence added there must stay
+  derivable from recorded attempts and must not become praise, prediction, or a learner label.

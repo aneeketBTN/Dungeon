@@ -36,15 +36,36 @@ owner.
 - Never remove or threaten removal for low accuracy, slow learning, or critical feedback. Review
   non-participation manually; bumping never revokes access automatically.
 
-## Announcement template
+## Change announcement
 
-Dungeon tester update — [date]
+Every change testers can see gets one announcement in **Announcements** when it reaches production.
+No silent releases: a tester who notices a difference must be able to find out why. Draft it from
+two questions.
 
-What changed: [one clear sentence]
+1. **What changed?** One plain sentence, in the words a learner would use.
+   Example: *Written practice now keeps the rubric hidden until the end of a practice check.*
+2. **What should testers do?** One specific action, not "have a look".
+   Example: *Try one Explain in your own words check and report anything unclear.*
 
-Please test: [specific subject, screen, or action]
+Paste format:
 
-Known limitation: [what is still not verified]
+```
+Dungeon update
 
-Feedback: post in Dungeon Feedback with your device/browser and what you expected versus what
-happened.
+What changed
+[What changed]
+
+What to try
+[What testers should try]
+
+Please post one structured report in Dungeon Feedback if anything is unclear or broken.
+```
+
+Rules for the announcement:
+
+- Post it after the change is live, never before; a push to `main` deploys, so announce once the
+  new version is serving.
+- Say plainly when a change asks something of the tester — signing in again, re-accepting the
+  agreement, or losing a saved position.
+- Name a real limitation when the change has one. Do not describe practice as exam prediction.
+- Keep it to the two answers plus the feedback line. Longer notes belong in `CHANGELOG.md`.

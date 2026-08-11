@@ -3,6 +3,43 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-11 — Dynamic homepage, practice builder, enforced agreement version, and readable matching
+
+- Rebuilt the dashboard around the owner's direction: subjects move to the top as a compact
+  switcher, the hero pairs the subject-local next action with a live evidence trendline and a
+  data-derived momentum message, and the persistent header shows a Term 6 evidence sparkline instead
+  of a `0 of 64` counter. The detailed evidence graph moved beside concept inspection; the mastery
+  matrix, the four-state Term 6 totals, and the staged panels now read as one continuous scroll
+  instead of hiding the hero.
+- Added the inline **Build your own practice** builder and retired the practice-setup dialog. Shape,
+  concept focus (anything / needs work / new ground), length (quick / standard / deep), and feedback
+  timing each change the generated run. Combinations that cannot narrow anything are disabled with
+  their reason, a length that cannot add questions collapses to the shorter run that matches it, and
+  the live summary states the real question count and estimate. Selections persist per learner.
+- Added the **How far you have come** strip: answers recorded, practice blocks, concepts with
+  evidence, and subjects started, all counted from real attempts with deduplicated multi-concept
+  questions. Copy stays factual and never converts activity into praise.
+- Inverted long-form matching. When answer cards carry the substance and the row labels are short,
+  each statement now appears once with the short labels as compact choices, instead of repeating
+  four paragraphs under every row. Stored responses, partial credit, concept results, and the answer
+  review keep the row-indexed shape.
+- Fixed the tester agreement gate: the accepted version is now carried on the session lookup and
+  re-checked on every authenticated request, so a session issued under older terms is rejected with
+  `AGREEMENT_REQUIRED` instead of running unchallenged until the cookie expires. The Control Room now
+  separates `Agreed`, `Older terms`, and `Never agreed`, which was the source of the misleading
+  "signed in with progress but not agreed" reading.
+- Fixed answer feedback losing to selection styling: `:has(input:checked)` inherits its argument's
+  specificity and outranked `.choice.wrong`, so a wrong match choice painted as an ordinary selection.
+- Added the standing change-announcement ritual to `COMMUNITY_PLAYBOOK.md` and the close-out
+  checklist: every tester-visible change ships with one `What changed` / `What to try` post.
+- Verification: 33 automated release/access/agent tests, `node --check` on the app and Control Room,
+  the 792-surface bank validator against the owner pack, and real-Browser desktop plus 390-pixel
+  passes over the new homepage order, builder availability rules, generated runs, held-feedback runs,
+  the inverted match interaction, and its resolved styling. Evidence:
+  `evidence/2026-08-11/t6-dynamic-homepage/verification.md`.
+- Deferred: cross-subject practice in one run, and deployment of this revision (a push to `main`
+  publishes it and will require the cohort to accept the current agreement again).
+
 ## 2026-08-11 — Adaptive primers, evidence-first dashboard, and tester group bumps
 
 - Added one source-traceable primer per T6 concept. Learning runs introduce only the next new

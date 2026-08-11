@@ -380,6 +380,47 @@ one side.
   accessible value list beside the canvas. Subject selection follows and concept inspection stays
   lower in the staged dashboard.
 
+### C27 — Staged evidence dashboard versus a dynamic homepage
+
+- C26 put the next-action hero first, then the mastery matrix and the selected-subject trend, with
+  subject choice below and the staged panels hiding the hero.
+- Owner direction (2026-08-11, later the same day): subjects belong at the top for fast switching;
+  the homepage should carry a trendline rather than a `0 of x` counter; it should invite the learner
+  to mix and match a practice check, reassure them about how far they have come, and only then open
+  into the holistic view further down the scroll.
+- Resolution: order the dashboard as subject rail → next-action hero with a live evidence
+  trendline and a data-derived momentum line → practice builder → "How far you have come" →
+  mastery matrix and Term 6 four-state totals → staged Subject focus / Concepts / Study plan
+  panels. The persistent header carries a Term 6 sparkline instead of the strong-concept counter,
+  and the detailed evidence graph moves next to concept inspection. Nothing hides when a panel is
+  opened: the page is one continuous scroll. Reassurance copy is derived from recorded attempts and
+  never converts activity into praise or predicts a result.
+
+### C28 — Configurable practice as a modal versus a homepage builder
+
+- The practice setup lived in a dialog reached from two places, so the most configurable part of the
+  product was invisible until a learner went looking for it.
+- Owner direction: the homepage should encourage mixing and matching a check.
+- Resolution (2026-08-11): one inline builder on the homepage owns generic practice, and the dialog
+  is removed. Shape, concept focus, length, and feedback timing each change the generated run.
+  LAW-01 applies literally: a combination with no questions, a narrowing focus that would select the
+  whole pool, and a length that cannot add questions over a shorter one are each disabled with the
+  reason shown before selection. The summary states the real count and time estimate. The exam-
+  pattern boundary is stated in the builder itself.
+
+### C29 — Row-by-row matching versus a matching board
+
+- Long-form matching listed every long answer card under every row, so a four-row question made the
+  learner read the same four paragraphs four times. An intermediate version showed each statement
+  once with a radio list beneath it; that was shorter but still stacked, so statements could not be
+  compared and the labels sat away from the text they described.
+- Resolution (2026-08-11): when the answer cards carry the substance and the row labels are short,
+  render a board. Statements sit side by side in one row, each has a slot directly underneath, and
+  the unplaced label tablets wait in a tray docked to the bottom of a resizable board. Placement
+  works by choose-then-place, by drag, and by keyboard, and each label is used once. The stored
+  response stays row-indexed, so partial credit, concept results, misconceptions, and the answer
+  review are unchanged. Short-choice matching keeps its compact select layout.
+
 ## Conflict handling protocol
 
 Before implementing a slice:

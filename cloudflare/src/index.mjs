@@ -280,7 +280,7 @@ export function createD1Store() {
     async findSession(env, tokenHash, country) {
       const db = requireDatabase(env);
       const row = await db.prepare(`SELECT learner_sessions.email AS email, testers.first_country AS first_country,
-          testers.location_locked_at AS location_locked_at
+          testers.location_locked_at AS location_locked_at, testers.agreement_version AS agreement_version
         FROM learner_sessions
         INNER JOIN testers ON testers.email = learner_sessions.email
         WHERE learner_sessions.token_hash = ? AND learner_sessions.expires_at > ? AND testers.active = 1`)
@@ -407,6 +407,7 @@ export function createD1Store() {
         lockReason: row.lock_reason || null,
         activeSession: Number(row.active_sessions || 0) > 0,
         agreementAccepted: row.agreement_version === AGREEMENT_VERSION,
+        agreementEverAccepted: Boolean(row.agreement_version),
         agreementAcceptedAt: row.agreement_accepted_at || null,
         communityInviteOpenedAt: row.community_invite_opened_at || null,
         communityJoined: Boolean(row.community_join_acknowledged_at),
@@ -455,7 +456,13 @@ async function authenticateLearner(request, env, store) {
   const token = sessionTokenFromRequest(request);
   if (!token) return null;
   const row = await store.findSession(env, await hashToken(token), requestCountry(request));
-  return normalizeEmail(row?.email);
+  if (!row?.email) return null;
+  // A version bump is a real terms change. A session issued under older terms must not carry that
+  // acceptance forward, so the learner returns to the agreement step on the next request.
+  if (row.agreement_version !== AGREEMENT_VERSION) {
+    throw new RequestError(401, "AGREEMENT_REQUIRED", "The tester agreement was updated. Sign in again to review and accept it.");
+  }
+  return normalizeEmail(row.email);
 }
 
 async function manageSession(request, env, fetchImpl, store) {

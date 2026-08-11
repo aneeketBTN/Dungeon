@@ -16,9 +16,10 @@
       <span class="brand-mark" aria-hidden="true">T6</span>
       <span><b>Term 6 Revision</b><small>One useful step at a time.</small></span>
     </button>
-    <div class="header-progress" aria-live="polite">
-      <span><small>Strong concepts</small><b id="header-progress">0 of 64</b></span>
-      <i aria-hidden="true"><span id="header-progress-fill"></span></i>
+    <div class="header-trend" aria-live="polite">
+      <span><small>Term 6 evidence</small><b id="header-trend-value">0%</b></span>
+      <svg id="header-spark" class="header-spark" viewBox="0 0 96 30" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <small class="header-trend-note" id="header-trend-note">No practice block yet</small>
     </div>
     <div class="account-controls" id="account-controls" hidden>
       <span id="sync-status" role="status" aria-live="polite">Saved online</span>
@@ -41,6 +42,14 @@
           </div>
         </aside>
 
+        <section class="subject-rail" aria-labelledby="subjects-title">
+          <div class="rail-heading">
+            <div><p class="eyebrow">Your subjects</p><h2 id="subjects-title">Choose a subject</h2></div>
+            <p>Everything below follows your choice.</p>
+          </div>
+          <div class="course-grid" id="course-grid" role="group" aria-label="Term 6 subjects"></div>
+        </section>
+
         <section class="focus-panel">
           <div class="focus-copy">
             <p class="eyebrow"><span id="selected-course-code">BRGSA</span></p>
@@ -49,17 +58,42 @@
             <div class="next-meta" id="next-step-meta"><span>~7 minutes</span><span>4 questions</span></div>
             <div class="hero-actions">
               <button class="button primary" id="start-recommended" type="button">Start this study set <span aria-hidden="true">→</span></button>
-              <button class="button quiet-light" id="start-selected-mock" type="button">Choose a practice check</button>
+              <button class="button quiet-light" id="start-selected-mock" type="button">Mix your own practice</button>
             </div>
           </div>
-          <aside class="finish-card" aria-labelledby="subject-finish-title">
-            <p class="eyebrow">Selected subject</p>
-            <h2 id="subject-finish-title">Your finish line</h2>
-            <strong id="subject-strong">0 of 16 strong</strong>
-            <div class="progress-track" aria-hidden="true"><i id="subject-progress-fill"></i></div>
-            <p id="subject-progress-copy">Choose any concept or begin the next study set.</p>
-            <small>Strong requires repeated evidence across types, blocks, and an applied check.</small>
+          <aside class="momentum-card" aria-labelledby="momentum-title">
+            <p class="eyebrow" id="momentum-scope">Selected subject</p>
+            <h2 id="momentum-title">How your evidence is moving</h2>
+            <div class="momentum-figure"><b id="momentum-value">0%</b><span class="momentum-delta" id="momentum-delta"></span></div>
+            <svg id="hero-trend" class="hero-trend" viewBox="0 0 320 88" preserveAspectRatio="none" role="img" aria-labelledby="momentum-title" aria-describedby="momentum-message"></svg>
+            <p id="momentum-message">Your first practice block starts the line.</p>
+            <small>The line moves with demonstrated evidence, never with time spent.</small>
           </aside>
+        </section>
+
+        <section class="practice-builder" id="practice-builder" aria-labelledby="builder-title" tabindex="-1">
+          <div class="section-heading compact-heading">
+            <div><p class="eyebrow">Mix and match</p><h2 id="builder-title">Build your own practice</h2></div>
+            <p>Every choice below changes the questions you actually get. This is practice, not a copy of the final paper.</p>
+          </div>
+          <div class="builder-groups">
+            <fieldset class="builder-group"><legend>What it tests</legend><div class="chip-row" id="builder-shape"></div></fieldset>
+            <fieldset class="builder-group"><legend>Which concepts</legend><div class="chip-row" id="builder-focus"></div></fieldset>
+            <fieldset class="builder-group"><legend>How long</legend><div class="chip-row" id="builder-length"></div></fieldset>
+            <fieldset class="builder-group"><legend>When explanations appear</legend><div class="chip-row" id="builder-mode"></div></fieldset>
+          </div>
+          <div class="builder-footer">
+            <p class="builder-summary" id="builder-summary" aria-live="polite"></p>
+            <button class="button primary" id="builder-start" type="button">Start this practice <span aria-hidden="true">→</span></button>
+          </div>
+        </section>
+
+        <section class="progress-story" aria-labelledby="story-title">
+          <div class="section-heading compact-heading">
+            <div><p class="eyebrow">How far you have come</p><h2 id="story-title">Your record so far</h2></div>
+            <p id="story-note">Counts describe what you have done, not what you are worth.</p>
+          </div>
+          <div class="story-stats" id="story-stats"></div>
         </section>
 
         <section class="evidence-summary" aria-labelledby="mastery-matrix-title">
@@ -70,23 +104,29 @@
               <div><ul class="mastery-values" id="mastery-values" aria-label="Mastery matrix values"></ul><p id="mastery-radar-copy"></p></div>
             </div>
           </article>
-          <section class="trend-card" aria-labelledby="trend-title">
-            <div class="trend-heading"><div><small>Selected subject</small><h3 id="trend-title">Evidence trend</h3></div><b id="trend-current">0%</b></div>
-            <svg id="progress-trend" class="progress-trend" role="img" aria-labelledby="trend-title trend-description" viewBox="0 0 760 220" preserveAspectRatio="none"></svg>
-            <p id="trend-description">Complete a practice block to create the first evidence point.</p>
-          </section>
-        </section>
-
-        <section class="course-switcher" aria-labelledby="subjects-title">
-          <div class="section-heading compact-heading">
-            <div><p class="eyebrow">Your subjects</p><h2 id="subjects-title">Choose a subject</h2></div>
-            <p>Your choice updates the subject focus above.</p>
-          </div>
-          <div class="course-grid" id="course-grid" role="group" aria-label="Term 6 subjects"></div>
+          <article class="overview-summary" aria-labelledby="overall-title">
+            <div class="summary-heading"><div><p class="eyebrow">All four subjects</p><h3 id="overall-title">All of Term 6</h3></div><span>64 core concepts</span></div>
+            <div class="overall-stats" aria-live="polite">
+              <article class="stat strong"><span>Strong</span><b id="overall-strong">0</b><small>Broad evidence</small></article>
+              <article class="stat developing"><span>Developing</span><b id="overall-developing">0</b><small>Evidence is building</small></article>
+              <article class="stat needs"><span>Needs practice</span><b id="overall-needs">0</b><small>Comes first</small></article>
+              <article class="stat unseen"><span>Not started</span><b id="overall-unseen">64</b><small>Still ahead</small></article>
+            </div>
+            <details class="explain-details">
+              <summary>How progress is decided</summary>
+              <div class="mastery-key" aria-label="Concept status guide">
+                <span><i class="dot strong"></i><b>Strong</b> — repeated across types, blocks, and a new case or reasoning step</span>
+                <span><i class="dot developing"></i><b>Developing</b> — some evidence, with a named next proof</span>
+                <span><i class="dot needs"></i><b>Needs practice</b> — a misconception or repeated miss is still open</span>
+                <span><i class="dot unseen"></i><b>Not started</b></span>
+              </div>
+              <p class="calibration-summary" id="calibration-summary">Confidence is sampled on diagnostic questions; there is not enough evidence for an overall summary yet.</p>
+            </details>
+          </article>
         </section>
 
         <nav class="stage-tabs" role="tablist" aria-label="Revision dashboard sections">
-          <button id="tab-overview" role="tab" type="button" aria-selected="true" aria-controls="panel-overview" tabindex="0" data-view="overview"><span>1</span>Overview</button>
+          <button id="tab-overview" role="tab" type="button" aria-selected="true" aria-controls="panel-overview" tabindex="0" data-view="overview"><span>1</span>Subject focus</button>
           <button id="tab-concepts" role="tab" type="button" aria-selected="false" aria-controls="panel-concepts" tabindex="-1" data-view="concepts"><span>2</span>Concepts</button>
           <button id="tab-plan" role="tab" type="button" aria-selected="false" aria-controls="panel-plan" tabindex="-1" data-view="plan"><span>3</span>Study plan</button>
         </nav>
@@ -104,27 +144,12 @@
                 <button class="button compact secondary" id="start-course" type="button">Start from the beginning</button>
               </div>
             </div>
-
-            <div class="overview-summary" aria-labelledby="overall-title">
-              <div class="summary-heading"><h3 id="overall-title">All of Term 6</h3><span>64 core concepts</span></div>
-              <div class="overall-stats" aria-live="polite">
-                <article class="stat strong"><span>Strong</span><b id="overall-strong">0</b><small>Broad evidence</small></article>
-                <article class="stat developing"><span>Developing</span><b id="overall-developing">0</b><small>Evidence is building</small></article>
-                <article class="stat needs"><span>Needs practice</span><b id="overall-needs">0</b><small>Comes first</small></article>
-                <article class="stat unseen"><span>Not started</span><b id="overall-unseen">64</b><small>Still ahead</small></article>
-              </div>
+            <div class="subject-finish">
+              <div class="summary-heading"><h3 id="subject-finish-title">Your finish line</h3><span id="subject-strong">0 of 16 strong</span></div>
+              <div class="progress-track" aria-hidden="true"><i id="subject-progress-fill"></i></div>
+              <p id="subject-progress-copy">Choose any concept or begin the next study set.</p>
+              <small>Strong requires repeated evidence across types, blocks, and an applied check.</small>
             </div>
-
-            <details class="explain-details">
-              <summary>How progress is decided</summary>
-              <div class="mastery-key" aria-label="Concept status guide">
-                <span><i class="dot strong"></i><b>Strong</b> — repeated across types, blocks, and a new case or reasoning step</span>
-                <span><i class="dot developing"></i><b>Developing</b> — some evidence, with a named next proof</span>
-                <span><i class="dot needs"></i><b>Needs practice</b> — a misconception or repeated miss is still open</span>
-                <span><i class="dot unseen"></i><b>Not started</b></span>
-              </div>
-              <p class="calibration-summary" id="calibration-summary">Confidence is sampled on diagnostic questions; there is not enough evidence for an overall summary yet.</p>
-            </details>
           </section>
 
           <section class="stage-panel" id="panel-concepts" role="tabpanel" aria-labelledby="tab-concepts" tabindex="-1" hidden>
@@ -132,6 +157,11 @@
               <div><p class="eyebrow" id="concepts-course-label">BRGSA · Concept evidence</p><h2>Inspect the concepts underneath the trend</h2></div>
               <p class="section-note">Open one concept to see the exact evidence still missing.</p>
             </div>
+            <section class="trend-card" aria-labelledby="trend-title">
+              <div class="trend-heading"><div><small>Selected subject</small><h3 id="trend-title">Evidence trend</h3></div><b id="trend-current">0%</b></div>
+              <svg id="progress-trend" class="progress-trend" role="img" aria-labelledby="trend-title trend-description" viewBox="0 0 760 220" preserveAspectRatio="none"></svg>
+              <p id="trend-description">Complete a practice block to create the first evidence point.</p>
+            </section>
             <section class="module-browser" aria-labelledby="module-browser-title">
               <div class="module-stepper">
                 <button class="icon-button" id="previous-module" type="button" aria-label="Previous module">←</button>
@@ -266,28 +296,6 @@
     <h2 id="reset-title">Reset all Term 6 progress?</h2>
     <p>This clears your saved revision progress on this account and this browser. It does not alter the supplied course pack.</p>
     <div><button class="button secondary" id="cancel-reset" type="button">Keep progress</button><button class="button danger" id="confirm-reset" type="button">Reset progress</button></div>
-  </dialog>
-
-  <dialog class="practice-setup-dialog" id="practice-setup-dialog" aria-labelledby="practice-setup-title">
-    <form method="dialog" class="practice-setup-form">
-      <button class="dialog-close" id="close-practice-setup" value="cancel" aria-label="Close practice setup">×</button>
-      <p class="eyebrow">Generic practice</p>
-      <h2 id="practice-setup-title">Choose what this practice should test</h2>
-      <p>This is a flexible practice check, not a prediction of the final paper.</p>
-      <fieldset>
-        <legend>When should explanations appear?</legend>
-        <label class="setup-choice"><input type="radio" name="practice-mode" value="learning" checked><span><b>Learn and repair</b><small>See an explanation after each answer.</small></span></label>
-        <label class="setup-choice"><input type="radio" name="practice-mode" value="simulation"><span><b>Practice check</b><small>Hold correctness and explanations until the end.</small></span></label>
-      </fieldset>
-      <fieldset>
-        <legend>Choose the mix</legend>
-        <label class="setup-choice"><input type="radio" name="practice-shape" value="mixed" checked><span><b>Mixed format</b><small>Recognition, cases, generation, and reasoning.</small></span></label>
-        <label class="setup-choice"><input type="radio" name="practice-shape" value="recognition"><span><b>Recognition-heavy</b><small>MCQs and precise concept retrieval.</small></span></label>
-        <label class="setup-choice"><input type="radio" name="practice-shape" value="application"><span><b>Case and application</b><small>Decisions, matching, and reasoning chains.</small></span></label>
-        <label class="setup-choice"><input type="radio" name="practice-shape" value="generation"><span><b>Explain in your own words</b><small>Short answers with a transparent self-review rubric.</small></span></label>
-      </fieldset>
-      <div class="dialog-actions"><button class="button secondary" value="cancel">Cancel</button><button class="button primary" id="begin-practice-shape" value="default">Start practice</button></div>
-    </form>
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>

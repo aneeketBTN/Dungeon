@@ -99,7 +99,11 @@
 
       if (status.locked) chips.append(chip("Locked", "alert"));
       else if (status.activeSession) chips.append(chip("Signed in", "good"));
-      chips.append(chip(status.agreementAccepted ? "Agreed" : "Not agreed yet", status.agreementAccepted ? "good" : "warn"));
+      // A tester who accepted an earlier version has agreed to something; only the current terms
+      // are outstanding. Saying "Not agreed yet" for both reads as if they never signed anything.
+      if (status.agreementAccepted) chips.append(chip("Agreed", "good"));
+      else if (status.agreementEverAccepted) chips.append(chip("Older terms", "warn"));
+      else chips.append(chip("Never agreed", "warn"));
       chips.append(chip(status.communityJoined ? "Group joined" : "Group missing", status.communityJoined ? "good" : "warn"));
       if (status.communityReminderAt && !status.communityJoined) chips.append(chip("Bumped", "alert"));
       if (status.hasProgress) chips.append(chip("Has progress", "good"));
