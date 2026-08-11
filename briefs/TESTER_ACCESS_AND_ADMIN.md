@@ -6,9 +6,9 @@ rapid-request rate limiting, and the dedicated email group/management secret. Th
 is `VERIFIED(BROWSER)` Healthy, Connected, and Allowlisted on the exact domain. Approved-email
 admission, the private denial, the first-login agreement gate, per-email progress storage, and the
 narrow agreement layout are `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` at
-`evidence/2026-08-11/learner-backend-and-agreement/verification.md`. One `mock/login.css` repair
-from that pass is `WAITING_OWNER_DEPLOY`. External tester grants remain
-`WAITING_OWNER_TESTER_EMAILS`.
+`evidence/2026-08-11/learner-backend-and-agreement/verification.md`. The `mock/login.css` repair is
+live and a fresh approved address has completed agreement -> dashboard -> sign-out -> revocation
+on the production domain. The first external cohort is active with nine approved addresses.
 
 Decision date: 2026-08-11 (superseding the same day's emailed-code learner design)
 
@@ -67,9 +67,10 @@ code on the learner path:
 `DUNGEON_CLOSED_TESTER_AGREEMENT.md` is the source text;
 `outputs/Dungeon_Closed_Tester_Agreement.docx` and `.pdf` are the deliverables built by
 `work/build_tester_agreement.py`. Owner direction: this is a gentlemen's agreement, so acceptance is
-an acknowledgement tick at first login, not a signature. The document carries no name, email, or
-signature blanks. The in-app step shows a short summary plus the full terms in a disclosure, and the
-system records only which version was accepted and when.
+two acknowledgement ticks at first login, not a signature. The document carries no name, email, or
+signature blanks. One acknowledgement accepts the closed-test terms; the other confirms membership
+in the private WhatsApp tester group. The in-app step shows a short summary plus the full terms in a
+disclosure, and the system records only which version was accepted and when.
 
 The Worker serves the allowlisted build directly from its self-contained Cloudflare deployment
 (embedded in the current API version, or through the equivalent Wrangler Assets binding) and
@@ -97,7 +98,11 @@ must be completed before claiming strong resistance to harvesting by authorised 
 `mock/admin.html` provides:
 
 - production health and allowlisted-release checks;
-- an email form, current tester list, refresh, and confirmation-backed one-person revocation;
+- cohort paste-onboarding, current tester list, refresh, clear-lock recovery, and
+  confirmation-backed one-person revocation;
+- per-tester session, agreement, progress, country, and last-active signals;
+- Participation and Where testers struggle panels computed from real saved state, with small
+  learning samples labelled as low evidence;
 - a truthful connected/setup-needed state based on the live Cloudflare edge controller;
 - the tester access/revocation workflow and honest anti-copy limit;
 - a release checklist and links to Cloudflare operations;
@@ -105,8 +110,8 @@ must be completed before claiming strong resistance to harvesting by authorised 
 - a change-announcement composer that copies a draft but never sends without another explicit
   action.
 
-The dashboard does not display a fake tester count, usage metric, feedback inbox, or deployment
-status that no connected backend can support. Cloudflare remains the authority for identity,
+The dashboard does not display a fake tester count, feedback inbox, or deployment status that no
+connected backend can support. Cloudflare remains the authority for admission,
 access logs, traffic, and rate limits; WhatsApp remains the current cohort conversation and
 feedback surface.
 
@@ -144,12 +149,8 @@ or ownerless group.
 
 ## Gates
 
-- `WAITING_OWNER_TESTER_EMAILS`: the owner/browser learner address is approved; no external tester
-  access is granted until the owner supplies addresses. Send the agreement document with the
-  invitation.
-- `WAITING_OWNER_DEPLOY`: the `mock/login.css` `[hidden]` repair (LAW-36) is built but not live.
-  Deploy from `cloudflare/`, then re-check the agreement step on the domain.
-- The owner has not yet walked one approved email through the agreement into the dashboard on the
-  live domain; do that once after the deploy to close the loop end to end.
-- GitHub and WhatsApp creation remain separately staged pending action-time confirmation.
+- The first cohort is active with nine approved tester addresses; small participation samples are
+  operational signals, not evidence for punitive or learning-quality conclusions.
+- The live `[hidden]` repair and a complete fresh-account agreement flow are verified. A changed
+  agreement version must repeat the same live acceptance check before release.
 - Server-side item delivery remains `UNSTARTED`; do not claim perfect anti-scraping.

@@ -2,9 +2,9 @@
 
 Date: 2026-08-11
 Route: `https://aneeketdas.com/dungeon/`
-Status claim: `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` for admission, denial, the agreement
-gate, and the narrow agreement layout. `WAITING_OWNER_DEPLOY` for one client CSS repair found in
-this pass.
+Status claim: `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` for admission, denial, agreement
+acceptance, dashboard entry, online progress status, sign-out, revocation, and the narrow agreement
+layout. The client CSS repair found in the first pass is live.
 
 ## What the system now does
 
@@ -59,9 +59,8 @@ already carried. Verified on the live page by inserting the same rule through CS
 collapsed to `0` at desktop and at 390 pixels, and the agreement panel was unaffected. `mock/admin.css`
 was checked and does not need the guard; `mock/admin.js` never toggles `hidden`.
 
-This repair is in the source and in both release builds. It is **not yet on the live edge** — this
-session had no Cloudflare deployment credential. Deploy with `npx wrangler deploy` from `cloudflare/`
-using the owner's Cloudflare login.
+This repair is in source, both release builds, and the live edge. The final Browser pass showed the
+agreement without stale email controls.
 
 ## Automated checks
 
@@ -78,12 +77,13 @@ using the owner's Cloudflare login.
 `work/build_tester_agreement.py`.
 
 Owner direction this session: the agreement is a gentlemen's agreement, not a signed contract. The
-tester name, approved-email, tester-signature, and owner-signature blanks were removed. Section 8
-now states that no signature is needed, that acceptance happens by ticking the acknowledgement box
-at first login, and that Dungeon records only the version and time. A shaded acknowledgement panel
-quotes the exact in-app checkbox wording. Two pages, rendered and read at
-`evidence/2026-08-11/closed-tester-agreement/render-acknowledgement/`. Earlier `render*` folders in
-that directory are superseded drafts that still carry signature lines; send the file in `outputs/`.
+tester name, approved-email, tester-signature, and owner-signature blanks were removed. Section 9
+now states that no signature is needed, that acceptance happens by ticking both acknowledgement
+boxes at first login, and that Dungeon records only the version and time. The group-membership
+section and shaded acknowledgement panel match the live WhatsApp-group requirement and exact
+in-app checkbox wording. Two pages, exported through Word and visually read at
+`evidence/2026-08-11/closed-tester-agreement/render-group-final3/`. Earlier `render*` folders in
+that directory are superseded drafts; send the files in `outputs/`.
 
 ## Honest boundary
 
@@ -125,9 +125,28 @@ Deployed and verified after the original pass above.
 
 `npm test` passes 27/27.
 
+## Final live acceptance and cleanup
+
+Production was checked again after deployment with a temporary address under the owner's domain:
+
+1. The Control Room added the address, increasing the approved count from 9 to 10.
+2. The fresh learner login stopped at `Keep the closed test private` and displayed neither the
+   learner dashboard nor stale email controls.
+3. Both required acknowledgements were present: the closed tester terms and confirmation that the
+   tester joined the private WhatsApp group.
+4. After both were checked, `Accept and enter` opened `Term 6 Revision — Learn, practise, improve`.
+   The learner header showed `Saved online` and `0 of 64`.
+5. `Sign out` returned to the email-entry page.
+6. The temporary address was revoked. The Control Room returned to `9 approved testers`, with no
+   temporary row left behind.
+
+The deployed Worker content response reported deployment
+`8b515b1471db4519ad198fee832541c9`. The production D1 schema carries migrations 0001-0003,
+including agreement version and acceptance time.
+
 ## Remaining
 
-- `WAITING_OWNER_DEPLOY`: publish the `login.css` repair to the live edge.
-- `WAITING_OWNER_TESTER_EMAILS`: no external tester address has been supplied yet.
-- The owner has not yet completed a full first login through the agreement to the dashboard on the
-  live domain; the gate itself is verified from both sides of the boundary.
+- The approved-email mechanism remains a binary possession-of-address check, not identity proof.
+- Server-side item delivery is still unstarted, so an authorised technical tester can inspect the
+  client question bundle.
+- Cohort numbers below the documented attempt thresholds remain noise rather than evidence.

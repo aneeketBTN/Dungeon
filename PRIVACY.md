@@ -11,6 +11,7 @@ data used to provide access, save progress, and detect obvious account sharing.
 - revision progress and game state associated with that email, including answers, attempts,
   confidence choices, completion state, and the time the state was last saved;
 - an opaque, hashed browser-session token and its expiry time;
+- the closed-test agreement version and acceptance time;
 - the coarse Cloudflare country code observed at first login and on later requests; and
 - account-security state, including whether an active session exists or a country-change lock was
   triggered.

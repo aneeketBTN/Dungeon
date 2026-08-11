@@ -272,9 +272,16 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   code, and the first approved login is held at a plain-language agreement step. Truthful
   interaction axis: the denial states one fixed private message and never reveals whether an
   address is on the list; the agreement records only version and acceptance time, and the owner
-  direction is an acknowledgement tick rather than a signature. Country locking is deliberately
+  direction uses acknowledgement controls rather than a signature. Country locking is deliberately
   country-level, is described to testers as an owner review prompt, and is never claimed as proof
   of misconduct. Evidence:
+  `evidence/2026-08-11/learner-backend-and-agreement/verification.md`.
+- **I32 (2026-08-11)** — Change: the closed tester agreement is verified through the complete
+  production lifecycle rather than only at the gate. A fresh temporary approved address was held
+  at the two required acknowledgements, entered the learner dashboard with `Saved online`, signed
+  out, and was revoked; the owner list returned to its original nine testers. Truthful interaction
+  and persistence axes: acceptance is a real stored gate, online state is visible, and cleanup did
+  not touch any real tester account. Evidence:
   `evidence/2026-08-11/learner-backend-and-agreement/verification.md`.
 
 ## Watch Items

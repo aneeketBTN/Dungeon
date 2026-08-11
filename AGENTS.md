@@ -37,7 +37,7 @@
 > remains an owner-only backup and is no longer an origin dependency. The owner Control Room is
 > `VERIFIED(BROWSER)` on the exact domain: health is Healthy, Access is Connected, and the release
 > is Allowlisted. Learner entry no longer uses an emailed code. The Control Room allowlist is the
-> only admission check: an approved email enters immediately with a signed opaque session, an
+> only admission check: an approved email enters immediately with an opaque server-side session, an
 > unapproved email receives one fixed private `Ask Aneeket to add you in.` denial that never
 > discloses the allowlist, and a first approved login is held at a one-time agreement step that
 > records only version and acceptance time. Progress is stored per email in Cloudflare D1 with the
@@ -50,11 +50,14 @@
 > paste-onboarding, a `Clear lock` recovery that forgives a country lock without deleting progress,
 > per-tester state chips, and two panels computed from real saved progress: Participation and
 > Where testers struggle. Authoring replacement questions stays out of the dashboard by design.
+> A fresh temporary approved address has now completed the live agreement, entered the learner
+> dashboard with `Saved online`, signed out, and been revoked; the Control Room returned to the
+> original nine approved testers. The built `[hidden]` repair is live, so the earlier
+> `WAITING_OWNER_DEPLOY` and end-to-end onboarding gaps are closed.
 > `aneeketBTN/Dungeon` (private) is connected to Workers Builds, so a push to `main` builds and
 > deploys; the first Git-triggered version is `6ebc486b`.
-> External tester grants remain
-> `WAITING_OWNER_TESTER_EMAILS`. GitHub and WhatsApp creation remain
-> staged owner-confirmed actions. The Learning Signal Auditor, Question Bank Steward, and Tester
+> The first external cohort is active with nine approved tester addresses. GitHub and the private
+> WhatsApp tester group are active. The Learning Signal Auditor, Question Bank Steward, and Tester
 > Cohort Steward are `PREPARED_NOT_ACTIVATED`: their project schedules are registered and verified
 > `PAUSED`, repository declarations remain disabled, activation preflight intentionally fails, no
 > run history exists, and no tester data or external action was touched. Evidence:
@@ -63,9 +66,9 @@
 > reference and still lacks complete real-Browser route acceptance.
 >
 > Static HTML/CSS/JavaScript prototypes in `mock/`; procedural learning engine and state in root
-> JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: deploy the
-> `login.css` repair, collect tester emails and send the agreement document, create the
-> community/repository, then continue owner/faculty content acceptance and learner calibration.
+> JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: observe the
+> active cohort without over-reading small samples, continue owner/faculty content acceptance, and
+> calibrate the learning model from genuine use.
 
 ## Start Here — Required Order
 
@@ -161,7 +164,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `briefs/T6_REVISION_FALLBACK.md` | Active plain-language dashboard contract, T6 source boundary, mastery/repetition model, and acceptance. | 2026-08-11 |
 | `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Research-grounded confidence, evidence-state, boss, mixed-format, rotation, and short-horizon retest contract. | 2026-08-11 |
 | `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
-| `briefs/TESTER_ACCESS_AND_ADMIN.md` | Live identity gate, anti-harvesting limits, exact-domain routing, owner dashboard, and remaining tester gates. | 2026-08-11 |
+| `briefs/TESTER_ACCESS_AND_ADMIN.md` | Live admission gate, anti-harvesting limits, exact-domain routing, owner dashboard, active-cohort operations, and remaining boundaries. | 2026-08-11 |
 | `BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
 | `QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
 | `CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-11 |
@@ -173,8 +176,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `REVIEW_LOG.md` | Historical engineering rationale for the learning engine. | 2026-07-16 |
 | `personalities.md` | Historical reinforcement/persona design brief; `PROMPT.md` wins when implemented behavior differs. | 2026-07-16 |
 | `README.md` | Student-facing active T6 launch, loop, exam-pattern boundary, progress isolation, scenarios, and legacy paths. | 2026-08-11 |
-| `TESTER_GUIDE.md` | Controlled-cohort test scope, structured feedback format, privacy boundary, and known limits. | 2026-08-11 |
-| `PRIVACY.md` | Tester-facing browser-local data and telemetry boundary. | 2026-08-11 |
+| `TESTER_GUIDE.md` | Controlled-cohort entry, personal-access rules, structured feedback, privacy boundary, and known limits. | 2026-08-11 |
+| `PRIVACY.md` | Tester-facing D1/browser data, agreement, location-security, retention, and telemetry boundary. | 2026-08-11 |
 | `SECURITY.md` | Private vulnerability-reporting and release-safety policy. | 2026-08-11 |
 | `COMMUNITY_PLAYBOOK.md` | WhatsApp community structure, moderation, announcements, and feedback triage. | 2026-08-11 |
 | `.openai/hosting.json` | Opaque Sites project binding only; runtime credentials never belong here. | 2026-08-11 |
@@ -187,10 +190,10 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `cloudflare/src/index.mjs` | Exact-path static router, approved-email admission, opaque learner sessions, agreement gate, single-browser and country locks, D1 progress API, signed owner Access validation, and owner-only tester management. | 2026-08-11 |
 | `cloudflare/migrations/` | Applied D1 migrations: learner auth and progress, country and single-session columns, then agreement version and acceptance time. | 2026-08-11 |
 | `db/schema.ts` | Readable mirror of the current tester, session, and progress table shapes. | 2026-08-11 |
-| `mock/login.html` | Approved-email entry, the one-time agreement step, its full-terms disclosure, and the acknowledgement control. | 2026-08-11 |
+| `mock/login.html` | Approved-email entry, the one-time agreement step, its full-terms disclosure, and both acknowledgement controls. | 2026-08-11 |
 | `mock/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
 | `mock/login.js` | Admission request, the `428` agreement branch, acceptance submission, and back-to-email recovery. | 2026-08-11 |
-| `DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Source text of the closed tester agreement; acceptance is the first-login acknowledgement tick, not a signature. | 2026-08-11 |
+| `DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Source text of the closed tester agreement; acceptance uses two first-login acknowledgements, not a signature. | 2026-08-11 |
 | `work/build_tester_agreement.py` | Builds the deliverable agreement document from that text. | 2026-08-11 |
 | `cloudflare/scripts/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
 | `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
@@ -307,21 +310,21 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - [ ] Push to `main` now publishes to the live domain through Workers Builds. Do not commit
   work-in-progress to `main` while testers are active; finish a change, then push. A bad version can
   be rolled back from Workers → Deployments.
-- [ ] The two new dashboard panels are verified against sample and synthetic data only. Their real
-  numbers stay empty until testers save progress; re-read them once the cohort is active, and treat
-  anything under ten first attempts as noise.
-- [ ] Approved-email admission, the private denial, the agreement gate, and progress storage are
-  verified from the live edge, a real Browser, and 23 automated tests. The owner has not yet walked
-  one approved email all the way through the agreement into the dashboard on the live domain; do
-  that once after the deploy above to close the loop end to end.
+- [ ] The two dashboard panels now read real cohort data. At final verification, Participation had
+  seven active testers and Where testers struggle had two first attempts for one concept. Treat
+  anything under ten first attempts as noise and never use accuracy alone for removal.
+- [ ] Approved-email admission, the private denial, agreement acceptance, dashboard entry, online
+  progress status, sign-out, and revocation are verified end to end on the live domain. Keep the
+  agreement version fixed until the terms actually change; a new version intentionally asks every
+  tester to accept again.
 - [ ] Approved-email entry is a binary admission check, not identity proof. Anyone holding an
   approved address can enter as that tester. Country locking is country-level only and can fire on
   legitimate travel, VPNs, mobile networks, or routing; keep it an owner review prompt with a human
   unlock path and never automate a permanent ban from it alone.
-- [ ] `WAITING_OWNER_TESTER_EMAILS`: one owner/browser address is approved for learner access; no
-  external tester should receive access until the owner supplies the address. Send
-  `outputs/Dungeon_Closed_Tester_Agreement.pdf` with the invitation; the tester also accepts it
-  in-app at first login. GitHub and WhatsApp community creation remain staged pending confirmation.
+- [ ] The first cohort is active with nine approved tester addresses. Send
+  `outputs/Dungeon_Closed_Tester_Agreement.pdf` with any future invitation; the tester also accepts
+  the current version in-app at first login. Treat the current dashboard samples as observational,
+  not conclusive, until the per-concept attempt thresholds are met.
 - [ ] The identity-gated client bundle prevents anonymous/casual harvesting but cannot stop an
   approved technical tester from downloading visible bank scripts. Server-side item delivery is
   `UNSTARTED`; do not claim perfect anti-scraping or DRM.

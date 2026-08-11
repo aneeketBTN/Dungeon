@@ -3,6 +3,22 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-11 — Closed tester agreement verified end to end on production
+
+- Deployed the current agreement-enabled Worker and confirmed the active D1 migration history
+  includes learner state, country/single-session security, and agreement acceptance.
+- Used a fresh temporary approved address to verify the complete production path: approval,
+  first-login agreement, both required acknowledgements, learner dashboard entry with `Saved
+  online`, sign-out, and revocation. The temporary account was removed and the Control Room
+  returned from ten to the original nine approved testers.
+- Refreshed the two-page DOCX/PDF agreement so its group-membership section and two quoted
+  acknowledgements match the live first-login gate; Word-native export and visual review found no
+  orphan page, clipping, or signature fields.
+- Closed the stale `WAITING_OWNER_DEPLOY`, `WAITING_OWNER_TESTER_EMAILS`, and incomplete end-to-end
+  onboarding notes. The first cohort and private WhatsApp group are active; small learning samples
+  remain observational only. Evidence:
+  `evidence/2026-08-11/learner-backend-and-agreement/verification.md`.
+
 ## 2026-08-11 — Cohort onboarding, lock recovery, learning signal, and push-to-deploy
 
 - Connected `aneeketBTN/Dungeon` (private) to Workers Builds. Root directory `cloudflare`, build
