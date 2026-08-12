@@ -42,16 +42,21 @@ function createMemoryStore({agreementAccepted = true} = {}) {
     communityOpened,
     communityJoined,
     communityReminders,
-    async checkLogin(env, email, country) {
+    async checkLogin(env, email, country, releaseOtherDevice) {
       if (locked.has(email)) throw new RequestError(403, "ACCOUNT_LOCKED", "This tester account is locked. Ask Aneeket for help.");
       if (countries.has(email) && country && countries.get(email) !== country) {
         locked.add(email);
         for (const [tokenHash, sessionEmail] of sessions) if (sessionEmail === email) sessions.delete(tokenHash);
         throw new RequestError(403, "LOCATION_LOCKED", "This tester account was locked because its country changed. Ask Aneeket for help.");
       }
-      if ([...sessions.values()].includes(email)) {
-        throw new RequestError(409, "ACCOUNT_IN_USE", "This tester account is already active on another browser. Sign out there or ask Aneeket for help.");
+      const inUse = [...sessions.values()].includes(email);
+      if (inUse) {
+        if (releaseOtherDevice !== true) {
+          throw new RequestError(409, "ACCOUNT_IN_USE", "This account is already open on another browser. You can sign that one out and continue here.");
+        }
+        for (const [tokenHash, sessionEmail] of sessions) if (sessionEmail === email) sessions.delete(tokenHash);
       }
+      return {releasedOtherDevice: inUse && releaseOtherDevice === true};
     },
     async issueSession(env, email, tokenHash, expiresAt, country) {
       active.add(email);
@@ -197,13 +202,13 @@ function workerWithGroup(testers = ["alpha@example.com"], options = {}) {
   });
 }
 
-async function login(worker, email, env = baseEnv, country = null) {
+async function login(worker, email, env = baseEnv, country = null, releaseOtherDevice = false) {
   const headers = {"Content-Type": "application/json", Origin: "https://aneeketdas.com"};
   if (country) headers["CF-IPCountry"] = country;
   return worker.fetch(request("/dungeon/api/session", {
     method: "POST",
     headers,
-    body: JSON.stringify({email})
+    body: JSON.stringify(releaseOtherDevice ? {email, releaseOtherDevice: true} : {email})
   }), env);
 }
 
@@ -524,6 +529,56 @@ test("unlocking a country lock keeps the tester's saved progress", async () => {
   }), baseEnv);
   assert.equal(progressResponse.status, 200);
   assert.deepEqual((await progressResponse.json()).state, sampleState);
+});
+
+test("a learner can move to a new device without losing progress or waiting for the owner", async () => {
+  const sampleState = {version: 2, selectedCourse: "BRGSA", conceptAttempts: {BRGSA: {C1: [{correct: true}]}}, completed: {BRGSA: [1]}};
+  const worker = workerWithGroup(["alpha@example.com"], {store: createMemoryStore()});
+
+  // Phone: sign in and record some work.
+  const phone = await login(worker, "alpha@example.com");
+  assert.equal(phone.status, 200);
+  await worker.fetch(request("/dungeon/api/progress", {
+    method: "PUT",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com", Cookie: cookieFrom(phone)},
+    body: JSON.stringify({state: sampleState})
+  }), baseEnv);
+
+  // Laptop: the plain attempt is refused, but with a code the page can act on rather
+  // than the old dead end of "sign out there".
+  const blocked = await login(worker, "alpha@example.com");
+  assert.equal(blocked.status, 409);
+  assert.equal((await blocked.json()).code, "ACCOUNT_IN_USE");
+
+  // Laptop: the learner chooses to end the other session.
+  const laptop = await login(worker, "alpha@example.com", baseEnv, null, true);
+  assert.equal(laptop.status, 200);
+  assert.equal((await laptop.clone().json()).releasedOtherDevice, true);
+
+  // The work follows the account, not the device.
+  const carried = await worker.fetch(request("/dungeon/api/progress", {
+    headers: {Cookie: cookieFrom(laptop)}
+  }), baseEnv);
+  assert.equal(carried.status, 200);
+  assert.deepEqual((await carried.json()).state, sampleState);
+
+  // Still exactly one active browser: the phone's cookie no longer authenticates.
+  const oldDevice = await worker.fetch(request("/dungeon/api/progress", {
+    headers: {Cookie: cookieFrom(phone)}
+  }), baseEnv);
+  assert.equal(oldDevice.status, 401, "the previous session must be ended, not merely joined");
+});
+
+test("a country-locked account cannot take over its way back in", async () => {
+  const worker = workerWithGroup(["alpha@example.com"], {store: createMemoryStore()});
+  const first = await login(worker, "alpha@example.com", baseEnv, "IN");
+  assert.equal(first.status, 200);
+
+  // A device switch is routine; clearing a country lock is a security decision, and
+  // the release flag must not be a way around it.
+  const abroad = await login(worker, "alpha@example.com", baseEnv, "US", true);
+  assert.equal(abroad.status, 403);
+  assert.equal((await abroad.json()).code, "LOCATION_LOCKED");
 });
 
 test("cohort insights rank by unassisted first attempts and exclude the owner", () => {

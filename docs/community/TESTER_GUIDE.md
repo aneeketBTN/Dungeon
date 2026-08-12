@@ -54,6 +54,25 @@ owner-reminder timestamps; it cannot independently verify WhatsApp membership. C
 process ordinary network and security metadata. Revocation deletes the tester's server-side
 Dungeon progress and sessions.
 
+## Switching between your phone and your laptop
+
+Your progress is saved to your email, not to a device, so you can pick up where you left off
+anywhere you sign in. Only one browser can be signed in at a time — that is what stops an approved
+email being passed around — but you do not need anyone's help to move.
+
+1. Open Dungeon on the new device and enter the same approved email.
+2. If the account is still open on your other browser, the page will say so and offer
+   **Sign out the other device and continue**.
+3. Choose it. The other browser is signed out, this one signs in, and every answer you have
+   recorded is already there.
+
+Nothing is deleted, and you do not have to sign out on the old device first — which matters when
+it is not with you. The old browser will simply ask for your email again next time.
+
+One thing this does **not** cover: if your account is locked because it was used from a different
+country, signing out the other device will not clear it. That check is deliberate and needs
+Aneeket. Message the group.
+
 ## Known limits
 
 - Exact final-paper sections, marks, duration, choices, and negative-marking rules are not yet

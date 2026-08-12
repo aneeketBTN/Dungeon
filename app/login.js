@@ -15,6 +15,10 @@
   var groupLink = document.getElementById("group-link");
   var groupProof = document.getElementById("group-proof");
   var privacyNote = document.getElementById("privacy-note");
+  var deviceSwitch = document.getElementById("device-switch");
+  var deviceSwitchConfirm = document.getElementById("device-switch-confirm");
+  var deviceSwitchCancel = document.getElementById("device-switch-cancel");
+  var deviceSwitchMessage = document.getElementById("device-switch-message");
   var pendingEmail = "";
   var agreementVersion = "";
   var groupInviteOpened = false;
@@ -40,6 +44,39 @@
     document.getElementById("agreement-title").focus();
   }
 
+  function showDeviceSwitch(email) {
+    pendingEmail = email;
+    form.hidden = true;
+    document.querySelector(".login-panel > .lede").hidden = true;
+    document.getElementById("login-title").hidden = true;
+    deviceSwitch.hidden = false;
+    deviceSwitchMessage.textContent = "";
+    deviceSwitchMessage.className = "form-message";
+    document.getElementById("device-switch-title").focus();
+  }
+
+  function hideDeviceSwitch() {
+    deviceSwitch.hidden = true;
+    form.hidden = false;
+    document.querySelector(".login-panel > .lede").hidden = false;
+    document.getElementById("login-title").hidden = false;
+    submit.disabled = false;
+    emailInput.focus();
+  }
+
+  /* One request shape for both the ordinary sign-in and the device switch; the only
+     difference is whether the learner has agreed to end their other session. */
+  async function requestSession(email, releaseOtherDevice) {
+    var response = await fetch("api/session", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(releaseOtherDevice ? {email: email, releaseOtherDevice: true} : {email: email})
+    });
+    return {response: response, payload: await readJson(response)};
+  }
+
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
     if (!emailInput.checkValidity()) {
@@ -47,23 +84,24 @@
       return;
     }
 
+    var email = emailInput.value.trim().toLowerCase();
     submit.disabled = true;
     message.className = "form-message waiting";
     message.textContent = "Checking access…";
     try {
-      var response = await fetch("api/session", {
-        method: "POST",
-        credentials: "same-origin",
-        cache: "no-store",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({email: emailInput.value.trim().toLowerCase()})
-      });
-      var payload = await readJson(response);
-      if (response.status === 428 && payload.agreementRequired) {
-        showAgreement(emailInput.value.trim().toLowerCase(), payload.agreementVersion, payload.communityInviteUrl);
+      var result = await requestSession(email, false);
+      if (result.response.status === 428 && result.payload.agreementRequired) {
+        showAgreement(email, result.payload.agreementVersion, result.payload.communityInviteUrl);
         return;
       }
-      if (!response.ok) throw new Error(payload.message || "Access could not be checked. Try again.");
+      /* Not an error the learner has to solve on their own — it is the device switch,
+         and it has a button. */
+      if (result.response.status === 409 && result.payload.code === "ACCOUNT_IN_USE") {
+        message.textContent = "";
+        showDeviceSwitch(email);
+        return;
+      }
+      if (!result.response.ok) throw new Error(result.payload.message || "Access could not be checked. Try again.");
       message.textContent = "Access confirmed. Opening your dashboard…";
       window.location.replace("./");
     } catch (error) {
@@ -71,6 +109,35 @@
       message.textContent = error.message || "Access could not be checked. Try again.";
       submit.disabled = false;
       emailInput.focus();
+    }
+  });
+
+  deviceSwitchCancel.addEventListener("click", function () {
+    pendingEmail = "";
+    hideDeviceSwitch();
+  });
+
+  deviceSwitchConfirm.addEventListener("click", async function () {
+    if (!pendingEmail) return hideDeviceSwitch();
+    deviceSwitchConfirm.disabled = true;
+    deviceSwitchMessage.className = "form-message waiting";
+    deviceSwitchMessage.textContent = "Signing out the other device…";
+    try {
+      var result = await requestSession(pendingEmail, true);
+      /* A first sign-in on a new device can still land on the agreement step, so the
+         takeover has to be able to hand over to it rather than assuming success. */
+      if (result.response.status === 428 && result.payload.agreementRequired) {
+        deviceSwitch.hidden = true;
+        showAgreement(pendingEmail, result.payload.agreementVersion, result.payload.communityInviteUrl);
+        return;
+      }
+      if (!result.response.ok) throw new Error(result.payload.message || "The other device could not be signed out. Try again.");
+      deviceSwitchMessage.textContent = "Done. Opening your dashboard…";
+      window.location.replace("./");
+    } catch (error) {
+      deviceSwitchMessage.className = "form-message";
+      deviceSwitchMessage.textContent = error.message || "The other device could not be signed out. Try again.";
+      deviceSwitchConfirm.disabled = false;
     }
   });
 

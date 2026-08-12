@@ -692,6 +692,48 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   pre-calculated sample size"*, the M02 lecture's own words. The law stays ACTIVE — it governs the
   233 lectures still unauthored.
 
+### LAW-51 🔴 — `title` is not a tooltip; a hover affordance must answer focus and touch too
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-12, reported by the owner: "the hovers on 'i's around the site don't actually
+  show anything." Seven affordances shipped explaining themselves only through the native `title`
+  attribute — two `.info` markers, the negative-marking flag, and four exam-slot marks on the
+  subject cards. `title` waits about a second before it appears, never appears on keyboard focus,
+  and never appears on touch at all. Each marker was drawn with `cursor: help`, a hover colour
+  change, and a `:focus-visible` ring, so it promised an explanation to three input methods and
+  delivered to at most one — and only to a mouse that stopped moving. Every explanation in the app
+  was unreachable on a phone.
+- **Why:** `title` reads like a tooltip API and is not one. It is a last-resort accessible-name
+  fallback rendered by browser chrome, with no styling, no focus behaviour, and no touch behaviour.
+  Nothing in the markup shows the gap: the attribute is present, so the code looks finished.
+- **Comply:** Explanatory content goes in `data-tip` and is rendered by the shared `.tip` bubble in
+  `app/t6.js`, which opens on hover after 120ms, on focus immediately, and on tap. The trigger keeps
+  its own `aria-label` (or its parent control's) so assistive technology is unaffected and the text
+  is never announced twice. A `title` on a non-form element is now a defect.
+- **Verify:** In the page, `document.querySelectorAll('[title]').length` is `0` on every screen, and
+  every `[data-tip]` trigger opens the bubble under a synthetic `focusin` as well as `pointerover`.
+  Note that `element.focus()` does not dispatch focus events while the Browser pane is not
+  compositing, so test focus with a dispatched event, not with `.focus()` (see LAW-46's lesson about
+  probe artifacts).
+
+### LAW-52 🟡 — A scale documented in a comment is not a scale; it drifts back within one session
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-12. `app/t6.css` carried a comment declaring a deliberate four-step corner
+  scale — written when sixteen radii were consolidated to four — and by this session the file held
+  **nineteen** literal `border-radius` declarations again (2, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 20,
+  21, plus three spellings of a pill). The same file had eighteen literal `font-size` values, two of
+  them 9px and 10px, which a phone is where anyone actually has to read.
+- **Why:** A comment describes an intention; a token enforces one. Each new rule was written by
+  copying a nearby value, and no check compared a declaration against the documented scale, so drift
+  cost nothing at the moment it happened and was invisible afterwards.
+- **Comply:** Every corner is `var(--r-mark | --r-control | --r-card | --r-panel | --r-pill)` or
+  `50%`; every size below reading size is `var(--t-micro | --t-small | --t-meta | --t-body)`. A new
+  literal means the scale is wrong and needs a step, not that this rule is special.
+- **Verify:** `grep -oE 'border-radius: [^;]+;' app/t6.css | grep -v 'var(--r-' | grep -vE '50%|: 0;'`
+  prints nothing, and `grep -oE 'font-size: [0-9.]+px' app/t6.css` prints nothing below 15px. The
+  rendered check is `tools/browser-checks/ui-audit.js`, whose `radiiOffScale` must be empty.
+
 ### LAW-50 🟡 — A lesson array closed with the wrong bracket is invisible until the file is parsed
 
 - **Tier/Status:** WATCH · ACTIVE

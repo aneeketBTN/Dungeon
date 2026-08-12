@@ -3,6 +3,186 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Dungeon, the examiner: a mocks platform beside the learning system (branch, not merged)
+
+- **Two products, one bank.** The learning system sequences to teach — lecture before test,
+  weak-first, feedback on every answer. The examiner does none of that on purpose: no primers, no
+  lessons, no feedback while the clock runs, and questions spread randomly rather than
+  pedagogically, because acclimatising to an exam means meeting a question you were not prepared
+  for. Seeded shuffle, so a reload does not reshuffle the paper mid-attempt.
+- **The paper shape is `docs/briefs/T6_EXAM_PATTERN.md` and nothing else.** Sections, counts,
+  per-question marks, 120 minutes, negative marking, and calculator rules are all read from the
+  authority. SPMS gets no calculator, BRGSA a normal one, SCLM a scientific one — offering a tool
+  the real paper forbids would train a habit the exam then removes.
+- **The furniture a candidate expects**: section tabs, countdown plus per-question timer, the
+  five-state question palette, mark-for-review, clear response, previous / save-and-next, submit
+  with confirmation, and auto-submit at zero. Each palette state carries its own **shape** as well
+  as its own colour — this is the densest colour-coding in the product and the worst case for
+  relying on hue alone.
+- **Scored by the paper's rules.** SPMS Section B: +1 per right option, −1 per wrong, floored at
+  zero per question **and capped at the question's marks**, so an item carrying three correct
+  options cannot pay out more than the two marks the paper says it is worth. Match is
+  all-or-nothing, because the paper states no partial credit and inventing one would teach a wrong
+  expectation about the real thing. Written answers are excluded from the machine total and
+  returned for self-review rather than guessed at.
+- **It says when it cannot be a full mock.** SPMS Section B has 8 of 20 MSQs and SCLM Section B has
+  4 of 6 numericals; the brief states this before the clock starts and the result scores out of
+  what is actually there, not out of the paper's nominal total. IBM carries a caveat instead of a
+  paper: ten written answers on a caselet released two days beforehand cannot be mocked, because
+  the case *is* the paper. Padding an MSQ section with MCQs would have been the worst option
+  available — it is the only negatively marked section in the term.
+- **The one link back to learning.** Concepts missed under exam conditions are recorded in
+  `profile.examMisses` and become a curated route, "Fix what the mock exposed", ordered by weight
+  (a wrong answer counts double a blank) and taught before being tested again. They are stored
+  **apart from `conceptAttempts`** deliberately: a timed, unassisted, uncoached paper is the
+  opposite of the conditions the evidence model is calibrated on, so a bad afternoon cannot rewrite
+  a mastery record and a lucky guess cannot award Strong. Misses prioritise; they never score.
+  Verified: `conceptAttempts` and `totalAnswers` are both 0 after a submitted mock.
+- **Defects found and fixed while building it**: match questions use `rows`/`choices`, not `pairs`,
+  so Section C rendered zero rows; `caselet` is null on some question families and `typeof null` is
+  `"object"`; numeric items carry the scenario in `stem` and the actual ask in `prompt`, and showing
+  only one lost either the context or the question; and the repair run called `renderQuestion()`
+  and `showScreen()` directly instead of `beginPractice()`, so it opened with the markup's
+  placeholder "Title" still in the header.
+- **Graph draw-on was missing for exactly the person who sees it first.** A learner with no data
+  gets the empty state of every chart, and those are dashed placeholder paths — which had been
+  excluded from tracing because `stroke-dasharray` already carries meaning on them (the distance
+  still to go). They are wiped instead: an animating clip reveals them left to right and leaves
+  every dash untouched. The trend chart's empty branch also returned before `drawOnce`. One caught
+  defect worth naming: the first version held the clipped state on the rule itself and ended on a
+  negative `inset()`, which is invalid — so the animation was dropped and the lines stayed clipped
+  to nothing. The hidden state now lives only inside the keyframes, the same rule the block
+  reveals already follow.
+- **Verified** at 375×812 and desktop, both themes, across the brief, runner, and result: 0
+  overflow, 0 tap targets under 44px, 0 off-scale radii, submit reachable without scrolling, and
+  the palette moved above the question on mobile — it had been landing at y=772, below every
+  option, so jumping to question 40 of 55 meant scrolling the whole of question 1 first. 39/39
+  tests pass.
+
+## 2026-08-12 — Dark mode, real tooltips, motion, device switching, mobile pass (branch, not merged)
+
+- **Every colour in `app/t6.css` is now a token, and every token is a light/dark pair.** The file
+  held 85 distinct hex values across 113 occurrences, 46 bare `white` keywords, and 32 `rgba()`
+  literals. Ten of those greys all meant "secondary text on the dark hero" and nine all meant
+  "hover hairline". Below `:root` there are now **zero** literal colours. Themes are declared once
+  with `light-dark()` rather than as a second copy of the palette; the switch is a single
+  `color-scheme` change on `:root`, which also darkens native controls, scrollbars, and the caret.
+  Depending on `light-dark()` is safe here because the answer feedback already relies on `:has()`,
+  which shipped later in every engine.
+- **`--ink` was doing two jobs that move in opposite directions** — text colour *and* the fill of
+  the hero, results hero, resume bar, toast, mock set card, and brand mark. Split into `--ink` and
+  `--deep`/`--on-deep`. In the dark theme the deep panel goes *below* the page rather than above it
+  and carries `--deep-edge`, because at night the luminance step alone (1.07:1) cannot draw a shape.
+- **`--focus` was used at t6.css:542 and never defined**, so the match-board focus ring had been
+  falling back to `currentColor`. Defined and applied.
+- **The palette is measured, not eyeballed.** `tools/check-palette.mjs` parses the `light-dark()`
+  pairs out of the real stylesheet — not a copy, which would pass forever after the CSS moved on —
+  and runs 140 checks per run: WCAG AA on every text/surface pairing the UI actually draws, 3:1 on
+  marks and focus rings, plus grayscale and the three Machado colour-vision simulations. All
+  required checks pass in both themes.
+- **It failed on the *existing* light palette, and that finding stands.** Green, amber, and red sit
+  within 1.2:1 of each other in luminance, and under deuteranopia Developing and Needs practice are
+  0.05 apart in OKLab — not a visible difference. So the four evidence states are now four
+  silhouettes: filled disc, half-filled disc, diamond, empty ring. The hues are unchanged (re-hueing
+  an accepted, deployed palette is not a side effect dark mode gets to have); shape carries the
+  state and colour reinforces it. The checker asserts the four remain shape-distinct.
+- **The reported "hovers on the i's show nothing" was real and worse than reported.** Recorded as
+  **LAW-51**. All seven explanatory affordances used the native `title` attribute, which never fires
+  on keyboard focus or touch — so every explanation in the app was unreachable on a phone. Replaced
+  with one shared `.tip` bubble: hover after 120ms, focus immediately, tap, Esc to dismiss, clamped
+  to the viewport with an arrow that tracks the trigger. `title` count is now 0.
+- **Appearance control**: three states, so "follow my device" survives being pressed once. Bootstrapped
+  from a new `app/theme.js` loaded synchronously in `<head>` — it cannot be inline because the
+  release serves `script-src 'self'`, and it cannot wait for `t6.js` at the end of `<body>` without
+  rendering the wrong theme first. Stored outside the learner profile on purpose: the profile syncs
+  to D1, and a theme belongs to the device you are reading on.
+- **Canvas cannot inherit a custom property, and `getPropertyValue('--blue')` returns the literal
+  string `light-dark(...)`** rather than resolving it. The radar reads its palette through a hidden
+  probe element at paint time and repaints on theme change, including a system change at sunset.
+- **Motion**: one entrance cascade over what is already on screen, SVG line-drawing for the charts,
+  a radar that grows from the centre, and press feedback. Deliberately *not* scroll-triggered — a
+  dashboard opened many times a day fails the frequency-of-use rule, and any safety net generous
+  enough to rescue a stuck node also fires before the learner scrolls to it. Nothing is hidden by
+  default: `.reveal-pending` is applied by script immediately before use, so a blocked script leaves
+  the page fully readable. `.route-full` is excluded from tracing because `.draw-in` would overwrite
+  the dashes that mean "distance still to go".
+- **A learner can move between devices without waiting for the owner.** Progress already followed
+  the email through D1, but the one-active-browser rule answered with "sign out there", which nobody
+  can do from a device they did not bring. `releaseOtherDevice` ends the other session and claims
+  this one; progress is untouched, and it is still exactly one active browser. The country lock is
+  checked first and is deliberately not bypassable — tested both ways.
+- **Buttons no longer stack their label above their arrow.** `.button` is `inline-flex` with
+  `nowrap`; the resume bar's "Go →" went from 48×56 (three lines) to 67×44.
+- **Mobile pass, measured with a new `tools/browser-checks/ui-audit.js`.** At 375×812 the first
+  option began at y=533 and the submit button sat at y=1183 — 370px below the fold — with 140px
+  spent on two stacked headers showing the brand, a sparkline, and the appearance control
+  mid-question. The global header is now hidden while a question is open, the action is a sticky
+  footer, and the keyboard hint ("1–4 or arrow keys") is hidden on `pointer: coarse`, where it was
+  34px of a sticky bar telling a thumb about arrow keys. The action bar is 76px and the submit
+  button is reachable without scrolling.
+- **Scale drift, recorded as LAW-52.** Nineteen literal corner radii against a four-step scale
+  documented in a comment, and eighteen literal font sizes including 9px and 10px. All corners are
+  now tokens; the type floor is 11px.
+- **Verified** at 1280×800, 966×910, and 375×812 in both themes on the dashboard and question
+  surfaces: 0 overflow, 0 tap targets under the floor, 0 off-scale radii, 0 ragged rows, no
+  horizontal scroll. 39/39 tests pass (two new). Evidence:
+  `evidence/2026-08-12/t6-dark-mode-and-mobile/verification.md`.
+- **Owed:** no screenshots — the Browser pane was not compositing, so pixel-level acceptance is
+  still outstanding, as it was for the lesson surface. `app/login.css` and `app/admin.css` keep
+  their own light-only palettes and have not been ported. Tester-visible, so it owes a change
+  announcement.
+
+## 2026-08-12 — Homepage restructured around four questions (branch, not merged)
+
+- **The homepage now asks four questions and answers each once:** what am I doing, where can I
+  start, how am I doing, additional resources. Owner direction, recorded as **C30** in
+  `DESIGN_SOURCE_INDEX.md`, superseding the C26/C27 ordering and reinforcing C28.
+- **Counted the duplication before removing it.** Generic practice had three entry points that all
+  called `openPracticeSetup()`; "Build your own practice" appeared as a summary and again as the
+  `<h2>` immediately inside it; sixteen concepts were listed twice, and the evidence explaining why
+  one needed work lived **only** in the copy that could not act on it; "N of 16 strong" appeared
+  twice; subject identity in seven places; hide/show nested three deep.
+- **Deleted as duplicate views, not as features.** `stage-tabs`/`stage-panels` with
+  `setDashboardView()` and `bindStageTabs()`; `renderConceptMap()`, `showConceptInspector()`, the
+  module stepper and the inspector panel; `#start-selected-mock`; the second "N of 16 strong";
+  the four story-stat cards; the `.momentum-card` nested inside the dark hero. Every capability
+  survives — the inspector's summary, evidence list, and confidence note now sit on the concept
+  row itself, behind the concept's own name.
+- **The hero withdraws its own duplicate.** `renderRecommendation()` hides whichever "way in" the
+  call to action is already offering, so the same action is never presented twice. Verified in
+  both states: priority withdrawn on a seeded profile, "start from the beginning" withdrawn on a
+  fresh one.
+- **Verified.** Injected layout probe at 1280×800 and 375×812: **0 findings** at both. One real
+  defect found and fixed (`#subject-sort` was a 32px tap target, under the 44px floor; pre-existing).
+  17 candidates rejected as probe artifacts under LAW-46 — all inside the deliberate `.course-grid`
+  swipe scroller, with the document proven not to scroll horizontally. LAW-36 measured in both
+  directions on all three toggles: `hidden` ⟺ `height: 0`. LAW-47 in-page: `ok: true`, 0 violations
+  across sets 1–9 and the mixed builder. `npm test` 37/37, build clean, net −21 lines.
+  Evidence: `evidence/2026-08-12/t6-homepage-four-questions/verification.md`.
+- **Owner review, same day, two rounds.** Block 1's heading became **"Your next step"** — chosen
+  over "Today's focus" because the app models three time horizons, so "today" is wrong for anyone
+  on the seven-day plan, and because the results screen already uses the phrase. The radar had
+  **no axis labels at all**: five unlabelled spokes where the fifth is not a subject. Names are now
+  drawn at each vertex (inline, not hover — hover does not exist on touch), values deliberately left
+  to the list beside it so the same fact is not stated twice, and the labels are clamped into the
+  canvas because "Connections" is 70px against a 21px "IBM" and is clamped at every size tested.
+  The canvas was also an unnamed `role="img"`; it now carries a real `aria-label` that says plainly
+  Connections is not a subject.
+- **Mobile pass.** The subject swipe row had no cue that more cards existed — an edge fade now
+  paints only on the side that still has cards behind it, and not at all where the row does not
+  scroll. Mastery values went 11px/12px → 12px/14px below 700px with the column minimum widened so
+  nothing is pushed out. A `.resume-bar` re-offers the recommended action once the hero scrolls
+  away; it reads its label from the hero button and delegates the click to it, so it is a shortcut
+  and not a second recommendation.
+- **Two measurement artifacts recorded** under LAW-46, both of which nearly became false fixes: CSS
+  opacity sampled at time zero of a 180ms transition, and `scrollIntoView({behavior:'auto'})`
+  appearing to do nothing because `scroll-behavior: smooth` wins.
+- **Deferred.** No screenshots — the Browser pane was not compositing, so acceptance is DOM and
+  computed-style level and a pixel pass is still owed. The route chart's new dark-surface colours
+  were reasoned, not contrast-measured. Nothing is pushed, merged, or deployed; the branch is
+  `redesign/homepage-four-questions` and the live cohort is untouched. A change announcement is
+  drafted and owed when this ships.
+
 ## 2026-08-12 — Numeric entry for SCLM Section B
 
 - **Added the second missing format.** SCLM Section B is 6 numericals worth 24 marks — 30% of that

@@ -57,6 +57,14 @@ button:disabled { cursor: wait; opacity: .65; }
 .agreement-terms h3:first-child { margin-top: 0; }
 .agreement-terms p { margin: 0; }
 
+/* Moving to another device. Presented as a decision with an obvious answer, not as
+   an error: the learner did nothing wrong, and the panel's job is to say what will
+   happen to their progress before they press anything. */
+.device-switch h2 { margin: 0; font-size: clamp(24px, 6vw, 31px); line-height: 1.1; }
+.device-switch > p { margin: 13px 0 0; font-size: 15px; line-height: 1.55; }
+.device-switch-note { margin-top: 12px !important; padding: 13px 15px; color: var(--muted); background: rgba(31,117,84,.06); border: 1px solid rgba(31,117,84,.28); border-radius: 14px; font-size: 13.5px !important; }
+.device-switch button:not(.back-button) { width: 100%; margin-top: 20px; }
+
 .group-step { margin: 20px 0 0; padding: 18px; background: rgba(31,117,84,.06); border: 1px solid rgba(31,117,84,.28); border-radius: 14px; }
 .group-step h3 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: 20px; letter-spacing: -.01em; }
 .group-step p { margin: 0 0 14px; color: var(--muted); font-size: 14px; line-height: 1.5; }

@@ -55,16 +55,12 @@
   var lastFinished = null;
   var scenarioMode = false;
   var toastTimer = null;
-  var dashboardView = "overview";
-  var selectedModule = 1;
-  var inspectedConceptId = null;
   var learnerEmail = null;
   var backendReady = false;
   var serverRevision = 0;
   var localChangeSequence = 0;
   var saveChain = Promise.resolve();
   var communityState = {joined:true, inviteOpenedAt:null, reminderAt:null};
-  var DASHBOARD_VIEWS = ["overview", "concepts", "plan", "lessons"];
   var HORIZON_PLANS = {
     today: {
       title: "A focused day, with recovery time",
@@ -117,6 +113,9 @@
       selectedCourse: EXAM_ORDER[0],
       subjectSort: "exam",
       conceptAttempts: {},
+      /* What the examiner exposed, kept apart from conceptAttempts on purpose — see
+         recordExamMisses. */
+      examMisses: {},
       completed: {},
       lastMock: {},
       active: null,
@@ -151,6 +150,9 @@
 
   function normalizeProfileShape(candidate) {
     candidate.primerState = candidate.primerState && typeof candidate.primerState === "object" ? candidate.primerState : {};
+    /* Added after version 2 shipped, so it is normalised rather than validated: an
+       existing saved profile has no examMisses and must not be thrown away for it. */
+    candidate.examMisses = candidate.examMisses && typeof candidate.examMisses === "object" ? candidate.examMisses : {};
     if (!validBuilder(candidate.builder)) candidate.builder = clone(DEFAULT_BUILDER);
     if (candidate.active) {
       candidate.active.baseCount = candidate.active.baseCount || candidate.active.queue.filter(function (item) {
@@ -746,7 +748,8 @@
     renderCommunityReminder();
     renderLessonIndex();
     renderConceptShelf();
-    setDashboardView(dashboardView);
+    // The row is rebuilt above, so its scrollable width has just changed.
+    updateRailScrollCue();
   }
 
   // Blocks are the honest unit of this line: one practice block moves it at most once, so repeating
@@ -818,6 +821,7 @@
     var current = Math.round((overall.strong + overall.developing * .5) / Math.max(1, overall.total) * 100);
     $("header-trend-value").textContent = current + "%";
     $("header-spark").innerHTML = sparklineMarkup(points, 96, 30, 3);
+    drawOnce($("header-spark"));
     var direction = trendDirectionCopy(points, "Up {n} since the last block", "Down {n} since the last block", "Level since the last block");
     $("header-trend-note").textContent = !direction ? "No practice block yet"
       : direction === "first" ? "First block recorded" : direction;
@@ -884,6 +888,7 @@
       ? (stats.strong === stats.total ? "complete" : (stats.total - stats.strong) + " to go")
       : delta > 0 ? "+" + delta + " this block" : delta < 0 ? delta + " this block" : "held level";
     $("hero-trend").innerHTML = goalRouteMarkup(stats.weighted, 320, 88, 6);
+    drawOnce($("hero-trend"));
     $("momentum-message").textContent = goalMessage(course, stats);
   }
 
@@ -922,30 +927,97 @@
     return days === 1 ? "yesterday" : days + " days ago";
   }
 
+  /* What you have done, in one line.
+   *
+   * This was four bordered stat cards — answers, blocks, concepts touched, subjects
+   * started — sitting above four more bordered stat cards for the concept states.
+   * Eight boxes of numbers before the learner reached anything they could act on.
+   * The same four facts read as a sentence, and the boxes below now carry the only
+   * numbers that describe evidence rather than effort. Still strictly factual: no
+   * praise, and activity is never presented as progress. */
   function renderProgressStory() {
     var story = progressStory();
     var overall = overallStats();
-    $("story-title").textContent = story.answers
-      ? story.blocks + " practice block" + (story.blocks === 1 ? "" : "s") + " behind you"
-      : "Your record starts with one block";
-    $("story-note").textContent = story.answers
-      ? "A record of what you have done, not a verdict on you. Last answer " + relativeDay(story.latest) + "."
-      : "Nothing is recorded yet. The first short block fills in every number here.";
-    var cards = [
-      {label: "Answers recorded", value: String(story.answers), note: "Across every subject"},
-      {label: "Practice blocks", value: String(story.blocks), note: "Separate sittings, not repeats"},
-      {label: "Concepts with evidence", value: story.touched + " of " + overall.total, note: story.touched === overall.total ? "All of them are underway" : (overall.total - story.touched) + " still untouched"},
-      {label: "Subjects started", value: story.subjects + " of " + COURSE_IDS.length, note: story.subjects === COURSE_IDS.length ? "All four are underway" : story.subjects ? "Switch at the top to start another" : "Pick one at the top to begin"}
-    ];
-    $("story-stats").innerHTML = cards.map(function (card) {
-      return "<article class='story-stat'><span>" + escapeHtml(card.label) + "</span><b>" + escapeHtml(card.value) +
-        "</b><small>" + escapeHtml(card.note) + "</small></article>";
-    }).join("");
+    if (!story.answers) {
+      $("story-stats").textContent = "Nothing is recorded yet. Your first short block fills in every number here.";
+      return;
+    }
+    $("story-stats").textContent = story.answers + " answer" + (story.answers === 1 ? "" : "s") +
+      " across " + story.blocks + " practice block" + (story.blocks === 1 ? "" : "s") + ". " +
+      story.touched + " of " + overall.total + " concepts have evidence, in " +
+      story.subjects + " of " + COURSE_IDS.length + " subjects. Last answer " + relativeDay(story.latest) + ".";
   }
 
-  function renderMasteryRadar() {
+  /* Reading a theme colour from script.
+   *
+   * Canvas takes no stylesheet, so the radar has to fetch its own ink — and the
+   * obvious way does not work. getComputedStyle().getPropertyValue("--blue") returns
+   * the *declared* text, which for a themed token is the literal string
+   * "light-dark(#176b78, #58c3d5)"; custom properties resolve at use, not at
+   * declaration. Assigning the token to a real property and reading that back is
+   * what forces the resolution, so a hidden probe carries the whole palette across.
+   *
+   * Read at paint time, never cached: the theme can change between two paints and a
+   * stale value leaves the chart drawn in the theme the learner just left. */
+  var colorProbe = null;
+  function themeColor(expression) {
+    if (!colorProbe) {
+      colorProbe = document.createElement("span");
+      colorProbe.setAttribute("aria-hidden", "true");
+      colorProbe.style.cssText = "position:absolute;width:0;height:0;visibility:hidden;pointer-events:none";
+      document.body.appendChild(colorProbe);
+    }
+    colorProbe.style.color = "";
+    colorProbe.style.color = expression;
+    return window.getComputedStyle(colorProbe).color;
+  }
+
+  /* The score ring sits on the results hero, which is the deep panel in both themes,
+     so its three bands are the meaning colours at dark-surface luminance rather than
+     the reading-surface ones. Set as an inline style because the band is computed,
+     not a class the stylesheet could match. */
+  var SCORE_BAND_INK = {high: "var(--green-on-deep)", mid: "var(--saffron)", low: "var(--red-on-deep)"};
+  function paintScoreRing() {
+    var ring = $("score-ring");
+    if (!ring) return;
+    ring.style.borderColor = themeColor(SCORE_BAND_INK[ring.dataset.band] || "var(--deep-rule)");
+  }
+
+  /* Everything the theme switch cannot reach through CSS. */
+  function repaintThemedCanvas() {
+    if ($("mastery-radar")) renderMasteryRadar();
+    if ($("results-screen") && $("results-screen").classList.contains("active")) paintScoreRing();
+  }
+
+  /* The polygon grows out of the centre on first paint. Progress is held here
+     rather than passed down, because the paint is re-entered once per frame and the
+     axis values must not be recomputed with it — walking all 64 concepts 45 times in
+     three quarters of a second is the difference between a smooth grow and a stutter.
+     A repaint frame reuses the cached axes and skips the DOM writes entirely. */
+  var radarProgress = 1;
+  var radarAxes = null;
+  var radarGrown = false;
+
+  function growRadar() {
+    if (radarGrown || prefersReducedMotion() || !window.requestAnimationFrame) { radarProgress = 1; return; }
+    radarGrown = true;
+    var started = null;
+    var DURATION = 760;
+    radarProgress = 0;
+    window.requestAnimationFrame(function step(now) {
+      if (started === null) started = now;
+      var t = Math.min(1, (now - started) / DURATION);
+      /* Cubic ease-out: leaves the centre quickly, settles onto the value. */
+      radarProgress = 1 - Math.pow(1 - t, 3);
+      renderMasteryRadar(true);
+      if (t < 1) window.requestAnimationFrame(step);
+    });
+  }
+
+  function renderMasteryRadar(isFrame) {
     var canvas = $("mastery-radar");
     if (!canvas) return;
+    if (isFrame && radarAxes) { paintRadar(canvas, radarAxes, true); return; }
     var connections = 0;
     var conceptCount = 0;
     var axes = COURSE_IDS.map(function (courseId) {
@@ -958,6 +1030,11 @@
       });
     });
     axes.push({label:"Connections", value:Math.round(connections / Math.max(1, conceptCount) * 100)});
+    radarAxes = axes;
+    paintRadar(canvas, axes, false);
+  }
+
+  function paintRadar(canvas, axes, isFrame) {
     var size = Math.max(240, Math.min(340, canvas.clientWidth || 320));
     var ratio = window.devicePixelRatio || 1;
     canvas.width = Math.round(size * ratio);
@@ -967,7 +1044,10 @@
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
     context.clearRect(0, 0, size, size);
     var center = size / 2;
-    var radius = size * .34;
+    /* Pulled in from .34 to leave room for the vertex labels below. Five unlabelled
+     * spokes meant the only way to tell which point was which was to read the value
+     * list beside the chart and infer the order — a shape you had to decode. */
+    var radius = size * .30;
     function point(index, scale) {
       var angle = -Math.PI / 2 + index * Math.PI * 2 / axes.length;
       return {x:center + Math.cos(angle) * radius * scale, y:center + Math.sin(angle) * radius * scale};
@@ -984,37 +1064,81 @@
       context.lineWidth = width;
       context.stroke();
     }
-    [1,.75,.5,.25].forEach(function (scale) { polygon(scale, null, "#d6ddd6", 1); });
+    var gridInk = themeColor("var(--line)");
+    var spokeInk = themeColor("var(--grey-soft)");
+    var plotInk = themeColor("var(--blue)");
+    [1,.75,.5,.25].forEach(function (scale) { polygon(scale, null, gridInk, 1); });
     axes.forEach(function (_, index) {
       var vertex = point(index, 1);
       context.beginPath();
       context.moveTo(center, center);
       context.lineTo(vertex.x, vertex.y);
-      context.strokeStyle = "#e2e6e0";
+      context.strokeStyle = spokeInk;
       context.lineWidth = 1;
       context.stroke();
     });
     context.beginPath();
     axes.forEach(function (axis, index) {
-      var vertex = point(index, Math.max(.02, axis.value / 100));
+      var vertex = point(index, Math.max(.02, axis.value / 100) * radarProgress);
       if (!index) context.moveTo(vertex.x, vertex.y); else context.lineTo(vertex.x, vertex.y);
     });
     context.closePath();
-    context.fillStyle = "rgba(23,107,120,.18)";
+    context.fillStyle = themeColor("var(--blue-glow)");
     context.fill();
-    context.strokeStyle = "#176b78";
+    context.strokeStyle = plotInk;
     context.lineWidth = 3;
     context.stroke();
     axes.forEach(function (axis, index) {
-      var vertex = point(index, Math.max(.02, axis.value / 100));
+      var vertex = point(index, Math.max(.02, axis.value / 100) * radarProgress);
       context.beginPath();
       context.arc(vertex.x, vertex.y, 4, 0, Math.PI * 2);
-      context.fillStyle = "#176b78";
+      context.fillStyle = plotInk;
       context.fill();
     });
+
+    /* Name every vertex on the chart itself.
+     *
+     * Inline rather than on hover: hover does not exist on a touch screen, and the
+     * fifth axis is the one most likely to be misread — four subjects plus
+     * "Connections" reads as five subjects until something says otherwise.
+     *
+     * Only the name is drawn, not the value. The list beside the canvas already
+     * carries the numbers, and repeating them here would put the same fact in two
+     * places on one screen. */
+    context.font = "800 11px Inter, ui-sans-serif, system-ui, sans-serif";
+    context.textBaseline = "middle";
+    context.fillStyle = themeColor("var(--ink-soft)");
+    var labelPad = 4;
+    axes.forEach(function (axis, index) {
+      var angle = -Math.PI / 2 + index * Math.PI * 2 / axes.length;
+      var anchor = {x: center + Math.cos(angle) * (radius + 11), y: center + Math.sin(angle) * (radius + 11)};
+      // Push the text away from the spoke it belongs to, so a label never sits on
+      // top of the polygon it is naming.
+      var horizontal = Math.cos(angle);
+      var align = Math.abs(horizontal) < .3 ? "center" : horizontal > 0 ? "left" : "right";
+      context.textAlign = align;
+      /* Clamp into the canvas. "Connections" is nearly twice the width of a subject
+       * acronym and sits on an outer vertex, so at the narrow sizes this canvas is
+       * allowed to take it would otherwise be cut off at the edge. */
+      var width = context.measureText(axis.label).width;
+      var left = align === "left" ? anchor.x : align === "right" ? anchor.x - width : anchor.x - width / 2;
+      var shift = left < labelPad ? labelPad - left
+        : left + width > size - labelPad ? size - labelPad - (left + width) : 0;
+      context.fillText(axis.label, anchor.x + shift, anchor.y);
+    });
+
+    if (isFrame) return;
     $("mastery-values").innerHTML = axes.map(function (axis) {
       return "<li><span>" + escapeHtml(axis.label) + "</span><b>" + axis.value + "%</b></li>";
     }).join("");
+    /* A canvas is opaque to assistive technology, and `role="img"` without a name
+     * announces as an unlabelled image. Name it, say plainly that it has five axes
+     * and that the fifth is not a subject, and point at the list that carries the
+     * values — rather than reciting the numbers here and making a screen reader
+     * hear them twice. */
+    canvas.setAttribute("aria-label", "Radar chart with five axes: " +
+      axes.map(function (axis) { return axis.label; }).join(", ") +
+      ". Connections is not a subject. The value for each is listed beside the chart.");
     $("mastery-radar-copy").textContent = "Subject values reflect Strong and Developing evidence. Connections shows concepts already used in a case, link, or reasoning step.";
   }
 
@@ -1124,19 +1248,23 @@
 
   /* The concept shelf.
    *
-   * Everything a learner needs per concept used to be split across two tabs: the
-   * "practise this one" button lived behind a module stepper and an inspector,
-   * and its lesson lived in a different panel entirely. Same information, three
-   * clicks apart. The shelf puts one row per concept with both actions on it.
+   * Everything a learner needs per concept used to be split across two places: the
+   * shelf listed every concept with Practise and Lesson, while a separate module
+   * browser paged through the same concepts eight at a time and opened an inspector
+   * panel holding the one thing the shelf lacked — the evidence still missing.
+   * Two lists of the same 16 concepts, and the reason to act on one of them was
+   * only in the list that could not act.
+   *
+   * The shelf is now the only concept list. The evidence, the summary, and the
+   * confidence note moved onto the row they describe, behind the concept's own
+   * name, so inspecting a concept is not a place you navigate to.
    *
    * It does not re-render lesson prose — Lesson jumps to the existing lesson row
    * and opens it, so there is one copy of that content, not two that can drift. */
   function openLessonFor(lectureId) {
-    // The panels now live inside a disclosure, so open it before switching view —
+    // The lesson index lives in a disclosure, so open it before scrolling —
     // otherwise the scroll and focus below land inside a collapsed element.
-    var browse = $("browse-disclosure");
-    if (browse) browse.open = true;
-    setDashboardView("lessons");
+    revealDisclosure("lessons-disclosure");
     var row = document.querySelector('.lesson-row[data-lecture="' + lectureId + '"]');
     if (!row) return;
     if (row.tagName === "DETAILS") row.open = true;
@@ -1168,13 +1296,24 @@
       group.appendChild(heading);
 
       byModule[moduleKey].forEach(function (concept) {
-        var status = conceptStatus(courseId, concept.id);
+        var evidence = conceptEvidence(courseId, concept.id);
+        var status = evidence.status;
         var row = document.createElement("div");
         row.className = "shelf-row";
 
-        var name = document.createElement("span");
+        /* The name is the disclosure control. Toggling with an explicit `hidden`
+         * sibling rather than <details> is deliberate: the row is a grid whose
+         * state and actions must stay visible while the evidence is collapsed,
+         * and a closed <details> hides every non-summary child in the UA layer
+         * where author CSS cannot reliably reach it (the LAW-36 shape). */
+        var bodyId = "shelf-evidence-" + courseId + "-" + concept.id;
+        var name = document.createElement("button");
+        name.type = "button";
         name.className = "shelf-name";
-        name.innerHTML = "<i class='dot " + status + "' aria-hidden='true'></i><b>" + escapeHtml(concept.name) + "</b>";
+        name.setAttribute("aria-expanded", "false");
+        name.setAttribute("aria-controls", bodyId);
+        name.innerHTML = "<i class='dot " + status + "' aria-hidden='true'></i><b>" + escapeHtml(concept.name) + "</b>" +
+          "<span class='shelf-why' aria-hidden='true'>Why</span>";
         row.appendChild(name);
 
         var state = document.createElement("span");
@@ -1207,6 +1346,44 @@
         }
 
         row.appendChild(actions);
+
+        // The evidence that used to live in the separate inspector panel: what the
+        // concept is, what is still missing before Strong, and what the sampled
+        // confidence checks do and do not say.
+        var body = document.createElement("div");
+        body.className = "shelf-body";
+        body.id = bodyId;
+        body.hidden = true;
+
+        var surfaces = questionSurfaces(courseId, concept.id);
+        var explained = surfaces.filter(function (question) { return question.explanation; })[0];
+        var summaryLine = document.createElement("p");
+        summaryLine.className = "shelf-summary";
+        summaryLine.textContent = concept.summary || (explained ? explained.explanation : "Practise this concept to build visible evidence.");
+        body.appendChild(summaryLine);
+
+        var reasons = document.createElement("ul");
+        reasons.className = "shelf-evidence";
+        reasons.innerHTML = evidence.reasons.map(function (reason) {
+          return "<li>" + escapeHtml(reason) + "</li>";
+        }).join("");
+        body.appendChild(reasons);
+
+        var confidence = document.createElement("p");
+        confidence.className = "shelf-confidence";
+        confidence.textContent = evidence.openConfidentError ? evidence.confidenceLabel
+          : evidence.confidenceCount ? evidence.confidenceCount + " diagnostic confidence check" +
+            (evidence.confidenceCount === 1 ? "" : "s") + " on this concept; no stable trait is inferred."
+          : "No diagnostic confidence check for this concept yet.";
+        body.appendChild(confidence);
+
+        name.addEventListener("click", function () {
+          var open = body.hidden;
+          body.hidden = !open;
+          name.setAttribute("aria-expanded", String(open));
+        });
+
+        row.appendChild(body);
         group.appendChild(row);
       });
       host.appendChild(group);
@@ -1318,38 +1495,17 @@
     });
   }
 
-  function setDashboardView(view, options) {
-    options = options || {};
-    if (DASHBOARD_VIEWS.indexOf(view) < 0) view = "overview";
-    dashboardView = view;
-    $("dashboard-screen").setAttribute("data-view", view);
-    DASHBOARD_VIEWS.forEach(function (name) {
-      var active = name === view;
-      var tab = $("tab-" + name);
-      var panel = $("panel-" + name);
-      tab.setAttribute("aria-selected", String(active));
-      tab.tabIndex = active ? 0 : -1;
-      panel.hidden = !active;
-    });
-    if (options.focusPanel) $("panel-" + view).focus({preventScroll: true});
-  }
-
-  function bindStageTabs() {
-    var tabs = $all(".stage-tabs [role='tab']");
-    tabs.forEach(function (tab, index) {
-      tab.addEventListener("click", function () { setDashboardView(tab.dataset.view); });
-      tab.addEventListener("keydown", function (event) {
-        var nextIndex = null;
-        if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % tabs.length;
-        if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + tabs.length) % tabs.length;
-        if (event.key === "Home") nextIndex = 0;
-        if (event.key === "End") nextIndex = tabs.length - 1;
-        if (nextIndex === null) return;
-        event.preventDefault();
-        setDashboardView(tabs[nextIndex].dataset.view);
-        tabs[nextIndex].focus();
-      });
-    });
+  /* Opens a disclosure and brings its contents into view.
+   *
+   * The four staged tabs are gone, so nothing on this page is mutually exclusive
+   * any more; sending a learner somewhere is now only ever "open this, then scroll
+   * to it". LAW-42 applies — the scroll has to wait a frame so a screen swap's own
+   * reset does not outlive it. */
+  function revealDisclosure(id) {
+    var host = $(id);
+    if (!host) return null;
+    if (host.tagName === "DETAILS") host.open = true;
+    return host;
   }
 
   function renderCourseCards() {
@@ -1367,7 +1523,7 @@
         var hint = SORT_MODES[mode].hint + " " + (mode === "exam"
           ? "Both papers on a day run back to back, so the subject you sit first is the one you can least afford to leave until the end."
           : "Subjects with the least evidence come first, using your own attempts.");
-        hintNode.setAttribute("title", hint);
+        hintNode.setAttribute("data-tip", hint);
         hintNode.setAttribute("aria-label", hint);
       }
     }
@@ -1409,16 +1565,14 @@
       button.innerHTML =
         "<span class='course-head'>" +
           "<b class='course-code'>" + escapeHtml(course.shortTitle) + "</b>" +
-          (exam.negative ? "<em class='course-flag' title='Negative marking in Section B: −1 per wrong answer'>−1</em>" : "") +
-          (exam.short ? "<span class='course-meta' title='" + escapeHtml(slot) + "'>" + escapeHtml(exam.short) + " · " + escapeHtml(exam.start) + "</span>" : "") +
+          (exam.negative ? "<em class='course-flag' data-tip='Negative marking in Section B: −1 per wrong answer'>−1</em>" : "") +
+          (exam.short ? "<span class='course-meta' data-tip='" + escapeHtml(slot) + "'>" + escapeHtml(exam.short) + " · " + escapeHtml(exam.start) + "</span>" : "") +
         "</span>" +
         "<span class='course-name'>" + escapeHtml(course.title) + "</span>" +
         "<span class='course-pill'><i class='pill-fill' aria-hidden='true' style='width:" + stats.weighted + "%'></i>" +
           "<span class='pill-label'>" + escapeHtml(pillCopy) + "</span></span>";
       button.addEventListener("click", function () {
         profile.selectedCourse = courseId;
-        selectedModule = 1;
-        inspectedConceptId = null;
         saveProfile();
         renderDashboard();
         var selectedCard = document.querySelector(".course-card.selected");
@@ -1428,23 +1582,80 @@
     });
   }
 
+  /* The subject row's edge fade.
+   *
+   * Below 700px the four cards become a swipe row, and a scroller with nothing at its
+   * edge reads as a layout that has been cut off rather than one that continues. The
+   * fade is drawn only on the side that actually has more to reach, and disappears at
+   * each end — an affordance that stays on when there is nothing left to scroll to is
+   * just decoration that lies. */
+  function updateRailScrollCue() {
+    var scroller = $("course-grid");
+    var wrap = $("rail-scroll");
+    if (!scroller || !wrap) return;
+    // clientWidth and scrollWidth are equal when the row is not scrollable at all,
+    // which is every desktop width — so this reports "none" and paints nothing.
+    var slack = scroller.scrollWidth - scroller.clientWidth;
+    if (slack <= 1) return wrap.setAttribute("data-scroll", "none");
+    var atStart = scroller.scrollLeft <= 1;
+    var atEnd = scroller.scrollLeft >= slack - 1;
+    wrap.setAttribute("data-scroll", atStart ? "start" : atEnd ? "end" : "middle");
+  }
+
+  /* The recommended action, re-offered after it scrolls away.
+   *
+   * The dashboard runs to roughly 6,700px on a phone, so a learner who reaches the
+   * concept list has to scroll the whole way back to act on the recommendation. This
+   * is deliberately not a second recommendation: the copy is read from the hero and
+   * the click is delegated to it, so there is exactly one place that decides what the
+   * next step is (LAW-04, LAW-18 — the scope is named). */
+  function bindResumeBar() {
+    var bar = $("resume-bar");
+    var hero = $("start-recommended");
+    if (!bar || !hero || !window.IntersectionObserver) return;
+    $("resume-bar-go").addEventListener("click", function () { hero.click(); });
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var away = !entry.isIntersecting;
+        bar.hidden = !away;
+        document.body.classList.toggle("has-resume-bar", away);
+        if (away) {
+          $("resume-bar-scope").textContent = $("selected-course-code").textContent;
+          /* The button's label, not the hero heading. The heading is a sentence
+           * ("Practise the concepts that need work first") and truncated to an
+           * ellipsis in this width; the button already says the same thing as an
+           * action in four words, and it is the thing this bar clicks. */
+          $("resume-bar-title").textContent = hero.textContent.replace(/\s*→\s*$/, "").trim();
+        }
+      });
+    }, {threshold: 0}).observe(hero);
+  }
+
+  // A route's label and its one-line description are set together, so the two can
+  // never disagree about what the button will do (LAW-04).
+  function setRouteCopy(id, label, note) {
+    var route = $(id);
+    if (!route) return;
+    route.querySelector("b").textContent = label;
+    route.querySelector("small").textContent = note;
+  }
+
   function renderSelectedSubject() {
     var courseId = profile.selectedCourse;
     var course = getCourse(courseId);
     var stats = courseStats(courseId);
     $("selected-course-code").textContent = course.shortTitle;
-    $("subject-finish-title").textContent = course.shortTitle + " finish line";
-    $("subject-title").textContent = course.title;
+    // Not the title: the selected card, the hero eyebrow, and the goal column all
+    // already name this subject. Only the description is new information here.
     $("subject-description").textContent = course.description;
-    $("concepts-course-label").textContent = course.shortTitle + " · Concept evidence";
     $("sets-title").textContent = course.shortTitle + " · Ten available study sets";
-    $("subject-strong").textContent = stats.strong + " of " + stats.total + " strong";
-    $("subject-progress-fill").style.width = stats.weighted + "%";
-    $("subject-progress-copy").textContent = subjectProgressCopy(stats);
-    $("practice-priority").textContent = stats.needs ? "Practise " + stats.needs + " concepts that need work" : stats.developing ? "Build stronger evidence" : stats.unseen ? "Start the next new concepts" : "Refresh strong concepts";
+    setRouteCopy("practice-priority",
+      stats.needs ? "Practise " + stats.needs + " concepts that need work"
+        : stats.developing ? "Build stronger evidence"
+        : stats.unseen ? "Start the next new concepts" : "Refresh strong concepts",
+      subjectProgressCopy(stats));
     renderMomentum(courseId);
     renderTrend(courseId);
-    renderConceptMap(courseId);
     renderSetList(courseId);
     renderHorizonPlan(profile.horizon || "today");
   }
@@ -1474,6 +1685,9 @@
     if (!points.length) {
       svg.innerHTML = grid + "<path class='trend-empty' d='M" + left + " " + (top + chartHeight) + " H" + (width - right) + "'/><text x='" + (width / 2) + "' y='" + (height / 2) + "' text-anchor='middle' class='trend-empty-copy'>Your first practice block will start the line</text>";
       $("trend-description").textContent = "No practice block is recorded yet. The line will reflect demonstrated evidence, not raw effort.";
+      /* The empty state animates too. It used to return before this, which meant the
+         one chart a new learner actually sees was the one that never moved. */
+      drawOnce(svg);
       return;
     }
     var plotted = points.map(function (point, index) {
@@ -1487,50 +1701,16 @@
       return "<circle cx='" + point.x + "' cy='" + point.y + "' r='6'><title>Practice block " + (index + 1) + ": " + point.value + "% evidence</title></circle>";
     }).join("");
     svg.innerHTML = grid + "<path class='trend-area' d='" + area + "'/><path class='trend-line' d='" + line + "'/>" + dots + "<text x='" + left + "' y='" + (height - 6) + "' class='trend-axis-copy'>First block</text><text x='" + (width - right) + "' y='" + (height - 6) + "' text-anchor='end' class='trend-axis-copy'>Latest</text>";
+    drawOnce(svg);
     var direction = points.length > 1 && points[points.length - 1].value < points[points.length - 2].value ? "The latest block revealed a dip, so the recommendation will revisit the affected concept." : "Correct evidence moves the line; misses can create an honest plateau or dip.";
     $("trend-description").textContent = points.length + " practice block" + (points.length === 1 ? "" : "s") + " shown. " + direction;
   }
 
-  function renderConceptMap(courseId) {
-    var course = getCourse(courseId);
-    var map = $("concept-map");
-    map.innerHTML = "";
-    selectedModule = Math.max(1, Math.min(8, selectedModule));
-    $("module-position").textContent = "Module " + selectedModule + " of 8";
-    $("module-browser-title").textContent = course.modules[selectedModule - 1];
-    $("previous-module").disabled = selectedModule === 1;
-    $("next-module").disabled = selectedModule === 8;
-    course.concepts.filter(function (concept) { return concept.module === selectedModule; }).forEach(function (concept) {
-      var evidence = conceptEvidence(courseId, concept.id);
-      var button = document.createElement("button");
-      button.type = "button";
-      button.className = "concept-node " + evidence.status + (inspectedConceptId === concept.id ? " selected" : "");
-      button.setAttribute("aria-pressed", String(inspectedConceptId === concept.id));
-      button.setAttribute("aria-label", concept.name + ". " + STATUS_LABEL[evidence.status] + ". Inspect the evidence.");
-      button.innerHTML = "<b>" + escapeHtml(concept.name) + "</b><span>" + STATUS_LABEL[evidence.status] + "</span><small>" + escapeHtml(evidence.reasons[0]) + "</small>";
-      button.addEventListener("click", function () { showConceptInspector(courseId, concept.id); });
-      map.appendChild(button);
-    });
-    if (inspectedConceptId && getConcept(courseId, inspectedConceptId) && getConcept(courseId, inspectedConceptId).module === selectedModule) showConceptInspector(courseId, inspectedConceptId, true);
-    else $("concept-inspector").hidden = true;
-  }
-
-  function showConceptInspector(courseId, conceptId, skipMapRefresh) {
-    var concept = getConcept(courseId, conceptId);
-    if (!concept) return;
-    inspectedConceptId = conceptId;
-    var evidence = conceptEvidence(courseId, conceptId);
-    var surfaces = questionSurfaces(courseId, conceptId);
-    var summaryQuestion = surfaces.filter(function (question) { return question.explanation; })[0];
-    $("inspector-status").className = "status-pill " + evidence.status;
-    $("inspector-status").textContent = STATUS_LABEL[evidence.status];
-    $("inspector-title").textContent = concept.name;
-    $("inspector-summary").textContent = concept.summary || (summaryQuestion ? summaryQuestion.explanation : "Practice this concept to build visible evidence.");
-    $("inspector-evidence").innerHTML = evidence.reasons.map(function (reason) { return "<li>" + escapeHtml(reason) + "</li>"; }).join("");
-    $("inspector-confidence").textContent = evidence.openConfidentError ? evidence.confidenceLabel : evidence.confidenceCount ? evidence.confidenceCount + " diagnostic confidence check" + (evidence.confidenceCount === 1 ? "" : "s") + " on this concept; no stable trait is inferred." : "No diagnostic confidence check for this concept yet.";
-    $("concept-inspector").hidden = false;
-    if (!skipMapRefresh) renderConceptMap(courseId);
-  }
+  /* renderConceptMap() and showConceptInspector() were deleted here.
+   *
+   * They drew a second copy of the same concept list — eight at a time behind a
+   * module stepper — and an inspector panel that was the only place the missing
+   * evidence appeared. renderConceptShelf() now carries both on the row itself. */
 
   function renderSetList(courseId) {
     var course = getCourse(courseId);
@@ -1593,6 +1773,30 @@
     $("next-step-copy").textContent = rec.copy;
     $("next-step-meta").innerHTML = "<span>" + escapeHtml(rec.minutes) + "</span><span>" + escapeHtml(rec.questions) + "</span>";
     $("start-recommended").innerHTML = recommendationActionLabel(rec) + " <span aria-hidden='true'>→</span>";
+
+    /* Withdraw whichever way in the hero is already offering. The recommendation
+     * runs the same function as one of these routes in three of its four states,
+     * so without this the page shows the identical action twice — once as the one
+     * call to action and again in the list of alternatives to it. */
+    var duplicated = rec.kind === "priority" ? "priority"
+      : rec.kind === "mock" ? "mock"
+      : rec.kind === "set" && rec.setId === 1 ? "course" : null;
+    $all("#route-list .route").forEach(function (route) {
+      route.hidden = route.dataset.route === duplicated;
+    });
+    /* The mock-repair route exists only when a mock has actually cost marks. Offering
+       it empty would be a control that cannot change the run, which the setup rule
+       forbids. */
+    var misses = examMissList(profile.selectedCourse);
+    var repairRoute = $("practice-exam-repair");
+    if (repairRoute) {
+      repairRoute.hidden = misses.length === 0;
+      if (misses.length) {
+        $("exam-repair-route-note").textContent = misses.length + " concept" +
+          (misses.length === 1 ? "" : "s") + " you lost marks on under exam conditions" +
+          (misses[0].concept ? ", starting with " + misses[0].concept.name : "") + ".";
+      }
+    }
   }
 
   function recommendationActionLabel(rec) {
@@ -1756,30 +1960,34 @@
     };
   }
 
-  // The homepage builder is the single place to configure generic practice, so every entry point
-  // that used to open a modal now brings the learner to those controls.
+  /* The builder is reached from exactly one control.
+   *
+   * It previously had three doors — a disclosure summary, a "Mix your own practice"
+   * button one section further down, and the hero call to action whenever the
+   * recommendation happened to be a mock. All three landed here, so the same
+   * feature was advertised three times on one screen. "Build your own practice" in
+   * the Ways in list is now the only one, and the hero withdraws its duplicate
+   * (see renderRecommendation). */
+  function setBuilderOpen(open) {
+    var builder = $("practice-builder");
+    var toggle = $("builder-toggle");
+    if (!builder || !toggle) return;
+    builder.hidden = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+  }
+
   function openPracticeSetup(courseId) {
-    /* The builder now sits inside a disclosure so it is not part of the homepage's
-     * first read. Anything that sends a learner to it has to open that disclosure
-     * first, or the scroll and focus below land on a collapsed element. */
-    var browse = $("browse-disclosure");
-    if (browse) browse.open = true;
-    var disclosure = $("builder-disclosure");
-    if (disclosure) disclosure.open = true;
     if (courseId && courseId !== profile.selectedCourse) {
       profile.selectedCourse = courseId;
-      selectedModule = 1;
-      inspectedConceptId = null;
       saveProfile();
       renderDashboard();
     }
     // showScreen resets the scroll position, and with smooth scrolling that animation would
-    // outlive and override the jump to the builder.
+    // outlive and override the jump to the builder (LAW-42).
     if (!$("dashboard-screen").classList.contains("active")) showScreen("dashboard-screen");
+    setBuilderOpen(true);
     var builder = $("practice-builder");
     if (!builder) return;
-    builder.classList.add("summoned");
-    window.setTimeout(function () { builder.classList.remove("summoned"); }, 1600);
     builder.focus({preventScroll: true});
     window.requestAnimationFrame(function () { builder.scrollIntoView({block: "center", behavior: "smooth"}); });
   }
@@ -3408,7 +3616,10 @@
     $("result-third-label").textContent = constructed.length ? (completedSession.mode === "simulation" ? "Written responses" : "Responses self-reviewed") : "Re-attempts passed";
     $("result-reattempts").textContent = String(constructed.length || reattempts);
     $("result-improved").textContent = String(improved);
-    $("score-ring").style.borderColor = percent >= 75 ? "#5da77e" : percent >= 50 ? "#d6953d" : "#c65e54";
+    /* The band is stored on the element so the ring can be repainted when the theme
+       changes without recomputing the whole results screen. */
+    $("score-ring").dataset.band = percent >= 75 ? "high" : percent >= 50 ? "mid" : "low";
+    paintScoreRing();
 
     var review = $("result-review");
     review.innerHTML = "";
@@ -3483,7 +3694,6 @@
     session = null;
     selected = null;
     confidence = null;
-    dashboardView = "overview";
     renderDashboard();
     showScreen("dashboard-screen");
   }
@@ -3501,7 +3711,6 @@
     profile = defaultProfile();
     session = null;
     lastFinished = null;
-    dashboardView = "overview";
     saveProfile();
     $("reset-dialog").close();
     renderDashboard();
@@ -3670,11 +3879,16 @@
       renderDashboard();
       return showScreen("dashboard-screen");
     }
+    /* These two scenarios used to select a tab. Nothing is mutually exclusive on the
+     * homepage any more, so they open the matching block and scroll to it instead —
+     * the same destination, reached the way a learner now reaches it. */
     if (name === "dashboard-concepts" || name === "dashboard-plan") {
       seedScenarioProgress();
-      dashboardView = name === "dashboard-concepts" ? "concepts" : "plan";
       renderDashboard();
-      return showScreen("dashboard-screen");
+      showScreen("dashboard-screen");
+      var target = name === "dashboard-concepts" ? $("concept-shelf-title") : revealDisclosure("plan-disclosure");
+      if (target) window.requestAnimationFrame(function () { target.scrollIntoView({block: "start", behavior: "smooth"}); });
+      return;
     }
     if (name === "practice-setup") {
       seedScenarioProgress();
@@ -3741,8 +3955,932 @@
     showScreen("dashboard-screen");
   }
 
+  /* Each chart draws itself once. A line that re-traces on every answer would be
+     the same tax the entrance cascade avoids, and the second tracing says nothing
+     the first did not. */
+  function drawOnce(node) {
+    if (!node || node.dataset.drawn) return;
+    node.dataset.drawn = "1";
+    drawPaths(node);
+  }
+
+  /* ==========================================================================
+   * Dungeon, the examiner
+   * ==========================================================================
+   *
+   * A second product sharing one bank. The learning system's whole job is to order
+   * questions so you can succeed at them — lecture before test, weak concepts first,
+   * feedback after every answer. This one deliberately does none of that, because
+   * what it is for is the opposite: meeting the paper cold, at length, on a clock.
+   *
+   * The paper shapes below are docs/briefs/T6_EXAM_PATTERN.md, which is the authority
+   * for structure and outranks anything else in the repo. Nothing here is invented:
+   * sections, counts, per-question marks, duration, negative marking, and calculator
+   * rules are all from that file. Where the bank cannot fill a section, the brief
+   * says so in the learner's own terms rather than padding with the wrong format —
+   * an MSQ section quietly filled with MCQs would train the wrong instinct on the
+   * only negatively marked section in the whole term, which is precisely backwards.
+   */
+  var EXAM_MINUTES = 120;
+  var EXAM_PAPERS = {
+    SPMS: {
+      title: "Software Product Management for Startups",
+      sat: "22 August, 09:00–11:00",
+      total: 75,
+      calculator: null,
+      sections: [
+        {id: "A", label: "Section A", type: "mcq", count: 35, marks: 1,
+         rule: "One correct option. One mark each. No negative marking."},
+        {id: "B", label: "Section B", type: "msq", count: 20, marks: 2, negative: true,
+         rule: "Multiple correct options. +1 for each right option, −1 for each wrong one, and a question cannot score below zero. Choosing every option is strictly worse than choosing only the ones you are sure of."}
+      ]
+    },
+    BRGSA: {
+      title: "Business Research and Growth Systems Architecture",
+      sat: "22 August, 13:00–15:00",
+      total: 80,
+      calculator: "basic",
+      sections: [
+        {id: "A", label: "Section A", type: "mcq", count: 20, marks: 2,
+         rule: "One correct option. Two marks each. No negative marking."},
+        {id: "B", label: "Section B", type: "case-cloze", count: 4, marks: 5,
+         rule: "A short scenario, then a task. Address every part of the task directly."},
+        {id: "C", label: "Section C", type: "short-answer", count: 2, marks: 10,
+         rule: "A complete structured response. Marked here by your own review against the rubric after you submit."}
+      ]
+    },
+    SCLM: {
+      title: "Supply Chain & Logistics Management",
+      sat: "23 August, 13:00–15:00",
+      total: 80,
+      calculator: "scientific",
+      sections: [
+        {id: "A", label: "Section A", type: "mcq", count: 50, marks: 1,
+         rule: "One correct option. One mark each. No negative marking."},
+        {id: "B", label: "Section B", type: "numeric", count: 6, marks: 4,
+         rule: "Enter the final figure only. Marks are for the answer inside the stated tolerance; no marks are given for working."},
+        {id: "C", label: "Section C", type: "match", count: 3, marks: 2,
+         rule: "Match every pair. Two marks each."}
+      ]
+    },
+    IBM: {
+      title: "Inclusive Business Model",
+      sat: "23 August, 09:00–11:00",
+      total: 100,
+      calculator: null,
+      sections: [
+        {id: "A", label: "Section A", type: "short-answer", count: 10, marks: 10,
+         rule: "Ten written answers, every one of them on the caselet released two days before the exam."}
+      ],
+      /* IBM cannot be mocked honestly and it is important to say why rather than to
+         ship a paper that pretends otherwise. Its real paper is ten written answers
+         on a case nobody has seen yet; a mock built from bank questions would be a
+         different exam wearing its name. */
+      caveat: "This paper is ten written answers on a caselet released two days beforehand. A mock cannot reproduce that, because the case is the paper. What is offered here is timed writing practice against the frameworks, not a rehearsal of the real questions."
+    }
+  };
+
+  /* Deterministic shuffle. The spread has to be random — that is the point, and
+     ordering by concept or module would rebuild the teaching sequence the exam does
+     not have — but it also has to survive a reload mid-paper, so it is seeded from
+     the attempt rather than from Math.random(). */
+  function examShuffle(items, seed) {
+    var out = items.slice();
+    var state = seed >>> 0 || 1;
+    for (var i = out.length - 1; i > 0; i--) {
+      state = (state * 1664525 + 1013904223) >>> 0;
+      var j = state % (i + 1);
+      var swap = out[i]; out[i] = out[j]; out[j] = swap;
+    }
+    return out;
+  }
+
+  function examPool(courseId, type) {
+    var course = getCourse(courseId);
+    var pool = [];
+    Object.keys(course.questions).forEach(function (key) {
+      var group = course.questions[key];
+      (Array.isArray(group) ? group : [group]).forEach(function (question) {
+        var questionType = question.type || "mcq";
+        /* Primers teach. They have no place on a paper. */
+        if (questionType === "primer") return;
+        if (questionType === type) pool.push(question);
+      });
+    });
+    return pool;
+  }
+
+  /* Builds the paper, and reports honestly on what it could not fill. */
+  function buildExamPaper(courseId, seed) {
+    var spec = EXAM_PAPERS[courseId];
+    if (!spec) return null;
+    var questions = [];
+    var shortfalls = [];
+    spec.sections.forEach(function (section) {
+      var pool = examShuffle(examPool(courseId, section.type), seed + section.id.charCodeAt(0));
+      var taken = pool.slice(0, section.count);
+      if (taken.length < section.count) {
+        shortfalls.push({section: section.id, want: section.count, have: taken.length, type: section.type});
+      }
+      taken.forEach(function (question) {
+        questions.push({question: question, section: section.id, marks: section.marks});
+      });
+    });
+    return {courseId: courseId, spec: spec, questions: questions, shortfalls: shortfalls,
+      /* The paper's own marks, not the bank's: a section short of items is worth
+         less, and saying it scored out of the full paper would be a lie. */
+      available: questions.reduce(function (sum, item) { return sum + item.marks; }, 0)};
+  }
+
+  /* ---- exam runtime ------------------------------------------------------- */
+
+  var exam = null;          /* the live attempt, or null outside the examiner */
+  var examTicker = null;
+
+  var EXAM_STATES = [
+    {id: "answered", label: "Answered"},
+    {id: "not-answered", label: "Not answered"},
+    {id: "not-visited", label: "Not visited"},
+    {id: "marked", label: "Marked for review"},
+    {id: "answered-marked", label: "Answered and marked (still scored)"}
+  ];
+
+  function examStateOf(index) {
+    var item = exam.items[index];
+    var answered = examHasResponse(item);
+    if (item.marked) return answered ? "answered-marked" : "marked";
+    if (answered) return "answered";
+    return item.visited ? "not-answered" : "not-visited";
+  }
+
+  function examHasResponse(item) {
+    if (item.response === null || item.response === undefined) return false;
+    if (Array.isArray(item.response)) return item.response.length > 0;
+    if (typeof item.response === "string") return item.response.trim() !== "";
+    if (typeof item.response === "object") return Object.keys(item.response).length > 0;
+    return true;
+  }
+
+  function openExaminer(courseId) {
+    var paper = buildExamPaper(courseId, 20260812);
+    if (!paper) return;
+    exam = {
+      paper: paper,
+      courseId: courseId,
+      items: paper.questions.map(function (entry, index) {
+        return {index: index, section: entry.section, marks: entry.marks, question: entry.question,
+          response: null, marked: false, visited: false, seconds: 0};
+      }),
+      current: 0,
+      section: paper.spec.sections[0].id,
+      remaining: EXAM_MINUTES * 60,
+      started: false,
+      submitted: false
+    };
+    showScreen("exam-screen");
+    renderExamBrief();
+  }
+
+  function renderExamBrief() {
+    var spec = exam.paper.spec;
+    $("exam-brief").hidden = false;
+    $("exam-runner").hidden = true;
+    $("exam-result").hidden = true;
+    $("exam-paper-title").textContent = spec.title;
+    $("exam-brief-lede").textContent = spec.caveat ||
+      "Sat " + spec.sat + ". Once the clock starts nothing is explained until you submit, and the questions arrive in the paper's order rather than a teaching order.";
+    $("exam-facts").innerHTML =
+      "<div><dt>Duration</dt><dd>" + EXAM_MINUTES + " minutes</dd></div>" +
+      "<div><dt>Total marks</dt><dd>" + spec.total + "</dd></div>" +
+      "<div><dt>Questions</dt><dd>" + spec.sections.reduce(function (n, s) { return n + s.count; }, 0) + "</dd></div>" +
+      "<div><dt>Calculator</dt><dd>" + (spec.calculator === "scientific" ? "Scientific" : spec.calculator === "basic" ? "Normal" : "Not allowed") + "</dd></div>";
+    $("exam-rules").innerHTML = spec.sections.map(function (section) {
+      return "<div class='exam-rule'><b>" + escapeHtml(section.label) + " · " + section.count +
+        " × " + section.marks + " mark" + (section.marks === 1 ? "" : "s") + "</b>" +
+        "<p>" + escapeHtml(section.rule) + "</p></div>";
+    }).join("");
+    var shortfalls = exam.paper.shortfalls;
+    var note = $("exam-shortfall");
+    note.hidden = shortfalls.length === 0;
+    if (shortfalls.length) {
+      /* Said plainly, and before the clock starts. A learner is entitled to know that
+         a section is short before they decide to spend two hours on it. */
+      note.textContent = "This mock is not full length yet. " + shortfalls.map(function (s) {
+        return "Section " + s.section + " asks for " + s.want + " " + s.type + " questions and the bank has " + s.have;
+      }).join("; ") + ". You will be scored out of what is actually here, not out of " + spec.total + ".";
+    }
+    $("exam-begin").textContent = "Start the clock · " + EXAM_MINUTES + " minutes";
+  }
+
+  function beginExam() {
+    exam.started = true;
+    $("exam-brief").hidden = true;
+    $("exam-runner").hidden = false;
+    exam.items[0].visited = true;
+    renderExamSections();
+    renderExamQuestion();
+    startExamClock();
+    $("exam-question").focus({preventScroll: true});
+  }
+
+  function startExamClock() {
+    window.clearInterval(examTicker);
+    examTicker = window.setInterval(function () {
+      if (!exam || exam.submitted) return;
+      exam.remaining -= 1;
+      exam.items[exam.current].seconds += 1;
+      renderExamClock();
+      /* The clock is the exam. When it runs out the paper is taken, answered or not. */
+      if (exam.remaining <= 0) submitExam(true);
+    }, 1000);
+  }
+
+  function formatClock(totalSeconds) {
+    var s = Math.max(0, totalSeconds);
+    var m = Math.floor(s / 60);
+    return m + ":" + String(s % 60).padStart(2, "0");
+  }
+
+  function renderExamClock() {
+    var left = $("exam-time-left");
+    left.textContent = formatClock(exam.remaining);
+    /* Under five minutes the clock stops being furniture. */
+    left.classList.toggle("urgent", exam.remaining <= 300);
+    $("exam-time-question").textContent = "On this question " + formatClock(exam.items[exam.current].seconds);
+  }
+
+  function renderExamSections() {
+    $("exam-sections").innerHTML = exam.paper.spec.sections.map(function (section) {
+      var count = exam.items.filter(function (i) { return i.section === section.id; }).length;
+      if (!count) return "";
+      return "<button type='button' role='tab' class='exam-section-tab" +
+        (section.id === exam.section ? " active" : "") + "' data-section='" + section.id +
+        "' aria-selected='" + (section.id === exam.section) + "'>" +
+        escapeHtml(section.label) + "<small>" + count + " × " + section.marks + "</small></button>";
+    }).join("");
+    $all(".exam-section-tab").forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        var first = exam.items.filter(function (i) { return i.section === tab.dataset.section; })[0];
+        if (first) goExamQuestion(first.index);
+      });
+    });
+  }
+
+  function renderExamPalette() {
+    var counts = {};
+    EXAM_STATES.forEach(function (state) { counts[state.id] = 0; });
+    exam.items.forEach(function (_, index) { counts[examStateOf(index)] += 1; });
+    $("exam-legend").innerHTML = EXAM_STATES.map(function (state) {
+      return "<li><i class='exam-chip " + state.id + "'>" + counts[state.id] + "</i><span>" + escapeHtml(state.label) + "</span></li>";
+    }).join("");
+    var sectionItems = exam.items.filter(function (i) { return i.section === exam.section; });
+    $("exam-palette").innerHTML = sectionItems.map(function (item) {
+      var withinSection = sectionItems.indexOf(item) + 1;
+      return "<button type='button' class='exam-chip " + examStateOf(item.index) +
+        (item.index === exam.current ? " current" : "") + "' data-index='" + item.index +
+        "' aria-label='Question " + withinSection + ", " + examStateOf(item.index).replace("-", " ") + "'>" +
+        withinSection + "</button>";
+    }).join("");
+    $all("#exam-palette .exam-chip").forEach(function (chip) {
+      chip.addEventListener("click", function () { goExamQuestion(Number(chip.dataset.index)); });
+    });
+  }
+
+  function goExamQuestion(index) {
+    if (index < 0 || index >= exam.items.length) return;
+    exam.current = index;
+    exam.section = exam.items[index].section;
+    exam.items[index].visited = true;
+    renderExamSections();
+    renderExamQuestion();
+    $("exam-question").focus({preventScroll: true});
+  }
+
+  function renderExamQuestion() {
+    var item = exam.items[exam.current];
+    var question = item.question;
+    var sectionItems = exam.items.filter(function (i) { return i.section === item.section; });
+    $("exam-qnumber").textContent = "Section " + item.section + " · Question " + (sectionItems.indexOf(item) + 1) + " of " + sectionItems.length;
+    $("exam-qmarks").textContent = item.marks + " mark" + (item.marks === 1 ? "" : "s");
+    $("exam-question-body").innerHTML = examQuestionMarkup(question, item);
+    bindExamResponse(item);
+    renderExamPalette();
+    renderExamClock();
+    $("exam-prev").disabled = exam.current === 0;
+    $("exam-next").textContent = exam.current === exam.items.length - 1 ? "Save" : "Save & next";
+    var calculator = exam.paper.spec.calculator;
+    $("exam-calc-toggle").hidden = !calculator;
+  }
+
+  function examQuestionMarkup(question, item) {
+    var type = question.type || "mcq";
+    var head = "";
+    /* `caselet` is a string on some question families and null on others, and null is
+       typeof "object" — so this checks the type rather than truthiness alone. */
+    if (typeof question.caselet === "string" && question.caselet) {
+      head += "<div class='exam-caselet'>" + escapeHtml(question.caselet) + "</div>";
+    }
+    head += "<h2 class='exam-stem'>" + escapeHtml(question.stem || question.prompt || "") + "</h2>";
+    /* Numeric items carry the scenario in `stem` and the actual ask in `prompt`; only
+       showing one of them loses either the context or the question. */
+    if (question.prompt && question.stem && question.prompt !== question.stem) {
+      head += "<p class='exam-prompt'>" + escapeHtml(question.prompt) + "</p>";
+    }
+    if (type === "mcq" || type === "case-cloze") {
+      return head + "<div class='exam-options' role='radiogroup'>" + (question.options || []).map(function (option, index) {
+        return "<button type='button' class='exam-option" + (item.response === index ? " chosen" : "") +
+          "' role='radio' aria-checked='" + (item.response === index) + "' data-choice='" + index + "'>" +
+          "<span class='option-key'>" + "ABCDEFGH"[index] + "</span><span>" + escapeHtml(option) + "</span></button>";
+      }).join("") + "</div>";
+    }
+    if (type === "msq") {
+      var chosen = Array.isArray(item.response) ? item.response : [];
+      return head + "<p class='exam-msq-note'>More than one option is correct. +1 for each right option, −1 for each wrong one.</p>" +
+        "<div class='exam-options'>" + (question.options || []).map(function (option, index) {
+          return "<button type='button' class='exam-option multi" + (chosen.indexOf(index) >= 0 ? " chosen" : "") +
+            "' role='checkbox' aria-checked='" + (chosen.indexOf(index) >= 0) + "' data-choice='" + index + "'>" +
+            "<span class='option-box'></span><span>" + escapeHtml(option) + "</span></button>";
+        }).join("") + "</div>";
+    }
+    if (type === "numeric") {
+      return head + "<label class='exam-numeric'><span>Final answer" + (question.unit ? " (" + escapeHtml(question.unit) + ")" : "") + "</span>" +
+        "<input id='exam-numeric-input' type='text' inputmode='decimal' autocomplete='off' value='" +
+        escapeHtml(item.response === null ? "" : String(item.response)) + "'></label>" +
+        "<p class='exam-hint'>Enter the figure only. No marks are given for working.</p>";
+    }
+    if (type === "match") {
+      /* The bank's shape: `rows` are the prompts and each carries `answer`, an index
+         into the shared `choices` list. There is nothing to shuffle — the choices are
+         already one fixed list, which is how the paper presents them. */
+      var rows = question.rows || [];
+      var choices = question.choices || [];
+      var picked = item.response && typeof item.response === "object" ? item.response : {};
+      return head + "<div class='exam-match'>" + rows.map(function (row, index) {
+        return "<div class='exam-match-row'><span>" + escapeHtml(row.label || "") + "</span>" +
+          "<select data-pair='" + index + "' aria-label='Match for " + escapeHtml(row.label || "") + "'>" +
+          "<option value=''>Choose</option>" +
+          choices.map(function (choice, choiceIndex) {
+            return "<option value='" + choiceIndex + "'" +
+              (String(picked[index]) === String(choiceIndex) ? " selected" : "") + ">" +
+              escapeHtml(choice) + "</option>";
+          }).join("") + "</select></div>";
+      }).join("") + "</div>";
+    }
+    /* short-answer and anything else written */
+    return head + "<label class='exam-written'><span>Your answer</span>" +
+      "<textarea id='exam-written-input' rows='12' placeholder='Write your full answer here.'>" +
+      escapeHtml(item.response === null ? "" : String(item.response)) + "</textarea></label>" +
+      "<p class='exam-hint'>Written answers are not machine-marked. After you submit you will review this against the rubric yourself.</p>";
+  }
+
+  function bindExamResponse(item) {
+    var type = item.question.type || "mcq";
+    $all("#exam-question-body .exam-option").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var choice = Number(button.dataset.choice);
+        if (type === "msq") {
+          var chosen = Array.isArray(item.response) ? item.response.slice() : [];
+          var at = chosen.indexOf(choice);
+          if (at >= 0) chosen.splice(at, 1); else chosen.push(choice);
+          item.response = chosen;
+        } else {
+          item.response = choice;
+        }
+        renderExamQuestion();
+      });
+    });
+    var numeric = $("exam-numeric-input");
+    if (numeric) numeric.addEventListener("input", function () { item.response = numeric.value; renderExamPalette(); });
+    var written = $("exam-written-input");
+    if (written) written.addEventListener("input", function () { item.response = written.value; renderExamPalette(); });
+    $all("#exam-question-body select[data-pair]").forEach(function (select) {
+      select.addEventListener("change", function () {
+        var picked = item.response && typeof item.response === "object" ? item.response : {};
+        if (select.value === "") delete picked[select.dataset.pair];
+        else picked[select.dataset.pair] = select.value;
+        item.response = picked;
+        renderExamPalette();
+      });
+    });
+  }
+
+  /* Scoring, by the paper's rules rather than the learning system's.
+     The only subtle one is SPMS Section B: +1 per right option, −1 per wrong, and the
+     floor is per question, not per paper — so a question cannot drag another one down. */
+  function scoreExamItem(item) {
+    var question = item.question;
+    var type = question.type || "mcq";
+    if (type === "msq") {
+      var correct = question.answers || question.correct || [];
+      var chosen = Array.isArray(item.response) ? item.response : [];
+      var right = chosen.filter(function (c) { return correct.indexOf(c) >= 0; }).length;
+      var wrong = chosen.length - right;
+      /* Floored at zero per question so one question cannot drag another down, and
+         capped at the question's own marks so a question carrying three correct
+         options cannot pay out more than the two marks the paper says it is worth. */
+      return {awarded: Math.min(item.marks, Math.max(0, right - wrong)), possible: item.marks, machine: true};
+    }
+    if (type === "mcq" || type === "case-cloze") {
+      return {awarded: item.response === question.answer ? item.marks : 0, possible: item.marks, machine: true};
+    }
+    if (type === "numeric") {
+      var value = parseFloat(String(item.response === null ? "" : item.response).replace(/[,₹\s]/g, ""));
+      var target = Number(question.answer);
+      var tolerance = Number(question.tolerance || 0);
+      var hit = isFinite(value) && Math.abs(value - target) <= tolerance;
+      return {awarded: hit ? item.marks : 0, possible: item.marks, machine: true};
+    }
+    if (type === "match") {
+      /* Every row or nothing. The paper gives a match question two marks and says
+         nothing about partial credit, and inventing a marking rule the examiner has
+         not stated would teach a wrong expectation about the real paper. */
+      var rows = question.rows || [];
+      var picked = item.response && typeof item.response === "object" ? item.response : {};
+      var hits = rows.filter(function (row, index) { return String(picked[index]) === String(row.answer); }).length;
+      return {awarded: rows.length && hits === rows.length ? item.marks : 0, possible: item.marks, machine: true};
+    }
+    /* Written answers are not machine-marked, and a mock must not pretend otherwise.
+       They are excluded from the machine total and reported separately for self-review. */
+    return {awarded: 0, possible: item.marks, machine: false, written: true};
+  }
+
+  function submitExam(automatic) {
+    if (!exam || exam.submitted) return;
+    if (!automatic) {
+      var unanswered = exam.items.filter(function (item) { return !examHasResponse(item); }).length;
+      var confirmCopy = unanswered
+        ? unanswered + " question" + (unanswered === 1 ? " is" : "s are") + " unanswered. Submit the paper anyway?"
+        : "Submit the paper?";
+      if (!window.confirm(confirmCopy)) return;
+    }
+    exam.submitted = true;
+    window.clearInterval(examTicker);
+    renderExamResult(automatic);
+  }
+
+  /* What the paper exposed, carried back into the learning system.
+   *
+   * The two products share a bank, and this is the one place they should share a
+   * signal: a concept you could not do under exam conditions is the best evidence
+   * anywhere in the product about what to study next.
+   *
+   * It is stored apart from `conceptAttempts` deliberately, and that separation is
+   * the whole design. A mock is unassisted, uncoached, against the clock, with no
+   * lesson before it and no feedback during it — the exact opposite of the conditions
+   * the evidence model is calibrated on. Writing mock answers into conceptAttempts
+   * would let a bad afternoon rewrite a learner's mastery record, and a lucky guess
+   * award Strong. So misses here **prioritise** and never **score**: they change the
+   * order of what is offered, and nothing else. */
+  function recordExamMisses(scores) {
+    var courseId = exam.courseId;
+    var store = profile.examMisses[courseId] || (profile.examMisses[courseId] = {});
+    var stamped = new Date().toISOString();
+    exam.items.forEach(function (item, index) {
+      var score = scores[index];
+      /* Written answers are not machine-marked, so nothing is known about them yet. */
+      if (!score.machine) return;
+      if (score.awarded === score.possible) return;
+      var conceptId = item.question.conceptId;
+      if (!conceptId) return;
+      var entry = store[conceptId] || (store[conceptId] = {missed: 0, skipped: 0, at: null});
+      if (examHasResponse(item)) entry.missed += 1; else entry.skipped += 1;
+      entry.at = stamped;
+    });
+    saveProfile();
+  }
+
+  /* The concepts a mock exposed, worst first. Skipped counts for less than answered
+     and wrong: running out of time is not the same as not knowing it. */
+  function examMissList(courseId) {
+    var store = (profile.examMisses && profile.examMisses[courseId]) || {};
+    return Object.keys(store).map(function (conceptId) {
+      var entry = store[conceptId];
+      return {conceptId: conceptId, concept: getConcept(courseId, conceptId),
+        weight: entry.missed * 2 + entry.skipped, missed: entry.missed, skipped: entry.skipped};
+    }).filter(function (row) { return row.concept && row.weight > 0; })
+      .sort(function (a, b) { return b.weight - a.weight; });
+  }
+
+  function startExamRepair(courseId) {
+    var misses = examMissList(courseId).slice(0, 8);
+    if (!misses.length) return;
+    profile.selectedCourse = courseId;
+    var ids = misses.map(function (row) {
+      return chooseQuestion(courseId, row.conceptId, null, []) || questionSurfaces(courseId, row.conceptId)[0];
+    }).filter(Boolean).map(function (question) { return question.id; });
+    if (!ids.length) return;
+    session = createSession(courseId, {kind: "exam-repair", title: "What the mock exposed",
+      kicker: "The concepts you lost marks on, taught before they are tested again"}, ids);
+    /* The same four steps every other run uses. Calling renderQuestion() and
+       showScreen() directly skipped beginPractice(), which is what writes the session
+       header — so the run started with the markup's placeholder "Title" still in it. */
+    profile.active = clone(session);
+    saveProfile();
+    beginPractice();
+  }
+
+  function renderExamResult(automatic) {
+    $("exam-runner").hidden = true;
+    $("exam-result").hidden = false;
+    var scores = exam.items.map(scoreExamItem);
+    recordExamMisses(scores);
+    var machine = scores.filter(function (s) { return s.machine; });
+    var written = scores.filter(function (s) { return !s.machine; });
+    var awarded = machine.reduce(function (n, s) { return n + s.awarded; }, 0);
+    var possible = machine.reduce(function (n, s) { return n + s.possible; }, 0);
+    var writtenMarks = written.reduce(function (n, s) { return n + s.possible; }, 0);
+
+    $("exam-result-title").textContent = automatic ? "Time ran out — paper taken as it stood" : "Your mock result";
+    $("exam-result-lede").textContent = writtenMarks
+      ? "Machine-marked sections only. " + writtenMarks + " marks of written work are yours to review against the rubric; nothing here scores them for you."
+      : "Every section on this paper is machine-marked.";
+    $("exam-score").innerHTML = "<b>" + awarded + "</b><span>of " + possible + " machine-marked marks</span>" +
+      (possible ? "<small>" + Math.round(awarded / possible * 100) + "%</small>" : "");
+
+    $("exam-section-breakdown").innerHTML = exam.paper.spec.sections.map(function (section) {
+      var indexes = exam.items.map(function (item, i) { return item.section === section.id ? i : -1; }).filter(function (i) { return i >= 0; });
+      if (!indexes.length) return "";
+      var sectionScores = indexes.map(function (i) { return scores[i]; });
+      var isWritten = sectionScores.some(function (s) { return !s.machine; });
+      var got = sectionScores.reduce(function (n, s) { return n + s.awarded; }, 0);
+      var out = sectionScores.reduce(function (n, s) { return n + s.possible; }, 0);
+      var attempted = indexes.filter(function (i) { return examHasResponse(exam.items[i]); }).length;
+      return "<div class='exam-section-score'><b>" + escapeHtml(section.label) + "</b>" +
+        "<span>" + (isWritten ? "Self-review · " + out + " marks" : got + " / " + out) + "</span>" +
+        "<small>" + attempted + " of " + indexes.length + " attempted</small></div>";
+    }).join("");
+    /* The most useful thing on this screen is not the score. It is the list of things
+       the paper just proved you cannot do yet, and a way straight into them. */
+    var misses = examMissList(exam.courseId);
+    var repair = $("exam-repair");
+    repair.hidden = misses.length === 0;
+    if (misses.length) {
+      $("exam-repair-copy").textContent = "This paper cost you marks on " + misses.length +
+        " concept" + (misses.length === 1 ? "" : "s") + ". They are now first in line back in the learning system, each one taught before it is tested again.";
+      $("exam-repair-list").innerHTML = misses.slice(0, 6).map(function (row) {
+        return "<li><b>" + escapeHtml(row.concept.name) + "</b><small>" +
+          (row.missed ? row.missed + " answered wrong" : "") +
+          (row.missed && row.skipped ? " · " : "") +
+          (row.skipped ? row.skipped + " left blank" : "") + "</small></li>";
+      }).join("");
+    }
+    $("exam-review-list").innerHTML = "";
+  }
+
+  function renderExamReview() {
+    var scores = exam.items.map(scoreExamItem);
+    $("exam-review-list").innerHTML = "<div class='exam-review'>" + exam.items.map(function (item, index) {
+      var score = scores[index];
+      var state = !examHasResponse(item) ? "skipped" : score.machine ? (score.awarded === score.possible ? "right" : score.awarded > 0 ? "part" : "wrong") : "written";
+      return "<article class='exam-review-item " + state + "'>" +
+        "<small>Section " + item.section + " · " + (score.machine ? score.awarded + " of " + score.possible : "self-review") + "</small>" +
+        "<b>" + escapeHtml(item.question.stem || item.question.prompt || "") + "</b>" +
+        (item.question.explanation ? "<p>" + escapeHtml(item.question.explanation) + "</p>" : "") +
+        "</article>";
+    }).join("") + "</div>";
+    $("exam-review").hidden = true;
+  }
+
+  function leaveExaminer() {
+    window.clearInterval(examTicker);
+    exam = null;
+    renderDashboard();
+    showScreen("dashboard-screen");
+  }
+
+  /* The calculator the paper allows, and only that one. SPMS permits none, so the
+     control is not rendered there at all rather than shown and disabled — offering a
+     tool the real paper forbids would train a habit the exam then removes. */
+  var CALC_KEYS = {
+    basic: [["7","8","9","÷"],["4","5","6","×"],["1","2","3","−"],["0",".","=","+"],["C","⌫"]],
+    scientific: [["√","x²","1/x","%"],["7","8","9","÷"],["4","5","6","×"],["1","2","3","−"],["0",".","=","+"],["C","⌫"]]
+  };
+
+  function renderCalculator() {
+    var kind = exam.paper.spec.calculator;
+    if (!kind) return;
+    var node = $("exam-calculator");
+    node.innerHTML = "<output id='exam-calc-display' aria-live='polite'>0</output>" +
+      CALC_KEYS[kind].map(function (row) {
+        return "<div class='calc-row'>" + row.map(function (key) {
+          return "<button type='button' class='calc-key' data-key='" + escapeHtml(key) + "'>" + escapeHtml(key) + "</button>";
+        }).join("") + "</div>";
+      }).join("");
+    var display = $("exam-calc-display");
+    var buffer = "";
+    var show = function (value) { display.textContent = value === "" ? "0" : value; };
+    $all("#exam-calculator .calc-key").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var key = button.dataset.key;
+        try {
+          if (key === "C") { buffer = ""; }
+          else if (key === "⌫") { buffer = buffer.slice(0, -1); }
+          else if (key === "=") {
+            /* Arithmetic only: the expression is rebuilt from the digits and operators
+               this keypad can produce, so nothing else can reach the evaluator. */
+            var safe = buffer.replace(/÷/g, "/").replace(/×/g, "*").replace(/−/g, "-");
+            if (!/^[0-9+\-*/.() ]*$/.test(safe)) throw new Error("bad");
+            buffer = String(Math.round(Function("return (" + safe + ")")() * 1e10) / 1e10);
+          }
+          else if (key === "√") { buffer = String(Math.sqrt(parseFloat(buffer) || 0)); }
+          else if (key === "x²") { buffer = String(Math.pow(parseFloat(buffer) || 0, 2)); }
+          else if (key === "1/x") { buffer = String(1 / (parseFloat(buffer) || 1)); }
+          else if (key === "%") { buffer = String((parseFloat(buffer) || 0) / 100); }
+          else buffer += key;
+        } catch (error) { buffer = ""; display.textContent = "Error"; return; }
+        show(buffer);
+      });
+    });
+  }
+
+  function bindExaminer() {
+    var open = $("open-exam");
+    if (open) open.addEventListener("click", function () { openExaminer(profile.selectedCourse); });
+    $("exam-leave-brief").addEventListener("click", leaveExaminer);
+    $("exam-begin").addEventListener("click", function () { beginExam(); renderCalculator(); });
+    $("exam-prev").addEventListener("click", function () { goExamQuestion(exam.current - 1); });
+    $("exam-next").addEventListener("click", function () { goExamQuestion(Math.min(exam.current + 1, exam.items.length - 1)); });
+    $("exam-clear").addEventListener("click", function () {
+      exam.items[exam.current].response = null;
+      renderExamQuestion();
+    });
+    $("exam-mark").addEventListener("click", function () {
+      exam.items[exam.current].marked = !exam.items[exam.current].marked;
+      if (exam.items[exam.current].marked && exam.current < exam.items.length - 1) goExamQuestion(exam.current + 1);
+      else renderExamQuestion();
+    });
+    $("exam-submit").addEventListener("click", function () { submitExam(false); });
+    $("exam-result-home").addEventListener("click", leaveExaminer);
+    $("exam-review").addEventListener("click", renderExamReview);
+    $("exam-repair-start").addEventListener("click", function () {
+      var courseId = exam.courseId;
+      window.clearInterval(examTicker);
+      exam = null;
+      startExamRepair(courseId);
+    });
+    $("practice-exam-repair").addEventListener("click", function () { startExamRepair(profile.selectedCourse); });
+    $("exam-calc-toggle").addEventListener("click", function () {
+      var panel = $("exam-calculator");
+      panel.hidden = !panel.hidden;
+      $("exam-calc-toggle").setAttribute("aria-expanded", String(!panel.hidden));
+    });
+    /* Leaving mid-paper is a real risk of losing two hours, so it asks. */
+    window.addEventListener("beforeunload", function (event) {
+      if (exam && exam.started && !exam.submitted) { event.preventDefault(); event.returnValue = ""; }
+    });
+  }
+
+  /* Entrance orchestration.
+   *
+   * Runs once, on first load. The dashboard re-renders on every answer and every
+   * subject switch; replaying the cascade each time would charge a 400ms flourish
+   * hundreds of times a session, which the motion language explicitly forbids for
+   * anything seen often.
+   *
+   * The groups below are ordered the way the page is read — the four questions, top
+   * to bottom. Items inside a group stagger against each other; groups do not
+   * stagger against each other, because they are screens apart and each one waits
+   * until it is actually scrolled to. */
+  var REVEAL_GROUPS = [
+    ".home-block > .block-heading",
+    ".subject-rail",
+    ".focus-panel",
+    ".route-list > .route",
+    ".set-block > *",
+    ".evidence-pair > *",
+    ".overall-stats > .stat",
+    ".concept-shelf-list > .shelf-group",
+    ".home-block > .disclosure"
+  ];
+  var STAGGER_MS = 55;
+
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  /* Only what the learner can already see is animated.
+   *
+   * The first build of this revealed on scroll, which was wrong twice over. It left
+   * everything below the fold sitting at opacity 0 waiting for an intersection, so a
+   * fast scroll arrived at blank space; and any safety net generous enough to rescue
+   * a stuck node also fired before the learner had scrolled to it, which cancelled
+   * the effect it was protecting. Scroll reveal also fails the frequency-of-use rule
+   * badly here — this is a dashboard opened many times a day, and animating a block
+   * every time it is scrolled past turns a flourish into a toll.
+   *
+   * So: one cascade, on load, over the elements already in view. Everything further
+   * down is never hidden and simply exists when the learner reaches it. There is
+   * nothing to rescue, because nothing else was ever put at risk. */
+  function setupReveals() {
+    if (prefersReducedMotion()) return;
+    var fold = window.innerHeight * 1.1;
+    var order = [];
+    REVEAL_GROUPS.forEach(function (selector) {
+      $all(selector).forEach(function (node) {
+        var top = node.getBoundingClientRect().top;
+        if (top >= 0 && top < fold) order.push({node: node, top: top});
+      });
+    });
+    /* Cascaded down the page rather than through the selector list, so the motion
+       follows the reading order a learner's eye is already taking. */
+    order.sort(function (a, b) { return a.top - b.top; });
+    order.forEach(function (item, index) {
+      var node = item.node;
+      node.classList.add("reveal-pending");
+      /* Capped: past about half a second the cascade stops reading as one motion and
+         starts reading as the page being slow. */
+      var delay = Math.min(index * STAGGER_MS, 440);
+      window.setTimeout(function () {
+        node.classList.remove("reveal-pending");
+        node.classList.add("reveal-in");
+        /* Dropped once played, so a later re-render of the same node does not
+           inherit an animation that has already been paid for. */
+        window.setTimeout(function () { node.classList.remove("reveal-in"); }, 600);
+      }, delay);
+    });
+  }
+
+  /* Line drawing for the three SVG charts. Each path is measured, told its own
+     length through a custom property, and traced from its first point — which is
+     also the end a learner starts reading from. Called after the markup is written,
+     because getTotalLength() needs the path to be in the document. */
+  function drawPaths(root) {
+    if (!root || prefersReducedMotion()) return;
+    /* Two ways to draw a line, because there are two kinds of line here.
+     *
+     * Solid data lines are traced with stroke-dasharray, the ordinary technique.
+     * Dashed lines cannot be: .draw-in overwrites stroke-dasharray with the path's own
+     * length, which would erase the dashes — and on `.route-full` those dashes are the
+     * meaning, standing for the distance still to go. They are wiped instead, revealed
+     * left to right with a clip, which leaves the dash pattern untouched.
+     *
+     * This matters more than it sounds: a learner opening the app for the first time
+     * has no data at all, so *every* chart is in its empty state and every one of those
+     * is a dashed placeholder. Excluding them meant the charts did not animate for
+     * exactly the person seeing them for the first time. */
+    var traced = root.querySelectorAll(".spark-line, .trend-line, .route-done");
+    Array.prototype.forEach.call(traced, function (path) {
+      if (!path.getTotalLength) return;
+      var length = path.getTotalLength();
+      if (!length) return;
+      path.style.setProperty("--draw-length", length.toFixed(1));
+      path.classList.add("draw-in");
+    });
+    Array.prototype.forEach.call(root.querySelectorAll(".route-full, .spark-empty, .trend-empty"), function (path) {
+      path.classList.add("draw-wipe");
+    });
+    Array.prototype.forEach.call(root.querySelectorAll(".spark-area, .trend-area, .route-gained"), function (node) {
+      node.classList.add("draw-fade");
+    });
+    Array.prototype.forEach.call(root.querySelectorAll(".spark-dot, .route-here, .route-goal, circle"), function (node) {
+      node.classList.add("draw-pop");
+    });
+  }
+
+  /* On-demand explanations.
+   *
+   * These were the browser's own `title` tooltip, which is why the "i" markers read
+   * as dead: `title` waits about a second, never fires on keyboard focus, and never
+   * fires on touch. One shared bubble replaces all seven of them — the two "i"
+   * markers, the negative-marking flag, and the four exam-slot marks.
+   *
+   * The bubble is aria-hidden on purpose. Every trigger already carries this text,
+   * either as its own aria-label or (for the marks inside a subject card) on the
+   * card button's label, so announcing the bubble as well would read it twice. */
+  var tipNode = null;
+  var tipTimer = null;
+  var tipTrigger = null;
+
+  function tipTarget(node) {
+    return node && node.closest ? node.closest("[data-tip]") : null;
+  }
+
+  function hideTip() {
+    window.clearTimeout(tipTimer);
+    if (tipTrigger) { tipTrigger.removeAttribute("data-tip-open"); tipTrigger = null; }
+    if (tipNode) tipNode.removeAttribute("data-open");
+  }
+
+  function placeTip(trigger) {
+    if (!tipNode) {
+      tipNode = document.createElement("div");
+      tipNode.className = "tip";
+      tipNode.setAttribute("aria-hidden", "true");
+      document.body.appendChild(tipNode);
+    }
+    tipNode.textContent = trigger.getAttribute("data-tip");
+    /* Measure at the origin before placing: a bubble still sitting at its last
+       position can be clamped by the wrong edge and report the wrong height. */
+    tipNode.style.left = "0px";
+    tipNode.style.top = "0px";
+    var rect = trigger.getBoundingClientRect();
+    var box = tipNode.getBoundingClientRect();
+    var margin = 12;
+    var gap = 9;
+    /* Above by default, below when there is no room above. */
+    var side = rect.top - box.height - gap >= margin ? "top" : "bottom";
+    var top = side === "top" ? rect.top - box.height - gap : rect.bottom + gap;
+    /* Clamped to the viewport. Both "i" markers sit near the right edge — the sort
+       hint about 100px in, the goal legend about 145px — so a centred bubble would
+       hang off the page at either one. */
+    var wanted = rect.left + rect.width / 2 - box.width / 2;
+    var left = Math.max(margin, Math.min(wanted, window.innerWidth - box.width - margin));
+    tipNode.style.left = Math.round(left) + "px";
+    tipNode.style.top = Math.round(top) + "px";
+    tipNode.setAttribute("data-side", side);
+    /* The arrow follows the trigger rather than the bubble, so a clamped bubble
+       still points at the thing it is explaining. */
+    var arrow = rect.left + rect.width / 2 - left;
+    tipNode.style.setProperty("--tip-arrow", Math.round(Math.max(13, Math.min(arrow, box.width - 13))) + "px");
+    tipNode.setAttribute("data-open", "");
+    trigger.setAttribute("data-tip-open", "");
+    tipTrigger = trigger;
+  }
+
+  function showTip(trigger, delay) {
+    window.clearTimeout(tipTimer);
+    if (!trigger.getAttribute("data-tip")) return;
+    if (!delay) { placeTip(trigger); return; }
+    tipTimer = window.setTimeout(function () { placeTip(trigger); }, delay);
+  }
+
+  function bindTips() {
+    /* Delegated: most triggers are rendered after this runs, and the subject cards
+       are rebuilt on every sort change and every answer. */
+    document.addEventListener("pointerover", function (event) {
+      if (event.pointerType === "touch") return;
+      var trigger = tipTarget(event.target);
+      if (trigger === tipTrigger) return;
+      if (!trigger) { hideTip(); return; }
+      /* 120ms — the "acknowledge" step in the motion language. Long enough not to
+         flicker while the pointer crosses the row, short enough to feel answered. */
+      showTip(trigger, 120);
+    });
+    /* Focus opens with no delay: a keyboard user has already committed to the
+       element, and waiting there reads as the control being dead. */
+    document.addEventListener("focusin", function (event) {
+      var trigger = tipTarget(event.target);
+      if (trigger) showTip(trigger, 0); else hideTip();
+    });
+    document.addEventListener("focusout", function (event) {
+      if (tipTrigger && tipTrigger === tipTarget(event.target)) hideTip();
+    });
+    /* Touch: tap opens, tap elsewhere closes. `title` offered nothing here at all,
+       which meant every explanation in the app was unreachable on a phone. */
+    document.addEventListener("pointerdown", function (event) {
+      if (event.pointerType !== "touch") return;
+      var trigger = tipTarget(event.target);
+      if (!trigger || trigger === tipTrigger) { hideTip(); return; }
+      showTip(trigger, 0);
+    }, true);
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && tipTrigger) hideTip();
+    });
+    /* A fixed bubble does not travel with the page or survive a reflow. */
+    window.addEventListener("scroll", hideTip, true);
+    window.addEventListener("resize", hideTip);
+  }
+
+  /* The appearance control. Three states rather than two, so "follow my device"
+     survives being pressed once. The sr-only span is the button's accessible name
+     and reports the state; the tooltip says what pressing it will do next. */
+  var THEME_COPY = {
+    system: {state: "Appearance: following your device", tip: "Following your device's light or dark setting. Press to stay on light."},
+    light: {state: "Appearance: light", tip: "Held on light. Press to stay on dark."},
+    dark: {state: "Appearance: dark", tip: "Held on dark. Press to go back to following your device."}
+  };
+
+  function renderThemeToggle() {
+    var button = $("theme-toggle");
+    if (!button || !window.T6Theme) return;
+    var copy = THEME_COPY[T6Theme.get()] || THEME_COPY.system;
+    button.setAttribute("data-theme-mode", T6Theme.get());
+    button.setAttribute("data-tip", copy.tip);
+    var label = $("theme-toggle-state");
+    if (label) label.textContent = copy.state;
+  }
+
   function bindEvents() {
-    bindStageTabs();
+    bindResumeBar();
+    bindTips();
+    bindExaminer();
+    renderThemeToggle();
+    if (window.T6Theme) {
+      $("theme-toggle").addEventListener("click", function () {
+        T6Theme.set(T6Theme.next());
+        hideTip();
+      });
+      /* Subscribed rather than called after the click, so the button cannot drift out
+         of step with the theme it reports — the icon and the label follow whoever
+         changed it, including the device switching over at sunset. Canvas is repainted
+         from the same signal because it cannot inherit a CSS custom property. */
+      T6Theme.onChange(function () {
+        renderThemeToggle();
+        repaintThemedCanvas();
+      });
+    }
+    $("course-grid").addEventListener("scroll", updateRailScrollCue, {passive: true});
+    window.addEventListener("resize", updateRailScrollCue);
     $("subject-sort").addEventListener("change", function (event) {
       profile.subjectSort = event.target.value === "hardest" ? "hardest" : "exam";
       saveProfile();
@@ -3750,12 +4888,12 @@
     });
     $("brand-home").addEventListener("click", goDashboard);
     $("start-recommended").addEventListener("click", executeRecommendation);
-    $("start-selected-mock").addEventListener("click", function () { openPracticeSetup(profile.selectedCourse); });
     $("practice-priority").addEventListener("click", function () { startPriorityPractice(profile.selectedCourse); });
     $("start-course").addEventListener("click", function () { startStudySet(profile.selectedCourse, 1); });
-    $("previous-module").addEventListener("click", function () { selectedModule -= 1; inspectedConceptId = null; renderConceptMap(profile.selectedCourse); });
-    $("next-module").addEventListener("click", function () { selectedModule += 1; inspectedConceptId = null; renderConceptMap(profile.selectedCourse); });
-    $("practice-inspected").addEventListener("click", function () { if (inspectedConceptId) startConceptPractice(profile.selectedCourse, inspectedConceptId); });
+    $("builder-toggle").addEventListener("click", function () {
+      setBuilderOpen($("practice-builder").hidden);
+      if (!$("practice-builder").hidden) $("practice-builder").focus({preventScroll: true});
+    });
     $("leave-practice").addEventListener("click", leavePractice);
     $("commit-answer").addEventListener("click", commitAnswer);
     $("next-question").addEventListener("click", nextQuestion);
@@ -3832,6 +4970,17 @@
       showScreen("dashboard-screen");
     }
     document.body.removeAttribute("aria-busy");
+    startEntrance();
+  }
+
+  /* Called after the first render, never again. Everything it does is optional
+     decoration on a page that is already complete and readable, which is why it is
+     the last thing to happen and why nothing above it waits on it. */
+  function startEntrance() {
+    if ($("dashboard-screen").classList.contains("active")) {
+      setupReveals();
+      growRadar();
+    }
   }
 
   init().catch(function () {
@@ -3841,5 +4990,6 @@
     renderDashboard();
     showScreen("dashboard-screen");
     setSyncStatus("Saved on this device");
+    startEntrance();
   });
 })();

@@ -325,7 +325,24 @@ function expiredSessionCookie() {
 
 export function createD1Store() {
   return {
-    async checkLogin(env, email, country) {
+    /* `releaseOtherDevice` is the learner moving from one device to another.
+     *
+     * Progress already follows the email through D1, so a learner who picks up a
+     * laptop instead of a phone has their work waiting — but the one-active-browser
+     * rule met them with "sign out there", which is not an instruction anyone can
+     * follow when "there" is at home. The owner could clear it from the Control Room;
+     * the learner could not, and had to wait for a human.
+     *
+     * Letting them evict their own other session grants no capability they did not
+     * already have: admission is a check on holding an approved email, and anyone
+     * holding one can already sign in whenever no session happens to exist. What the
+     * rule actually buys is that two people cannot use one account *at the same
+     * time*, and eviction keeps that exactly — one session in, one session out.
+     *
+     * The country lock is checked above this and is deliberately not touched.
+     * Switching devices is routine; clearing a lock is a security decision that
+     * stays with the owner. A locked account cannot take over its way in. */
+    async checkLogin(env, email, country, releaseOtherDevice) {
       const db = requireDatabase(env);
       const now = new Date().toISOString();
       const tester = await db.prepare("SELECT first_country, location_locked_at FROM testers WHERE email = ?").bind(email).first();
@@ -343,8 +360,14 @@ export function createD1Store() {
       await db.prepare("DELETE FROM learner_sessions WHERE expires_at <= ?").bind(now).run();
       const existing = await db.prepare("SELECT token_hash FROM learner_sessions WHERE email = ? LIMIT 1").bind(email).first();
       if (existing) {
-        throw new RequestError(409, "ACCOUNT_IN_USE", "This tester account is already active on another browser. Sign out there or ask Aneeket for help.");
+        if (releaseOtherDevice !== true) {
+          throw new RequestError(409, "ACCOUNT_IN_USE", "This account is already open on another browser. You can sign that one out and continue here.");
+        }
+        /* Sessions only. Progress lives in its own table and is never touched by a
+           device switch — the whole point is that the learner keeps their work. */
+        await db.prepare("DELETE FROM learner_sessions WHERE email = ?").bind(email).run();
       }
+      return {releasedOtherDevice: Boolean(existing) && releaseOtherDevice === true};
     },
 
     async issueSession(env, email, tokenHash, expiresAt, country) {
@@ -644,11 +667,14 @@ async function manageSession(request, env, fetchImpl, store) {
       throw new RequestError(400, "COMMUNITY_ACK_REQUIRED", "Open the WhatsApp invite and confirm membership before entering.");
     }
   }
-  await store.checkLogin(env, email, country);
+  const login = await store.checkLogin(env, email, country, body?.releaseOtherDevice === true);
   if (acceptedVersion !== AGREEMENT_VERSION) await store.acceptAgreement(env, email, AGREEMENT_VERSION);
   await store.issueSession(env, email, await hashToken(token), expiresAt, country);
-  console.log(JSON.stringify({event: "learner_login", status: "approved"}));
-  return json({status: "approved", email}, 200, {"Set-Cookie": sessionCookie(token)});
+  /* Recorded separately so a run of takeovers on one address is visible to the owner
+     as a pattern — one learner switching devices looks nothing like an address being
+     passed around, and only the log can tell them apart. */
+  console.log(JSON.stringify({event: "learner_login", status: "approved", releasedOtherDevice: Boolean(login?.releasedOtherDevice)}));
+  return json({status: "approved", email, releasedOtherDevice: Boolean(login?.releasedOtherDevice)}, 200, {"Set-Cookie": sessionCookie(token)});
 }
 
 async function manageCommunity(request, env, store) {
