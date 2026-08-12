@@ -93,9 +93,10 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .rail-scroll[data-scroll="start"]::after, .rail-scroll[data-scroll="middle"]::after { opacity: 1; }
 .rail-scroll[data-scroll="middle"]::before, .rail-scroll[data-scroll="end"]::before { opacity: 1; }
 
-.subject-identity { margin: 0; }
-.subject-identity b { font-size: 14px; }
-.subject-identity span { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; }
+/* A caption on the cards, not a paragraph of its own. Tight to the row above it and
+   generously clear of the hero below, so the space says which one it belongs to
+   instead of leaving it floating between the two. */
+.subject-identity { max-width: 62ch; margin: -5px 0 14px; color: var(--muted); font-size: 13px; }
 .focus-panel { position: relative; overflow: hidden; margin-top: 14px; display: grid; grid-template-columns: minmax(0,1.42fr) minmax(300px,.62fr); color: white; background: var(--ink); border-radius: 26px; box-shadow: var(--shadow); }
 .focus-panel::before { content: ""; position: absolute; width: 360px; height: 360px; right: -130px; top: -180px; border: 1px solid rgba(126,209,220,.22); border-radius: 50%; box-shadow: 0 0 0 48px rgba(126,209,220,.03), 0 0 0 96px rgba(126,209,220,.025); pointer-events: none; }
 .focus-copy { position: relative; z-index: 1; padding: clamp(30px,5vw,58px); }
@@ -123,7 +124,11 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    border between them and put a second surface inside the first (LAW-19). A
    hairline is the one separator space cannot replace here, because the two
    columns sit side by side. */
-.focus-goal { position: relative; z-index: 1; align-self: center; padding: clamp(24px,3vw,34px) clamp(26px,3.4vw,40px); border-inline-start: 1px solid rgba(255,255,255,.14); }
+/* Stretched, not centred. Centred it was 287px tall in a 505px panel, so the hairline
+   ran 57% of the way down and stopped in mid-air — the single clearest "unfinished"
+   tell on the block. The column now spans the panel and the rule terminates against
+   both edges; the content is centred inside it instead. */
+.focus-goal { position: relative; z-index: 1; align-self: stretch; display: grid; align-content: center; padding: clamp(24px,3vw,34px) clamp(26px,3.4vw,40px); border-inline-start: 1px solid rgba(255,255,255,.14); }
 .focus-goal .eyebrow { color: #9fb4ad; }
 .momentum-figure { margin-top: 9px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; }
 .momentum-figure > b { font: 700 32px/1 Georgia, serif; }
@@ -180,7 +185,10 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
 .section-heading h2 { margin: 7px 0 0; font: 650 clamp(27px,3vw,38px)/1.08 Georgia, serif; }
 .compact-heading h2 { font-size: 25px; }
-.compact-heading > p, .section-note, #subject-description { max-width: 520px; margin: 7px 0 0; color: var(--muted); }
+/* `.section-note` and `#subject-description` were dropped from this rule: the first
+   has no markup left, and the second is now .subject-identity, which an id selector
+   here would out-specify. */
+.compact-heading > p { max-width: 520px; margin: 7px 0 0; color: var(--muted); }
 .course-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
 .course-card { min-height: 96px; padding: 12px 13px; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto 1fr; gap: 7px 10px; text-align: left; border: 1px solid var(--line); background: var(--card-soft); border-radius: 12px; cursor: pointer; }
 .course-card:hover { border-color: #91a397; background: white; }
@@ -428,11 +436,16 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .route-done { fill: none; stroke: #7ed1dc; stroke-width: 3; stroke-linecap: round; }
 .route-goal { fill: #5fbf8f; stroke: var(--ink); stroke-width: 3; }
 .route-here { fill: #7ed1dc; stroke: var(--ink); stroke-width: 3; }
-.hero-trend { height: 54px; overflow: visible; }
-.route-legend { margin: 2px 0 0; display: flex; justify-content: space-between; font-size: 11px; }
+/* 54px left the route reading as a stray diagonal in a large dark field. */
+.hero-trend { height: 72px; margin: 16px 0 0; overflow: visible; }
+.route-legend { margin: 4px 0 0; display: flex; justify-content: space-between; font-size: 11px; }
 .momentum-figure > b { color: white; }
 .momentum-unit { font-size: 11px; }
-.hero-cta { width: 100%; padding: 16px 20px; font-size: 16px; }
+#momentum-message { margin-top: 14px; }
+/* Sized to its label, not to the column. At full width it was a 664px slab of saffron
+   in a 780px column, which reads as a banner rather than a button. It still goes full
+   width below 700px, where a thumb-width target is the point. */
+.hero-cta { padding: 17px 30px; font-size: 16px; }
 /* Explanations that were paragraphs are now on demand. Keyboard reachable, and
    the same text is on title and aria-label so it is not mouse-only. */
 .info { display: inline-grid; place-items: center; width: 16px; height: 16px; margin-left: 4px; border: 1px solid var(--line); border-radius: 50%; background: white; color: var(--muted); font-size: 10px; font-weight: 900; font-style: normal; cursor: help; vertical-align: middle; }

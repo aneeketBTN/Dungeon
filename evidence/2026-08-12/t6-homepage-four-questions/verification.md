@@ -208,11 +208,41 @@ was the 180ms transition being sampled at time zero. The same shape appeared aga
 `scrollY` read 0 while the animation was still running. Both are LAW-46: settle the layout, or
 disable the transition, before believing a probe.
 
+## Visual pass (third owner review — first actual pixels seen)
+
+The owner supplied a desktop screenshot of block 1 and reported it looked "wonky" and
+"undercooked". This is the **first pixel-level input this work has had**, since the Browser pane
+never composited. Every item below was then measured in the running page rather than eyeballed
+from the image, and re-measured after the fix.
+
+| Measured before | Defect | After |
+| --- | --- | --- |
+| `.focus-goal` 287px tall in a 505px panel, `align-self: center` | The hairline divider ran **57%** of the panel and stopped in mid-air — the clearest unfinished tell on the block | `align-self: stretch` with `align-content: center`; divider spans **100%** and terminates on both edges |
+| `identityBold` === `.course-card.selected .course-name` | The subject identity line repeated the selected card **verbatim** — a duplicate introduced by the restructure that removed duplicates | `<b id="subject-title">` deleted along with its JS write; the line now carries only the description, which is the one thing the card does not say |
+| `#subject-description` capped at `520px` inside a 1120px row | Wrapped early with ~600px of dead space beside it, reading as an orphaned fragment | Dropped from the shared `.compact-heading > p, .section-note, #subject-description` rule — an id selector there out-specified the new class rule. Now `62ch` as a caption |
+| Gaps 18 / 13 / 14px | Flat rhythm: the description floated equidistant between the cards and the hero, belonging to neither | 8px above, 28px below — a **3.5×** inter/intra ratio, so space alone says it describes the cards |
+| CTA 664px in a 780px column (**85%**) | A saffron slab reading as a banner rather than a button | Sized to its label: 272px (**35%**). Still full width below 700px, where a thumb-width target is the point |
+| `.hero-trend` 54px | The route read as a stray diagonal in a large dark field | 72px |
+
+`.section-note` was removed from that shared rule at the same time — it has had no markup since the
+staged panels were deleted.
+
+**Re-verified:** all five left edges in block 1 agree at `73px` (block heading, rail label, first
+card, description, hero panel). Layout probe **0 findings** at 1280×800 and 375×812, scanned at the
+top and scrolled with the resume bar showing. On the narrow stack the divider correctly swaps
+`border-inline-start: 0` → `border-top: 1px` and the CTA returns to full width (315 of 315). No
+console errors. `npm test` 37/37, build clean.
+
 ## What is NOT verified
 
-- **No screenshots.** The Browser pane was not compositing frames in this session — the same
-  limitation recorded for the lesson surface on 2026-08-12. Acceptance here is DOM and
-  computed-style level only; **a pixel-level pass is still owed** before this reaches testers.
+- **No screenshots taken by this session.** The Browser pane never composited frames — the same
+  limitation recorded for the lesson surface on 2026-08-12. One owner-supplied screenshot of block 1
+  was reviewed and produced six measured defects (see the visual pass above), which is itself the
+  argument that DOM measurement does not substitute for looking: **every one of those six passed a
+  clean 0-finding layout probe.** A probe catches overflow, clipping, and undersized targets; it
+  cannot see a rule that stops in mid-air or a line of text that repeats the card above it.
+  **A full pixel pass across all four blocks and both viewports is still owed** before this reaches
+  testers; only block 1 at desktop has been seen.
 - Contrast of the route chart's new dark-surface colours was reasoned, not measured. The
   three meanings are unchanged (green goal, cyan position, dashed remainder); only luminance
   moved. Measure before merge.

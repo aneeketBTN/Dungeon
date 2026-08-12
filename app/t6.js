@@ -1561,7 +1561,8 @@
     var course = getCourse(courseId);
     var stats = courseStats(courseId);
     $("selected-course-code").textContent = course.shortTitle;
-    $("subject-title").textContent = course.title;
+    // Not the title: the selected card, the hero eyebrow, and the goal column all
+    // already name this subject. Only the description is new information here.
     $("subject-description").textContent = course.description;
     $("sets-title").textContent = course.shortTitle + " · Ten available study sets";
     setRouteCopy("practice-priority",
