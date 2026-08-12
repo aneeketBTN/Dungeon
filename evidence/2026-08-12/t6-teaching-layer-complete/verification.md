@@ -99,4 +99,7 @@ three explainer paragraphs, worked example, glossary entries, the handoff senten
 - **Uncited lectures.** 54 IBM, 55 SCLM, and 68 SPMS lectures have no lesson and no question citing
   them; they are never delivered. Coverage is complete for what a learner can reach, not for the
   whole course.
-- Nothing deployed. This is branch `reorg/structure`; only a merge to `main` reaches the cohort.
+- **Not deployed.** This work sits on `reorg/structure` above commit `3c69d1e`. PR #1 merged
+  `3c69d1e` into `main` at 11:20 IST on 2026-08-12, so the live cohort has the restructure and the
+  first 80 lessons (BRGSA and IBM), but **not** the SCLM and SPMS lessons verified here. A change
+  announcement is owed for what did ship.
