@@ -12,10 +12,10 @@
    * default sort uses: whatever you sit first is what you can least afford to
    * leave until the end. */
   var EXAM_SCHEDULE = {
-    SPMS:  {seat: 1, day: "Sat 22 Aug", start: "09:00", end: "11:00", marks: 75,  negative: true,  note: "35 MCQs + 20 multi-select"},
-    BRGSA: {seat: 2, day: "Sat 22 Aug", start: "13:00", end: "15:00", marks: 80,  negative: false, note: "20 MCQs + 4 cases + 2 written"},
-    IBM:   {seat: 3, day: "Sun 23 Aug", start: "09:00", end: "11:00", marks: 100, negative: false, note: "10 written answers on a released caselet"},
-    SCLM:  {seat: 4, day: "Sun 23 Aug", start: "13:00", end: "15:00", marks: 80,  negative: false, note: "50 MCQs + 6 numericals + 3 matches"}
+    SPMS:  {seat: 1, day: "Sat 22 Aug", short: "Aug 22", full: "Saturday 22 August", start: "09:00", end: "11:00", marks: 75,  negative: true,  note: "35 MCQs + 20 multi-select"},
+    BRGSA: {seat: 2, day: "Sat 22 Aug", short: "Aug 22", full: "Saturday 22 August", start: "13:00", end: "15:00", marks: 80,  negative: false, note: "20 MCQs + 4 cases + 2 written"},
+    IBM:   {seat: 3, day: "Sun 23 Aug", short: "Aug 23", full: "Sunday 23 August",   start: "09:00", end: "11:00", marks: 100, negative: false, note: "10 written answers on a released caselet"},
+    SCLM:  {seat: 4, day: "Sun 23 Aug", short: "Aug 23", full: "Sunday 23 August",   start: "13:00", end: "15:00", marks: 80,  negative: false, note: "50 MCQs + 6 numericals + 3 matches"}
   };
 
   var EXAM_ORDER = COURSE_IDS.slice().sort(function (a, b) {
@@ -1385,17 +1385,36 @@
       if (mode === "exam" && exam.day && exam.day !== previousDay) button.classList.add("day-start");
       previousDay = exam.day;
       button.setAttribute("aria-pressed", String(profile.selectedCourse === courseId));
-      button.setAttribute("aria-label", course.title + ". " +
-        (exam.day ? "Sat " + exam.day + " at " + exam.start + ", " + exam.marks + " marks. " : "") +
+      /* The visible card compresses the timetable to "Aug 22 · 09:00" and puts the
+       * rest on a tooltip, which is mouse-only — so the button's own label carries
+       * the full sitting details for anyone reading by keyboard or screen reader.
+       * (This previously prefixed "Sat " onto a day that already began "Sat".) */
+      button.setAttribute("aria-label", course.shortTitle + ", " + course.title + ". " +
+        (exam.full ? exam.full + ", " + exam.start + " to " + exam.end + ", " + exam.marks + " marks" +
+          (exam.negative ? ", negative marking in Section B" : "") + ". " : "") +
         stats.strong + " of " + stats.total + " concepts strong. Open subject dashboard.");
-      var targetCopy = stats.strong === stats.total ? "Complete" : (stats.total - stats.strong) + " left";
-      button.innerHTML = "<span class='course-code'>" + escapeHtml(course.shortTitle) +
-          (exam.negative ? "<em class='course-flag' title='Negative marking in Section B'>−1</em>" : "") + "</span>" +
+      /* The card carries four facts and nothing else: which subject, when it is
+       * sat, how far along you are, and whether it punishes a wrong answer.
+       *
+       * The acronym leads because it is what a learner calls the subject; the
+       * full name sits under it in lighter weight, so a clipped title reads as
+       * secondary detail rather than as a sentence cut off mid-word. Date and
+       * time collapse to one meta line, with the full slot on hover and focus —
+       * two lines of timetable per card was more than the rail needed to say.
+       *
+       * Progress is a single pill whose fill *is* the bar, so the count, the
+       * remaining work, and the visual are one element instead of three. */
+      var slot = exam.full ? exam.full + ", " + exam.start + "–" + exam.end + ", " + exam.marks + " marks" : "";
+      var pillCopy = stats.strong + "/" + stats.total + " Strong";
+      button.innerHTML =
+        "<span class='course-head'>" +
+          "<b class='course-code'>" + escapeHtml(course.shortTitle) + "</b>" +
+          (exam.negative ? "<em class='course-flag' title='Negative marking in Section B: −1 per wrong answer'>−1</em>" : "") +
+          (exam.short ? "<span class='course-meta' title='" + escapeHtml(slot) + "'>" + escapeHtml(exam.short) + " · " + escapeHtml(exam.start) + "</span>" : "") +
+        "</span>" +
         "<span class='course-name'>" + escapeHtml(course.title) + "</span>" +
-        (exam.day ? "<span class='course-when'><b>" + escapeHtml(exam.day) + "</b> " + escapeHtml(exam.start) + "–" + escapeHtml(exam.end) +
-          " <small>" + exam.marks + " marks</small></span>" : "") +
-        "<span class='course-bottom'><b>" + stats.strong + " / " + stats.total + " strong</b><small>" + escapeHtml(targetCopy) + "</small>" +
-        "<span class='mini-track' aria-hidden='true'><i style='width:" + stats.weighted + "%'></i></span></span>";
+        "<span class='course-pill'><i class='pill-fill' aria-hidden='true' style='width:" + stats.weighted + "%'></i>" +
+          "<span class='pill-label'>" + escapeHtml(pillCopy) + "</span></span>";
       button.addEventListener("click", function () {
         profile.selectedCourse = courseId;
         selectedModule = 1;
