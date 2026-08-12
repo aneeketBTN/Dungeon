@@ -3,6 +3,39 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Teaching layer complete: every scheduled question is now taught
+
+- **Closed the 0→80 path.** SCLM and SPMS were the two subjects still untaught. 26 lessons authored
+  from the clean transcripts takes SCLM from 6 of 16 cited lectures to 16 of 16, and SPMS from 0 to
+  16 — so scheduled questions fully taught goes from **433 of 724 to 724 of 724**, and 106 lessons
+  are authored in total. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+  `evidence/2026-08-12/t6-teaching-layer-complete/verification.md`.
+- **LAW-47 verified across all four subjects**, not just the one that changed: the teach-before-test
+  check evaluated in the page from an empty `lessonsRead`, across all 9 study sets per subject plus
+  the mixed builder — 595 queue items, zero violations. SPMS study set 1 now opens
+  `lesson:SPMS-M01-L10` before its primer and every scored question.
+- **Every figure was grepped against its lecture before being written.** Rajashree Cement's 99-hour
+  rake cycle with 13 hours of locomotive detention inside it, the ₹3,800/hour penalty and the
+  142,800 extra tons a year; Laxmi Transformers at ₹548 a ton by rail against ₹260.3 by sea, and the
+  bounding argument that computes inventory only for the highest-inventory option; FarmAid's
+  scenarios clustering between ₹8.5 and ₹8.75 lakhs, where the recommendation turns on Ahmedabad
+  already existing rather than on cost; Akshaya Patra's 40,000-rated roti machine running at 35,000.
+- **Three defects found while doing it.** (1) LAW-50 recurred — an `explainer` array closed with
+  `},` — caught by `check_lesson_file.mjs` before the bank validator, which is exactly why the
+  protocol orders the gates that way. (2) The vocabulary gate raised a **false** invented-vocabulary
+  warning: it builds `\b<term>\b`, so the singular `public private partnership` could not match the
+  plural-only `public private partnerships` that occurs three times in the SCLM transcripts. Fixed
+  in the lesson by using the course's own plural; the gate limitation is recorded as a Known Gap.
+  (3) `SPMS-M06-L08` is titled "Traceability" but the word appears only in its header — the body
+  teaches the customer → product → project requirements chain. The lesson was authored for what the
+  lecture teaches rather than inventing content to match its label.
+- Regression: 35 tests pass, `build-site.mjs` prepares 15 assets, `validate_t6_bank.js` reports 0
+  errors and 1 warning (the pre-existing IBM option-length cue), no console errors.
+- Deferred: no screenshots — the Browser pane was not compositing, so pixel acceptance of the lesson
+  surface is still owed. 177 uncited lectures across IBM, SCLM, and SPMS remain unauthored by
+  choice; no question cites them, so a lesson there is never delivered. All 106 lessons stay
+  `WAITING_OWNER_CONTENT_ACCEPTANCE`, now the largest block of unaccepted content in the product.
+
 ## 2026-08-12 — Collaboration handoff: `AGENTS.md` corrected, branch published
 
 - **Published `reorg/structure` to GitHub so a second contributor can work.** Nothing merged to

@@ -2637,5 +2637,216 @@
     connects: "Per-unit numbers are the input. The next session scales them up into financial management and forecasting."
   });
 
+  lesson({
+    lectureId: "SPMS-M05-L02",
+    courseId: "SPMS",
+    module: 5,
+    order: 2,
+    title: "Competition and alternatives",
+    objective: "Define competition the way a customer does — across every alternative, including doing nothing — instead of naming two rivals early.",
+    explainer: [
+      "One of the biggest mistakes startups make is defining competition very early and too narrowly. Start an education venture and people immediately ask whether you are like Byju's, and you begin unconsciously identifying with named players before you have worked out whom you are serving or what value you are giving. The second mistake follows from the first: assuming that if you build a software product, your competition must be another software product.",
+      "Customers are the ones who actually decide who your competition is, and they decide it by comparison. A music service is not measured against rival music services alone — it sits against Apple Music, YouTube, and Amazon Music, and also against CDs and radio. In business software the alternatives are frequently not software at all: a spreadsheet, consultants, legacy systems, internal tools. And in enterprise scenarios the most common alternative is simply not doing anything, which the lecture names outright — inertia is the biggest competition.",
+      "So the analysis has to reach every alternative, current and potential. Product management should hold direct competition, substitutes, ecosystem forces, and strategic positioning together as alternatives, rather than treating only the first of those as real competition. The lecture draws this as a petal diagram of market alternatives, set against traditional competition analysis that worked inside an industry and a method. Product A versus product B is not the problem the customer is trying to solve."
+    ],
+    worked: {
+      setup: "An enterprise software team lists three rival vendors as its competition.",
+      move: "Add the alternatives that are not software — spreadsheets, consultants, legacy systems, internal tools — and then add doing nothing at all.",
+      because: "The customer sets the comparison, not the vendor. In enterprise the most frequent outcome is not losing to a rival but the buyer carrying on exactly as they are, which is why inertia is named as the biggest competition. An analysis listing only vendors has no strategy at all against the option that wins most often."
+    },
+    glossary: [
+      {term: "alternatives", plain: "Everything a customer could do instead, including manual processes and existing tools."},
+      {term: "market alternatives", plain: "The petal-diagram view of every option open to the customer, current and potential."},
+      {term: "direct competition", plain: "Rival products in the same category — only one slice of the alternatives."},
+      {term: "substitutes", plain: "Different means to the same end, which customers weigh alongside direct rivals."},
+      {term: "inertia", plain: "The customer doing nothing, named here as the biggest competition in enterprise settings."}
+    ],
+    connects: "Knowing what you are compared against sets the message. The next session covers the function that carries it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M05-L04",
+    courseId: "SPMS",
+    module: 5,
+    order: 4,
+    title: "Value communication: the buyer's journey",
+    objective: "Communicate value across the buyer's journey from unawareness onward, matching message, format, and channel to the stage.",
+    explainer: [
+      "Value communication belongs to product marketing and marketing orchestration, and it exists because good products routinely fail without it. Google Glass and virtual reality carried real potential that was never articulated, and fizzled away. Many startups fail not for lack of value but because the value was never articulated well enough for customers to understand it. The usual failures are communicating too late, after the decision has already been taken; using the wrong channels; and sending a message that does not match what the customer actually needs.",
+      "It divides in two. Before the purchase is the buyer's journey; after the purchase is the customer journey. Successful startups communicate value across both rather than stopping at the sale. The process itself is connecting defined customer value with the identified target markets for the product — which is communicating the positioning. Value messaging means need-relevant communication, with the engagement tools, formats, content, and channel all adapted to where the buyer currently stands in that journey.",
+      "The Apple Watch makes the difficulty concrete. Offer a ₹40,000 or ₹50,000 wearable to a retired senior citizen and the answer is that a watch is a watch — theirs was a gift from their father, it has a golden strap, and they like it. They are comparing against a category they have grown up with, at a different price point, with a different alternative in mind. If a wearable reads as just a watch, nothing about its value has landed yet. That is why the journey opens at value awareness, and why the stage before it is unawareness rather than disagreement."
+    ],
+    worked: {
+      setup: "A ₹50,000 wearable is pitched to someone who already owns a watch they like.",
+      move: "Place them at unawareness rather than at objection, and lead with value awareness instead of features or price.",
+      because: "The response — a watch is a watch, mine was a gift, it has a golden strap — is a comparison against a category they already understand at a price they already accept. Nothing has yet told them a wearable does a different job. Arguing price against that comparison loses, because the message is pitched at a later stage of the journey than the buyer is actually standing in."
+    },
+    glossary: [
+      {term: "value communication", plain: "Making the delivered value understandable, before and after the purchase."},
+      {term: "buyer's journey", plain: "The pre-purchase path, beginning at unawareness and moving through value awareness."},
+      {term: "customer journey", plain: "The post-purchase half, which successful startups keep communicating across."},
+      {term: "value messaging", plain: "Need-relevant content, format, and channel matched to the buyer's current stage."}
+    ],
+    connects: "That is the half before the purchase. The next session takes the customer journey that follows it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L05",
+    courseId: "SPMS",
+    module: 6,
+    order: 5,
+    title: "Requirements engineering",
+    objective: "Classify a requirement as functional or non-functional, and catch the support, pricing, and deployment expectations that travel with it.",
+    explainer: [
+      "A requirement is a wish or a need for a future product capability — what the product should be doing once it exists. The IEEE definition adds a second origin: a capability needed to solve a problem, or a condition required by standards, contracts, or regulations. For a messaging product that covers capabilities like sending a message, encrypting it, and storing it, and equally the compliance imposed by whatever regulation or contract applies to it.",
+      "Robertson and Robertson split requirements two ways, and this is the classification the course works from. A requirement is either an action the product should perform or a quality the product should possess. The action is a functional requirement. The quality is a non-functional requirement, usually shortened to NFR. The split matters because the two are elicited, specified, and tested by different means, even though a customer will state both in the same sentence without marking the difference.",
+      "Requirements are value centric — they are not just feature requests. A requirement may include support expectations: that a message is delivered within some number of milliseconds or sub-seconds, or that a fault in the software is resolved within a stated number of minutes. It may carry pricing conditions, that it should not be priced above a certain amount per user or per usage. It may specify deployment, that it must run on a particular operating system. And unlike a services project, where the customer hands over requirements directly, a product context has to answer deliberately who supplies them at all."
+    ],
+    worked: {
+      setup: "A customer says the product must send a message, and must deliver it within 200 milliseconds.",
+      move: "Split the sentence. Sending the message is a functional requirement — an action. The 200-millisecond bound is non-functional — a quality.",
+      because: "They arrive together but they are different objects with different verification. The action is confirmed by whether a message sends; the quality is confirmed by measurement under load, and it constrains architecture rather than behaviour. Reading the latency clause as scene-setting around the 'real' requirement is how non-functional requirements get dropped in specification and rediscovered in production."
+    },
+    glossary: [
+      {term: "requirement", plain: "A wish or need for a future product capability, or a condition set by standards or contracts."},
+      {term: "functional requirement", plain: "An action the product should perform."},
+      {term: "non-functional requirement", plain: "A quality the product should possess — latency, security, availability."},
+      {term: "requirements engineering", plain: "The process of eliciting, specifying, and managing requirements for a product."}
+    ],
+    connects: "That is the basic split. The next session works through the types of requirement in detail."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L08",
+    courseId: "SPMS",
+    module: 6,
+    order: 8,
+    title: "From customer need to project requirement",
+    objective: "Trace a need from a customer's business aspiration through a standardised product requirement into the project requirements engineering owns.",
+    explainer: [
+      "Customer requirements arrive non-standard, and that is not a failure on the customer's part. They are not writing system requirements; they are describing business needs and aspirations. Converting those into product requirements takes a significant amount of work, and that translation is the product manager's central competence here. Standardising means generalising one customer's stated need so that more customers of that same nature can be serviced through the one product.",
+      "Then comes a third class. Once a product requirement exists, it is broken down for a release across smaller teams — there might be five, ten, or twenty of them, depending on whether the release runs to a hundred person days or a thousand. Those are project requirements, and they sit much closer to the product development team. Ask for a customer master to be created and the specification questions follow immediately: is there an internal ID, a formatted ID, a linkage, and what does data integrity demand of the table design?",
+      "The boundary matters as much as the chain does. Project requirements belong to the development project, and project issues that surface during requirements work are explicitly not part of the product management process — they are left with the engineering team. What the product management layer owes is generalisation: requirements made actionable for developers, in a consistent style, suitable for internal communication, and oriented towards a standard product rather than one customer's particular installation."
+    ],
+    worked: {
+      setup: "A customer asks for a customer master to be created.",
+      move: "Separate the three levels. The business aspiration becomes a standardised product requirement; the internal ID, formatted ID, linkage, and table design are project requirements.",
+      because: "Each level has a different owner and a different reader. The customer stated an aspiration, not a system requirement. The product requirement has to generalise it so other customers of the same kind are served by the same thing. The specification questions underneath are internal to development, and the lecture is explicit that project issues arising there are not part of the product management process."
+    },
+    glossary: [
+      {term: "customer requirements", plain: "What a customer wants to establish, stated as business needs rather than system specifications."},
+      {term: "product requirements", plain: "The standardised, generalised version that serves many customers of that nature."},
+      {term: "project requirements", plain: "Internal development specifications for a release, owned by engineering."},
+      {term: "requirements elicitation", plain: "Drawing requirements out of customers and other sources before standardising them."}
+    ],
+    connects: "That is the requirement chain end to end. The next session places it inside the ISPMA framework."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L01",
+    courseId: "SPMS",
+    module: 7,
+    order: 1,
+    title: "Prioritisation: MoSCoW",
+    objective: "Sort a release bucket with must, should, could, and won't so the team agrees on what is out as well as what is in.",
+    explainer: [
+      "The situation is a growing product with more demand than capacity. Different customers ask for features they find missing, investors ask for features that open new markets, and the sales team asks for something else again — all against a release bucket of only one, three, or six months. Deciding between them is the actual job of the product manager and the founder, and the course covers four prioritisation techniques across this session and the next.",
+      "The first is Moscow, which is an acronym rather than a capital city: must have, should have, could have, and won't have. Its purpose is to build a common understanding across the team about what definitely needs doing and what definitely does not. It works as a filtering criterion, closer to a triage than to a ranking, and part of its value is being able to state that some things will definitely not be done. That is why it fits agile and release planning, and why it matters most in an MVP, where scope must be controlled and time to market is important.",
+      "Ride-sharing makes the four levels concrete. Must have covers ride booking, payments, and GPS tracking — without those you simply do not have ride software. Should have is driver rating: it is what helps a customer choose between one ride or driver and another, valuable without being load-bearing. Could have is multi-stop ride planning. Uber launched as a point A to point B service, and adding a stop — dropping someone on the way with a small detour — is a genuine improvement the product ran without for years."
+    ],
+    worked: {
+      setup: "Customers, investors, and sales each want different features, and the release bucket is three months.",
+      move: "Run the four levels and make the won't-have list explicit, not just the must-have list.",
+      because: "The technique is described as a filtering criterion, like a triage, and filtering only works in both directions. A must-have list on its own leaves everything else implicitly negotiable, so the same requests return at every planning cycle. Naming what will definitely not be done is what makes scope control real — which is exactly what an MVP needs when time to market matters."
+    },
+    glossary: [
+      {term: "must have", plain: "Capabilities without which the product does not function at all — booking, payments, GPS."},
+      {term: "should have", plain: "Valuable but not load-bearing, like driver ratings that help a customer choose."},
+      {term: "could have", plain: "Real improvements the product can ship without, like multi-stop planning."},
+      {term: "won't have", plain: "Explicitly excluded this release — the half of the filter that makes scope control real."},
+      {term: "release planning", plain: "Deciding what fits in a fixed release window of one, three, or six months."}
+    ],
+    connects: "That is the first technique. The next session adds three more and compares when each one fits."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L04",
+    courseId: "SPMS",
+    module: 7,
+    order: 4,
+    title: "Product roadmap",
+    objective: "Translate a product strategy into a sequence of releases on a time axis, and read an evolution as deliberate ordering.",
+    explainer: [
+      "A roadmap is the process of translating your product strategy into a series of releases on a time axis. It answers what you want to accomplish — where the product should be in three or five years — and how you intend to get there through prioritization. The strategic timeframe runs up to five years, or three, depending on the space the product is in. Put plainly, a roadmap is a smart sequence for developing, releasing, and evolving a solution.",
+      "WhatsApp's evolution shows the sequencing at work. It started in 2009, by which time there were already many messaging applications, including well-established players like Skype, Yahoo Messenger, and ICQ. It launched first on iPhone, with the Android version arriving around 2011 — even though the team knew a big chunk of its potential users were on Android in Asia. Running the earlier experiment on iOS in the US market, closer to home, was the deliberate choice.",
+      "The capability sequence is the part worth studying. Message history search appeared around 2011, and chat backup only after 2012, which means that at the acquisition in the second half of 2014 the product still lacked things that now read as basic. A roadmap is therefore not an inventory of everything a product will eventually contain. It is an ordering decision, and what has been deferred is as much a part of it as what has been scheduled."
+    ],
+    worked: {
+      setup: "A team wants its roadmap to show every capability the product will eventually have.",
+      move: "Make it a sequence on a time axis instead — what gets developed, released, and evolved in what order across three to five years.",
+      because: "A roadmap translates strategy into releases, not into a feature inventory. WhatsApp is the demonstration: iPhone before Android despite knowing where the users were, message history search around 2011, chat backup after 2012, and an acquisition in 2014 with capabilities still absent. What was deliberately left until later is precisely what made the earlier releases shippable."
+    },
+    glossary: [
+      {term: "roadmap", plain: "Product strategy translated into a series of releases along a time axis."},
+      {term: "product strategy", plain: "Where the product is meant to be in three to five years, which the roadmap sequences."},
+      {term: "time axis", plain: "The dimension that turns a set of intentions into an ordered plan."},
+      {term: "prioritization", plain: "The decisions about ordering that determine what a roadmap actually contains."}
+    ],
+    connects: "That is the shape of a roadmap. The next session continues into how one is built and kept current."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L03",
+    courseId: "SPMS",
+    module: 8,
+    order: 3,
+    title: "Metrics, performance, and risk",
+    objective: "Choose startup-appropriate metrics across the four types, and use them to reduce uncertainty rather than to report performance.",
+    explainer: [
+      "Risk management matters more in a startup than in a mature company, because the business is still evolving and the standard performance measures may not be ready yet — top line, bottom line, and net promoter score all assume a steadier state than an early-stage product has. The fundamental difference is the level of uncertainty. A startup does not yet know whether customers truly want the product, whether the business model is scalable, whether acquisition costs are sustainable, or whether the product can generate long-term profitability. Those being open is why performance and risk management bear directly on survival.",
+      "That reframes what metrics are for. They exist to reduce uncertainty as far as it can be reduced, to improve decision-making with whatever information is available on a dynamic basis, to identify risks early where that is possible, and to allocate resources smartly. This is a different purpose from reporting performance upward, and it changes which numbers are worth collecting in the first place.",
+      "Four types are worth measuring in a startup product context: business and financial metrics, product metrics, customer metrics, and marketing and visibility metrics. Which business metrics apply depends on the stage you are at — recurring revenue measured annually or monthly, average revenue per user, customer lifetime value, gross margin as the measure of profitability efficiency, and operating profitability once below-the-line costs are accounted for."
+    ],
+    worked: {
+      setup: "An early-stage product has no meaningful net promoter score, and its bottom line is not yet informative.",
+      move: "Do not wait for the mature metrics to become available. Pick from the four types according to which open question each one closes.",
+      because: "What distinguishes a startup is uncertainty, not scale. The useful metric is the one that answers whether customers truly want the product, whether the model is scalable, or whether acquisition costs are sustainable. Since metrics here exist to reduce uncertainty and surface risk early rather than to report performance, a number that is easy to produce but answers nothing is worth less than a rougher one that closes an open question."
+    },
+    glossary: [
+      {term: "average revenue per user", plain: "Revenue divided across the user base — ARPU, a stage-dependent business metric."},
+      {term: "customer lifetime value", plain: "What a customer is worth across the whole relationship, not one transaction."},
+      {term: "gross margin", plain: "The measure of profitability efficiency before below-the-line costs."},
+      {term: "product metrics", plain: "One of the four types, measuring the product itself rather than the business around it."}
+    ],
+    connects: "Metrics manage the risks you can count. The next session turns to the legal exposures you cannot."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L05",
+    courseId: "SPMS",
+    module: 8,
+    order: 5,
+    title: "Data privacy",
+    objective: "Distinguish what CCPA, GDPR, and DPDP each cover, and apply the principles that hold whichever one applies.",
+    explainer: [
+      "Data privacy is handled here as legal awareness a product manager needs rather than as a compliance chore. In the AI age data is an extremely critical asset — a privacy matter for individuals and an asset for companies and countries alike. In the early stages of computerization data was treated fairly openly; now most countries worldwide have strong or reasonably strong data regulation in place. The three the course covers are CCPA in the United States, GDPR in Europe, and DPDP in India, because that is largely where the customers are.",
+      "Their scopes differ, and the difference is the part to hold onto. US protection applies largely to data from private spheres, with stringent regimes for particular categories — HIPAA for health data, and separate coverage for credit card data. Employee data is not covered by those data protection regulations. GDPR takes the opposite approach: any personal data is protected irrespective of its sensitivity. It was enacted in May 2018 and has since served as a model for jurisdictions well outside Europe, including Switzerland, Canada, and Australia.",
+      "Two elements generalise beyond any single regime. The right to be forgotten lets an individual whose data you hold require that you erase it. And data protection by design means the obligation does not wait to be requested — the moment you offer someone a service, you are already undertaking it, so a customer never has to ask you to confirm their data is protected. The practical rule that follows is territorial: whichever country your product goes into, understand that country's privacy laws before you sell software into that market."
+    ],
+    worked: {
+      setup: "A product built for the US market is about to launch in Europe.",
+      move: "Re-scope rather than reuse. Under GDPR any personal data is protected irrespective of sensitivity, not only the categories US law singles out.",
+      because: "The two regimes are constructed differently. US protection concentrates on private-sphere data with stringent rules for specific categories — health under HIPAA, credit card data — and leaves employee data outside data protection regulation altogether. GDPR covers all personal data regardless of sensitivity. A compliance model built category by category does not transfer, which is exactly why the rule is to understand each market's law before selling into it."
+    },
+    glossary: [
+      {term: "GDPR", plain: "Europe's regulation, enacted May 2018, covering any personal data irrespective of sensitivity."},
+      {term: "CCPA", plain: "The US state law covered here, alongside category regimes like HIPAA for health data."},
+      {term: "DPDP", plain: "India's data protection legislation, the third regime a product selling here must meet."},
+      {term: "right to be forgotten", plain: "An individual's ability to require that data held about them be erased."},
+      {term: "data protection by design", plain: "Protection built in from the outset, never something a customer has to request."}
+    ],
+    connects: "That is the legal floor the product stands on. The next session steps back up to strategic management."
+  });
+
   window.T6_LESSONS = lessons;
 })();

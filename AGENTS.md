@@ -18,19 +18,20 @@
 > passes (LAW-48). Case questions cite and explain the lecture their case came from. A vocabulary
 > gate measures first use against the clean lecture transcripts, not the concept index, which is
 > unreliable for this (LAW-49); it caught three real authoring errors during the session.
-> **BRGSA and IBM are complete for every lecture a learner can actually reach.** 80 lessons are
-> authored: BRGSA 50 of 50 lectures; IBM 16 of 16 *cited* lectures (24 authored, so 8 belong to
-> lectures no question cites and are never delivered); SCLM 6 of 16 cited; SPMS 0 of 16 cited. Each
+> **All four subjects are now complete for every lecture a learner can actually reach**
+> (`evidence/2026-08-12/t6-teaching-layer-complete/verification.md`). 106 lessons are authored:
+> BRGSA 50 of 50 lectures; IBM, SCLM, and SPMS each 16 of 16 *cited* lectures. Each
 > lesson is authored from its own lecture's transcript and carries that lecture's real figures; every
 > number and framework was grepped against the source before it was written down. The originating
 > defect is closed with it: `sample_logic`'s correct answer no longer says "stopping rule" or "sample
 > bound" but *"Run the test to completion at the pre-calculated sample size"*, the lecture's own
 > phrasing, which also cleared a length cue that had been excluding the question.
-> **433 of 724 scheduled questions are fully taught; 291 are not** — BRGSA 187 of 187, IBM 177 of
-> 177, SCLM 69 of 180, SPMS 0 of 180. The validator reports that backlog rather than hiding it and
-> the lesson gate names the exact next lectures to author, so run them rather than quoting these
-> counts from this file. SCLM and SPMS transcripts carry almost no faculty objectives, so their
-> lessons need objectives authored from scratch. All lesson prose is new and stays
+> **724 of 724 scheduled questions are fully taught** — BRGSA 187, IBM 177, SCLM 180, SPMS 180.
+> `VERIFIED(REAL_BROWSER)`: LAW-47 checked from an empty `lessonsRead` across all 9 study sets in
+> every subject plus the mixed builder — 595 queue items, zero violations. Run the gates rather than
+> quoting these counts from this file. 54 IBM, 55 SCLM, and 68 SPMS lectures remain unauthored, but
+> no question cites them, so they would never be delivered; coverage is complete for what a learner
+> can reach, not for the whole course. All lesson prose is new and stays
 > `WAITING_OWNER_CONTENT_ACCEPTANCE`. No screenshots — the Browser pane was not compositing — so
 > pixel-level acceptance is still owed. Nothing is deployed: this work is on `reorg/structure`, and
 > only a merge to `main` reaches the live cohort.
@@ -420,7 +421,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `app/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, relevance-first distractor selection, case-lecture provenance, and the option-diagnosis pass. | 2026-08-12 |
 | `app/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
 | `docs/authoring/LESSON-AUTHORING-PROTOCOL.md` | Handoff procedure for the teaching layer: sources, lesson contract, batch procedure, gates, the four traps already paid for, and per-subject definition of done. Read before authoring any lesson. | 2026-08-12 |
-| `app/sets/t6_lessons.js` | Teaching layer: 80 authored lecture-grain lessons (objective, explainer, worked example, glossary, handoff) that must be delivered before anything about that lecture is scored. BRGSA and IBM complete for every cited lecture; SCLM 6 of 16, SPMS 0 of 16. | 2026-08-12 |
+| `app/sets/t6_lessons.js` | Teaching layer: 106 authored lecture-grain lessons (objective, explainer, worked example, glossary, handoff) that must be delivered before anything about that lecture is scored. All four subjects complete on cited lectures; 724 of 724 scheduled questions taught. | 2026-08-12 |
 | `tools/lib/clean_transcripts.js` | The one loader for the external lecture source. Reads the clean transcripts (position in the module file is a lecture's identity, not its recording code) and still accepts the old AI-Ready Pack layout; `sourceKind` says which was read. | 2026-08-12 |
 | `tools/build_t6_lessons.mjs` | Extracts lesson candidates from the external lecture source — objectives, glossary terms with first-use, worked-example lines, provenance — into `work/t6_lessons/`. Extraction only; prose is authored. | 2026-08-12 |
 | `tools/check_lesson_file.mjs` | Authoring-time gate: reports every structural defect in one pass (bracket class, record shape, prose limits) and, given the pack, prints the exact next batch of lectures to author. Run between batches, before the bank validator. | 2026-08-12 |
@@ -546,17 +547,20 @@ after the version is live, since a push to `main` deploys.
   sections, duration, marks, options, negative marking, likely score, or pass probability.
 - [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 792 surfaces are source-traceable and structurally
   verified, but transcript-derived content, the 64 support-only primers, the 64 constructed-
-  response rubrics/exemplars, and the 80 authored lessons still need owner/faculty acceptance
-  before `DONE`.
-- [ ] **The 0→80 path is half-built.** 433 of 724 scheduled questions are fully taught. BRGSA and
-  IBM are complete for every *cited* lecture; SCLM has 6 of 16 and SPMS 0 of 16, so 291 questions
-  still meet a cold learner untaught and the core claim holds only for BRGSA and IBM.
-  `node tools/check_lesson_file.mjs "<transcripts>"` names the exact next lectures to author and
-  `node tools/validate_t6_bank.js "<transcripts>"` prints the backlog — do not quote a coverage
-  number from this file. Authoring order: SCLM's 10 remaining cited lectures, then SPMS's 16. Both
-  carry almost no faculty objectives in the source, so their lessons need objectives from scratch.
-  Eight authored IBM lessons are for lectures no question cites and are therefore never delivered;
-  they are harmless but do not count them as coverage.
+  response rubrics/exemplars, and the 106 authored lessons still need owner/faculty acceptance
+  before `DONE`. This is now the largest single block of unaccepted content in the product.
+- [x] **The 0→80 path reaches every scheduled question — closed 2026-08-12.** 724 of 724 are
+  taught, verified in a real browser at
+  `evidence/2026-08-12/t6-teaching-layer-complete/verification.md`. What remains is *acceptance*,
+  not coverage. Do not quote coverage numbers from this file; run
+  `node tools/check_lesson_file.mjs "<transcripts>"`. Note that 177 uncited lectures across IBM,
+  SCLM, and SPMS have no lesson and no question citing them — authoring those is optional work that
+  moves no coverage, and lessons for them are never delivered.
+- [ ] The vocabulary gate cannot match a singular glossary term against a plural-only occurrence:
+  it builds `\b<term>\b`, so `public private partnership` was reported absent although
+  `public private partnerships` appears three times. It reports this as *invented vocabulary*, which
+  is a false accusation rather than a missed check. Use the course's own form; treat that warning as
+  a prompt to grep before deleting a term.
 - [ ] IBM's option lengths still cue the answer: sorting each question's options by length puts the
   correct one at rank 3 of 4 in **45%** of 68 sampled questions against a 25% baseline, so "pick the
   second-longest" is a working strategy. The validator reports this as a warning, not an error. Vary
