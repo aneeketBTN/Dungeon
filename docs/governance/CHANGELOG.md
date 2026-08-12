@@ -3,6 +3,73 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-13 — One switch between two products; repair arrives in sittings; the bag
+
+Evidence: `evidence/2026-08-13/t6-dual-facing-and-sittings/verification.md`
+(`VERIFIED(REAL_BROWSER + AUTOMATED)`, 320→1600px; no screenshots — see below, the cause is now
+measured rather than assumed).
+
+- **The site is dual-facing, and the switch is in the header.** Learn and Exam, a segmented control
+  with a sliding thumb, and a `document.startViewTransition` between the two sides: the old page
+  leaves in the direction you came from and the new one arrives from the side you pressed. The
+  header is pulled out of the moving picture with its own `view-transition-name`, because furniture
+  present on both sides should not travel. Direction, duration, and the reduced-motion form live in
+  the stylesheet next to the switch; the script only decides *when* a move is a crossing.
+- **Which side you are on is derived from the screen, never stored.** `showScreen` sets `data-mode`
+  and both `aria-pressed` values from a table of the examiner's screen ids, so every route written
+  before the switch existed — the dashboard's way in, backing out of a brief, the two repair routes,
+  leaving a paper — keeps the switch agreeing with the page. Crossings animate; moves that stay on
+  one side do not, since animating those would say "you have gone somewhere else" when you have not.
+- **The switch is a group of two pressed buttons, not a tablist.** A tablist promises arrow-key
+  movement between tabs and one panel per tab, and the examiner side is two screens deep, so the tab
+  contract would have been a lie to a screen reader.
+- **Two defects found while verifying, both fixed.** A view transition skipped before it animates
+  rejects `ready`; nothing caught it, so a working app printed twelve
+  `InvalidStateError: Transition was aborted` lines. And because the update callback runs a frame
+  later, a fast double-press read the pre-press mode and was dropped as "already there" — pressing
+  Exam then Learn quickly landed you on Exam. A `pendingMode` now records where a flying transition
+  is heading.
+- **The examiner's home leads with one recommended paper.** A paper you have never met beats a
+  second set of one you have, in seat order; after that it is your weakest paper, and within it an
+  unseen set before a re-sit. Two rules came out of driving six seeded profiles through it: a caveat
+  paper cannot win "weakest" (IBM's mock is self-marked against a rubric, so at 40% it beat BRGSA's
+  55% and would have become the only thing ever recommended), and a paper's standing is its *best*
+  result while the *set* to sit is chosen separately. The hero repeats the bank shortfall rather
+  than being the one honest surface that goes quiet, via an `examShortfalls` helper now shared with
+  the paper cards.
+- **Repair after a mock arrives in sittings of four concepts** (built the previous turn, documented
+  here). Concepts taken into a sitting are stamped `repairedAt`, so the next sitting moves on rather
+  than repeating, and once every miss has been through it falls back to a second pass. Verified
+  across sittings: 4, then 4 more, no overlap. Kicker: "4 concepts this sitting · 9 waiting for the
+  next". A sixty-step run is the wrong thing to hand someone who has just finished two hours.
+- **The bag** (same turn, same gap now closed): a header drawer holding a 25/5 focus timer that runs
+  off a timestamp rather than a countdown — so changing screens or opening a paper does not reset
+  it, and the header carries a live chip while it runs — and eight pieces of guidance written from
+  what this app actually does. One bug fixed in testing: skipping to the break showed 25:00 because
+  stopping the timer recomputed the remaining time from the still-running clock.
+- **Mobile.** With the switch in it the header overflowed 375px by 123px, and briefly by 17px at
+  721. Below 760 the header now drops the wordmark and the evidence figure — the figure is the first
+  thing on the dashboard directly beneath, so the duplicate goes and the fact stays — and the switch
+  narrows without shortening. 0 overflow at every width from 320 to 1600.
+- **The 44px floor.** The project's own `ui-audit.js` flagged the switch halves at 38px. The
+  pill-in-a-pill inset moved from the container's padding onto the thumb, so each half is now a
+  full-height 44px target inside the same 46px control. `button#brand-home` is still 42px on
+  desktop; it is pre-existing and was left alone.
+- **Why there are still no screenshots, measured this time.** The Browser pane is not displayed, so
+  its tab composites no frames: `document.timeline.currentTime` reads 0 and stays there, every CSS
+  transition sits frozen at its start value, `resize_window` does not change `innerWidth`, and
+  screenshots time out at 5s. Twice this looked exactly like a CSS bug — the thumb "not moving", the
+  two labels' colours "swapped" — and both were the frozen clock. The evidence file records the
+  technique that gives a real answer (drive `getAnimations()` to the end, measure layout in
+  fixed-width same-origin iframes). The Chrome-extension path was tried at the owner's suggestion
+  and reported "not connected" three times. **Pixel acceptance remains owed.**
+- **Deferred, by the owner's instruction ("everything except SCLM"):** the two SCLM Section B
+  numericals still blocked behind authoring `SCLM-M03-L06`'s lesson, and the two SCLM prompt-variety
+  warnings (Section A forces 14 questions to share one prompt, Section C forces 3).
+  `npm run check:exam` names all four every run; nothing outside SCLM is outstanding.
+- Gates: `node --check app/t6.js`, `npm test` **39/39**, `npm run check:palette` clean in both
+  themes, `tools/validate_t6_bank.js` `ok: true`.
+
 ## 2026-08-13 — SPMS Section B completed and un-broken; the exam-pattern gate that found it
 
 - **`npm run check:exam` — a gate and an authoring worklist in one.** `tools/check_exam_readiness.mjs`

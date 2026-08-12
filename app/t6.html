@@ -48,6 +48,20 @@
         </svg>
         <span class="sr-only" id="theme-toggle-state">Appearance: follow my device</span>
       </button>
+      <!-- Two products, one switch. The examiner is not a mode of the learning system,
+           so this reads as moving between two places rather than toggling a setting.
+           A group of two pressed-state buttons rather than a tablist: a tablist
+           promises arrow-key movement between tabs and one panel per tab, and the
+           examiner side is two screens deep, so the tab contract would be a lie. -->
+      <div class="mode-switch" id="mode-switch" role="group" aria-label="Which side of Dungeon">
+        <button class="mode-option" id="mode-learn" type="button" aria-pressed="true" data-mode="learn">
+          <span>Learn</span>
+        </button>
+        <button class="mode-option" id="mode-exam" type="button" aria-pressed="false" data-mode="exam">
+          <span>Exam</span>
+        </button>
+        <span class="mode-thumb" id="mode-thumb" aria-hidden="true"></span>
+      </div>
       <!-- The bag. Everything a learner might want mid-session but should not have to
            leave the page for: a focus timer, and the handful of things about how this
            app works that change how much you get out of it. -->
@@ -490,14 +504,26 @@
           <button class="button secondary" id="exam-home-leave" type="button">← The learning system</button>
         </header>
 
-        <!-- Your record across every paper, shown first when there is one, because a
-             returning candidate is asking "am I moving" before "which set next". -->
+        <!-- One recommended paper, above everything. A candidate opening this wants to
+             be told what to sit, not to compare twelve options — the list is still
+             below for when they want to choose. -->
+        <section class="exam-pick" id="exam-pick" aria-labelledby="exam-pick-title" hidden>
+          <p class="eyebrow">Sit this next</p>
+          <h2 id="exam-pick-title"></h2>
+          <p class="exam-pick-why" id="exam-pick-why"></p>
+          <div class="exam-pick-facts" id="exam-pick-facts"></div>
+          <button class="button primary" id="exam-pick-start" type="button"></button>
+        </section>
+
+        <!-- Your record across every paper. A returning candidate is asking "am I
+             moving" before "which set next". -->
         <section class="exam-record" id="exam-record-block" aria-labelledby="exam-record-title" hidden>
           <h2 id="exam-record-title">Your record</h2>
           <div class="insight-grid" id="exam-record"></div>
           <p class="insight-verdict" id="exam-record-verdict"></p>
         </section>
 
+        <h2 class="exam-papers-title">Every paper</h2>
         <div class="exam-papers" id="exam-papers"></div>
       </div>
     </section>

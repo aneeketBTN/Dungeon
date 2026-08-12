@@ -526,6 +526,27 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   LAW-19, LAW-36, LAW-46. Evidence:
   `evidence/2026-08-12/t6-homepage-four-questions/verification.md`.
 
+- **I-TWO-PRODUCTS (2026-08-13)** — Issue: the examiner had become a second product with no way to
+  move between the two sides except a button on one dashboard, which made it read as a mode of the
+  learning system rather than a place of its own. Cause: it grew out of the learning system, so
+  every route into it was an outbound link rather than navigation. Fix: a header Learn/Exam switch
+  with a view transition between the sides. **Visual/motion-coherence axis:** motion here carries
+  one piece of meaning — direction of travel — so it follows the switch (the examiner is to the
+  right, so arriving there moves that way) and the header is pulled out of the moving picture,
+  because furniture on both sides that travels with the page says the whole app changed when only
+  the content did. Crossings animate and same-side moves do not, so the animation keeps meaning
+  something. **Accessibility axis:** three findings, all fixed. The switch was first written as a
+  `role="tablist"`, which promises arrow-key movement and one panel per tab, and the examiner side
+  is two screens deep — it is now a labelled `role="group"` of two `aria-pressed` buttons. Its
+  halves measured 38px against the 44px floor and are now 44, by moving the pill-in-a-pill inset
+  from the container's padding onto the thumb rather than by growing the control. And the
+  reduced-motion form keeps the browser's cross-fade, shortened, rather than removing the
+  transition: less motion, not no signal. **Truthful-interaction axis:** which side the switch
+  reports is derived inside `showScreen` from the screen on show, so it cannot drift from the page;
+  and the recommended-paper hero repeats the bank shortfall rather than being the one surface where
+  the honest warning goes quiet. Laws: LAW-51, LAW-55, LAW-56. Evidence:
+  `evidence/2026-08-13/t6-dual-facing-and-sittings/verification.md`.
+
 ## Watch Items
 
 - Painterly production target is confirmed; current pixel-like Door media remains interim.

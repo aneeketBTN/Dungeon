@@ -1296,6 +1296,91 @@ li .exam-chip { cursor: default; }
 .exam-repair-list small { color: var(--muted); font-size: var(--t-small); }
 .route-from-exam { border-color: var(--blue-line); background: var(--blue-veil); }
 
+/* Two products, one switch.
+   =========================================================================
+   A segmented control with a sliding thumb, which reads as "these are two
+   places" rather than "this is a checkbox". The thumb moves; the labels do not. */
+/* The inset that makes this look like a pill-in-a-pill is on the thumb, not on the
+   container: with padding on the container each half would be a 38px tap target
+   inside a 46px control, and the dashboard's floor is 44. The halves run the full
+   height and the thumb sits 3px inside them. */
+.mode-switch { position: relative; display: inline-flex; background: var(--card-soft); border: 1px solid var(--line-strong); border-radius: var(--r-pill); }
+.mode-option { position: relative; z-index: 1; min-height: 44px; padding: 0 16px; color: var(--muted); background: none; border: 0; border-radius: var(--r-pill); cursor: pointer; font: inherit; font-weight: 800; font-size: var(--t-meta); transition: color .18s ease; }
+.mode-option[aria-pressed="true"] { color: var(--on-deep); }
+.mode-thumb { position: absolute; z-index: 0; inset-block: 3px; inset-inline-start: 3px; width: calc(50% - 6px); background: var(--deep); border-radius: var(--r-pill); transition: transform .32s cubic-bezier(.2,.8,.2,1); }
+:root[data-mode="exam"] .mode-thumb { transform: translateX(calc(100% + 6px)); }
+/* The examiner runs on the same tokens but leads with saffron, so the two sides do
+   not look like one product with a different heading. */
+:root[data-mode="exam"] .mode-thumb { background: var(--saffron); }
+:root[data-mode="exam"] .mode-option[aria-pressed="true"] { color: var(--on-saffron); }
+
+/* The switch on a phone.
+   -------------------------------------------------------------------------
+   A 375px header cannot hold the wordmark, the evidence figure, and a switch
+   between two products at full size. Of those three the switch is the only one
+   that is navigation: the mark still goes home, and the same evidence figure is
+   the first thing on the dashboard directly underneath, so what is given up here
+   is a duplicate rather than a fact. Measured to fit at 320px, which is the
+   narrowest phone anyone is likely to sit a mock on.
+
+   These live here rather than in the main mobile block because the switch's own
+   rules are further down the file and would otherwise win the cascade. The
+   breakpoint is not the header's usual 700: with the switch in it, the full-size
+   header measures wider than the window until about 738px, so the compact form is
+   held until 760 rather than handing anyone a sideways-scrolling header. */
+@media (max-width: 760px) {
+  .header-trend { display: none; }
+  .brand > span:not(.brand-mark) { display: none; }
+  /* Narrower only. The height is the one thing that must not shrink on the device
+     where it is actually being tapped. */
+  .mode-option { padding: 0 10px; font-size: var(--t-small); }
+}
+
+/* The transition between the two sides.
+   -------------------------------------------------------------------------
+   The browser cross-fades the two snapshots on its own; what is added here is a
+   short directional slide, so the move reads as travelling to the other side
+   rather than as the page redrawing itself.
+
+   Direction follows the switch: the examiner sits to the right of the learning
+   system, so going there sends the old page left and brings the new one in from
+   the right, and coming back does the opposite. By the time these animations
+   run the DOM has already changed, so `:root[data-mode="exam"]` means "we are
+   arriving at the examiner" — the selector describes the destination.
+
+   The header is pulled out of the moving picture with its own transition name.
+   Furniture that is present on both sides should not travel: only the thing you
+   changed is allowed to move. */
+.app-header { view-transition-name: app-header; }
+::view-transition-old(app-header) { animation: none; opacity: 0; }
+::view-transition-new(app-header) { animation: none; opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation: mode-exit-left .26s cubic-bezier(.4,0,1,1) both; }
+  ::view-transition-new(root) { animation: mode-enter-right .3s cubic-bezier(0,0,.2,1) both; }
+  :root:not([data-mode="exam"])::view-transition-old(root) { animation-name: mode-exit-right; }
+  :root:not([data-mode="exam"])::view-transition-new(root) { animation-name: mode-enter-left; }
+}
+/* Asked for less motion: the cross-fade stays, because the change still has to be
+   legible, and only the travel across the screen goes. The default cross-fade is
+   the browser's own, so this shortens it rather than replacing it. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .14s; }
+  .mode-thumb { transition-duration: .14s; }
+}
+@keyframes mode-exit-left { to { opacity: 0; transform: translateX(-2.2%); } }
+@keyframes mode-enter-right { from { opacity: 0; transform: translateX(2.2%); } }
+@keyframes mode-exit-right { to { opacity: 0; transform: translateX(2.2%); } }
+@keyframes mode-enter-left { from { opacity: 0; transform: translateX(-2.2%); } }
+
+/* The recommended paper. One answer, above the twelve options. */
+.exam-pick { margin-bottom: 26px; padding: 24px 26px; background: var(--card); border: 1px solid var(--line-strong); border-inline-start: 5px solid var(--saffron); border-radius: var(--r-panel); box-shadow: var(--shadow-lift); }
+.exam-pick h2 { margin: 4px 0 10px; font: 650 clamp(22px,3vw,29px)/1.2 Georgia, serif; }
+.exam-pick-why { max-width: 60ch; margin: 0 0 16px; color: var(--muted); font-size: var(--t-meta); line-height: 1.55; }
+.exam-pick-facts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.exam-pick-facts span { padding: 5px 11px; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-mark); font-size: var(--t-small); font-weight: 650; }
+.exam-papers-title { margin: 0 0 14px; font: 650 20px Georgia, serif; }
+
 /* The bag. A drawer rather than a modal, because its whole value is being readable
    while the thing it describes is still on screen. */
 .bag-button { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 8px 13px; color: inherit; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-control); cursor: pointer; font: inherit; font-weight: 800; }

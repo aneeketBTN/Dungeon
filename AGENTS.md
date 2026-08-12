@@ -1,5 +1,31 @@
 # Dungeon
-> **The examiner is a product, and its dashboard is the point (2026-08-12; newest):** the examiner
+> **One switch between two products (2026-08-13; newest):** the header carries a Learn / Exam
+> segmented control, and moving between the two sides runs through `document.startViewTransition` —
+> the old page leaves the way you came from, the new one arrives from the side you pressed, and the
+> header is held still by its own `view-transition-name` because furniture on both sides should not
+> travel. Direction, duration, and the reduced-motion form (the browser's cross-fade, shortened, with
+> the travel dropped) are in `app/t6.css` beside the switch; the script only decides *when* a move is
+> a crossing. **Which side you are on is derived from the screen, never stored:** `showScreen` sets
+> `data-mode` and both `aria-pressed` values from a table of the examiner's screen ids, so routes
+> written long before the switch cannot disagree with it. It is a `role="group"` of two pressed
+> buttons rather than a tablist, since the examiner side is two screens deep and the tab contract
+> would be a lie. The examiner's home now leads with **one recommended paper** — a paper you have
+> never met before a second set of one you have, in seat order, then your weakest paper, with IBM
+> last because its self-marked percentage is not the same kind of number and would otherwise win
+> "weakest" forever. Post-mock repair arrives in **sittings of four concepts**, stamped so the next
+> sitting moves on, and the **bag** holds a timestamp-driven 25/5 focus timer and eight pieces of
+> guidance. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+> `evidence/2026-08-13/t6-dual-facing-and-sittings/verification.md`: thumb centred within 0.4px of
+> both labels at 375 and 1280, 9.9:1 on the saffron half, 0 overflow from 320 to 1600, 0 sub-44px
+> targets of ours, 39/39 tests, palette gate clean. Two defects were found by that verification and
+> fixed — a skipped transition rejected `ready` unhandled, and a fast double-press landed on the
+> wrong side. **Still no screenshots, and the cause is now measured rather than assumed:** an
+> undisplayed Browser pane composites no frames, so `document.timeline.currentTime` is pinned at 0
+> and every CSS transition reads as its start value — which twice looked exactly like a CSS bug.
+> Drive `getAnimations()` to the end and measure layout in fixed-width same-origin iframes. Pixel
+> acceptance remains owed.
+>
+> **The examiner is a product, and its dashboard is the point (2026-08-12):** the examiner
 > now has its own front door at `app/t6.html#exam-home-screen` — four papers, three seeded sets each,
 > openable with no learning state at all. A set's seed is subject + set index, never the clock, so a
 > paper survives a refresh and set 2 is genuinely a different draw from set 1. The shortfalls and
@@ -494,9 +520,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tools/check_exam_readiness.mjs` | **Exam-pattern gate and authoring worklist.** `npm run check:exam [SUBJECT]`. Reads `EXAM_PAPERS` out of `app/t6.js` (one source of truth, not a copy) and multiplies it by the bank: which sections cannot be filled and what that costs in marks, whether a negatively marked section is free to a candidate who ticks everything (LAW-53), and how many questions are *forced* to share one visible prompt. Prints "N × type for SUBJECT Section X", soonest paper first. Run it before authoring and after. | 2026-08-12 |
 | `tools/check-palette.mjs` | Palette gate. Parses the `light-dark()` pairs out of `app/t6.css` itself and measures 140 contrast pairings, grayscale separation, and three colour-vision simulations in both themes, then asserts the four evidence states are shape-distinct. Run after touching any colour token. | 2026-08-12 |
 | `tools/browser-checks/ui-audit.js` | UI audit probe, evaluated **in the page**: overflow, tap targets under 44px, corner radii off the four-step scale, paragraph density, type scale, and ragged rows. Used for the mobile pass; re-run per screen and per viewport. | 2026-08-12 |
-| `app/t6.html` | Four-question homepage (what am I doing / where can I start / how am I doing / additional resources), subject rail, hero with the one next action and distance to goal, single-entry practice builder, matrix/trend/totals, one concept list, lesson surface, layered questions, in-question glossary, plans, and results. | 2026-08-12 |
-| `app/t6.css` | Homepage block rhythm and the four-question layout, chip builder, concept-shelf rows with inline evidence, matching board, lesson/glossary presentation, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-12 |
-| `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, recommendation-aware route dedupe, builder pool rules, matching board, persistence, scenarios, **and the examiner**: seeded mock sets, prompt-spread draw, per-question capture, the breakdown/pacing/negative-marking analysis, attempt history, and the locally-buffered non-transmitting telemetry shaper. | 2026-08-12 |
+| `app/t6.html` | Four-question homepage (what am I doing / where can I start / how am I doing / additional resources), subject rail, hero with the one next action and distance to goal, single-entry practice builder, matrix/trend/totals, one concept list, lesson surface, layered questions, in-question glossary, plans, results, the header Learn/Exam switch, the bag drawer, and the examiner home's recommended-paper hero. | 2026-08-13 |
+| `app/t6.css` | Homepage block rhythm and the four-question layout, chip builder, concept-shelf rows with inline evidence, matching board, lesson/glossary presentation, flat primer/question hierarchy across desktop and narrow layouts, and the two-product switch: thumb geometry, the `::view-transition` direction rules and their reduced-motion form, and the ≤760 header compaction that keeps the switch from overflowing a phone. | 2026-08-13 |
+| `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, recommendation-aware route dedupe, builder pool rules, matching board, persistence, scenarios, the bag's timestamp-driven focus timer, **and the examiner**: seeded mock sets, prompt-spread draw, per-question capture, the breakdown/pacing/negative-marking analysis, attempt history, repair in stamped sittings, the recommended-paper rule, the `crossProducts` view-transition wrapper with `showScreen` as the single source of which product is showing, and the locally-buffered non-transmitting telemetry shaper. | 2026-08-13 |
 | `app/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
 | `app/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
 | `app/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, relevance-first distractor selection, case-lecture provenance, and the option-diagnosis pass. | 2026-08-12 |
@@ -727,7 +753,20 @@ after the version is live, since a push to `main` deploys.
   English.
 - [ ] Lesson visual acceptance is DOM- and computed-style-level only. The Browser pane was not
   compositing frames in the verifying session, so no screenshots exist for the lesson surface at
-  either viewport. A pixel-level pass is still owed.
+  either viewport. A pixel-level pass is still owed. **Same gate now covers the examiner, the
+  two-product switch, and its transition** — and as of 2026-08-13 the cause is measured, not
+  assumed: an undisplayed pane composites no frames, so `document.timeline.currentTime` stays at 0,
+  every CSS transition reads as its *start* value, and `resize_window` does nothing. Two apparent
+  CSS bugs that session were this artefact. Verify motion by driving `getAnimations()` to the end
+  of its computed duration, and viewport layout in fixed-width same-origin iframes. The Chrome
+  extension path was attempted and reported "not connected".
+- [ ] **Prompt variety in SCLM is still flagged and was deferred by owner instruction (2026-08-13).**
+  `npm run check:exam` warns that Section A forces 14 of every paper's questions to share one prompt
+  and Section C forces 3. Not a blocker for sitting the paper; it trains recognition of a stem rather
+  than of an idea. Vary the caselet, not just the options.
+- [ ] `button#brand-home` measures 42px tall on desktop, under the project's own 44px floor, and
+  `tools/browser-checks/ui-audit.js` reports it on every screen. Pre-existing; the mobile block
+  already raises it to 44. One line, but it moves header geometry, so it wants its own measurement.
 - [ ] Push to `main` now publishes to the live domain through Workers Builds. Do not commit
   work-in-progress to `main` while testers are active; finish a change, then push. A bad version can
   be rolled back from Workers → Deployments.

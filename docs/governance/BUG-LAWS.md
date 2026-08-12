@@ -775,6 +775,49 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   in every section. Checked live for SPMS Section A (`4+0+31+0+0 = 35`, then `12+1+21+1+0 = 35`) and
   Section B (`8+0+0+0+0 = 8`).
 
+### LAW-55 🟡 — An API that defers your DOM change makes the DOM a stale reading, and its promises reject on ordinary outcomes
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-13. Both halves showed up within minutes of each other on the Learn/Exam
+  switch, which navigates inside `document.startViewTransition`. (a) A transition that is skipped
+  before it animates — a background tab, a window not compositing, a second press during the first —
+  rejects `ready`. Nothing was attached to it, so a perfectly working app printed twelve
+  `InvalidStateError: Transition was aborted because of invalid state` lines. (b) The update
+  callback runs a frame or two later, so during that gap `documentElement.dataset.mode` still said
+  the side you had just left. A second press inside the gap compared against it, concluded "already
+  there", and returned — pressing Exam then Learn quickly landed you on Exam.
+- **Why:** Both are the same shape. The DOM is normally a truthful record of what the user asked
+  for, and these APIs break that for a few frames by design. Guarding on the DOM inside that window
+  reads intent that has not landed yet; ignoring the promises treats an expected outcome as
+  impossible.
+- **Comply:** Keep the intent in a variable for the life of the deferred call (`pendingMode`) and
+  guard on `intent || domState`, not on the DOM alone. Attach a no-op `catch` to any promise the
+  platform rejects on a *normal* path — but only that one: a promise that rejects because *your*
+  callback threw must stay uncaught, or a real fault goes silent.
+- **Verify:** Press the control twice as fast as the harness allows and assert the *last* press
+  wins; press three times and assert the same. Listen for `unhandledrejection` across the whole
+  interaction and assert zero. Both are cheap and neither is visible to a single-press test.
+
+### LAW-56 🟡 — In a browser that is not compositing, an animated property reads as its start value
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-13. Verifying the switch in the Browser pane while the pane was not displayed:
+  the thumb's computed transform stayed `matrix(1, 0, 0, 1, 0, 0)` at 60ms, 340ms and 1500ms after
+  the press, and the two labels' colours read as exactly inverted — the unselected side wearing the
+  selected colour. Both look precisely like a CSS defect, and one of them was "fixed" for several
+  minutes before the cause was found. `document.timeline.currentTime` was `0` and stayed `0`.
+- **Why:** An undisplayed tab composites no frames, so the document timeline never advances. Every
+  CSS transition is registered and `playState: "running"`, and every one of them is pinned at t=0 —
+  which is the value the property is animating *from*. `resize_window` and `screenshot` fail in the
+  same conditions and for the same reason, which is the tell.
+- **Comply:** Before trusting any reading of an animated property, check
+  `document.timeline.currentTime`. If it is 0, drive the animation yourself —
+  `getAnimations().forEach(a => a.currentTime = a.effect.getComputedTiming().duration)` — and read
+  after that. For viewport-dependent layout, measure inside a fixed-width same-origin iframe, where
+  media queries resolve against the frame rather than the dead viewport.
+- **Verify:** The measured end state matches the geometry it should land on — for the switch, the
+  thumb's centre within a pixel of the pressed label's centre, at every tested width.
+
 ### LAW-50 🟡 — A lesson array closed with the wrong bracket is invisible until the file is parsed
 
 - **Tier/Status:** WATCH · ACTIVE

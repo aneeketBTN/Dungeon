@@ -300,8 +300,15 @@
     }
   }
 
+  /* The examiner's screens. Which product you are in is derived from the screen on
+     show rather than stored, so the header switch can never drift out of step with
+     the page behind it — including on the routes that were written long before the
+     switch existed. */
+  var EXAM_SCREENS = {"exam-home-screen": true, "exam-screen": true};
+
   function showScreen(id) {
     $all(".screen").forEach(function (screen) { screen.classList.toggle("active", screen.id === id); });
+    markMode(EXAM_SCREENS[id] ? "exam" : "learn");
     window.scrollTo(0, 0);
     if (id === "dashboard-screen") window.requestAnimationFrame(renderMasteryRadar);
   }
@@ -3700,8 +3707,9 @@
     session = null;
     selected = null;
     confidence = null;
-    renderDashboard();
-    showScreen("dashboard-screen");
+    /* The brand button is in the header, so this is also the way home from the
+       examiner — which makes it a crossing, and it should look like one. */
+    crossProducts("learn", function () { renderDashboard(); showScreen("dashboard-screen"); });
   }
 
   function leavePractice() {
@@ -4810,6 +4818,182 @@
     };
   }
 
+  /* ---- two products, one switch --------------------------------------------------
+   *
+   * The learning system and the examiner are separate products that happen to share a
+   * bank, and the switch has to feel like moving between two rooms rather than
+   * toggling a setting — otherwise the examiner reads as a mode of the learning
+   * system, which is the thing the whole design is trying not to be.
+   *
+   * The transition uses `document.startViewTransition`, which takes a snapshot of the
+   * page before and after the change and animates between the two on the compositor.
+   * Two things matter about using it correctly:
+   *
+   *   - The DOM change must happen *inside* the callback. Mutating before the call
+   *     means the "old" snapshot is already the new state and nothing animates.
+   *   - Where the API is missing, the swap still has to happen. The transition is
+   *     decoration; the navigation is not.
+   *
+   * What the animation actually looks like — direction, duration, and what it becomes
+   * for someone who has asked for less motion — is in the stylesheet, next to the
+   * switch it belongs to.
+   */
+
+  /* Runs a navigation inside a view transition. Everything that crosses between the
+     two products goes through here — the header switch, the dashboard's way in, and
+     every way out of the examiner — so the move looks the same whichever door was
+     used. Moves that stay on one side are left alone: within the examiner, going
+     from the papers to a brief is an ordinary screen change, and animating it would
+     say "you have gone somewhere else" when you have not. */
+  var pendingMode = null;   /* the side a transition is on its way to, while it flies */
+
+  function crossProducts(target, navigate) {
+    if ((pendingMode || currentMode()) === target || !document.startViewTransition) {
+      pendingMode = null;
+      navigate();
+      return;
+    }
+    /* The update callback runs a frame or two later, so for that gap the page still
+       says "learn" while the learner has already asked for the examiner. Recording
+       where we are heading keeps a second press during that gap from being read as a
+       press for the side we are already on and silently dropped. */
+    pendingMode = target;
+    var transition = document.startViewTransition(function () { pendingMode = null; navigate(); });
+    /* A transition can be skipped before it ever animates — a background tab, a
+       window that is not compositing, or a second switch pressed during the first.
+       That is a normal outcome and the navigation has still happened, but `ready`
+       rejects, and an unhandled rejection would report a working app as broken.
+       `updateCallbackDone` is deliberately left alone: if the navigation itself
+       threw, that is a real fault and should still be loud. */
+    if (transition && transition.ready) transition.ready.catch(function () {});
+  }
+
+  function currentMode() { return document.documentElement.getAttribute("data-mode") || "learn"; }
+
+  /* Called by showScreen, never directly: which side you are on is a fact about the
+     screen you are looking at, so the switch cannot disagree with the page. */
+  function markMode(mode) {
+    document.documentElement.setAttribute("data-mode", mode);
+    $all("#mode-switch .mode-option").forEach(function (button) {
+      button.setAttribute("aria-pressed", button.dataset.mode === mode ? "true" : "false");
+    });
+  }
+
+  function switchMode(mode) {
+    if ((pendingMode || currentMode()) === mode) return;
+    /* Leaving a paper mid-attempt would lose it, so the clock is stopped and the
+       attempt dropped deliberately rather than left running behind another screen. */
+    if (mode === "learn" && exam && !exam.submitted) {
+      if (!window.confirm("Leaving the examiner ends this attempt. Leave anyway?")) return;
+      window.clearInterval(examTicker);
+      exam = null;
+    }
+    if (mode === "exam") { openExamHome(); return; }
+    crossProducts("learn", function () { renderDashboard(); showScreen("dashboard-screen"); });
+  }
+
+  function bindModeSwitch() {
+    if (!$("mode-switch")) return;
+    $all("#mode-switch .mode-option").forEach(function (button) {
+      button.addEventListener("click", function () { switchMode(button.dataset.mode); });
+    });
+  }
+
+  /* Which paper to sit next.
+   *
+   * The rule is per paper, not per set: a paper you have never met comes before a
+   * second set of one you have, in the order the papers are actually sat, because a
+   * candidate with three weeks left learns more from meeting all four once than from
+   * three goes at the same one. Once every paper has been met it is the weakest
+   * result, since that is where the marks are.
+   *
+   * IBM comes last among the papers you have not met. Its real paper is written
+   * answers on a caselet nobody has seen, so what we can offer is timed writing
+   * practice rather than a rehearsal — worth doing, not worth doing first. */
+  function recommendedMock() {
+    var papers = EXAM_ORDER.filter(function (courseId) { return EXAM_PAPERS[courseId]; })
+      .map(function (courseId) {
+        var spec = EXAM_PAPERS[courseId];
+        var sets = [];
+        for (var set = 0; set < EXAM_SET_COUNT; set++) {
+          var history = examAttemptsFor(courseId, set);
+          sets.push({
+            set: set, sittings: history.length,
+            best: history.reduce(function (top, row) { return !top || examPercent(row) > examPercent(top) ? row : top; }, null)
+          });
+        }
+        var sat = sets.filter(function (row) { return row.sittings; });
+        return {
+          courseId: courseId, spec: spec, sets: sets, sittings: sat.length,
+          /* A paper's standing is its best result, not its worst: the worst set says
+             something about that set, the best says what the paper is worth to you
+             now. Which *set* to sit is decided separately, below. */
+          best: sat.reduce(function (top, row) {
+            return top === null ? examPercent(row.best) : Math.max(top, examPercent(row.best));
+          }, null),
+          caveat: Boolean(spec.caveat)
+        };
+      });
+
+    /* Within a paper, a set you have not seen beats one you have: same paper, same
+       rules, but a set you have already sat is partly a memory test. */
+    function nextSet(paper) {
+      var fresh = paper.sets.filter(function (row) { return !row.sittings; })[0];
+      if (fresh) return fresh;
+      return paper.sets.slice().sort(function (a, b) { return examPercent(a.best) - examPercent(b.best); })[0];
+    }
+    function first(list) { return list.length ? {paper: list[0], set: nextSet(list[0]), reason: "unmet"} : null; }
+
+    var unmet = first(papers.filter(function (p) { return !p.sittings && !p.caveat; }))
+      || first(papers.filter(function (p) { return !p.sittings; }));
+    if (unmet) return unmet;
+    /* IBM stays out of the weakest-first race too. Its mock is marked by the
+       candidate against a rubric, so its percentage is not the same kind of number
+       as a machine-marked paper's — ranked together it would win "weakest" almost
+       every time and quietly become the only thing ever recommended. */
+    var met = papers.filter(function (p) { return p.sittings && !p.caveat; });
+    if (!met.length) met = papers.filter(function (p) { return p.sittings; });
+    if (!met.length) return null;
+    met.sort(function (a, b) { return a.best - b.best; });
+    return {paper: met[0], set: nextSet(met[0]), reason: "weakest"};
+  }
+
+  /* What a section cannot fill from the bank. Seed-independent, so it can be told
+     before a paper is built — and told here as well as on the card, because the hero
+     is where most people will start from and it must not be the one honest place
+     that goes quiet. */
+  function examShortfalls(courseId) {
+    var spec = EXAM_PAPERS[courseId];
+    return spec.sections.map(function (section) {
+      var have = examPool(courseId, section.type).length;
+      return have < section.count ? {section: section, have: have} : null;
+    }).filter(Boolean);
+  }
+
+  function renderExamPick() {
+    var pick = recommendedMock();
+    var block = $("exam-pick");
+    block.hidden = !pick;
+    if (!pick) return;
+    var paper = pick.paper;
+    var row = pick.set;
+    var questions = paper.spec.sections.reduce(function (n, s) { return n + s.count; }, 0);
+    var short = examShortfalls(paper.courseId);
+    $("exam-pick-title").textContent = paper.spec.title + " · " + examSetLabel(row.set);
+    $("exam-pick-why").textContent = (pick.reason === "unmet"
+      ? "You have not sat this one yet, and it is the next paper on your timetable you have not met. Meeting all four once tells you more than three goes at the same one."
+      : "This is your weakest paper so far, at " + paper.best + "%. It is where the marks are.")
+      + (short.length ? " Some sections are short of the real paper — it says which, and scores you out of what is there." : "");
+    $("exam-pick-facts").innerHTML =
+      "<span>" + escapeHtml(paper.spec.sat) + "</span>" +
+      "<span>" + questions + " questions</span>" +
+      "<span>" + EXAM_MINUTES + " minutes</span>" +
+      "<span>" + paper.spec.total + " marks</span>" +
+      (row.sittings ? "<span>" + row.sittings + " sitting" + (row.sittings === 1 ? "" : "s") + " on this set</span>" : "");
+    $("exam-pick-start").textContent = row.sittings ? "Sit it again" : "Start this paper";
+    $("exam-pick-start").onclick = function () { openExaminer(paper.courseId, row.set); };
+  }
+
   /* ---- the bag ------------------------------------------------------------------
    *
    * A drawer holding the two things a learner wants mid-session and should not leave
@@ -5069,12 +5253,14 @@
     return row.possible ? Math.round((row.awarded / row.possible) * 100) : 0;
   }
 
+  /* Every route into the examiner goes through the same door, so arriving from the
+     dashboard, from the switch, or from backing out of a brief all look alike. */
   function openExamHome() {
-    renderExamHome();
-    showScreen("exam-home-screen");
+    crossProducts("exam", function () { renderExamHome(); showScreen("exam-home-screen"); });
   }
 
   function renderExamHome() {
+    renderExamPick();
     renderExamRecord();
     $("exam-papers").innerHTML = EXAM_ORDER.filter(function (courseId) { return EXAM_PAPERS[courseId]; })
       .map(renderExamPaperCard).join("");
@@ -5091,10 +5277,7 @@
     /* What this build can actually fill, computed from the pools rather than from a
        built paper: the shortfall does not depend on the seed, and a candidate is
        owed it before they commit two hours, not at the end. */
-    var short = spec.sections.map(function (section) {
-      var have = examPool(courseId, section.type).length;
-      return have < section.count ? {section: section, have: have} : null;
-    }).filter(Boolean);
+    var short = examShortfalls(courseId);
     var negative = spec.sections.some(function (s) { return s.negative; });
 
     var sets = "";
@@ -5415,7 +5598,7 @@
            and a stale `exam` would leave the next paper's clock running against it. */
         window.clearInterval(examTicker);
         exam = null;
-        startExamRepair(courseId, conceptId);
+        crossProducts("learn", function () { startExamRepair(courseId, conceptId); });
       });
     });
 
@@ -5543,8 +5726,7 @@
   function leaveExaminer() {
     window.clearInterval(examTicker);
     exam = null;
-    renderDashboard();
-    showScreen("dashboard-screen");
+    crossProducts("learn", function () { renderDashboard(); showScreen("dashboard-screen"); });
   }
 
   /* The calculator the paper allows, and only that one. SPMS permits none, so the
@@ -5628,11 +5810,14 @@
       openExamHome();
     });
     $("exam-review").addEventListener("click", renderExamReview);
+    /* The most-used crossing in the app: a paper has just told you what you lost, and
+       this walks you out of the examiner and into the lesson. It should look like
+       leaving the exam hall. */
     $("exam-repair-start").addEventListener("click", function () {
       var courseId = exam.courseId;
       window.clearInterval(examTicker);
       exam = null;
-      startExamRepair(courseId);
+      crossProducts("learn", function () { startExamRepair(courseId); });
     });
     $("practice-exam-repair").addEventListener("click", function () { startExamRepair(profile.selectedCourse); });
     $("exam-calc-toggle").addEventListener("click", function () {
@@ -5881,6 +6066,7 @@
     bindTips();
     bindExaminer();
     bindBag();
+    bindModeSwitch();
     renderThemeToggle();
     if (window.T6Theme) {
       $("theme-toggle").addEventListener("click", function () {
