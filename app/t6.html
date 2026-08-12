@@ -7,6 +7,10 @@
   <title>Term 6 Revision — Learn, practise, improve</title>
   <meta name="description" content="A clear Term 6 revision dashboard with source-based practice, progress tracking, and targeted re-attempts.">
   <link rel="stylesheet" href="t6.css">
+  <!-- Synchronous and above the fold on purpose: this sets the theme attribute before
+       the first paint. Deferring it, or folding it into t6.js at the end of <body>,
+       renders the wrong theme and then swaps. See the header of theme.js. -->
+  <script src="theme.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -21,9 +25,33 @@
       <svg id="header-spark" class="header-spark" viewBox="0 0 96 30" preserveAspectRatio="none" aria-hidden="true"></svg>
       <small class="header-trend-note" id="header-trend-note">No practice block yet</small>
     </div>
-    <div class="account-controls" id="account-controls" hidden>
-      <span id="sync-status" role="status" aria-live="polite">Saved online</span>
-      <button id="sign-out" type="button">Sign out</button>
+    <!-- Tools sit together so the header keeps three children and its
+         space-between distribution: brand, evidence, tools. -->
+    <div class="header-tools">
+      <!-- Three states, not two. A learner whose machine switches at sunset should be
+           able to stay on "follow my device", which a plain light/dark toggle throws
+           away the moment it is pressed once. The button reports the state it is in;
+           its label says what pressing it will do. -->
+      <button class="theme-toggle" id="theme-toggle" type="button" data-theme-mode="system">
+        <svg class="theme-icon" data-mode="system" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M10 3a7 7 0 0 0 0 14z" fill="currentColor"/>
+        </svg>
+        <svg class="theme-icon" data-mode="light" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <circle cx="10" cy="10" r="3.6" fill="currentColor"/>
+          <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <path d="M10 1.7v2.1M10 16.2v2.1M18.3 10h-2.1M3.8 10H1.7M15.9 4.1l-1.5 1.5M5.6 14.4l-1.5 1.5M15.9 15.9l-1.5-1.5M5.6 5.6L4.1 4.1"/>
+          </g>
+        </svg>
+        <svg class="theme-icon" data-mode="dark" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <path d="M16.4 12.5A7.1 7.1 0 0 1 7.5 3.6a7.1 7.1 0 1 0 8.9 8.9z" fill="currentColor"/>
+        </svg>
+        <span class="sr-only" id="theme-toggle-state">Appearance: follow my device</span>
+      </button>
+      <div class="account-controls" id="account-controls" hidden>
+        <span id="sync-status" role="status" aria-live="polite">Saved online</span>
+        <button id="sign-out" type="button">Sign out</button>
+      </div>
     </div>
   </header>
 
@@ -62,7 +90,7 @@
                   <option value="exam">Exam order</option>
                   <option value="hardest">Hardest for you</option>
                 </select>
-                <span class="info" id="subject-sort-hint" tabindex="0" role="note" aria-label="Exam order is the order you sit the papers.">i</span>
+                <span class="info" id="subject-sort-hint" tabindex="0" role="note" data-tip="Exam order is the order you sit the papers." aria-label="Exam order is the order you sit the papers.">i</span>
               </div>
             </div>
             <!-- The grid becomes a swipe row on narrow screens. The wrapper carries the
@@ -92,8 +120,30 @@
               <p class="eyebrow" id="momentum-scope">Selected subject</p>
               <div class="momentum-figure"><b id="momentum-value">0 / 16</b><span class="momentum-delta" id="momentum-delta"></span><small class="momentum-unit">concepts Strong</small></div>
               <svg id="hero-trend" class="hero-trend" viewBox="0 0 320 88" preserveAspectRatio="none" role="img" aria-label="Distance travelled towards every concept Strong" aria-describedby="momentum-message"></svg>
-              <p class="route-legend"><span>Start</span><span>All Strong <span class="info" tabindex="0" role="note" title="Strong means repeated evidence across question types plus an applied check. The marker moves with demonstrated evidence, never with time spent, and says nothing about your exam score." aria-label="Strong means repeated evidence across question types plus an applied check. The marker moves with demonstrated evidence, never with time spent, and says nothing about your exam score.">i</span></span></p>
+              <p class="route-legend"><span>Start</span><span>All Strong <span class="info" tabindex="0" role="note" data-tip="Strong means repeated evidence across question types plus an applied check. The marker moves with demonstrated evidence, never with time spent, and says nothing about your exam score." aria-label="Strong means repeated evidence across question types plus an applied check. The marker moves with demonstrated evidence, never with time spent, and says nothing about your exam score.">i</span></span></p>
               <p id="momentum-message">Every concept in this subject is still ahead of you.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- The second product, named as one.
+             Everything above and below this is the learning system, which sequences
+             to teach: a lecture before the question that cites it, weak concepts
+             first, feedback on every answer. The examiner does none of that. Giving
+             it its own surface is the honest way to say the two are not the same
+             activity, so a learner never mistakes a practice run for a rehearsal or
+             a mock score for evidence of what they know. -->
+        <section class="home-block exam-invite-block" id="home-exam" aria-labelledby="exam-invite-title">
+          <div class="exam-invite">
+            <div class="exam-invite-copy">
+              <p class="eyebrow">Dungeon, the examiner</p>
+              <h2 id="exam-invite-title">Sit a full mock under exam conditions</h2>
+              <p>Real length, real sections, real marking. Questions arrive in the paper's own order,
+                not a teaching order, and nothing is explained until you submit.</p>
+              <p class="exam-invite-meta" id="exam-invite-meta"></p>
+            </div>
+            <div class="exam-invite-actions">
+              <button class="button primary" id="open-exam" type="button">Open the examiner <span aria-hidden="true">→</span></button>
             </div>
           </div>
         </section>
@@ -109,6 +159,11 @@
                already offering is withdrawn from this list, so the same action is never
                presented twice on one screen. -->
           <div class="route-list" id="route-list">
+            <!-- Only rendered once a mock has actually exposed something. -->
+            <button class="route route-from-exam" id="practice-exam-repair" type="button" data-route="exam-repair" hidden>
+              <b>Fix what the mock exposed</b>
+              <small id="exam-repair-route-note">Concepts you lost marks on under exam conditions.</small>
+            </button>
             <button class="route" id="practice-priority" type="button" data-route="priority">
               <b>Practise what needs work</b>
               <small>Weakest concepts first, chosen from your own attempts.</small>
@@ -341,6 +396,104 @@
         <div class="results-actions">
           <button class="button primary" id="result-primary" type="button">Continue this subject <span aria-hidden="true">→</span></button>
           <button class="button secondary" id="repeat-set" type="button">Repeat this set</button>
+        </div>
+      </div>
+    </section>
+    <!-- Dungeon, the examiner.
+         =========================================================================
+         A separate product from the learning system, and deliberately hostile to it:
+         no primers, no lessons, no feedback, no weak-first ordering, no evidence
+         written while the clock runs. The learning system sequences to teach; this
+         one spreads the paper out the way the real one will, because acclimatising
+         to an exam means meeting a question you were not prepared for. The paper
+         shape is docs/briefs/T6_EXAM_PATTERN.md and nothing else. -->
+    <section class="screen exam-screen" id="exam-screen" aria-labelledby="exam-paper-title">
+      <!-- The briefing. Real candidates read instructions before the clock starts, and
+           the marking rules are the part that changes how you answer. -->
+      <div class="exam-brief" id="exam-brief">
+        <div class="exam-brief-card">
+          <p class="eyebrow">Dungeon, the examiner</p>
+          <h1 id="exam-paper-title">Paper</h1>
+          <p class="exam-brief-lede" id="exam-brief-lede"></p>
+          <dl class="exam-facts" id="exam-facts"></dl>
+          <div class="exam-rules" id="exam-rules"></div>
+          <p class="exam-shortfall" id="exam-shortfall" hidden></p>
+          <div class="exam-brief-actions">
+            <button class="button secondary" id="exam-leave-brief" type="button">Back</button>
+            <button class="button primary" id="exam-begin" type="button">Start the clock</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- The paper itself. -->
+      <div class="exam-runner" id="exam-runner" hidden>
+        <header class="exam-bar">
+          <div class="exam-sections" id="exam-sections" role="tablist" aria-label="Sections"></div>
+          <div class="exam-clock">
+            <span class="exam-clock-label">Time left</span>
+            <b id="exam-time-left" role="timer" aria-live="off">120:00</b>
+            <small id="exam-time-question">On this question 0:00</small>
+          </div>
+          <button class="exam-calc-toggle" id="exam-calc-toggle" type="button" hidden aria-expanded="false" aria-controls="exam-calculator">Calculator</button>
+        </header>
+
+        <div class="exam-body">
+          <main class="exam-question" id="exam-question" tabindex="-1">
+            <p class="exam-qmeta"><span id="exam-qnumber">Question 1</span><span id="exam-qmarks"></span></p>
+            <div id="exam-question-body"></div>
+          </main>
+
+          <aside class="exam-rail" aria-label="Question palette">
+            <ul class="exam-legend" id="exam-legend"></ul>
+            <p class="exam-rail-heading">Choose a question</p>
+            <div class="exam-palette" id="exam-palette"></div>
+          </aside>
+        </div>
+
+        <footer class="exam-actions">
+          <div class="exam-actions-left">
+            <button class="button compact secondary" id="exam-mark" type="button">Mark for review &amp; next</button>
+            <button class="button compact secondary" id="exam-clear" type="button">Clear response</button>
+          </div>
+          <div class="exam-actions-right">
+            <button class="button compact secondary" id="exam-prev" type="button">Previous</button>
+            <button class="button compact primary" id="exam-next" type="button">Save &amp; next</button>
+            <button class="button compact danger" id="exam-submit" type="button">Submit</button>
+          </div>
+        </footer>
+
+        <!-- Draggable would be nicer; a docked panel is what a 120-minute paper on a
+             phone can actually afford. -->
+        <div class="exam-calculator" id="exam-calculator" hidden role="group" aria-label="Calculator"></div>
+      </div>
+
+      <!-- The result. Scored by the paper's own rules, not the learning system's. -->
+      <div class="exam-result" id="exam-result" hidden>
+        <div class="exam-result-card">
+          <p class="eyebrow">Paper complete</p>
+          <h2 id="exam-result-title">Your mock result</h2>
+          <p class="exam-result-lede" id="exam-result-lede"></p>
+          <div class="exam-score" id="exam-score"></div>
+          <div id="exam-section-breakdown"></div>
+          <!-- The link back. A mock's most useful output is not its score, it is the
+               list of things it proved you cannot do yet. -->
+          <section class="exam-repair" id="exam-repair" aria-labelledby="exam-repair-title" hidden>
+            <p class="eyebrow">Back to learning</p>
+            <h3 id="exam-repair-title">What this paper exposed</h3>
+            <p id="exam-repair-copy"></p>
+            <ul class="exam-repair-list" id="exam-repair-list"></ul>
+            <button class="button primary" id="exam-repair-start" type="button">Revise these concepts <span aria-hidden="true">→</span></button>
+          </section>
+
+          <p class="exam-caveat">A mock measures how you handled this paper on this day. It is not a
+            prediction of your result, and the questions here are not the questions you will sit.
+            Nothing here is recorded as evidence of what you know — the paper only changes what the
+            learning system offers you next.</p>
+          <div class="exam-brief-actions">
+            <button class="button secondary" id="exam-result-home" type="button">Back to learning</button>
+            <button class="button primary" id="exam-review" type="button">Review every question</button>
+          </div>
+          <div id="exam-review-list"></div>
         </div>
       </div>
     </section>

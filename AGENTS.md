@@ -1,5 +1,42 @@
 # Dungeon
-> **Teaching layer — the 0→80 path (2026-08-12; newest):** The app could measure a learner but could
+> **Two products, one bank (2026-08-12; newest):** Dungeon is now **the learning system**
+> (learn by failing: teach before test, weak-first, feedback on every answer) and **the examiner**
+> (`app/t6.html#exam-screen`), a mocks platform that deliberately does none of that. The examiner
+> builds a paper strictly from `docs/briefs/T6_EXAM_PATTERN.md` — sections, counts, per-question
+> marks, 120 minutes, negative marking, calculator — and spreads questions randomly rather than
+> pedagogically, with a seeded shuffle so a reload does not reshuffle the paper. It ships the exam
+> furniture a candidate expects: section tabs, countdown with a per-question timer, a five-state
+> question palette (answered / not answered / not visited / marked / answered-and-marked, each with
+> its own **shape** as well as colour), mark-for-review, clear response, and submit with auto-submit
+> at zero. Scoring is the paper's own: SPMS Section B is +1 per right option, −1 per wrong, floored
+> at zero **and capped at the question's marks**; match is all-or-nothing because the paper states no
+> partial credit; written answers are excluded from the machine total and returned for self-review.
+> **Where the bank cannot fill a section the brief says so before the clock starts** and scores out
+> of what is actually there — SPMS Section B has 8 of 20 MSQs, SCLM Section B 4 of 6 numericals — and
+> IBM carries a caveat that its paper is ten written answers on an unseen caselet, so a mock cannot
+> reproduce it. **The two products are linked in one direction only:** concepts missed under exam
+> conditions are stored in `profile.examMisses` and become a curated revision route
+> ("Fix what the mock exposed"), taught before being tested again. Mock answers deliberately never
+> touch `conceptAttempts` — a timed, unassisted, uncoached paper is not the condition the evidence
+> model is calibrated on, so misses **prioritise and never score**. `VERIFIED(REAL_BROWSER)`:
+> `conceptAttempts` and `totalAnswers` both stay 0 after a submitted mock.
+>
+> **Design system, dark mode, and the mobile pass (2026-08-12):** every colour in `app/t6.css` is a
+> token and every token a `light-dark()` pair — 85 hex values, 46 `white` keywords, and 32 rgba
+> literals are now **zero** below `:root`. The theme switch is one `color-scheme` change, so native
+> controls follow. `--ink` was split from `--deep` (it was both text and the hero's fill). The
+> palette is measured by `tools/check-palette.mjs`, which found that the *existing* state hues
+> cannot carry state without colour — green/amber/red sit within 1.2:1 in grayscale and 0.05 OKLab
+> apart under deuteranopia — so the four evidence states are now four silhouettes with hues
+> unchanged. All seven `title`-based hover explanations were unreachable by keyboard and touch and
+> are now one real tooltip (**LAW-51**). A documented four-step corner scale had drifted back to
+> nineteen literal radii (**LAW-52**). On mobile the submit button sat 370px below the fold and is
+> now sticky, with the global header hidden mid-question. Evidence:
+> `evidence/2026-08-12/t6-dark-mode-and-mobile/verification.md`. Learners can now move device
+> themselves: `releaseOtherDevice` ends the other session and claims this one, progress intact,
+> still one active browser, and a country lock is not bypassable by it.
+>
+> **Teaching layer — the 0→80 path (2026-08-12):** The app could measure a learner but could
 > not teach one, so it only served people who had already studied the course.
 > `VERIFIED(REAL_BROWSER + AUTOMATED)` at `evidence/2026-08-12/t6-teaching-layer/verification.md`.
 > The bank generates ~12.8 surfaces per concept by recombining four harvested sentences, so first
@@ -425,6 +462,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `app/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
 | `app/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
 | `app/admin.js` | Cohort onboarding, revoke/unlock, per-tester and bulk **force sign-out** with live session counts, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-12 |
+| `app/theme.js` | Theme bootstrap loaded synchronously in `<head>`: reads the stored appearance before first paint, exposes `T6Theme` (get/set/next/resolved/onChange), and follows the system setting when unset. Separate from t6.js because the release serves `script-src self`, so the usual inline head script is blocked. | 2026-08-12 |
+| `tools/check-palette.mjs` | Palette gate. Parses the `light-dark()` pairs out of `app/t6.css` itself and measures 140 contrast pairings, grayscale separation, and three colour-vision simulations in both themes, then asserts the four evidence states are shape-distinct. Run after touching any colour token. | 2026-08-12 |
+| `tools/browser-checks/ui-audit.js` | UI audit probe, evaluated **in the page**: overflow, tap targets under 44px, corner radii off the four-step scale, paragraph density, type scale, and ragged rows. Used for the mobile pass; re-run per screen and per viewport. | 2026-08-12 |
 | `app/t6.html` | Four-question homepage (what am I doing / where can I start / how am I doing / additional resources), subject rail, hero with the one next action and distance to goal, single-entry practice builder, matrix/trend/totals, one concept list, lesson surface, layered questions, in-question glossary, plans, and results. | 2026-08-12 |
 | `app/t6.css` | Homepage block rhythm and the four-question layout, chip builder, concept-shelf rows with inline evidence, matching board, lesson/glossary presentation, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-12 |
 | `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, recommendation-aware route dedupe, builder pool rules, matching board, persistence, and scenarios. | 2026-08-12 |

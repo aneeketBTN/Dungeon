@@ -44,6 +44,33 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 ## Issue → Cause → Fix
 
+- **I-DARK (2026-08-12)** — Issue: every explanatory hover in the app showed nothing. Cause: all
+  seven used the native `title` attribute, which waits ~1s, never fires on keyboard focus, and never
+  fires on touch — so each marker's `cursor: help` and `:focus-visible` ring promised an explanation
+  to three input methods and delivered to at most one. On a phone, every explanation in the product
+  was unreachable. Fix: one shared `.tip` bubble on `data-tip`, hover/focus/tap/Esc, with the
+  accessible name left on the trigger so nothing is announced twice. Recorded as **LAW-51**.
+  Evidence: `evidence/2026-08-12/t6-dark-mode-and-mobile/verification.md`.
+- **I-STATE (2026-08-12)** — Issue: the four evidence states were four identical circles differing
+  only in fill, against a standing rule that they stay distinguishable without colour or motion.
+  Cause: the rule was being satisfied indirectly, by the text label beside each dot, so the mark
+  itself carried nothing a reader had not already been told — and the hues could not have carried it
+  anyway (measured: within 1.2:1 in grayscale; 0.05 OKLab apart under deuteranopia). Fix: four
+  silhouettes — filled disc, half-filled disc, diamond, empty ring — with hues unchanged and
+  reinforcing. `tools/check-palette.mjs` now asserts shape-distinctness, so the four cannot quietly
+  collapse back into four circles.
+- **I-MOBILE (2026-08-12)** — Issue: answering a question on a phone meant scrolling 370px past the
+  last option to reach Submit, with the first option starting past the half-way line. Cause: desktop
+  density carried onto a phone — two stacked headers costing 140px, of which the top one showed the
+  brand, a Term 6 sparkline, and the appearance control mid-question, plus a sticky-bar hint about
+  arrow keys shown to thumbs. Fix: global header hidden while a question is open, action bar made
+  sticky, keyboard hint keyed to `pointer: coarse`. Submit is now reachable without scrolling.
+  Measured before and after at 375x812 with `tools/browser-checks/ui-audit.js`.
+- **I-SCALE (2026-08-12)** — Issue: a documented four-step corner scale had drifted back to nineteen
+  literal radii, and the type scale to eighteen literal sizes including 9px and 10px. Cause: the
+  scale lived in a comment, which describes an intention rather than enforcing one; each new rule
+  copied a nearby value at no cost and left no trace. Fix: tokens for both, and a grep-able check in
+  **LAW-52** plus `radiiOffScale` in the UI audit probe.
 - **I1 (2026-07-16)** — Issue: product art direction was coherent for the homepage but incomplete
   across market, questions, feedback, motion, completion, and results. Cause: the creative thesis
   had not been translated into product-wide state rules. Fix: added `docs/design/ART_DIRECTION_SYSTEM.md`.

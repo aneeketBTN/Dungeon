@@ -23,6 +23,21 @@
         <button id="login-submit" type="submit">Open revision dashboard</button>
       </form>
 
+      <!-- Moving to another device. Progress already follows the email through the
+           server, so the only thing in the way is the one-active-browser rule. This
+           says so plainly and offers the one action that resolves it, rather than the
+           old dead end of "sign out there" — which nobody can do from a device they
+           did not bring. -->
+      <section class="device-switch" id="device-switch" aria-labelledby="device-switch-title" hidden>
+        <p class="eyebrow">Already signed in elsewhere</p>
+        <h2 id="device-switch-title" tabindex="-1">Continue on this device?</h2>
+        <p>This account is open on another browser. You can sign that one out and carry on here.</p>
+        <p class="device-switch-note">Your progress is saved to your account, not to a device, so nothing is lost either way. The other browser will need to sign in again.</p>
+        <button id="device-switch-confirm" type="button">Sign out the other device and continue</button>
+        <p class="form-message" id="device-switch-message" role="status" aria-live="polite"></p>
+        <button class="back-button" id="device-switch-cancel" type="button">Back</button>
+      </section>
+
       <section class="agreement" id="agreement" aria-labelledby="agreement-title" hidden>
         <p class="eyebrow">One-time agreement</p>
         <h2 id="agreement-title" tabindex="-1">Keep the closed test private</h2>

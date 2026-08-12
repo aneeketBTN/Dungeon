@@ -9,6 +9,9 @@ const publicFiles = [
   "app/t6.html",
   "app/t6.css",
   "app/t6.js",
+  // Loaded synchronously in <head> so the theme is set before the first paint; it
+  // cannot be inline because the release serves `script-src 'self'`.
+  "app/theme.js",
   "app/login.html",
   "app/login.css",
   "app/login.js",
