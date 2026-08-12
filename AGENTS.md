@@ -425,9 +425,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `app/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
 | `app/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
 | `app/admin.js` | Cohort onboarding, revoke/unlock, per-tester and bulk **force sign-out** with live session counts, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-12 |
-| `app/t6.html` | Subject rail, trendline hero, inline practice builder, distance-travelled strip, holistic matrix/totals, lesson surface, layered questions, in-question glossary, plans, and results. | 2026-08-12 |
-| `app/t6.css` | Dynamic homepage, chip builder, matching board, lesson/glossary presentation, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-12 |
-| `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, builder pool rules, matching board, persistence, and scenarios. | 2026-08-12 |
+| `app/t6.html` | Four-question homepage (what am I doing / where can I start / how am I doing / additional resources), subject rail, hero with the one next action and distance to goal, single-entry practice builder, matrix/trend/totals, one concept list, lesson surface, layered questions, in-question glossary, plans, and results. | 2026-08-12 |
+| `app/t6.css` | Homepage block rhythm and the four-question layout, chip builder, concept-shelf rows with inline evidence, matching board, lesson/glossary presentation, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-12 |
+| `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, recommendation-aware route dedupe, builder pool rules, matching board, persistence, and scenarios. | 2026-08-12 |
 | `app/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
 | `app/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
 | `app/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, relevance-first distractor selection, case-lecture provenance, and the option-diagnosis pass. | 2026-08-12 |
@@ -598,6 +598,17 @@ after the version is live, since a push to `main` deploys.
   `node tools/check_lesson_file.mjs "<transcripts>"`. Note that 177 uncited lectures across IBM,
   SCLM, and SPMS have no lesson and no question citing them — authoring those is optional work that
   moves no coverage, and lessons for them are never delivered.
+- [ ] **Homepage four-question restructure is on a branch and not merged.**
+  `redesign/homepage-four-questions` reorders the dashboard into what am I doing / where can I
+  start / how am I doing / additional resources, and removes the duplicate entry points that had
+  accumulated: three doors to the practice builder, two lists of the same concepts, "N of 16
+  strong" twice, hide/show nested three deep. Recorded as C30 in `DESIGN_SOURCE_INDEX.md`,
+  superseding the C26/C27 ordering. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+  `evidence/2026-08-12/t6-homepage-four-questions/verification.md` — 0 layout findings at 1280×800
+  and 375×812, LAW-36 measured in both directions, LAW-47 clean, 37/37 tests. **Two things are
+  owed before it merges:** a pixel-level pass (the Browser pane was not compositing, so there are
+  no screenshots) and a contrast measurement of the goal chart's new dark-surface colours. It is
+  tester-visible, so it also owes the change announcement drafted with it.
 - [ ] The vocabulary gate cannot match a singular glossary term against a plural-only occurrence:
   it builds `\b<term>\b`, so `public private partnership` was reported absent although
   `public private partnerships` appears three times. It reports this as *invented vocabulary*, which

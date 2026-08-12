@@ -463,6 +463,21 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   four subjects, zero violations. Truthful-reporting axis: a verification script is itself code and
   can report a failure that is not there — a red result needs the same scrutiny as a green one before
   it is acted on or reported. Law: LAW-47.
+- **I52 (2026-08-12)** — Issue: the homepage offered the same action several times in different
+  places, and the reason to take an action lived apart from the control that took it. Generic
+  practice had three entry points all calling `openPracticeSetup()`; sixteen concepts were listed
+  twice, with the missing-evidence explanation only in the copy that had no Practise button;
+  "N of 16 strong" appeared twice; hide/show nested three levels deep. Cause: five sessions of
+  ordering work (C15, C26, C27, C28) each added or moved furniture, and none removed the previous
+  arrangement — the disclosures added after C27 had already broken its own "nothing hides" rule.
+  Fix: four blocks answering one question each, the inspector merged onto the concept row, and
+  `renderRecommendation()` withdrawing whichever route the hero already offers so a duplicate
+  cannot reappear as state changes. Visual/motion-coherence axis: an interface accretes duplicates
+  one reasonable addition at a time, so periodically **counting** how many ways a single action can
+  be reached is worth more than judging any one addition. Accessibility axis: `#subject-sort` was
+  measured at 32px against the 44px floor the rest of the dashboard holds, and fixed. Laws:
+  LAW-19, LAW-36, LAW-46. Evidence:
+  `evidence/2026-08-12/t6-homepage-four-questions/verification.md`.
 
 ## Watch Items
 

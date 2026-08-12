@@ -65,22 +65,34 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .community-reminder p:not(.eyebrow) { margin: 0; color: #5f5a4f; }
 .community-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 9px; }
 .community-actions .button { text-decoration: none; }
-.subject-rail { padding: 18px 20px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
+/* The four questions.
+ *
+ * Each block answers one of them. Grouping is carried by space, not by rules or
+ * boxes: 56px between blocks against 14px inside one, so the break between two
+ * questions is unmistakable without drawing a single line. The numbered eyebrow
+ * plus the serif question is the only signpost a block needs. */
+.home-block { margin-top: 56px; }
+.home-block:first-of-type { margin-top: 0; }
+.block-heading { margin-bottom: 18px; }
+.block-heading h2 { margin: 6px 0 0; font: 650 clamp(28px,3.4vw,40px)/1.06 Georgia, serif; letter-spacing: -.02em; }
+.block-note { max-width: 620px; margin: 9px 0 0; color: var(--muted); font-size: 13px; }
+.block-heading .block-note { margin-top: 11px; }
+
+.subject-rail { display: grid; gap: 13px; }
 .rail-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
-.rail-heading h2 { margin: 4px 0 0; font: 650 23px/1.1 Georgia, serif; }
-.rail-heading > p { margin: 0; color: var(--muted); font-size: 12px; }
-.subject-rail .course-grid { margin-top: 13px; }
-.focus-panel { position: relative; overflow: hidden; margin-top: 14px; display: grid; grid-template-columns: minmax(0,1.42fr) minmax(330px,.68fr); color: white; background: var(--ink); border-radius: 26px; box-shadow: var(--shadow); }
+.rail-heading h3 { margin: 0; color: var(--muted); font: 800 11px/1 Inter, sans-serif; letter-spacing: .13em; text-transform: uppercase; }
+/* The full name of what you just picked, answering the block's question directly.
+   It used to sit three sections lower, inside a tab. */
+.subject-identity { margin: 0; }
+.subject-identity b { font-size: 14px; }
+.subject-identity span { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; }
+.focus-panel { position: relative; overflow: hidden; margin-top: 14px; display: grid; grid-template-columns: minmax(0,1.42fr) minmax(300px,.62fr); color: white; background: var(--ink); border-radius: 26px; box-shadow: var(--shadow); }
 .focus-panel::before { content: ""; position: absolute; width: 360px; height: 360px; right: -130px; top: -180px; border: 1px solid rgba(126,209,220,.22); border-radius: 50%; box-shadow: 0 0 0 48px rgba(126,209,220,.03), 0 0 0 96px rgba(126,209,220,.025); pointer-events: none; }
 .focus-copy { position: relative; z-index: 1; padding: clamp(30px,5vw,58px); }
 .focus-copy .eyebrow { color: #d6ddd8; }
 .focus-copy h1 { max-width: 720px; margin: 12px 0 14px; font: 650 clamp(36px,5vw,62px)/1.02 Georgia, "Times New Roman", serif; letter-spacing: -.035em; }
 .focus-copy > p:not(.eyebrow) { max-width: 670px; margin: 0; color: #cad3cc; font-size: clamp(16px,1.7vw,18px); }
 .hero-actions, .results-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 25px; }
-/* Sits in a narrow heading column, so its two actions usually cannot share a row.
-   A grid track keeps them equal width whether they sit side by side or stack;
-   wrapped flex left them at 257px above 187px, which reads as an accident. */
-.subject-actions { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 11px; margin-top: 25px; }
 .button { min-height: 48px; padding: 12px 18px; border: 1px solid transparent; border-radius: 11px; font-weight: 800; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
 .button:hover:not(:disabled) { transform: translateY(-1px); }
 .button.primary { color: white; background: var(--green); box-shadow: 0 8px 22px rgba(35,112,77,.18); }
@@ -96,23 +108,35 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 
 .next-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 19px; }
 .next-meta span { padding: 6px 9px; color: #e0e6e1; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 7px; font-size: 12px; font-weight: 800; }
-.momentum-card { position: relative; z-index: 1; margin: 22px 22px 22px 0; padding: 22px 24px 20px; align-self: center; color: var(--ink); background: #fbfaf5; border-radius: 19px; }
-.momentum-card h2 { margin: 4px 0 0; font: 650 21px/1.14 Georgia, serif; }
-.momentum-figure { margin-top: 11px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; }
+/* Where you stand, on the hero itself rather than in a pale card floating on top
+   of it. The action and the distance left are one thought; a nested panel drew a
+   border between them and put a second surface inside the first (LAW-19). A
+   hairline is the one separator space cannot replace here, because the two
+   columns sit side by side. */
+.focus-goal { position: relative; z-index: 1; align-self: center; padding: clamp(24px,3vw,34px) clamp(26px,3.4vw,40px); border-inline-start: 1px solid rgba(255,255,255,.14); }
+.focus-goal .eyebrow { color: #9fb4ad; }
+.momentum-figure { margin-top: 9px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; }
 .momentum-figure > b { font: 700 32px/1 Georgia, serif; }
 .momentum-delta { display: inline-block; padding: 3px 8px; border-radius: 99px; font-size: 11px; font-weight: 850; white-space: nowrap; }
 .momentum-delta.up { color: var(--green); background: var(--green-soft); }
 .momentum-delta.down { color: var(--red); background: var(--red-soft); }
 .momentum-delta.flat { color: var(--muted); background: var(--grey-soft); }
 .hero-trend { display: block; width: 100%; height: 88px; margin: 12px 0; overflow: visible; }
-.momentum-card > p { margin: 0; color: #4d5a51; font-size: 13px; }
-.momentum-card > small { display: block; margin-top: 13px; padding-top: 12px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--line); }
-.progress-track { height: 9px; overflow: hidden; background: #e2e6e0; border-radius: 99px; }
-.progress-track i { display: block; width: 0; height: 100%; background: var(--green); transition: width .25s ease; }
+.focus-goal > p:not(.eyebrow):not(.route-legend) { margin: 0; color: #c3ccc5; font-size: 13px; }
+.momentum-unit, .focus-goal .route-legend { color: #93a49b; }
+.focus-goal .info { background: transparent; border-color: rgba(255,255,255,.3); color: #cbd5cd; }
 
-.practice-builder { margin-top: 14px; padding: 24px 26px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); transition: box-shadow .3s ease, border-color .3s ease; }
+/* Ways in. These are controls, so they carry a surface — the one place a box is
+   still doing work on this page (better-layout: controls must look interactive). */
+.route-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 12px; }
+.route { min-height: 84px; padding: 15px 17px; display: grid; align-content: center; gap: 5px; text-align: start; color: inherit; background: var(--card); border: 1px solid var(--line); border-radius: 13px; cursor: pointer; transition: border-color .15s ease, transform .15s ease; }
+.route:hover { border-color: #91a397; transform: translateY(-1px); }
+.route b { font-size: 14px; }
+.route small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+.route[aria-expanded="true"] { border-color: var(--blue); background: #f2fafb; box-shadow: inset 0 0 0 1px var(--blue); }
+
+.practice-builder { margin-top: 12px; padding: 24px 26px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
 .practice-builder:focus { outline: none; }
-.practice-builder.summoned { border-color: #78aeb6; box-shadow: 0 0 0 4px rgba(23,107,120,.13); }
 .builder-groups { margin-top: 18px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px 20px; }
 .builder-group { min-width: 0; margin: 0; padding: 0; border: 0; }
 .builder-group legend { padding: 0 0 9px; color: var(--muted); font-size: 11px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
@@ -126,20 +150,16 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .builder-footer { margin-top: 20px; padding-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-top: 1px solid var(--line); }
 .builder-summary { margin: 0; max-width: 640px; color: var(--ink-soft); font-size: 13px; font-weight: 650; }
 
-.progress-story { margin-top: 14px; padding: 22px 26px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
-.progress-story .compact-heading h2 { font-size: 23px; }
-.story-stats { margin-top: 15px; display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
-.story-stat { min-height: 92px; padding: 13px 15px; display: grid; align-content: start; background: var(--card-soft); border: 1px solid var(--line); border-radius: 11px; }
-.story-stat span { color: var(--muted); font-size: 11px; font-weight: 850; }
-.story-stat b { margin: 6px 0 3px; font: 700 25px/1 Georgia, serif; }
-.story-stat small { color: var(--muted); font-size: 11px; }
+/* The study-set list closes the "where can I start" block, so it needs a label of
+   its own but not another framed panel around it. */
+.set-block { margin-top: 34px; }
+.set-block h3 { margin: 0; font: 650 21px Georgia, serif; }
+.set-block .block-note { margin-top: 6px; }
 
-.evidence-summary { margin-top: 14px; display: grid; grid-template-columns: minmax(360px,1fr) minmax(0,1fr); gap: 14px; }
-.mastery-matrix, .evidence-summary .overview-summary { min-width: 0; padding: 20px 22px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
-.evidence-summary .overview-summary .summary-heading { align-items: start; }
-.evidence-summary .overview-summary .summary-heading h3 { margin: 3px 0 0; font: 650 24px/1.1 Georgia, serif; }
+.evidence-pair { margin-top: 14px; display: grid; grid-template-columns: minmax(340px,1fr) minmax(0,1fr); align-items: start; gap: 14px; }
+.mastery-matrix, .evidence-pair .trend-card { min-width: 0; margin: 0; padding: 20px 22px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
 .mastery-matrix .summary-heading { align-items: start; }
-.mastery-matrix .summary-heading h2 { margin: 3px 0 0; font: 650 24px/1.1 Georgia, serif; }
+.mastery-matrix .summary-heading h3 { margin: 0; font: 650 21px/1.15 Georgia, serif; }
 .radar-layout { margin-top: 8px; display: grid; grid-template-columns: minmax(200px,1fr) minmax(130px,.62fr); align-items: center; gap: 8px; }
 #mastery-radar { display: block; width: min(100%,340px); aspect-ratio: 1; margin: 0 auto; }
 .mastery-values { margin: 0; padding: 0; display: grid; gap: 7px; list-style: none; }
@@ -189,7 +209,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .course-card.day-start { border-left: 3px solid var(--blue); }
 .rail-sort { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .rail-sort label { color: var(--muted); font-size: 11px; }
-.rail-sort select { min-height: 32px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; background: white; font: inherit; font-size: 12px; }
+/* A real control, so it gets a real target: 32px failed the 44px floor the rest of
+   the dashboard already holds to. */
+.rail-sort select { min-height: 44px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; background: white; font: inherit; font-size: 12px; }
 .rail-sort-hint { flex-basis: 100%; margin: 0; color: var(--muted); font-size: 11px; }
 .rail-note { margin: 10px 0 0; color: var(--muted); font-size: 12px; }
 .course-bottom { grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2px 8px; }
@@ -198,21 +220,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .mini-track { grid-column: 1 / -1; height: 5px; margin-top: 6px; overflow: hidden; background: #dfe4de; border-radius: 99px; }
 .mini-track i { display: block; height: 100%; background: var(--green); }
 
-.stage-tabs { position: relative; margin: 14px 0 0; padding: 5px; display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; background: #e7e7df; border-radius: 14px; }
-.stage-tabs button { min-height: 52px; padding: 10px 14px; display: flex; align-items: center; justify-content: center; gap: 9px; border: 0; color: #657068; background: transparent; border-radius: 10px; font-weight: 800; cursor: pointer; }
-.stage-tabs button span { width: 25px; height: 25px; display: grid; place-items: center; border: 1px solid #aeb6af; border-radius: 50%; font-size: 11px; }
-.stage-tabs button[aria-selected="true"] { color: var(--ink); background: var(--card); box-shadow: 0 2px 9px rgba(31,42,34,.08); }
-.stage-tabs button[aria-selected="true"] span { color: white; background: var(--blue); border-color: var(--blue); }
-.stage-panels { margin-top: 10px; }
-.stage-panel { padding: clamp(22px,3.7vw,40px); background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
-.stage-panel:focus { outline: none; }
-.subject-heading { align-items: center; }
-.subject-actions { justify-content: flex-end; margin-top: 0; }
-.subject-finish { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line); }
-.subject-finish .summary-heading > span { color: var(--ink); font-size: 13px; font-weight: 850; }
-.subject-finish .progress-track { margin: 14px 0 11px; }
-.subject-finish > p { margin: 0; color: #536057; }
-.subject-finish > small { display: block; margin-top: 11px; color: var(--muted); }
 .summary-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
 .summary-heading h3 { margin: 0; font: 650 21px Georgia, serif; }
 .summary-heading span { color: var(--muted); font-size: 12px; }
@@ -227,8 +234,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .stat.needs { border-left-color: var(--red); background: var(--red-soft); }
 .stat.unseen { border-left-color: #859087; background: var(--grey-soft); }
 
-.explain-details, .dashboard-tools { margin-top: 18px; border-top: 1px solid var(--line); }
-.explain-details summary, .dashboard-tools summary { min-height: 46px; padding: 14px 2px 0; color: var(--blue); font-weight: 800; cursor: pointer; }
+.explain-details { margin-top: 18px; border-top: 1px solid var(--line); }
+.explain-details summary { min-height: 46px; padding: 14px 2px 0; color: var(--blue); font-weight: 800; cursor: pointer; }
 /* Two even columns rather than wrapped flex: the four entries carry descriptions of
    very different lengths (444/332/383/81px), so flex-wrap gave each its own ragged
    line. A grid aligns the status dots into two clean columns. */
@@ -243,10 +250,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .dot.needs { background: var(--red); border-color: var(--red); }
 .dot.unseen { background: white; }
 
-.trend-card { margin-top: 24px; padding: 20px 22px 15px; background: #f7f7f2; border: 1px solid var(--line); border-radius: 15px; }
+.trend-card { padding: 20px 22px 15px; background: #f7f7f2; border: 1px solid var(--line); border-radius: 15px; }
 .trend-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
-.trend-heading small { color: var(--muted); font-size: 10px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
-.trend-heading h3 { margin: 2px 0 0; font: 650 22px Georgia, serif; }
+.trend-heading h3 { margin: 0; font: 650 21px/1.15 Georgia, serif; }
 .trend-heading > b { color: var(--green); font: 700 30px Georgia, serif; }
 .progress-trend { width: 100%; height: 220px; margin-top: 9px; overflow: visible; }
 .trend-grid { stroke: #dfe4dc; stroke-width: 1; vector-effect: non-scaling-stroke; }
@@ -257,39 +263,11 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .trend-empty { fill: none; stroke: #aeb7b0; stroke-width: 2; stroke-dasharray: 6 7; vector-effect: non-scaling-stroke; }
 .trend-empty-copy { fill: #69756d; font: 13px Inter, sans-serif; }
 #trend-description { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
-.module-browser { margin-top: 18px; padding: 18px; border: 1px solid var(--line); border-radius: 15px; }
-.module-stepper { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 14px; text-align: center; }
-.module-stepper small { color: var(--blue); font-size: 10px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
-.module-stepper h3 { margin: 2px 0 0; font: 650 22px Georgia, serif; }
-.icon-button { width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--line); background: var(--card-soft); border-radius: 50%; cursor: pointer; }
-.icon-button:disabled { opacity: .35; cursor: not-allowed; }
-.concept-map { width: 100%; margin: 18px auto 0; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
-.module-card { position: relative; min-height: 132px; padding: 17px 17px 17px 57px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); column-gap: 10px; align-content: start; border: 1px solid var(--line); background: var(--card-soft); border-radius: 13px; counter-increment: module; }
-.module-card::before { content: counter(module); position: absolute; left: 16px; top: 17px; width: 28px; height: 28px; display: grid; place-items: center; color: white; background: var(--ink-soft); border-radius: 50%; font-size: 11px; font-weight: 900; }
-.module-card::after { content: ""; position: absolute; left: 29px; top: 47px; bottom: -14px; width: 1px; background: var(--line); }
-.module-card:last-child::after { display: none; }
-.module-card small { color: var(--blue); font-size: 10px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
-.module-card small, .module-card h3 { grid-column: 1 / -1; }
-.module-card h3 { margin: 4px 0 10px; font-size: 14px; line-height: 1.25; }
-.concept-node { width: 100%; min-height: 102px; padding: 13px 14px; display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 8px; border: 1px solid var(--line); background: white; border-radius: 10px; text-align: left; cursor: pointer; }
-.concept-node b { font-size: 14px; line-height: 1.25; }
-.concept-node span { white-space: nowrap; font-size: 10px; font-weight: 850; }
-.concept-node small { grid-column: 1 / -1; color: var(--muted); font-size: 11px; }
-.concept-node.selected { box-shadow: 0 0 0 3px rgba(23,107,120,.13); }
-.concept-node.strong { border-left: 5px solid var(--green); background: var(--green-soft); }
-.concept-node.developing { border-left: 5px solid var(--amber); background: var(--amber-soft); }
-.concept-node.needs { border-left: 5px solid var(--red); background: var(--red-soft); }
-.concept-node.unseen { border-left: 5px solid #a9b0aa; }
-.concept-inspector { margin-top: 12px; padding: 20px; background: #f6f7f3; border: 1px solid var(--line); border-radius: 12px; }
-.concept-inspector > div:first-child { display: flex; align-items: center; gap: 10px; }
-.concept-inspector h3 { margin: 0; font: 650 22px Georgia, serif; }
-.concept-inspector > p { margin: 12px 0; color: #4f5c53; }
-.concept-inspector ul { margin: 0; padding-left: 20px; color: var(--muted); }
-.concept-inspector li + li { margin-top: 5px; }
-.inspector-actions { margin-top: 18px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
-.inspector-actions span { color: var(--blue); font-size: 11px; font-weight: 800; }
+/* The module browser, its stepper, the concept nodes, and the inspector panel were
+   removed here: a second copy of the concept list that only the shelf could act on.
+   Their content lives on .shelf-row now. */
 
-.set-list { margin-top: 24px; display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+.set-list { margin-top: 14px; display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
 .set-card { min-height: 86px; padding: 13px 14px; display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 12px; border: 1px solid var(--line); background: var(--card-soft); border-radius: 11px; text-align: left; cursor: pointer; }
 .set-card:hover { border-color: #96a79c; }
 .set-number { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; font-weight: 900; }
@@ -300,9 +278,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .set-card.mock { color: white; background: var(--ink); }
 .set-card.mock small { color: #bac3bb; }
 .set-card.mock .set-state { color: #84d2dc; }
-.exam-details p { max-width: 790px; margin: 9px 0 0; color: var(--muted); }
-.horizon-details { margin-bottom: 20px; }
-.horizon-picker { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+.horizon-picker { display: flex; flex-wrap: wrap; gap: 8px; }
 .horizon-choice { min-height: 42px; padding: 9px 12px; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 9px; font-weight: 800; cursor: pointer; }
 .horizon-choice.selected, .horizon-choice[aria-pressed="true"] { color: var(--ink); background: var(--blue-soft); border-color: #78aeb6; }
 .horizon-plan { max-width: 820px; margin-top: 15px; }
@@ -310,8 +286,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .horizon-plan ol { margin: 0; padding-left: 21px; color: #48564d; }
 .horizon-plan li + li { margin-top: 5px; }
 .horizon-plan .rest-note { margin: 12px 0 0; padding-top: 11px; color: var(--muted); border-top: 1px solid var(--line); font-size: 12px; }
-.dashboard-tools { width: fit-content; margin: 19px 4px 0 auto; color: var(--muted); font-size: 12px; }
-.dashboard-tools p { margin: 8px 0 0; }
 
 .practice-screen { background: #121814; color: white; }
 .practice-screen.active { display: flex; flex-direction: column; }
@@ -435,20 +409,20 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 
 /* The route to the goal. The full line is always drawn so the distance is
    legible before any progress exists; the filled wedge is ground covered. */
-.route-full { fill: none; stroke: #c3cec7; stroke-width: 3; stroke-dasharray: 6 6; stroke-linecap: round; }
-.route-gained { fill: var(--blue-soft); stroke: none; }
-.route-done { fill: none; stroke: var(--blue); stroke-width: 3; stroke-linecap: round; }
-.route-goal { fill: var(--green); stroke: white; stroke-width: 3; }
-.route-here { fill: var(--blue); stroke: white; stroke-width: 3; }
-.hero-trend { height: 64px; overflow: visible; }
-.route-legend { margin: 2px 0 0; display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; }
-.momentum-unit { color: var(--muted); font-size: 11px; }
-/* The goal card sits beside the one call to action, so it is condensed: it has to
-   say where you are without competing for the click. */
-.hero-trend { height: 54px; }
-.momentum-card { gap: 6px; }
+/* The route to the goal now draws on the dark hero rather than a pale card, so the
+   same three meanings are restated at dark-surface contrast: green is the goal,
+   cyan is where you stand, and the dashed remainder is the distance left. The
+   meanings are unchanged — only the luminance is. */
+.route-full { fill: none; stroke: rgba(255,255,255,.26); stroke-width: 3; stroke-dasharray: 6 6; stroke-linecap: round; }
+.route-gained { fill: rgba(126,209,220,.15); stroke: none; }
+.route-done { fill: none; stroke: #7ed1dc; stroke-width: 3; stroke-linecap: round; }
+.route-goal { fill: #5fbf8f; stroke: var(--ink); stroke-width: 3; }
+.route-here { fill: #7ed1dc; stroke: var(--ink); stroke-width: 3; }
+.hero-trend { height: 54px; overflow: visible; }
+.route-legend { margin: 2px 0 0; display: flex; justify-content: space-between; font-size: 11px; }
+.momentum-figure > b { color: white; }
+.momentum-unit { font-size: 11px; }
 .hero-cta { width: 100%; padding: 16px 20px; font-size: 16px; }
-.browse-actions { padding: 12px 16px 0; }
 /* Explanations that were paragraphs are now on demand. Keyboard reachable, and
    the same text is on title and aria-label so it is not mouse-only. */
 .info { display: inline-grid; place-items: center; width: 16px; height: 16px; margin-left: 4px; border: 1px solid var(--line); border-radius: 50%; background: white; color: var(--muted); font-size: 10px; font-weight: 900; font-style: normal; cursor: help; vertical-align: middle; }
@@ -468,26 +442,41 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .disclosure > summary small { color: var(--muted); font-size: 12px; }
 .disclosure > summary:hover { background: white; }
 .disclosure > summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.disclosure + .disclosure { margin-top: 10px; }
 .disclosure[open] > summary { border-bottom: 1px solid var(--line); border-radius: 12px 12px 0 0; }
-.disclosure > section { margin: 0; border: 0; border-radius: 0 0 12px 12px; }
+.disclosure > section, .disclosure-body { margin: 0; padding: 18px 16px; border: 0; border-radius: 0 0 12px 12px; }
+.disclosure-body > p:first-child { margin-top: 0; }
 /* A closed <details> only guarantees the summary renders; a child carrying its own
    `display` (the stage tabs are a flex row) keeps painting anyway. Hide them
    explicitly, or "collapsed" collapses nothing. */
 .disclosure:not([open]) > *:not(summary) { display: none; }
 
-/* One row per concept: status, then both things you can do with it. */
-.concept-shelf { display: grid; gap: 12px; }
+/* One row per concept, and the only concept list on the page: status, the evidence
+   still missing behind the name, and both things you can do with it. */
+.concept-shelf-block { margin-top: 34px; }
+.concept-shelf-block h3 { margin: 0; font: 650 21px Georgia, serif; }
+.concept-shelf-block .block-note { margin: 6px 0 14px; }
+.concept-shelf-list { display: grid; gap: 12px; }
 .shelf-group { display: grid; gap: 6px; }
 .shelf-module { margin: 10px 0 2px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-.shelf-row { padding: 10px 12px; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 10px; background: white; }
-.shelf-name { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.shelf-row { padding: 10px 12px; display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: white; }
+/* The concept's own name is the control that reveals its evidence. */
+.shelf-name { display: flex; align-items: center; gap: 8px; min-width: 0; min-height: 44px; padding: 0; text-align: start; background: transparent; border: 0; cursor: pointer; }
 .shelf-name b { font-size: 13px; font-weight: 650; }
+.shelf-why { color: var(--blue); font-size: 11px; font-weight: 800; }
+.shelf-name[aria-expanded="true"] .shelf-why::after { content: " ▴"; }
+.shelf-name[aria-expanded="false"] .shelf-why::after { content: " ▾"; }
 .shelf-state { font-size: 11px; color: var(--muted); white-space: nowrap; }
 .shelf-state.strong { color: var(--green); }
 .shelf-state.needs { color: var(--red); }
 .shelf-actions { display: flex; gap: 6px; }
+.shelf-body { grid-column: 1 / -1; margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--line); }
+.shelf-summary { margin: 0; color: #4f5c53; font-size: 13px; }
+.shelf-evidence { margin: 10px 0 0; padding-inline-start: 20px; color: var(--muted); font-size: 12px; }
+.shelf-evidence li + li { margin-top: 4px; }
+.shelf-confidence { margin: 10px 0 0; color: var(--blue); font-size: 11px; font-weight: 800; }
 @media (max-width: 640px) {
-  .shelf-row { grid-template-columns: 1fr auto; }
+  .shelf-row { grid-template-columns: minmax(0,1fr) auto; }
   .shelf-actions { grid-column: 1 / -1; }
 }
 .format-note { margin: 0 0 4px; color: var(--muted); font-size: 12px; }
@@ -658,10 +647,12 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .toast.show { opacity: 1; transform: translate(-50%,0); }
 
 @media (max-width: 900px) {
+  /* Stacked, the goal is below the action rather than beside it, so the separator
+     becomes a horizontal rule and the inline border would land on the wrong edge. */
   .focus-panel { grid-template-columns: 1fr; }
-  .momentum-card { margin: 0 22px 22px; }
-  .evidence-summary, .builder-groups { grid-template-columns: 1fr; }
-  .course-grid, .overall-stats, .story-stats { grid-template-columns: repeat(2,1fr); }
+  .focus-goal { border-inline-start: 0; border-top: 1px solid rgba(255,255,255,.14); padding-top: 24px; }
+  .evidence-pair, .builder-groups { grid-template-columns: 1fr; }
+  .course-grid, .overall-stats { grid-template-columns: repeat(2,1fr); }
   .builder-footer { align-items: stretch; flex-direction: column; }
   .builder-footer .button { width: 100%; }
   .practice-shell { grid-template-columns: 1fr; padding-top: 24px; }
@@ -688,13 +679,14 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
   .focus-copy h1 { font-size: 39px; }
   .hero-actions { align-items: stretch; flex-direction: column; }
   .hero-actions .button { width: 100%; }
-  .momentum-card { margin: 0 10px 10px; padding: 18px 16px 16px; border-radius: 14px; }
-  .momentum-card h2 { max-width: none; }
-  .mastery-matrix, .evidence-summary .overview-summary { padding: 17px 14px; }
+  .focus-goal { padding: 22px 20px 24px; }
+  .mastery-matrix, .evidence-pair .trend-card { padding: 17px 14px; }
   .radar-layout { grid-template-columns: minmax(190px,1fr) minmax(115px,.55fr); }
-  .subject-rail, .practice-builder, .progress-story { padding: 17px 14px; }
-  .compact-heading, .rail-heading { align-items: flex-start; }
-  .compact-heading > p, .rail-heading > p { max-width: 180px; font-size: 11px; text-align: right; }
+  .practice-builder { padding: 17px 14px; }
+  .home-block { margin-top: 40px; }
+  .block-heading h2 { font-size: 27px; }
+  .compact-heading { align-items: flex-start; }
+  .compact-heading > p { max-width: 180px; font-size: 11px; text-align: right; }
   /* One swipeable row keeps the subject switch a thumb move away instead of a screen of cards. */
   .course-grid { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding-bottom: 5px; }
   .course-card { flex: 0 0 186px; scroll-snap-align: start; min-height: 96px; grid-template-columns: 1fr; gap: 4px; }
@@ -702,18 +694,11 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
   .builder-groups { gap: 14px; }
   .chip-option { min-height: 58px; padding: 9px 10px; }
   .chip-option small { font-size: 10px; }
-  .stage-tabs button { min-height: 48px; padding: 8px 5px; gap: 5px; font-size: 12px; }
-  .stage-tabs button span { width: 22px; height: 22px; }
-  .stage-panel { padding: 21px 14px; }
-  .section-heading, .subject-heading { align-items: flex-start; flex-direction: column; }
+  .section-heading { align-items: flex-start; flex-direction: column; }
   .section-heading h2 { font-size: 29px; }
-  .subject-actions { width: 100%; }
-  .subject-actions .button { flex: 1; }
   .overall-stats { grid-template-columns: repeat(2,1fr); }
   .stat { min-height: 98px; }
-  .concept-map, .set-list { grid-template-columns: 1fr; }
-  .module-card { grid-template-columns: 1fr; }
-  .dashboard-tools { margin-right: 2px; }
+  .set-list { grid-template-columns: 1fr; }
   .practice-header { min-height: 74px; grid-template-columns: 1fr auto; padding: 9px 13px; }
   .practice-header .text-button { font-size: 0; }
   .practice-header .text-button::after { content: "← Dashboard"; font-size: 12px; }
@@ -729,13 +714,6 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
   .prompt-flow.has-case h1 { font-size: 18px; }
   .trend-card { padding: 16px 10px 12px; }
   .progress-trend { height: 180px; }
-  .module-browser { padding: 14px 10px; }
-  .module-stepper { gap: 8px; }
-  .module-stepper h3 { font-size: 18px; }
-  .concept-node { min-height: 92px; }
-  .concept-inspector { padding: 16px 13px; }
-  .inspector-actions { align-items: stretch; flex-direction: column; }
-  .inspector-actions .button { width: 100%; }
   .cloze-sentence { padding: 0; font-size: 17px; line-height: 1.65; }
   .options .inline-blank select { width: 100%; margin: 7px 0; }
   .match-row { grid-template-columns: 1fr; gap: 7px; }
@@ -764,8 +742,6 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
   .brand b { font-size: 13px; }
   .header-spark { display: none; }
   .account-controls { gap: 0; }
-  .story-stats { grid-template-columns: 1fr; }
-  .story-stat { min-height: 0; }
   .community-actions { display: grid; }
   .radar-layout { grid-template-columns: 1fr; }
   #mastery-radar { width: min(100%,280px); }

@@ -3,6 +3,39 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Homepage restructured around four questions (branch, not merged)
+
+- **The homepage now asks four questions and answers each once:** what am I doing, where can I
+  start, how am I doing, additional resources. Owner direction, recorded as **C30** in
+  `DESIGN_SOURCE_INDEX.md`, superseding the C26/C27 ordering and reinforcing C28.
+- **Counted the duplication before removing it.** Generic practice had three entry points that all
+  called `openPracticeSetup()`; "Build your own practice" appeared as a summary and again as the
+  `<h2>` immediately inside it; sixteen concepts were listed twice, and the evidence explaining why
+  one needed work lived **only** in the copy that could not act on it; "N of 16 strong" appeared
+  twice; subject identity in seven places; hide/show nested three deep.
+- **Deleted as duplicate views, not as features.** `stage-tabs`/`stage-panels` with
+  `setDashboardView()` and `bindStageTabs()`; `renderConceptMap()`, `showConceptInspector()`, the
+  module stepper and the inspector panel; `#start-selected-mock`; the second "N of 16 strong";
+  the four story-stat cards; the `.momentum-card` nested inside the dark hero. Every capability
+  survives — the inspector's summary, evidence list, and confidence note now sit on the concept
+  row itself, behind the concept's own name.
+- **The hero withdraws its own duplicate.** `renderRecommendation()` hides whichever "way in" the
+  call to action is already offering, so the same action is never presented twice. Verified in
+  both states: priority withdrawn on a seeded profile, "start from the beginning" withdrawn on a
+  fresh one.
+- **Verified.** Injected layout probe at 1280×800 and 375×812: **0 findings** at both. One real
+  defect found and fixed (`#subject-sort` was a 32px tap target, under the 44px floor; pre-existing).
+  17 candidates rejected as probe artifacts under LAW-46 — all inside the deliberate `.course-grid`
+  swipe scroller, with the document proven not to scroll horizontally. LAW-36 measured in both
+  directions on all three toggles: `hidden` ⟺ `height: 0`. LAW-47 in-page: `ok: true`, 0 violations
+  across sets 1–9 and the mixed builder. `npm test` 37/37, build clean, net −21 lines.
+  Evidence: `evidence/2026-08-12/t6-homepage-four-questions/verification.md`.
+- **Deferred.** No screenshots — the Browser pane was not compositing, so acceptance is DOM and
+  computed-style level and a pixel pass is still owed. The route chart's new dark-surface colours
+  were reasoned, not contrast-measured. Nothing is pushed, merged, or deployed; the branch is
+  `redesign/homepage-four-questions` and the live cohort is untouched. A change announcement is
+  drafted and owed when this ships.
+
 ## 2026-08-12 — Numeric entry for SCLM Section B
 
 - **Added the second missing format.** SCLM Section B is 6 numericals worth 24 marks — 30% of that

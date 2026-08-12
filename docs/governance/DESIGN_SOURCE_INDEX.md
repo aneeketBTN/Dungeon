@@ -379,6 +379,9 @@ one side.
   matrix (BRGSA, IBM, SCLM, SPMS, Connections) and the selected-subject evidence trend. Preserve an
   accessible value list beside the canvas. Subject selection follows and concept inspection stays
   lower in the staged dashboard.
+- **Ordering superseded by C30 (2026-08-12).** The matrix, the trend, and the accessible value
+  list remain; "concept inspection stays lower" no longer holds, because the inspector was
+  merged into the concept row.
 
 ### C27 — Staged evidence dashboard versus a dynamic homepage
 
@@ -395,6 +398,10 @@ one side.
   and the detailed evidence graph moves next to concept inspection. Nothing hides when a panel is
   opened: the page is one continuous scroll. Reassurance copy is derived from recorded attempts and
   never converts activity into praise or predicts a result.
+- **Ordering superseded by C30 (2026-08-12).** The staged panels and the "nothing hides" rule
+  are withdrawn — the rule had already been broken by the three disclosures added after this
+  entry. Still in force: subjects at the top, a trendline rather than a counter, the header
+  sparkline, and the reassurance-copy restriction.
 
 ### C28 — Configurable practice as a modal versus a homepage builder
 
@@ -407,6 +414,9 @@ one side.
   whole pool, and a length that cannot add questions over a shorter one are each disabled with the
   reason shown before selection. The summary states the real count and time estimate. The exam-
   pattern boundary is stated in the builder itself.
+- **Reinforced by C30 (2026-08-12).** The builder remains the single owner of generic practice
+  and every rule above still holds. What changed is that it had acquired three entry points,
+  which is the same failure this entry was written to fix, one level up: it now has one.
 
 ### C29 — Row-by-row matching versus a matching board
 
@@ -420,6 +430,34 @@ one side.
   works by choose-then-place, by drag, and by keyboard, and each label is used once. The stored
   response stays row-indexed, so partial credit, concept results, misconceptions, and the answer
   review are unchanged. Short-choice matching keeps its compact select layout.
+
+### C30 — A staged dashboard versus four questions asked once
+
+- C26, C27, and C28 each moved the homepage's furniture without reducing it. The result was
+  a page that answered the same question in several places: three doors to the practice
+  builder (a disclosure summary, a "Mix your own practice" button, and the hero call to
+  action whenever the recommendation happened to be a mock), two lists of the same sixteen
+  concepts where only the list that could **not** act on them explained why they needed
+  work, "N of 16 strong" in two places, the same evidence drawn eight ways, and hide/show
+  nesting three levels deep. C27's "nothing hides" rule was already broken in practice by
+  the three disclosures added after it.
+- Owner direction (2026-08-12): the homepage should answer **what am I doing → where can I
+  start → how am I doing → additional resources**, collapse options that appear more than
+  once, and reduce the cognitive load of the current UI.
+- Resolution (2026-08-12): four labelled blocks in that order, each answering its question
+  once. Only "Additional resources" collapses, and every collapsed thing keeps a visible
+  Show/Hide affordance. **Supersedes C26, C27, and C28's ordering**; C28's substance is
+  strengthened rather than reversed — the inline builder is still the single owner of
+  generic practice, and it now has exactly one entry point instead of three.
+- Preserved from the superseded entries: the next action stays first inside its block
+  (C26/C27), reassurance copy stays derived from recorded attempts and never becomes praise
+  or prediction (C27), and every builder option still states its effect before selection
+  (C28, LAW-01).
+- Nothing was removed as a *capability*. The module stepper and concept inspector were
+  deleted as a **duplicate view**; their content — the concept summary, the evidence still
+  missing, and the confidence note — now sits on the concept row it describes.
+- Evidence: `evidence/2026-08-12/t6-homepage-four-questions/verification.md`. Pixel-level
+  acceptance is still owed; the Browser pane was not compositing when this was verified.
 
 ## Conflict handling protocol
 

@@ -55,16 +55,12 @@
   var lastFinished = null;
   var scenarioMode = false;
   var toastTimer = null;
-  var dashboardView = "overview";
-  var selectedModule = 1;
-  var inspectedConceptId = null;
   var learnerEmail = null;
   var backendReady = false;
   var serverRevision = 0;
   var localChangeSequence = 0;
   var saveChain = Promise.resolve();
   var communityState = {joined:true, inviteOpenedAt:null, reminderAt:null};
-  var DASHBOARD_VIEWS = ["overview", "concepts", "plan", "lessons"];
   var HORIZON_PLANS = {
     today: {
       title: "A focused day, with recovery time",
@@ -746,7 +742,6 @@
     renderCommunityReminder();
     renderLessonIndex();
     renderConceptShelf();
-    setDashboardView(dashboardView);
   }
 
   // Blocks are the honest unit of this line: one practice block moves it at most once, so repeating
@@ -922,25 +917,25 @@
     return days === 1 ? "yesterday" : days + " days ago";
   }
 
+  /* What you have done, in one line.
+   *
+   * This was four bordered stat cards — answers, blocks, concepts touched, subjects
+   * started — sitting above four more bordered stat cards for the concept states.
+   * Eight boxes of numbers before the learner reached anything they could act on.
+   * The same four facts read as a sentence, and the boxes below now carry the only
+   * numbers that describe evidence rather than effort. Still strictly factual: no
+   * praise, and activity is never presented as progress. */
   function renderProgressStory() {
     var story = progressStory();
     var overall = overallStats();
-    $("story-title").textContent = story.answers
-      ? story.blocks + " practice block" + (story.blocks === 1 ? "" : "s") + " behind you"
-      : "Your record starts with one block";
-    $("story-note").textContent = story.answers
-      ? "A record of what you have done, not a verdict on you. Last answer " + relativeDay(story.latest) + "."
-      : "Nothing is recorded yet. The first short block fills in every number here.";
-    var cards = [
-      {label: "Answers recorded", value: String(story.answers), note: "Across every subject"},
-      {label: "Practice blocks", value: String(story.blocks), note: "Separate sittings, not repeats"},
-      {label: "Concepts with evidence", value: story.touched + " of " + overall.total, note: story.touched === overall.total ? "All of them are underway" : (overall.total - story.touched) + " still untouched"},
-      {label: "Subjects started", value: story.subjects + " of " + COURSE_IDS.length, note: story.subjects === COURSE_IDS.length ? "All four are underway" : story.subjects ? "Switch at the top to start another" : "Pick one at the top to begin"}
-    ];
-    $("story-stats").innerHTML = cards.map(function (card) {
-      return "<article class='story-stat'><span>" + escapeHtml(card.label) + "</span><b>" + escapeHtml(card.value) +
-        "</b><small>" + escapeHtml(card.note) + "</small></article>";
-    }).join("");
+    if (!story.answers) {
+      $("story-stats").textContent = "Nothing is recorded yet. Your first short block fills in every number here.";
+      return;
+    }
+    $("story-stats").textContent = story.answers + " answer" + (story.answers === 1 ? "" : "s") +
+      " across " + story.blocks + " practice block" + (story.blocks === 1 ? "" : "s") + ". " +
+      story.touched + " of " + overall.total + " concepts have evidence, in " +
+      story.subjects + " of " + COURSE_IDS.length + " subjects. Last answer " + relativeDay(story.latest) + ".";
   }
 
   function renderMasteryRadar() {
@@ -1124,19 +1119,23 @@
 
   /* The concept shelf.
    *
-   * Everything a learner needs per concept used to be split across two tabs: the
-   * "practise this one" button lived behind a module stepper and an inspector,
-   * and its lesson lived in a different panel entirely. Same information, three
-   * clicks apart. The shelf puts one row per concept with both actions on it.
+   * Everything a learner needs per concept used to be split across two places: the
+   * shelf listed every concept with Practise and Lesson, while a separate module
+   * browser paged through the same concepts eight at a time and opened an inspector
+   * panel holding the one thing the shelf lacked — the evidence still missing.
+   * Two lists of the same 16 concepts, and the reason to act on one of them was
+   * only in the list that could not act.
+   *
+   * The shelf is now the only concept list. The evidence, the summary, and the
+   * confidence note moved onto the row they describe, behind the concept's own
+   * name, so inspecting a concept is not a place you navigate to.
    *
    * It does not re-render lesson prose — Lesson jumps to the existing lesson row
    * and opens it, so there is one copy of that content, not two that can drift. */
   function openLessonFor(lectureId) {
-    // The panels now live inside a disclosure, so open it before switching view —
+    // The lesson index lives in a disclosure, so open it before scrolling —
     // otherwise the scroll and focus below land inside a collapsed element.
-    var browse = $("browse-disclosure");
-    if (browse) browse.open = true;
-    setDashboardView("lessons");
+    revealDisclosure("lessons-disclosure");
     var row = document.querySelector('.lesson-row[data-lecture="' + lectureId + '"]');
     if (!row) return;
     if (row.tagName === "DETAILS") row.open = true;
@@ -1168,13 +1167,24 @@
       group.appendChild(heading);
 
       byModule[moduleKey].forEach(function (concept) {
-        var status = conceptStatus(courseId, concept.id);
+        var evidence = conceptEvidence(courseId, concept.id);
+        var status = evidence.status;
         var row = document.createElement("div");
         row.className = "shelf-row";
 
-        var name = document.createElement("span");
+        /* The name is the disclosure control. Toggling with an explicit `hidden`
+         * sibling rather than <details> is deliberate: the row is a grid whose
+         * state and actions must stay visible while the evidence is collapsed,
+         * and a closed <details> hides every non-summary child in the UA layer
+         * where author CSS cannot reliably reach it (the LAW-36 shape). */
+        var bodyId = "shelf-evidence-" + courseId + "-" + concept.id;
+        var name = document.createElement("button");
+        name.type = "button";
         name.className = "shelf-name";
-        name.innerHTML = "<i class='dot " + status + "' aria-hidden='true'></i><b>" + escapeHtml(concept.name) + "</b>";
+        name.setAttribute("aria-expanded", "false");
+        name.setAttribute("aria-controls", bodyId);
+        name.innerHTML = "<i class='dot " + status + "' aria-hidden='true'></i><b>" + escapeHtml(concept.name) + "</b>" +
+          "<span class='shelf-why' aria-hidden='true'>Why</span>";
         row.appendChild(name);
 
         var state = document.createElement("span");
@@ -1207,6 +1217,44 @@
         }
 
         row.appendChild(actions);
+
+        // The evidence that used to live in the separate inspector panel: what the
+        // concept is, what is still missing before Strong, and what the sampled
+        // confidence checks do and do not say.
+        var body = document.createElement("div");
+        body.className = "shelf-body";
+        body.id = bodyId;
+        body.hidden = true;
+
+        var surfaces = questionSurfaces(courseId, concept.id);
+        var explained = surfaces.filter(function (question) { return question.explanation; })[0];
+        var summaryLine = document.createElement("p");
+        summaryLine.className = "shelf-summary";
+        summaryLine.textContent = concept.summary || (explained ? explained.explanation : "Practise this concept to build visible evidence.");
+        body.appendChild(summaryLine);
+
+        var reasons = document.createElement("ul");
+        reasons.className = "shelf-evidence";
+        reasons.innerHTML = evidence.reasons.map(function (reason) {
+          return "<li>" + escapeHtml(reason) + "</li>";
+        }).join("");
+        body.appendChild(reasons);
+
+        var confidence = document.createElement("p");
+        confidence.className = "shelf-confidence";
+        confidence.textContent = evidence.openConfidentError ? evidence.confidenceLabel
+          : evidence.confidenceCount ? evidence.confidenceCount + " diagnostic confidence check" +
+            (evidence.confidenceCount === 1 ? "" : "s") + " on this concept; no stable trait is inferred."
+          : "No diagnostic confidence check for this concept yet.";
+        body.appendChild(confidence);
+
+        name.addEventListener("click", function () {
+          var open = body.hidden;
+          body.hidden = !open;
+          name.setAttribute("aria-expanded", String(open));
+        });
+
+        row.appendChild(body);
         group.appendChild(row);
       });
       host.appendChild(group);
@@ -1318,38 +1366,17 @@
     });
   }
 
-  function setDashboardView(view, options) {
-    options = options || {};
-    if (DASHBOARD_VIEWS.indexOf(view) < 0) view = "overview";
-    dashboardView = view;
-    $("dashboard-screen").setAttribute("data-view", view);
-    DASHBOARD_VIEWS.forEach(function (name) {
-      var active = name === view;
-      var tab = $("tab-" + name);
-      var panel = $("panel-" + name);
-      tab.setAttribute("aria-selected", String(active));
-      tab.tabIndex = active ? 0 : -1;
-      panel.hidden = !active;
-    });
-    if (options.focusPanel) $("panel-" + view).focus({preventScroll: true});
-  }
-
-  function bindStageTabs() {
-    var tabs = $all(".stage-tabs [role='tab']");
-    tabs.forEach(function (tab, index) {
-      tab.addEventListener("click", function () { setDashboardView(tab.dataset.view); });
-      tab.addEventListener("keydown", function (event) {
-        var nextIndex = null;
-        if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % tabs.length;
-        if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + tabs.length) % tabs.length;
-        if (event.key === "Home") nextIndex = 0;
-        if (event.key === "End") nextIndex = tabs.length - 1;
-        if (nextIndex === null) return;
-        event.preventDefault();
-        setDashboardView(tabs[nextIndex].dataset.view);
-        tabs[nextIndex].focus();
-      });
-    });
+  /* Opens a disclosure and brings its contents into view.
+   *
+   * The four staged tabs are gone, so nothing on this page is mutually exclusive
+   * any more; sending a learner somewhere is now only ever "open this, then scroll
+   * to it". LAW-42 applies — the scroll has to wait a frame so a screen swap's own
+   * reset does not outlive it. */
+  function revealDisclosure(id) {
+    var host = $(id);
+    if (!host) return null;
+    if (host.tagName === "DETAILS") host.open = true;
+    return host;
   }
 
   function renderCourseCards() {
@@ -1417,8 +1444,6 @@
           "<span class='pill-label'>" + escapeHtml(pillCopy) + "</span></span>";
       button.addEventListener("click", function () {
         profile.selectedCourse = courseId;
-        selectedModule = 1;
-        inspectedConceptId = null;
         saveProfile();
         renderDashboard();
         var selectedCard = document.querySelector(".course-card.selected");
@@ -1428,23 +1453,30 @@
     });
   }
 
+  // A route's label and its one-line description are set together, so the two can
+  // never disagree about what the button will do (LAW-04).
+  function setRouteCopy(id, label, note) {
+    var route = $(id);
+    if (!route) return;
+    route.querySelector("b").textContent = label;
+    route.querySelector("small").textContent = note;
+  }
+
   function renderSelectedSubject() {
     var courseId = profile.selectedCourse;
     var course = getCourse(courseId);
     var stats = courseStats(courseId);
     $("selected-course-code").textContent = course.shortTitle;
-    $("subject-finish-title").textContent = course.shortTitle + " finish line";
     $("subject-title").textContent = course.title;
     $("subject-description").textContent = course.description;
-    $("concepts-course-label").textContent = course.shortTitle + " · Concept evidence";
     $("sets-title").textContent = course.shortTitle + " · Ten available study sets";
-    $("subject-strong").textContent = stats.strong + " of " + stats.total + " strong";
-    $("subject-progress-fill").style.width = stats.weighted + "%";
-    $("subject-progress-copy").textContent = subjectProgressCopy(stats);
-    $("practice-priority").textContent = stats.needs ? "Practise " + stats.needs + " concepts that need work" : stats.developing ? "Build stronger evidence" : stats.unseen ? "Start the next new concepts" : "Refresh strong concepts";
+    setRouteCopy("practice-priority",
+      stats.needs ? "Practise " + stats.needs + " concepts that need work"
+        : stats.developing ? "Build stronger evidence"
+        : stats.unseen ? "Start the next new concepts" : "Refresh strong concepts",
+      subjectProgressCopy(stats));
     renderMomentum(courseId);
     renderTrend(courseId);
-    renderConceptMap(courseId);
     renderSetList(courseId);
     renderHorizonPlan(profile.horizon || "today");
   }
@@ -1491,46 +1523,11 @@
     $("trend-description").textContent = points.length + " practice block" + (points.length === 1 ? "" : "s") + " shown. " + direction;
   }
 
-  function renderConceptMap(courseId) {
-    var course = getCourse(courseId);
-    var map = $("concept-map");
-    map.innerHTML = "";
-    selectedModule = Math.max(1, Math.min(8, selectedModule));
-    $("module-position").textContent = "Module " + selectedModule + " of 8";
-    $("module-browser-title").textContent = course.modules[selectedModule - 1];
-    $("previous-module").disabled = selectedModule === 1;
-    $("next-module").disabled = selectedModule === 8;
-    course.concepts.filter(function (concept) { return concept.module === selectedModule; }).forEach(function (concept) {
-      var evidence = conceptEvidence(courseId, concept.id);
-      var button = document.createElement("button");
-      button.type = "button";
-      button.className = "concept-node " + evidence.status + (inspectedConceptId === concept.id ? " selected" : "");
-      button.setAttribute("aria-pressed", String(inspectedConceptId === concept.id));
-      button.setAttribute("aria-label", concept.name + ". " + STATUS_LABEL[evidence.status] + ". Inspect the evidence.");
-      button.innerHTML = "<b>" + escapeHtml(concept.name) + "</b><span>" + STATUS_LABEL[evidence.status] + "</span><small>" + escapeHtml(evidence.reasons[0]) + "</small>";
-      button.addEventListener("click", function () { showConceptInspector(courseId, concept.id); });
-      map.appendChild(button);
-    });
-    if (inspectedConceptId && getConcept(courseId, inspectedConceptId) && getConcept(courseId, inspectedConceptId).module === selectedModule) showConceptInspector(courseId, inspectedConceptId, true);
-    else $("concept-inspector").hidden = true;
-  }
-
-  function showConceptInspector(courseId, conceptId, skipMapRefresh) {
-    var concept = getConcept(courseId, conceptId);
-    if (!concept) return;
-    inspectedConceptId = conceptId;
-    var evidence = conceptEvidence(courseId, conceptId);
-    var surfaces = questionSurfaces(courseId, conceptId);
-    var summaryQuestion = surfaces.filter(function (question) { return question.explanation; })[0];
-    $("inspector-status").className = "status-pill " + evidence.status;
-    $("inspector-status").textContent = STATUS_LABEL[evidence.status];
-    $("inspector-title").textContent = concept.name;
-    $("inspector-summary").textContent = concept.summary || (summaryQuestion ? summaryQuestion.explanation : "Practice this concept to build visible evidence.");
-    $("inspector-evidence").innerHTML = evidence.reasons.map(function (reason) { return "<li>" + escapeHtml(reason) + "</li>"; }).join("");
-    $("inspector-confidence").textContent = evidence.openConfidentError ? evidence.confidenceLabel : evidence.confidenceCount ? evidence.confidenceCount + " diagnostic confidence check" + (evidence.confidenceCount === 1 ? "" : "s") + " on this concept; no stable trait is inferred." : "No diagnostic confidence check for this concept yet.";
-    $("concept-inspector").hidden = false;
-    if (!skipMapRefresh) renderConceptMap(courseId);
-  }
+  /* renderConceptMap() and showConceptInspector() were deleted here.
+   *
+   * They drew a second copy of the same concept list — eight at a time behind a
+   * module stepper — and an inspector panel that was the only place the missing
+   * evidence appeared. renderConceptShelf() now carries both on the row itself. */
 
   function renderSetList(courseId) {
     var course = getCourse(courseId);
@@ -1593,6 +1590,17 @@
     $("next-step-copy").textContent = rec.copy;
     $("next-step-meta").innerHTML = "<span>" + escapeHtml(rec.minutes) + "</span><span>" + escapeHtml(rec.questions) + "</span>";
     $("start-recommended").innerHTML = recommendationActionLabel(rec) + " <span aria-hidden='true'>→</span>";
+
+    /* Withdraw whichever way in the hero is already offering. The recommendation
+     * runs the same function as one of these routes in three of its four states,
+     * so without this the page shows the identical action twice — once as the one
+     * call to action and again in the list of alternatives to it. */
+    var duplicated = rec.kind === "priority" ? "priority"
+      : rec.kind === "mock" ? "mock"
+      : rec.kind === "set" && rec.setId === 1 ? "course" : null;
+    $all("#route-list .route").forEach(function (route) {
+      route.hidden = route.dataset.route === duplicated;
+    });
   }
 
   function recommendationActionLabel(rec) {
@@ -1756,30 +1764,34 @@
     };
   }
 
-  // The homepage builder is the single place to configure generic practice, so every entry point
-  // that used to open a modal now brings the learner to those controls.
+  /* The builder is reached from exactly one control.
+   *
+   * It previously had three doors — a disclosure summary, a "Mix your own practice"
+   * button one section further down, and the hero call to action whenever the
+   * recommendation happened to be a mock. All three landed here, so the same
+   * feature was advertised three times on one screen. "Build your own practice" in
+   * the Ways in list is now the only one, and the hero withdraws its duplicate
+   * (see renderRecommendation). */
+  function setBuilderOpen(open) {
+    var builder = $("practice-builder");
+    var toggle = $("builder-toggle");
+    if (!builder || !toggle) return;
+    builder.hidden = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+  }
+
   function openPracticeSetup(courseId) {
-    /* The builder now sits inside a disclosure so it is not part of the homepage's
-     * first read. Anything that sends a learner to it has to open that disclosure
-     * first, or the scroll and focus below land on a collapsed element. */
-    var browse = $("browse-disclosure");
-    if (browse) browse.open = true;
-    var disclosure = $("builder-disclosure");
-    if (disclosure) disclosure.open = true;
     if (courseId && courseId !== profile.selectedCourse) {
       profile.selectedCourse = courseId;
-      selectedModule = 1;
-      inspectedConceptId = null;
       saveProfile();
       renderDashboard();
     }
     // showScreen resets the scroll position, and with smooth scrolling that animation would
-    // outlive and override the jump to the builder.
+    // outlive and override the jump to the builder (LAW-42).
     if (!$("dashboard-screen").classList.contains("active")) showScreen("dashboard-screen");
+    setBuilderOpen(true);
     var builder = $("practice-builder");
     if (!builder) return;
-    builder.classList.add("summoned");
-    window.setTimeout(function () { builder.classList.remove("summoned"); }, 1600);
     builder.focus({preventScroll: true});
     window.requestAnimationFrame(function () { builder.scrollIntoView({block: "center", behavior: "smooth"}); });
   }
@@ -3483,7 +3495,6 @@
     session = null;
     selected = null;
     confidence = null;
-    dashboardView = "overview";
     renderDashboard();
     showScreen("dashboard-screen");
   }
@@ -3501,7 +3512,6 @@
     profile = defaultProfile();
     session = null;
     lastFinished = null;
-    dashboardView = "overview";
     saveProfile();
     $("reset-dialog").close();
     renderDashboard();
@@ -3670,11 +3680,16 @@
       renderDashboard();
       return showScreen("dashboard-screen");
     }
+    /* These two scenarios used to select a tab. Nothing is mutually exclusive on the
+     * homepage any more, so they open the matching block and scroll to it instead —
+     * the same destination, reached the way a learner now reaches it. */
     if (name === "dashboard-concepts" || name === "dashboard-plan") {
       seedScenarioProgress();
-      dashboardView = name === "dashboard-concepts" ? "concepts" : "plan";
       renderDashboard();
-      return showScreen("dashboard-screen");
+      showScreen("dashboard-screen");
+      var target = name === "dashboard-concepts" ? $("concept-shelf-title") : revealDisclosure("plan-disclosure");
+      if (target) window.requestAnimationFrame(function () { target.scrollIntoView({block: "start", behavior: "smooth"}); });
+      return;
     }
     if (name === "practice-setup") {
       seedScenarioProgress();
@@ -3742,7 +3757,6 @@
   }
 
   function bindEvents() {
-    bindStageTabs();
     $("subject-sort").addEventListener("change", function (event) {
       profile.subjectSort = event.target.value === "hardest" ? "hardest" : "exam";
       saveProfile();
@@ -3750,12 +3764,12 @@
     });
     $("brand-home").addEventListener("click", goDashboard);
     $("start-recommended").addEventListener("click", executeRecommendation);
-    $("start-selected-mock").addEventListener("click", function () { openPracticeSetup(profile.selectedCourse); });
     $("practice-priority").addEventListener("click", function () { startPriorityPractice(profile.selectedCourse); });
     $("start-course").addEventListener("click", function () { startStudySet(profile.selectedCourse, 1); });
-    $("previous-module").addEventListener("click", function () { selectedModule -= 1; inspectedConceptId = null; renderConceptMap(profile.selectedCourse); });
-    $("next-module").addEventListener("click", function () { selectedModule += 1; inspectedConceptId = null; renderConceptMap(profile.selectedCourse); });
-    $("practice-inspected").addEventListener("click", function () { if (inspectedConceptId) startConceptPractice(profile.selectedCourse, inspectedConceptId); });
+    $("builder-toggle").addEventListener("click", function () {
+      setBuilderOpen($("practice-builder").hidden);
+      if (!$("practice-builder").hidden) $("practice-builder").focus({preventScroll: true});
+    });
     $("leave-practice").addEventListener("click", leavePractice);
     $("commit-answer").addEventListener("click", commitAnswer);
     $("next-question").addEventListener("click", nextQuestion);
