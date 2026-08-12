@@ -554,10 +554,18 @@ after the version is live, since a push to `main` deploys.
   structure. Sections, counts, marks, duration, negative marking, and calculator rules may be stated
   as fact. Still not claimable: question content, difficulty, topic weighting within a section, the
   IBM caselet's subject, a likely score, or a pass probability.
-- [ ] **Two required formats do not exist in the app, and they are worth 64 marks.** SPMS Section B
-  is 20 negatively marked multiple-select questions (40 marks, **53% of that paper**) and SCLM
-  Section B is 6 tolerance-graded numericals (24 marks, 30%). The bank has neither an MSQ nor a
-  numeric-entry surface. Building these outranks any further MCQ authoring.
+- [~] **MSQ format built and verified; numerical still missing.** The multiple-select surface exists
+  and is `VERIFIED(REAL_BROWSER)`: it renders as checkboxes with the marking rule stated, toggles,
+  scores exactly as the paper does (+1 per right option, −1 per wrong, floored at zero per question),
+  and marks each option `correct` / `wrong` / `missed` after checking. Eight authored SPMS items ship,
+  each on a lecture that already has a lesson, and they schedule into real study sets. **Two gaps
+  remain on it:** the per-option diagnosis does not surface in the wrong-answer panel for MSQ (the
+  `diagnosisFor` MSQ branch was added but does not fire — likely `response.selected` is not carried
+  for this type), and `msqMarks` is computed but never rendered, so the learner is not shown "1 of 3
+  marks". Only 8 of the paper's 20 MSQs are authored.
+- [ ] **SCLM numerical entry does not exist** — 6 tolerance-graded numericals, 24 marks, 30% of that
+  paper. Needs a numeric-answer surface with a grading tolerance, since the exam awards marks for the
+  final answer only and gives none for working. This is now the largest missing format.
 - [ ] **IBM's paper contains no objective questions at all** — ten subjective answers on a caselet
   released two days beforehand. Its 196 MCQ-derived surfaces contribute nothing to it, and authoring
   its 62 uncited lectures would add zero marks. Do not spend bank effort there; the useful work is

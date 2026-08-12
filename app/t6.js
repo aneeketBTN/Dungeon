@@ -1564,7 +1564,7 @@
   }
 
   function shapeMatches(shape, question) {
-    if (shape === "recognition") return question.type === "mcq" || question.type === "cloze";
+    if (shape === "recognition") return question.type === "mcq" || question.type === "cloze" || question.type === "msq";
     if (shape === "application") return question.type === "case-cloze" || question.type === "match" || question.type === "boss" || question.perspective === "apply";
     if (shape === "generation") return question.type === "short-answer" || question.type === "cloze" || question.type === "case-cloze";
     return true;
@@ -2027,6 +2027,10 @@
   function hasCompleteResponse(question) {
     if (question.type === "short-answer") return session.subjectiveStage === "rubric" ? true : typeof selected === "string" && selected.trim().length >= 20;
     if (question.type === "mcq" || question.type === "primer" || !question.type) return typeof selected === "number";
+    /* MSQ: any selection is a complete response. Selecting nothing is not — under
+     * the paper's marking a blank scores zero either way, but committing an empty
+     * answer is almost always a mis-click rather than a decision. */
+    if (question.type === "msq") return Array.isArray(selected) && selected.length > 0;
     var count = question.type === "boss" ? question.steps.length : question.type === "match" ? question.rows.length : question.blanks.length;
     return Array.isArray(selected) && selected.length === count && selected.every(function (value) { return typeof value === "number" && value >= 0; });
   }
@@ -2042,6 +2046,7 @@
     if (question.type === "cloze" || question.type === "case-cloze") return renderCloze(question);
     if (question.type === "match") return renderMatch(question);
     if (question.type === "boss") return renderBoss(question);
+    if (question.type === "msq") return renderMultiOptions(question);
     renderOptions(question);
   }
 
@@ -2052,6 +2057,60 @@
     holder.removeAttribute("role");
     holder.removeAttribute("aria-label");
     return holder;
+  }
+
+  /* Multiple-select, for SPMS Section B.
+   *
+   * The paper marks this section +1 for each right answer and -1 for each wrong
+   * one, with the net floored at zero per question. Two consequences the surface
+   * has to make visible, because they invert the habit a single-answer bank
+   * builds: selecting every option is strictly bad, and selecting only what you
+   * are confident of is rational. The learner is never told how many are correct
+   * — that is the skill being tested. */
+  function msqSelection() {
+    return Array.isArray(selected) ? selected : [];
+  }
+
+  function renderMultiOptions(question) {
+    var holder = prepareResponseHolder("msq-options");
+    holder.setAttribute("role", "group");
+    holder.setAttribute("aria-label", "Select every correct answer");
+    var chosen = msqSelection();
+    var answers = question.answers || [];
+    question.options.forEach(function (copy, index) {
+      var picked = chosen.indexOf(index) >= 0;
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "option option-multi";
+      button.setAttribute("role", "checkbox");
+      button.setAttribute("aria-checked", String(picked));
+      button.disabled = !!session.answered;
+      button.innerHTML = "<span class='option-box' aria-hidden='true'></span><span>" + escapeHtml(copy) + "</span>";
+      if (session.answered && session.mode !== "simulation") {
+        var isAnswer = answers.indexOf(index) >= 0;
+        if (isAnswer) button.classList.add("correct");
+        if (picked && !isAnswer) button.classList.add("wrong");
+        if (!picked && isAnswer) button.classList.add("missed");
+      }
+      button.addEventListener("click", function () { toggleOption(index); });
+      holder.appendChild(button);
+    });
+    $("question-help").textContent = "Select every correct answer. Each right one scores +1, each wrong one −1, and the question cannot go below zero — so choose only what you are sure of.";
+  }
+
+  function toggleOption(index) {
+    if (!session || session.answered) return;
+    var chosen = msqSelection().slice();
+    var at = chosen.indexOf(index);
+    if (at >= 0) chosen.splice(at, 1); else chosen.push(index);
+    chosen.sort(function (a, b) { return a - b; });
+    selected = chosen;
+    session.selected = chosen;
+    $all(".option-multi").forEach(function (button, optionIndex) {
+      button.setAttribute("aria-checked", String(chosen.indexOf(optionIndex) >= 0));
+    });
+    updateCommitState();
+    saveProfile();
   }
 
   function renderOptions(question) {
@@ -2553,6 +2612,18 @@
     if (question.type === "mcq" || question.type === "primer" || !question.type) {
       return (question.diagnoses || [])[response.selected] || null;
     }
+    /* MSQ indexes diagnoses by option, but `selected` is the set the learner
+     * picked and `partResults` tracks the answer indices — neither lines up with
+     * the generic part logic below. Explain the first wrongly selected option:
+     * over-selection is what the negative marking punishes, so that is the
+     * choice worth naming. If they only under-selected there is no wrong pick to
+     * diagnose, and the missed-answer marking already carries the lesson. */
+    if (question.type === "msq") {
+      var answers = question.answers || [];
+      var wrongPick = (response.selected || []).filter(function (index) { return answers.indexOf(index) < 0; })[0];
+      if (wrongPick === undefined) return null;
+      return (question.diagnoses || [])[wrongPick] || null;
+    }
     var failedIndex = (response.partResults || []).indexOf(false);
     if (failedIndex < 0) return null;
     var chosen = (response.selected || [])[failedIndex];
@@ -2564,6 +2635,28 @@
       var mcqCorrect = selected === question.answer;
       var mcqDiagnosis = mcqCorrect ? null : (question.diagnoses || [])[selected];
       return {correct: mcqCorrect, partial: mcqCorrect ? 1 : 0, partResults: [mcqCorrect], conceptResults: {}, misconception: mcqCorrect ? null : (mcqDiagnosis ? mcqDiagnosis.tag : (question.misconceptions || [])[selected] || "wrong-option")};
+    }
+    if (question.type === "msq") {
+      /* Scored exactly as the paper scores it: +1 per correct option selected,
+       * -1 per wrong option selected, floored at zero for the question. Mastery
+       * evidence is stricter than marks — `correct` requires the exact set, so a
+       * part-marked answer never reads as understanding on the dashboard. */
+      var answers = question.answers || [];
+      var picked = msqSelection();
+      var hits = picked.filter(function (index) { return answers.indexOf(index) >= 0; });
+      var misses = picked.filter(function (index) { return answers.indexOf(index) < 0; });
+      var awarded = Math.max(0, hits.length - misses.length);
+      var exact = hits.length === answers.length && misses.length === 0;
+      var firstWrong = misses.length ? misses[0] : null;
+      var msqDiagnosis = firstWrong === null ? null : (question.diagnoses || [])[firstWrong];
+      return {
+        correct: exact,
+        partial: answers.length ? awarded / answers.length : 0,
+        partResults: answers.map(function (index) { return picked.indexOf(index) >= 0; }),
+        conceptResults: {},
+        msqMarks: {awarded: awarded, available: answers.length, hits: hits.length, misses: misses.length},
+        misconception: exact ? null : (msqDiagnosis ? msqDiagnosis.tag : (misses.length ? "over-selected" : "under-selected"))
+      };
     }
     var parts = question.type === "boss" ? question.steps : question.type === "match" ? question.rows : question.blanks;
     var partResults = parts.map(function (part, index) { return selected[index] === part.answer; });
@@ -2764,6 +2857,7 @@
 
   function correctAnswerKey(question) {
     if (question.type === "mcq" || question.type === "primer" || !question.type) return [question.options[question.answer]];
+    if (question.type === "msq") return (question.answers || []).map(function (index) { return question.options[index]; });
     if (question.type === "match") return question.rows.map(function (row) { return row.label + " → " + question.choices[row.answer]; });
     if (question.type === "boss") return question.steps.map(function (step) { return step.label + ": " + step.options[step.answer]; });
     if (question.type === "short-answer") return [question.exemplar];

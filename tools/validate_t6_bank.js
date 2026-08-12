@@ -237,6 +237,25 @@ courseIds.forEach(function (courseId) {
     } else if (question.type === "boss") {
       if (!question.boss || !Array.isArray(question.steps) || question.steps.length < 3 || !(question.supportingConceptIds || []).length) errors.push(question.id + " is not a multi-concept, three-step boss");
       (question.steps || []).forEach(function (step, index) { checkOptionShape(question, "boss step " + (index + 1), step.options, step.answer, false); });
+    } else if (question.type === "msq") {
+      /* Multiple-select, for SPMS Section B. The paper marks it +1 per right
+       * option and -1 per wrong, floored at zero. Two properties have to hold or
+       * the format teaches the wrong reflex: there must be at least two correct
+       * options, otherwise it is an MCQ wearing checkboxes and rewards picking
+       * one; and at least one wrong option, otherwise selecting everything is
+       * the optimal play and the negative marking never bites. */
+      if (!Array.isArray(question.options) || question.options.length < 4 || question.options.length > 6) errors.push(question.id + " must offer four to six multiple-select options");
+      if (!Array.isArray(question.answers) || question.answers.length < 2) errors.push(question.id + " must have at least two correct options, or it is a single-answer question");
+      if ((question.answers || []).length >= (question.options || []).length) errors.push(question.id + " marks every option correct, so selecting all of them cannot be penalised");
+      (question.answers || []).forEach(function (index) {
+        if (typeof index !== "number" || index < 0 || index >= (question.options || []).length) errors.push(question.id + " has an answer index outside its options");
+      });
+      if (new Set(question.answers || []).size !== (question.answers || []).length) errors.push(question.id + " repeats an answer index");
+      if (question.answer !== undefined) errors.push(question.id + " must not carry a single `answer`; multiple-select uses `answers`");
+      (question.options || []).forEach(function (_, index) {
+        if ((question.answers || []).indexOf(index) >= 0) return;
+        if (!(question.diagnoses || [])[index]) errors.push(question.id + " option " + index + " is a distractor with no diagnosis");
+      });
     } else if (question.type === "short-answer") {
       if (!question.selfReviewOnly || !Array.isArray(question.rubric) || question.rubric.length < 3 || !question.exemplar) errors.push(question.id + " lacks a transparent self-review rubric or exemplar");
       if ((question.options || question.answer) !== undefined) errors.push(question.id + " must not imply opaque automatic grading");
@@ -476,7 +495,12 @@ if (packPath) {
 } else warnings.push("Lecture-source existence, the vocabulary gate, and lesson coverage were not checked; pass the T6 pack path to enable them.");
 
 var total = courseIds.reduce(function (sum, courseId) { return sum + Object.keys(courses[courseId].questions).length; }, 0);
-if (total !== 792) errors.push("Expected 792 bank items (728 challenges + 64 adaptive primers), found " + total);
+/* A floor, not an equality. The original check pinned the bank at exactly 792 so
+ * that a generator regression silently dropping surfaces would fail loudly — but
+ * it also fails every time an authored item is legitimately added, which makes the
+ * gate an obstacle to the work rather than a guard on it. A floor still catches the
+ * regression it was written for. Growth is expected; shrinkage is the bug. */
+if (total < 792) errors.push("Bank shrank to " + total + " items; the floor is 792 (728 generated challenges + 64 adaptive primers). A drop means the generator lost surfaces.");
 
 console.log(JSON.stringify({
   ok: errors.length === 0,

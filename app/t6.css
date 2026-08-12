@@ -374,6 +374,19 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .option.correct .option-key { color: white; background: var(--green); border-color: var(--green); }
 .option.wrong { border-color: var(--red); background: var(--red-soft); }
 .option.wrong .option-key { color: white; background: var(--red); border-color: var(--red); }
+
+/* Multiple-select. The box is square where the single-answer key is a rounded
+ * letter tile, so the two formats are told apart before any option is read —
+ * which matters, because the scoring rule differs between them. */
+.option-box { width: 22px; height: 22px; margin-top: 3px; border: 2px solid #bfc7c1; border-radius: 5px; background: white; position: relative; }
+.option-multi[aria-checked="true"] .option-box { border-color: var(--blue); background: var(--blue); }
+.option-multi[aria-checked="true"] .option-box::after { content: ""; position: absolute; left: 6px; top: 2px; width: 5px; height: 10px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.option.option-multi.correct .option-box { border-color: var(--green); background: var(--green); }
+.option.option-multi.wrong .option-box { border-color: var(--red); background: var(--red); }
+/* A correct option the learner did not pick: marked, but not as an error. */
+.option.option-multi.missed { border-color: var(--green); background: transparent; border-style: dashed; }
+.option.option-multi.missed .option-box { border-color: var(--green); background: white; }
+.msq-marks { margin: 10px 0 0; font-size: 13px; font-weight: 700; }
 .format-note { margin: 0 0 4px; color: var(--muted); font-size: 12px; }
 .cloze-sentence { padding: 0; color: #2f3e35; background: transparent; border: 0; border-radius: 0; font: 650 clamp(17px,2vw,21px)/1.8 Georgia, serif; }
 .inline-blank { display: block; width: 100%; margin: 8px 0; }
