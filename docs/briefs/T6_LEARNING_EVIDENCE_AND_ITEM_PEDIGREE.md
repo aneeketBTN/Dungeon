@@ -285,12 +285,12 @@ Authoring rules:
 
 Most of the bank satisfies this without authoring. Distractors are borrowed from other concepts —
 `comparableWrong(data.summary, otherSummaries)` hands the learner another concept's principle — so
-`mock/sets/t6_challenges.js` derives the diagnosis from provenance it already holds, exactly rather
+`app/sets/t6_challenges.js` derives the diagnosis from provenance it already holds, exactly rather
 than by inference. The recognised families are: another concept's principle, decision, causal chain,
 or label; the same concept's wrong facet (a match board offering an idea's principle and its decision
 side by side); and the three constructed boss-integration errors (framework swap, single-framework
 overreach, reversed determination). Hand-written distractors with no machine-knowable provenance are
-diagnosed in `mock/sets/t6_diagnoses.js`, keyed by question id and option index.
+diagnosed in `app/sets/t6_diagnoses.js`, keyed by question id and option index.
 
 **Enforcement.** `tools/validate_t6_bank.js` fails the build when any scheduled distractor lacks a
 diagnosis, when any of the four fields is empty, when a `why` restates the correct answer, or when a
@@ -399,7 +399,7 @@ independent Strong evidence within a practice block.
 
 ## Implemented bank and learner-facing hierarchy
 
-`mock/sets/t6_challenges.js` expands the 216-item baseline to 792 tagged surfaces: 728 scored
+`app/sets/t6_challenges.js` expands the 216-item baseline to 792 tagged surfaces: 728 scored
 challenges, including five
 boss variants for each of 32 modules and one source-grounded constructed-response surface for each
 of 64 concepts, plus one source-traceable adaptive primer per concept. Active scored scheduling

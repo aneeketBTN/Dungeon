@@ -108,7 +108,7 @@ not make it authoritative.
 | Proficiency rank | `docs/engine/PROMPT.md` §17 | profile, dashboard, reassurance language |
 | Subject-specific exams | `docs/engine/PROMPT.md` §4 and graphs | setup, question formats, scoring, dashboard |
 | Persistence/stats | `docs/engine/PROMPT.md`, `data/state/` | resume, results, recommendations, player history |
-| Prototype interaction | `mock/rogue.*` | current Hall/run/results behavior |
+| Prototype interaction | `app/rogue.*` | current Hall/run/results behavior |
 | T6 exam fallback | `docs/briefs/T6_REVISION_FALLBACK.md`; `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`; `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md`; owner-supplied T6 AI-ready pack | four-subject dashboard, evidence-based progress, adaptive repetition, mixed formats, confidence, constructed response, first-cohort boundary |
 | Controlled tester release | current owner direction; `docs/briefs/TESTER_ACCESS_AND_ADMIN.md`; `docs/community/TESTER_GUIDE.md`; `docs/community/PRIVACY.md`; `SECURITY.md`; `docs/community/COMMUNITY_PLAYBOOK.md` | hosting boundary, identity access, source publication, feedback, moderation, announcements, incident intake |
 | Legacy practice portal | `legacy/prototypes/index.html` and other mock pages | content inventory and old navigation |

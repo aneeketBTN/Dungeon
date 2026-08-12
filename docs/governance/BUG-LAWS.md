@@ -140,7 +140,7 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 
 - **Tier/Status:** 🟡 · ACTIVE
 - **Origin:** 2026-08-10 all-subject dashboard Browser acceptance: the server internally served
-  `mock/t6.html` at `/`, so the browser resolved `sets/t6_catalog.js` from `/sets/` and the route
+  `app/t6.html` at `/`, so the browser resolved `sets/t6_catalog.js` from `/sets/` and the route
   loaded without its course data.
 - **Why:** Returning the right HTML bytes at a different URL does not preserve relative script,
   stylesheet, media, navigation, or module paths.
@@ -469,14 +469,14 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 ### LAW-36 🟡 — An author element selector can silently defeat the `hidden` attribute
 
 - **Tier/Status:** 🟡 · ACTIVE
-- **Origin:** 2026-08-11 live agreement-screen Browser pass: `mock/login.css` declared
+- **Origin:** 2026-08-11 live agreement-screen Browser pass: `app/login.css` declared
   `form { display: grid; }`, which outranks the user-agent `[hidden] { display: none }` rule. The
   email form reported `hidden === true` while still painting 174 pixels of stale controls beneath
   the agreement step.
 - **Why:** The DOM, the accessibility intent, and the pixels disagree. A screen that looks
   dismissed is still operable, and a step meant to be a hard gate reads as optional.
 - **Comply:** Every stylesheet that sets `display` on an element or shared class selector must also
-  carry `[hidden] { display: none !important; }` near the reset. `mock/t6.css` is the reference.
+  carry `[hidden] { display: none !important; }` near the reset. `app/t6.css` is the reference.
 - **Verify:** After any screen-swap change, assert in a real Browser that each element toggled
   `hidden` measures `getBoundingClientRect().height === 0`. Property state alone is not evidence.
 

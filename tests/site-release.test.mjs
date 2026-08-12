@@ -17,7 +17,7 @@ const env = {
 test("root redirects to the canonical active route", async () => {
   const response = await worker.fetch(new Request("https://dungeon.test/"), env);
   assert.equal(response.status, 302);
-  assert.equal(response.headers.get("location"), "/mock/t6.html");
+  assert.equal(response.headers.get("location"), "/app/t6.html");
   assert.equal(response.headers.get("cache-control"), "no-store");
 });
 
@@ -34,7 +34,7 @@ test("health endpoint reports the shared progress storage model", async () => {
 test("admin uses its canonical owner dashboard route", async () => {
   const response = await worker.fetch(new Request("https://dungeon.test/admin"), env);
   assert.equal(response.status, 302);
-  assert.equal(response.headers.get("location"), "/mock/admin.html");
+  assert.equal(response.headers.get("location"), "/app/admin.html");
   assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow, noarchive");
 });
 
@@ -54,7 +54,7 @@ test("tester management fails closed until the Cloudflare edge is connected", as
 
 test("static responses receive launch security and cache headers", async () => {
   const response = await worker.fetch(
-    new Request("https://dungeon.test/mock/t6.js"),
+    new Request("https://dungeon.test/app/t6.js"),
     env
   );
   assert.equal(response.status, 200);
@@ -71,10 +71,10 @@ test("release build includes only the allowlisted active app", async () => {
     new URL("../tools/build-site.mjs", import.meta.url),
     "utf8"
   );
-  assert.match(buildScript, /mock\/t6\.html/);
-  assert.match(buildScript, /mock\/login\.html/);
-  assert.match(buildScript, /mock\/admin\.html/);
-  assert.match(buildScript, /mock\/robots\.txt/);
+  assert.match(buildScript, /app\/t6\.html/);
+  assert.match(buildScript, /app\/login\.html/);
+  assert.match(buildScript, /app\/admin\.html/);
+  assert.match(buildScript, /app\/robots\.txt/);
   assert.doesNotMatch(buildScript, /state\//);
   assert.doesNotMatch(buildScript, /history\//);
   assert.doesNotMatch(buildScript, /data\//);
@@ -84,8 +84,8 @@ test("release build includes only the allowlisted active app", async () => {
 });
 
 test("anonymous login assets do not disclose the private WhatsApp invite", async () => {
-  const loginHtml = await readFile(new URL("../mock/login.html", import.meta.url), "utf8");
-  const loginJs = await readFile(new URL("../mock/login.js", import.meta.url), "utf8");
+  const loginHtml = await readFile(new URL("../app/login.html", import.meta.url), "utf8");
+  const loginJs = await readFile(new URL("../app/login.js", import.meta.url), "utf8");
   assert.doesNotMatch(loginHtml, /E9RThdcAzqFDTiWPUYcE3I/);
   assert.doesNotMatch(loginJs, /E9RThdcAzqFDTiWPUYcE3I/);
 });

@@ -40,7 +40,7 @@ Write only under `work/question-proposals/`. Every proposal must contain evidenc
 lecture IDs, current and proposed versions, answer rationale, misconception tags, difficulty
 hypothesis, validation output and rollback notes. Status is always `quarantined`.
 
-Never edit `mock/sets/`, `mock/t6.js`, active bank manifests or production assets. Never publish a
+Never edit `app/sets/`, `app/t6.js`, active bank manifests or production assets. Never publish a
 question or change an algorithm. Owner approval and the normal implementation/evidence gates are
 required for promotion.
 

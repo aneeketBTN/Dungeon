@@ -1,5 +1,5 @@
-const ACTIVE_ROUTE = "/mock/t6.html";
-const ADMIN_ROUTE = "/mock/admin.html";
+const ACTIVE_ROUTE = "/app/t6.html";
+const ADMIN_ROUTE = "/app/admin.html";
 
 const SECURITY_HEADERS = {
   "Content-Security-Policy": [

@@ -2,8 +2,8 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "mock-server",
-      "runtimeExecutable": "python3",
+      "name": "dungeon-dev-server",
+      "runtimeExecutable": "python",
       "runtimeArgs": ["tools/server.py"],
       "port": 8099,
       "autoPort": true

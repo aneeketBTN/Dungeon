@@ -2,7 +2,7 @@
 
 Updated: 2026-08-11
 
-Copy or download the entire project folder to the Mac. Do not copy only `mock/`: the complete
+Copy or download the entire project folder to the Mac. Do not copy only `app/`: the complete
 folder also contains the operating brief, evidence, legacy references, and learning-engine data
 that must be preserved.
 
@@ -43,12 +43,12 @@ bash tools/start-mac.sh
 
 ## Active implementation
 
-- `mock/t6.html` — staged dashboard, evidence graph, mixed-format practice, and results structure
-- `mock/t6.css` — low-density desktop, narrow, accessible, and reduced-motion presentation
-- `mock/t6.js` — confidence-aware evidence states, rotation, boss grading, save/resume/reset
-- `mock/sets/t6_brgsa.js` — original BRGSA authored bank
-- `mock/sets/t6_catalog.js` — all-subject catalogue and dashboard concept mapping
-- `mock/sets/t6_challenges.js` — mixed-format/boss augmentation and active rotation pools
+- `app/t6.html` — staged dashboard, evidence graph, mixed-format practice, and results structure
+- `app/t6.css` — low-density desktop, narrow, accessible, and reduced-motion presentation
+- `app/t6.js` — confidence-aware evidence states, rotation, boss grading, save/resume/reset
+- `app/sets/t6_brgsa.js` — original BRGSA authored bank
+- `app/sets/t6_catalog.js` — all-subject catalogue and dashboard concept mapping
+- `app/sets/t6_challenges.js` — mixed-format/boss augmentation and active rotation pools
 - `tools/validate_t6_bank.js` — bank/source/breadth validation utility
 - `tools/server.py` — local server and root redirect
 
@@ -85,12 +85,12 @@ required = [
     "AGENTS.md",
     "docs/briefs/T6_REVISION_FALLBACK.md",
     "docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md",
-    "mock/t6.html",
-    "mock/t6.css",
-    "mock/t6.js",
-    "mock/sets/t6_brgsa.js",
-    "mock/sets/t6_catalog.js",
-    "mock/sets/t6_challenges.js",
+    "app/t6.html",
+    "app/t6.css",
+    "app/t6.js",
+    "app/sets/t6_brgsa.js",
+    "app/sets/t6_catalog.js",
+    "app/sets/t6_challenges.js",
     "tools/validate_t6_bank.js",
     "data/state/game_state.json",
     "data/history/question_history.json",

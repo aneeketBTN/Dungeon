@@ -888,19 +888,21 @@ async function serveAsset(request, env, assetPath, embeddedAssets) {
 
 function learnerAssetPath(pathname, prefix) {
   const learnerFiles = new Map([
-    [`${prefix}/`, "/mock/t6.html"],
-    [`${prefix}/t6.html`, "/mock/t6.html"],
-    [`${prefix}/t6.css`, "/mock/t6.css"],
-    [`${prefix}/t6.js`, "/mock/t6.js"],
+    [`${prefix}/`, "/app/t6.html"],
+    [`${prefix}/t6.html`, "/app/t6.html"],
+    [`${prefix}/t6.css`, "/app/t6.css"],
+    [`${prefix}/t6.js`, "/app/t6.js"],
     [`${prefix}/release-manifest.json`, "/release-manifest.json"],
-    [`${prefix}/robots.txt`, "/mock/robots.txt"]
+    [`${prefix}/robots.txt`, "/app/robots.txt"]
   ]);
   if (learnerFiles.has(pathname)) return learnerFiles.get(pathname);
-  if (pathname.startsWith(`${prefix}/sets/`)) return `/mock${pathname.slice(prefix.length)}`;
+  if (pathname.startsWith(`${prefix}/sets/`)) return `/app${pathname.slice(prefix.length)}`;
+  // The client directory was renamed from mock/ to app/. These /mock/ URLs are public and may sit
+  // in tester bookmarks, so they keep resolving; only the asset they point at moved.
   if (pathname === `${prefix}/mock/t6.html` || pathname === `${prefix}/mock/t6.css` || pathname === `${prefix}/mock/t6.js`) {
-    return pathname.slice(prefix.length);
+    return `/app${pathname.slice(`${prefix}/mock`.length)}`;
   }
-  if (pathname.startsWith(`${prefix}/mock/sets/`)) return pathname.slice(prefix.length);
+  if (pathname.startsWith(`${prefix}/mock/sets/`)) return `/app${pathname.slice(`${prefix}/mock`.length)}`;
   return null;
 }
 
@@ -917,8 +919,8 @@ export function createWorker({
         const prefix = env?.DUNGEON_PREFIX || "/dungeon";
 
         if (url.pathname === prefix) return redirect(`${prefix}/${url.search}`);
-        if (url.pathname === `${prefix}/login.css`) return await serveAsset(request, env, "/mock/login.css", embeddedAssets);
-        if (url.pathname === `${prefix}/login.js`) return await serveAsset(request, env, "/mock/login.js", embeddedAssets);
+        if (url.pathname === `${prefix}/login.css`) return await serveAsset(request, env, "/app/login.css", embeddedAssets);
+        if (url.pathname === `${prefix}/login.js`) return await serveAsset(request, env, "/app/login.js", embeddedAssets);
         if (url.pathname === `${prefix}/api/session`) return await manageSession(request, env, fetchImpl, store);
         if (url.pathname === `${prefix}/api/community`) return await manageCommunity(request, env, store);
         if (url.pathname === `${prefix}/api/progress`) return await manageProgress(request, env, store);
@@ -942,9 +944,9 @@ export function createWorker({
           await verifyAdmin(request, env);
         }
         if (url.pathname === `${prefix}/admin`) return redirect(`${prefix}/admin/${url.search}`);
-        if (url.pathname === `${prefix}/admin/`) return await serveAsset(request, env, "/mock/admin.html", embeddedAssets);
-        if (url.pathname === `${prefix}/admin/admin.css`) return await serveAsset(request, env, "/mock/admin.css", embeddedAssets);
-        if (url.pathname === `${prefix}/admin/admin.js`) return await serveAsset(request, env, "/mock/admin.js", embeddedAssets);
+        if (url.pathname === `${prefix}/admin/`) return await serveAsset(request, env, "/app/admin.html", embeddedAssets);
+        if (url.pathname === `${prefix}/admin/admin.css`) return await serveAsset(request, env, "/app/admin.css", embeddedAssets);
+        if (url.pathname === `${prefix}/admin/admin.js`) return await serveAsset(request, env, "/app/admin.js", embeddedAssets);
         if (url.pathname === `${prefix}/admin/t6.html`) return redirect(`${prefix}/`);
         if (url.pathname === `${prefix}/admin/health`) {
           requireDatabase(env);
@@ -953,7 +955,7 @@ export function createWorker({
         if (url.pathname === `${prefix}/admin/release-manifest.json`) {
           return await serveAsset(request, env, "/release-manifest.json", embeddedAssets);
         }
-        if (url.pathname.startsWith(`${prefix}/admin/`) || url.pathname.startsWith(`${prefix}/mock/admin`)) {
+        if (url.pathname.startsWith(`${prefix}/admin/`) || url.pathname.startsWith(`${prefix}/mock/admin`) || url.pathname.startsWith(`${prefix}/app/admin`)) {
           return json({code: "NOT_FOUND", message: "Not found."}, 404);
         }
 
@@ -961,7 +963,7 @@ export function createWorker({
         if (assetPath) {
           const email = await authenticateLearner(request, env, store);
           if (!email) {
-            if (assetPath === "/mock/t6.html") return await serveAsset(request, env, "/mock/login.html", embeddedAssets);
+            if (assetPath === "/app/t6.html") return await serveAsset(request, env, "/app/login.html", embeddedAssets);
             return json({code: "LOGIN_REQUIRED", message: "Enter your approved email to continue."}, 401);
           }
           return await serveAsset(request, env, assetPath, embeddedAssets);

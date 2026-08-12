@@ -3,7 +3,7 @@
 > states the specific gap choosing it reveals. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
 > `evidence/2026-08-12/t6-option-diagnoses/verification.md`: 2,943 diagnoses across the active bank
 > with zero generic fallbacks, derived from generator provenance for 92.3% of slots and hand-authored
-> in `mock/sets/t6_diagnoses.js` for the remaining 78 texts. The wrong-answer panel was rebuilt as
+> in `app/sets/t6_diagnoses.js` for the remaining 78 texts. The wrong-answer panel was rebuilt as
 > verdict → what this choice assumed → catch it earlier → what governs this question → the complete
 > answer (no longer collapsed) → why it connects. `tools/validate_t6_bank.js` now fails the build when
 > a scheduled distractor lacks a diagnosis, so questions drafted later inherit the contract in
@@ -128,7 +128,7 @@
 > cinematic/Ari/economy product slice remains at `legacy/rogue/rogue.html` as an `IMPLEMENTED` legacy
 > reference and still lacks complete real-Browser route acceptance.
 >
-> Static HTML/CSS/JavaScript prototypes in `mock/`; procedural learning engine and state in root
+> Static HTML/CSS/JavaScript prototypes in `app/`; procedural learning engine and state in root
 > JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: observe the
 > active cohort without over-reading small samples,
 > continue owner/faculty content acceptance, and calibrate the learning model from genuine use.
@@ -190,7 +190,7 @@ Rules:
   launches the active T6 fallback and preserves the older engine as a legacy path.
 - `docs/briefs/` — owner-supplied briefs and durable implementation mappings. Add each new external
   brief here or index its connected-source location in `docs/governance/DESIGN_SOURCE_INDEX.md`.
-- `mock/` — active T6 revision route, legacy static prototypes, content sets, and local server.
+- `app/` — active T6 revision route, legacy static prototypes, content sets, and local server.
 - `.openai/` — Sites project binding; contains no runtime secrets.
 - `.agents/` — paused tester-agent charters, consent-safe data contracts, synthetic fixtures, and
   fail-closed activation gates; three project schedules are registered `PAUSED` and none is
@@ -253,9 +253,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, and tester management. | 2026-08-11 |
 | `cloudflare/migrations/` | Applied D1 history for auth/progress, browser/country locks, agreement acceptance, and community timestamps. | 2026-08-11 |
 | `db/schema.ts` | Readable mirror of tester, session, progress, agreement, and community-state table shapes. | 2026-08-11 |
-| `mock/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. | 2026-08-11 |
-| `mock/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
-| `mock/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery. | 2026-08-11 |
+| `app/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. | 2026-08-11 |
+| `app/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
+| `app/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery. | 2026-08-11 |
 | `docs/community/DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
 | `work/build_tester_agreement.py` | Builds the verified two-page agreement DOCX for Word/PDF delivery. | 2026-08-11 |
 | `cloudflare/tools/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
@@ -265,16 +265,16 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tests/site-release.test.mjs` | Release-boundary, anonymous-invite secrecy, privacy, routing, header, and setup checks. | 2026-08-11 |
 | `tests/cloudflare-access.test.mjs` | Owner auth, tester management, agreement/community state, bump, routing, health, and cache checks. | 2026-08-11 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
-| `mock/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
-| `mock/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
-| `mock/admin.js` | Cohort onboarding, revoke/unlock, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-11 |
-| `mock/t6.html` | Subject rail, trendline hero, inline practice builder, distance-travelled strip, holistic matrix/totals, layered questions, plans, and results. | 2026-08-11 |
-| `mock/t6.css` | Dynamic homepage, chip builder, matching board, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-11 |
-| `mock/t6.js` | Adaptive primers, evidence-gated mastery, sparkline/momentum copy, builder pool rules, matching board, persistence, and scenarios. | 2026-08-11 |
-| `mock/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
-| `mock/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
-| `mock/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, and the provenance-derived option-diagnosis pass. | 2026-08-12 |
-| `mock/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
+| `app/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
+| `app/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
+| `app/admin.js` | Cohort onboarding, revoke/unlock, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-11 |
+| `app/t6.html` | Subject rail, trendline hero, inline practice builder, distance-travelled strip, holistic matrix/totals, layered questions, plans, and results. | 2026-08-11 |
+| `app/t6.css` | Dynamic homepage, chip builder, matching board, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-11 |
+| `app/t6.js` | Adaptive primers, evidence-gated mastery, sparkline/momentum copy, builder pool rules, matching board, persistence, and scenarios. | 2026-08-11 |
+| `app/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
+| `app/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
+| `app/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, and the provenance-derived option-diagnosis pass. | 2026-08-12 |
+| `app/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
 | `tools/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, scored-pool, and option-diagnosis validator. | 2026-08-12 |
 | `legacy/rogue/rogue.html` | Legacy character → Hall → run → failure/results product-flow markup. | 2026-08-10 |
 | `legacy/rogue/rogue.js` | Legacy product-slice state transitions, questions, rewards, quest, and outcome behavior. | 2026-08-10 |
@@ -321,7 +321,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   relevant brief and `docs/governance/DESIGN_SOURCE_INDEX.md`.
 - `docs/engine/PROMPT.md` is current procedural-engine authority; the T6 fallback's authored questions follow
   its indexed pack and brief. `docs/engine/REVIEW_LOG.md` and `docs/design/personalities.md` are rationale and history.
-- `mock/` shows implemented behavior, not intended behavior.
+- `app/` shows implemented behavior, not intended behavior.
 - Do not edit `data/graphs/`, `data/state/`, or `data/history/` during UI testing unless the task explicitly
   authorizes engine/data changes and a backup-safe plan exists.
 - Do not call an asset production-ready without the acceptance gate in
@@ -331,9 +331,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   operations unless explicitly requested.
 - Run the smallest relevant verification after each coherent change. Current baseline checks:
   - JavaScript syntax: `node --check legacy/rogue/rogue.js`
-  - T6 JavaScript syntax: `node --check mock/t6.js`,
-    `node --check mock/sets/t6_brgsa.js`, `node --check mock/sets/t6_catalog.js`, and
-    `node --check mock/sets/t6_challenges.js`
+  - T6 JavaScript syntax: `node --check app/t6.js`,
+    `node --check app/sets/t6_brgsa.js`, `node --check app/sets/t6_catalog.js`, and
+    `node --check app/sets/t6_challenges.js`
   - T6 bank: `node tools/validate_t6_bank.js "<Term 6 AI-Ready Pack>"`
   - Python server syntax on macOS: `python3 -m py_compile tools/server.py`
   - Local server on macOS: `python3 tools/server.py 8099`

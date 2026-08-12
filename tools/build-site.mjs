@@ -6,20 +6,20 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const dist = join(root, "dist");
 
 const publicFiles = [
-  "mock/t6.html",
-  "mock/t6.css",
-  "mock/t6.js",
-  "mock/login.html",
-  "mock/login.css",
-  "mock/login.js",
-  "mock/admin.html",
-  "mock/admin.css",
-  "mock/admin.js",
-  "mock/robots.txt",
-  "mock/sets/t6_diagnoses.js",
-  "mock/sets/t6_brgsa.js",
-  "mock/sets/t6_catalog.js",
-  "mock/sets/t6_challenges.js"
+  "app/t6.html",
+  "app/t6.css",
+  "app/t6.js",
+  "app/login.html",
+  "app/login.css",
+  "app/login.js",
+  "app/admin.html",
+  "app/admin.css",
+  "app/admin.js",
+  "app/robots.txt",
+  "app/sets/t6_diagnoses.js",
+  "app/sets/t6_brgsa.js",
+  "app/sets/t6_catalog.js",
+  "app/sets/t6_challenges.js"
 ];
 
 await rm(dist, { recursive: true, force: true });
@@ -37,7 +37,7 @@ await writeFile(join(dist, "server", "index.js"), workerSource, "utf8");
 
 const releaseManifest = {
   generatedAt: new Date().toISOString(),
-  route: "/mock/t6.html",
+  route: "/app/t6.html",
   health: "/health",
   storage: "cloudflare-d1-with-browser-fallback",
   files: publicFiles

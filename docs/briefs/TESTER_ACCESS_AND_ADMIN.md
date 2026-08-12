@@ -6,7 +6,7 @@ rapid-request rate limiting, and the dedicated email group/management secret. Th
 is `VERIFIED(BROWSER)` Healthy, Connected, and Allowlisted on the exact domain. Approved-email
 admission, the private denial, the first-login agreement gate, per-email progress storage, and the
 narrow agreement layout are `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` at
-`evidence/2026-08-11/learner-backend-and-agreement/verification.md`. The `mock/login.css` repair is
+`evidence/2026-08-11/learner-backend-and-agreement/verification.md`. The `app/login.css` repair is
 live and a fresh approved address has completed agreement -> dashboard -> sign-out -> revocation
 on the production domain. The first external cohort has eight approved addresses at the latest
 Control Room read.
@@ -105,7 +105,7 @@ must be completed before claiming strong resistance to harvesting by authorised 
 
 ## Owner dashboard
 
-`mock/admin.html` provides:
+`app/admin.html` provides:
 
 - production health and allowlisted-release checks;
 - cohort paste-onboarding, current tester list, refresh, clear-lock recovery, and

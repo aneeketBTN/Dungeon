@@ -86,7 +86,7 @@ class Handler(SimpleHTTPRequestHandler):
             return self._send_json(_board())
         if path == "/":
             self.send_response(302)
-            self.send_header("Location", "/mock/t6.html")
+            self.send_header("Location", "/app/t6.html")
             self.end_headers()
             return
         return super().do_GET()

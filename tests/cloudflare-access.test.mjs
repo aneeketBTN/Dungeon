@@ -529,7 +529,7 @@ test("revoke invalidates sessions and deletes saved progress", async () => {
   assert.equal(store.progress.has("alpha@example.com"), false);
 
   const after = await worker.fetch(request("/dungeon/", {headers: {Cookie: cookie}}), baseEnv);
-  assert.equal(await after.text(), "asset:/mock/login.html");
+  assert.equal(await after.text(), "asset:/app/login.html");
 });
 
 test("mixed-selector groups are rejected instead of silently widened", async () => {
@@ -558,13 +558,28 @@ test("approved email enters immediately while an unapproved email gets the priva
   assert.equal(approved.status, 200);
   assert.match(approved.headers.get("set-cookie"), /HttpOnly; Secure; SameSite=Lax/);
   const learner = await worker.fetch(request("/dungeon/", {headers: {Cookie: cookieFrom(approved)}}), baseEnv);
-  assert.equal(await learner.text(), "asset:/mock/t6.html");
+  assert.equal(await learner.text(), "asset:/app/t6.html");
+});
+
+test("legacy /mock/ bookmarks still resolve to the renamed app assets", async () => {
+  const worker = workerWithGroup(["alpha@example.com"]);
+  const approved = await login(worker, "alpha@example.com");
+  const cookie = cookieFrom(approved);
+  for (const [bookmarked, asset] of [
+    ["/dungeon/mock/t6.html", "asset:/app/t6.html"],
+    ["/dungeon/mock/t6.css", "asset:/app/t6.css"],
+    ["/dungeon/mock/t6.js", "asset:/app/t6.js"],
+    ["/dungeon/mock/sets/t6_brgsa.js", "asset:/app/sets/t6_brgsa.js"]
+  ]) {
+    const response = await worker.fetch(request(bookmarked, {headers: {Cookie: cookie}}), baseEnv);
+    assert.equal(await response.text(), asset, `${bookmarked} should still serve ${asset}`);
+  }
 });
 
 test("anonymous learner sees only the login and cannot fetch the question bank", async () => {
   const worker = workerWithGroup();
   const learner = await worker.fetch(request("/dungeon/"), baseEnv);
-  assert.equal(await learner.text(), "asset:/mock/login.html");
+  assert.equal(await learner.text(), "asset:/app/login.html");
   const bank = await worker.fetch(request("/dungeon/sets/t6_brgsa.js"), baseEnv);
   assert.equal(bank.status, 401);
 });
@@ -617,7 +632,7 @@ test("owner routes retain the separate Cloudflare Access boundary", async () => 
   let adminChecks = 0;
   const worker = workerWithGroup([], {verifyAdmin: async () => { adminChecks += 1; return owner; }});
   const admin = await worker.fetch(request("/dungeon/admin/"), baseEnv);
-  assert.equal(await admin.text(), "asset:/mock/admin.html");
+  assert.equal(await admin.text(), "asset:/app/admin.html");
   const health = await worker.fetch(request("/dungeon/admin/health"), baseEnv);
   assert.equal((await health.json()).storage, "cloudflare-d1");
   assert.equal(adminChecks, 2);
@@ -673,8 +688,8 @@ test("standalone delivery serves embedded login and learner assets", async () =>
   const worker = workerWithGroup(["alpha@example.com"], {
     store,
     embeddedAssets: {
-      "/mock/login.html": {body: "embedded login", contentType: "text/html; charset=utf-8"},
-      "/mock/t6.html": {body: "embedded learner", contentType: "text/html; charset=utf-8"}
+      "/app/login.html": {body: "embedded login", contentType: "text/html; charset=utf-8"},
+      "/app/t6.html": {body: "embedded learner", contentType: "text/html; charset=utf-8"}
     }
   });
   const {ASSETS, ...envWithoutAssets} = baseEnv;

@@ -254,9 +254,9 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 - **I29 (2026-08-11)** — Issue: on the live first-login agreement step the email form was set
   `hidden` in the DOM but still painted 174 pixels of operable controls under the agreement.
-  Cause: `mock/login.css` set `display: grid` on the `form` element selector, and an author type
+  Cause: `app/login.css` set `display: grid` on the `form` element selector, and an author type
   selector outranks the user-agent `[hidden]` rule. Fix: added `[hidden] { display: none !important; }`
-  to `mock/login.css`, matching the guard `mock/t6.css` already carried, and confirmed on the live
+  to `app/login.css`, matching the guard `app/t6.css` already carried, and confirmed on the live
   page that the stale form collapses to zero height at desktop and at 390 pixels. Truthful
   interaction axis: a gate that renders as partly dismissed invites the learner to bypass it.
   Evidence: `evidence/2026-08-11/learner-backend-and-agreement/verification.md`; prevention:
