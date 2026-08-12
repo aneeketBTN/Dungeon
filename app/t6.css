@@ -18,7 +18,28 @@
   --grey-soft: #edf0eb;
   --saffron: #f3bf63;
   --shadow: 0 22px 60px rgba(35,45,38,.09);
-  --radius: 20px;
+
+  /* Corner scale.
+   *
+   * This stylesheet had sixteen distinct radii — 4, 5, 7, 8, 9, 10, 11, 12, 13, 14,
+   * 15, 18, 20, 21, 26 — which is drift, not a system, and it showed: a 26px corner
+   * on the hero pulled its visible top edge 26px inward from the text sitting flush
+   * above it, so the column read as misaligned even though every left edge measured
+   * the same 73px. Four steps now, chosen by what the surface is:
+   *
+   *   mark     inline marks and chips
+   *   control  things you press
+   *   card     objects in a list
+   *   panel    major surfaces
+   *
+   * The top of the scale is deliberately tight. The art direction gives architecture
+   * "wedges and verticals"; a monumental panel should read as something carved, not
+   * as a soft blob, and the tighter corner is what keeps it aligned to its column. */
+  --r-mark: 3px;
+  --r-control: 7px;
+  --r-card: 9px;
+  --r-panel: 10px;
+  --radius: var(--r-panel);
 }
 
 * { box-sizing: border-box; }
@@ -60,7 +81,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .account-controls button:focus-visible { outline: 3px solid rgba(31,117,84,.18); outline-offset: 2px; }
 
 .dashboard-wrap { width: min(1120px,calc(100% - 34px)); margin: 0 auto; padding: 34px 0 72px; }
-.community-reminder { margin-bottom: 18px; padding: 18px 20px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 22px; background: #fff7e8; border: 1px solid #e5c791; border-left: 5px solid var(--saffron); border-radius: 14px; }
+.community-reminder { margin-bottom: 18px; padding: 18px 20px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 22px; background: #fff7e8; border: 1px solid #e5c791; border-left: 5px solid var(--saffron); border-radius: var(--r-panel); }
 .community-reminder h2 { margin: 3px 0 4px; font: 650 23px/1.12 Georgia, serif; }
 .community-reminder p:not(.eyebrow) { margin: 0; color: #5f5a4f; }
 .community-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 9px; }
@@ -97,14 +118,14 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    generously clear of the hero below, so the space says which one it belongs to
    instead of leaving it floating between the two. */
 .subject-identity { max-width: 62ch; margin: -5px 0 14px; color: var(--muted); font-size: 13px; }
-.focus-panel { position: relative; overflow: hidden; margin-top: 14px; display: grid; grid-template-columns: minmax(0,1.42fr) minmax(300px,.62fr); color: white; background: var(--ink); border-radius: 26px; box-shadow: var(--shadow); }
+.focus-panel { position: relative; overflow: hidden; margin-top: 14px; display: grid; grid-template-columns: minmax(0,1.42fr) minmax(300px,.62fr); color: white; background: var(--ink); border-radius: var(--r-panel); box-shadow: var(--shadow); }
 .focus-panel::before { content: ""; position: absolute; width: 360px; height: 360px; right: -130px; top: -180px; border: 1px solid rgba(126,209,220,.22); border-radius: 50%; box-shadow: 0 0 0 48px rgba(126,209,220,.03), 0 0 0 96px rgba(126,209,220,.025); pointer-events: none; }
 .focus-copy { position: relative; z-index: 1; padding: clamp(30px,5vw,58px); }
 .focus-copy .eyebrow { color: #d6ddd8; }
 .focus-copy h1 { max-width: 720px; margin: 12px 0 14px; font: 650 clamp(36px,5vw,62px)/1.02 Georgia, "Times New Roman", serif; letter-spacing: -.035em; }
 .focus-copy > p:not(.eyebrow) { max-width: 670px; margin: 0; color: #cad3cc; font-size: clamp(16px,1.7vw,18px); }
 .hero-actions, .results-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 25px; }
-.button { min-height: 48px; padding: 12px 18px; border: 1px solid transparent; border-radius: 11px; font-weight: 800; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
+.button { min-height: 48px; padding: 12px 18px; border: 1px solid transparent; border-radius: var(--r-control); font-weight: 800; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
 .button:hover:not(:disabled) { transform: translateY(-1px); }
 .button.primary { color: white; background: var(--green); box-shadow: 0 8px 22px rgba(35,112,77,.18); }
 .focus-copy .button.primary { color: var(--ink); background: var(--saffron); box-shadow: none; }
@@ -118,7 +139,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .danger-text { color: var(--red); }
 
 .next-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 19px; }
-.next-meta span { padding: 6px 9px; color: #e0e6e1; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 7px; font-size: 12px; font-weight: 800; }
+.next-meta span { padding: 6px 9px; color: #e0e6e1; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: var(--r-mark); font-size: 12px; font-weight: 800; }
 /* Where you stand, on the hero itself rather than in a pale card floating on top
    of it. The action and the distance left are one thought; a nested panel drew a
    border between them and put a second surface inside the first (LAW-19). A
@@ -144,7 +165,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 /* Ways in. These are controls, so they carry a surface — the one place a box is
    still doing work on this page (better-layout: controls must look interactive). */
 .route-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 12px; }
-.route { min-height: 84px; padding: 15px 17px; display: grid; align-content: center; gap: 5px; text-align: start; color: inherit; background: var(--card); border: 1px solid var(--line); border-radius: 13px; cursor: pointer; transition: border-color .15s ease, transform .15s ease; }
+.route { min-height: 84px; padding: 15px 17px; display: grid; align-content: center; gap: 5px; text-align: start; color: inherit; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-card); cursor: pointer; transition: border-color .15s ease, transform .15s ease; }
 .route:hover { border-color: #91a397; transform: translateY(-1px); }
 .route b { font-size: 14px; }
 .route small { color: var(--muted); font-size: 12px; line-height: 1.4; }
@@ -156,7 +177,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .builder-group { min-width: 0; margin: 0; padding: 0; border: 0; }
 .builder-group legend { padding: 0 0 9px; color: var(--muted); font-size: 11px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
 .chip-row { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
-.chip-option { min-height: 64px; padding: 10px 12px; display: grid; align-content: center; gap: 3px; text-align: left; color: inherit; background: var(--card-soft); border: 1px solid var(--line); border-radius: 11px; cursor: pointer; }
+.chip-option { min-height: 64px; padding: 10px 12px; display: grid; align-content: center; gap: 3px; text-align: left; color: inherit; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-control); cursor: pointer; }
 .chip-option:hover:not(:disabled) { border-color: #91a397; background: white; }
 .chip-option b { font-size: 13px; }
 .chip-option small { color: var(--muted); font-size: 11px; line-height: 1.35; }
@@ -190,7 +211,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    here would out-specify. */
 .compact-heading > p { max-width: 520px; margin: 7px 0 0; color: var(--muted); }
 .course-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
-.course-card { min-height: 96px; padding: 12px 13px; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto 1fr; gap: 7px 10px; text-align: left; border: 1px solid var(--line); background: var(--card-soft); border-radius: 12px; cursor: pointer; }
+.course-card { min-height: 96px; padding: 12px 13px; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto 1fr; gap: 7px 10px; text-align: left; border: 1px solid var(--line); background: var(--card-soft); border-radius: var(--r-card); cursor: pointer; }
 .course-card:hover { border-color: #91a397; background: white; }
 /* Selection is drawn with an inset ring, not a thicker border: a 2px border
    against the 1px on every other card shifted this card's contents down a pixel,
@@ -229,7 +250,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .rail-sort label { color: var(--muted); font-size: 11px; }
 /* A real control, so it gets a real target: 32px failed the 44px floor the rest of
    the dashboard already holds to. */
-.rail-sort select { min-height: 44px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; background: white; font: inherit; font-size: 12px; }
+.rail-sort select { min-height: 44px; padding: 4px 8px; border: 1px solid var(--line); border-radius: var(--r-control); background: white; font: inherit; font-size: 12px; }
 .rail-sort-hint { flex-basis: 100%; margin: 0; color: var(--muted); font-size: 11px; }
 .rail-note { margin: 10px 0 0; color: var(--muted); font-size: 12px; }
 .course-bottom { grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2px 8px; }
@@ -242,7 +263,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .summary-heading h3 { margin: 0; font: 650 21px Georgia, serif; }
 .summary-heading span { color: var(--muted); font-size: 12px; }
 .overall-stats { margin-top: 14px; display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
-.stat { min-height: 101px; padding: 14px 15px; border: 1px solid var(--line); border-left-width: 4px; border-radius: 11px; }
+.stat { min-height: 101px; padding: 14px 15px; border: 1px solid var(--line); border-left-width: 4px; border-radius: var(--r-card); }
 .stat span, .stat b, .stat small { display: block; }
 .stat span { font-size: 11px; font-weight: 850; }
 .stat b { margin: 7px 0 2px; font: 700 27px/1 Georgia, serif; }
@@ -257,7 +278,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 /* Two even columns rather than wrapped flex: the four entries carry descriptions of
    very different lengths (444/332/383/81px), so flex-wrap gave each its own ragged
    line. A grid aligns the status dots into two clean columns. */
-.mastery-key { margin-top: 11px; padding: 13px 15px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px 22px; color: var(--muted); background: #f4f5f1; border-radius: 10px; font-size: 12px; }
+.mastery-key { margin-top: 11px; padding: 13px 15px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px 22px; color: var(--muted); background: #f4f5f1; border-radius: var(--r-card); font-size: 12px; }
 .mastery-key span { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: start; gap: 7px; }
 .mastery-key .dot { margin-top: 5px; }
 .mastery-key b { color: var(--ink); }
@@ -268,7 +289,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .dot.needs { background: var(--red); border-color: var(--red); }
 .dot.unseen { background: white; }
 
-.trend-card { padding: 20px 22px 15px; background: #f7f7f2; border: 1px solid var(--line); border-radius: 15px; }
+.trend-card { padding: 20px 22px 15px; background: #f7f7f2; border: 1px solid var(--line); border-radius: var(--r-panel); }
 .trend-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
 .trend-heading h3 { margin: 0; font: 650 21px/1.15 Georgia, serif; }
 .trend-heading > b { color: var(--green); font: 700 30px Georgia, serif; }
@@ -286,7 +307,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    Their content lives on .shelf-row now. */
 
 .set-list { margin-top: 14px; display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
-.set-card { min-height: 86px; padding: 13px 14px; display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 12px; border: 1px solid var(--line); background: var(--card-soft); border-radius: 11px; text-align: left; cursor: pointer; }
+.set-card { min-height: 86px; padding: 13px 14px; display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 12px; border: 1px solid var(--line); background: var(--card-soft); border-radius: var(--r-card); text-align: left; cursor: pointer; }
 .set-card:hover { border-color: #96a79c; }
 .set-number { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; font-weight: 900; }
 .set-card b, .set-card small { display: block; }
@@ -297,7 +318,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .set-card.mock small { color: #bac3bb; }
 .set-card.mock .set-state { color: #84d2dc; }
 .horizon-picker { display: flex; flex-wrap: wrap; gap: 8px; }
-.horizon-choice { min-height: 42px; padding: 9px 12px; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 9px; font-weight: 800; cursor: pointer; }
+.horizon-choice { min-height: 42px; padding: 9px 12px; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: var(--r-control); font-weight: 800; cursor: pointer; }
 .horizon-choice.selected, .horizon-choice[aria-pressed="true"] { color: var(--ink); background: var(--blue-soft); border-color: #78aeb6; }
 .horizon-plan { max-width: 820px; margin-top: 15px; }
 .horizon-plan h3 { margin: 0 0 7px; font: 650 20px Georgia, serif; }
@@ -455,8 +476,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 /* Progressive disclosure for the homepage's secondary blocks. The builder and the
    full evidence breakdown are real features, but neither answers "what do I do
    next", so neither earns space in the first read. */
-.disclosure { border: 1px solid var(--line); border-radius: 12px; background: var(--card-soft); }
-.disclosure > summary { padding: 14px 16px; display: grid; gap: 2px; cursor: pointer; list-style: none; border-radius: 12px; }
+.disclosure { border: 1px solid var(--line); border-radius: var(--r-panel); background: var(--card-soft); }
+.disclosure > summary { padding: 14px 16px; display: grid; gap: 2px; cursor: pointer; list-style: none; border-radius: var(--r-panel); }
 .disclosure > summary::-webkit-details-marker { display: none; }
 .disclosure > summary::after { content: "Show"; grid-column: 2; grid-row: 1 / span 2; align-self: center; color: var(--blue); font-size: 12px; font-weight: 700; }
 .disclosure[open] > summary::after { content: "Hide"; }
@@ -466,8 +487,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .disclosure > summary:hover { background: white; }
 .disclosure > summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 .disclosure + .disclosure { margin-top: 10px; }
-.disclosure[open] > summary { border-bottom: 1px solid var(--line); border-radius: 12px 12px 0 0; }
-.disclosure > section, .disclosure-body { margin: 0; padding: 18px 16px; border: 0; border-radius: 0 0 12px 12px; }
+.disclosure[open] > summary { border-bottom: 1px solid var(--line); border-radius: var(--r-panel) var(--r-panel) 0 0; }
+.disclosure > section, .disclosure-body { margin: 0; padding: 18px 16px; border: 0; border-radius: 0 0 var(--r-panel) var(--r-panel); }
 .disclosure-body > p:first-child { margin-top: 0; }
 /* A closed <details> only guarantees the summary renders; a child carrying its own
    `display` (the stage tabs are a flex row) keeps painting anyway. Hide them
@@ -482,7 +503,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .concept-shelf-list { display: grid; gap: 12px; }
 .shelf-group { display: grid; gap: 6px; }
 .shelf-module { margin: 10px 0 2px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-.shelf-row { padding: 10px 12px; display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: white; }
+.shelf-row { padding: 10px 12px; display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: 6px 10px; border: 1px solid var(--line); border-radius: var(--r-card); background: white; }
 /* The concept's own name is the control that reveals its evidence. */
 .shelf-name { display: flex; align-items: center; gap: 8px; min-width: 0; min-height: 44px; padding: 0; text-align: start; background: transparent; border: 0; cursor: pointer; }
 .shelf-name b { font-size: 13px; font-weight: 650; }
@@ -669,7 +690,7 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 /* The recommended action, re-offered once the hero button scrolls away. Inside
    .dashboard-screen on purpose: when that screen is inactive it is display:none, so a
    fixed child cannot survive into the practice or results screens. */
-.resume-bar { position: fixed; left: 50%; bottom: 0; z-index: 55; width: min(560px, calc(100% - 20px)); margin-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); padding: 11px 12px 11px 16px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 14px; color: white; background: var(--ink); border-radius: 14px; box-shadow: 0 14px 40px rgba(20,28,23,.34); transform: translateX(-50%); }
+.resume-bar { position: fixed; left: 50%; bottom: 0; z-index: 55; width: min(560px, calc(100% - 20px)); margin-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); padding: 11px 12px 11px 16px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 14px; color: white; background: var(--ink); border-radius: var(--r-panel); box-shadow: 0 14px 40px rgba(20,28,23,.34); transform: translateX(-50%); }
 .resume-bar p { min-width: 0; margin: 0; }
 .resume-bar span { display: block; color: #9fb4ad; font-size: 10px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
 .resume-bar b { display: block; margin-top: 2px; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
@@ -708,7 +729,7 @@ body.has-resume-bar .dashboard-wrap { padding-bottom: calc(96px + env(safe-area-
   .community-reminder { grid-template-columns: 1fr; padding: 16px; }
   .community-actions { justify-content: stretch; }
   .community-actions .button { flex: 1; }
-  .focus-panel { border-radius: 18px; }
+  .focus-panel { border-radius: var(--r-panel); }
   .focus-copy { padding: 27px 20px 23px; }
   .focus-copy h1 { font-size: 39px; }
   .hero-actions { align-items: stretch; flex-direction: column; }
@@ -727,8 +748,12 @@ body.has-resume-bar .dashboard-wrap { padding-bottom: calc(96px + env(safe-area-
   .block-heading h2 { font-size: 27px; }
   .compact-heading { align-items: flex-start; }
   .compact-heading > p { max-width: 180px; font-size: 11px; text-align: right; }
-  /* One swipeable row keeps the subject switch a thumb move away instead of a screen of cards. */
-  .course-grid { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding-bottom: 5px; }
+  /* One swipeable row keeps the subject switch a thumb move away instead of a screen of cards.
+     The scrollbar is hidden because the edge fade now carries that message and does it
+     better — it says which direction has more, and disappears at each end. Nothing is
+     lost: the cards are real buttons, so focus still walks and scrolls the row. */
+  .course-grid { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding-bottom: 0; scrollbar-width: none; }
+  .course-grid::-webkit-scrollbar { display: none; }
   .course-card { flex: 0 0 186px; scroll-snap-align: start; min-height: 96px; grid-template-columns: 1fr; gap: 4px; }
   .course-name { min-height: 30px; font-size: 12px; }
   .builder-groups { gap: 14px; }
