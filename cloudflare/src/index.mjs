@@ -468,6 +468,44 @@ export function createD1Store() {
       return Number(result?.meta?.changes || 0) > 0;
     },
 
+    /* Force sign-out.
+     *
+     * Deliberately narrower than revoke. `revokeTester` deletes the tester row,
+     * and both learner_progress and learner_sessions cascade from it, so revoking
+     * destroys the learner's saved work. This only clears the session rows: the
+     * tester stays approved and every byte of progress survives, so their next
+     * visit is a normal sign-in that resumes exactly where they were.
+     *
+     * The country lock is left alone on purpose. Signing someone out is a routine
+     * act; clearing a lock is a security decision with its own explicit control. */
+    async signOutTester(env, email) {
+      const db = requireDatabase(env);
+      const result = await db.prepare("DELETE FROM learner_sessions WHERE email = ?").bind(email).run();
+      return Number(result?.meta?.changes || 0);
+    },
+
+    async signOutTesters(env, emails) {
+      if (!emails.length) return 0;
+      const db = requireDatabase(env);
+      const placeholders = emails.map(() => "?").join(", ");
+      const result = await db.prepare(`DELETE FROM learner_sessions WHERE email IN (${placeholders})`)
+        .bind(...emails).run();
+      return Number(result?.meta?.changes || 0);
+    },
+
+    async countActiveSessions(env, emails) {
+      if (!emails.length) return {};
+      const db = requireDatabase(env);
+      const now = new Date().toISOString();
+      const placeholders = emails.map(() => "?").join(", ");
+      const result = await db.prepare(`SELECT email, COUNT(*) AS live FROM learner_sessions
+        WHERE expires_at > ? AND email IN (${placeholders})
+        GROUP BY email`).bind(now, ...emails).all();
+      const counts = {};
+      (result?.results || []).forEach((row) => { counts[row.email] = Number(row.live || 0); });
+      return counts;
+    },
+
     async listTesterSecurity(env, emails) {
       if (!emails.length) return {};
       const db = requireDatabase(env);
@@ -777,6 +815,15 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
     const security = typeof store.listTesterSecurity === "function"
       ? await store.listTesterSecurity(env, testers)
       : {};
+    /* Live session count per tester, folded into the same payload the row already
+     * renders. Without it, "Sign out" is a control with nothing to act on — the
+     * owner cannot tell whether it will do anything, or whether it already did. */
+    if (typeof store.countActiveSessions === "function") {
+      const live = await store.countActiveSessions(env, testers);
+      testers.forEach((email) => {
+        security[email] = {...(security[email] || {}), activeSessions: live[email] || 0};
+      });
+    }
     return {status: "connected", testers, security, ...extra};
   };
   if (method === "GET") return json(await responseBody(emails));
@@ -796,6 +843,17 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
       console.log(JSON.stringify({event: "tester_community_reminder", reminded: targets.length}));
       return json(await responseBody(emails, {reminded: targets}));
     }
+    /* Bulk sign-out. Sits above the single-email guard because it has no target:
+     * it is the control for "the release changed, send everyone back through
+     * sign-in". The owner is excluded so a mistake here cannot lock the owner out
+     * of the Control Room that issued it. */
+    if (body?.action === "sign-out-all") {
+      if (typeof store.signOutTesters !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Progress storage is temporarily unavailable.");
+      const targets = emails.filter((email) => email !== ownerEmail);
+      const cleared = await store.signOutTesters(env, targets);
+      console.log(JSON.stringify({event: "tester_session_change", action: "sign-out-all", testers: targets.length, sessionsCleared: cleared}));
+      return json(await responseBody(emails, {signedOut: targets, sessionsCleared: cleared}));
+    }
     const targetEmail = normalizeEmail(body?.email);
     if (!targetEmail) throw new RequestError(400, "INVALID_EMAIL", "Enter a valid tester email.");
     if (targetEmail === ownerEmail) throw new RequestError(400, "OWNER_PROTECTED", "Owner access cannot be changed here.");
@@ -806,13 +864,19 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
       console.log(JSON.stringify({event: "tester_lock_change", action: "unlock"}));
       return json(await responseBody(emails, {unlocked: targetEmail}));
     }
+    if (body?.action === "sign-out") {
+      if (typeof store.signOutTester !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Progress storage is temporarily unavailable.");
+      const cleared = await store.signOutTester(env, targetEmail);
+      console.log(JSON.stringify({event: "tester_session_change", action: "sign-out", sessionsCleared: cleared}));
+      return json(await responseBody(emails, {signedOut: targetEmail, sessionsCleared: cleared}));
+    }
     if (body?.action === "bump") {
       if (typeof store.remindCommunity !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Community reminders are temporarily unavailable.");
       await store.remindCommunity(env, [targetEmail]);
       console.log(JSON.stringify({event: "tester_community_reminder", reminded: 1}));
       return json(await responseBody(emails, {reminded: [targetEmail]}));
     }
-    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use unlock, bump, or bump-unjoined.");
+    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use sign-out, sign-out-all, unlock, bump, or bump-unjoined.");
   }
 
   if (method === "DELETE") {

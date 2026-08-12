@@ -399,6 +399,30 @@
       });
       return;
     }
+    /* Multiple-select has no single `question.answer`, so the generic path below
+     * would treat every option as a distractor — including the correct ones — and
+     * overwrite the authored diagnosis with a generated placeholder whose text is
+     * undefined. That shipped once: the wrong-answer panel rendered blank because
+     * `diagnoses[i].text` existed but held nothing.
+     *
+     * Correct options get null. Wrong options keep whatever the author wrote and
+     * only fall back to generation when the author left a gap. Authored text wins
+     * here in a way it does not elsewhere, because an MSQ distractor is wrong in a
+     * specific way the generator cannot infer from provenance. */
+    if (question.type === "msq") {
+      var answerSet = question.answers || [];
+      var existing = question.diagnoses || [];
+      var role = targetRoleFor(question.options, answerSet[0], provenance);
+      question.diagnoses = question.options.map(function (option, index) {
+        if (answerSet.indexOf(index) >= 0) return null;
+        if (existing[index] && (existing[index].why || existing[index].label)) return existing[index];
+        return diagnoseOption(option, self, provenance, hints, authored, question.id, index, role);
+      });
+      question.misconceptions = question.diagnoses.map(function (diagnosis) {
+        return diagnosis ? diagnosis.tag : null;
+      });
+      return;
+    }
     if (Array.isArray(question.options)) {
       question.diagnoses = diagnoseGroup(question.options, question.answer, self, provenance, hints, authored, question.id);
       question.misconceptions = question.diagnoses.map(function (diagnosis) {
@@ -410,6 +434,161 @@
   function addQuestion(course, question) {
     if (course.questions[question.id]) throw new Error("Duplicate T6 challenge question ID: " + question.id);
     course.questions[question.id] = question;
+  }
+
+  /* Authored multiple-select items for SPMS Section B.
+   *
+   * The paper's Section B is 20 MSQs worth 40 of its 75 marks, negatively marked
+   * at +1 per right option and -1 per wrong, floored at zero per question. No
+   * generated surface can stand in for that: an MSQ needs several defensibly
+   * correct options and at least one plausible wrong one, which is an authoring
+   * job. Each item sits on a lecture that already has a lesson, so LAW-47 holds
+   * without any extra scheduling work. */
+  var SPMS_MULTI = [
+    {concept: "spms_dfv", source: "SPMS-M01-L05", node: "Desirability, feasibility, viability",
+     stem: "Select every statement that matches how the lecture presents the three-way framework.",
+     options: [
+       "Desirability is validated with design skills and empathy for the customer",
+       "Feasibility asks whether the product can be built with the technology available today",
+       "A product that is desirable and feasible but not viable is unsustainable",
+       "Viability is settled once a working prototype exists"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Read viability as buildability", label: "Answered the feasibility question and stopped",
+       why: "This choice assumed that proving the product can be made also proves it should be. A prototype demonstrates the technology exists, which is the feasibility check; viability asks the separate question of whether it can profit or fund the business.",
+       cue: "When a check passes, name which of the three it was. If the evidence is technical, it cannot be viability."}},
+     explanation: "Each area needs a different skill — design for desirability, engineering for feasibility, business for viability. A prototype proves you can build it, which is the feasibility question; viability asks whether it can profit or fund the business."},
+
+    {concept: "spms_jtbd", source: "SPMS-M01-L10", node: "Jobs to be done",
+     stem: "In the drilling-machine example, select every need the purchase actually serves.",
+     options: [
+       "Functional — the certificate has to go onto the wall",
+       "Emotional — pride in more than a decade of study",
+       "Social — new patients gain confidence they are seeing a qualified doctor",
+       "Financial — the drill costs less than hiring someone to do it"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Added a layer the lecture does not use", label: "Treated price as one of the layers of the job",
+       why: "This choice assumed cost is one of the needs stacked inside the purchase. The lecture names functional, emotional, and social. Cost enters somewhere else entirely — through customer value, which is benefit minus cost.",
+       cue: "List the three layers before answering. A candidate that is not one of them belongs to the value calculation instead."}},
+     explanation: "The example stacks a functional, an emotional, and a social need in one purchase. Cost enters only through customer value, which is benefit minus cost — it is not one of the layers of the job."},
+
+    {concept: "spms_tamsam", source: "SPMS-M02-L04", node: "TAM, SAM, and SOM",
+     stem: "Select every statement that matches the lecture's Zerodha market sizing.",
+     options: [
+       "TAM is every retail investor who could use the product, worldwide",
+       "Regulation on cross-border investing narrows SAM to online retail investors in India",
+       "SOM narrows further because incumbent brokerages already serve those investors",
+       "SOM is the figure to quote as the market when raising funds"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Turned a sizing step into a pitch number", label: "Read the funnel as a headline figure",
+       why: "This choice assumed one of the three is the number you present. The lecture uses them as successive narrowing constraints — what could exist, what you may reach, what you can take against incumbents — not as a figure to quote.",
+       cue: "Ask what each step removes. A step that removes nothing is being used as a claim rather than an analysis."}},
+     explanation: "TAM measures the prize, SAM what you are permitted and able to reach, SOM what you can take given who already holds it. They are narrowing constraints, not a headline figure."},
+
+    {concept: "spms_chasm", source: "SPMS-M02-L10", node: "Crossing the chasm",
+     stem: "Select every strategy the lecture gives for crossing the chasm.",
+     options: [
+       "Focus on a narrow beachhead market rather than spray and pray",
+       "Simplify onboarding and the interface for mainstream users",
+       "Build trust through uptime, security, support, compliance, and social proof",
+       "Raise the price at launch so mainstream buyers read it as quality"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Substituted a signal for risk reduction", label: "Answered a risk problem with a pricing move",
+       why: "This choice assumed mainstream buyers read a high price as quality. The lecture's premise is that mainstream customers avoid risk, so all four strategies lower perceived risk — beachhead focus, simplification, trust, ecosystem fit. Pricing is not among them.",
+       cue: "Name which of the four a candidate belongs to. If it fits none of them, it is not part of the crossing."}},
+     explanation: "The four are beachhead focus, simplification, trust and reliability, and ecosystem fit. Mainstream customers avoid risk, so the work is lowering perceived risk rather than signalling through price."},
+
+    {concept: "spms_lean_canvas", source: "SPMS-M03-L06", node: "Lean Canvas",
+     stem: "Select every box that appears on the Lean Canvas but not on the Business Model Canvas.",
+     options: ["Problem", "Solution", "Unfair advantage", "Customer segments"],
+     answers: [0, 1, 2],
+     wrong: {3: {tag: "Counted a shared box as an addition", label: "Read a carried-over box as new",
+       why: "This choice assumed customer segments is unique to the Lean Canvas. It carries across from the Business Model Canvas, along with channels, cost structure, and revenue structure. The additions are problem, solution, key metrics, and unfair advantage.",
+       cue: "Build two lists before answering — what carries over, and what replaces it. The question only asks about the second."}},
+     explanation: "Problem, solution, key metrics, and unfair advantage are the Lean Canvas additions. Customer segments, channels, cost structure, and revenue structure carry across from the Business Model Canvas."},
+
+    {concept: "spms_unit_economics", source: "SPMS-M04-L07", node: "Unit economics",
+     stem: "Select every business type paired with the unit the lecture assigns it.",
+     options: [
+       "SaaS — one customer or account",
+       "Ride-sharing — one ride",
+       "E-commerce — one order",
+       "Marketplace — one customer lifetime"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Applied the SaaS unit to a transactional model", label: "Chose a unit the relationship does not support",
+       why: "This choice assumed the marketplace acquires a customer who then transacts repeatedly across a lifetime. The unit follows the customer relationship model, and a marketplace relationship is transactional — so the unit is one transaction.",
+       cue: "Ask whether the business acquires a relationship or completes a transaction. That answer names the unit."}},
+     explanation: "The unit follows the customer relationship model. SaaS acquires a customer who transacts repeatedly, so the account is the unit; a marketplace relationship is transactional, so the transaction is."},
+
+    {concept: "spms_alternatives", source: "SPMS-M05-L02", node: "Competition and alternatives",
+     stem: "Select everything that counts as competition on the lecture's definition.",
+     options: [
+       "Rival products in the same category",
+       "Manual alternatives such as spreadsheets, consultants, or internal tools",
+       "The customer deciding to carry on doing nothing",
+       "Only the firms the startup has publicly named as competitors"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Let the vendor define the comparison", label: "Set the competitive field from the inside",
+       why: "This choice assumed competition is whatever the startup declares it to be. The lecture is explicit that customers decide the comparison — and in enterprise the most frequent alternative is inertia, the buyer carrying on exactly as they are.",
+       cue: "Ask what the customer would do if you did not exist. Whatever that is, it is the competition, named or not."}},
+     explanation: "Customers set the comparison, and in enterprise the most common alternative is inertia — doing nothing at all. Defining competition early and narrowly is named as the biggest mistake."},
+
+    {concept: "spms_privacy", source: "SPMS-M08-L05", node: "Privacy by design",
+     stem: "Select every statement that is correct about the privacy regimes as the lecture presents them.",
+     options: [
+       "GDPR protects any personal data irrespective of its sensitivity",
+       "GDPR was enacted in May 2018 and became a model for Switzerland, Canada, and Australia",
+       "US data protection leaves employee data outside its data protection regulations",
+       "Data protection by design means the customer must request that their data be protected"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Read a standing obligation as opt-in", label: "Made protection something the user has to ask for",
+       why: "This choice assumed the duty begins when a customer requests it. By design means the obligation applies the moment you offer the service, which is why a customer never has to confirm that their data is protected.",
+       cue: "Ask when the duty starts. If the answer is 'once they ask', it is not protection by design."}},
+     explanation: "GDPR covers all personal data regardless of sensitivity, while US protection is category-based and excludes employee data. Protection by design is never something a customer has to ask for."}
+  ];
+
+  /* Why each item connects onward — the `link` line every question carries. */
+  var SPMS_MULTI_LINKS = {
+    spms_dfv: "Every later decision assumes all three checks passed separately; skipping viability is what makes a product unsustainable rather than unbuildable.",
+    spms_jtbd: "Reading the job underneath a request is what makes a value proposition specific rather than a feature list.",
+    spms_tamsam: "Sizing decides who the first customers are, which is what the beachhead strategy then acts on.",
+    spms_chasm: "Crossing depends on having something worth crossing with, which is what problem-solution and product-market fit establish.",
+    spms_lean_canvas: "Choosing the canvas is choosing the question — whether the business runs well, or whether it should exist at all.",
+    spms_unit_economics: "Per-unit profitability is the viability pillar made countable, and it feeds forecasting and funding decisions.",
+    spms_alternatives: "What you are compared against sets the message, which is what value communication has to carry.",
+    spms_privacy: "Privacy is a constraint on the product itself, not a clause added at launch."
+  };
+
+  function addAuthoredMultiSelect(course) {
+    if (course.id !== "SPMS") return;
+    SPMS_MULTI.forEach(function (item, index) {
+      var concept = (course.concepts || []).filter(function (entry) { return entry.id === item.concept; })[0];
+      if (!concept) return;
+      addQuestion(course, {
+        id: item.concept + "_msq",
+        courseId: course.id,
+        conceptId: item.concept,
+        supportingConceptIds: [],
+        module: concept.module,
+        source: item.source,
+        sourceIds: [item.source],
+        node: item.node,
+        pattern: "Select every correct answer",
+        perspective: "retrieve",
+        type: "msq",
+        skills: ["recognise", "distinguish"],
+        difficulty: 3,
+        variantFamily: item.concept + "_msq",
+        boss: false,
+        stem: item.stem,
+        options: item.options,
+        answers: item.answers,
+        diagnoses: item.options.map(function (_, optionIndex) {
+          return item.wrong[optionIndex] || null;
+        }),
+        explanation: item.explanation,
+        link: SPMS_MULTI_LINKS[item.concept] || concept.bridge || concept.summary
+      });
+    });
   }
 
   function addTermCloze(course, concept, data) {
@@ -797,6 +976,8 @@
 
     // Runs last, over every question in the course — authored MCQs included — so a
     // question added by any path is diagnosed without its author wiring anything up.
+    addAuthoredMultiSelect(course);
+
     var provenance = buildProvenance(allData);
     Object.keys(course.questions).forEach(function (id) {
       attachDiagnoses(course.questions[id], dataById, provenance, authoredDiagnoses);

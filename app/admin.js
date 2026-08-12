@@ -36,6 +36,7 @@
     testersConnected = connected;
     $("add-tester").disabled = !connected || busy;
     $("bump-unjoined").disabled = !connected || busy;
+    $("sign-out-all").disabled = !connected || busy;
     $("refresh-testers").disabled = busy;
     $("tester-email").setAttribute("aria-disabled", String(!connected || busy));
   }
@@ -108,6 +109,11 @@
       if (status.communityReminderAt && !status.communityJoined) chips.append(chip("Bumped", "alert"));
       if (status.hasProgress) chips.append(chip("Has progress", "good"));
       else chips.append(chip("Not started", "warn"));
+      /* Live sessions, so "Sign out" is never a control the owner has to guess
+       * about. More than one means the same email is open in several browsers. */
+      var live = Number(status.activeSessions || 0);
+      if (live === 1) chips.append(chip("Signed in", "good"));
+      else if (live > 1) chips.append(chip("Signed in ×" + live, "alert"));
       if (status.firstCountry) chips.append(chip(status.firstCountry));
 
       var seen = relativeTime(status.lastSeenAt || status.progressUpdatedAt);
@@ -125,6 +131,15 @@
         bump.setAttribute("aria-label", "Bump " + email + " to join the WhatsApp group and give feedback");
         bump.addEventListener("click", function () { bumpTester(email); });
         actions.append(bump);
+      }
+      if (live > 0) {
+        var signOut = document.createElement("button");
+        signOut.className = "button secondary";
+        signOut.type = "button";
+        signOut.textContent = "Sign out";
+        signOut.setAttribute("aria-label", "End the browser sessions for " + email + " so they sign in again, keeping their progress");
+        signOut.addEventListener("click", function () { signOutTester(email, live); });
+        actions.append(signOut);
       }
       if (status.locked) {
         var unlock = document.createElement("button");
@@ -352,6 +367,63 @@
     }
   }
 
+  /* Sign-out, single and bulk.
+   *
+   * The confirmation says what survives, because the destructive-sounding word is
+   * "sign out" and the owner's real question is whether the learner loses work.
+   * They do not: this clears session rows only, so approval and every saved answer
+   * stay exactly where they are. */
+  async function signOutTester(email, live) {
+    if (!testersConnected) return;
+    var count = Number(live || 0);
+    var where = count > 1 ? count + " open browser sessions" : "their open browser session";
+    if (!window.confirm("Sign out " + email + "?\n\nThis ends " + where + " and they will be asked to sign in again.\n\nThey keep their approval and all of their saved progress — nothing is deleted.")) return;
+    setTesterControls(true, true);
+    try {
+      var response = await fetch(testersEndpoint, {
+        method: "PATCH",
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({email: email, action: "sign-out"})
+      });
+      var payload = await readJson(response);
+      if (!response.ok) throw new Error(payload.message || "They could not be signed out.");
+      renderTesters(Array.isArray(payload.testers) ? payload.testers : [], payload.security);
+      showToast("Signed out " + email + ". Their progress is intact.");
+    } catch (error) {
+      showToast(error.message || "They could not be signed out.");
+    } finally {
+      setTesterControls(testersConnected, false);
+    }
+  }
+
+  async function signOutEveryone() {
+    if (!testersConnected) return;
+    if (!window.confirm("Sign out every tester?\n\nEveryone will be asked to sign in again the next time they open the app. Your own Control Room session is not affected.\n\nNobody loses approval and nobody loses progress — nothing is deleted.")) return;
+    setTesterControls(true, true);
+    try {
+      var response = await fetch(testersEndpoint, {
+        method: "PATCH",
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({action: "sign-out-all"})
+      });
+      var payload = await readJson(response);
+      if (!response.ok) throw new Error(payload.message || "Testers could not be signed out.");
+      renderTesters(Array.isArray(payload.testers) ? payload.testers : [], payload.security);
+      var cleared = Number(payload.sessionsCleared || 0);
+      showToast(cleared
+        ? "Ended " + cleared + (cleared === 1 ? " session" : " sessions") + ". Everyone keeps their progress."
+        : "Nobody was signed in. Nothing changed.");
+    } catch (error) {
+      showToast(error.message || "Testers could not be signed out.");
+    } finally {
+      setTesterControls(testersConnected, false);
+    }
+  }
+
   function communityReminderCopy(email) {
     return "Dungeon tester reminder" + (email ? " for " + email : "") +
       "\n\nPlease join the tester WhatsApp group and keep sharing feedback throughout testing. " +
@@ -473,6 +545,7 @@
   $("refresh-status").addEventListener("click", refreshStatus);
   $("refresh-testers").addEventListener("click", function () { loadTesters(); loadInsights(); });
   $("bump-unjoined").addEventListener("click", bumpUnjoined);
+  $("sign-out-all").addEventListener("click", signOutEveryone);
   $("tester-form").addEventListener("submit", addTester);
   $("tester-email").addEventListener("input", updateParseHint);
   $("copy-feedback").addEventListener("click", function () {

@@ -18,22 +18,28 @@
 > passes (LAW-48). Case questions cite and explain the lecture their case came from. A vocabulary
 > gate measures first use against the clean lecture transcripts, not the concept index, which is
 > unreliable for this (LAW-49); it caught three real authoring errors during the session.
-> **BRGSA and IBM are complete for every lecture a learner can actually reach.** 80 lessons are
-> authored: BRGSA 50 of 50 lectures; IBM 16 of 16 *cited* lectures (24 authored, so 8 belong to
-> lectures no question cites and are never delivered); SCLM 6 of 16 cited; SPMS 0 of 16 cited. Each
+> **All four subjects are now complete for every lecture a learner can actually reach**
+> (`evidence/2026-08-12/t6-teaching-layer-complete/verification.md`). 106 lessons are authored:
+> BRGSA 50 of 50 lectures; IBM, SCLM, and SPMS each 16 of 16 *cited* lectures. Each
 > lesson is authored from its own lecture's transcript and carries that lecture's real figures; every
 > number and framework was grepped against the source before it was written down. The originating
 > defect is closed with it: `sample_logic`'s correct answer no longer says "stopping rule" or "sample
 > bound" but *"Run the test to completion at the pre-calculated sample size"*, the lecture's own
 > phrasing, which also cleared a length cue that had been excluding the question.
-> **433 of 724 scheduled questions are fully taught; 291 are not** — BRGSA 187 of 187, IBM 177 of
-> 177, SCLM 69 of 180, SPMS 0 of 180. The validator reports that backlog rather than hiding it and
-> the lesson gate names the exact next lectures to author, so run them rather than quoting these
-> counts from this file. SCLM and SPMS transcripts carry almost no faculty objectives, so their
-> lessons need objectives authored from scratch. All lesson prose is new and stays
+> **724 of 724 scheduled questions are fully taught** — BRGSA 187, IBM 177, SCLM 180, SPMS 180.
+> `VERIFIED(REAL_BROWSER)`: LAW-47 checked from an empty `lessonsRead` across all 9 study sets in
+> every subject plus the mixed builder — 595 queue items, zero violations. Run the gates rather than
+> quoting these counts from this file. 54 IBM, 55 SCLM, and 68 SPMS lectures remain unauthored, but
+> no question cites them, so they would never be delivered; coverage is complete for what a learner
+> can reach, not for the whole course. All lesson prose is new and stays
 > `WAITING_OWNER_CONTENT_ACCEPTANCE`. No screenshots — the Browser pane was not compositing — so
-> pixel-level acceptance is still owed. Nothing is deployed: this work is on `reorg/structure`, and
-> only a merge to `main` reaches the live cohort.
+> pixel-level acceptance is still owed. **Partly deployed (2026-08-12):** PR #1 merged
+> `reorg/structure` commit `3c69d1e` into `main` at 11:20 IST, which carries the workspace
+> restructure and the first 80 lessons (BRGSA and IBM complete) to the live cohort through Workers
+> Builds. The SCLM and SPMS lessons landed after that merge and are **not** on `main`, so testers
+> currently get teaching on BRGSA and IBM only. This is a tester-visible change and **owes a change
+> announcement** — see Session Hygiene. Confirm the deployed version in Workers → Deployments rather
+> than from this file.
 >
 > **Workspace restructure (2026-08-12):** The repository was reorganized for collaboration
 > in seven verified phases on branch `reorg/structure`, with no behaviour change intended and none
@@ -136,10 +142,11 @@
 > `docs/community/COMMUNITY_PLAYBOOK.md`.
 > Student-facing game/proprietary vocabulary and diagnostic question metadata are removed from the
 > learning view. Sixty-four constructed-response surfaces use transparent self-review without
-> automatic correctness or Strong credit. Exact final-paper structure is
-> `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`: it is an explicit claim boundary, not a prerequisite this
-> cohort can wait for. Owner/faculty content acceptance remains open, so the route is not
-> `DONE` or an exam-score prediction. The privacy-scoped release wrapper, worker health route,
+> automatic correctness or Strong credit. Exact final-paper structure is **known as of 2026-08-12**
+> and recorded in `docs/briefs/T6_EXAM_PATTERN.md`, which closed
+> `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`; structure may be stated as fact, but question content,
+> difficulty, topic weighting, a likely score, and pass probability remain unclaimable. Owner/faculty
+> content acceptance remains open, so the route is not `DONE` or an exam-score prediction. The privacy-scoped release wrapper, worker health route,
 > security/no-index/private-cache headers, release tests, owner control room, and community
 > operating documents are verified at
 > `evidence/2026-08-11/tester-access-admin/verification.md`; the owner-JWT-verified Cloudflare group
@@ -165,6 +172,10 @@
 > `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` at
 > `evidence/2026-08-11/learner-backend-and-agreement/verification.md`. The Control Room adds cohort
 > paste-onboarding, a `Clear lock` recovery that forgives a country lock without deleting progress,
+> per-tester and bulk **force sign-out** that ends browser sessions so a tester must sign in again
+> while keeping approval and every byte of progress — unlike `Revoke`, which cascades and deletes
+> their saved work — with live session counts shown on each row so the control has something visible
+> to act on,
 > per-tester state chips, two panels computed from real saved progress (Participation and Where
 > testers struggle), and per-person or bulk `Bump` actions for missing group acknowledgements; a bump
 > records an in-app reminder and copies a firm manual message, but never claims to send it or
@@ -340,8 +351,15 @@ laid out as `<root>/<SUBJECT>/<SUBJECT>_M<NN>_SUM_TRANSCRIPT.txt`: one file per 
 lectures in teaching order behind `## <code> | <title>` headers. A lecture's identity is its
 **position** in that file (the Nth section is `L<N>`), not the recording code in the header — module
 2 runs C10, C01, C02 … C12, so the codes are not even monotonic. `tools/lib/clean_transcripts.js` is
-the one loader; `tools/validate_t6_bank.js`, `tools/check_lesson_file.mjs`, and
-`tools/build_t6_lessons.mjs` each take this root as their first argument.
+the loader; `tools/validate_t6_bank.js` and `tools/check_lesson_file.mjs` go through it and take this
+root as their first argument.
+
+**`tools/build_t6_lessons.mjs` is the exception and still requires the old pack.** It reads
+`graph/LECTURE_MANIFEST.jsonl` and the `dense/` layer directly and has not been migrated to the
+loader, so it must be given the AI-Ready Pack root instead; pointed at the clean transcripts it dies
+with `ENOENT ... LECTURE_MANIFEST.jsonl`. It is an authoring aid that writes candidates to
+`work/t6_lessons/`, not a gate, so this does not affect verification — but do not assume one path
+argument serves all three tools.
 
 The older `Term 6 AI-Ready Pack` (`graph_source/`, `graph/LECTURE_MANIFEST.jsonl`, `dense/`,
 `subject_core/`, `indexes/`) is still *readable* so existing invocations do not hard-fail, but it is
@@ -360,6 +378,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `CLAUDE.md` | Claude compatibility entry; points to this operating index and preserves engine startup facts. | 2026-07-16 |
 | `docs/governance/DESIGN_SOURCE_INDEX.md` | Authority order, brief inventory, and unresolved product conflicts. | 2026-08-11 |
 | `docs/briefs/PROJECT_OPERATING_SYSTEM.md` | Durable requirements and Codex adaptation of the owner-supplied admin-system brief. | 2026-07-16 |
+| `docs/briefs/T6_EXAM_PATTERN.md` | **Authority for paper structure.** Batch 1 sections, counts, marks, negative marking, calculators, and what remains unclaimable. Closed `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`. | 2026-08-12 |
 | `docs/briefs/T6_REVISION_FALLBACK.md` | Active dashboard, adaptive-primer, source-boundary, mastery/repetition, and acceptance contract. | 2026-08-11 |
 | `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Confidence, evidence-state, adaptive-primer, boss, mixed-format, rotation, and retest contract. | 2026-08-11 |
 | `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
@@ -404,7 +423,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
 | `app/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
 | `app/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
-| `app/admin.js` | Cohort onboarding, revoke/unlock, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-11 |
+| `app/admin.js` | Cohort onboarding, revoke/unlock, per-tester and bulk **force sign-out** with live session counts, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-12 |
 | `app/t6.html` | Subject rail, trendline hero, inline practice builder, distance-travelled strip, holistic matrix/totals, lesson surface, layered questions, in-question glossary, plans, and results. | 2026-08-12 |
 | `app/t6.css` | Dynamic homepage, chip builder, matching board, lesson/glossary presentation, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-12 |
 | `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, builder pool rules, matching board, persistence, and scenarios. | 2026-08-12 |
@@ -413,7 +432,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `app/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, relevance-first distractor selection, case-lecture provenance, and the option-diagnosis pass. | 2026-08-12 |
 | `app/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
 | `docs/authoring/LESSON-AUTHORING-PROTOCOL.md` | Handoff procedure for the teaching layer: sources, lesson contract, batch procedure, gates, the four traps already paid for, and per-subject definition of done. Read before authoring any lesson. | 2026-08-12 |
-| `app/sets/t6_lessons.js` | Teaching layer: 80 authored lecture-grain lessons (objective, explainer, worked example, glossary, handoff) that must be delivered before anything about that lecture is scored. BRGSA and IBM complete for every cited lecture; SCLM 6 of 16, SPMS 0 of 16. | 2026-08-12 |
+| `app/sets/t6_lessons.js` | Teaching layer: 106 authored lecture-grain lessons (objective, explainer, worked example, glossary, handoff) that must be delivered before anything about that lecture is scored. All four subjects complete on cited lectures; 724 of 724 scheduled questions taught. | 2026-08-12 |
 | `tools/lib/clean_transcripts.js` | The one loader for the external lecture source. Reads the clean transcripts (position in the module file is a lecture's identity, not its recording code) and still accepts the old AI-Ready Pack layout; `sourceKind` says which was read. | 2026-08-12 |
 | `tools/build_t6_lessons.mjs` | Extracts lesson candidates from the external lecture source — objectives, glossary terms with first-use, worked-example lines, provenance — into `work/t6_lessons/`. Extraction only; prose is authored. | 2026-08-12 |
 | `tools/check_lesson_file.mjs` | Authoring-time gate: reports every structural defect in one pass (bracket class, record shape, prose limits) and, given the pack, prints the exact next batch of lectures to author. Run between batches, before the bank validator. | 2026-08-12 |
@@ -479,7 +498,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   - T6 JavaScript syntax: `node --check app/t6.js`,
     `node --check app/sets/t6_brgsa.js`, `node --check app/sets/t6_catalog.js`,
     `node --check app/sets/t6_challenges.js`, and `node --check app/sets/t6_lessons.js`
-  - Lesson candidates: `node tools/build_t6_lessons.mjs "<Term 6 Clean Transcripts>"`
+  - Lesson candidates: `node tools/build_t6_lessons.mjs "<Term 6 AI-Ready Pack>" [SUBJECT]`
+    — the old pack, not the clean transcripts; this tool still reads `graph/LECTURE_MANIFEST.jsonl`.
   - Lesson file, and what to author next: `node tools/check_lesson_file.mjs "<Term 6 Clean Transcripts>"`
     — run this *before* the bank validator; a lesson file that does not parse makes the validator
     report nothing at all.
@@ -533,22 +553,50 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
-- [ ] `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`: no same-course final exists to supply an exact
-  blueprint. This is a standing claim boundary, not a work-blocking gate. Do not claim exact
-  sections, duration, marks, options, negative marking, likely score, or pass probability.
+- [x] `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` — **closed 2026-08-12.** The owner supplied the Batch 1
+  pattern; it is recorded in `docs/briefs/T6_EXAM_PATTERN.md`, which is now authority for paper
+  structure. Sections, counts, marks, duration, negative marking, and calculator rules may be stated
+  as fact. Still not claimable: question content, difficulty, topic weighting within a section, the
+  IBM caselet's subject, a likely score, or a pass probability.
+- [~] **MSQ format built and verified; numerical still missing.** The multiple-select surface exists
+  and is `VERIFIED(REAL_BROWSER)`: it renders as checkboxes with the marking rule stated, toggles,
+  scores exactly as the paper does (+1 per right option, −1 per wrong, floored at zero per question),
+  and marks each option `correct` / `wrong` / `missed` after checking. Eight authored SPMS items ship,
+  each on a lecture that already has a lesson, and they schedule into real study sets. **Two gaps
+  remain on it:** the per-option diagnosis does not surface in the wrong-answer panel for MSQ (the
+  `diagnosisFor` MSQ branch was added but does not fire — likely `response.selected` is not carried
+  for this type), and `msqMarks` is computed but never rendered, so the learner is not shown "1 of 3
+  marks". Only 8 of the paper's 20 MSQs are authored.
+- [ ] **SCLM numerical entry does not exist** — 6 tolerance-graded numericals, 24 marks, 30% of that
+  paper. Needs a numeric-answer surface with a grading tolerance, since the exam awards marks for the
+  final answer only and gives none for working. This is now the largest missing format.
+- [ ] **IBM's paper contains no objective questions at all** — ten subjective answers on a caselet
+  released two days beforehand. Its 196 MCQ-derived surfaces contribute nothing to it, and authoring
+  its 62 uncited lectures would add zero marks. Do not spend bank effort there; the useful work is
+  framework fluency and structured written answers against an unseen case.
+- [ ] **BRGSA self-containment.** The paper states that no question requires memorising a Clairo or
+  Zoko figure. Bank items that test recall of one are training a skill the exam explicitly excludes.
+  Teaching with those numbers is fine; testing recall of them is not. The bank has not been audited
+  against this.
+- [ ] **SCLM is under-weighted on computation.** Section B is 24 marks of numericals with a
+  scientific calculator and supplied normal-distribution tables, pointing at safety stock, service
+  level, and newsvendor. Only 3 of its 16 cited lectures carry arithmetic today.
 - [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 792 surfaces are source-traceable and structurally
   verified, but transcript-derived content, the 64 support-only primers, the 64 constructed-
-  response rubrics/exemplars, and the 80 authored lessons still need owner/faculty acceptance
-  before `DONE`.
-- [ ] **The 0→80 path is half-built.** 433 of 724 scheduled questions are fully taught. BRGSA and
-  IBM are complete for every *cited* lecture; SCLM has 6 of 16 and SPMS 0 of 16, so 291 questions
-  still meet a cold learner untaught and the core claim holds only for BRGSA and IBM.
-  `node tools/check_lesson_file.mjs "<transcripts>"` names the exact next lectures to author and
-  `node tools/validate_t6_bank.js "<transcripts>"` prints the backlog — do not quote a coverage
-  number from this file. Authoring order: SCLM's 10 remaining cited lectures, then SPMS's 16. Both
-  carry almost no faculty objectives in the source, so their lessons need objectives from scratch.
-  Eight authored IBM lessons are for lectures no question cites and are therefore never delivered;
-  they are harmless but do not count them as coverage.
+  response rubrics/exemplars, and the 106 authored lessons still need owner/faculty acceptance
+  before `DONE`. This is now the largest single block of unaccepted content in the product.
+- [x] **The 0→80 path reaches every scheduled question — closed 2026-08-12.** 724 of 724 are
+  taught, verified in a real browser at
+  `evidence/2026-08-12/t6-teaching-layer-complete/verification.md`. What remains is *acceptance*,
+  not coverage. Do not quote coverage numbers from this file; run
+  `node tools/check_lesson_file.mjs "<transcripts>"`. Note that 177 uncited lectures across IBM,
+  SCLM, and SPMS have no lesson and no question citing them — authoring those is optional work that
+  moves no coverage, and lessons for them are never delivered.
+- [ ] The vocabulary gate cannot match a singular glossary term against a plural-only occurrence:
+  it builds `\b<term>\b`, so `public private partnership` was reported absent although
+  `public private partnerships` appears three times. It reports this as *invented vocabulary*, which
+  is a false accusation rather than a missed check. Use the course's own form; treat that warning as
+  a prompt to grep before deleting a term.
 - [ ] IBM's option lengths still cue the answer: sorting each question's options by length puts the
   correct one at rank 3 of 4 in **45%** of 68 sampled questions against a 25% baseline, so "pick the
   second-longest" is a working strategy. The validator reports this as a warning, not an error. Vary

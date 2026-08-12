@@ -157,6 +157,21 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .course-card.selected { border: 2px solid var(--blue); background: #f2fafb; box-shadow: 0 0 0 3px rgba(23,107,120,.07); }
 .course-code { align-self: start; padding: 4px 7px; color: var(--blue); background: var(--blue-soft); border-radius: 6px; font-size: 10px; font-weight: 900; }
 .course-name { align-self: center; font: 650 13px/1.2 Georgia, serif; }
+/* Sitting time, so the rail reads as a timetable rather than a menu. */
+.course-when { grid-column: 1 / -1; display: flex; align-items: baseline; flex-wrap: wrap; gap: 5px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.course-when b { color: var(--ink); font-size: 11px; }
+.course-when small { padding: 1px 5px; background: var(--card-soft); border: 1px solid var(--line); border-radius: 999px; font-size: 10px; }
+.course-card.selected .course-when small { background: white; }
+/* Negative marking is the one rule that changes how you answer, so it earns a
+   permanent mark rather than a line of copy the learner has to remember. */
+.course-flag { margin-left: 5px; padding: 1px 4px; color: var(--red); background: var(--red-soft); border-radius: 4px; font-style: normal; font-size: 9px; font-weight: 900; }
+/* Where the exam day turns over. Only meaningful in exam order. */
+.course-card.day-start { border-left: 3px solid var(--blue); }
+.rail-sort { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.rail-sort label { color: var(--muted); font-size: 11px; }
+.rail-sort select { min-height: 32px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; background: white; font: inherit; font-size: 12px; }
+.rail-sort-hint { flex-basis: 100%; margin: 0; color: var(--muted); font-size: 11px; }
+.rail-note { margin: 10px 0 0; color: var(--muted); font-size: 12px; }
 .course-bottom { grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2px 8px; }
 .course-bottom b { font-size: 11px; }
 .course-bottom small { color: var(--muted); font-size: 10px; }
@@ -374,6 +389,19 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .option.correct .option-key { color: white; background: var(--green); border-color: var(--green); }
 .option.wrong { border-color: var(--red); background: var(--red-soft); }
 .option.wrong .option-key { color: white; background: var(--red); border-color: var(--red); }
+
+/* Multiple-select. The box is square where the single-answer key is a rounded
+ * letter tile, so the two formats are told apart before any option is read —
+ * which matters, because the scoring rule differs between them. */
+.option-box { width: 22px; height: 22px; margin-top: 3px; border: 2px solid #bfc7c1; border-radius: 5px; background: white; position: relative; }
+.option-multi[aria-checked="true"] .option-box { border-color: var(--blue); background: var(--blue); }
+.option-multi[aria-checked="true"] .option-box::after { content: ""; position: absolute; left: 6px; top: 2px; width: 5px; height: 10px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.option.option-multi.correct .option-box { border-color: var(--green); background: var(--green); }
+.option.option-multi.wrong .option-box { border-color: var(--red); background: var(--red); }
+/* A correct option the learner did not pick: marked, but not as an error. */
+.option.option-multi.missed { border-color: var(--green); background: transparent; border-style: dashed; }
+.option.option-multi.missed .option-box { border-color: var(--green); background: white; }
+.msq-marks { margin: 10px 0 0; font-size: 13px; font-weight: 700; }
 .format-note { margin: 0 0 4px; color: var(--muted); font-size: 12px; }
 .cloze-sentence { padding: 0; color: #2f3e35; background: transparent; border: 0; border-radius: 0; font: 650 clamp(17px,2vw,21px)/1.8 Georgia, serif; }
 .inline-blank { display: block; width: 100%; margin: 8px 0; }

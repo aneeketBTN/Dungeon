@@ -3,6 +3,116 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Subjects ordered by the timetable, and by where the learner is weakest
+
+- **The subject rail is now a timetable.** Order defaults to the order the papers are sat — SPMS
+  (Sat 22 Aug 09:00), BRGSA (Sat 22 Aug 13:00), IBM (Sun 23 Aug 09:00), SCLM (Sun 23 Aug 13:00) —
+  and each card carries its day, sitting time, and total marks. A new profile now opens on **SPMS**
+  rather than BRGSA: the first paper sat, not the first alphabetically. Both papers on a day run back
+  to back, so the sitting order is a real constraint on revision, not a preference.
+- **Negative marking is a permanent mark on the card**, not a line of copy to remember. SPMS is the
+  only paper with it, and it is the one rule that changes how you answer.
+- **A second order, "Hardest for you"**, sorts by weakest evidence first using the learner's own
+  attempts, with the sitting order as a stable tie-break so the list is not accidentally alphabetical
+  before any practice exists. Sorting is presentation only — it never changes what is scheduled
+  inside a subject, so switching it cannot alter anyone's practice or evidence. The choice persists.
+- The day-boundary marker only renders in exam order, where it means something; in any other order it
+  would mislead.
+- `VERIFIED(REAL_BROWSER)`: exam order renders the full timetable with the boundary at IBM; seeding
+  BRGSA and SCLM with evidence moves IBM ahead of BRGSA and SCLM last under "Hardest for you", while
+  exam order stays fixed. Preference persists across reload. No console errors. Synthetic data was
+  seeded on the `127.0.0.1` origin and cleared afterwards, so the owner's `localhost` session was
+  never touched.
+
+## 2026-08-12 — Control Room: force sign-out that preserves progress
+
+- **Added a sign-out control that is deliberately narrower than revoke.** `revokeTester` deletes the
+  tester row, and both `learner_progress` and `learner_sessions` cascade from it, so revoking has
+  always destroyed the learner's saved work. The new `signOutTester` / `signOutTesters` clear session
+  rows only: the tester stays approved, every byte of progress survives, and their next visit is a
+  normal sign-in that resumes where they were. The country lock is deliberately untouched — signing
+  someone out is routine, clearing a lock is a security decision with its own control.
+- **Per-tester and bulk.** A row-level `Sign out`, and a toolbar `Sign everyone out` for the
+  "release changed, send everyone back through sign-in" case. The bulk path excludes the owner, so a
+  mistake cannot lock the owner out of the Control Room that issued it.
+- **Live session counts are surfaced in the same payload the row already renders**
+  (`countActiveSessions`), because otherwise `Sign out` is a control with nothing to act on — the
+  owner could not tell whether it would do anything or whether it already had. A tester with one
+  session shows `Signed in`; more than one shows `Signed in ×N` in alert styling, since that means
+  the same email is open in several browsers. With zero sessions the button is not rendered at all
+  rather than offered as a no-op.
+- Two tests added (35 → 37). The first proves the actual promise end to end: write progress, sign
+  out, confirm the old cookie is rejected with 401, sign back in, and assert the restored state is
+  byte-identical. The second proves the bulk path clears tester sessions and never includes the
+  owner. The memory store mirrors the real contract — sign-out touches sessions and nothing else — so
+  the test exercises the guarantee rather than a convenient fake.
+- `VERIFIED(REAL_BROWSER)` for the UI: rows with 1, 3, and 0 sessions render the chip and control
+  correctly. Console 404s during that check are the Worker-backed API routes absent from the static
+  dev server, not a regression.
+
+## 2026-08-12 — Exam pattern received; coverage plan reversed before authoring
+
+- **`EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` is closed.** The owner supplied the Batch 1 pattern for all
+  four papers. Recorded as authority in `docs/briefs/T6_EXAM_PATTERN.md`. Structure — sections,
+  counts, marks, duration, negative marking, calculators — may now be stated as fact. Question
+  content, difficulty, topic weighting, a likely score, and pass probability remain unclaimable.
+- **The plan to author 191 uncited lectures was stopped before any of it was written.** Checked
+  against the pattern, uniform lecture coverage is the wrong instrument. Three findings:
+- **Two required formats do not exist in the app, and they carry 64 marks.** SPMS Section B is 20
+  negatively marked multiple-select questions — 40 marks, **53% of that paper** — and SCLM Section B
+  is 6 tolerance-graded numericals worth 24 marks, 30%. The bank supports MCQ, cloze, case-cloze,
+  match, short-answer, and boss; it has neither MSQ nor numeric entry. Building those two beats any
+  volume of further MCQ authoring.
+- **IBM's paper has no objective section at all** — ten subjective answers on a caselet released two
+  days before. Its 196 MCQ-derived surfaces contribute nothing to it, and the 62 uncited IBM
+  lectures I was about to author would have added zero marks. That was the single most expensive
+  assumption in the previous plan.
+- **Two alignment defects logged against the existing bank.** BRGSA's paper guarantees every question
+  is self-contained with no Clairo or Zoko figure to recall, so bank items testing recall of one
+  train a skill the exam excludes; the bank has not been audited for this. And SCLM carries 24 marks
+  of computation with supplied normal-distribution tables, while only 3 of its 16 cited lectures
+  carry arithmetic.
+- Also measured, and the reason the question came up: the bank asks about **92 of 283 lectures
+  (32.5%)**. IBM, SCLM, and SPMS each concentrate ~196 questions onto 16 lectures — a median of 15
+  each — while 62 to 68 lectures get none. BRGSA is the healthier shape at 44 lectures, median 2.
+  Corrected a mistaken assumption while measuring: concepts are assigned by a module-scoped regex
+  (`t6_catalog.js`), so new questions bucket into existing concepts and broader coverage needs **no**
+  concept-model change.
+- Nothing authored this session beyond the record itself. Exams are 22–23 August 2026.
+
+## 2026-08-12 — Teaching layer complete: every scheduled question is now taught
+
+- **Closed the 0→80 path.** SCLM and SPMS were the two subjects still untaught. 26 lessons authored
+  from the clean transcripts takes SCLM from 6 of 16 cited lectures to 16 of 16, and SPMS from 0 to
+  16 — so scheduled questions fully taught goes from **433 of 724 to 724 of 724**, and 106 lessons
+  are authored in total. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+  `evidence/2026-08-12/t6-teaching-layer-complete/verification.md`.
+- **LAW-47 verified across all four subjects**, not just the one that changed: the teach-before-test
+  check evaluated in the page from an empty `lessonsRead`, across all 9 study sets per subject plus
+  the mixed builder — 595 queue items, zero violations. SPMS study set 1 now opens
+  `lesson:SPMS-M01-L10` before its primer and every scored question.
+- **Every figure was grepped against its lecture before being written.** Rajashree Cement's 99-hour
+  rake cycle with 13 hours of locomotive detention inside it, the ₹3,800/hour penalty and the
+  142,800 extra tons a year; Laxmi Transformers at ₹548 a ton by rail against ₹260.3 by sea, and the
+  bounding argument that computes inventory only for the highest-inventory option; FarmAid's
+  scenarios clustering between ₹8.5 and ₹8.75 lakhs, where the recommendation turns on Ahmedabad
+  already existing rather than on cost; Akshaya Patra's 40,000-rated roti machine running at 35,000.
+- **Three defects found while doing it.** (1) LAW-50 recurred — an `explainer` array closed with
+  `},` — caught by `check_lesson_file.mjs` before the bank validator, which is exactly why the
+  protocol orders the gates that way. (2) The vocabulary gate raised a **false** invented-vocabulary
+  warning: it builds `\b<term>\b`, so the singular `public private partnership` could not match the
+  plural-only `public private partnerships` that occurs three times in the SCLM transcripts. Fixed
+  in the lesson by using the course's own plural; the gate limitation is recorded as a Known Gap.
+  (3) `SPMS-M06-L08` is titled "Traceability" but the word appears only in its header — the body
+  teaches the customer → product → project requirements chain. The lesson was authored for what the
+  lecture teaches rather than inventing content to match its label.
+- Regression: 35 tests pass, `build-site.mjs` prepares 15 assets, `validate_t6_bank.js` reports 0
+  errors and 1 warning (the pre-existing IBM option-length cue), no console errors.
+- Deferred: no screenshots — the Browser pane was not compositing, so pixel acceptance of the lesson
+  surface is still owed. 177 uncited lectures across IBM, SCLM, and SPMS remain unauthored by
+  choice; no question cites them, so a lesson there is never delivered. All 106 lessons stay
+  `WAITING_OWNER_CONTENT_ACCEPTANCE`, now the largest block of unaccepted content in the product.
+
 ## 2026-08-12 — Collaboration handoff: `AGENTS.md` corrected, branch published
 
 - **Published `reorg/structure` to GitHub so a second contributor can work.** Nothing merged to

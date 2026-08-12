@@ -2158,5 +2158,695 @@
     connects: "You now hold both inventory models. Choosing between them is a separate skill from operating either, and it is tested on its own."
   });
 
+  lesson({
+    lectureId: "SCLM-M04-L04",
+    courseId: "SCLM",
+    module: 4,
+    order: 4,
+    title: "Designing a sourcing portfolio",
+    objective: "Match a product's uncertainty and value to a responsive or a low-cost source, and pick a hedge that fits the risk you actually face.",
+    explainer: [
+      "The tempting sourcing question is which supplier is best. The useful one is which mix of suppliers is best for different products and demand situations. Tailored sourcing means exactly that: you deliberately combine supplier types because different products need different strengths. Two dimensions recur through the course — responsiveness, which is speed, flexibility, and the ability to ramp up and down; and low cost, which is efficiency, stable production, and cheaper labour and overheads. So the portfolio is usually a responsive source for volatile, high-value, time-sensitive items and a low-cost source for stable, mature, predictable ones.",
+      "Location is the second lens. Onshore means producing in the same market — often higher cost, but faster response and easier coordination. Nearshore is a nearby region, a compromise between cost and responsiveness. Offshore is far away, usually to capture low production cost, at the price of longer lead times and more disruption exposure. Onshore is favoured when innovation and variety are high, volatility is high, disruption impact is high, and engineering support needs are high. Offshore is favoured when labour content is high, the cost differential is meaningful, and volatility and variety are low.",
+      "Sourcing risk shows up as an inability to meet demand on time, as higher procurement cost, and sometimes as loss of intellectual property. There are three common levers. Multiple sourcing gives you a backup, but it is not free — qualification cost, coordination cost, possibly higher unit cost, and a backup that receives no volume will not invest or stay qualified. Inventory is the simpler hedge for stable, low-value items that do not go obsolete. Contracts and financial hedges cover price and exchange-rate volatility. Choose the hedge that matches the risk type."
+    ],
+    worked: {
+      setup: "Product A is a basic, stable part in a mature product with high volume and stable weekly demand. Product B is a new variant with uncertain demand and frequent design changes.",
+      move: "Split them rather than picking one supplier. A goes to a low-cost supplier, possibly offshore, on long production runs and stable ordering. B goes to a responsive supplier, onshore or nearshore, with smaller lots, faster replenishment, and more engineering support.",
+      because: "The lecture is explicit that this is not a rule that offshore is good or bad. A mature product becomes risky to offshore if disruptions are frequent or the stockout penalty is high, and an innovative product can be offshored if the firm modularises the design, freezes interfaces early, and keeps final differentiation near the market. Align the choice with uncertainty, lead time, and the cost of being wrong."
+    },
+    glossary: [
+      {term: "tailored sourcing", plain: "Deliberately combining different kinds of suppliers because different products need different strengths."},
+      {term: "onshore", plain: "Producing in the same market — higher cost, but faster response and easier coordination."},
+      {term: "nearshore", plain: "Producing in a nearby region, as a compromise between cost and responsiveness."},
+      {term: "offshore", plain: "Producing far away to capture low production cost, accepting longer lead times and disruption exposure."},
+      {term: "sourcing risk", plain: "Risk that surfaces as missed demand, higher procurement cost, or lost intellectual property."},
+      {term: "multiple sourcing", plain: "Holding a second qualified supplier as a hedge, at a coordination and unit-cost premium."}
+    ],
+    connects: "A portfolio only performs if the stages act on the same information. The next segment is what happens when they do not."
+  });
+
+  lesson({
+    lectureId: "SCLM-M04-L05",
+    courseId: "SCLM",
+    module: 4,
+    order: 5,
+    title: "Coordination and the bullwhip effect",
+    objective: "Explain upstream amplification as a structural outcome of delay and local decision rules, not as a forecasting failure.",
+    explainer: [
+      "Supply chain coordination improves when decisions at each stage are aligned with total supply chain surplus. It requires two things: information sharing, and decision-making that anticipates the impact of one stage's actions on the others. When coordination is weak, every stage does what is locally best, and that degrades both responsiveness and cost for the chain as a whole. Two broad causes: incentives conflict across stages because ownership differs, and information gets delayed and distorted as it moves, so no stage sees true end demand — only a transformed version of it.",
+      "The bullwhip effect is demand amplification as you move upstream. Order fluctuations become larger and more volatile from retailer to wholesaler to manufacturer to supplier. The name is the analogy: a small movement of the handle creates a large movement at the tip. The label is often credited to Procter & Gamble's Pampers supply chain, where upstream orders fluctuated far more than retail sales, and it was formalised by Lee, Padmanabhan, and Whang. The beer distribution game and Sterman's work showed that decision-makers create oscillation even when the environment is simple.",
+      "The costs run in one direction. Manufacturing cost rises, because volatile orders mean overtime in the peaks, idle capacity in the troughs, and frequent schedule changes. Inventory cost rises through more cycle and safety inventory. Replenishment lead time rises as congestion and priority shifts set in, which raises safety stock again — a vicious cycle. Transportation and handling labour costs rise. Counterintuitively, product availability falls: inventory sitting in the wrong place at the wrong time gives you high stock and shelf stockouts together. Relationships erode, and profitability falls."
+    ],
+    worked: {
+      setup: "Consumer sales at the retailer are relatively stable, but manufacturer orders to the supplier swing hard.",
+      move: "Do not diagnose this as bad forecasting. Trace it structurally: delay between stages, partial information about true end demand, and locally rational ordering rules at every stage.",
+      because: "The lecture's key message is that the bullwhip is a structural outcome of multi-stage systems with delay, partial information, and local rules. Pandemic-era shocks showed the same shape — retailers ordered heavily against empty shelves, wholesalers reacted to those orders, and manufacturers saw huge swings even where consumer consumption never rose proportionally."
+    },
+    glossary: [
+      {term: "bullwhip effect", plain: "Demand amplification moving upstream: order swings grow larger at each stage away from the customer."},
+      {term: "supply chain coordination", plain: "Decisions at each stage aligned with total supply chain surplus rather than local profit."},
+      {term: "demand amplification", plain: "The growth in order variability as a signal travels away from end demand."},
+      {term: "order variability", plain: "How much a stage's orders swing, as distinct from how much real demand swings."},
+      {term: "safety inventory", plain: "Stock carried against forecast error, which rises as the signal gets noisier."},
+      {term: "upstream", plain: "Towards the supplier end of the chain, away from the end customer."}
+    ],
+    connects: "This amplification is not random. It is created systematically by a few obstacles, which the next segment takes one at a time."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L06",
+    courseId: "SCLM",
+    module: 5,
+    order: 6,
+    title: "Drivers of supply chain re-engineering",
+    objective: "Name the five motivations for re-engineering a chain, and segment customers on profile attributes before designing one.",
+    explainer: [
+      "There are five motivations for improving or re-engineering supply chains. Customer profile, because changing or differing profiles change what the chain must be good at. Inventory management, since leaner is generally better. Costs. Facilitating technologies, which showed up repeatedly in the module's vignettes as the thing that made a redesign possible. And attitudes — the willingness of the different actors to coordinate and to empathise with one another. The last one is not decoration; a redesign that the actors will not cooperate with does not happen.",
+      "Customer profile is really a set of attributes you can segment on. How much value addition the customer seeks. Order size, which is typically larger in B2B than B2C. The response time customers are comfortable with. Timeliness, which is a different attribute from response time: the morning newspaper must arrive in a narrow band, while other products only need to arrive within a few hours or days. Delivery location, which quick commerce and home delivery have moved from extra value to plain expectation. Service needs involving reverse logistics — drop-and-pick, returns, repairs. Reliability of the promise. And cost sensitivity.",
+      "Inventory is the second driver. Companies generally hold more inventory than they themselves think they need, and lead times for procurement, manufacture, and distribution run well above the technological minimum. Attention to inventory can cut both stock and stockouts at once, because stock at every stage has to be fed into and pulled out of before anything moves further — inventory buys safety by spending time. The exception is genuinely unpredictable demand, where high uncertainty changes the calculation."
+    ],
+    worked: {
+      setup: "Two groups of customers buy the same product. One is content with delivery inside a few days; the other needs it at a specific time each morning.",
+      move: "Segment them on timeliness rather than on response time, then design a chain for each segment.",
+      because: "The lecture treats timeliness and response time as separate attributes deliberately. The morning newspaper has to arrive within a narrow band; other products only have to arrive within a window. Collapsing the two throws away the distinction that decides the design."
+    },
+    glossary: [
+      {term: "customer profile", plain: "The set of attributes — value addition, order size, response time, reliability, cost sensitivity — you segment customers on."},
+      {term: "timeliness", plain: "Needing a product at a specific time or narrow band, distinct from how long a customer will wait."},
+      {term: "reverse logistics", plain: "Flows back from the customer: returns, repairs, and drop-and-pick packaging."},
+      {term: "facilitating technologies", plain: "Technology that makes a supply chain redesign possible in the first place."},
+      {term: "technological minimum", plain: "The shortest lead time the process could actually achieve, which real lead times usually exceed."}
+    ],
+    connects: "Motivation tells you why to redesign. The rest of the module works through firms that actually did it, and what the redesign cost them."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L13",
+    courseId: "SCLM",
+    module: 5,
+    order: 13,
+    title: "FarmAid: reading a stockyard optimisation",
+    objective: "Read a scenario table from a location model and pick a recommendation on practicality, not on the lowest number.",
+    explainer: [
+      "The model returns solutions for scenarios rather than one answer, and the scenarios are what you reason with. Two cost structures frame it. Currently primary and secondary transportation both run ₹3 per tractor per kilometre, giving ₹11.2 lakhs. Going forward primary falls to ₹2.5 and secondary rises to ₹3.5, giving ₹10.3 lakhs. Constraints are then added one at a time, and the interesting output is how the optimal set of stockyards moves as each one bites.",
+      "With no limit on secondary distance the cost is naturally lowest — ₹8.2 lakhs a month currently, ₹8.73 in the future structure. Impose a 350 kilometre secondary limit, which is what overnight servicing requires, and the model wants three stockyards, Valsad, Ahmedabad, and Rajkot, under both cost structures, at ₹9.43 and ₹8.78. Relax it to 500 kilometres, roughly second-day delivery, and costs fall to ₹8.87 and ₹8.75. Add a clearing and forwarding agent demanding a minimum throughput of 200 tractors a month against Gujarat's 500, and the current structure collapses onto Valsad alone.",
+      "Most of these scenarios land between about ₹8.5 and ₹8.75 lakhs. At the accuracy the data actually supports, those are not meaningfully different — and that is the lesson. The recommendation is Valsad and Ahmedabad: Ahmedabad already operates, so only Valsad is a new opening, and Valsad sits at the entry into Gujarat from the Thane factory, so southern and part of northern Gujarat serve from there while central Gujarat, Saurashtra, and Kutch serve from Ahmedabad."
+    ],
+    worked: {
+      setup: "Several scenarios return total costs between roughly ₹8.5 and ₹8.75 lakhs a month, each with a different set of stockyards.",
+      move: "Do not rank them by cost. Treat differences inside that band as noise at the available data accuracy, then choose on managerial practicality — Valsad and Ahmedabad, because Ahmedabad is already open and only one new site has to be built.",
+      because: "The model narrows the field; it does not pick the winner. The same pattern repeats across states, and it is always a move away from the marketing office towards the demand geography: Tamil Nadu from Chennai to Hosur and Trichy, Karnataka from Bangalore to Belgaum and Davangere, Punjab from Jalandhar to Patiala, Haryana from Karnal towards Gurgaon."
+    },
+    glossary: [
+      {term: "stockyard", plain: "A stocking point between the factory and the dealer, whose location the model chooses."},
+      {term: "primary transportation", plain: "Movement from the factory to the stockyard, costed per tractor per kilometre."},
+      {term: "secondary transportation", plain: "Movement from the stockyard onward to the customer, costed the same way."},
+      {term: "minimum throughput", plain: "A volume floor an agent demands before taking the business, which can force fewer, larger sites."},
+      {term: "clearing and forwarding agent", plain: "A third party handling despatch at a location, whose terms become constraints on the network."}
+    ],
+    connects: "That closes the module's redesign work. Module 6 shifts to the service providers and owner-operators inside a chain, starting with the people whose whole business is one link of it."
+  });
+
+  lesson({
+    lectureId: "SCLM-M06-L05",
+    courseId: "SCLM",
+    module: 6,
+    order: 5,
+    title: "Hasmukhbhai: the expansion decision",
+    objective: "Evaluate a geographic expansion against investment capacity and local conditions, and against the operating discipline that made the existing business work.",
+    explainer: [
+      "March 2006. Hasmukhbhai K. Nakum operates four cold storage facilities in Ahmedabad, all profitable, in an industry characterised by high operating costs, seasonal demand patterns, and volatile profitability. That profitability is the unusual part: several competing facilities had been forced to shut down on rising electricity costs, poor capacity utilization, and weak managerial practices. What separated him was operational discipline, strong relationships with traders, and the ability to keep utilisation high.",
+      "The question is whether to expand beyond Ahmedabad. He can invest roughly ₹3.5 crores from a combination of personal savings and borrowed funds, and has narrowed the field to Surat, Pune, and Mumbai. The evaluation is deliberately not just market size — it runs on investment requirement, land prices, government subsidy policies, infrastructure availability, and the competitive environment in each candidate city. Geographical diversification is meant to reduce business risk as much as to capture new demand.",
+      "The track record sets the terms. His family had run cold storages since 1978. Hira Cold Storage, started with his uncle in 1990 at about 1,500 tons, reached roughly 8,000 tons by 2006; Happa, started in 1999, grew from about 1,500 to 4,500 tons by 2002. Mother Shree Cold Storage took about ₹2.5 crores in 2004, of which ₹1.3 crores was a loan from Indian Overseas Bank, and in 2005 he took over a badly run neighbouring facility and restructured it as Mother Agro at about 2,500 tons. Throughout, he held an equity to debt ratio near 25:75."
+    ],
+    worked: {
+      setup: "Three candidate cities — Surat, Pune, and Mumbai — against roughly ₹3.5 crores of investable funds.",
+      move: "Do not rank them on demand alone. Score each on investment requirement, land price, subsidy policy, infrastructure, and competition, then test the winner against whether he can still run it the way he runs Ahmedabad.",
+      because: "His advantage was never the location. It was capacity utilization, cost discipline, and trader relationships, in a sector where rivals failed on electricity costs and weak management. A city that offers demand but prevents him reproducing high utilisation and close personal involvement removes the thing that made four facilities profitable — and at roughly 25:75 gearing, the debt still has to be serviced either way."
+    },
+    glossary: [
+      {term: "cold storage", plain: "A facility preserving perishable produce, bridging seasonal harvests and year-round consumption."},
+      {term: "capacity utilization", plain: "How full the facility runs — the lever that separated survivors from closures in this industry."},
+      {term: "equity to debt ratio", plain: "The split between owner funds and borrowing; his sat near 25:75 across ventures."},
+      {term: "geographical diversification", plain: "Spreading facilities across locations to reduce business risk, not only to add demand."}
+    ],
+    connects: "That is expansion judged from the owner's side. The next segment takes a firm already at scale and asks what it took to turn its logistics around."
+  });
+
+  lesson({
+    lectureId: "SCLM-M06-L07",
+    courseId: "SCLM",
+    module: 6,
+    order: 7,
+    title: "Rajashree Cement: buying capacity or buying back time",
+    objective: "Choose between capital and efficiency routes to the same throughput by reading a turnaround-time breakdown for where the capacity already sits.",
+    explainer: [
+      "Rajashree Cement wanted supply to Dodballapur up from 52,000 tons a month to 70,000, and had three ways to get there. Raise throughput per trip by increasing the load per wagon or the wagons per rake, which needs wagon redesign and fresh stock. Raise the number of trips by adding rakes, which also needs fresh stock — one possibility was modifying oil tankers made surplus by the shift to pipeline transportation. Or raise the number of trips using the same rakes, by improving turnaround time from 99 hours to a target of 74. The first two are capital expenditure; the third is efficiency-driven, and that is the one they implemented with the railways.",
+      "The cycle breakdown shows why. Across 2002-03, at a monthly average of 22 rakes loaded: loading 3.5 hours, idle time before loading 7.5, waiting for a locomotive after loading 13, transit out 34, transit back 30, and unloading and readying the rake about 9 hours 45 minutes — 99 hours in total. The 13-hour wait was the single largest inefficiency. The locomotive that delivered the empty rake was routinely reassigned to other railway operations, and neighbouring stations serving other industries and cement plants were competing for the same engines.",
+      "The fix was the engine on load system: the locomotive stays attached to the rake instead of being detached and re-summoned. The operational agreement required loading to finish within 3 hours, the railway held the locomotive for that window, and any overrun carried a penalty of ₹3,800 an hour. Expected turnaround fell from 99 hours to about 80 and monthly trips rose from 21 to around 27 — an additional 142,800 tons a year, roughly 12,000 tons a month, worth about ₹12.5 million a year to Rajashree Cement and about ₹54.4 million in extra freight revenue to Indian Railways."
+    ],
+    worked: {
+      setup: "Three routes to 70,000 tons a month: bigger loads per trip, more rakes, or faster turnaround on the rakes already running.",
+      move: "Take the turnaround route. Read the 99-hour cycle, find the 13 hours of locomotive detention sitting inside it, and attack that instead of buying rolling stock.",
+      because: "Alternatives 1 and 2 both need capital expenditure and fresh stock; alternative 3 needs only a change to how the locomotive is scheduled. The throughput was already inside the existing cycle as waiting time. The trial from September 2003 ran 78 trips, 45 of them under the new system, and operational issues including engine withdrawals still emerged — an agreement on paper is not yet the practice."
+    },
+    glossary: [
+      {term: "turnaround time", plain: "The full rake cycle from loading through transit and unloading back to available — 99 hours here."},
+      {term: "rake", plain: "A complete train of wagons moved as one unit."},
+      {term: "locomotive detention", plain: "Time a loaded rake waits for an engine, which was the largest single inefficiency in the cycle."},
+      {term: "engine on load", plain: "Keeping the locomotive attached through loading so no second engine has to be summoned."},
+      {term: "throughput", plain: "Tons actually moved per month, which can rise from faster cycles as well as from more assets."}
+    ],
+    connects: "That gain depended on another party's scheduling and incentives. The next segment goes inside a transport operator and looks at how its drivers are paid."
+  });
+
+  lesson({
+    lectureId: "SCLM-M07-L06",
+    courseId: "SCLM",
+    module: 7,
+    order: 6,
+    title: "Laxmi Transformers: multimodal cost trade-offs",
+    objective: "Rank transport modes on landed cost, then bound the inventory question so you only compute the option that could overturn the ranking.",
+    explainer: [
+      "The comparison covers 62,000 tons of ore a year inbound from Daitari. All rail runs 2,200 kilometres to Pen at ₹517.5 a ton, ₹320 lakhs, plus 15 kilometres of road to Alibag at ₹30 a ton, another ₹19 lakhs — about ₹548 a ton and ₹339 lakhs in total. All road works out to ₹552 lakhs. By sea via Paradip, including the Daitari-to-Paradip leg by rail, it comes to ₹199 lakhs with the smaller ship and ₹184 lakhs with the bigger one, which carries a scale advantage.",
+      "The sea option has more parts to assemble. Payload is taken as 31,000 or 62,000 tons because only 62,000 is needed — two trips of the 35,000-ton ship or one of the 65,000-ton. Travel time is 14 and 15 days, and adding port time for loading and unloading gives cycle times of 27 and 32 days. The costs are fuel, loading, unloading, barge operating cost, and standing charges, which is the cost of hiring the vessel for that period. For the 35,000 DWT ship that totals ₹80.5 lakhs, ₹161 lakhs for two trips, or ₹260.3 a ton against ₹548 by rail. Barges are prorated: five 1,000-ton barges at ₹300 per ton per month, taken as 8/30 of ₹15 lakhs for the 8 unloading days, is ₹4 lakhs.",
+      "Those are transport costs only, and sea buys its saving by holding inventory. The efficient move is to evaluate just the option carrying the most — 62,000 tons landed in one go. Cycle stock averages 31,000 tons, half the shipment drawn down over the year. Buffer stock is set on a contingency basis rather than by modelling uncertainty: the logistics managers judged a month enough, which against 62,000 tons a year is about 5,000 tons. Pipeline stock builds at Daitari at a 2,000-ton rake load a day across 31 days, averaging 1,000 tons."
+    ],
+    worked: {
+      setup: "Sea lands at ₹184–199 lakhs against ₹339 lakhs by rail, but moves the entire year's ore in one or two shipments.",
+      move: "Compute inventory carrying cost for the highest-inventory option only. If even that option still comes in below the dearer-to-move alternatives, stop — the others cannot change the ranking.",
+      because: "This is a bounding argument, not a shortcut. The single-shipment option holds the most stock by construction, so its carrying cost is the largest any option could incur; if the worst case still wins, computing the rest adds nothing. The same logic already removed an option: Daitari to Paradip is ₹38 lakhs by rail against ₹47 lakhs by road, so the road variant is dominated and drops out without further analysis."
+    },
+    glossary: [
+      {term: "standing charges", plain: "The cost of hiring the vessel for the period, which accrues whether or not it is moving."},
+      {term: "cycle stock", plain: "Stock held because deliveries arrive in batches — here averaging half the shipment size."},
+      {term: "buffer stock", plain: "Extra cover against disruption, set here by judgement at one month rather than by modelling."},
+      {term: "pipeline stock", plain: "Material already in motion or accumulating for despatch, counted as inventory in transit."},
+      {term: "cycle time", plain: "Travel plus port time for a full ship round trip — 27 days smaller, 32 days larger."},
+      {term: "payload", plain: "Tons actually carried on a voyage, which need not equal the vessel's deadweight."}
+    ],
+    connects: "The sea option only pays if the ports perform. The next segment turns to Indian port performance and what public-private participation changed."
+  });
+
+  lesson({
+    lectureId: "SCLM-M07-L07",
+    courseId: "SCLM",
+    module: 7,
+    order: 7,
+    title: "Indian ports: structure, PPP, and scale",
+    objective: "Read India's port sector through its volume-versus-value split, its major/non-major and PPP shares, and its size against global ports.",
+    explainer: [
+      "Ports carry export-import traffic and also coastal movement, which is a viable alternative for domestic freight. Globally, 68% of world production by value is exported, and shipping moves 70% of trade by value and 80% by volume. India sits differently on both: over 95% of its trade moves by ship in volume terms, well above the global 80%, but only 65% by value, below the global 70%. The gap between volume share and value share is therefore much wider for India than globally — the lecture poses that as a question for reflection rather than answering it.",
+      "The structure splits by who runs the port. In 2024-25 roughly 1,600 million tons moved through Indian ports. Major ports, driven by the central government, handled 854 million tons; non-major ports, driven by state governments, about 740 — a 46% share that has risen over the past decade and now hovers near a 46/54 split. Inside the non-major group, the Gujarat Maritime Board alone accounts for 30% of national traffic. Adani Ports and Special Economic Zone, which operates in both major and non-major ports, carried about 450 million tons, 28% of national port traffic. The public private partnership share is over 74%.",
+      "Scale is the part worth holding onto. India's top seven ports in 2024-25 — Gujarat Adani Port at Mundra, past 200 million tons a year, then Paradip, Deendayal Port Trust at Kandla, Sikka, Jawaharlal Nehru Port, Visakhapatnam, and Mumbai — total about 873 million tons of 1,593, more than half the national throughput. Globally, the single largest port, Ningbo Zhoushan, handled 1,261 million tons in 2022. Six of the world's top seven are in China, the exception being Singapore, and all of them clear 500 million tons."
+    ],
+    worked: {
+      setup: "India moves over 95% of its trade by volume by sea but only 65% by value, where the global figures are 80% and 70%.",
+      move: "Read the widened gap as a statement about cargo mix rather than about port capability.",
+      because: "Value share runs below volume share everywhere, because dense low-value bulk goes by sea while high-value goods can justify air or land. What is distinctive is that India's gap is far wider than the global one, which points at what is being shipped rather than at how well it is being shipped. The lecture raises this deliberately as an open question."
+    },
+    glossary: [
+      {term: "major ports", plain: "Ports driven by the central government — 854 million tons in 2024-25."},
+      {term: "non-major ports", plain: "State-government-driven ports, about 46% of national traffic and rising."},
+      {term: "public private partnerships", plain: "Private ownership or operation of ports and terminals, now over 74% of traffic."},
+      {term: "coastal movement", plain: "Domestic freight moved by sea along the coast rather than overland."}
+    ],
+    connects: "Ports are one node a government can improve. Module 8 turns to how logistics performance is measured across states, and what that measurement is meant to do."
+  });
+
+  lesson({
+    lectureId: "SCLM-M08-L01",
+    courseId: "SCLM",
+    module: 8,
+    order: 1,
+    title: "LEADS: measuring logistics across states",
+    objective: "Explain what LEADS measures, how it derives from the World Bank index, and why a perception survey is used to create competition between states.",
+    explainer: [
+      "The central government's lever on state logistics is competition. Alongside creating a logistics focus under the Ministry of Commerce and Industry and funding infrastructure directly, it needed a way to incentivise state governments, who control infrastructure, services, and the regulatory context in a far more distributed way. Logistics Ease Across Different States — LEADS — exists for that. Work began in 2018, and the stated purpose is an index evaluating logistics efficiency across Indian states, to identify strengths and improvement areas in state-level performance.",
+      "The method is a perception-based survey capturing responses from logistics stakeholders — service providers and users — across all states and union territories. Over the years it has added measures that can be examined objectively, including secondary data on infrastructure and regulatory processes. It builds on the World Bank's Logistics Performance Index, which runs the same idea across countries, compiled every two years from surveys of international logistics professionals. The first LEADS used 8 parameters: the six that broadly mirror the World Bank's, plus two more.",
+      "India's 2023 position on the Logistics Performance Index is rank 38 with a score of 3.4 on a 5.0 scale, against Singapore first at 4.3. The six pillars are customs, infrastructure, international shipments, logistics competence and quality, timeliness, and tracking and tracing, where India scores 3, 3.2, 3.5, 3.5, 3.6, and 3.4. The ranks tell a sharper story than the scores: customs and infrastructure both sit at 47, worse than the overall rank, while international shipments reaches 22. India had ranked above 50 at one point and has improved to 38."
+    ],
+    worked: {
+      setup: "India scores 3.6 on timeliness and 3.0 on customs, and its ranks are 47 on customs and infrastructure against an overall rank of 38.",
+      move: "Read the ranks alongside the scores to locate where the country is actually behind.",
+      because: "A score is absolute; a rank is relative to everyone else. India's customs and infrastructure scores are not dramatically low, but the ranks show other countries clustered above on exactly those pillars, which is where improvement buys the most position. That is the same mechanism LEADS applies inside India — publishing a state-by-state comparison is what creates the competitive environment."
+    },
+    glossary: [
+      {term: "LEADS", plain: "Logistics Ease Across Different States, the government's index of state-level logistics efficiency."},
+      {term: "Logistics Performance Index", plain: "The World Bank's cross-country logistics index that LEADS is modelled on."},
+      {term: "perception-based survey", plain: "Ratings collected from stakeholders rather than measured directly — the original LEADS method."},
+      {term: "pillars", plain: "The six indicators the index scores: customs, infrastructure, international shipments, competence, timeliness, and tracking."}
+    ],
+    connects: "An index measures the environment a supply chain operates in. The next two segments follow one organisation delivering at scale inside that environment."
+  });
+
+  lesson({
+    lectureId: "SCLM-M08-L03",
+    courseId: "SCLM",
+    module: 8,
+    order: 3,
+    title: "Akshaya Patra: kitchen throughput to school delivery",
+    objective: "Trace how kitchen capacity, building layout, and loading sequence together decide whether hot meals reach schools on time.",
+    explainer: [
+      "Production runs from a centralized kitchen built for scale, leaning on mechanized equipment for efficiency, hygiene, and consistency. The menu rotates weekly against defined calorie and protein values. Where the Government of Gujarat suggested a two-item menu — one food grain based, one vegetable or dal based — the foundation ran three items, so the food is more interesting and clears the nutritional norms rather than just meeting the minimum. On a typical day the Gandhinagar kitchen produced roughly 2.4 lakh rotis, or 3 tons of dal, 8 tons of vegetables, and 5 tons of rice. Cooking ran on steam from boilers, and a single rice cauldron handled 100 kilograms in about 20 minutes.",
+      "The constraints sit in the machinery and in the building. The automated rotimaking machine is rated at 40,000 rotis an hour but delivers closer to 35,000, because of alignment issues and rejected rotis that go back for reuse. The lecture draws a real design question out of that: atta arrives as a rectangular sheet, so cutting circular rotis leaves unused portions, and a triangular or rectangular roti would waste less. Layout adds its own drag — rotis are made in one building while rice and vegetables are cooked in another, which complicates loading at dispatch, because the kitchen occupies pre-designed structures on an industrial estate.",
+      "Distribution is engineered backwards from unloading. Cooked food goes into specially designed stainless steel containers that retain heat and prevent contamination, sized to each school's quantity, labelled with school name and route number, then staged near the loading platforms in route-wise sequence. Each vehicle serves 14 to 18 schools on a predetermined route, and departures run in two phases: early morning for schools eating at 9:30, late morning for 12:30. By 2010 the Gandhinagar unit ran 33 distribution routes to more than 800 schools."
+    ],
+    worked: {
+      setup: "Containers for 14 to 18 schools must go onto one vehicle, and the meal has to still be hot at the last stop.",
+      move: "Load last in, first out — the first school on the route is loaded last, so its containers sit nearest the door.",
+      because: "The loading sequence is dictated by the unloading sequence, not by what is convenient at the kitchen. Time spent digging for the right container at one school is time the rest of the load spends cooling. The fleet split works on the same margin: 21 owned vehicles carry up to 72 containers with insulation and container rack systems, while hired vehicles lack both, which cuts carrying capacity and raises the risk of food spillage."
+    },
+    glossary: [
+      {term: "centralized kitchen", plain: "One large mechanised facility cooking for many schools, rather than cooking at each school."},
+      {term: "last in, first out", plain: "Loading so the first delivery is nearest the door, keeping unloading fast."},
+      {term: "route number", plain: "The identifier on each container that decides which vehicle it is staged for."},
+      {term: "container rack systems", plain: "Fitted racking on owned vehicles that raises how many containers fit and steadies them in transit."}
+    ],
+    connects: "That completes the chain from kitchen to school gate. The final session draws the module's threads together."
+  });
+
+  lesson({
+    lectureId: "SPMS-M01-L05",
+    courseId: "SPMS",
+    module: 1,
+    order: 5,
+    title: "Desirability, feasibility, viability",
+    objective: "Test an idea separately on all three of desirability, feasibility, and viability, and name what breaks when one is missing.",
+    explainer: [
+      "Three areas drawn as a Venn diagram, derived by IDEO Consulting in design thinking and adapted here for product management. Desirability asks whether customers or potential customers actually need the thing. Feasibility asks whether it can be built with the technology available today. Viability asks whether it should be built at all — whether it can turn a profit, or make enough money to support the business. The point of separating them is that passing one check tells you nothing about the other two.",
+      "The running example is a digital water bottle: put an edge device on an ordinary bottle and it becomes a hydration device that measures the temperature you drink at, how many times you drink, how much, and at what intervals. Desirability is whether people look at that and say it is worth having, or shrug and say a regular bottle is fine. Feasibility is whether the edge devices, electronics, and firmware actually exist to measure those things. Viability is whether there is money in it once both of those hold.",
+      "Each area needs a different skill. Desirability needs design skills, because you are validating empathy with customers and reading their pulse. Feasibility needs engineering skills. Viability needs business skills. The intersections are where the framework earns its keep. Desirability plus feasibility without viability is an unsustainable product: people want it and you can build it, but every new iteration and every new customer costs you more money. Desirability plus viability without engineering capability is the space-travel case — a real want, genuinely profitable, that you cannot build."
+    ],
+    worked: {
+      setup: "A team has validated that customers want the product and has proved the technology can deliver it.",
+      move: "Do not proceed on that basis. Run viability as its own check — can this make a profit, or sustain the business?",
+      because: "Desirability intersecting feasibility without viability is a named failure in the framework, not an edge case. The product is unsustainable precisely because it works: every additional iteration and every additional customer consumes more money than it returns. Two of three is not two-thirds of a business."
+    },
+    glossary: [
+      {term: "desirability", plain: "Whether customers or potential customers actually need the product."},
+      {term: "feasibility", plain: "Whether it can be built with the technology available today."},
+      {term: "viability", plain: "Whether it should be built — can it profit, or fund the business that makes it."},
+      {term: "design thinking", plain: "The IDEO practice this three-way framework was originally derived from."}
+    ],
+    connects: "Those three checks tell you whether an idea is a business. The next session looks at the kinds of organisation that take such ideas on."
+  });
+
+  lesson({
+    lectureId: "SPMS-M01-L10",
+    courseId: "SPMS",
+    module: 1,
+    order: 10,
+    title: "Jobs to Be Done",
+    objective: "Separate the job a customer is hiring a product for from the product itself, and read its functional, emotional, and social layers.",
+    explainer: [
+      "The framework starts from a distinction that is easy to blur. A need is a perceived problem. Value is that problem solved well enough to motivate someone to pay for it and use it repeatedly. Many products fail not because they do not solve the need, but because they do not deliver enough value. Customer need is a problem, a pain, or a job that users want done — which is where Jobs to Be Done takes its name.",
+      "The example is a doctor buying a drilling machine and a drilling bit. Taken at face value that is a drill sale. Ask why and it becomes hanging a picture; ask again and it is displaying an MD certificate in her clinic; ask again and it is so that new patients feel comfortable and trust they are seeing a qualified doctor. Three layers stack in one purchase. The functional need is displaying the degree. Underneath sits pride in more than a decade of study. And the social need is the confidence a walk-in patient takes from seeing it on the wall.",
+      "Customer value is the perceived benefit relative to the cost of alternatives — benefits minus cost, where cost means money, time, effort, and risk together. In the drill case the cost is a frame and a hole in the wall; the benefit is all three layers at once. That is why need and value come apart so routinely: a product can satisfy the stated need and still lose to an alternative delivering more of the emotional and social job. Uber against pre-Uber taxis and auto rickshaws is the same comparison, where the stated need was only to get from one place to another."
+    ],
+    worked: {
+      setup: "A customer walks in and asks for a drilling bit and a drilling machine.",
+      move: "Ask why until the job appears: photos, then a degree certificate, then new patients trusting a qualified doctor.",
+      because: "Taking the request at face value scopes you to selling drills. The job actually being hired for is patient trust, and it is functional, emotional, and social at the same time. A competitor who delivers the certificate-on-the-wall outcome without a drill wins the job while never satisfying the stated need."
+    },
+    glossary: [
+      {term: "Jobs to Be Done", plain: "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."},
+      {term: "functional need", plain: "The practical task on the surface — here, getting the certificate onto the wall."},
+      {term: "social need", plain: "How the outcome reads to others: the confidence new patients take from the displayed degree."},
+      {term: "customer value", plain: "Perceived benefit minus cost, where cost includes money, time, effort, and risk."}
+    ],
+    connects: "That is how to read what a customer is really buying. Module 2 turns to expressing it as value the product can promise."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L04",
+    courseId: "SPMS",
+    module: 2,
+    order: 4,
+    title: "TAM, SAM, SOM and early evangelists",
+    objective: "Size an opportunity through TAM, SAM, and SOM, and name the innermost group who will adopt without hesitation.",
+    explainer: [
+      "Two questions come before building anything. How big is this opportunity — am I building for everyone in Delhi, for India, for the world? And who are my first one, two, hundred, or thousand customers, the people who will use the product right away without any hesitation? The answers are drawn as concentric circles: Total Addressable Market, Serviceable Available Market, Serviceable Obtainable Market, and inside those the early evangelists.",
+      "TAM is how big the market could possibly be. For Zerodha, an investment platform, that is every retail investor wanting to invest in exchange traded securities or mutual funds — worldwide, anyone who could use it. SAM is how much of that you could reach now. Cross-border investing runs into regulatory frameworks, so even though the product could solve the problem for online retail investors anywhere, Zerodha's serviceable available market narrows to online retail investors in India.",
+      "SOM narrows again: of the people you could reach, how many can you practically service and win today. India's online retail investors are already being served by brokerages such as Kotak Securities, ICICI Direct, and HDFC Securities, so the obtainable market is the segment those firms fit badly — cost-conscious, frugal investors who want to save on brokerage, who want plenty of information for do-it-yourself investing, and who do not need a dedicated relationship manager. The early evangelists sit inside that circle."
+    ],
+    worked: {
+      setup: "Zerodha's addressable market is every retail investor in exchange traded securities and mutual funds.",
+      move: "Narrow it twice. Regulation cuts it to online retail investors in India; incumbent brokerages cut it again to cost-conscious, self-directed investors.",
+      because: "TAM measures the prize, not the plan, and the two narrowings are different kinds of constraint. SAM is what you are permitted and able to reach; SOM is what you can actually take given who already holds it. Quoting TAM as the target skips both, which is how a plan ends up addressed to nobody in particular."
+    },
+    glossary: [
+      {term: "Total Addressable Market", plain: "The largest the market could be — everyone who could ever use the product."},
+      {term: "Serviceable Available Market", plain: "The part of TAM you could actually reach now, after regulation and geography."},
+      {term: "Serviceable Obtainable Market", plain: "The part of SAM you can practically service and win against incumbents."},
+      {term: "Early Evangelist", plain: "A first customer who adopts right away without hesitation, sitting inside the innermost circle."}
+    ],
+    connects: "Sizing tells you where to aim. The next session is about learning fast enough to actually hit it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L10",
+    courseId: "SPMS",
+    module: 2,
+    order: 10,
+    title: "Crossing the chasm",
+    objective: "Move a product from early adopters into the mainstream using beachhead focus, simplification, trust, and ecosystem fit.",
+    explainer: [
+      "Crossing the Chasm was coined by Geoffrey Moore in his book of the same title, to explain how high-tech products get beyond their early markets and into the mainstream. The situation is specific: you have run an MVP for early markets and had good success with early adopters, and the mainstream turns out to be a different audience with different tolerances. Four strategies do the crossing.",
+      "First, focus on a narrow beachhead market rather than spray and pray. WhatsApp launched in 2009 only for iOS customers, in markets like North America, knowing perfectly well that a big chunk of messaging happened on Android phones in India and elsewhere. The point was to get it right close to home and build references, case studies, credibility, and repeatability first. Second, simplify the product for mainstream users. ChatGPT runs on a powerful engine that ordinary users could never reach through programming languages or API interfaces, so OpenAI built easy onboarding and a simplified chat interface. Onboarding, UX, configuration, and documentation all move adoption.",
+      "Third, build trust and reliability, because mainstream customers avoid risk. That means uptime, low downtime, high security, good customer support, compliance that guarantees comfort, and social proof. Aadhaar reached a billion people by starting small, building reliability and the compliance infrastructure, and only then going big. Fourth, build ecosystems and integrations, because mainstream users prefer products that fit their existing workflows rather than ones demanding they change their lifestyle. That means integrating with enterprise systems, APIs, marketplaces, platforms, and partner ecosystems — UPI is the standing example."
+    ],
+    worked: {
+      setup: "An MVP has succeeded with early adopters and the team wants to go wide immediately.",
+      move: "Pick a narrow beachhead instead. Win it completely, then expand on the references and repeatability it produces.",
+      because: "Spray and pray fails because it never finishes anything. WhatsApp's 2009 launch deliberately passed over the larger Android market to get iOS in North America right first. The output of a beachhead is not only revenue — it is credibility, case studies, and a repeatable motion, which are exactly what a risk-averse mainstream buyer needs before it will move at all."
+    },
+    glossary: [
+      {term: "beachhead market", plain: "One narrow segment won completely before expanding, rather than addressing everyone at once."},
+      {term: "spray and pray", plain: "Trying to reach everybody at once and finishing with nobody."},
+      {term: "early adopters", plain: "The early-market customers who take a product on before it is proven."},
+      {term: "social proof", plain: "Visible evidence that others already rely on the product, which lowers perceived risk."}
+    ],
+    connects: "Crossing assumes you had something worth crossing with. The next session names the two fits that decide whether you did."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L02",
+    courseId: "SPMS",
+    module: 3,
+    order: 2,
+    title: "Product definition and positioning",
+    objective: "Translate a product vision into a definition of what the product does and a positioning statement of why a customer should use it.",
+    explainer: [
+      "Vision comes first, because definition and positioning are both translations of it. A product vision should be a crisp statement, easy to understand; inspirational enough to motivate teams and partners; customer-oriented, because ultimately the product has to deliver customer value; strategic enough to drive prioritisation over time; long-term oriented rather than aimed at the next three or six months; differentiating against competition and alternatives; and feasible enough that you can actually deliver on it.",
+      "The two outputs answer different questions for different readers. Product definition is what the product does. It is largely internal — it exists so the team and its partners understand exactly what is being built. Product positioning is how the product impacts customers or potential users, and why they should use it. Collapsing the two produces either a definition that reads like marketing copy or a position statement that means nothing to anyone outside the building.",
+      "The course supplies a syntax with fixed highlighted phrases you keep and write around. For UPI, the definition opens on the problem of fragmented and inconvenient digital payments — payments divided across various systems and bank accounts — which affects consumers, merchants, banks, and the digital economy overall. The impact clause then names what that costs: slow cash adoption, with cash stuck in pockets and the velocity of cash low, and transaction friction, where neither party has the exact change or the right device. The same template is then run on HydraSmart, the hypothetical smart water bottle."
+    ],
+    worked: {
+      setup: "A team has a product vision and needs both a brief for its partners and a customer-facing statement.",
+      move: "Write two artefacts, not one. The definition answers what the product does; the positioning answers why a customer should use it and what changes for them.",
+      because: "They address different readers. Definition is internal alignment — partners have to know exactly what is being built. Positioning is external impact. The UPI statement shows the split working: the definition names fragmented payments across systems, while the impact clause carries the consequences — slow cash velocity, transaction friction — which is the part that persuades anyone outside the team."
+    },
+    glossary: [
+      {term: "product definition", plain: "What the product does — the internal statement partners and the team build against."},
+      {term: "product positioning", plain: "How the product impacts users, and why they should use it."},
+      {term: "product vision", plain: "The crisp, long-term, differentiating statement both of the above translate."},
+      {term: "transaction friction", plain: "Cost imposed by the payment itself — no exact change, no suitable device."}
+    ],
+    connects: "A position statement is a claim. The next session covers the practices that take it to market."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L06",
+    courseId: "SPMS",
+    module: 3,
+    order: 6,
+    title: "Lean Canvas",
+    objective: "Choose between Business Model Canvas and Lean Canvas by the question being asked, and name the boxes that differ.",
+    explainer: [
+      "The Business Model Canvas, created by Alex Osterwalder, describes on a single page of nine boxes how a business runs and creates value — both for its customers and for itself. It runs from the customer segments you address all the way to the revenues you make from them, together with the value proposition being delivered and the cost structure required to deliver it. The Lean Canvas, created by Ash Maurya, is an extension of that with a different purpose.",
+      "Several boxes carry across unchanged: customer segments, channels, cost structure, and revenue structure. The value proposition box becomes unique value proposition. Four boxes are new — problem, solution, and key metrics down the left-hand side, and unfair advantage at the top right. Those substitutions are the whole point. The Lean Canvas trades description of a working business for the things an unproven idea still has to establish.",
+      "Which one to use is decided by the question you are asking. The Business Model Canvas asks how this business works, and how it can be made more efficient as times change — so it suits established products and scaling businesses, and analysing a pivot or an enhancement against today's model. The Lean Canvas asks something more fundamental: should this product exist? It is built to validate a startup idea quickly, which follows from the course's own definition of a startup as not a business but an experiment or project to validate a business model. It suits early-stage startups and MVPs."
+    ],
+    worked: {
+      setup: "An early-stage team wants its business on one page and reaches for the Business Model Canvas.",
+      move: "Use the Lean Canvas instead, and fill in problem, solution, key metrics, and unfair advantage.",
+      because: "The two canvases encode different questions. The Business Model Canvas assumes a business exists and asks how it runs and how to improve it. A startup is not yet a business — it is an experiment to validate a business model — so the useful question is whether the product should exist at all. The four Lean Canvas boxes are exactly the unvalidated parts, and the Business Model Canvas has nowhere to put them."
+    },
+    glossary: [
+      {term: "Lean Canvas", plain: "Ash Maurya's one-page canvas for validating an early-stage idea quickly."},
+      {term: "Business Model Canvas", plain: "Alex Osterwalder's nine-box page describing how an existing business runs and creates value."},
+      {term: "unique value proposition", plain: "The Lean Canvas replacement for value proposition, forcing a claim of distinctiveness."},
+      {term: "unfair advantage", plain: "Something a competitor cannot easily copy or buy, sitting at the canvas's top right."},
+      {term: "key metrics", plain: "The few numbers that would show the idea is or is not working."}
+    ],
+    connects: "The canvas names what has to be true. The next session turns to how the product actually reaches the customer."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L02",
+    courseId: "SPMS",
+    module: 4,
+    order: 2,
+    title: "Value-based pricing",
+    objective: "Translate delivered customer value into a price, and recognise cost-based pricing as the fallback it is.",
+    explainer: [
+      "Pricing follows from value you have already established. The course has defined value and value bundles through the value pyramid; this session is about translating what value you deliver to the customer into a tangible price, so the product is valuable to the business as well. That is the move from customer value to business value, and it is the reason value-based pricing matters for software products in particular.",
+      "The alternative is cost-based pricing. Software services are the familiar case: you bill by the number of hours an engineer spends, at $50 an hour or $200 an hour, worked back from salary and total cost to the company. That is what you fall back on when you do not know how your product will be deployed, or what it does to the customer's life and business. It is defensible in ignorance — but the real value of products lies in understanding and delivering value, so you may as well translate that value into monetisation directly.",
+      "The pyramid starts at the bottom with value creation as the foundational layer: you cannot think about pricing until you are sure you are creating value, and the value in question is economic value — tangible and measurable in value terms. An industrial coffee machine sold to a chain that serves 200 cups a day gives you a peg, because the economic value is 200 multiplied by what a cup earns them. B2C is much harder, because no such number is available, so you work instead from comparable information about what other products in the space do."
+    ],
+    worked: {
+      setup: "A team cannot measure what its product earns its customers, and defaults to pricing on its own costs.",
+      move: "Name that as cost-based pricing and treat it as a fallback. Go looking for the economic value peg first, and for comparables when no peg exists.",
+      because: "Cost-based pricing is what you use when you do not know the deployment of your product or its impact on the customer's business — it prices your inputs rather than their outcome. The industrial coffee machine has a peg because 200 cups a day is countable. Most B2C has no such number, which is why the lecture sends you to comparable products rather than back to your own cost sheet."
+    },
+    glossary: [
+      {term: "value-based pricing", plain: "Setting price from the value delivered to the customer rather than from what it cost to build."},
+      {term: "cost-based pricing", plain: "Pricing from your own inputs — the hourly-billing model used when impact is unknown."},
+      {term: "value creation", plain: "The foundational layer: being sure value exists before pricing anything."},
+      {term: "economic value", plain: "Value that is tangible and measurable, like 200 cups of coffee a day."},
+      {term: "value pyramid", plain: "The framework of value levels the pricing discussion is built on."}
+    ],
+    connects: "That establishes the basis for a price. The next session covers the strategies that actually set one."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L07",
+    courseId: "SPMS",
+    module: 4,
+    order: 7,
+    title: "Unit economics",
+    objective: "Pick the right unit for a business model and use per-unit cost and revenue to judge when profitability arrives.",
+    explainer: [
+      "Unit economics is foundational for two reasons the course has already built. First, a startup is not a business but an experiment to validate a business model — and validating that model means understanding what it takes to get the business, what it takes to service it, and whether and when you become profitable. Second, the three pillars of desirability, feasibility, and viability all boil down to this one concept, because viability is precisely the question unit economics answers.",
+      "The move is to stop looking at the business as a whole and look at the individual transaction or relationship instead: what it takes to acquire this customer and to fulfil this piece of business. Unit economics is the measure of profitability of one unit of your offering — a customer, or a relationship — validating the business model at an atomic level, with the cost of revenue analysed on a per-unit basis. Startups cannot be profitable from day one the way mature businesses are, so the real question is how many customers or transactions, or how long, before profitability is reached.",
+      "The unit itself depends on the business, and choosing it wrongly makes every later number meaningless. In SaaS, acquiring the customer is the significant act, so the unit is one customer or account. In a marketplace it is one transaction. In ride-sharing, Ola or Uber, it is one ride. On a cloud platform it is a single usage, an API call for instance. In e-commerce it is one order, as at Amazon or Flipkart. In fintech and wallets it is one payment transaction. What decides it is the customer relationship model from the business model canvas."
+    ],
+    worked: {
+      setup: "A SaaS company and a marketplace both want to know whether they are profitable per unit.",
+      move: "Use different units. SaaS takes one customer or account; the marketplace takes one transaction.",
+      because: "The unit follows the customer relationship model. SaaS acquires a customer who then transacts repeatedly across a lifetime, so the customer acquisition cost has to be spread over that whole relationship — which only works if the unit is the account. A marketplace relationship is transactional, so the transaction is the unit. Borrowing the marketplace's unit for SaaS would bury the acquisition cost that decides whether the model works at all."
+    },
+    glossary: [
+      {term: "unit economics", plain: "Profitability measured for one unit of the offering — a customer, a ride, an order."},
+      {term: "customer acquisition cost", plain: "What it costs to acquire a customer, totalled over a period; abbreviated CAC."},
+      {term: "business model validation", plain: "Establishing what it takes to get and service the business, and when profit arrives."},
+      {term: "customer relationship model", plain: "Whether a customer transacts once or repeatedly, which decides what the unit is."}
+    ],
+    connects: "Per-unit numbers are the input. The next session scales them up into financial management and forecasting."
+  });
+
+  lesson({
+    lectureId: "SPMS-M05-L02",
+    courseId: "SPMS",
+    module: 5,
+    order: 2,
+    title: "Competition and alternatives",
+    objective: "Define competition the way a customer does — across every alternative, including doing nothing — instead of naming two rivals early.",
+    explainer: [
+      "One of the biggest mistakes startups make is defining competition very early and too narrowly. Start an education venture and people immediately ask whether you are like Byju's, and you begin unconsciously identifying with named players before you have worked out whom you are serving or what value you are giving. The second mistake follows from the first: assuming that if you build a software product, your competition must be another software product.",
+      "Customers are the ones who actually decide who your competition is, and they decide it by comparison. A music service is not measured against rival music services alone — it sits against Apple Music, YouTube, and Amazon Music, and also against CDs and radio. In business software the alternatives are frequently not software at all: a spreadsheet, consultants, legacy systems, internal tools. And in enterprise scenarios the most common alternative is simply not doing anything, which the lecture names outright — inertia is the biggest competition.",
+      "So the analysis has to reach every alternative, current and potential. Product management should hold direct competition, substitutes, ecosystem forces, and strategic positioning together as alternatives, rather than treating only the first of those as real competition. The lecture draws this as a petal diagram of market alternatives, set against traditional competition analysis that worked inside an industry and a method. Product A versus product B is not the problem the customer is trying to solve."
+    ],
+    worked: {
+      setup: "An enterprise software team lists three rival vendors as its competition.",
+      move: "Add the alternatives that are not software — spreadsheets, consultants, legacy systems, internal tools — and then add doing nothing at all.",
+      because: "The customer sets the comparison, not the vendor. In enterprise the most frequent outcome is not losing to a rival but the buyer carrying on exactly as they are, which is why inertia is named as the biggest competition. An analysis listing only vendors has no strategy at all against the option that wins most often."
+    },
+    glossary: [
+      {term: "alternatives", plain: "Everything a customer could do instead, including manual processes and existing tools."},
+      {term: "market alternatives", plain: "The petal-diagram view of every option open to the customer, current and potential."},
+      {term: "direct competition", plain: "Rival products in the same category — only one slice of the alternatives."},
+      {term: "substitutes", plain: "Different means to the same end, which customers weigh alongside direct rivals."},
+      {term: "inertia", plain: "The customer doing nothing, named here as the biggest competition in enterprise settings."}
+    ],
+    connects: "Knowing what you are compared against sets the message. The next session covers the function that carries it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M05-L04",
+    courseId: "SPMS",
+    module: 5,
+    order: 4,
+    title: "Value communication: the buyer's journey",
+    objective: "Communicate value across the buyer's journey from unawareness onward, matching message, format, and channel to the stage.",
+    explainer: [
+      "Value communication belongs to product marketing and marketing orchestration, and it exists because good products routinely fail without it. Google Glass and virtual reality carried real potential that was never articulated, and fizzled away. Many startups fail not for lack of value but because the value was never articulated well enough for customers to understand it. The usual failures are communicating too late, after the decision has already been taken; using the wrong channels; and sending a message that does not match what the customer actually needs.",
+      "It divides in two. Before the purchase is the buyer's journey; after the purchase is the customer journey. Successful startups communicate value across both rather than stopping at the sale. The process itself is connecting defined customer value with the identified target markets for the product — which is communicating the positioning. Value messaging means need-relevant communication, with the engagement tools, formats, content, and channel all adapted to where the buyer currently stands in that journey.",
+      "The Apple Watch makes the difficulty concrete. Offer a ₹40,000 or ₹50,000 wearable to a retired senior citizen and the answer is that a watch is a watch — theirs was a gift from their father, it has a golden strap, and they like it. They are comparing against a category they have grown up with, at a different price point, with a different alternative in mind. If a wearable reads as just a watch, nothing about its value has landed yet. That is why the journey opens at value awareness, and why the stage before it is unawareness rather than disagreement."
+    ],
+    worked: {
+      setup: "A ₹50,000 wearable is pitched to someone who already owns a watch they like.",
+      move: "Place them at unawareness rather than at objection, and lead with value awareness instead of features or price.",
+      because: "The response — a watch is a watch, mine was a gift, it has a golden strap — is a comparison against a category they already understand at a price they already accept. Nothing has yet told them a wearable does a different job. Arguing price against that comparison loses, because the message is pitched at a later stage of the journey than the buyer is actually standing in."
+    },
+    glossary: [
+      {term: "value communication", plain: "Making the delivered value understandable, before and after the purchase."},
+      {term: "buyer's journey", plain: "The pre-purchase path, beginning at unawareness and moving through value awareness."},
+      {term: "customer journey", plain: "The post-purchase half, which successful startups keep communicating across."},
+      {term: "value messaging", plain: "Need-relevant content, format, and channel matched to the buyer's current stage."}
+    ],
+    connects: "That is the half before the purchase. The next session takes the customer journey that follows it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L05",
+    courseId: "SPMS",
+    module: 6,
+    order: 5,
+    title: "Requirements engineering",
+    objective: "Classify a requirement as functional or non-functional, and catch the support, pricing, and deployment expectations that travel with it.",
+    explainer: [
+      "A requirement is a wish or a need for a future product capability — what the product should be doing once it exists. The IEEE definition adds a second origin: a capability needed to solve a problem, or a condition required by standards, contracts, or regulations. For a messaging product that covers capabilities like sending a message, encrypting it, and storing it, and equally the compliance imposed by whatever regulation or contract applies to it.",
+      "Robertson and Robertson split requirements two ways, and this is the classification the course works from. A requirement is either an action the product should perform or a quality the product should possess. The action is a functional requirement. The quality is a non-functional requirement, usually shortened to NFR. The split matters because the two are elicited, specified, and tested by different means, even though a customer will state both in the same sentence without marking the difference.",
+      "Requirements are value centric — they are not just feature requests. A requirement may include support expectations: that a message is delivered within some number of milliseconds or sub-seconds, or that a fault in the software is resolved within a stated number of minutes. It may carry pricing conditions, that it should not be priced above a certain amount per user or per usage. It may specify deployment, that it must run on a particular operating system. And unlike a services project, where the customer hands over requirements directly, a product context has to answer deliberately who supplies them at all."
+    ],
+    worked: {
+      setup: "A customer says the product must send a message, and must deliver it within 200 milliseconds.",
+      move: "Split the sentence. Sending the message is a functional requirement — an action. The 200-millisecond bound is non-functional — a quality.",
+      because: "They arrive together but they are different objects with different verification. The action is confirmed by whether a message sends; the quality is confirmed by measurement under load, and it constrains architecture rather than behaviour. Reading the latency clause as scene-setting around the 'real' requirement is how non-functional requirements get dropped in specification and rediscovered in production."
+    },
+    glossary: [
+      {term: "requirement", plain: "A wish or need for a future product capability, or a condition set by standards or contracts."},
+      {term: "functional requirement", plain: "An action the product should perform."},
+      {term: "non-functional requirement", plain: "A quality the product should possess — latency, security, availability."},
+      {term: "requirements engineering", plain: "The process of eliciting, specifying, and managing requirements for a product."}
+    ],
+    connects: "That is the basic split. The next session works through the types of requirement in detail."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L08",
+    courseId: "SPMS",
+    module: 6,
+    order: 8,
+    title: "From customer need to project requirement",
+    objective: "Trace a need from a customer's business aspiration through a standardised product requirement into the project requirements engineering owns.",
+    explainer: [
+      "Customer requirements arrive non-standard, and that is not a failure on the customer's part. They are not writing system requirements; they are describing business needs and aspirations. Converting those into product requirements takes a significant amount of work, and that translation is the product manager's central competence here. Standardising means generalising one customer's stated need so that more customers of that same nature can be serviced through the one product.",
+      "Then comes a third class. Once a product requirement exists, it is broken down for a release across smaller teams — there might be five, ten, or twenty of them, depending on whether the release runs to a hundred person days or a thousand. Those are project requirements, and they sit much closer to the product development team. Ask for a customer master to be created and the specification questions follow immediately: is there an internal ID, a formatted ID, a linkage, and what does data integrity demand of the table design?",
+      "The boundary matters as much as the chain does. Project requirements belong to the development project, and project issues that surface during requirements work are explicitly not part of the product management process — they are left with the engineering team. What the product management layer owes is generalisation: requirements made actionable for developers, in a consistent style, suitable for internal communication, and oriented towards a standard product rather than one customer's particular installation."
+    ],
+    worked: {
+      setup: "A customer asks for a customer master to be created.",
+      move: "Separate the three levels. The business aspiration becomes a standardised product requirement; the internal ID, formatted ID, linkage, and table design are project requirements.",
+      because: "Each level has a different owner and a different reader. The customer stated an aspiration, not a system requirement. The product requirement has to generalise it so other customers of the same kind are served by the same thing. The specification questions underneath are internal to development, and the lecture is explicit that project issues arising there are not part of the product management process."
+    },
+    glossary: [
+      {term: "customer requirements", plain: "What a customer wants to establish, stated as business needs rather than system specifications."},
+      {term: "product requirements", plain: "The standardised, generalised version that serves many customers of that nature."},
+      {term: "project requirements", plain: "Internal development specifications for a release, owned by engineering."},
+      {term: "requirements elicitation", plain: "Drawing requirements out of customers and other sources before standardising them."}
+    ],
+    connects: "That is the requirement chain end to end. The next session places it inside the ISPMA framework."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L01",
+    courseId: "SPMS",
+    module: 7,
+    order: 1,
+    title: "Prioritisation: MoSCoW",
+    objective: "Sort a release bucket with must, should, could, and won't so the team agrees on what is out as well as what is in.",
+    explainer: [
+      "The situation is a growing product with more demand than capacity. Different customers ask for features they find missing, investors ask for features that open new markets, and the sales team asks for something else again — all against a release bucket of only one, three, or six months. Deciding between them is the actual job of the product manager and the founder, and the course covers four prioritisation techniques across this session and the next.",
+      "The first is Moscow, which is an acronym rather than a capital city: must have, should have, could have, and won't have. Its purpose is to build a common understanding across the team about what definitely needs doing and what definitely does not. It works as a filtering criterion, closer to a triage than to a ranking, and part of its value is being able to state that some things will definitely not be done. That is why it fits agile and release planning, and why it matters most in an MVP, where scope must be controlled and time to market is important.",
+      "Ride-sharing makes the four levels concrete. Must have covers ride booking, payments, and GPS tracking — without those you simply do not have ride software. Should have is driver rating: it is what helps a customer choose between one ride or driver and another, valuable without being load-bearing. Could have is multi-stop ride planning. Uber launched as a point A to point B service, and adding a stop — dropping someone on the way with a small detour — is a genuine improvement the product ran without for years."
+    ],
+    worked: {
+      setup: "Customers, investors, and sales each want different features, and the release bucket is three months.",
+      move: "Run the four levels and make the won't-have list explicit, not just the must-have list.",
+      because: "The technique is described as a filtering criterion, like a triage, and filtering only works in both directions. A must-have list on its own leaves everything else implicitly negotiable, so the same requests return at every planning cycle. Naming what will definitely not be done is what makes scope control real — which is exactly what an MVP needs when time to market matters."
+    },
+    glossary: [
+      {term: "must have", plain: "Capabilities without which the product does not function at all — booking, payments, GPS."},
+      {term: "should have", plain: "Valuable but not load-bearing, like driver ratings that help a customer choose."},
+      {term: "could have", plain: "Real improvements the product can ship without, like multi-stop planning."},
+      {term: "won't have", plain: "Explicitly excluded this release — the half of the filter that makes scope control real."},
+      {term: "release planning", plain: "Deciding what fits in a fixed release window of one, three, or six months."}
+    ],
+    connects: "That is the first technique. The next session adds three more and compares when each one fits."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L04",
+    courseId: "SPMS",
+    module: 7,
+    order: 4,
+    title: "Product roadmap",
+    objective: "Translate a product strategy into a sequence of releases on a time axis, and read an evolution as deliberate ordering.",
+    explainer: [
+      "A roadmap is the process of translating your product strategy into a series of releases on a time axis. It answers what you want to accomplish — where the product should be in three or five years — and how you intend to get there through prioritization. The strategic timeframe runs up to five years, or three, depending on the space the product is in. Put plainly, a roadmap is a smart sequence for developing, releasing, and evolving a solution.",
+      "WhatsApp's evolution shows the sequencing at work. It started in 2009, by which time there were already many messaging applications, including well-established players like Skype, Yahoo Messenger, and ICQ. It launched first on iPhone, with the Android version arriving around 2011 — even though the team knew a big chunk of its potential users were on Android in Asia. Running the earlier experiment on iOS in the US market, closer to home, was the deliberate choice.",
+      "The capability sequence is the part worth studying. Message history search appeared around 2011, and chat backup only after 2012, which means that at the acquisition in the second half of 2014 the product still lacked things that now read as basic. A roadmap is therefore not an inventory of everything a product will eventually contain. It is an ordering decision, and what has been deferred is as much a part of it as what has been scheduled."
+    ],
+    worked: {
+      setup: "A team wants its roadmap to show every capability the product will eventually have.",
+      move: "Make it a sequence on a time axis instead — what gets developed, released, and evolved in what order across three to five years.",
+      because: "A roadmap translates strategy into releases, not into a feature inventory. WhatsApp is the demonstration: iPhone before Android despite knowing where the users were, message history search around 2011, chat backup after 2012, and an acquisition in 2014 with capabilities still absent. What was deliberately left until later is precisely what made the earlier releases shippable."
+    },
+    glossary: [
+      {term: "roadmap", plain: "Product strategy translated into a series of releases along a time axis."},
+      {term: "product strategy", plain: "Where the product is meant to be in three to five years, which the roadmap sequences."},
+      {term: "time axis", plain: "The dimension that turns a set of intentions into an ordered plan."},
+      {term: "prioritization", plain: "The decisions about ordering that determine what a roadmap actually contains."}
+    ],
+    connects: "That is the shape of a roadmap. The next session continues into how one is built and kept current."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L03",
+    courseId: "SPMS",
+    module: 8,
+    order: 3,
+    title: "Metrics, performance, and risk",
+    objective: "Choose startup-appropriate metrics across the four types, and use them to reduce uncertainty rather than to report performance.",
+    explainer: [
+      "Risk management matters more in a startup than in a mature company, because the business is still evolving and the standard performance measures may not be ready yet — top line, bottom line, and net promoter score all assume a steadier state than an early-stage product has. The fundamental difference is the level of uncertainty. A startup does not yet know whether customers truly want the product, whether the business model is scalable, whether acquisition costs are sustainable, or whether the product can generate long-term profitability. Those being open is why performance and risk management bear directly on survival.",
+      "That reframes what metrics are for. They exist to reduce uncertainty as far as it can be reduced, to improve decision-making with whatever information is available on a dynamic basis, to identify risks early where that is possible, and to allocate resources smartly. This is a different purpose from reporting performance upward, and it changes which numbers are worth collecting in the first place.",
+      "Four types are worth measuring in a startup product context: business and financial metrics, product metrics, customer metrics, and marketing and visibility metrics. Which business metrics apply depends on the stage you are at — recurring revenue measured annually or monthly, average revenue per user, customer lifetime value, gross margin as the measure of profitability efficiency, and operating profitability once below-the-line costs are accounted for."
+    ],
+    worked: {
+      setup: "An early-stage product has no meaningful net promoter score, and its bottom line is not yet informative.",
+      move: "Do not wait for the mature metrics to become available. Pick from the four types according to which open question each one closes.",
+      because: "What distinguishes a startup is uncertainty, not scale. The useful metric is the one that answers whether customers truly want the product, whether the model is scalable, or whether acquisition costs are sustainable. Since metrics here exist to reduce uncertainty and surface risk early rather than to report performance, a number that is easy to produce but answers nothing is worth less than a rougher one that closes an open question."
+    },
+    glossary: [
+      {term: "average revenue per user", plain: "Revenue divided across the user base — ARPU, a stage-dependent business metric."},
+      {term: "customer lifetime value", plain: "What a customer is worth across the whole relationship, not one transaction."},
+      {term: "gross margin", plain: "The measure of profitability efficiency before below-the-line costs."},
+      {term: "product metrics", plain: "One of the four types, measuring the product itself rather than the business around it."}
+    ],
+    connects: "Metrics manage the risks you can count. The next session turns to the legal exposures you cannot."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L05",
+    courseId: "SPMS",
+    module: 8,
+    order: 5,
+    title: "Data privacy",
+    objective: "Distinguish what CCPA, GDPR, and DPDP each cover, and apply the principles that hold whichever one applies.",
+    explainer: [
+      "Data privacy is handled here as legal awareness a product manager needs rather than as a compliance chore. In the AI age data is an extremely critical asset — a privacy matter for individuals and an asset for companies and countries alike. In the early stages of computerization data was treated fairly openly; now most countries worldwide have strong or reasonably strong data regulation in place. The three the course covers are CCPA in the United States, GDPR in Europe, and DPDP in India, because that is largely where the customers are.",
+      "Their scopes differ, and the difference is the part to hold onto. US protection applies largely to data from private spheres, with stringent regimes for particular categories — HIPAA for health data, and separate coverage for credit card data. Employee data is not covered by those data protection regulations. GDPR takes the opposite approach: any personal data is protected irrespective of its sensitivity. It was enacted in May 2018 and has since served as a model for jurisdictions well outside Europe, including Switzerland, Canada, and Australia.",
+      "Two elements generalise beyond any single regime. The right to be forgotten lets an individual whose data you hold require that you erase it. And data protection by design means the obligation does not wait to be requested — the moment you offer someone a service, you are already undertaking it, so a customer never has to ask you to confirm their data is protected. The practical rule that follows is territorial: whichever country your product goes into, understand that country's privacy laws before you sell software into that market."
+    ],
+    worked: {
+      setup: "A product built for the US market is about to launch in Europe.",
+      move: "Re-scope rather than reuse. Under GDPR any personal data is protected irrespective of sensitivity, not only the categories US law singles out.",
+      because: "The two regimes are constructed differently. US protection concentrates on private-sphere data with stringent rules for specific categories — health under HIPAA, credit card data — and leaves employee data outside data protection regulation altogether. GDPR covers all personal data regardless of sensitivity. A compliance model built category by category does not transfer, which is exactly why the rule is to understand each market's law before selling into it."
+    },
+    glossary: [
+      {term: "GDPR", plain: "Europe's regulation, enacted May 2018, covering any personal data irrespective of sensitivity."},
+      {term: "CCPA", plain: "The US state law covered here, alongside category regimes like HIPAA for health data."},
+      {term: "DPDP", plain: "India's data protection legislation, the third regime a product selling here must meet."},
+      {term: "right to be forgotten", plain: "An individual's ability to require that data held about them be erased."},
+      {term: "data protection by design", plain: "Protection built in from the outset, never something a customer has to request."}
+    ],
+    connects: "That is the legal floor the product stands on. The next session steps back up to strategic management."
+  });
+
   window.T6_LESSONS = lessons;
 })();
