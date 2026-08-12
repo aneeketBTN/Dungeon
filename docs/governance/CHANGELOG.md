@@ -3,6 +3,64 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Lossless workspace restructure for collaboration
+
+- **Reorganized the repository in seven verified phases**, no behaviour changes intended and none
+  observed. Every phase ran the same six gates before the next began: the test suite, `node --check`
+  across all source scripts, the bank validator against the real pack, a build whose `dist/client`
+  hashes were compared against a pre-reorg golden snapshot, a whole-tree SHA-256 content manifest
+  proving no file was silently lost, and a real-browser pass.
+- **Entries below this one are not rewritten.** A changelog entry records what a past session did;
+  rewriting its paths to match the new layout would turn a true historical statement into a false
+  one. Read older entries against this map:
+
+  | Was | Is now |
+  | --- | --- |
+  | `mock/` (t6, login, admin, sets, robots) | `app/` |
+  | `mock/rogue.*` | `legacy/rogue/` |
+  | `mock/` older prototypes and their sets | `legacy/prototypes/` |
+  | `mock/CLAs/` | `legacy/CLAs/` (untracked) |
+  | `mock/server.py`, launchers, `validate_t6_bank.js` | `tools/` |
+  | `scripts/` | `tools/` |
+  | `site/` | `sites-backup/` |
+  | `state/`, `history/`, `graphs/` | `data/state/`, `data/history/`, `data/graphs/` |
+  | root Markdown, `briefs/` | `docs/{governance,briefs,engine,design,community,ops}/` |
+
+  `evidence/` and `_TRANSFER/` are frozen for the same reason. `cloudflare/`, `db/`, `tests/`,
+  `outputs/`, `work/`, and `coordination/` did not move.
+- **`cloudflare/` was deliberately left in place.** Workers Builds deploys from it and its root
+  directory is configured in the Cloudflare dashboard, outside this repository. Moving it would have
+  broken auto-deploy in a way no local check could catch.
+- **Public URLs are unchanged.** Testers reach `/dungeon/`, `/dungeon/t6.html`, and
+  `/dungeon/admin/`, none of which contained the renamed directory. The legacy `/dungeon/mock/...`
+  aliases are kept as accepted public URLs and now resolve to `app/` assets; a new test walks four
+  of those bookmark URLs and asserts each still serves its asset.
+- **`site/worker.mjs` was documented as production and is not.** `wrangler.jsonc` deploys
+  `cloudflare/src/index.mjs`; nothing references the `dist/server/index.js` this file builds to. It
+  is the private Sites entrypoint, unchanged since `d92e06a` while the live Worker moved through
+  four releases. Renamed to `sites-backup/` with a README recording the divergence — most seriously
+  that it has no agreement gate, so promoting it as-is would admit testers without acceptance.
+- **`graph_source/` was never missing.** It is a directory of the external owner-supplied pack at
+  `C:\Users\knigh\OneDrive\Desktop\exam\Term 6 AI-Ready Pack` (283 chunks, matching the documented
+  283 lectures), correctly untracked. `AGENTS.md` cited it among repo-relative paths, which read as
+  a missing repository directory; the Directory Map now states the boundary.
+- **Two latent hazards found and fixed, neither caused by the restructure.** `core.autocrlf=true`
+  rewrote checked-out files from LF to CRLF — the release build copies from the working tree, so
+  that silently changes deployed asset bytes; pinned with `core.autocrlf=false` and a
+  `.gitattributes` that holds for every contributor. And the path-anchored ignore rules
+  (`mock/CLAs/`, `mock/tunnel-out.txt`, `mock/leaderboard.json`) stopped matching the moment their
+  directory moved, which briefly re-tracked the private course material; rewritten as directory- and
+  file-name patterns, and verified absent from history.
+- **Verification.** 35 tests pass (34 baseline plus the bookmark test), 32 syntax checks, bank
+  validator reports zero errors and zero warnings, and `dist/client` is byte-identical to the
+  pre-reorg golden snapshot with only the URL prefix renamed. Real browser on the dev server: `/`
+  redirects to `/app/t6.html`, all fourteen assets return 200 with no console errors, a study set
+  opens and renders a primer from the bank, and login and admin load their siblings.
+  Backup: `C:\Users\knigh\Dungeon-backup\2026-08-12-pre-reorg`, 576 files verified byte-identical by
+  SHA-256, plus git tag `pre-reorg-abfd606`.
+- **Not done.** No push and no deploy — the live cohort is untouched by this work until the branch
+  `reorg/structure` is merged. Live-edge re-verification is owner-gated on that merge.
+
 ## 2026-08-12 — Measured UI alignment pass and the Access login loop fixed at source
 
 - **Fixed the Cloudflare Access login loop locking the owner out of the Control Room.** The

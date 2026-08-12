@@ -402,7 +402,8 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   path, could expose operational controls or issue the learner JWT where the Worker expects the
   owner audience.
 - **Comply:** Keep a more-specific owner application with a distinct audience; keep all dashboard
-  HTML/CSS/JS/API paths under `/dungeon/admin*`; block legacy `/dungeon/mock/admin*` aliases; and
+  HTML/CSS/JS/API paths under `/dungeon/admin*`; block legacy `/dungeon/mock/admin*` and
+  `/dungeon/app/admin*` aliases; and
   validate both the admin audience and exact owner email inside the Worker.
 - **Verify:** Anonymous edge redirects show different learner/admin audience IDs; routing tests
   prove direct admin aliases return 404; missing/wrong owner authentication returns 403; real-

@@ -4,6 +4,16 @@ This directory stores the artifacts required to promote work through:
 
 `DIAGNOSED → IMPLEMENTED → VERIFIED(<evidence>) → DONE`
 
+## Paths in here are frozen
+
+An evidence file records what was true on its date. When directories move, its paths are **not**
+rewritten: a verification that says it checked `mock/t6.js` did check `mock/t6.js`, and editing that
+to `app/t6.js` would make a true statement false and quietly restate an old acceptance as covering
+a file that did not exist yet.
+
+Read older evidence against the path map in the 2026-08-12 restructure entry at the top of
+`docs/governance/CHANGELOG.md`.
+
 ## Layout
 
 Use:

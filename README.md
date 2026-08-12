@@ -94,7 +94,7 @@ and question-bearing scripts are not shared-cacheable. This prevents anonymous a
 collection, not copying by an already approved tester. See
 `docs/briefs/TESTER_ACCESS_AND_ADMIN.md` for the threat boundary.
 
-The owner dashboard is `/mock/admin.html` locally and
+The owner dashboard is `/app/admin.html` locally and
 `https://aneeketdas.com/dungeon/admin/` on the protected domain. It checks production health and
 the release allowlist, provides direct tester add/list/revoke controls,
 provides a feedback template, and drafts—but never autonomously sends—change announcements.
@@ -121,7 +121,7 @@ the browser experience.
 
 ## Deterministic test routes
 
-Append one scenario to `/mock/t6.html`:
+Append one scenario to `/app/t6.html`:
 
 - `?scenario=dashboard-progress`
 - `?scenario=dashboard-concepts`

@@ -1,5 +1,21 @@
 # Dungeon
-> **Diagnosis revision (2026-08-12; newest):** Every distractor a scheduled question can present now
+> **Workspace restructure (2026-08-12; newest):** The repository was reorganized for collaboration
+> in seven verified phases on branch `reorg/structure`, with no behaviour change intended and none
+> observed. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+> `evidence/2026-08-12/workspace-restructure/verification.md`. The live app is now `app/` and holds
+> exactly the fourteen files the build ships; `legacy/` holds the rogue slice and older prototypes;
+> `tools/` holds every build and dev script; `data/` holds live learner state; `docs/` holds all
+> documentation; and `site/` became `sites-backup/` because it is the private Sites entrypoint, not
+> the deployed Worker. `cloudflare/` did not move: Workers Builds deploys from that path using a
+> dashboard-side root-directory setting. Public URLs are unchanged and the legacy `/dungeon/mock/...`
+> bookmark aliases still resolve. `dist/client` is byte-identical to the pre-reorg golden snapshot
+> with only its URL prefix renamed. Two latent hazards were fixed in passing: `core.autocrlf=true`
+> was rewriting LF working-tree files to CRLF, which would have changed deployed asset bytes, and
+> the path-anchored ignore rules stopped matching once their directory moved. `evidence/`,
+> `_TRANSFER/`, and older `CHANGELOG.md` entries are deliberately frozen rather than path-rewritten.
+> Nothing is pushed or deployed; the live cohort is untouched until the branch is merged.
+>
+> **Diagnosis revision (2026-08-12):** Every distractor a scheduled question can present now
 > states the specific gap choosing it reveals. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
 > `evidence/2026-08-12/t6-option-diagnoses/verification.md`: 2,943 diagnoses across the active bank
 > with zero generic fallbacks, derived from generator provenance for 92.3% of slots and hand-authored
@@ -185,33 +201,63 @@ Rules:
 
 ## Directory Map
 
-- `/` — operating index, design contracts, learning engine, project documentation, and ledgers.
-  Root Markdown files are hand-maintained unless explicitly marked generated; `README.md` now
-  launches the active T6 fallback and preserves the older engine as a legacy path.
+Root holds only what tools and GitHub discover by convention: `AGENTS.md`, `CLAUDE.md`,
+`README.md`, `SECURITY.md`, `package.json`, `.gitignore`, and `.gitattributes`. Everything else
+lives under a named directory.
+
+**What ships to learners**
+
+- `app/` — the live T6 route and nothing else: exactly the fourteen files in the build allowlist.
+  A file here reaches production. If it should not, it does not belong in this directory.
+- `tools/` — release build, bank validator, agent-readiness check, and the local dev server and
+  launchers. Nothing executable lives in `app/`.
+- `cloudflare/` — the **deployed** Worker: exact-path router, approved-email learner sessions, the
+  agreement gate, signed owner Access validation, tester allowlist controller, applied D1
+  migrations, and standalone packaging fallback. Workers Builds deploys from this path; its root
+  directory is configured in the Cloudflare dashboard, so **do not move this directory** without
+  changing that setting first.
+- `sites-backup/` — the private Sites entrypoint. **Not** the deployed Worker, and diverged from it;
+  read `sites-backup/README.md` before treating it as a fallback.
+- `db/` — readable mirror of the learner-backend tables; applied history is `cloudflare/migrations/`.
+- `tests/` — release-boundary, routing, access-management, and security-header checks.
+
+**Documentation**
+
+- `docs/governance/` — ledgers and authority: `DESIGN_SOURCE_INDEX.md`, `BUG-LAWS.md`,
+  `QUALITY-LOG.md`, `CHANGELOG.md`.
 - `docs/briefs/` — owner-supplied briefs and durable implementation mappings. Add each new external
   brief here or index its connected-source location in `docs/governance/DESIGN_SOURCE_INDEX.md`.
-- `app/` — active T6 revision route, legacy static prototypes, content sets, and local server.
-- `.openai/` — Sites project binding; contains no runtime secrets.
-- `.agents/` — paused tester-agent charters, consent-safe data contracts, synthetic fixtures, and
-  fail-closed activation gates; three project schedules are registered `PAUSED` and none is
-  running.
-- `tools/` — deterministic public-release build scripts.
-- `site/` — production worker entrypoint, health route, and response security policy.
-- `cloudflare/` — deployed exact-path static edge, approved-email learner sessions, the agreement
-  gate, signed owner Access validation, owner-only tester allowlist controller, applied D1
-  migrations, standalone packaging fallback, and non-source runtime secrets.
-- `db/` — the current shared learner-backend table shapes as one readable reference; the applied
-  change history lives in `cloudflare/migrations/`.
-- `tests/` — release-boundary, routing, access-management, and security-header checks.
-- `data/graphs/` — generated subject concept graphs. Do not hand-edit during product/UI work.
-- `data/state/` — live game and learner state. Treat as real player data; do not clear for testing.
+- `docs/engine/` — `PROMPT.md` (procedural-engine authority) and `REVIEW_LOG.md` (rationale).
+- `docs/design/` — art direction, the proposed product-wide system, the legacy UX loop, personas.
+- `docs/community/` — tester guide, community playbook, privacy, and the closed-test agreement.
+- `docs/ops/` — machine transfer and local launch notes.
+
+**Data, evidence, and history — treat as records, not working files**
+
+- `data/state/` — live game and learner state. Real player data; do not clear for testing.
 - `data/history/` — real question and flag history. Do not repurpose as test fixtures.
+- `data/graphs/` — generated subject concept graphs. Do not hand-edit during product/UI work.
+- `evidence/` — named acceptance evidence by date/task. **Frozen**: entries describe what was true
+  on their date, so their paths are not rewritten when directories move.
+- `legacy/` — `rogue/` (the cinematic slice), `prototypes/` (older subject pages and their sets),
+  and the untracked `CLAs/` source material. Reference only; nothing here ships.
+
+**Working material and control planes**
+
 - `outputs/` — rendered/candidate media and separated production assets.
 - `work/` — source research, animation frames, scripts, and intermediate art outputs.
-- `evidence/` — named acceptance evidence, organized by date/task.
+- `.agents/` — paused tester-agent charters, consent-safe data contracts, synthetic fixtures, and
+  fail-closed activation gates; three project schedules are registered `PAUSED` and none is running.
+- `.claude/` — Claude-specific configuration and the state-manager agent.
+- `.openai/` — Sites project binding; contains no runtime secrets.
 - `coordination/` — authority charter and append-only agent/tool exchange notes.
-- `_TRANSFER/` — historical transfer/setup memory; not current product authority.
-- `.claude/` — Claude-specific compatibility/configuration and the legacy state-manager agent.
+- `_TRANSFER/` — historical transfer/setup memory; not current product authority, and frozen for
+  the same reason as `evidence/`.
+
+The Term 6 course pack is **external**, not part of this repository:
+`C:\Users\knigh\OneDrive\Desktop\exam\Term 6 AI-Ready Pack`. References to `graph_source/`,
+`graph/LECTURE_MANIFEST.jsonl`, `dense/`, `subject_core/`, and `indexes/` are relative to that pack.
+`tools/validate_t6_bank.js` takes its path as the first argument.
 
 If a directory grows beyond roughly 20 meaningful files without an index, flag it. Frame sequences
 and generated outputs are exempt when their parent has a manifest/contact sheet.
@@ -249,7 +295,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `package.json` | Dependency-free release build, validation, and test commands. | 2026-08-11 |
 | `tools/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
 | `tools/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
-| `sites-backup/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
+| `sites-backup/worker.mjs` | Private Sites backup entrypoint, **not** the deployed Worker: learner/admin redirects, health response, static delivery, and security headers. Diverged from `cloudflare/src/index.mjs` and has no agreement gate. | 2026-08-12 |
+| `sites-backup/README.md` | Records why this worker is not production and what must be reconciled before promoting it. | 2026-08-12 |
 | `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, and tester management. | 2026-08-11 |
 | `cloudflare/migrations/` | Applied D1 history for auth/progress, browser/country locks, agreement acceptance, and community timestamps. | 2026-08-11 |
 | `db/schema.ts` | Readable mirror of tester, session, progress, agreement, and community-state table shapes. | 2026-08-11 |
@@ -308,7 +355,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   color or motion.
 - Procedural-engine correctness, grading, spaced repetition, persona detection, and subject rules
   remain governed by `docs/engine/PROMPT.md`. The active authored T6 bank instead follows the owner direction,
-  `docs/briefs/T6_REVISION_FALLBACK.md`, and the indexed `graph_source/` lecture sources.
+  `docs/briefs/T6_REVISION_FALLBACK.md`, and the indexed `graph_source/` lecture sources inside the
+  external Term 6 AI-Ready Pack (see Directory Map); `graph_source/` is not a directory of this repo.
 - Cosmetics may not alter learning power. A power-up must declare its learning effect, result
   labeling, persistence, and dashboard treatment before implementation.
 - Persona and rank displays must obey the evidence thresholds and language restrictions in
@@ -321,7 +369,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   relevant brief and `docs/governance/DESIGN_SOURCE_INDEX.md`.
 - `docs/engine/PROMPT.md` is current procedural-engine authority; the T6 fallback's authored questions follow
   its indexed pack and brief. `docs/engine/REVIEW_LOG.md` and `docs/design/personalities.md` are rationale and history.
-- `app/` shows implemented behavior, not intended behavior.
+- `app/` shows implemented behavior, not intended behavior — and it is what production serves. Every
+  file in it ships. `legacy/` is the reference-only counterpart and ships nothing.
 - Do not edit `data/graphs/`, `data/state/`, or `data/history/` during UI testing unless the task explicitly
   authorizes engine/data changes and a backup-safe plan exists.
 - Do not call an asset production-ready without the acceptance gate in
@@ -449,7 +498,7 @@ after the version is live, since a push to `main` deploys.
 ## Metadata
 
 - Generated: 2026-07-16
-- Last verified: 2026-08-11 (792 source-traceable T6 surfaces, 64 adaptive primers, 565 active
+- Last verified: 2026-08-12 (workspace restructure verified lossless; 792 source-traceable T6 surfaces, 64 adaptive primers, 565 active
   scored items, evidence-gated progress, sampled optional confidence, boss-step/whole-chain
   separation, constructed self-review, held feedback, mixed formats and boss grading, the dynamic
   homepage with its trendline hero and mix-and-match builder, the matching board, real-Browser

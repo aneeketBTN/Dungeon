@@ -57,7 +57,7 @@ the active student route.
 
 ## Deterministic Browser scenarios
 
-Append `?scenario=NAME` to `/mock/t6.html`:
+Append `?scenario=NAME` to `/app/t6.html`:
 
 - `dashboard-progress`
 - `dashboard-concepts`

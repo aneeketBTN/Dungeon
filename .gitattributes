@@ -1,0 +1,17 @@
+# This repository is LF-native in the working tree.
+#
+# core.autocrlf=true was rewriting checked-out files to CRLF. The release build copies files
+# straight from the working tree into dist/client, so a line-ending conversion changes the bytes
+# the Worker serves and every asset hash with them. Pin the checkout so no contributor's global
+# git config can reintroduce that.
+* text=auto eol=lf
+
+# Never touched by text conversion.
+*.png  binary
+*.jpg  binary
+*.gif  binary
+*.mp4  binary
+*.pdf  binary
+*.docx binary
+*.sqlite binary
+*.tgz  binary
