@@ -2427,5 +2427,215 @@
     connects: "That completes the chain from kitchen to school gate. The final session draws the module's threads together."
   });
 
+  lesson({
+    lectureId: "SPMS-M01-L05",
+    courseId: "SPMS",
+    module: 1,
+    order: 5,
+    title: "Desirability, feasibility, viability",
+    objective: "Test an idea separately on all three of desirability, feasibility, and viability, and name what breaks when one is missing.",
+    explainer: [
+      "Three areas drawn as a Venn diagram, derived by IDEO Consulting in design thinking and adapted here for product management. Desirability asks whether customers or potential customers actually need the thing. Feasibility asks whether it can be built with the technology available today. Viability asks whether it should be built at all — whether it can turn a profit, or make enough money to support the business. The point of separating them is that passing one check tells you nothing about the other two.",
+      "The running example is a digital water bottle: put an edge device on an ordinary bottle and it becomes a hydration device that measures the temperature you drink at, how many times you drink, how much, and at what intervals. Desirability is whether people look at that and say it is worth having, or shrug and say a regular bottle is fine. Feasibility is whether the edge devices, electronics, and firmware actually exist to measure those things. Viability is whether there is money in it once both of those hold.",
+      "Each area needs a different skill. Desirability needs design skills, because you are validating empathy with customers and reading their pulse. Feasibility needs engineering skills. Viability needs business skills. The intersections are where the framework earns its keep. Desirability plus feasibility without viability is an unsustainable product: people want it and you can build it, but every new iteration and every new customer costs you more money. Desirability plus viability without engineering capability is the space-travel case — a real want, genuinely profitable, that you cannot build."
+    ],
+    worked: {
+      setup: "A team has validated that customers want the product and has proved the technology can deliver it.",
+      move: "Do not proceed on that basis. Run viability as its own check — can this make a profit, or sustain the business?",
+      because: "Desirability intersecting feasibility without viability is a named failure in the framework, not an edge case. The product is unsustainable precisely because it works: every additional iteration and every additional customer consumes more money than it returns. Two of three is not two-thirds of a business."
+    },
+    glossary: [
+      {term: "desirability", plain: "Whether customers or potential customers actually need the product."},
+      {term: "feasibility", plain: "Whether it can be built with the technology available today."},
+      {term: "viability", plain: "Whether it should be built — can it profit, or fund the business that makes it."},
+      {term: "design thinking", plain: "The IDEO practice this three-way framework was originally derived from."}
+    ],
+    connects: "Those three checks tell you whether an idea is a business. The next session looks at the kinds of organisation that take such ideas on."
+  });
+
+  lesson({
+    lectureId: "SPMS-M01-L10",
+    courseId: "SPMS",
+    module: 1,
+    order: 10,
+    title: "Jobs to Be Done",
+    objective: "Separate the job a customer is hiring a product for from the product itself, and read its functional, emotional, and social layers.",
+    explainer: [
+      "The framework starts from a distinction that is easy to blur. A need is a perceived problem. Value is that problem solved well enough to motivate someone to pay for it and use it repeatedly. Many products fail not because they do not solve the need, but because they do not deliver enough value. Customer need is a problem, a pain, or a job that users want done — which is where Jobs to Be Done takes its name.",
+      "The example is a doctor buying a drilling machine and a drilling bit. Taken at face value that is a drill sale. Ask why and it becomes hanging a picture; ask again and it is displaying an MD certificate in her clinic; ask again and it is so that new patients feel comfortable and trust they are seeing a qualified doctor. Three layers stack in one purchase. The functional need is displaying the degree. Underneath sits pride in more than a decade of study. And the social need is the confidence a walk-in patient takes from seeing it on the wall.",
+      "Customer value is the perceived benefit relative to the cost of alternatives — benefits minus cost, where cost means money, time, effort, and risk together. In the drill case the cost is a frame and a hole in the wall; the benefit is all three layers at once. That is why need and value come apart so routinely: a product can satisfy the stated need and still lose to an alternative delivering more of the emotional and social job. Uber against pre-Uber taxis and auto rickshaws is the same comparison, where the stated need was only to get from one place to another."
+    ],
+    worked: {
+      setup: "A customer walks in and asks for a drilling bit and a drilling machine.",
+      move: "Ask why until the job appears: photos, then a degree certificate, then new patients trusting a qualified doctor.",
+      because: "Taking the request at face value scopes you to selling drills. The job actually being hired for is patient trust, and it is functional, emotional, and social at the same time. A competitor who delivers the certificate-on-the-wall outcome without a drill wins the job while never satisfying the stated need."
+    },
+    glossary: [
+      {term: "Jobs to Be Done", plain: "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."},
+      {term: "functional need", plain: "The practical task on the surface — here, getting the certificate onto the wall."},
+      {term: "social need", plain: "How the outcome reads to others: the confidence new patients take from the displayed degree."},
+      {term: "customer value", plain: "Perceived benefit minus cost, where cost includes money, time, effort, and risk."}
+    ],
+    connects: "That is how to read what a customer is really buying. Module 2 turns to expressing it as value the product can promise."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L04",
+    courseId: "SPMS",
+    module: 2,
+    order: 4,
+    title: "TAM, SAM, SOM and early evangelists",
+    objective: "Size an opportunity through TAM, SAM, and SOM, and name the innermost group who will adopt without hesitation.",
+    explainer: [
+      "Two questions come before building anything. How big is this opportunity — am I building for everyone in Delhi, for India, for the world? And who are my first one, two, hundred, or thousand customers, the people who will use the product right away without any hesitation? The answers are drawn as concentric circles: Total Addressable Market, Serviceable Available Market, Serviceable Obtainable Market, and inside those the early evangelists.",
+      "TAM is how big the market could possibly be. For Zerodha, an investment platform, that is every retail investor wanting to invest in exchange traded securities or mutual funds — worldwide, anyone who could use it. SAM is how much of that you could reach now. Cross-border investing runs into regulatory frameworks, so even though the product could solve the problem for online retail investors anywhere, Zerodha's serviceable available market narrows to online retail investors in India.",
+      "SOM narrows again: of the people you could reach, how many can you practically service and win today. India's online retail investors are already being served by brokerages such as Kotak Securities, ICICI Direct, and HDFC Securities, so the obtainable market is the segment those firms fit badly — cost-conscious, frugal investors who want to save on brokerage, who want plenty of information for do-it-yourself investing, and who do not need a dedicated relationship manager. The early evangelists sit inside that circle."
+    ],
+    worked: {
+      setup: "Zerodha's addressable market is every retail investor in exchange traded securities and mutual funds.",
+      move: "Narrow it twice. Regulation cuts it to online retail investors in India; incumbent brokerages cut it again to cost-conscious, self-directed investors.",
+      because: "TAM measures the prize, not the plan, and the two narrowings are different kinds of constraint. SAM is what you are permitted and able to reach; SOM is what you can actually take given who already holds it. Quoting TAM as the target skips both, which is how a plan ends up addressed to nobody in particular."
+    },
+    glossary: [
+      {term: "Total Addressable Market", plain: "The largest the market could be — everyone who could ever use the product."},
+      {term: "Serviceable Available Market", plain: "The part of TAM you could actually reach now, after regulation and geography."},
+      {term: "Serviceable Obtainable Market", plain: "The part of SAM you can practically service and win against incumbents."},
+      {term: "Early Evangelist", plain: "A first customer who adopts right away without hesitation, sitting inside the innermost circle."}
+    ],
+    connects: "Sizing tells you where to aim. The next session is about learning fast enough to actually hit it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L10",
+    courseId: "SPMS",
+    module: 2,
+    order: 10,
+    title: "Crossing the chasm",
+    objective: "Move a product from early adopters into the mainstream using beachhead focus, simplification, trust, and ecosystem fit.",
+    explainer: [
+      "Crossing the Chasm was coined by Geoffrey Moore in his book of the same title, to explain how high-tech products get beyond their early markets and into the mainstream. The situation is specific: you have run an MVP for early markets and had good success with early adopters, and the mainstream turns out to be a different audience with different tolerances. Four strategies do the crossing.",
+      "First, focus on a narrow beachhead market rather than spray and pray. WhatsApp launched in 2009 only for iOS customers, in markets like North America, knowing perfectly well that a big chunk of messaging happened on Android phones in India and elsewhere. The point was to get it right close to home and build references, case studies, credibility, and repeatability first. Second, simplify the product for mainstream users. ChatGPT runs on a powerful engine that ordinary users could never reach through programming languages or API interfaces, so OpenAI built easy onboarding and a simplified chat interface. Onboarding, UX, configuration, and documentation all move adoption.",
+      "Third, build trust and reliability, because mainstream customers avoid risk. That means uptime, low downtime, high security, good customer support, compliance that guarantees comfort, and social proof. Aadhaar reached a billion people by starting small, building reliability and the compliance infrastructure, and only then going big. Fourth, build ecosystems and integrations, because mainstream users prefer products that fit their existing workflows rather than ones demanding they change their lifestyle. That means integrating with enterprise systems, APIs, marketplaces, platforms, and partner ecosystems — UPI is the standing example."
+    ],
+    worked: {
+      setup: "An MVP has succeeded with early adopters and the team wants to go wide immediately.",
+      move: "Pick a narrow beachhead instead. Win it completely, then expand on the references and repeatability it produces.",
+      because: "Spray and pray fails because it never finishes anything. WhatsApp's 2009 launch deliberately passed over the larger Android market to get iOS in North America right first. The output of a beachhead is not only revenue — it is credibility, case studies, and a repeatable motion, which are exactly what a risk-averse mainstream buyer needs before it will move at all."
+    },
+    glossary: [
+      {term: "beachhead market", plain: "One narrow segment won completely before expanding, rather than addressing everyone at once."},
+      {term: "spray and pray", plain: "Trying to reach everybody at once and finishing with nobody."},
+      {term: "early adopters", plain: "The early-market customers who take a product on before it is proven."},
+      {term: "social proof", plain: "Visible evidence that others already rely on the product, which lowers perceived risk."}
+    ],
+    connects: "Crossing assumes you had something worth crossing with. The next session names the two fits that decide whether you did."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L02",
+    courseId: "SPMS",
+    module: 3,
+    order: 2,
+    title: "Product definition and positioning",
+    objective: "Translate a product vision into a definition of what the product does and a positioning statement of why a customer should use it.",
+    explainer: [
+      "Vision comes first, because definition and positioning are both translations of it. A product vision should be a crisp statement, easy to understand; inspirational enough to motivate teams and partners; customer-oriented, because ultimately the product has to deliver customer value; strategic enough to drive prioritisation over time; long-term oriented rather than aimed at the next three or six months; differentiating against competition and alternatives; and feasible enough that you can actually deliver on it.",
+      "The two outputs answer different questions for different readers. Product definition is what the product does. It is largely internal — it exists so the team and its partners understand exactly what is being built. Product positioning is how the product impacts customers or potential users, and why they should use it. Collapsing the two produces either a definition that reads like marketing copy or a position statement that means nothing to anyone outside the building.",
+      "The course supplies a syntax with fixed highlighted phrases you keep and write around. For UPI, the definition opens on the problem of fragmented and inconvenient digital payments — payments divided across various systems and bank accounts — which affects consumers, merchants, banks, and the digital economy overall. The impact clause then names what that costs: slow cash adoption, with cash stuck in pockets and the velocity of cash low, and transaction friction, where neither party has the exact change or the right device. The same template is then run on HydraSmart, the hypothetical smart water bottle."
+    ],
+    worked: {
+      setup: "A team has a product vision and needs both a brief for its partners and a customer-facing statement.",
+      move: "Write two artefacts, not one. The definition answers what the product does; the positioning answers why a customer should use it and what changes for them.",
+      because: "They address different readers. Definition is internal alignment — partners have to know exactly what is being built. Positioning is external impact. The UPI statement shows the split working: the definition names fragmented payments across systems, while the impact clause carries the consequences — slow cash velocity, transaction friction — which is the part that persuades anyone outside the team."
+    },
+    glossary: [
+      {term: "product definition", plain: "What the product does — the internal statement partners and the team build against."},
+      {term: "product positioning", plain: "How the product impacts users, and why they should use it."},
+      {term: "product vision", plain: "The crisp, long-term, differentiating statement both of the above translate."},
+      {term: "transaction friction", plain: "Cost imposed by the payment itself — no exact change, no suitable device."}
+    ],
+    connects: "A position statement is a claim. The next session covers the practices that take it to market."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L06",
+    courseId: "SPMS",
+    module: 3,
+    order: 6,
+    title: "Lean Canvas",
+    objective: "Choose between Business Model Canvas and Lean Canvas by the question being asked, and name the boxes that differ.",
+    explainer: [
+      "The Business Model Canvas, created by Alex Osterwalder, describes on a single page of nine boxes how a business runs and creates value — both for its customers and for itself. It runs from the customer segments you address all the way to the revenues you make from them, together with the value proposition being delivered and the cost structure required to deliver it. The Lean Canvas, created by Ash Maurya, is an extension of that with a different purpose.",
+      "Several boxes carry across unchanged: customer segments, channels, cost structure, and revenue structure. The value proposition box becomes unique value proposition. Four boxes are new — problem, solution, and key metrics down the left-hand side, and unfair advantage at the top right. Those substitutions are the whole point. The Lean Canvas trades description of a working business for the things an unproven idea still has to establish.",
+      "Which one to use is decided by the question you are asking. The Business Model Canvas asks how this business works, and how it can be made more efficient as times change — so it suits established products and scaling businesses, and analysing a pivot or an enhancement against today's model. The Lean Canvas asks something more fundamental: should this product exist? It is built to validate a startup idea quickly, which follows from the course's own definition of a startup as not a business but an experiment or project to validate a business model. It suits early-stage startups and MVPs."
+    ],
+    worked: {
+      setup: "An early-stage team wants its business on one page and reaches for the Business Model Canvas.",
+      move: "Use the Lean Canvas instead, and fill in problem, solution, key metrics, and unfair advantage.",
+      because: "The two canvases encode different questions. The Business Model Canvas assumes a business exists and asks how it runs and how to improve it. A startup is not yet a business — it is an experiment to validate a business model — so the useful question is whether the product should exist at all. The four Lean Canvas boxes are exactly the unvalidated parts, and the Business Model Canvas has nowhere to put them."
+    },
+    glossary: [
+      {term: "Lean Canvas", plain: "Ash Maurya's one-page canvas for validating an early-stage idea quickly."},
+      {term: "Business Model Canvas", plain: "Alex Osterwalder's nine-box page describing how an existing business runs and creates value."},
+      {term: "unique value proposition", plain: "The Lean Canvas replacement for value proposition, forcing a claim of distinctiveness."},
+      {term: "unfair advantage", plain: "Something a competitor cannot easily copy or buy, sitting at the canvas's top right."},
+      {term: "key metrics", plain: "The few numbers that would show the idea is or is not working."}
+    ],
+    connects: "The canvas names what has to be true. The next session turns to how the product actually reaches the customer."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L02",
+    courseId: "SPMS",
+    module: 4,
+    order: 2,
+    title: "Value-based pricing",
+    objective: "Translate delivered customer value into a price, and recognise cost-based pricing as the fallback it is.",
+    explainer: [
+      "Pricing follows from value you have already established. The course has defined value and value bundles through the value pyramid; this session is about translating what value you deliver to the customer into a tangible price, so the product is valuable to the business as well. That is the move from customer value to business value, and it is the reason value-based pricing matters for software products in particular.",
+      "The alternative is cost-based pricing. Software services are the familiar case: you bill by the number of hours an engineer spends, at $50 an hour or $200 an hour, worked back from salary and total cost to the company. That is what you fall back on when you do not know how your product will be deployed, or what it does to the customer's life and business. It is defensible in ignorance — but the real value of products lies in understanding and delivering value, so you may as well translate that value into monetisation directly.",
+      "The pyramid starts at the bottom with value creation as the foundational layer: you cannot think about pricing until you are sure you are creating value, and the value in question is economic value — tangible and measurable in value terms. An industrial coffee machine sold to a chain that serves 200 cups a day gives you a peg, because the economic value is 200 multiplied by what a cup earns them. B2C is much harder, because no such number is available, so you work instead from comparable information about what other products in the space do."
+    ],
+    worked: {
+      setup: "A team cannot measure what its product earns its customers, and defaults to pricing on its own costs.",
+      move: "Name that as cost-based pricing and treat it as a fallback. Go looking for the economic value peg first, and for comparables when no peg exists.",
+      because: "Cost-based pricing is what you use when you do not know the deployment of your product or its impact on the customer's business — it prices your inputs rather than their outcome. The industrial coffee machine has a peg because 200 cups a day is countable. Most B2C has no such number, which is why the lecture sends you to comparable products rather than back to your own cost sheet."
+    },
+    glossary: [
+      {term: "value-based pricing", plain: "Setting price from the value delivered to the customer rather than from what it cost to build."},
+      {term: "cost-based pricing", plain: "Pricing from your own inputs — the hourly-billing model used when impact is unknown."},
+      {term: "value creation", plain: "The foundational layer: being sure value exists before pricing anything."},
+      {term: "economic value", plain: "Value that is tangible and measurable, like 200 cups of coffee a day."},
+      {term: "value pyramid", plain: "The framework of value levels the pricing discussion is built on."}
+    ],
+    connects: "That establishes the basis for a price. The next session covers the strategies that actually set one."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L07",
+    courseId: "SPMS",
+    module: 4,
+    order: 7,
+    title: "Unit economics",
+    objective: "Pick the right unit for a business model and use per-unit cost and revenue to judge when profitability arrives.",
+    explainer: [
+      "Unit economics is foundational for two reasons the course has already built. First, a startup is not a business but an experiment to validate a business model — and validating that model means understanding what it takes to get the business, what it takes to service it, and whether and when you become profitable. Second, the three pillars of desirability, feasibility, and viability all boil down to this one concept, because viability is precisely the question unit economics answers.",
+      "The move is to stop looking at the business as a whole and look at the individual transaction or relationship instead: what it takes to acquire this customer and to fulfil this piece of business. Unit economics is the measure of profitability of one unit of your offering — a customer, or a relationship — validating the business model at an atomic level, with the cost of revenue analysed on a per-unit basis. Startups cannot be profitable from day one the way mature businesses are, so the real question is how many customers or transactions, or how long, before profitability is reached.",
+      "The unit itself depends on the business, and choosing it wrongly makes every later number meaningless. In SaaS, acquiring the customer is the significant act, so the unit is one customer or account. In a marketplace it is one transaction. In ride-sharing, Ola or Uber, it is one ride. On a cloud platform it is a single usage, an API call for instance. In e-commerce it is one order, as at Amazon or Flipkart. In fintech and wallets it is one payment transaction. What decides it is the customer relationship model from the business model canvas."
+    ],
+    worked: {
+      setup: "A SaaS company and a marketplace both want to know whether they are profitable per unit.",
+      move: "Use different units. SaaS takes one customer or account; the marketplace takes one transaction.",
+      because: "The unit follows the customer relationship model. SaaS acquires a customer who then transacts repeatedly across a lifetime, so the customer acquisition cost has to be spread over that whole relationship — which only works if the unit is the account. A marketplace relationship is transactional, so the transaction is the unit. Borrowing the marketplace's unit for SaaS would bury the acquisition cost that decides whether the model works at all."
+    },
+    glossary: [
+      {term: "unit economics", plain: "Profitability measured for one unit of the offering — a customer, a ride, an order."},
+      {term: "customer acquisition cost", plain: "What it costs to acquire a customer, totalled over a period; abbreviated CAC."},
+      {term: "business model validation", plain: "Establishing what it takes to get and service the business, and when profit arrives."},
+      {term: "customer relationship model", plain: "Whether a customer transacts once or repeatedly, which decides what the unit is."}
+    ],
+    connects: "Per-unit numbers are the input. The next session scales them up into financial management and forecasting."
+  });
+
   window.T6_LESSONS = lessons;
 })();
