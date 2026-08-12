@@ -15,14 +15,15 @@ cloudflare/dist-standalone/
 # Real learner data and local runtime state
 state/
 history/
-mock/leaderboard.json
-mock/leaderboard.json.tmp
+leaderboard.json
+leaderboard.json.tmp
 
 # Owner-supplied or generated working material
-mock/CLAs/
+# Directory-name patterns (no leading path) so a future move cannot escape them.
+CLAs/
 outputs/
 work/
-mock/tunnel-out.txt
+tunnel-out.txt
 
 # Private transfer and coordination records
 _TRANSFER/

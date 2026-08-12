@@ -125,7 +125,7 @@
 > repository declarations disabled, activation preflight intentionally failing, no run history, and
 > no tester data touched. Evidence:
 > `evidence/2026-08-11/tester-agent-readiness/verification.md`. The earlier
-> cinematic/Ari/economy product slice remains at `mock/rogue.html` as an `IMPLEMENTED` legacy
+> cinematic/Ari/economy product slice remains at `legacy/rogue/rogue.html` as an `IMPLEMENTED` legacy
 > reference and still lacks complete real-Browser route acceptance.
 >
 > Static HTML/CSS/JavaScript prototypes in `mock/`; procedural learning engine and state in root
@@ -276,9 +276,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `mock/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, and the provenance-derived option-diagnosis pass. | 2026-08-12 |
 | `mock/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
 | `mock/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, scored-pool, and option-diagnosis validator. | 2026-08-12 |
-| `mock/rogue.html` | Legacy character → Hall → run → failure/results product-flow markup. | 2026-08-10 |
-| `mock/rogue.js` | Legacy product-slice state transitions, questions, rewards, quest, and outcome behavior. | 2026-08-10 |
-| `mock/rogue.css` | Legacy product-slice responsive presentation, feedback states, and animation behavior. | 2026-08-10 |
+| `legacy/rogue/rogue.html` | Legacy character → Hall → run → failure/results product-flow markup. | 2026-08-10 |
+| `legacy/rogue/rogue.js` | Legacy product-slice state transitions, questions, rewards, quest, and outcome behavior. | 2026-08-10 |
+| `legacy/rogue/rogue.css` | Legacy product-slice responsive presentation, feedback states, and animation behavior. | 2026-08-10 |
 | `mock/server.py` | Portable local static/media server; `/` now opens the active T6 route; legacy leaderboard API remains. | 2026-08-10 |
 | `mock/start-mac.sh` | Dependency-free macOS launcher for the local prototype server. | 2026-07-16 |
 | `mock/serve-tunnel.cmd` | Fail-closed Windows launcher for the server and an explicitly installed LocalTunnel 2.0.2 CLI. | 2026-08-04 |
@@ -330,7 +330,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - Preserve user changes and unrelated files. Avoid destructive source-control or filesystem
   operations unless explicitly requested.
 - Run the smallest relevant verification after each coherent change. Current baseline checks:
-  - JavaScript syntax: `node --check mock/rogue.js`
+  - JavaScript syntax: `node --check legacy/rogue/rogue.js`
   - T6 JavaScript syntax: `node --check mock/t6.js`,
     `node --check mock/sets/t6_brgsa.js`, `node --check mock/sets/t6_catalog.js`, and
     `node --check mock/sets/t6_challenges.js`

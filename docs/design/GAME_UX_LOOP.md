@@ -352,7 +352,7 @@ results, and return home. Expand content only after this slice is stable.
 
 ## Current prototype audit — implementation review
 
-Reviewed: `mock/index.html`, `mock/rogue.html`, `mock/rogue.js`, relevant animation styles, current
+Reviewed: `legacy/prototypes/index.html`, `legacy/rogue/rogue.html`, `legacy/rogue/rogue.js`, relevant animation styles, current
 Door composite/plane sheets, and the existing art-direction document.
 
 This is not yet a browser-verified usability pass.

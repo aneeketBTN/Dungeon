@@ -146,7 +146,7 @@ Scenario routes do not save normal browser progress.
 ## Legacy references
 
 The Term 5 procedural engine in `docs/engine/PROMPT.md`, its live state/history, the earlier cinematic product
-prototype at `/mock/rogue.html`, and the older Open Mock pages remain preserved for reference. They
+prototype at `/legacy/rogue/rogue.html`, and the older Open Mock pages remain preserved for reference. They
 are not part of the active student path.
 
 Product decisions and remaining gates are in `docs/briefs/T6_REVISION_FALLBACK.md`.

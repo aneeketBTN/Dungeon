@@ -123,7 +123,7 @@ laboratory schedule transfers perfectly to every T6 learner:
 
 The public programme boundary is recorded by IIMB at
 [BBA DBE Academics](https://dbe.iimb.ac.in/academics_v4/). The prior-term style analysis is local
-evidence at `mock/CLAs/_analysis/findings.md`; it guides item framing, not exact T6-paper claims.
+evidence at `legacy/CLAs/_analysis/findings.md`; it guides item framing, not exact T6-paper claims.
 
 ## Public progress model
 

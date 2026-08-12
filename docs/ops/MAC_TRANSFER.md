@@ -52,7 +52,7 @@ bash mock/start-mac.sh
 - `mock/validate_t6_bank.js` — bank/source/breadth validation utility
 - `mock/server.py` — local server and root redirect
 
-The earlier cinematic product slice remains at `mock/rogue.html`. It is a legacy reference, not
+The earlier cinematic product slice remains at `legacy/rogue/rogue.html`. It is a legacy reference, not
 the active student route.
 
 ## Deterministic Browser scenarios

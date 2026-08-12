@@ -79,7 +79,7 @@ not make it authoritative.
    - Canonical for documented setup and commands only when consistent with `docs/engine/PROMPT.md`.
 
 8. **Current implementation evidence**
-   - `mock/index.html`, `mock/rogue.html`, `mock/rogue.css`, `mock/rogue.js`, and other mock pages.
+   - `legacy/prototypes/index.html`, `legacy/rogue/rogue.html`, `legacy/rogue/rogue.css`, `legacy/rogue/rogue.js`, and other mock pages.
    - These show what exists. They are not automatically product requirements.
 
 9. **Current visual evidence and research**
@@ -111,7 +111,7 @@ not make it authoritative.
 | Prototype interaction | `mock/rogue.*` | current Hall/run/results behavior |
 | T6 exam fallback | `docs/briefs/T6_REVISION_FALLBACK.md`; `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`; `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md`; owner-supplied T6 AI-ready pack | four-subject dashboard, evidence-based progress, adaptive repetition, mixed formats, confidence, constructed response, first-cohort boundary |
 | Controlled tester release | current owner direction; `docs/briefs/TESTER_ACCESS_AND_ADMIN.md`; `docs/community/TESTER_GUIDE.md`; `docs/community/PRIVACY.md`; `SECURITY.md`; `docs/community/COMMUNITY_PLAYBOOK.md` | hosting boundary, identity access, source publication, feedback, moderation, announcements, incident intake |
-| Legacy practice portal | `mock/index.html` and other mock pages | content inventory and old navigation |
+| Legacy practice portal | `legacy/prototypes/index.html` and other mock pages | content inventory and old navigation |
 
 ## Conflict register
 
@@ -196,7 +196,7 @@ one side.
   product layers later.
 - Resolution (2026-08-10): the T6 fallback is the active default route. It removes all non-learning
   gates from the critical path, keeps configurable generic practice one click away, and preserves the broad product
-  slice at `mock/rogue.html` as a legacy reference rather than deleting it.
+  slice at `legacy/rogue/rogue.html` as a legacy reference rather than deleting it.
 
 ### C12 — Game-system vocabulary versus student comprehension
 
