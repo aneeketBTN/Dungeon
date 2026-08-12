@@ -33,13 +33,14 @@
 > no question cites them, so they would never be delivered; coverage is complete for what a learner
 > can reach, not for the whole course. All lesson prose is new and stays
 > `WAITING_OWNER_CONTENT_ACCEPTANCE`. No screenshots — the Browser pane was not compositing — so
-> pixel-level acceptance is still owed. **Partly deployed (2026-08-12):** PR #1 merged
-> `reorg/structure` commit `3c69d1e` into `main` at 11:20 IST, which carries the workspace
-> restructure and the first 80 lessons (BRGSA and IBM complete) to the live cohort through Workers
-> Builds. The SCLM and SPMS lessons landed after that merge and are **not** on `main`, so testers
-> currently get teaching on BRGSA and IBM only. This is a tester-visible change and **owes a change
-> announcement** — see Session Hygiene. Confirm the deployed version in Workers → Deployments rather
-> than from this file.
+> pixel-level acceptance is still owed. **Deployed (2026-08-12):** `reorg/structure` was merged to
+> `main` as `a8f90bc`, which carries the complete teaching layer for all four subjects, the
+> multiple-select format, the exam-ordered subject rail, and the Control Room sign-out to the live
+> cohort through Workers Builds. An earlier merge (PR #1, `3c69d1e`) had shipped only the restructure
+> and the first 80 lessons. These are tester-visible changes and **owe a change announcement** — a
+> draft is at `outputs/ANNOUNCEMENT-2026-08-12-lessons.md` (untracked). Confirm the deployed version
+> in Workers → Deployments rather than from this file; a push to `main` starts a build, it does not
+> prove one finished.
 >
 > **Workspace restructure (2026-08-12):** The repository was reorganized for collaboration
 > in seven verified phases on branch `reorg/structure`, with no behaviour change intended and none
