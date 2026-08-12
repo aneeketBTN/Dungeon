@@ -3,6 +3,36 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Exam pattern received; coverage plan reversed before authoring
+
+- **`EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` is closed.** The owner supplied the Batch 1 pattern for all
+  four papers. Recorded as authority in `docs/briefs/T6_EXAM_PATTERN.md`. Structure — sections,
+  counts, marks, duration, negative marking, calculators — may now be stated as fact. Question
+  content, difficulty, topic weighting, a likely score, and pass probability remain unclaimable.
+- **The plan to author 191 uncited lectures was stopped before any of it was written.** Checked
+  against the pattern, uniform lecture coverage is the wrong instrument. Three findings:
+- **Two required formats do not exist in the app, and they carry 64 marks.** SPMS Section B is 20
+  negatively marked multiple-select questions — 40 marks, **53% of that paper** — and SCLM Section B
+  is 6 tolerance-graded numericals worth 24 marks, 30%. The bank supports MCQ, cloze, case-cloze,
+  match, short-answer, and boss; it has neither MSQ nor numeric entry. Building those two beats any
+  volume of further MCQ authoring.
+- **IBM's paper has no objective section at all** — ten subjective answers on a caselet released two
+  days before. Its 196 MCQ-derived surfaces contribute nothing to it, and the 62 uncited IBM
+  lectures I was about to author would have added zero marks. That was the single most expensive
+  assumption in the previous plan.
+- **Two alignment defects logged against the existing bank.** BRGSA's paper guarantees every question
+  is self-contained with no Clairo or Zoko figure to recall, so bank items testing recall of one
+  train a skill the exam excludes; the bank has not been audited for this. And SCLM carries 24 marks
+  of computation with supplied normal-distribution tables, while only 3 of its 16 cited lectures
+  carry arithmetic.
+- Also measured, and the reason the question came up: the bank asks about **92 of 283 lectures
+  (32.5%)**. IBM, SCLM, and SPMS each concentrate ~196 questions onto 16 lectures — a median of 15
+  each — while 62 to 68 lectures get none. BRGSA is the healthier shape at 44 lectures, median 2.
+  Corrected a mistaken assumption while measuring: concepts are assigned by a module-scoped regex
+  (`t6_catalog.js`), so new questions bucket into existing concepts and broader coverage needs **no**
+  concept-model change.
+- Nothing authored this session beyond the record itself. Exams are 22–23 August 2026.
+
 ## 2026-08-12 — Teaching layer complete: every scheduled question is now taught
 
 - **Closed the 0→80 path.** SCLM and SPMS were the two subjects still untaught. 26 lessons authored

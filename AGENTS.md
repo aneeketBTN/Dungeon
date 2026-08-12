@@ -142,10 +142,11 @@
 > `docs/community/COMMUNITY_PLAYBOOK.md`.
 > Student-facing game/proprietary vocabulary and diagnostic question metadata are removed from the
 > learning view. Sixty-four constructed-response surfaces use transparent self-review without
-> automatic correctness or Strong credit. Exact final-paper structure is
-> `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`: it is an explicit claim boundary, not a prerequisite this
-> cohort can wait for. Owner/faculty content acceptance remains open, so the route is not
-> `DONE` or an exam-score prediction. The privacy-scoped release wrapper, worker health route,
+> automatic correctness or Strong credit. Exact final-paper structure is **known as of 2026-08-12**
+> and recorded in `docs/briefs/T6_EXAM_PATTERN.md`, which closed
+> `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`; structure may be stated as fact, but question content,
+> difficulty, topic weighting, a likely score, and pass probability remain unclaimable. Owner/faculty
+> content acceptance remains open, so the route is not `DONE` or an exam-score prediction. The privacy-scoped release wrapper, worker health route,
 > security/no-index/private-cache headers, release tests, owner control room, and community
 > operating documents are verified at
 > `evidence/2026-08-11/tester-access-admin/verification.md`; the owner-JWT-verified Cloudflare group
@@ -373,6 +374,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `CLAUDE.md` | Claude compatibility entry; points to this operating index and preserves engine startup facts. | 2026-07-16 |
 | `docs/governance/DESIGN_SOURCE_INDEX.md` | Authority order, brief inventory, and unresolved product conflicts. | 2026-08-11 |
 | `docs/briefs/PROJECT_OPERATING_SYSTEM.md` | Durable requirements and Codex adaptation of the owner-supplied admin-system brief. | 2026-07-16 |
+| `docs/briefs/T6_EXAM_PATTERN.md` | **Authority for paper structure.** Batch 1 sections, counts, marks, negative marking, calculators, and what remains unclaimable. Closed `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`. | 2026-08-12 |
 | `docs/briefs/T6_REVISION_FALLBACK.md` | Active dashboard, adaptive-primer, source-boundary, mastery/repetition, and acceptance contract. | 2026-08-11 |
 | `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Confidence, evidence-state, adaptive-primer, boss, mixed-format, rotation, and retest contract. | 2026-08-11 |
 | `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
@@ -547,9 +549,26 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
-- [ ] `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`: no same-course final exists to supply an exact
-  blueprint. This is a standing claim boundary, not a work-blocking gate. Do not claim exact
-  sections, duration, marks, options, negative marking, likely score, or pass probability.
+- [x] `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` — **closed 2026-08-12.** The owner supplied the Batch 1
+  pattern; it is recorded in `docs/briefs/T6_EXAM_PATTERN.md`, which is now authority for paper
+  structure. Sections, counts, marks, duration, negative marking, and calculator rules may be stated
+  as fact. Still not claimable: question content, difficulty, topic weighting within a section, the
+  IBM caselet's subject, a likely score, or a pass probability.
+- [ ] **Two required formats do not exist in the app, and they are worth 64 marks.** SPMS Section B
+  is 20 negatively marked multiple-select questions (40 marks, **53% of that paper**) and SCLM
+  Section B is 6 tolerance-graded numericals (24 marks, 30%). The bank has neither an MSQ nor a
+  numeric-entry surface. Building these outranks any further MCQ authoring.
+- [ ] **IBM's paper contains no objective questions at all** — ten subjective answers on a caselet
+  released two days beforehand. Its 196 MCQ-derived surfaces contribute nothing to it, and authoring
+  its 62 uncited lectures would add zero marks. Do not spend bank effort there; the useful work is
+  framework fluency and structured written answers against an unseen case.
+- [ ] **BRGSA self-containment.** The paper states that no question requires memorising a Clairo or
+  Zoko figure. Bank items that test recall of one are training a skill the exam explicitly excludes.
+  Teaching with those numbers is fine; testing recall of them is not. The bank has not been audited
+  against this.
+- [ ] **SCLM is under-weighted on computation.** Section B is 24 marks of numericals with a
+  scientific calculator and supplied normal-distribution tables, pointing at safety stock, service
+  level, and newsvendor. Only 3 of its 16 cited lectures carry arithmetic today.
 - [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 792 surfaces are source-traceable and structurally
   verified, but transcript-derived content, the 64 support-only primers, the 64 constructed-
   response rubrics/exemplars, and the 106 authored lessons still need owner/faculty acceptance
