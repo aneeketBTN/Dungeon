@@ -451,11 +451,15 @@
        "Desirability is validated with design skills and empathy for the customer",
        "Feasibility asks whether the product can be built with the technology available today",
        "A product that is desirable and feasible but not viable is unsustainable",
-       "Viability is settled once a working prototype exists"
+       "Viability is settled once a working prototype exists",
+       "Feasibility is confirmed by customer interviews showing people want the product"
      ], answers: [0, 1, 2],
      wrong: {3: {tag: "Read viability as buildability", label: "Answered the feasibility question and stopped",
        why: "This choice assumed that proving the product can be made also proves it should be. A prototype demonstrates the technology exists, which is the feasibility check; viability asks the separate question of whether it can profit or fund the business.",
-       cue: "When a check passes, name which of the three it was. If the evidence is technical, it cannot be viability."}},
+       cue: "When a check passes, name which of the three it was. If the evidence is technical, it cannot be viability."},
+       4: {tag: "Checked desirability and called it feasibility", label: "Used the wrong evidence for the question",
+         why: "This choice assumed wanting the product is evidence it can be built. Interviews establish desirability — that customers want it — which the lecture pairs with design skills and empathy. Feasibility is the engineering question of whether today's technology can deliver it.",
+         cue: "Ask which skill produced the evidence. Design evidence answers desirability; engineering evidence answers feasibility."}},
      explanation: "Each area needs a different skill — design for desirability, engineering for feasibility, business for viability. A prototype proves you can build it, which is the feasibility question; viability asks whether it can profit or fund the business."},
 
     {concept: "spms_jtbd", source: "SPMS-M01-L10", node: "Jobs to be done",
@@ -464,11 +468,15 @@
        "Functional — the certificate has to go onto the wall",
        "Emotional — pride in more than a decade of study",
        "Social — new patients gain confidence they are seeing a qualified doctor",
-       "Financial — the drill costs less than hiring someone to do it"
+       "Financial — the drill costs less than hiring someone to do it",
+       "Habitual — the purchase repeats often enough that no decision is taken"
      ], answers: [0, 1, 2],
      wrong: {3: {tag: "Added a layer the lecture does not use", label: "Treated price as one of the layers of the job",
        why: "This choice assumed cost is one of the needs stacked inside the purchase. The lecture names functional, emotional, and social. Cost enters somewhere else entirely — through customer value, which is benefit minus cost.",
-       cue: "List the three layers before answering. A candidate that is not one of them belongs to the value calculation instead."}},
+       cue: "List the three layers before answering. A candidate that is not one of them belongs to the value calculation instead."},
+       4: {tag: "Invented a fourth layer", label: "Added a need the framework does not name",
+         why: "This choice assumed repetition is one of the needs stacked inside a purchase. The lecture names three — functional, emotional, social. A certificate framed once is not a habitual purchase at all, which is what makes this a fourth layer imported from elsewhere.",
+         cue: "Count the layers the lecture names. If your answer needs a fourth, it is not this framework."}},
      explanation: "The example stacks a functional, an emotional, and a social need in one purchase. Cost enters only through customer value, which is benefit minus cost — it is not one of the layers of the job."},
 
     {concept: "spms_tamsam", source: "SPMS-M02-L04", node: "TAM, SAM, and SOM",
@@ -477,11 +485,15 @@
        "TAM is every retail investor who could use the product, worldwide",
        "Regulation on cross-border investing narrows SAM to online retail investors in India",
        "SOM narrows further because incumbent brokerages already serve those investors",
-       "SOM is the figure to quote as the market when raising funds"
+       "SOM is the figure to quote as the market when raising funds",
+       "TAM is calculated last, by scaling the achievable share back up"
      ], answers: [0, 1, 2],
      wrong: {3: {tag: "Turned a sizing step into a pitch number", label: "Read the funnel as a headline figure",
        why: "This choice assumed one of the three is the number you present. The lecture uses them as successive narrowing constraints — what could exist, what you may reach, what you can take against incumbents — not as a figure to quote.",
-       cue: "Ask what each step removes. A step that removes nothing is being used as a claim rather than an analysis."}},
+       cue: "Ask what each step removes. A step that removes nothing is being used as a claim rather than an analysis."},
+       4: {tag: "Ran the funnel backwards", label: "Derived the whole market from the reachable share",
+         why: "This choice assumed the sizing builds upward from what you can win. It narrows downward: TAM is everyone who could use the product, SAM is what regulation and reach permit, SOM is what remains against incumbents. Scaling up from SOM would make the prize a function of your own weakness.",
+         cue: "Check the direction. Each step should remove people, never add them back."}},
      explanation: "TAM measures the prize, SAM what you are permitted and able to reach, SOM what you can take given who already holds it. They are narrowing constraints, not a headline figure."},
 
     {concept: "spms_chasm", source: "SPMS-M02-L10", node: "Crossing the chasm",
@@ -490,20 +502,27 @@
        "Focus on a narrow beachhead market rather than spray and pray",
        "Simplify onboarding and the interface for mainstream users",
        "Build trust through uptime, security, support, compliance, and social proof",
-       "Raise the price at launch so mainstream buyers read it as quality"
+       "Raise the price at launch so mainstream buyers read it as quality",
+       "Address the early market and the mainstream at the same time to build volume faster"
      ], answers: [0, 1, 2],
      wrong: {3: {tag: "Substituted a signal for risk reduction", label: "Answered a risk problem with a pricing move",
        why: "This choice assumed mainstream buyers read a high price as quality. The lecture's premise is that mainstream customers avoid risk, so all four strategies lower perceived risk — beachhead focus, simplification, trust, ecosystem fit. Pricing is not among them.",
-       cue: "Name which of the four a candidate belongs to. If it fits none of them, it is not part of the crossing."}},
+       cue: "Name which of the four a candidate belongs to. If it fits none of them, it is not part of the crossing."},
+       4: {tag: "Answered the chasm by ignoring it", label: "Served both markets instead of crossing between them",
+         why: "This choice assumed breadth speeds the crossing. It is the spray-and-pray the lecture names as the failure — the two markets buy for opposite reasons, and a product addressing both at once reduces risk for neither. Beachhead focus is deliberately narrow for that reason.",
+         cue: "Ask who the message is for. If it is written for two audiences with opposite attitudes to risk, it convinces neither."}},
      explanation: "The four are beachhead focus, simplification, trust and reliability, and ecosystem fit. Mainstream customers avoid risk, so the work is lowering perceived risk rather than signalling through price."},
 
     {concept: "spms_lean_canvas", source: "SPMS-M03-L06", node: "Lean Canvas",
      stem: "Select every box that appears on the Lean Canvas but not on the Business Model Canvas.",
-     options: ["Problem", "Solution", "Unfair advantage", "Customer segments"],
+     options: ["Problem", "Solution", "Unfair advantage", "Customer segments", "Channels"],
      answers: [0, 1, 2],
      wrong: {3: {tag: "Counted a shared box as an addition", label: "Read a carried-over box as new",
        why: "This choice assumed customer segments is unique to the Lean Canvas. It carries across from the Business Model Canvas, along with channels, cost structure, and revenue structure. The additions are problem, solution, key metrics, and unfair advantage.",
-       cue: "Build two lists before answering — what carries over, and what replaces it. The question only asks about the second."}},
+       cue: "Build two lists before answering — what carries over, and what replaces it. The question only asks about the second."},
+       4: {tag: "Counted a second shared box as an addition", label: "Read another carried-over box as new",
+         why: "This choice assumed channels is one of the Lean Canvas additions. It carries across from the Business Model Canvas alongside customer segments, cost structure, and revenue structure. The additions are problem, solution, key metrics, and unfair advantage.",
+         cue: "Name the four additions before you look at the options. Anything outside that list carries over."}},
      explanation: "Problem, solution, key metrics, and unfair advantage are the Lean Canvas additions. Customer segments, channels, cost structure, and revenue structure carry across from the Business Model Canvas."},
 
     {concept: "spms_unit_economics", source: "SPMS-M04-L07", node: "Unit economics",
@@ -512,11 +531,15 @@
        "SaaS — one customer or account",
        "Ride-sharing — one ride",
        "E-commerce — one order",
-       "Marketplace — one customer lifetime"
+       "Marketplace — one customer lifetime",
+       "The unit is whichever one makes the economics look strongest to investors"
      ], answers: [0, 1, 2],
      wrong: {3: {tag: "Applied the SaaS unit to a transactional model", label: "Chose a unit the relationship does not support",
        why: "This choice assumed the marketplace acquires a customer who then transacts repeatedly across a lifetime. The unit follows the customer relationship model, and a marketplace relationship is transactional — so the unit is one transaction.",
-       cue: "Ask whether the business acquires a relationship or completes a transaction. That answer names the unit."}},
+       cue: "Ask whether the business acquires a relationship or completes a transaction. That answer names the unit."},
+       4: {tag: "Chose the unit for the audience", label: "Picked a unit to flatter the numbers",
+         why: "This choice assumed the unit is a presentational decision. It follows the customer relationship model, and it is not optional — choosing a unit the relationship does not support produces economics that describe a business you are not running.",
+         cue: "Ask what the business actually sells one of. That is the unit, whatever it does to the figures."}},
      explanation: "The unit follows the customer relationship model. SaaS acquires a customer who transacts repeatedly, so the account is the unit; a marketplace relationship is transactional, so the transaction is."},
 
     {concept: "spms_alternatives", source: "SPMS-M05-L02", node: "Competition and alternatives",
@@ -525,11 +548,15 @@
        "Rival products in the same category",
        "Manual alternatives such as spreadsheets, consultants, or internal tools",
        "The customer deciding to carry on doing nothing",
-       "Only the firms the startup has publicly named as competitors"
+       "Only the firms the startup has publicly named as competitors",
+       "An alternative counts only once the customer has formally evaluated it"
      ], answers: [0, 1, 2],
      wrong: {3: {tag: "Let the vendor define the comparison", label: "Set the competitive field from the inside",
        why: "This choice assumed competition is whatever the startup declares it to be. The lecture is explicit that customers decide the comparison — and in enterprise the most frequent alternative is inertia, the buyer carrying on exactly as they are.",
-       cue: "Ask what the customer would do if you did not exist. Whatever that is, it is the competition, named or not."}},
+       cue: "Ask what the customer would do if you did not exist. Whatever that is, it is the competition, named or not."},
+       4: {tag: "Required a formal process before counting a rival", label: "Waited for the customer to run a comparison",
+         why: "This choice assumed competition begins at evaluation. Inertia is the most frequent enterprise alternative precisely because nobody evaluates it — the buyer carries on as they are without ever running a comparison, and that decision still costs you the deal.",
+         cue: "Ask whether the alternative needs a decision to win. Doing nothing wins by default."}},
      explanation: "Customers set the comparison, and in enterprise the most common alternative is inertia — doing nothing at all. Defining competition early and narrowly is named as the biggest mistake."},
 
     {concept: "spms_privacy", source: "SPMS-M08-L05", node: "Privacy by design",
@@ -538,16 +565,261 @@
        "GDPR protects any personal data irrespective of its sensitivity",
        "GDPR was enacted in May 2018 and became a model for Switzerland, Canada, and Australia",
        "US data protection leaves employee data outside its data protection regulations",
-       "Data protection by design means the customer must request that their data be protected"
+       "Data protection by design means the customer must request that their data be protected",
+       "US data protection is a single federal regime covering every category of data alike"
      ], answers: [0, 1, 2],
      wrong: {3: {tag: "Read a standing obligation as opt-in", label: "Made protection something the user has to ask for",
        why: "This choice assumed the duty begins when a customer requests it. By design means the obligation applies the moment you offer the service, which is why a customer never has to confirm that their data is protected.",
-       cue: "Ask when the duty starts. If the answer is 'once they ask', it is not protection by design."}},
-     explanation: "GDPR covers all personal data regardless of sensitivity, while US protection is category-based and excludes employee data. Protection by design is never something a customer has to ask for."}
+       cue: "Ask when the duty starts. If the answer is 'once they ask', it is not protection by design."},
+       4: {tag: "Gave the US regime GDPR's shape", label: "Read a category-based regime as a blanket one",
+         why: "This choice assumed both regimes work the same way. GDPR is the one that protects personal data irrespective of sensitivity; US protection is category-based, which is exactly why employee data falls outside it.",
+         cue: "Ask what the regime keys on. GDPR keys on the data being personal; the US regime keys on which category it falls in."}},
+     explanation: "GDPR covers all personal data regardless of sensitivity, while US protection is category-based and excludes employee data. Protection by design is never something a customer has to ask for."},
+
+    /* ---- the twelve that complete Section B ----------------------------------
+     *
+     * Authored 2026-08-12 to close LAW-53. The eight above were all
+     * three-correct-of-four with the wrong option at index 3, which made the section
+     * free twice over: ticking every option scored full marks, and so did ticking
+     * A, B and C without reading a word.
+     *
+     * These vary on both axes deliberately. Correct counts run one, two, and three of
+     * four, so counting once tells a candidate nothing, and the correct positions move,
+     * so no fixed pattern pays. The one-of-four items are the important shape — ticking
+     * everything on one scores 1 − 3 = −2, floored to zero — because they are what put
+     * a real cost back on a speculative tick.
+     *
+     * Every item sits on a lecture that already has a lesson, so LAW-47 holds with no
+     * extra scheduling, and each follows its own lesson's vocabulary rather than a
+     * paraphrase of it (LAW-49). */
+
+    {concept: "spms_positioning", source: "SPMS-M03-L02", node: "Product definition and positioning",
+     stem: "Select every statement that matches how the lecture separates definition from positioning.",
+     options: [
+       "Product definition is what the product does, and is largely internal — the team and its partners build against it",
+       "Product positioning is how the product impacts users, and why they should use it",
+       "Positioning is written first, and the product vision is derived from it afterwards",
+       "Definition and positioning are two names for the same customer-facing statement"
+     ], answers: [0, 1],
+     wrong: {
+       2: {tag: "Inverted the order of the three artefacts", label: "Derived the vision from the positioning",
+         why: "This choice assumed positioning is the starting point. The lecture puts vision first precisely because definition and positioning are both translations of it — a positioning statement with no vision behind it has nothing to be strategic about.",
+         cue: "Ask which statement the other two are translations of. That one is the vision, and it comes first."},
+       3: {tag: "Collapsed two artefacts with different readers", label: "Merged the internal brief with the external claim",
+         why: "This choice assumed one statement can serve both readers. They answer different questions: definition tells partners exactly what is being built, positioning tells a customer why they should care. Collapsing them produces a definition that reads like marketing, or a positioning nobody can build from.",
+         cue: "Ask who the sentence is for. If the answer is 'both', two artefacts have been written as one."}},
+     explanation: "Vision comes first, and the other two translate it. Definition is what the product does, written for the team and its partners; positioning is how it impacts users and why they should use it."},
+
+    {concept: "spms_value_pricing", source: "SPMS-M04-L02", node: "Value-based pricing",
+     stem: "Select every statement that matches how the lecture treats cost-based pricing.",
+     options: [
+       "It prices your own inputs rather than the customer's outcome",
+       "It is the method to prefer once the product has a measurable economic value peg",
+       "Billing by engineer hours at $50 or $200 an hour is the familiar software-services case",
+       "It is the fallback for when you do not know how the product will be deployed, or what it does to the customer's business",
+       "It is what the lecture recommends for software products in particular"
+     ], answers: [0, 2, 3],
+     wrong: {
+       4: {tag: "Reversed the lecture's recommendation", label: "Recommended the fallback for the case it argues against",
+         why: "This choice assumed software is the case where costing your inputs works best. It is the opposite: the lecture raises software services as the familiar example of hourly billing and then argues that the real value of products lies in understanding and delivering value, which is why value-based pricing matters for software in particular.",
+         cue: "Ask what the lecture is arguing for. The example it opens with is usually the thing it is about to replace."},
+       1: {tag: "Promoted the fallback over the method", label: "Kept costing after the value became measurable",
+       why: "This choice assumed cost-based pricing stays appropriate once you can measure impact. The lecture calls it defensible in ignorance — it is what you use when the deployment and the customer impact are unknown. An economic value peg is exactly what removes that ignorance, so it is the point at which you stop.",
+       cue: "Ask what you now know that you did not before. A peg means you can price the outcome, so pricing the inputs is a choice to leave money on the table."}},
+     explanation: "Cost-based pricing prices your inputs — hourly billing worked back from salary — and is defensible only in ignorance of deployment and impact. A measurable peg is what lets you price the outcome instead."},
+
+    {concept: "spms_buyer_journey", source: "SPMS-M05-L04", node: "Buyer journey communication",
+     stem: "Select every failure the lecture names when value is communicated badly.",
+     options: [
+       "Communicating too late, after the decision has already been taken",
+       "Pricing the product below the nearest competitor",
+       "Using the wrong channels to carry the message",
+       "Publishing the product vision before the product definition"
+     ], answers: [0, 2],
+     wrong: {
+       1: {tag: "Substituted a pricing decision for a communication one", label: "Answered a different discipline's question",
+         why: "This choice assumed the failure is in the price. The lecture is explicit that startups fail not for lack of value but because the value was never articulated well enough to be understood — undercutting a competitor does not make an unarticulated value proposition legible.",
+         cue: "Ask whether the customer understood the offer. If they never understood it, price was not what failed."},
+       3: {tag: "Borrowed an ordering rule from the positioning lecture", label: "Applied a rule from a different session",
+         why: "This choice assumed the failure is one of sequence between artefacts. Vision does precede definition, but that belongs to the positioning session; the failures named here are about timing relative to the customer's decision, the channel, and the fit of the message.",
+         cue: "Check whose timeline the failure sits on. These three are on the customer's, not the team's."}},
+     explanation: "The named failures are communicating too late, using the wrong channels, and sending a message that does not match the customer's need. Good products fizzle when the value is never articulated, not when it is mispriced."},
+
+    {concept: "spms_requirements", source: "SPMS-M06-L05", node: "Functional and quality requirements",
+     stem: "A customer says the product must send a message, and must deliver it within 200 milliseconds. Select every statement that classifies this correctly.",
+     options: [
+       "Sending the message is a functional requirement — an action the product performs",
+       "The 200-millisecond bound is functional, because it describes what the product does",
+       "Both halves are non-functional, because the customer stated them in one sentence",
+       "The 200-millisecond bound is non-functional — a quality, confirmed by measurement under load"
+     ], answers: [0, 3],
+     wrong: {
+       1: {tag: "Read a quality as an action", label: "Classified a bound as behaviour",
+         why: "This choice assumed anything the product must do is functional. Robertson and Robertson split on action versus quality: the action is sending, and the 200 milliseconds is a quality constraining how well that action is performed. They are verified differently — one by whether a message sends, the other by measurement under load.",
+         cue: "Ask what confirms it. If you need a stopwatch or a load test rather than a yes or no, it is a quality."},
+       2: {tag: "Let the sentence decide the classification", label: "Classified by how it was said, not by what it is",
+         why: "This choice assumed one sentence carries one kind of requirement. Customers routinely state both together — that is the normal case, and it is why the split matters. Arriving in one breath does not make them one object.",
+         cue: "Split the sentence at the verbs before classifying. Each clause gets its own answer."}},
+     explanation: "The split is action versus quality. Sending is the action and so functional; the 200-millisecond bound is a quality and so non-functional, constraining architecture rather than behaviour."},
+
+    {concept: "spms_traceability", source: "SPMS-M06-L08", node: "Requirements traceability",
+     stem: "Select every statement that matches how the lecture traces a need into a requirement.",
+     options: [
+       "Customer requirements arrive already standardised, because customers state system requirements",
+       "Standardising generalises one customer's stated need so more customers of that nature are served by one product",
+       "Project requirements break a product requirement down for a release across smaller teams",
+       "Customer requirements describe business needs and aspirations rather than system specifications",
+       "Project requirements are written by the customer and passed to engineering unchanged"
+     ], answers: [1, 2, 3],
+     wrong: {
+       4: {tag: "Handed an internal artefact back to the customer", label: "Skipped both translations at once",
+         why: "This choice assumed the customer's words travel intact to the development team. Project requirements are the last of three forms, not the first — they sit closest to the development team and are produced by breaking a standardised product requirement down for a release.",
+         cue: "Count the translations between a business aspiration and a development task. There are two, and skipping them is what loses the traceability."},
+       0: {tag: "Expected the customer to do the translation", label: "Treated non-standard input as a customer failure",
+       why: "This choice assumed requirements arrive ready to build. The lecture is explicit that they do not, and that this is not a failure on the customer's part — they are describing business needs, not writing specifications. Converting them is the product manager's central competence here.",
+       cue: "Ask whose job the translation is. If the answer is the customer's, the product manager has been written out of the step that defines the role."}},
+     explanation: "Customer requirements arrive as business needs and aspirations. Standardising generalises one customer's need so the product serves many; project requirements are the internal breakdown engineering owns for a release."},
+
+    {concept: "spms_priority", source: "SPMS-M07-L01", node: "MoSCoW and RICE prioritisation",
+     stem: "Select every statement that matches how the lecture uses MoSCoW.",
+     options: [
+       "Won't have is part of the method, and stating it is what makes scope control real",
+       "It ranks every item against every other to produce one ordered list",
+       "It works as a filtering criterion, closer to a triage than to a ranking",
+       "Moscow refers to the capital city, where the technique was first formalised"
+     ], answers: [0, 2],
+     wrong: {
+       1: {tag: "Read a filter as a ranking", label: "Expected an ordered list from a triage",
+         why: "This choice assumed prioritisation always means sequencing. MoSCoW sorts into four buckets to build common understanding of what is definitely in and definitely out; it does not order items within a bucket, which is why the lecture pairs it with other techniques.",
+         cue: "Ask whether the output is a list or a set of buckets. Buckets filter; only a list ranks."},
+       3: {tag: "Took an acronym for a place name", label: "Read the name as an origin story",
+         why: "This choice assumed the technique is named after where it came from. The lecture says plainly that it is an acronym rather than a capital city: must have, should have, could have, won't have.",
+         cue: "Expand the letters before assuming a name is geographic."}},
+     explanation: "MoSCoW is an acronym — must, should, could, won't — used as a filter rather than a ranking. Naming what won't be done is the half that makes scope control real."},
+
+    {concept: "spms_priority", variant: "buckets", source: "SPMS-M07-L01", node: "MoSCoW and RICE prioritisation",
+     stem: "For the ride-hailing product the lecture uses, select every capability it places in must have.",
+     options: [
+       "Booking a ride",
+       "Payments",
+       "Driver ratings that help a customer choose between drivers",
+       "GPS",
+       "Multi-stop route planning"
+     ], answers: [0, 1, 3],
+     wrong: {
+       4: {tag: "Promoted a could-have to a must", label: "Treated a refinement as foundational",
+         why: "This choice assumed a capability that improves a journey belongs in must have. The lecture uses multi-stop planning as its could-have: a real improvement the product can ship without. Must have is only what the product cannot function without at all.",
+         cue: "Ask whether the first version could launch without it. If yes, it is could have at best."},
+       2: {tag: "Promoted a helpful feature to load-bearing", label: "Read valuable as essential",
+       why: "This choice assumed anything that improves the experience is a must. The lecture puts ratings in should have: valuable, and genuinely useful for choosing between drivers, but the product still functions without them. Must have is reserved for capabilities without which there is no product at all.",
+       cue: "Remove the feature and ask whether the product still works. If it does, it is not a must."}},
+     explanation: "Must have covers what the product cannot function without — booking, payments, GPS. Ratings are should have: valuable, and not load-bearing."},
+
+    {concept: "spms_roadmap", source: "SPMS-M07-L04", node: "Product roadmap",
+     stem: "Select every statement that matches the lecture's account of a roadmap.",
+     options: [
+       "It fixes the next three to six months and deliberately goes no further",
+       "It translates product strategy into a series of releases on a time axis",
+       "WhatsApp launched first on iPhone, with the Android version arriving around 2011",
+       "It lists the features to build without ordering them, leaving sequence to the team"
+     ], answers: [1, 2],
+     wrong: {
+       0: {tag: "Cut the strategic horizon to a release window", label: "Confused the roadmap with the release bucket",
+         why: "This choice assumed a roadmap covers the same window as a release. The strategic timeframe runs to three or five years depending on the space — the three-to-six-month bucket is what prioritisation fills, and the roadmap is what says in which order.",
+         cue: "Ask which question is being answered. 'What fits in this release' is the bucket; 'where should the product be in five years' is the roadmap."},
+       3: {tag: "Removed the ordering that makes it a roadmap", label: "Reduced a sequence to a backlog",
+         why: "This choice assumed a roadmap is a set of intentions. The time axis is exactly what distinguishes it — the lecture calls it a smart sequence for developing, releasing, and evolving a solution, and an unordered list is a backlog.",
+         cue: "Look for the axis. Without one, nothing has been sequenced."}},
+     explanation: "A roadmap translates strategy into releases along a time axis, over a three-to-five-year horizon. WhatsApp's iPhone-first launch, with Android around 2011, is the lecture's worked sequence."},
+
+    {concept: "spms_roadmap", variant: "sequence", source: "SPMS-M07-L04", node: "Product roadmap",
+     stem: "Select every statement that reads WhatsApp's evolution the way the lecture does.",
+     options: [
+       "Launching on iPhone first shows the team did not know where its users were",
+       "The Android delay was a resourcing accident rather than a decision",
+       "A roadmap is a set of releases with no strategic horizon behind it",
+       "A roadmap is a smart sequence for developing, releasing, and evolving a solution",
+       "The team launched on iPhone knowing a big chunk of its potential users were on Android in Asia"
+     ], answers: [3, 4],
+     wrong: {
+       0: {tag: "Read a deliberate order as an oversight", label: "Mistook sequencing for ignorance",
+         why: "This choice assumed launching where the users were not is a mistake. The lecture is explicit that the team knew a big chunk of its potential users were on Android in Asia and launched on iPhone anyway — which is what makes it a sequence rather than an accident.",
+         cue: "Ask whether the team knew. A choice made with the information available is a decision, not an error."},
+       1: {tag: "Explained a decision away as capacity", label: "Attributed ordering to resourcing",
+         why: "This choice assumed the gap between platforms was whatever the team could manage. The point of the example is deliberate ordering — running the earlier step first and letting what it showed inform the next release.",
+         cue: "Ask what the first release was for. If it produced information the second one used, the order was the plan."},
+       2: {tag: "Kept the releases and dropped the strategy", label: "Left a roadmap with nothing to sequence toward",
+         why: "This choice assumed a roadmap is just the release list. It is the translation of a product strategy — where the product should be in three or five years — and without that horizon nothing decides the order.",
+         cue: "Ask what the sequence is aiming at. No destination means no roadmap."}},
+     explanation: "The evolution is deliberate ordering, not accident: the team launched on iPhone knowing many users were on Android. A roadmap is a smart sequence for developing, releasing, and evolving a solution."},
+
+    {concept: "spms_requirements", variant: "definition", source: "SPMS-M06-L05", node: "Functional and quality requirements",
+     stem: "Select every statement that matches the lecture's definition of a requirement.",
+     options: [
+       "It is only a capability a customer has explicitly asked for",
+       "It is any feature already present in the product",
+       "It is a wish or need for a future product capability, or a condition required by standards, contracts, or regulations",
+       "Requirements are classified by which team will end up building them",
+       "It describes a future capability, which is why requirements are elicited before anything is built"
+     ], answers: [2, 4],
+     wrong: {
+       0: {tag: "Dropped the second origin", label: "Kept only the requirements someone requested",
+         why: "This choice assumed every requirement traces to a customer request. The IEEE definition the lecture cites adds a second origin: a condition required by standards, contracts, or regulations. For a messaging product that is compliance nobody asked for and everybody is bound by.",
+         cue: "Ask whether anything would still be required if no customer mentioned it. Regulation is the usual answer."},
+       1: {tag: "Pointed the definition at the present", label: "Described the product instead of the need",
+         why: "This choice assumed a requirement describes what exists. It is about a future capability — what the product should be doing once it exists — which is why requirements are elicited before they are built.",
+         cue: "Check the tense. A requirement is about what should be, not what is."},
+       3: {tag: "Classified by owner rather than by kind", label: "Used the team as the taxonomy",
+         why: "This choice assumed the split follows the org chart. Robertson and Robertson split on what the requirement is — an action the product performs, or a quality it possesses — because the two are elicited, specified, and tested by different means.",
+         cue: "Ask what distinguishes the two classes. If the answer names a team rather than a property, it is the wrong axis."}},
+     explanation: "A requirement is a wish or need for a future capability, or a condition set by standards, contracts, or regulations. It is classified as an action or a quality, not by who builds it."},
+
+    {concept: "spms_metrics", source: "SPMS-M08-L03", node: "Actionable product metrics",
+     stem: "Select every statement that matches why the lecture says metrics matter more in a startup.",
+     options: [
+       "They exist to reduce uncertainty as far as it can be reduced",
+       "Top line, bottom line, and net promoter score assume a steadier state than an early product has",
+       "A startup should report performance first and take up risk management once the business matures",
+       "The fundamental difference from a mature company is the level of uncertainty",
+       "They exist to report performance to investors on a fixed reporting cycle"
+     ], answers: [0, 1, 3],
+     wrong: {
+       4: {tag: "Made metrics a reporting duty", label: "Pointed the measures at an audience instead of a decision",
+         why: "This choice assumed metrics exist to be reported. The lecture is specific that they exist to reduce uncertainty, improve decision-making on a dynamic basis with whatever information is available, and identify risks early. A fixed cycle is the opposite of dynamic.",
+         cue: "Ask what changes because of the number. If the answer is only that someone has been informed, it is reporting rather than measurement."},
+       2: {tag: "Deferred the thing survival depends on", label: "Ordered risk management after performance",
+       why: "This choice assumed risk management is a maturity activity. The lecture argues the opposite — risk matters more in a startup precisely because it does not yet know whether customers want the product, whether the model scales, or whether acquisition costs are sustainable. Those being open is why it bears on survival.",
+       cue: "Ask what is still unknown. The more that is open, the earlier risk management belongs."}},
+     explanation: "Metrics exist to reduce uncertainty and improve decisions with the information available. Standard performance measures assume a steadier state than an early-stage product has, which is why the startup case differs."},
+
+    {concept: "spms_metrics", variant: "types", source: "SPMS-M08-L03", node: "Actionable product metrics",
+     stem: "Select every metric paired with what the lecture says it measures.",
+     options: [
+       "Average revenue per user — revenue divided across the user base",
+       "Gross margin — profitability measured after all below-the-line costs",
+       "Customer lifetime value — what a customer is worth across the whole relationship, not one transaction",
+       "Net promoter score — the startup-appropriate replacement for reducing uncertainty"
+     ], answers: [0, 2],
+     wrong: {
+       1: {tag: "Moved the line the margin sits above", label: "Measured efficiency after the wrong costs",
+         why: "This choice assumed gross margin nets off everything. It measures profitability efficiency before below-the-line costs — moving that line changes which decisions the number can inform.",
+         cue: "Name the line the measure sits above. Gross sits above below-the-line costs, by definition."},
+       3: {tag: "Made a mature-state measure the startup answer", label: "Offered NPS as the uncertainty tool",
+         why: "This choice assumed net promoter score is the startup metric. The lecture lists it among the standard measures that assume a steadier state — it is one of the things an early product cannot yet lean on, not the replacement for reducing uncertainty.",
+         cue: "Ask whether the measure needs a stable base to mean anything. If it does, it is not the early-stage answer."}},
+     explanation: "ARPU spreads revenue across the user base and customer lifetime value covers the whole relationship. Gross margin sits before below-the-line costs, and NPS is one of the steadier-state measures a startup cannot yet lean on."}
   ];
 
   /* Why each item connects onward — the `link` line every question carries. */
   var SPMS_MULTI_LINKS = {
+    spms_positioning: "Definition and positioning are what every later artefact quotes; a team that never separated them argues about scope and messaging as if they were one decision.",
+    spms_value_pricing: "Pricing is where customer value becomes business value, so an unmeasured value proposition shows up here as a price nobody can defend.",
+    spms_buyer_journey: "A value proposition nobody understands is worth what an absent one is worth, which is why communication sits between building value and capturing it.",
+    spms_requirements: "The action-versus-quality split decides how a requirement is elicited, specified, and tested, so misclassifying one at the start misroutes it all the way to delivery.",
+    spms_traceability: "Tracing a business aspiration to a project task is what keeps a release connected to why anyone asked for it.",
+    spms_priority: "Prioritisation is what turns more demand than capacity into a release, and naming what is out is the half that holds scope.",
+    spms_roadmap: "The roadmap is where strategy becomes an order of releases, so a sequence with no horizon behind it is a backlog with dates.",
+    spms_metrics: "Metrics reduce the uncertainty a startup runs on, which is why the measure that suits a mature company can mislead an early product.",
     spms_dfv: "Every later decision assumes all three checks passed separately; skipping viability is what makes a product unsustainable rather than unbuildable.",
     spms_jtbd: "Reading the job underneath a request is what makes a value proposition specific rather than a feature list.",
     spms_tamsam: "Sizing decides who the first customers are, which is what the beachhead strategy then acts on.",
@@ -564,7 +836,11 @@
       var concept = (course.concepts || []).filter(function (entry) { return entry.id === item.concept; })[0];
       if (!concept) return;
       addQuestion(course, {
-        id: item.concept + "_msq",
+        /* A concept may carry more than one multiple-select item — Section B needs
+           twenty and only sixteen SPMS lectures have a lesson to sit one on — so the
+           id takes an optional variant. Without it the second item on a concept
+           silently overwrote the first. */
+        id: item.concept + "_msq" + (item.variant ? "_" + item.variant : ""),
         courseId: course.id,
         conceptId: item.concept,
         supportingConceptIds: [],

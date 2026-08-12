@@ -734,6 +734,47 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   prints nothing, and `grep -oE 'font-size: [0-9.]+px' app/t6.css` prints nothing below 15px. The
   rendered check is `tools/browser-checks/ui-audit.js`, whose `radiiOffScale` must be empty.
 
+### LAW-53 🔴 — A scored section a candidate can beat without knowing anything is a broken section
+
+- **Tier/Status:** 🔴 · ACTIVE
+- **Origin:** 2026-08-12. All eight authored SPMS multiple-select items carry **3 correct options of
+  4**. Under the paper's own rule (+1 right, −1 wrong, floored at zero, capped at the question's
+  marks) ticking every option scores `min(2, 3−1) = 2` — full marks. Verified in a real browser:
+  ticking all four options on all eight Section B questions, and answering nothing at all in Section
+  A, returned `Section B 16 / 16`. The examiner was simultaneously displaying the paper's stated rule
+  that *choosing every option is strictly worse than choosing only the ones you are sure of*, and the
+  results dashboard was calling the exploit rational: "Ticking generously is rational on this shape."
+- **Why:** The marking rule and the item shapes were authored separately and never multiplied
+  together. A negative-marking rule only creates a trade-off when wrong options are common enough to
+  make a speculative tick cost more than it pays; at 3-of-4 the floor absorbs the only wrong tick
+  available. Nothing in the bank validator looks at the *interaction* between a section's rule and
+  its items, so the section validated item-by-item while being collectively free.
+- **Comply:** Any section with a per-question marking rule states, in the same place, the item shapes
+  that make the rule bite, and the shapes are authored to a spread rather than a constant. Where a
+  mock's items do not reproduce the trade-off, the product says so to the candidate rather than
+  letting them find it — a discovered exploit becomes a habit, and the habit is what costs marks in
+  the real paper.
+- **Verify:** For every negatively marked item, `min(marks, max(0, correct − (options − correct))) <
+  marks` must hold for at least some items, or the section is free. The examiner computes exactly
+  this (`negativeMarkingAnalysis`, `exploitable`) and renders a defect warning when it is true for
+  every item; the warning appearing at all means the bank still needs fixing.
+
+### LAW-54 🟡 — A count beside a grid must be counted over the same set the grid is showing
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-12. The examiner's question palette showed one section (35 chips for SPMS
+  Section A) while its legend counted the whole paper, so the rail read "42 Not visited" above a grid
+  of 35. Caught from a screenshot, not from the DOM checks — the two numbers were individually
+  correct and only the pairing was wrong.
+- **Why:** The legend and the palette were rendered in one function from two different collections;
+  the section filter was applied to the grid and, being two lines further down, never reached the
+  tally above it. Each number is defensible alone, which is why review passes over it.
+- **Comply:** Derive a summary and the thing it summarises from the *same* array in the same scope.
+  If the grid filters, the count consumes the filtered result, not the source.
+- **Verify:** In the running paper, the legend's counts sum to the number of palette chips on screen,
+  in every section. Checked live for SPMS Section A (`4+0+31+0+0 = 35`, then `12+1+21+1+0 = 35`) and
+  Section B (`8+0+0+0+0 = 8`).
+
 ### LAW-50 🟡 — A lesson array closed with the wrong bracket is invisible until the file is parsed
 
 - **Tier/Status:** WATCH · ACTIVE

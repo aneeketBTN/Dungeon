@@ -1296,6 +1296,106 @@ li .exam-chip { cursor: default; }
 .exam-repair-list small { color: var(--muted); font-size: var(--t-small); }
 .route-from-exam { border-color: var(--blue-line); background: var(--blue-veil); }
 
+/* The bag. A drawer rather than a modal, because its whole value is being readable
+   while the thing it describes is still on screen. */
+.bag-button { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 8px 13px; color: inherit; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-control); cursor: pointer; font: inherit; font-weight: 800; }
+.bag-button:hover { border-color: var(--deep); }
+.bag-icon { width: 19px; height: 19px; }
+.bag-timer { padding: 2px 7px; background: var(--saffron); color: var(--on-saffron); border-radius: var(--r-pill); font-size: var(--t-small); font-variant-numeric: tabular-nums; }
+.bag-scrim { position: fixed; inset: 0; z-index: 40; background: var(--backdrop); }
+.bag-panel { position: fixed; z-index: 41; inset-block: 0; inset-inline-end: 0; width: min(430px, 100%); overflow-y: auto; padding: 22px 24px 40px; background: var(--paper); border-inline-start: 1px solid var(--line); box-shadow: var(--shadow-deep); }
+.bag-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.bag-head h2 { margin: 0; font: 650 25px Georgia, serif; }
+.bag-section { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+.bag-section:first-of-type { border-top: 0; padding-top: 4px; }
+.bag-section h3 { margin: 0 0 8px; font: 650 18px Georgia, serif; }
+.bag-note { margin: 0 0 14px; max-width: 46ch; color: var(--muted); font-size: var(--t-meta); }
+.pomodoro { padding: 17px; text-align: center; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-panel); }
+.pomodoro-clock { display: block; font: 700 46px/1 Georgia, serif; font-variant-numeric: tabular-nums; }
+.pomodoro-phase { margin: 6px 0 14px; color: var(--muted); font-size: var(--t-meta); font-weight: 650; }
+.pomodoro.is-break .pomodoro-clock { color: var(--blue); }
+.pomodoro-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.pomodoro-count { display: block; margin-top: 12px; color: var(--muted); font-size: var(--t-small); }
+.bag-guide { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.bag-guide li { padding-inline-start: 13px; border-inline-start: 3px solid var(--line-strong); font-size: var(--t-meta); line-height: 1.5; }
+.bag-guide b { display: block; }
+
+@media (max-width: 720px) {
+  .bag-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .bag-panel { inset-block-start: auto; block-size: min(86vh, 100%); width: 100%; border-inline-start: 0; border-start-start-radius: var(--r-panel); border-start-end-radius: var(--r-panel); }
+}
+
+/* The examiner's front door. Its own product, so its own room: papers as cards, sets
+   as the only control on each, and the two honest warnings — the caveat and the
+   shortfall — inside the card rather than a click away. */
+.exam-home { max-width: 1000px; margin: 0 auto; padding: 30px 20px 72px; }
+.exam-home-head { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 18px; margin-bottom: 26px; }
+.exam-home-head h1 { margin: 4px 0 8px; font: 650 clamp(30px,4.2vw,42px)/1.1 Georgia, serif; }
+.exam-home-lede { max-width: 62ch; margin: 0; color: var(--muted); font-size: var(--t-body); line-height: 1.55; }
+.exam-record { margin-bottom: 28px; padding: 18px 20px; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-panel); }
+.exam-record h2 { margin: 0 0 12px; font: 650 20px Georgia, serif; }
+.exam-papers { display: grid; gap: 16px; }
+.exam-paper { padding: 20px 22px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-panel); }
+.exam-paper h2 { margin: 0; font: 650 21px Georgia, serif; }
+.exam-paper-meta { margin: 5px 0 0; color: var(--muted); font-size: var(--t-small); }
+.exam-paper-sections { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+.exam-paper-sections li { display: flex; gap: 6px; align-items: baseline; padding: 5px 10px; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-mark); font-size: var(--t-small); }
+.exam-paper-sections span { color: var(--muted); }
+/* Both warnings read as warnings. A candidate about to spend two hours is owed the
+   shortfall in the same weight as the rules, not in a footnote. */
+.exam-paper-caveat, .exam-paper-short { margin: 13px 0 0; padding: 11px 13px; border-inline-start: 4px solid var(--amber); background: var(--amber-soft); border-radius: 0 var(--r-mark) var(--r-mark) 0; font-size: var(--t-meta); }
+.exam-sets { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 10px; margin-top: 16px; }
+.exam-set { display: grid; gap: 3px; padding: 13px 15px; text-align: start; background: var(--card-soft); border: 1px solid var(--line-strong); border-radius: var(--r-card); cursor: pointer; font: inherit; color: inherit; transition: border-color .15s ease, background .15s ease; }
+.exam-set:hover { border-color: var(--deep); background: var(--card); }
+.exam-set b { font: 650 17px Georgia, serif; }
+.exam-set span { font-size: var(--t-meta); font-variant-numeric: tabular-nums; }
+.exam-set small { color: var(--muted); font-size: var(--t-small); }
+
+@media (max-width: 720px) {
+  .exam-home { padding: 20px 15px 60px; }
+  .exam-home-head { flex-direction: column-reverse; align-items: stretch; }
+}
+
+/* Insights. Cards carry the numbers, the depth list carries the diagnosis, and each
+   block ends in a verdict line — a statistic a learner cannot act on is decoration,
+   and this screen has no room for decoration. */
+.exam-insights { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line); }
+.exam-insights h3 { margin: 0 0 16px; font: 650 23px Georgia, serif; }
+.insight-block { margin-top: 24px; }
+.insight-block h4 { margin: 0 0 6px; font: 650 17px Georgia, serif; }
+.insight-note { margin: 0 0 12px; max-width: 68ch; color: var(--muted); font-size: var(--t-meta); }
+.insight-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(155px,1fr)); gap: 10px; }
+.insight-card { padding: 13px 14px; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-card); }
+.insight-card small { display: block; color: var(--muted); font-size: var(--t-micro); font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
+.insight-card b { display: block; margin: 5px 0 4px; font: 700 25px/1 Georgia, serif; }
+.insight-card span { display: block; color: var(--muted); font-size: var(--t-small); line-height: 1.45; }
+.insight-verdict { margin: 12px 0 0; padding: 12px 14px; background: var(--blue-veil); border-inline-start: 4px solid var(--blue); border-radius: 0 var(--r-card) var(--r-card) 0; font-size: var(--t-meta); }
+/* Louder than a verdict, because it corrects something the learner may already have
+   concluded from the score they just saw. */
+.insight-warning { margin: 12px 0 0; padding: 12px 14px; background: var(--red-soft); border-inline-start: 4px solid var(--red); border-radius: 0 var(--r-card) var(--r-card) 0; font-size: var(--t-meta); }
+.insight-warning p { margin: 0; }
+.insight-warning p + p { margin-top: 8px; }
+.depth-list { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.depth-row { padding: 13px 15px; background: var(--card-soft); border: 1px solid var(--line); border-inline-start: 4px solid var(--line-strong); border-radius: var(--r-card); }
+/* The lower the rung, the more urgent. Red where the idea has not landed at all,
+   easing to blue at "holds it alone but not alongside others" — which is the best
+   problem on this list to have, and reads as such. */
+.depth-row.rung-1, .depth-row.rung-2 { border-inline-start-color: var(--red); }
+.depth-row.rung-3, .depth-row.rung-4 { border-inline-start-color: var(--amber); }
+.depth-row.rung-5 { border-inline-start-color: var(--blue); }
+.depth-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.depth-head b { font-size: var(--t-body); }
+.depth-tag { color: var(--muted); font-size: var(--t-micro); font-weight: 850; letter-spacing: .04em; text-transform: uppercase; }
+.depth-row p { margin: 6px 0 0; font-size: var(--t-meta); }
+.depth-row small { display: block; margin-top: 7px; color: var(--muted); font-size: var(--t-small); font-variant-numeric: tabular-nums; }
+.depth-route { margin-top: 10px; }
+.written-review { margin-top: 12px; padding: 15px 16px; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-card); }
+.written-review > b { display: block; margin-bottom: 10px; font-size: var(--t-body); }
+.rubric-points { display: grid; gap: 7px; margin: 12px 0 0; padding: 0; list-style: none; }
+.rubric-points li { display: grid; gap: 2px; padding: 9px 11px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-mark); }
+.rubric-points b { font-size: var(--t-meta); }
+.rubric-points span { color: var(--muted); font-size: var(--t-small); }
+
 /* Motion.
  *
  * Three rules govern everything below, from docs/design/ART_DIRECTION_SYSTEM.md:

@@ -1,5 +1,32 @@
 # Dungeon
-> **Two products, one bank (2026-08-12; newest):** Dungeon is now **the learning system**
+> **The examiner is a product, and its dashboard is the point (2026-08-12; newest):** the examiner
+> now has its own front door at `app/t6.html#exam-home-screen` — four papers, three seeded sets each,
+> openable with no learning state at all. A set's seed is subject + set index, never the clock, so a
+> paper survives a refresh and set 2 is genuinely a different draw from set 1. The shortfalls and
+> IBM's caveat are stated **on the card, before the clock**, not after. The results screen is now a
+> diagnostic: pacing against the paper's own per-question budget, *where knowledge breaks down* per
+> concept, the cost of speculative ticking, second thoughts and what they were worth, and — for
+> written work — course-vocabulary use against rubric points. Each breakdown row routes into a taught
+> single-concept run (`LESSON → primer → questions`, so LAW-47 holds). Attempt summaries persist and
+> a re-sit of the *same* set is compared, since two draws differ in difficulty as well as in study.
+> `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+> `evidence/2026-08-12/t6-examiner-product-and-insights/verification.md`: `conceptAttempts` and
+> `totalAnswers` both still **0** after three submitted mocks, legend and palette agree in every
+> section, 0 overflow / 0 sub-44px tap targets / 0 off-scale radii at 375×812, 39/39 tests, palette
+> gate clean. **Two defects the examiner exposed, both bank-content and neither fixed here:**
+> `REDLINE` **LAW-53** — all eight SPMS MSQs are 3-correct-of-4, so ticking every option scores full
+> marks (verified `16/16` with nothing answered in Section A) while the paper's stated rule says the
+> opposite; the dashboard now reports this as a defect instead of endorsing it. And **16 of 50** SCLM
+> Section A questions share a character-identical caselet *and* stem, with the pool at 52 for a
+> section needing 50, so only clustering could be fixed (longest identical run is now 1). `WATCH`
+> **LAW-54** covers the legend that counted the whole paper above a one-section grid. Telemetry:
+> `tester-event.schema.json` is `1.1` with six examiner event types, banded-only fields, and a
+> **separate consent scope**, enforced in both directions; the app shapes and locally buffers events
+> behind a flag defaulting **off** and **there is no transmission path**. `profile.examAttempts`
+> syncs to D1 with the rest of the profile, which `docs/community/PRIVACY.md` now discloses. No
+> screenshots — the Browser pane was not compositing — so pixel acceptance is still owed.
+>
+> **Two products, one bank (2026-08-12):** Dungeon is now **the learning system**
 > (learn by failing: teach before test, weak-first, feedback on every answer) and **the examiner**
 > (`app/t6.html#exam-screen`), a mocks platform that deliberately does none of that. The examiner
 > builds a paper strictly from `docs/briefs/T6_EXAM_PATTERN.md` — sections, counts, per-question
@@ -439,9 +466,10 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `.openai/hosting.json` | Opaque Sites project binding only; runtime credentials never belong here. | 2026-08-11 |
 | `.agents/README.md` | Paused tester-agent control plane, authority boundary, and activation order. | 2026-08-11 |
 | `.agents/deployment.json` | Fail-closed activation gates, paused automation IDs, models, cadence, and non-running declarations. | 2026-08-11 |
+| `.agents/contracts/tester-event.schema.json` | Consented pseudonymous event contract, `1.1`. Learning **and** examiner event types under **separate consent scopes**, enforced both ways by an `allOf` rule; examiner fields are banded or bounded, never exact, because the cohort is small enough for an exact mark to identify. | 2026-08-12 |
+| `tools/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. Reads allowed versions/scopes from the contract rather than restating them, and rejects any event whose consent scope does not match its type. | 2026-08-12 |
 | `package.json` | Dependency-free release build, validation, and test commands. | 2026-08-11 |
 | `tools/build-site.mjs` | Allowlists the fifteen learner/admin/protection assets and produces the deployment artifact. | 2026-08-12 |
-| `tools/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
 | `sites-backup/worker.mjs` | Private Sites backup entrypoint, **not** the deployed Worker: learner/admin redirects, health response, static delivery, and security headers. Diverged from `cloudflare/src/index.mjs` and has no agreement gate. | 2026-08-12 |
 | `sites-backup/README.md` | Records why this worker is not production and what must be reconciled before promoting it. | 2026-08-12 |
 | `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, and tester management. | 2026-08-11 |
@@ -463,11 +491,12 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `app/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
 | `app/admin.js` | Cohort onboarding, revoke/unlock, per-tester and bulk **force sign-out** with live session counts, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-12 |
 | `app/theme.js` | Theme bootstrap loaded synchronously in `<head>`: reads the stored appearance before first paint, exposes `T6Theme` (get/set/next/resolved/onChange), and follows the system setting when unset. Separate from t6.js because the release serves `script-src self`, so the usual inline head script is blocked. | 2026-08-12 |
+| `tools/check_exam_readiness.mjs` | **Exam-pattern gate and authoring worklist.** `npm run check:exam [SUBJECT]`. Reads `EXAM_PAPERS` out of `app/t6.js` (one source of truth, not a copy) and multiplies it by the bank: which sections cannot be filled and what that costs in marks, whether a negatively marked section is free to a candidate who ticks everything (LAW-53), and how many questions are *forced* to share one visible prompt. Prints "N × type for SUBJECT Section X", soonest paper first. Run it before authoring and after. | 2026-08-12 |
 | `tools/check-palette.mjs` | Palette gate. Parses the `light-dark()` pairs out of `app/t6.css` itself and measures 140 contrast pairings, grayscale separation, and three colour-vision simulations in both themes, then asserts the four evidence states are shape-distinct. Run after touching any colour token. | 2026-08-12 |
 | `tools/browser-checks/ui-audit.js` | UI audit probe, evaluated **in the page**: overflow, tap targets under 44px, corner radii off the four-step scale, paragraph density, type scale, and ragged rows. Used for the mobile pass; re-run per screen and per viewport. | 2026-08-12 |
 | `app/t6.html` | Four-question homepage (what am I doing / where can I start / how am I doing / additional resources), subject rail, hero with the one next action and distance to goal, single-entry practice builder, matrix/trend/totals, one concept list, lesson surface, layered questions, in-question glossary, plans, and results. | 2026-08-12 |
 | `app/t6.css` | Homepage block rhythm and the four-question layout, chip builder, concept-shelf rows with inline evidence, matching board, lesson/glossary presentation, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-12 |
-| `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, recommendation-aware route dedupe, builder pool rules, matching board, persistence, and scenarios. | 2026-08-12 |
+| `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, recommendation-aware route dedupe, builder pool rules, matching board, persistence, scenarios, **and the examiner**: seeded mock sets, prompt-spread draw, per-question capture, the breakdown/pacing/negative-marking analysis, attempt history, and the locally-buffered non-transmitting telemetry shaper. | 2026-08-12 |
 | `app/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
 | `app/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
 | `app/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, relevance-first distractor selection, case-lecture provenance, and the option-diagnosis pass. | 2026-08-12 |
@@ -544,6 +573,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   - Lesson file, and what to author next: `node tools/check_lesson_file.mjs "<Term 6 Clean Transcripts>"`
     — run this *before* the bank validator; a lesson file that does not parse makes the validator
     report nothing at all.
+  - Exam-pattern readiness and the authoring worklist: `npm run check:exam` — needs no transcripts,
+    so run it first. Non-zero exit means a section cannot be filled or a negatively marked section
+    is free. `npm run check:exam SPMS` narrows it to one paper.
   - T6 bank: `node tools/validate_t6_bank.js "<Term 6 Clean Transcripts>"`
     — always with the path. `npm run validate:bank` passes **no** argument, so it returns `ok: true`
     with an empty `"coverage": {}` having skipped every lecture check and the LAW-49 vocabulary gate.
@@ -608,6 +640,23 @@ after the version is live, since a push to `main` deploys.
   `diagnosisFor` MSQ branch was added but does not fire — likely `response.selected` is not carried
   for this type), and `msqMarks` is computed but never rendered, so the learner is not shown "1 of 3
   marks". Only 8 of the paper's 20 MSQs are authored.
+- [x] **`REDLINE` LAW-53 closed for SPMS Section B — 2026-08-13.** Section B is 20 of 20 and no longer
+  free. Every 3-correct item gained a fifth option, because with 4 options and 2 marks a 3-of-4 pays
+  `min(2, 3−1) = 2` — full marks — while 3-of-5 pays 1. Shapes are now `3-of-5 ×12, 2-of-4 ×6,
+  2-of-5 ×2`, and the answer positions vary. Verified in a browser: ticking every option on all
+  twenty questions and answering nothing in Section A scored **12 / 40**, down from **16 / 16**.
+  The examiner's defect warning correctly stops appearing. `npm run check:exam SPMS` is clean and
+  `tools/validate_t6_bank.js` reports `ok: true` against the transcripts.
+- [x] **SCLM's z-based method is confirmed taught — 2026-08-13.** It is `SCLM-M03-L06` ("Q Model"):
+  z value, standard normal tables, safety stock, cycle service level, and a full worked continuous-
+  review example. The earlier uncertainty is resolved; the formula may be used.
+- [ ] **The last two SCLM numericals are blocked on one lesson.** `SCLM-M03-L06` carries the method
+  and the worked example — daily demand ~N(60, 7), lead time 6 days, K = ₹10, h = ₹0.5/unit/year,
+  current Q = 1,200 and ROP = 360 — which yields the two missing items directly: the reorder point
+  for a 95% cycle service level (`360 + 1.645 × 7 × √6 ≈ 388`) and the service level the current
+  policy actually achieves (ROP equals mean lead-time demand, so z = 0 and it is 50%). **But
+  `SCLM-M03-L06` has no lesson**, and a scored question citing an untaught lecture breaks LAW-47.
+  Author that lesson first via `docs/authoring/LESSON-AUTHORING-PROTOCOL.md`, then the two items.
 - [~] **SCLM numeric entry built; 4 of 6 items authored.** `VERIFIED(REAL_BROWSER)`: a typed figure
   is graded against a per-question tolerance, comma and ₹ formatting is parsed, and the verdict states
   the entry against the accepted band. A wrong figure matching a known wrong method names that method
@@ -616,6 +665,18 @@ after the version is live, since a push to `main` deploys.
   and the obvious candidates are safety stock and service level — the paper supplies standard normal
   tables, which points there — but *it is not yet confirmed that SCLM teaches the z-based formula*.
   Verify that against the transcripts before authoring, rather than assuming the standard form.
+- [ ] **`REDLINE` LAW-53: SPMS Section B is free marks.** All eight authored MSQs carry 3 correct
+  options of 4, so ticking every option scores full marks on every one of them — verified `16/16`
+  in a browser with nothing answered in Section A. The paper's own rule says choosing every option
+  is strictly worse. **The fix is authoring**: the twelve outstanding MSQs, and a revision of the
+  eight, need a spread of 1-, 2-, and 3-correct shapes so a speculative tick costs something. Until
+  then the examiner shows a defect warning. Do not treat Section B scores as meaningful.
+- [ ] **The bank cannot fill a 50-question section with distinct prompts.** SCLM Section A draws 50
+  from a pool of 52 carrying 22 distinct caselets and 20 distinct stems; 16 of the 50 share a
+  character-identical caselet *and* stem (the generator's filler, "A student understands the
+  definition but needs to explain why the idea changes the next decision"). They are different items
+  — all 50 option sets differ — but present identically. Ordering was fixed; volume and prompt
+  variety are authoring work. This is the same root as the bank-volume audit below.
 - [ ] **IBM's paper contains no objective questions at all** — ten subjective answers on a caselet
   released two days beforehand. Its 196 MCQ-derived surfaces contribute nothing to it, and authoring
   its 62 uncited lectures would add zero marks. Do not spend bank effort there; the useful work is

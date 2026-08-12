@@ -116,6 +116,11 @@
       /* What the examiner exposed, kept apart from conceptAttempts on purpose — see
          recordExamMisses. */
       examMisses: {},
+      /* One record per submitted paper, so a second sitting of the same set can be
+         compared against the first. Summary only — no responses, no question text —
+         because the useful question is "did this move" and storing the paper back
+         would make a saved profile a copy of the bank. */
+      examAttempts: {},
       completed: {},
       lastMock: {},
       active: null,
@@ -153,6 +158,7 @@
     /* Added after version 2 shipped, so it is normalised rather than validated: an
        existing saved profile has no examMisses and must not be thrown away for it. */
     candidate.examMisses = candidate.examMisses && typeof candidate.examMisses === "object" ? candidate.examMisses : {};
+    candidate.examAttempts = candidate.examAttempts && typeof candidate.examAttempts === "object" ? candidate.examAttempts : {};
     if (!validBuilder(candidate.builder)) candidate.builder = clone(DEFAULT_BUILDER);
     if (candidate.active) {
       candidate.active.baseCount = candidate.active.baseCount || candidate.active.queue.filter(function (item) {
@@ -4070,6 +4076,45 @@
     return pool;
   }
 
+  /* Spread repeated stems apart.
+   *
+   * The bank generates about three surfaces per concept from a handful of templates,
+   * so a section needing most of its pool necessarily repeats stems: SCLM Section A
+   * wants 50 MCQs, the pool holds 52, and between them they carry 22 distinct stems —
+   * one of which covers 16 questions. Selection cannot fix that. It is a bank-content
+   * gap and is recorded as one.
+   *
+   * It is worse than a repeated task line, too: measured on SCLM Section A, sixteen
+   * of the fifty questions carry a character-identical caselet *and* stem — the
+   * generator's filler prompt, "A student understands the definition but needs to
+   * explain why the idea changes the next decision" — and differ only in their
+   * options. Those sixteen are genuinely different items, but they present with
+   * nothing to tell them apart.
+   *
+   * What selection can fix is the clustering. A candidate who meets the same sentence
+   * three times in a row reads it as a broken paper; the same three spread across
+   * forty questions reads as a familiar phrasing, which is what it actually is. So the
+   * draw is round-robined across groups of identical *visible prompt* — caselet and
+   * stem together, since that is what the candidate reads — largest group first,
+   * leaving the order within each group exactly as the seed shuffled it. */
+  function spreadByStem(questions) {
+    var groups = [];
+    var index = {};
+    questions.forEach(function (question) {
+      var key = String(question.caselet || "") + "|" + String(question.stem || question.prompt || question.id);
+      if (!(key in index)) { index[key] = groups.length; groups.push([]); }
+      groups[index[key]].push(question);
+    });
+    if (groups.length < 2) return questions;
+    groups.sort(function (a, b) { return b.length - a.length; });
+    var out = [];
+    for (var i = 0; out.length < questions.length; i++) {
+      /* eslint-disable-next-line no-loop-func */
+      groups.forEach(function (group) { if (group[i]) out.push(group[i]); });
+    }
+    return out;
+  }
+
   /* Builds the paper, and reports honestly on what it could not fill. */
   function buildExamPaper(courseId, seed) {
     var spec = EXAM_PAPERS[courseId];
@@ -4082,6 +4127,7 @@
       if (taken.length < section.count) {
         shortfalls.push({section: section.id, want: section.count, have: taken.length, type: section.type});
       }
+      taken = spreadByStem(taken);
       taken.forEach(function (question) {
         questions.push({question: question, section: section.id, marks: section.marks});
       });
@@ -4121,15 +4167,45 @@
     return true;
   }
 
-  function openExaminer(courseId) {
-    var paper = buildExamPaper(courseId, 20260812);
+  /* ---- mock sets ----------------------------------------------------------------
+   *
+   * One paper per subject was a rehearsal you could memorise. Three are three
+   * genuinely different draws from the same bank under the same rules, which is what
+   * "sit another one" has to mean if the second sitting is to measure anything.
+   *
+   * The seed is derived from the subject and the set number, never from the clock:
+   * a paper has to survive a refresh halfway through, so Set 2 of SCLM must be the
+   * same 59 questions in the same order tomorrow as it is now.
+   */
+  var EXAM_SET_COUNT = 3;
+
+  function examSeed(courseId, setIndex) {
+    var base = 2166136261;
+    for (var i = 0; i < courseId.length; i++) {
+      base = (base ^ courseId.charCodeAt(i)) >>> 0;
+      base = (base * 16777619) >>> 0;
+    }
+    return (base + (setIndex + 1) * 2654435761) >>> 0;
+  }
+
+  function openExaminer(courseId, setIndex) {
+    var set = typeof setIndex === "number" ? setIndex : 0;
+    var paper = buildExamPaper(courseId, examSeed(courseId, set));
     if (!paper) return;
     exam = {
       paper: paper,
       courseId: courseId,
+      setIndex: set,
       items: paper.questions.map(function (entry, index) {
         return {index: index, section: entry.section, marks: entry.marks, question: entry.question,
-          response: null, marked: false, visited: false, seconds: 0};
+          response: null, marked: false, visited: false,
+          /* Telemetry, captured while the paper runs because none of it can be
+             reconstructed afterwards. `seconds` is time with the question actually on
+             screen; `visits` counts returns to it; `changes` counts how often the
+             answer moved; `firstResponse` is what they put down before any second
+             thoughts, which is the only way to tell a corrected slip from a coin flip.
+             All of it lives on the attempt and none of it reaches conceptAttempts. */
+          seconds: 0, visits: 0, changes: 0, firstResponse: null, firstResponseSeconds: null};
       }),
       current: 0,
       section: paper.spec.sections[0].id,
@@ -4149,7 +4225,10 @@
     $("exam-paper-title").textContent = spec.title;
     $("exam-brief-lede").textContent = spec.caveat ||
       "Sat " + spec.sat + ". Once the clock starts nothing is explained until you submit, and the questions arrive in the paper's order rather than a teaching order.";
+    var sat = examAttemptsFor(exam.courseId, exam.setIndex);
     $("exam-facts").innerHTML =
+      "<div><dt>Paper</dt><dd>" + examSetLabel(exam.setIndex) +
+        (sat.length ? " · sat " + sat.length + "×" : " · not sat") + "</dd></div>" +
       "<div><dt>Duration</dt><dd>" + EXAM_MINUTES + " minutes</dd></div>" +
       "<div><dt>Total marks</dt><dd>" + spec.total + "</dd></div>" +
       "<div><dt>Questions</dt><dd>" + spec.sections.reduce(function (n, s) { return n + s.count; }, 0) + "</dd></div>" +
@@ -4227,13 +4306,17 @@
   }
 
   function renderExamPalette() {
+    var sectionItems = exam.items.filter(function (i) { return i.section === exam.section; });
+    /* Counted over the section the palette is showing, not the whole paper. They
+       disagreed before — the legend said "42 not visited" above a grid of 35 — which
+       makes the one number a candidate uses to decide where to spend the next ten
+       minutes quietly wrong. */
     var counts = {};
     EXAM_STATES.forEach(function (state) { counts[state.id] = 0; });
-    exam.items.forEach(function (_, index) { counts[examStateOf(index)] += 1; });
+    sectionItems.forEach(function (item) { counts[examStateOf(item.index)] += 1; });
     $("exam-legend").innerHTML = EXAM_STATES.map(function (state) {
       return "<li><i class='exam-chip " + state.id + "'>" + counts[state.id] + "</i><span>" + escapeHtml(state.label) + "</span></li>";
     }).join("");
-    var sectionItems = exam.items.filter(function (i) { return i.section === exam.section; });
     $("exam-palette").innerHTML = sectionItems.map(function (item) {
       var withinSection = sectionItems.indexOf(item) + 1;
       return "<button type='button' class='exam-chip " + examStateOf(item.index) +
@@ -4250,7 +4333,8 @@
     if (index < 0 || index >= exam.items.length) return;
     exam.current = index;
     exam.section = exam.items[index].section;
-    exam.items[index].visited = true;
+    if (!exam.items[index].visited) exam.items[index].visited = true;
+    exam.items[index].visits += 1;
     renderExamSections();
     renderExamQuestion();
     $("exam-question").focus({preventScroll: true});
@@ -4333,6 +4417,22 @@
       "<p class='exam-hint'>Written answers are not machine-marked. After you submit you will review this against the rubric yourself.</p>";
   }
 
+  /* Every response passes through here so the history is captured once, in one place.
+     The first answer is kept separately from the final one: a learner who puts down B
+     in nine seconds and leaves it is doing something different from one who puts down
+     B, thinks, and moves to C — and only the first-answer record can tell them apart
+     afterwards. */
+  function recordExamResponse(item, value) {
+    var had = examHasResponse(item);
+    item.response = value;
+    if (!had && examHasResponse(item)) {
+      item.firstResponse = Array.isArray(value) ? value.slice() : value;
+      item.firstResponseSeconds = item.seconds;
+    } else if (had) {
+      item.changes += 1;
+    }
+  }
+
   function bindExamResponse(item) {
     var type = item.question.type || "mcq";
     $all("#exam-question-body .exam-option").forEach(function (button) {
@@ -4342,23 +4442,23 @@
           var chosen = Array.isArray(item.response) ? item.response.slice() : [];
           var at = chosen.indexOf(choice);
           if (at >= 0) chosen.splice(at, 1); else chosen.push(choice);
-          item.response = chosen;
+          recordExamResponse(item, chosen);
         } else {
-          item.response = choice;
+          recordExamResponse(item, choice);
         }
         renderExamQuestion();
       });
     });
     var numeric = $("exam-numeric-input");
-    if (numeric) numeric.addEventListener("input", function () { item.response = numeric.value; renderExamPalette(); });
+    if (numeric) numeric.addEventListener("input", function () { recordExamResponse(item, numeric.value); renderExamPalette(); });
     var written = $("exam-written-input");
-    if (written) written.addEventListener("input", function () { item.response = written.value; renderExamPalette(); });
+    if (written) written.addEventListener("input", function () { recordExamResponse(item, written.value); renderExamPalette(); });
     $all("#exam-question-body select[data-pair]").forEach(function (select) {
       select.addEventListener("change", function () {
         var picked = item.response && typeof item.response === "object" ? item.response : {};
         if (select.value === "") delete picked[select.dataset.pair];
         else picked[select.dataset.pair] = select.value;
-        item.response = picked;
+        recordExamResponse(item, picked);
         renderExamPalette();
       });
     });
@@ -4449,34 +4549,713 @@
     saveProfile();
   }
 
+  /* One sitting's worth of repair.
+   *
+   * A randomised trial exposed the problem this fixes: a learner who does badly enough
+   * to expose eleven concepts got a run that started at 28 items and grew to 63 as
+   * wrong answers scheduled re-attempts, and was still unfinished 44 steps in. The
+   * compounding ran exactly the wrong way — the worse the paper went, the longer the
+   * repair — so the learner this exists for hit a wall straight after a two-hour mock.
+   *
+   * Four concepts is a sitting a tired person can finish, and finishing is what makes
+   * them come back. The rest are not dropped; they stay queued, worst first, for the
+   * next sitting. */
+  var EXAM_REPAIR_SITTING = 4;
+
   /* The concepts a mock exposed, worst first. Skipped counts for less than answered
-     and wrong: running out of time is not the same as not knowing it. */
+     and wrong: running out of time is not the same as not knowing it. Concepts already
+     taken into a sitting drop behind the ones that have not been, so a second sitting
+     picks up where the first stopped rather than repeating it. */
   function examMissList(courseId) {
     var store = (profile.examMisses && profile.examMisses[courseId]) || {};
     return Object.keys(store).map(function (conceptId) {
       var entry = store[conceptId];
       return {conceptId: conceptId, concept: getConcept(courseId, conceptId),
-        weight: entry.missed * 2 + entry.skipped, missed: entry.missed, skipped: entry.skipped};
+        weight: entry.missed * 2 + entry.skipped, missed: entry.missed, skipped: entry.skipped,
+        repairedAt: entry.repairedAt || null};
     }).filter(function (row) { return row.concept && row.weight > 0; })
-      .sort(function (a, b) { return b.weight - a.weight; });
+      .sort(function (a, b) {
+        if (Boolean(a.repairedAt) !== Boolean(b.repairedAt)) return a.repairedAt ? 1 : -1;
+        return b.weight - a.weight;
+      });
   }
 
-  function startExamRepair(courseId) {
-    var misses = examMissList(courseId).slice(0, 8);
-    if (!misses.length) return;
+  /* One concept, several surfaces, taught first. This is what the depth list routes
+     into: a learner who has just been told they can use an idea but cannot tell it
+     from its neighbour wants that idea now, not a tour of all eight things they lost
+     marks on. `layeredQueue` puts the lesson and primer in front either way. */
+  function conceptRepairIds(courseId, conceptId, want) {
+    var ids = [];
+    for (var i = 0; i < (want || 3); i++) {
+      var question = chooseQuestion(courseId, conceptId, null, ids);
+      if (!question || ids.indexOf(question.id) >= 0) break;
+      ids.push(question.id);
+    }
+    return ids;
+  }
+
+  function startExamRepair(courseId, conceptId) {
     profile.selectedCourse = courseId;
-    var ids = misses.map(function (row) {
-      return chooseQuestion(courseId, row.conceptId, null, []) || questionSurfaces(courseId, row.conceptId)[0];
-    }).filter(Boolean).map(function (question) { return question.id; });
+    var ids, details;
+    if (conceptId) {
+      ids = conceptRepairIds(courseId, conceptId, 3);
+      var concept = getConcept(courseId, conceptId);
+      details = {kind: "exam-repair", conceptId: conceptId,
+        title: concept ? concept.name : "What the mock exposed",
+        kicker: "Taught first, then tested again — from what the mock exposed"};
+    } else {
+      var pending = examMissList(courseId);
+      /* Take from the concepts no sitting has covered yet. Once every one has been
+         through, fall back to the full list — a second pass over the same misses is
+         legitimate revision, not a bug. */
+      var untouched = pending.filter(function (row) { return !row.repairedAt; });
+      var source = untouched.length ? untouched : pending;
+      var misses = source.slice(0, EXAM_REPAIR_SITTING);
+      if (!misses.length) return;
+      ids = misses.map(function (row) {
+        return chooseQuestion(courseId, row.conceptId, null, []) || questionSurfaces(courseId, row.conceptId)[0];
+      }).filter(Boolean).map(function (question) { return question.id; });
+      /* Stamped as taken so the next sitting moves on. The miss itself is kept — it is
+         still what the paper proved, and it still orders future practice. */
+      var stamp = new Date().toISOString();
+      var store = profile.examMisses[courseId] || {};
+      misses.forEach(function (row) { if (store[row.conceptId]) store[row.conceptId].repairedAt = stamp; });
+      var left = Math.max(0, untouched.length - misses.length);
+      details = {kind: "exam-repair", title: "What the mock exposed",
+        kicker: left
+          ? misses.length + " concepts this sitting · " + left + " waiting for the next"
+          : "The concepts you lost marks on, taught before they are tested again"};
+    }
     if (!ids.length) return;
-    session = createSession(courseId, {kind: "exam-repair", title: "What the mock exposed",
-      kicker: "The concepts you lost marks on, taught before they are tested again"}, ids);
+    session = createSession(courseId, details, ids);
     /* The same four steps every other run uses. Calling renderQuestion() and
        showScreen() directly skipped beginPractice(), which is what writes the session
        header — so the run started with the markup's placeholder "Title" still in it. */
     profile.active = clone(session);
     saveProfile();
     beginPractice();
+  }
+
+  /* ---- where knowledge breaks down --------------------------------------------
+   *
+   * A score says how many marks. It does not say what went wrong, and "revise
+   * Demand validation" is not much better — a learner who can define an idea but
+   * cannot use it needs something completely different from one who can use it but
+   * confuses it with its neighbour.
+   *
+   * The bank already carries the metadata to tell those apart. Every question
+   * declares the `skills` it exercises, and those sort into a ladder: recognising an
+   * idea is not explaining it, explaining is not applying, applying is not telling it
+   * from the idea next to it, and none of that is combining two. So for each concept
+   * we find the highest rung answered correctly and the lowest rung answered wrongly.
+   * The gap between them is the breakdown point, and it names the fix.
+   */
+  var SKILL_LADDER = [
+    {id: "recognise", rung: 1, label: "recognise it"},
+    {id: "explain", rung: 2, label: "explain it"},
+    {id: "apply", rung: 3, label: "apply it"},
+    {id: "compute", rung: 3, label: "compute with it"},
+    {id: "distinguish", rung: 4, label: "tell it from its neighbours"},
+    {id: "diagnose", rung: 4, label: "spot it going wrong"},
+    {id: "evaluate", rung: 5, label: "judge it"},
+    {id: "connect", rung: 5, label: "connect it to other ideas"},
+    {id: "generate", rung: 5, label: "produce it yourself"}
+  ];
+  var RUNG_OF = {};
+  SKILL_LADDER.forEach(function (entry) { RUNG_OF[entry.id] = entry; });
+
+  function questionRung(question) {
+    /* The hardest thing a question asks for is what it actually tests. */
+    var best = null;
+    (question.skills || []).forEach(function (skill) {
+      var entry = RUNG_OF[skill];
+      if (entry && (!best || entry.rung > best.rung)) best = entry;
+    });
+    return best || RUNG_OF.apply;
+  }
+
+  /* What each rung asks for, in a learner's words rather than the taxonomy's. */
+  var RUNG_ASK = {
+    1: "pick it out of a list",
+    2: "say what it claims",
+    3: "use it on a case",
+    4: "tell it apart from a neighbouring idea",
+    5: "hold it alongside another idea"
+  };
+
+  /* The diagnosis, stated so that it claims only what this paper actually observed.
+   *
+   * This is the part that is easy to get wrong and worth being careful about. The
+   * scored bank asks for rung 3, 4, and 5 only — recognising and explaining are what
+   * the *primers* do, and primers never appear on a paper. So a dashboard that says
+   * "you can explain it but cannot apply it" after a mock would be inventing the
+   * first half of that sentence: nothing on the paper tested explaining. What can be
+   * said is the pair actually seen — the hardest thing that went right, and the
+   * easiest thing that went wrong — and when only one of those exists, only that one
+   * is said. `cleared` is 0 when nothing about the concept went right. */
+  function breakdownCopy(cleared, failed, connectionOnly) {
+    if (connectionOnly) {
+      return {name: "Holds alone, not alongside",
+        fix: "You answered this correctly on its own and lost it when it shared a question with another idea. The gap is combining, not the idea itself — work the questions that put two ideas together."};
+    }
+    if (!cleared) {
+      return {name: "Nothing landed",
+        fix: "Every question on this went wrong, including asking you to " + RUNG_ASK[failed] +
+          ". Treat this as first contact and start from the lesson, not from more questions."};
+    }
+    if (cleared < failed) {
+      return {name: "Stops at " + RUNG_ASK[cleared],
+        fix: "You could " + RUNG_ASK[cleared] + " but not " + RUNG_ASK[failed] +
+          ". That is the step to practise — going over the definition again will not move it."};
+    }
+    /* Right and wrong at the same level, or right above and wrong below. Unstable
+       rather than absent, and it is a different fix: not new material, more reps. */
+    return {name: "Unreliable at " + RUNG_ASK[failed],
+      fix: "You managed to " + RUNG_ASK[cleared] + " on one question and lost it on another at the same level. " +
+        "It is not missing, it is not dependable yet — repetition is what fixes this, not a new lesson."};
+  }
+
+  /* One attempt, fully analysed. Everything the dashboard shows comes from here. */
+  function analyseExamAttempt(attempt) {
+    var items = attempt.items;
+    var scores = items.map(scoreExamItem);
+    var machine = items.filter(function (_, i) { return scores[i].machine; });
+    var durations = items.filter(function (i) { return i.seconds > 0; }).map(function (i) { return i.seconds; }).sort(function (a, b) { return a - b; });
+    var median = durations.length ? durations[Math.floor(durations.length / 2)] : 0;
+
+    /* Per-concept ladder positions. */
+    var concepts = {};
+    items.forEach(function (item, index) {
+      var score = scores[index];
+      if (!score.machine) return;
+      var conceptId = item.question.conceptId;
+      if (!conceptId) return;
+      var entry = concepts[conceptId] || (concepts[conceptId] = {
+        conceptId: conceptId, concept: getConcept(attempt.courseId, conceptId),
+        highestRight: 0, lowestWrong: 99, right: 0, wrong: 0, skipped: 0,
+        soloRight: 0, soloWrong: 0, integrativeRight: 0, integrativeWrong: 0, seconds: 0
+      });
+      var rung = questionRung(item.question).rung;
+      var integrative = (item.question.supportingConceptIds || []).length > 0;
+      entry.seconds += item.seconds;
+      if (!examHasResponse(item)) { entry.skipped += 1; return; }
+      if (score.awarded === score.possible) {
+        entry.right += 1;
+        if (rung > entry.highestRight) entry.highestRight = rung;
+        if (integrative) entry.integrativeRight += 1; else entry.soloRight += 1;
+      } else {
+        entry.wrong += 1;
+        if (rung < entry.lowestWrong) entry.lowestWrong = rung;
+        if (integrative) entry.integrativeWrong += 1; else entry.soloWrong += 1;
+      }
+    });
+
+    /* The breakdown is the pair actually observed: the easiest thing that went wrong,
+       and the hardest thing that went right. Neither is inferred from the other. */
+    var breakdowns = Object.keys(concepts).map(function (id) {
+      var entry = concepts[id];
+      if (!entry.concept || entry.lowestWrong === 99) return null;
+      var failed = Math.min(5, Math.max(1, entry.lowestWrong));
+      var cleared = entry.highestRight;
+      /* Right on its own and wrong alongside another idea is a connection failure
+         whatever the rungs say, and it is the one a score sheet never surfaces. */
+      var connectionOnly = entry.soloRight > 0 && entry.integrativeWrong > 0 && entry.integrativeRight === 0;
+      return {conceptId: id, concept: entry.concept, rung: connectionOnly ? 5 : failed,
+        cleared: cleared, failed: failed,
+        copy: breakdownCopy(cleared, failed, connectionOnly),
+        right: entry.right, wrong: entry.wrong, skipped: entry.skipped, seconds: entry.seconds,
+        connectionOnly: connectionOnly};
+    }).filter(Boolean).sort(function (a, b) {
+      /* Nothing-landed first, then the lowest step failed, then the most marks lost. */
+      if (!a.cleared !== !b.cleared) return a.cleared ? 1 : -1;
+      if (a.rung !== b.rung) return a.rung - b.rung;
+      return b.wrong - a.wrong;
+    });
+
+    /* Pacing. */
+    var spent = items.reduce(function (n, i) { return n + i.seconds; }, 0);
+    var slowest = items.map(function (item, index) { return {item: item, score: scores[index]}; })
+      .filter(function (row) { return row.item.seconds > 0; })
+      .sort(function (a, b) { return b.item.seconds - a.item.seconds; }).slice(0, 3);
+    var attempted = items.filter(examHasResponse).length;
+
+    /* Guessing. A fast wrong answer that was never revisited is the signature; a
+       question answered in under a third of this learner's own median time is fast
+       *for them*, which is the only baseline that means anything. */
+    var guessThreshold = Math.max(6, Math.round(median / 3));
+    var guesses = items.filter(function (item, index) {
+      return scores[index].machine && examHasResponse(item) &&
+        scores[index].awarded < scores[index].possible &&
+        item.seconds > 0 && item.seconds <= guessThreshold && item.changes === 0;
+    });
+    var changedMind = items.filter(function (item, index) {
+      return scores[index].machine && item.changes > 0 && examHasResponse(item);
+    });
+    var changedToWrong = changedMind.filter(function (item) {
+      var index = items.indexOf(item);
+      var first = item.firstResponse;
+      if (first === null) return false;
+      var wouldHaveScored = scoreExamItem({question: item.question, marks: item.marks, response: first});
+      return wouldHaveScored.awarded > scores[index].awarded;
+    });
+
+    return {
+      attempt: attempt, scores: scores, concepts: concepts, breakdowns: breakdowns,
+      median: median, spent: spent, remaining: attempt.remaining, attempted: attempted,
+      total: items.length, slowest: slowest, guesses: guesses,
+      changedMind: changedMind, changedToWrong: changedToWrong,
+      machineAwarded: scores.filter(function (s) { return s.machine; }).reduce(function (n, s) { return n + s.awarded; }, 0),
+      machinePossible: scores.filter(function (s) { return s.machine; }).reduce(function (n, s) { return n + s.possible; }, 0),
+      negative: negativeMarkingAnalysis(items, scores)
+    };
+  }
+
+  /* ---- the bag ------------------------------------------------------------------
+   *
+   * A drawer holding the two things a learner wants mid-session and should not leave
+   * the page for: a focus timer, and the handful of facts about how this app works
+   * that change how much they get out of it.
+   *
+   * The timer is deliberately plain. It does not gamify, it does not nag, and it
+   * writes nothing to the profile — a study aid that quietly became another thing to
+   * keep a streak on would be working against the learner. It survives navigation
+   * because it runs off a timestamp rather than a countdown variable, so switching
+   * screens or opening a paper does not reset it. */
+  var POMODORO = {focus: 25 * 60, break: 5 * 60};
+  var pomodoro = {phase: "focus", remaining: POMODORO.focus, endsAt: null, running: false, completed: 0};
+  var pomodoroTicker = null;
+
+  function pomodoroSecondsLeft() {
+    if (!pomodoro.running) return pomodoro.remaining;
+    return Math.max(0, Math.round((pomodoro.endsAt - Date.now()) / 1000));
+  }
+
+  function renderPomodoro() {
+    var left = pomodoroSecondsLeft();
+    var mins = Math.floor(left / 60), secs = left % 60;
+    var clock = mins + ":" + (secs < 10 ? "0" : "") + secs;
+    var display = $("pomodoro-clock");
+    if (!display) return;
+    display.textContent = clock;
+    $("pomodoro-phase").textContent = (pomodoro.phase === "focus" ? "Focus" : "Break") + " · " +
+      (pomodoro.running ? "running" : left === (pomodoro.phase === "focus" ? POMODORO.focus : POMODORO.break) ? "not started" : "paused");
+    $("pomodoro-toggle").textContent = pomodoro.running ? "Pause" : left < (pomodoro.phase === "focus" ? POMODORO.focus : POMODORO.break) ? "Resume" : "Start";
+    $("pomodoro-skip").textContent = pomodoro.phase === "focus" ? "Skip to break" : "Back to focus";
+    document.querySelector(".pomodoro").classList.toggle("is-break", pomodoro.phase === "break");
+    $("pomodoro-count").textContent = pomodoro.completed
+      ? pomodoro.completed + " focus block" + (pomodoro.completed === 1 ? "" : "s") + " finished today."
+      : "No focus blocks finished yet.";
+    /* The chip on the header button is the only part visible with the bag shut, so a
+       learner can leave it closed and still know where they are. */
+    var chip = $("bag-timer-chip");
+    chip.hidden = !pomodoro.running;
+    chip.textContent = clock;
+  }
+
+  function pomodoroTick() {
+    if (!pomodoro.running) return;
+    if (pomodoroSecondsLeft() > 0) { renderPomodoro(); return; }
+    /* Phase over. Roll to the other one, stopped — a break you have to start is a
+       break you noticed. */
+    if (pomodoro.phase === "focus") { pomodoro.completed += 1; pomodoro.phase = "break"; pomodoro.remaining = POMODORO.break; }
+    else { pomodoro.phase = "focus"; pomodoro.remaining = POMODORO.focus; }
+    pomodoro.running = false;
+    pomodoro.endsAt = null;
+    window.clearInterval(pomodoroTicker);
+    pomodoroTicker = null;
+    renderPomodoro();
+  }
+
+  function setPomodoroRunning(running) {
+    if (running) {
+      pomodoro.endsAt = Date.now() + pomodoro.remaining * 1000;
+      pomodoro.running = true;
+      if (!pomodoroTicker) pomodoroTicker = window.setInterval(pomodoroTick, 1000);
+    } else {
+      pomodoro.remaining = pomodoroSecondsLeft();
+      pomodoro.running = false;
+      window.clearInterval(pomodoroTicker);
+      pomodoroTicker = null;
+    }
+    renderPomodoro();
+  }
+
+  function setBagOpen(open) {
+    $("bag-panel").hidden = !open;
+    $("bag-scrim").hidden = !open;
+    $("bag-open").setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) $("bag-panel").focus({preventScroll: true});
+    else $("bag-open").focus({preventScroll: true});
+  }
+
+  function bindBag() {
+    if (!$("bag-open")) return;
+    $("bag-panel").setAttribute("tabindex", "-1");
+    $("bag-open").addEventListener("click", function () { setBagOpen($("bag-panel").hidden); });
+    $("bag-close").addEventListener("click", function () { setBagOpen(false); });
+    $("bag-scrim").addEventListener("click", function () { setBagOpen(false); });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !$("bag-panel").hidden) setBagOpen(false);
+    });
+    $("pomodoro-toggle").addEventListener("click", function () { setPomodoroRunning(!pomodoro.running); });
+    /* Clear `running` *before* setting the new duration. setPomodoroRunning(false)
+       recomputes `remaining` from the live end-time, so leaving the timer marked as
+       running here overwrote the phase's fresh duration with whatever was left on the
+       old clock — skipping to a five-minute break showed 25:00. */
+    $("pomodoro-reset").addEventListener("click", function () {
+      pomodoro.running = false;
+      pomodoro.remaining = pomodoro.phase === "focus" ? POMODORO.focus : POMODORO.break;
+      setPomodoroRunning(false);
+    });
+    $("pomodoro-skip").addEventListener("click", function () {
+      pomodoro.running = false;
+      pomodoro.phase = pomodoro.phase === "focus" ? "break" : "focus";
+      pomodoro.remaining = pomodoro.phase === "focus" ? POMODORO.focus : POMODORO.break;
+      setPomodoroRunning(false);
+    });
+    renderPomodoro();
+  }
+
+  /* ---- product telemetry, shaped but not sent ------------------------------------
+   *
+   * Two different things get called telemetry and only one of them is here.
+   *
+   * Everything above this line is the learner's own analysis: it is computed on their
+   * device, shown to them, saved in their profile, and goes nowhere. This block is the
+   * other kind — what the owner would need to make the product better — and it is
+   * deliberately built as far as it can honestly go and no further.
+   *
+   * It shapes events against `.agents/contracts/tester-event.schema.json` and puts
+   * them in a bounded local buffer. It does not transmit. There is no endpoint in this
+   * file, no fetch, and no queue that drains anywhere, because the things that must
+   * exist before a single event may leave a tester's machine do not exist yet:
+   * explicit consent for *this* scope, pseudonymous identity mapping, a retention and
+   * deletion path, and owner activation. Those are tracked in `.agents/` and the
+   * collection stays off until they land.
+   *
+   * So the flag defaults to off, and with it off nothing is computed or stored at all.
+   * What this buys today is that the contract is executable and verified rather than
+   * aspirational: the events are the real shape, from a real attempt, validated
+   * against the real schema.
+   */
+  var TELEMETRY_FLAG = "t6.telemetry.local";
+  var telemetryBuffer = [];
+
+  function telemetryEnabled() {
+    try { return window.localStorage.getItem(TELEMETRY_FLAG) === "on"; }
+    catch (error) { return false; }
+  }
+
+  function band(value, bands) {
+    for (var i = 0; i < bands.length; i++) if (value <= bands[i][0]) return bands[i][1];
+    return bands[bands.length - 1][1];
+  }
+
+  function percentBand(percent) {
+    return band(percent, [[19, "0-19"], [39, "20-39"], [59, "40-59"], [79, "60-79"], [100, "80-100"]]);
+  }
+
+  /* Bands, never exact values. The cohort is eight people: an exact mark on a named
+     paper on a known date is close to an identifier, and a raw duration is a
+     behavioural fingerprint. The product questions — is anyone finishing, is negative
+     marking being handled, does the diagnosis get clicked — all survive banding. */
+  function examTelemetryEvents(analysis, automatic) {
+    var attempt = analysis.attempt;
+    var courseId = attempt.courseId;
+    var sittings = examAttemptsFor(courseId, attempt.setIndex || 0).length;
+    var shortfall = attempt.paper.shortfalls.length > 0;
+    var scorePercent = analysis.machinePossible
+      ? Math.round(analysis.machineAwarded / analysis.machinePossible * 100) : 0;
+    var attemptedPercent = analysis.total
+      ? Math.round(analysis.attempted / analysis.total * 100) : 0;
+    var guessPercent = analysis.total
+      ? Math.round(analysis.guesses.length / analysis.total * 100) : 0;
+    var budget = EXAM_MINUTES * 60;
+
+    var base = {
+      schema_version: "1.1",
+      consent_scope: "tester-examiner-events-v1",
+      synthetic: false,
+      course_id: courseId,
+      exam_set_index: attempt.setIndex || 0
+    };
+
+    var events = [{
+      event_type: "exam_attempt_submitted",
+      exam_sitting_number: Math.max(1, sittings),
+      exam_paper_shortfall: shortfall,
+      exam_outcome: automatic ? "auto-submitted" : "submitted",
+      exam_score_band: analysis.machinePossible ? percentBand(scorePercent) : "not-scored",
+      exam_attempted_band: percentBand(attemptedPercent),
+      exam_pacing_band: attempt.remaining <= 0 ? "ran-out"
+        : band(analysis.spent / budget * 100, [[50, "well-under"], [85, "under"], [100, "on-pace"], [1e9, "over"]]),
+      exam_guess_band: guessPercent === 0 ? "none"
+        : band(guessPercent, [[9, "under-10pct"], [25, "10-25pct"], [1e9, "over-25pct"]]),
+      exam_wrong_ticks: analysis.negative ? analysis.negative.wrongTicks : 0,
+      exam_changed_to_wrong: analysis.changedToWrong.length,
+      exam_revisit_band: band(attempt.items.reduce(function (n, i) { return n + Math.max(0, i.visits - 1); }, 0),
+        [[0, "none"], [analysis.total, "few"], [1e9, "many"]]),
+      exam_breakdown_count: analysis.breakdowns.length
+    }];
+
+    /* One per concept that broke down. This is the signal that says which ideas the
+       bank teaches badly rather than which learner studied badly — the same rung
+       failing across many testers is a content defect, not eight coincidences. */
+    analysis.breakdowns.forEach(function (row) {
+      events.push({
+        event_type: "exam_breakdown_identified",
+        concept_ids: [row.conceptId],
+        exam_breakdown_rung: row.rung,
+        exam_breakdown_kind: row.connectionOnly ? "connection-only"
+          : !row.cleared ? "nothing-landed"
+          : row.cleared < row.failed ? "stops-below" : "unreliable"
+      });
+    });
+
+    return events.map(function (event) {
+      var merged = {};
+      Object.keys(base).forEach(function (key) { merged[key] = base[key]; });
+      Object.keys(event).forEach(function (key) { merged[key] = event[key]; });
+      return merged;
+    });
+  }
+
+  /* Buffered locally and bounded. No transmission path exists, by design. */
+  function bufferExamTelemetry(analysis, automatic) {
+    if (!telemetryEnabled()) return;
+    try {
+      examTelemetryEvents(analysis, automatic).forEach(function (event) { telemetryBuffer.push(event); });
+      while (telemetryBuffer.length > 200) telemetryBuffer.shift();
+      window.T6_TELEMETRY_BUFFER = telemetryBuffer;
+    } catch (error) { /* telemetry must never break a paper */ }
+  }
+
+  /* ---- the examiner's front door ------------------------------------------------ */
+
+  function examAttemptsFor(courseId, setIndex) {
+    var log = (profile.examAttempts && profile.examAttempts[courseId]) || [];
+    return typeof setIndex === "number"
+      ? log.filter(function (row) { return row.setIndex === setIndex; })
+      : log.slice();
+  }
+
+  /* Summary only. The paper is rebuildable from its seed, so storing responses would
+     buy nothing and cost a learner's saved profile the size of the bank. */
+  function recordExamAttempt(analysis, automatic) {
+    var courseId = analysis.attempt.courseId;
+    var log = profile.examAttempts[courseId] || (profile.examAttempts[courseId] = []);
+    var rungs = {};
+    analysis.breakdowns.forEach(function (row) { rungs[row.rung] = (rungs[row.rung] || 0) + 1; });
+    log.push({
+      setIndex: analysis.attempt.setIndex || 0,
+      at: new Date().toISOString(),
+      awarded: analysis.machineAwarded, possible: analysis.machinePossible,
+      attempted: analysis.attempted, total: analysis.total,
+      spent: analysis.spent, median: analysis.median,
+      guesses: analysis.guesses.length,
+      changedToWrong: analysis.changedToWrong.length,
+      wrongTicks: analysis.negative ? analysis.negative.wrongTicks : 0,
+      breakdowns: analysis.breakdowns.length, rungs: rungs,
+      autoSubmitted: Boolean(automatic)
+    });
+    /* Two dozen papers is more than a term's worth; older ones stop being evidence. */
+    while (log.length > 24) log.shift();
+    saveProfile();
+  }
+
+  function examSetLabel(index) { return "Set " + (index + 1); }
+
+  function examPercent(row) {
+    return row.possible ? Math.round((row.awarded / row.possible) * 100) : 0;
+  }
+
+  function openExamHome() {
+    renderExamHome();
+    showScreen("exam-home-screen");
+  }
+
+  function renderExamHome() {
+    renderExamRecord();
+    $("exam-papers").innerHTML = EXAM_ORDER.filter(function (courseId) { return EXAM_PAPERS[courseId]; })
+      .map(renderExamPaperCard).join("");
+    $all("#exam-papers [data-exam-set]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        openExaminer(button.dataset.examCourse, Number(button.dataset.examSet));
+      });
+    });
+  }
+
+  function renderExamPaperCard(courseId) {
+    var spec = EXAM_PAPERS[courseId];
+    var questions = spec.sections.reduce(function (n, s) { return n + s.count; }, 0);
+    /* What this build can actually fill, computed from the pools rather than from a
+       built paper: the shortfall does not depend on the seed, and a candidate is
+       owed it before they commit two hours, not at the end. */
+    var short = spec.sections.map(function (section) {
+      var have = examPool(courseId, section.type).length;
+      return have < section.count ? {section: section, have: have} : null;
+    }).filter(Boolean);
+    var negative = spec.sections.some(function (s) { return s.negative; });
+
+    var sets = "";
+    for (var i = 0; i < EXAM_SET_COUNT; i++) {
+      var history = examAttemptsFor(courseId, i);
+      var best = history.reduce(function (top, row) {
+        return !top || examPercent(row) > examPercent(top) ? row : top;
+      }, null);
+      var last = history[history.length - 1];
+      sets += "<button type='button' class='exam-set' data-exam-set='" + i + "' data-exam-course='" +
+        escapeHtml(courseId) + "'>" +
+        "<b>" + examSetLabel(i) + "</b>" +
+        (history.length
+          ? "<span>" + examPercent(last) + "% last" + (history.length > 1 ? " · " + examPercent(best) + "% best" : "") + "</span>" +
+            "<small>" + history.length + " sitting" + (history.length === 1 ? "" : "s") + "</small>"
+          : "<span>Not sat</span><small>" + questions + " questions · " + EXAM_MINUTES + " minutes</small>") +
+        "</button>";
+    }
+
+    return "<article class='exam-paper'>" +
+      "<header><h2>" + escapeHtml(spec.title) + "</h2>" +
+      "<p class='exam-paper-meta'>" + escapeHtml(spec.sat) + " · " + spec.total + " marks · " +
+      questions + " questions · " +
+      (spec.calculator === "scientific" ? "Scientific calculator" : spec.calculator === "basic" ? "Normal calculator" : "No calculator") +
+      (negative ? " · Negative marking" : "") + "</p></header>" +
+      "<ul class='exam-paper-sections'>" + spec.sections.map(function (section) {
+        return "<li><b>" + escapeHtml(section.label) + "</b><span>" + section.count + " × " +
+          section.marks + " mark" + (section.marks === 1 ? "" : "s") + "</span></li>";
+      }).join("") + "</ul>" +
+      /* The caveat and the shortfall are the two things that would be dishonest to
+         put behind a click. IBM cannot be mocked at all; a section the bank cannot
+         fill scores out of less than the real paper. Both are said before you sit. */
+      (spec.caveat ? "<p class='exam-paper-caveat'>" + escapeHtml(spec.caveat) + "</p>" : "") +
+      (short.length ? "<p class='exam-paper-short'>" + short.map(function (row) {
+        return row.section.label + " has " + row.have + " of " + row.section.count + " questions in the bank";
+      }).join("; ") + ". This mock scores out of what is actually here, not out of " + spec.total + ".</p>" : "") +
+      "<div class='exam-sets'>" + sets + "</div></article>";
+  }
+
+  function renderExamRecord() {
+    var all = [];
+    Object.keys(profile.examAttempts || {}).forEach(function (courseId) {
+      (profile.examAttempts[courseId] || []).forEach(function (row) {
+        all.push({courseId: courseId, row: row});
+      });
+    });
+    $("exam-record-block").hidden = all.length === 0;
+    if (!all.length) return;
+    var papers = all.length;
+    var best = all.reduce(function (top, entry) {
+      return !top || examPercent(entry.row) > examPercent(top.row) ? entry : top;
+    }, null);
+    var finished = all.filter(function (e) { return !e.row.autoSubmitted; }).length;
+    var unfinished = all.filter(function (e) { return e.row.attempted < e.row.total; }).length;
+
+    /* Improvement is only meaningful within one set — a better score on an easier
+       draw is not progress. So it is measured on sets sat more than once. */
+    var repeated = [];
+    Object.keys(profile.examAttempts || {}).forEach(function (courseId) {
+      var bySet = {};
+      (profile.examAttempts[courseId] || []).forEach(function (row) {
+        (bySet[row.setIndex] = bySet[row.setIndex] || []).push(row);
+      });
+      Object.keys(bySet).forEach(function (setIndex) {
+        var rows = bySet[setIndex];
+        if (rows.length > 1) repeated.push({first: rows[0], last: rows[rows.length - 1], courseId: courseId});
+      });
+    });
+    var improved = repeated.filter(function (p) { return examPercent(p.last) > examPercent(p.first); }).length;
+
+    $("exam-record").innerHTML = [
+      {label: "Papers sat", value: String(papers), note: finished === papers ? "All submitted before time." : (papers - finished) + " ran out of clock."},
+      {label: "Best", value: examPercent(best.row) + "%", note: (EXAM_PAPERS[best.courseId] ? EXAM_PAPERS[best.courseId].title.split(" ").slice(0, 2).join(" ") : best.courseId) + " · " + examSetLabel(best.row.setIndex)},
+      {label: "Finished the paper", value: (papers - unfinished) + " of " + papers, note: unfinished ? "The rest had questions left blank at the end." : "Nothing left unattempted."},
+      repeated.length
+        ? {label: "Sets re-sat", value: improved + " of " + repeated.length, note: "improved on the second sitting of the same paper"}
+        : {label: "Sets re-sat", value: "—", note: "Sitting one set twice is how you tell study from luck."}
+    ].map(function (card) {
+      return "<div class='insight-card'><small>" + escapeHtml(card.label) + "</small><b>" +
+        escapeHtml(card.value) + "</b><span>" + escapeHtml(card.note) + "</span></div>";
+    }).join("");
+
+    $("exam-record-verdict").textContent = repeated.length
+      ? (improved >= repeated.length / 2
+        ? "You are scoring better on papers you have sat before. That is worth exactly as much as the studying you did between them — the second sitting of a set you remember is not a clean measurement."
+        : "Re-sitting has not moved your score yet. A set you have already seen only measures what you did between the two sittings, so this is a question about the studying, not the paper.")
+      : "Nothing here is a prediction of your real result. It is what these questions, under this clock, showed about what you can and cannot do yet.";
+  }
+
+  /* ---- the cost of a speculative tick ------------------------------------------
+   *
+   * SPMS Section B is the only negatively marked section in the term: +1 for each
+   * right option, −1 for each wrong one, floored at zero per question. That floor is
+   * the part learners get wrong in both directions — it makes a wild guess cheaper
+   * than it feels, and a careful extra tick more expensive than it looks.
+   *
+   * With n options of which k are correct, a single tick chosen at random is right
+   * with probability k/n, so its expected value is (k/n) − (1 − k/n) = 2k/n − 1.
+   * On a four-option question with two correct answers that is exactly zero: ticking
+   * at random is a coin flip that costs nothing and gains nothing. Every tick above
+   * your actual confidence is only worth it when you believe you are better than
+   * even on it — and the floor means a question you have already lost cannot lose
+   * you more, which is why the *last* tick on a question you are failing is free.
+   */
+  function negativeMarkingAnalysis(items, scores) {
+    var negatives = [];
+    /* Every negatively marked item on the paper, answered or not. The cost analysis
+       needs the answered ones; the *shape* analysis below needs all of them, because
+       whether this paper rewards indiscriminate ticking is a property of the items
+       themselves and not of what this candidate happened to do. */
+    var shapes = [];
+    items.forEach(function (item, index) {
+      if ((item.question.type || "") !== "msq") return;
+      var correct = item.question.answers || item.question.correct || [];
+      var options = (item.question.options || []).length;
+      shapes.push({options: options, correct: correct.length, marks: item.marks});
+      var chosen = Array.isArray(item.response) ? item.response : [];
+      if (!chosen.length) return;
+      var right = chosen.filter(function (c) { return correct.indexOf(c) >= 0; }).length;
+      var wrong = chosen.length - right;
+      negatives.push({item: item, index: index, right: right, wrong: wrong,
+        options: options, correct: correct.length,
+        awarded: scores[index].awarded, possible: item.marks});
+    });
+    if (!shapes.length) return null;
+
+    /* Does ticking every option score full marks? With k correct of n and the floor,
+       ticking everything pays min(marks, max(0, k − (n − k))). When that equals the
+       question's marks, the whole trade-off the section is built on disappears: a
+       candidate who ticks blindly scores as well as one who knows the material.
+       Measured, not assumed — and reported, because a mock that can be beaten this
+       way must say so rather than let a candidate discover it and learn the habit. */
+    var tickAllPerfect = shapes.filter(function (shape) {
+      return Math.min(shape.marks, Math.max(0, shape.correct - (shape.options - shape.correct))) >= shape.marks;
+    }).length;
+    var exploitable = tickAllPerfect === shapes.length;
+
+    if (!negatives.length) {
+      return {questions: 0, wrongTicks: 0, lostToWrongTicks: 0,
+        evPerRandomTick: Math.round((2 * shapes[0].correct / shapes[0].options - 1) * 100) / 100,
+        options: shapes[0].options, correct: shapes[0].correct,
+        totalItems: shapes.length, tickAllPerfect: tickAllPerfect, exploitable: exploitable};
+    }
+    var totalWrongTicks = negatives.reduce(function (n, row) { return n + row.wrong; }, 0);
+    var lostToWrongTicks = negatives.reduce(function (n, row) {
+      /* What the same question would have paid with the wrong ticks removed. */
+      return n + (Math.min(row.possible, row.right) - row.awarded);
+    }, 0);
+    var sampleOptions = negatives[0].options || 4;
+    var sampleCorrect = negatives[0].correct || 2;
+    return {
+      questions: negatives.length,
+      wrongTicks: totalWrongTicks,
+      lostToWrongTicks: lostToWrongTicks,
+      evPerRandomTick: Math.round((2 * sampleCorrect / sampleOptions - 1) * 100) / 100,
+      options: sampleOptions,
+      correct: sampleCorrect,
+      totalItems: shapes.length,
+      tickAllPerfect: tickAllPerfect,
+      exploitable: exploitable
+    };
   }
 
   function renderExamResult(automatic) {
@@ -4509,14 +5288,32 @@
         "<span>" + (isWritten ? "Self-review · " + out + " marks" : got + " / " + out) + "</span>" +
         "<small>" + attempted + " of " + indexes.length + " attempted</small></div>";
     }).join("");
+    var analysis = analyseExamAttempt(exam);
+    renderExamInsights(analysis);
+    /* Recorded after the analysis so the stored row is the same numbers the learner
+       was just shown, and before the comparison below reads the log. */
+    recordExamAttempt(analysis, automatic);
+    bufferExamTelemetry(analysis, automatic);
+    renderExamProgress(analysis);
+
     /* The most useful thing on this screen is not the score. It is the list of things
        the paper just proved you cannot do yet, and a way straight into them. */
     var misses = examMissList(exam.courseId);
     var repair = $("exam-repair");
     repair.hidden = misses.length === 0;
     if (misses.length) {
+      /* Say what the run actually contains. `startExamRepair` takes the worst eight, so
+         a paper that exposed eleven concepts produces a run covering eight of them —
+         and the first version of this sentence said all eleven were in it, which a
+         trial caught by finding three that never appeared. The rest are genuinely
+         prioritised for later runs, so that is what it now says. */
+      var inRun = Math.min(misses.length, EXAM_REPAIR_SITTING);
       $("exam-repair-copy").textContent = "This paper cost you marks on " + misses.length +
-        " concept" + (misses.length === 1 ? "" : "s") + ". They are now first in line back in the learning system, each one taught before it is tested again.";
+        " concept" + (misses.length === 1 ? "" : "s") + ". " +
+        (misses.length > inRun
+          ? "One sitting takes the " + inRun + " that cost you most, each taught before it is tested again. The other " +
+            (misses.length - inRun) + " are queued for the sittings after it — short enough to finish is the point."
+          : "Each one is taught before it is tested again.");
       $("exam-repair-list").innerHTML = misses.slice(0, 6).map(function (row) {
         return "<li><b>" + escapeHtml(row.concept.name) + "</b><small>" +
           (row.missed ? row.missed + " answered wrong" : "") +
@@ -4525,6 +5322,208 @@
       }).join("");
     }
     $("exam-review-list").innerHTML = "";
+  }
+
+  function clockWords(seconds) {
+    var s = Math.max(0, Math.round(seconds));
+    if (s < 60) return s + "s";
+    var m = Math.floor(s / 60);
+    return m + "m " + (s % 60) + "s";
+  }
+
+  function signed(n, suffix) {
+    return (n > 0 ? "+" : n < 0 ? "−" : "±") + Math.abs(n) + (suffix || "");
+  }
+
+  /* Same set, sat again. This is the only comparison in the product that is close to
+     like-for-like, and even then it is not clean: the second sitting is against a
+     paper you have seen. The verdict says so rather than congratulating a learner for
+     remembering answers. */
+  function renderExamProgress(analysis) {
+    var courseId = analysis.attempt.courseId;
+    var history = examAttemptsFor(courseId, analysis.attempt.setIndex || 0);
+    var block = $("exam-progress-block");
+    block.hidden = history.length < 2;
+    if (history.length < 2) return;
+    var now = history[history.length - 1];
+    var before = history[history.length - 2];
+    var deltaScore = examPercent(now) - examPercent(before);
+    var deltaTime = Math.round((now.spent - before.spent) / 60);
+    var deltaBlanks = (now.total - now.attempted) - (before.total - before.attempted);
+    var deltaBroken = now.breakdowns - before.breakdowns;
+
+    $("exam-progress-body").innerHTML = [
+      {label: "Score", value: signed(deltaScore, "%"), note: examPercent(before) + "% → " + examPercent(now) + "%"},
+      {label: "Time on the paper", value: signed(deltaTime, "m"), note: clockWords(before.spent) + " → " + clockWords(now.spent)},
+      {label: "Left blank", value: signed(deltaBlanks), note: (before.total - before.attempted) + " → " + (now.total - now.attempted) + " questions"},
+      {label: "Concepts breaking down", value: signed(deltaBroken), note: before.breakdowns + " → " + now.breakdowns + " on this paper"}
+    ].map(function (card) {
+      return "<div class='insight-card'><small>" + escapeHtml(card.label) + "</small><b>" +
+        escapeHtml(card.value) + "</b><span>" + escapeHtml(card.note) + "</span></div>";
+    }).join("");
+
+    $("exam-progress-verdict").textContent = deltaScore > 0
+      ? "Better than last time on the same paper. Some of that is study and some of it is recognition — you have seen these questions before, so treat the gain as an upper bound rather than a measurement."
+      : deltaScore < 0
+        ? "Lower than last time on a paper you have already seen, which is the one result that cannot be explained by an unlucky draw. Look at the pacing above before concluding anything about what you know."
+        : "The same score on the same paper. Whatever you did between the two sittings has not reached these questions yet.";
+  }
+
+  function renderExamInsights(analysis) {
+    var spec = analysis.attempt.paper.spec;
+
+    /* Pacing. The useful comparison is not "how long did you take" but "how does that
+       sit against the clock you will actually have". */
+    var perQuestion = analysis.total ? analysis.spent / analysis.total : 0;
+    var budget = analysis.total ? (EXAM_MINUTES * 60) / analysis.total : 0;
+    $("exam-pacing").innerHTML = [
+      {label: "Attempted", value: analysis.attempted + " of " + analysis.total,
+       note: analysis.attempted === analysis.total ? "Nothing left blank." : (analysis.total - analysis.attempted) + " never answered."},
+      {label: "Time used", value: clockWords(analysis.spent),
+       note: analysis.remaining > 0 ? clockWords(analysis.remaining) + " left on the clock." : "The clock ran out."},
+      {label: "Per question", value: clockWords(perQuestion),
+       note: perQuestion > budget * 1.15 ? "Above the " + clockWords(budget) + " this paper allows each." :
+             perQuestion < budget * 0.5 ? "Well under the " + clockWords(budget) + " available. Time was not your constraint." :
+             "Comfortably inside the " + clockWords(budget) + " available."},
+      {label: "Longest question", value: analysis.slowest.length ? clockWords(analysis.slowest[0].item.seconds) : "—",
+       note: analysis.slowest.length ? (analysis.slowest[0].score.awarded === analysis.slowest[0].score.possible ? "And you got it right — time well spent." : "And it was still wrong. That is the one to have left and come back to.") : ""}
+    ].map(function (card) {
+      return "<div class='insight-card'><small>" + escapeHtml(card.label) + "</small><b>" +
+        escapeHtml(card.value) + "</b><span>" + escapeHtml(card.note) + "</span></div>";
+    }).join("");
+
+    /* Where knowledge breaks down. */
+    var depth = analysis.breakdowns.slice(0, 6);
+    $("exam-depth-block").hidden = depth.length === 0;
+    $("exam-depth-list").innerHTML = depth.map(function (row) {
+      return "<li class='depth-row rung-" + row.rung + "'>" +
+        "<div class='depth-head'><b>" + escapeHtml(row.concept.name) + "</b>" +
+        "<span class='depth-tag'>" + escapeHtml(row.copy.name) + "</span></div>" +
+        "<p>" + escapeHtml(row.copy.fix) + "</p>" +
+        "<small>" + row.right + " right · " + row.wrong + " wrong" +
+        (row.skipped ? " · " + row.skipped + " blank" : "") + " · " + clockWords(row.seconds) + " spent</small>" +
+        /* The route back, per concept. The examiner diagnoses and the learning system
+           teaches; this is the door between them, one idea at a time. */
+        "<button type='button' class='button compact secondary depth-route' data-repair-concept='" +
+        escapeHtml(row.conceptId) + "'>Teach me this again</button></li>";
+    }).join("");
+    $all("#exam-depth-list [data-repair-concept]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var courseId = analysis.attempt.courseId;
+        var conceptId = button.dataset.repairConcept;
+        /* Leaving the examiner properly on the way out: the attempt is finished with,
+           and a stale `exam` would leave the next paper's clock running against it. */
+        window.clearInterval(examTicker);
+        exam = null;
+        startExamRepair(courseId, conceptId);
+      });
+    });
+
+    /* Negative marking, where the paper has it. */
+    var negative = analysis.negative;
+    $("exam-negative-block").hidden = !negative;
+    if (negative) {
+      var ev = negative.evPerRandomTick;
+      $("exam-negative-body").innerHTML =
+        "<div class='insight-grid'>" +
+        "<div class='insight-card'><small>Wrong ticks</small><b>" + negative.wrongTicks + "</b><span>across " + negative.questions + " answered question" + (negative.questions === 1 ? "" : "s") + "</span></div>" +
+        "<div class='insight-card'><small>Marks they cost</small><b>" + negative.lostToWrongTicks + "</b><span>you would have scored this much more ticking only what you were sure of</span></div>" +
+        "<div class='insight-card'><small>A random tick is worth</small><b>" + (ev > 0 ? "+" : "") + ev.toFixed(2) + "</b><span>on a " + negative.options + "-option question with " + negative.correct + " correct</span></div>" +
+        "</div>" +
+        "<p class='insight-verdict'>" + escapeHtml(
+          ev === 0
+            ? "On this paper's shape a random tick is an exact coin flip: it gains as much as it loses, so it is never the thing that decides your score. What decides it is ticking options you are better than even on, and leaving the rest. " +
+              (negative.lostToWrongTicks > 0
+                ? "You gave away " + negative.lostToWrongTicks + " mark" + (negative.lostToWrongTicks === 1 ? "" : "s") + " to ticks that were worse than a coin flip."
+                : "You did not give anything away to speculative ticks. Keep doing that.")
+            : ev > 0
+              ? "On the items in this mock a random tick pays on average, because they carry more correct options than wrong ones. Do not take that to the real paper — see the warning below."
+              : "A random tick loses on average here, so every uncertain tick is a real cost. Tick only what you can defend."
+        ) + "</p>" +
+        /* A mock that can be beaten by ticking everything has to say so. The habit is
+           the harm: a candidate who finds this and does not know it is an artefact of
+           the mock will carry it into a paper where it costs them the section. */
+        (negative.exploitable
+          ? "<div class='insight-warning'>" +
+            "<p><b>A defect in this mock, not a strategy.</b> Every negatively marked question in this build carries " +
+            negative.correct + " correct options out of " + negative.options + ", so ticking <em>all</em> of them scores full marks on all " +
+            negative.totalItems + " — " + negative.correct + " right minus " + (negative.options - negative.correct) +
+            " wrong, and the per-question floor absorbs the rest.</p>" +
+            "<p>The real paper's rule is the opposite: choosing every option is strictly worse than choosing only what you are sure of. " +
+            "These items are miscalibrated and it is recorded as a defect. Do not learn a ticking habit from this section.</p></div>"
+          : "") +
+        "<p class='insight-note'>One thing the floor gives you: a question cannot score below zero, so once a question is already lost, a further tick costs nothing. Being decisive on a question you are failing is free; being speculative on one you are winning is not.</p>";
+    }
+
+    /* Answer behaviour. */
+    var behaviour = [];
+    if (analysis.guesses.length) {
+      behaviour.push("<div class='insight-card'><small>Fast and wrong</small><b>" + analysis.guesses.length +
+        "</b><span>answered in under " + clockWords(Math.max(6, Math.round(analysis.median / 3))) +
+        " and never revisited — your own median is " + clockWords(analysis.median) + "</span></div>");
+    }
+    if (analysis.changedMind.length) {
+      behaviour.push("<div class='insight-card'><small>Changed your mind</small><b>" + analysis.changedMind.length +
+        "</b><span>" + (analysis.changedToWrong.length
+          ? analysis.changedToWrong.length + " of them moved from a right answer to a wrong one"
+          : "and none of them moved away from a right answer") + "</span></div>");
+    }
+    $("exam-behaviour-block").hidden = behaviour.length === 0;
+    if (behaviour.length) {
+      $("exam-behaviour-body").innerHTML = "<div class='insight-grid'>" + behaviour.join("") + "</div>" +
+        "<p class='insight-verdict'>" + escapeHtml(
+          analysis.changedToWrong.length > analysis.changedMind.length / 2 && analysis.changedMind.length > 2
+            ? "Your first instinct was better than your second more often than not on this paper. That is worth knowing before you sit the real one."
+            : analysis.guesses.length > analysis.total * 0.15
+              ? "A sixth of your answers went down fast and stayed wrong. Those are the ones to mark for review rather than commit to."
+              : "Nothing alarming in how you committed to answers."
+        ) + "</p>";
+    }
+
+    /* Written answers: vocabulary is computable, the rubric is self-review. */
+    var written = analysis.attempt.items.filter(function (item) {
+      return (item.question.type || "") === "short-answer" && examHasResponse(item);
+    });
+    $("exam-written-block").hidden = written.length === 0;
+    if (written.length) {
+      $("exam-written-body").innerHTML = written.map(function (item) {
+        var text = String(item.response || "");
+        var words = text.trim().split(/\s+/).filter(Boolean).length;
+        var terms = lessonVocabulary(item.question);
+        var used = terms.filter(function (term) { return new RegExp("\\b" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "s?\\b", "i").test(text); });
+        var rubric = item.question.rubric || [];
+        return "<article class='written-review'>" +
+          "<b>" + escapeHtml(item.question.node || item.question.stem || "Written answer") + "</b>" +
+          "<div class='insight-grid'>" +
+            "<div class='insight-card'><small>Length</small><b>" + words + "</b><span>words, " + clockWords(item.seconds) + " spent</span></div>" +
+            (terms.length ? "<div class='insight-card'><small>Course vocabulary</small><b>" + used.length + " of " + terms.length +
+              "</b><span>" + (used.length ? escapeHtml(used.slice(0, 4).join(", ")) : "none of this lecture's terms appear") + "</span></div>" : "") +
+            (rubric.length ? "<div class='insight-card'><small>Rubric points</small><b>" + rubric.length + "</b><span>to check your answer against below</span></div>" : "") +
+          "</div>" +
+          (rubric.length ? "<ul class='rubric-points'>" + rubric.map(function (point) {
+            return "<li><b>" + escapeHtml(point.label) + "</b><span>" + escapeHtml(point.description) + "</span></li>";
+          }).join("") + "</ul>" : "") +
+          (terms.length && used.length < Math.ceil(terms.length / 2)
+            ? "<p class='insight-verdict'>You answered in your own words rather than the course's. Examiners look for the framework's vocabulary, because it is the evidence you are using the framework and not describing it from outside.</p>"
+            : "") +
+          "</article>";
+      }).join("");
+    }
+  }
+
+  /* The terms the lecture behind a question actually introduced. */
+  function lessonVocabulary(question) {
+    var lessons = window.T6_LESSONS || {};
+    var ids = question.sourceIds || (question.source ? [question.source] : []);
+    var terms = [];
+    ids.forEach(function (id) {
+      var lesson = lessons[id];
+      if (!lesson || !lesson.glossary) return;
+      lesson.glossary.forEach(function (entry) {
+        if (entry && entry.term && terms.indexOf(entry.term) < 0) terms.push(entry.term);
+      });
+    });
+    return terms;
   }
 
   function renderExamReview() {
@@ -4595,13 +5594,25 @@
 
   function bindExaminer() {
     var open = $("open-exam");
-    if (open) open.addEventListener("click", function () { openExaminer(profile.selectedCourse); });
-    $("exam-leave-brief").addEventListener("click", leaveExaminer);
+    /* The examiner opens on its own home, not on one subject's brief. It is a
+       separate product and the learner's current subject is the learning system's
+       state, not the examiner's. */
+    if (open) open.addEventListener("click", openExamHome);
+    $("exam-home-leave").addEventListener("click", leaveExaminer);
+    /* Back from a brief returns to the papers, not out of the product entirely. */
+    $("exam-leave-brief").addEventListener("click", function () {
+      window.clearInterval(examTicker);
+      exam = null;
+      openExamHome();
+    });
     $("exam-begin").addEventListener("click", function () { beginExam(); renderCalculator(); });
     $("exam-prev").addEventListener("click", function () { goExamQuestion(exam.current - 1); });
     $("exam-next").addEventListener("click", function () { goExamQuestion(Math.min(exam.current + 1, exam.items.length - 1)); });
     $("exam-clear").addEventListener("click", function () {
-      exam.items[exam.current].response = null;
+      /* Clearing is a change of answer like any other, and it goes through the same
+         recorder — otherwise "answered, then wiped it" reads afterwards as a question
+         that was never touched. */
+      recordExamResponse(exam.items[exam.current], null);
       renderExamQuestion();
     });
     $("exam-mark").addEventListener("click", function () {
@@ -4611,6 +5622,11 @@
     });
     $("exam-submit").addEventListener("click", function () { submitExam(false); });
     $("exam-result-home").addEventListener("click", leaveExaminer);
+    $("exam-result-papers").addEventListener("click", function () {
+      window.clearInterval(examTicker);
+      exam = null;
+      openExamHome();
+    });
     $("exam-review").addEventListener("click", renderExamReview);
     $("exam-repair-start").addEventListener("click", function () {
       var courseId = exam.courseId;
@@ -4864,6 +5880,7 @@
     bindResumeBar();
     bindTips();
     bindExaminer();
+    bindBag();
     renderThemeToggle();
     if (window.T6Theme) {
       $("theme-toggle").addEventListener("click", function () {

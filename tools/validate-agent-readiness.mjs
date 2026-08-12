@@ -14,13 +14,30 @@ export function validateEvent(event, schema) {
   const required = schema.required || [];
   for (const key of required) if (!(key in event)) errors.push(`missing:${key}`);
   for (const key of Object.keys(event)) if (!allowed.has(key)) errors.push(`unknown:${key}`);
-  if (event.schema_version !== "1.0") errors.push("schema_version");
+  /* Read the allowed values out of the contract rather than restating them here. The
+     two were duplicated and drifted apart the moment the contract gained a second
+     consent scope, which is exactly the failure a validator should not have. */
+  if (event.schema_version !== schema.properties.schema_version.const) errors.push("schema_version");
   if (!/^evt_[A-Za-z0-9_-]{8,80}$/.test(event.event_id || "")) errors.push("event_id");
   if (!/^tester_[A-Za-z0-9_-]{6,64}$/.test(event.tester_id || "")) errors.push("tester_id");
   if (!/^session_[A-Za-z0-9_-]{6,64}$/.test(event.session_id || "")) errors.push("session_id");
-  if (event.consent_scope !== "tester-learning-events-v1") errors.push("consent_scope");
+  if (!(schema.properties.consent_scope.enum || []).includes(event.consent_scope)) errors.push("consent_scope");
   if (typeof event.synthetic !== "boolean") errors.push("synthetic");
   if (!(schema.properties.event_type.enum || []).includes(event.event_type)) errors.push("event_type");
+
+  /* The cross-field rule, and the one that is not a restatement of the schema: an
+     examiner event may only ride the examiner consent scope and vice versa. A tester
+     who consented to learning telemetry has not consented to having their exam
+     performance collected, and the way that goes wrong in practice is a new event
+     type shipped under the old scope because it was the one already granted. */
+  const examinerRule = (schema.allOf || []).find(rule => rule.if?.properties?.event_type?.enum);
+  if (examinerRule) {
+    const examinerTypes = examinerRule.if.properties.event_type.enum;
+    const expected = examinerTypes.includes(event.event_type)
+      ? examinerRule.then.properties.consent_scope.const
+      : examinerRule.else.properties.consent_scope.const;
+    if (event.consent_scope !== expected) errors.push("consent_scope:wrong-scope-for-event");
+  }
   return errors;
 }
 

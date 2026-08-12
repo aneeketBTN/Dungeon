@@ -3,6 +3,83 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-13 — SPMS Section B completed and un-broken; the exam-pattern gate that found it
+
+- **`npm run check:exam` — a gate and an authoring worklist in one.** `tools/check_exam_readiness.mjs`
+  reads `EXAM_PAPERS` out of `app/t6.js` rather than keeping a copy, and multiplies the paper by the
+  bank: sections that cannot be filled and what they cost in marks, negatively marked sections that
+  are free, uniform answer shapes, positional cues, and prompts *forced* to repeat. It prints
+  `N × type for SUBJECT Section X`, soonest paper first. Built before authoring, on purpose.
+  Its first version passed SCLM Section A — the very section whose 16 identical prompts motivated it —
+  because a 60%-distinct ratio hides forced repeats; it now measures forced repeats directly.
+- **Section B is 20 of 20 and no longer free (LAW-53 closed).** Twelve items authored on the eight
+  SPMS lectures that had a lesson but no MSQ, some carrying a second item on a different aspect, with
+  `SPMS_MULTI` gaining an optional `variant` so two items can share a concept without the second
+  silently overwriting the first.
+- **The section was gameable two ways and both are shut.** Every one of the original eight was
+  3-correct-of-4 *with the wrong option at index 3*, so ticking everything scored full marks and so
+  did ticking A, B, C without reading. With 4 options and 2 marks a 3-of-4 pays `min(2, 3−1) = 2`;
+  every 3-correct item therefore gained a fifth option, since 3-of-5 pays 1. Shapes are now
+  `3-of-5 ×12, 2-of-4 ×6, 2-of-5 ×2` with varied positions. **Verified in a browser: ticking every
+  option on all twenty and answering nothing in Section A scored 12 / 40, down from 16 / 16.**
+- Two items were first written as 1-of-4 — not free, but the bank validator rightly rejects a
+  select-all with one answer as a single-answer question in disguise. They became 2-of-5, which is
+  also not free. `validate_t6_bank.js` is `ok: true` against the transcripts, LAW-49 vocabulary gate
+  included; 39/39 tests pass.
+- **SCLM's z-based method is confirmed taught** — `SCLM-M03-L06` ("Q Model"), with standard normal
+  tables and a full worked continuous-review example. That closes a standing uncertainty. The two
+  outstanding numericals follow from its own figures, but **`SCLM-M03-L06` has no lesson**, so they
+  are blocked behind authoring one rather than being written against an untaught lecture.
+
+## 2026-08-12 — The examiner becomes a product, and its dashboard says where knowledge breaks down
+
+Evidence: `evidence/2026-08-12/t6-examiner-product-and-insights/verification.md`
+(`VERIFIED(REAL_BROWSER + AUTOMATED)`, 1280×720 and 375×812; no screenshots — the Browser pane was
+not compositing, so pixel-level acceptance is still owed).
+
+- **The examiner has its own front door.** `exam-home-screen`: four papers, three seeded sets each,
+  reachable without any learning state — "jump straight in". Both honest warnings moved *ahead* of
+  the clock: IBM's caveat and the bank shortfalls (SPMS Section B has 8 of 20, SCLM Section B 4 of 6)
+  are stated on the card before a candidate commits two hours. A set's seed comes from subject + set
+  index, never the clock, so a paper survives a refresh; verified that sets 0/1/2 are different
+  papers and that set 0 rebuilds identically.
+- **A diagnostic dashboard, not a score.** Pacing against the paper's own per-question budget;
+  *where knowledge breaks down* per concept, read off the `skills` each question exercises (100% of
+  the 804-question bank carries them); the cost of speculative ticking under negative marking; second
+  thoughts and their value; and, for written answers, course-vocabulary use and rubric points. Each
+  block ends in a verdict a learner can act on.
+- **The diagnosis only claims what the paper tested.** The scored bank asks for apply / distinguish /
+  connect; recognise and explain belong to primers, which never appear on a paper. The first draft
+  told learners "you can say what it means but not use it on a case" when nothing had tested saying
+  what it means. It now reports the observed pair — hardest thing right, easiest thing wrong — and
+  says only that.
+- **Per-concept route back into the learning system.** Each breakdown row starts a taught run for
+  that one concept. Verified the queue is `LESSON → primer → questions`: LAW-47 holds on the new
+  route. The bulk "what the mock exposed" button remains.
+- **Attempt history**, and a comparison shown only when the *same* set is re-sat, since two different
+  draws differ in difficulty as well as in study. Stored as summaries, never responses.
+- **`REDLINE` LAW-53 — Section B is free.** All eight authored SPMS MSQs are 3-correct-of-4, so
+  ticking every option scores full marks. Verified in the browser: all four options ticked on all
+  eight questions, nothing answered in Section A, `Section B 16 / 16`. The paper's stated rule says
+  the opposite, and the dashboard had been calling it "rational". The bank fix needs transcripts and
+  owner acceptance and is **not done**; what is done is that the examiner now detects the condition
+  and warns the candidate it is a defect in the mock, not a strategy for the exam.
+- **`WATCH` LAW-54 — the legend counted the whole paper above a one-section grid** ("42 Not visited"
+  over 35 chips). Fixed; legend and palette now agree in every section.
+- **Sixteen questions on one paper shared a character-identical caselet and stem.** Measured on SCLM
+  Section A: 50 questions, 22 distinct caselets, 20 distinct stems. The pool holds 52 for a section
+  needing 50, so selection cannot fix it — a bank-volume gap, recorded. The draw is now round-robined
+  across identical visible prompts, which cut the longest run of identical stems to 1.
+- **Telemetry contract extended to the examiner, and still not transmitting.**
+  `tester-event.schema.json` → `1.1`: six examiner event types, banded-only fields, and a **separate
+  consent scope** so agreeing to learning telemetry does not enrol a tester in exam-performance
+  collection. A contract rule and a matching validator check reject a scope/event mismatch in both
+  directions. The app shapes and locally buffers events behind a flag defaulting to **off**; there is
+  no fetch, beacon, or drain. An event captured from a real attempt validates with zero unknown or
+  forbidden fields. `deployable: false` unchanged; 39/39 tests and the palette gate pass.
+- **Disclosure:** `profile.examAttempts` syncs to D1 with the rest of the profile, so mock summaries
+  now reach the learner backend. `docs/community/PRIVACY.md` updated.
+
 ## 2026-08-12 — Dungeon, the examiner: a mocks platform beside the learning system (branch, not merged)
 
 - **Two products, one bank.** The learning system sequences to teach — lecture before test,

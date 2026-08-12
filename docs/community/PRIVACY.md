@@ -10,6 +10,11 @@ data used to provide access, save progress, and detect obvious account sharing.
 - the approved email address supplied to the owner;
 - revision progress and game state associated with that email, including answers, attempts,
   confidence choices, completion state, and the time the state was last saved;
+- a summary of every mock paper submitted in the examiner: which paper and set, when, the marks
+  scored out of the marks available, how much of the paper was attempted, how long it took, and
+  counts of guessed or changed answers. Your written answers and the options you chose are **not**
+  stored — only the summary — and the concepts a mock exposed are kept to reorder what the learning
+  system offers you next, never to score you;
 - an opaque, hashed browser-session token and its expiry time;
 - the closed-test agreement version and acceptance time;
 - the time the private WhatsApp invite was opened, the time the tester acknowledged joining, and

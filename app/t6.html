@@ -48,12 +48,83 @@
         </svg>
         <span class="sr-only" id="theme-toggle-state">Appearance: follow my device</span>
       </button>
+      <!-- The bag. Everything a learner might want mid-session but should not have to
+           leave the page for: a focus timer, and the handful of things about how this
+           app works that change how much you get out of it. -->
+      <button class="bag-button" id="bag-open" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="bag-panel">
+        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="bag-icon">
+          <path d="M3.5 6.5h13l-1 10.5h-11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M7 6.5V5a3 3 0 0 1 6 0v1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <span class="bag-label">Bag</span>
+        <span class="bag-timer" id="bag-timer-chip" hidden aria-hidden="true"></span>
+      </button>
       <div class="account-controls" id="account-controls" hidden>
         <span id="sync-status" role="status" aria-live="polite">Saved online</span>
         <button id="sign-out" type="button">Sign out</button>
       </div>
     </div>
   </header>
+
+  <!-- The bag drawer. Not a modal over the question: a learner should be able to read
+       "how do I get more out of this" while the thing it describes is still on screen. -->
+  <div class="bag-scrim" id="bag-scrim" hidden></div>
+  <aside class="bag-panel" id="bag-panel" role="dialog" aria-modal="false" aria-labelledby="bag-title" hidden>
+    <div class="bag-head">
+      <h2 id="bag-title">Bag</h2>
+      <button class="icon-button" id="bag-close" type="button" aria-label="Close the bag">✕</button>
+    </div>
+
+    <!-- Focus timer. Twenty-five and five, and it says why rather than assuming
+         everyone already knows what a pomodoro is. -->
+    <section class="bag-section" aria-labelledby="bag-timer-title">
+      <h3 id="bag-timer-title">Focus timer</h3>
+      <p class="bag-note">Twenty-five minutes of work, five of rest. The point is not the
+        number — it is deciding in advance when you stop, so the break is a plan rather
+        than a drift.</p>
+      <div class="pomodoro">
+        <b class="pomodoro-clock" id="pomodoro-clock" role="timer" aria-live="off">25:00</b>
+        <p class="pomodoro-phase" id="pomodoro-phase">Focus · not started</p>
+        <div class="pomodoro-actions">
+          <button class="button compact primary" id="pomodoro-toggle" type="button">Start</button>
+          <button class="button compact secondary" id="pomodoro-reset" type="button">Reset</button>
+          <button class="button compact secondary" id="pomodoro-skip" type="button">Skip to break</button>
+        </div>
+        <small class="pomodoro-count" id="pomodoro-count">No focus blocks finished yet.</small>
+      </div>
+    </section>
+
+    <!-- What actually changes your result here. Written from what the app does, not
+         from general study advice. -->
+    <section class="bag-section" aria-labelledby="bag-guide-title">
+      <h3 id="bag-guide-title">Getting the most out of Dungeon</h3>
+      <ul class="bag-guide">
+        <li><b>Lessons are unscored on purpose.</b> Nothing you do in a lesson counts for
+          or against you, so read them slowly. A lecture's lesson always arrives before
+          the first question that tests it — if you are seeing one, the question is next.</li>
+        <li><b>Read the line that starts "This choice assumed".</b> Every wrong answer
+          names the specific belief that produced it, not just the right answer. That
+          sentence is the whole point of getting it wrong here rather than in August.</li>
+        <li><b>A question you miss comes back in a different form.</b> That is deliberate.
+          Recognising the same wording again proves nothing, so the re-attempt changes the
+          shape and asks for the same idea.</li>
+        <li><b>Mocks never score you.</b> The examiner writes nothing to your progress — a
+          timed, unhelped paper is not the condition your mastery is measured on. What a
+          mock does is reorder what you are taught next.</li>
+        <li><b>Take the repair in sittings.</b> After a mock, the four concepts that cost
+          you most come first and the rest wait. Finishing a short sitting beats
+          abandoning a long one.</li>
+        <li><b>Answer the confidence prompt honestly.</b> It is not graded. Saying you were
+          sure and being wrong is the most useful signal in the app, and skipping it costs
+          you nothing.</li>
+        <li><b>Practise across subjects, not one to exhaustion.</b> The papers are two days
+          apart and the subject rail is in exam order for that reason.</li>
+        <li><b>What this app will not tell you</b> is what you will score. It knows what you
+          have and have not shown you can do. Treat anything that sounds like a prediction
+          as a mistake on our part.</li>
+      </ul>
+    </section>
+  </aside>
 
   <main id="main-content">
     <section class="screen dashboard-screen active" id="dashboard-screen" aria-labelledby="next-step-title">
@@ -399,6 +470,38 @@
         </div>
       </div>
     </section>
+    <!-- The examiner's own front door.
+         =========================================================================
+         The examiner is a product, not a mode of the learning system, so it gets its
+         own way in: pick a paper, pick a set, start the clock. Nothing here requires
+         a single question of study first — that is the point of "for those who dare".
+         What it does owe a candidate is the truth before they commit two hours: what
+         the paper is, what this build could not fill, and what happened last time. -->
+    <section class="screen exam-home-screen" id="exam-home-screen" aria-labelledby="exam-home-title">
+      <div class="exam-home">
+        <header class="exam-home-head">
+          <div>
+            <p class="eyebrow">Dungeon, the examiner</p>
+            <h1 id="exam-home-title">Sit a mock.</h1>
+            <p class="exam-home-lede">Four papers, three sets each, under the real rules: the real
+              counts, the real marks, two hours, and no help until you submit. Each set is a
+              different draw, so a second sitting is a second paper.</p>
+          </div>
+          <button class="button secondary" id="exam-home-leave" type="button">← The learning system</button>
+        </header>
+
+        <!-- Your record across every paper, shown first when there is one, because a
+             returning candidate is asking "am I moving" before "which set next". -->
+        <section class="exam-record" id="exam-record-block" aria-labelledby="exam-record-title" hidden>
+          <h2 id="exam-record-title">Your record</h2>
+          <div class="insight-grid" id="exam-record"></div>
+          <p class="insight-verdict" id="exam-record-verdict"></p>
+        </section>
+
+        <div class="exam-papers" id="exam-papers"></div>
+      </div>
+    </section>
+
     <!-- Dungeon, the examiner.
          =========================================================================
          A separate product from the learning system, and deliberately hostile to it:
@@ -475,6 +578,52 @@
           <p class="exam-result-lede" id="exam-result-lede"></p>
           <div class="exam-score" id="exam-score"></div>
           <div id="exam-section-breakdown"></div>
+
+          <!-- Insights, not statistics. Every block here has to end in something the
+               learner can do differently on the next paper. -->
+          <section class="exam-insights" id="exam-insights" aria-labelledby="exam-insights-title">
+            <h3 id="exam-insights-title">How you sat this paper</h3>
+
+            <div class="insight-grid" id="exam-pacing"></div>
+
+            <!-- Shown only on a re-sit of the same set. Comparing two different draws
+                 would compare their difficulty as much as your studying. -->
+            <div class="insight-block" id="exam-progress-block" hidden>
+              <h4>Against your last sitting of this set</h4>
+              <div class="insight-grid" id="exam-progress-body"></div>
+              <p class="insight-verdict" id="exam-progress-verdict"></p>
+            </div>
+
+            <!-- Where knowledge breaks down: the part a score cannot tell you. -->
+            <div class="insight-block" id="exam-depth-block" hidden>
+              <h4>Where it broke down</h4>
+              <p class="insight-note">Two people can lose the same mark for opposite reasons. This
+                reads what each question asked of you — recognise, explain, apply, distinguish,
+                connect — and finds the step where you stopped.</p>
+              <ul class="depth-list" id="exam-depth-list"></ul>
+            </div>
+
+            <!-- The negative-marking strategy lesson, shown only where it applies. -->
+            <div class="insight-block" id="exam-negative-block" hidden>
+              <h4>Your ticking, and what it cost</h4>
+              <div id="exam-negative-body"></div>
+            </div>
+
+            <!-- Answer behaviour: speed, second thoughts, and what they were worth. -->
+            <div class="insight-block" id="exam-behaviour-block" hidden>
+              <h4>How you answered</h4>
+              <div id="exam-behaviour-body"></div>
+            </div>
+
+            <!-- Written work: the two things that can be checked without marking it. -->
+            <div class="insight-block" id="exam-written-block" hidden>
+              <h4>Your written answers</h4>
+              <p class="insight-note">These are not marked here. Two things can still be measured:
+                whether you used the course's own vocabulary, and whether you covered each rubric
+                point. Both are what a marker looks for first.</p>
+              <div id="exam-written-body"></div>
+            </div>
+          </section>
           <!-- The link back. A mock's most useful output is not its score, it is the
                list of things it proved you cannot do yet. -->
           <section class="exam-repair" id="exam-repair" aria-labelledby="exam-repair-title" hidden>
@@ -491,6 +640,7 @@
             learning system offers you next.</p>
           <div class="exam-brief-actions">
             <button class="button secondary" id="exam-result-home" type="button">Back to learning</button>
+            <button class="button secondary" id="exam-result-papers" type="button">Sit another set</button>
             <button class="button primary" id="exam-review" type="button">Review every question</button>
           </div>
           <div id="exam-review-list"></div>

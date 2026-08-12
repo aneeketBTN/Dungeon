@@ -44,6 +44,26 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 ## Issue → Cause → Fix
 
+- **I-EXPLOIT (2026-08-12)** — Issue: the examiner's results dashboard told candidates that ticking
+  generously under negative marking "is rational on this shape", and it was right about the mock and
+  wrong about the exam. Cause: all eight authored SPMS multiple-select items carry 3 correct options
+  of 4, so with the floor, ticking everything scores full marks — verified live at `16 / 16` with no
+  Section A answered at all. The advice was computed from the items in front of it without asking
+  whether those items reproduced the real paper's trade-off. Fix: the analysis now computes whether
+  tick-everything is optimal across the paper's items and, when it is, renders it as a **defect
+  notice** rather than a strategy, telling the candidate not to carry the habit into the real paper.
+  The bank itself still needs a spread of 1-, 2-, and 3-correct shapes. Recorded as **LAW-53**.
+  Evidence: `evidence/2026-08-12/t6-examiner-product-and-insights/verification.md`.
+- **I-OVERCLAIM (2026-08-12)** — Issue: the "where it broke down" panel told learners things the
+  paper had not measured — "you can say what it means but not use it on a case" — when explaining had
+  never been tested. Cause: the diagnosis was written as a five-rung ladder and the copy for each
+  rung asserted that every rung below it had been cleared. Measured against the bank, scored items
+  only ever ask for rungs 3–5; recognise and explain belong to primers, which never appear on a
+  paper, so two of the five strings were unreachable and the third was an inference presented as an
+  observation. Fix: the panel reports the observed pair only — the hardest thing answered right and
+  the easiest thing answered wrong — and where nothing was cleared it says that instead of inventing
+  a floor. Same evidence file.
+
 - **I-DARK (2026-08-12)** — Issue: every explanatory hover in the app showed nothing. Cause: all
   seven used the native `title` attribute, which waits ~1s, never fires on keyboard focus, and never
   fires on touch — so each marker's `cursor: help` and `:focus-visible` ring promised an explanation

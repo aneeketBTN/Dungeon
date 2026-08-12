@@ -17,7 +17,7 @@
     "synthetic"
   ],
   "properties": {
-    "schema_version": { "const": "1.0" },
+    "schema_version": { "const": "1.1" },
     "event_id": { "type": "string", "pattern": "^evt_[A-Za-z0-9_-]{8,80}$" },
     "event_type": {
       "enum": [
@@ -32,7 +32,14 @@
         "session_abandoned",
         "session_resumed",
         "practice_completed",
-        "consent_changed"
+        "consent_changed",
+
+        "exam_set_opened",
+        "exam_attempt_started",
+        "exam_response_committed",
+        "exam_attempt_submitted",
+        "exam_breakdown_identified",
+        "exam_repair_started"
       ]
     },
     "occurred_at": { "type": "string", "format": "date-time" },
@@ -40,7 +47,9 @@
     "tester_id": { "type": "string", "pattern": "^tester_[A-Za-z0-9_-]{6,64}$" },
     "session_id": { "type": "string", "pattern": "^session_[A-Za-z0-9_-]{6,64}$" },
     "app_version": { "type": "string", "minLength": 1, "maxLength": 64 },
-    "consent_scope": { "const": "tester-learning-events-v1" },
+    "consent_scope": {
+      "enum": ["tester-learning-events-v1", "tester-examiner-events-v1"]
+    },
     "synthetic": { "type": "boolean" },
     "course_id": { "enum": ["BRGSA", "IBM", "SCLM", "SPMS"] },
     "question_id": { "type": "string", "minLength": 1, "maxLength": 160 },
@@ -80,7 +89,65 @@
     "input_mode": { "enum": ["keyboard", "pointer", "touch", "mixed", "unknown"] },
     "feedback_mode": { "enum": ["immediate", "held-until-end"] },
     "practice_shape": { "enum": ["mixed", "recognition", "application", "generation"] },
-    "reason_code": { "type": ["string", "null"], "maxLength": 160 }
-  }
+    "reason_code": { "type": ["string", "null"], "maxLength": 160 },
+
+    "exam_set_index": { "type": "integer", "minimum": 0, "maximum": 9 },
+    "exam_section_id": { "type": "string", "minLength": 1, "maxLength": 4 },
+    "exam_sitting_number": { "type": "integer", "minimum": 1, "maximum": 50 },
+    "exam_paper_shortfall": { "type": "boolean" },
+    "exam_outcome": { "enum": ["submitted", "auto-submitted", "abandoned"] },
+    "exam_score_band": {
+      "enum": ["0-19", "20-39", "40-59", "60-79", "80-100", "not-scored"]
+    },
+    "exam_attempted_band": {
+      "enum": ["0-19", "20-39", "40-59", "60-79", "80-100"]
+    },
+    "exam_pacing_band": {
+      "enum": ["well-under", "under", "on-pace", "over", "ran-out"]
+    },
+    "exam_guess_band": { "enum": ["none", "under-10pct", "10-25pct", "over-25pct"] },
+    "exam_wrong_ticks": { "type": "integer", "minimum": 0, "maximum": 200 },
+    "exam_changed_to_wrong": { "type": "integer", "minimum": 0, "maximum": 200 },
+    "exam_revisit_band": { "enum": ["none", "few", "many"] },
+    "exam_breakdown_rung": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "exam_breakdown_kind": {
+      "enum": ["nothing-landed", "stops-below", "unreliable", "connection-only"]
+    },
+    "exam_breakdown_count": { "type": "integer", "minimum": 0, "maximum": 200 },
+    "exam_vocabulary_band": {
+      "enum": ["none", "under-half", "half-or-more", "all", "not-applicable"]
+    },
+    "exam_rubric_points": { "type": "integer", "minimum": 0, "maximum": 20 },
+    "exam_repair_route": { "enum": ["single-concept", "all-exposed"] }
+  },
+
+  "$comment": "Examiner fields are banded rather than exact on purpose. The cohort is eight people; an exact mark on a named paper on a known date is close to an identifier, and a raw duration is a behavioural fingerprint. Bands answer the product questions (is anyone finishing? is negative marking being handled? does the diagnosis get clicked?) without carrying a re-identifiable performance record. Written answers contribute a vocabulary band and a rubric-point count only — never their text, which is why raw_text and written_response remain forbidden field names. Examiner events carry their own consent scope so that agreeing to learning telemetry does not silently enrol a tester in exam-performance collection; the two are separately revocable.",
+
+  "allOf": [
+    {
+      "$comment": "An examiner event may only ride the examiner consent scope, and a learning event may only ride the learning scope. Mismatches are the failure mode this contract exists to prevent.",
+      "if": {
+        "properties": {
+          "event_type": {
+            "enum": [
+              "exam_set_opened",
+              "exam_attempt_started",
+              "exam_response_committed",
+              "exam_attempt_submitted",
+              "exam_breakdown_identified",
+              "exam_repair_started"
+            ]
+          }
+        },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": { "consent_scope": { "const": "tester-examiner-events-v1" } }
+      },
+      "else": {
+        "properties": { "consent_scope": { "const": "tester-learning-events-v1" } }
+      }
+    }
+  ]
 }
 

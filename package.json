@@ -9,6 +9,8 @@
     "build": "node tools/build-site.mjs",
     "test": "node --test tests/site-release.test.mjs tests/agent-readiness.test.mjs tests/cloudflare-access.test.mjs",
     "validate:bank": "node tools/validate_t6_bank.js",
+    "check:exam": "node tools/check_exam_readiness.mjs",
+    "check:palette": "node tools/check-palette.mjs",
     "agents:check": "node tools/validate-agent-readiness.mjs",
     "agents:activation-check": "node tools/validate-agent-readiness.mjs --activation"
   }
