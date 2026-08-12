@@ -113,6 +113,101 @@ assets, `npm test` **37 passed / 0 failed**. Net `419 insertions, 440 deletions`
 (`stage-tabs`, `concept-map`, `concept-inspector`, `start-selected-mock`, `subject-strong`,
 `panel-overview`) returns empty, and no console errors on load in any state exercised.
 
+## Follow-up pass (same day, owner review of the first draft)
+
+**1. Block 1 heading was passive.** "What am I doing" sat directly above the one call to action
+and described a state rather than pointing at it. Now **"Your next step"**. Chosen over the other
+candidate, "Today's focus", because the app models three time horizons (under 24 hours, three days,
+seven days) — "today" is simply wrong for a learner on the seven-day plan — and because the results
+screen already says *"Your next step is clear."*, so this matches a phrase the product uses. The
+numbered eyebrow ("1 — Right now") is unchanged and still carries the ordering. Blocks 2–4 keep
+their question form; making the whole set active is a separate call and was not taken unilaterally.
+
+**2. The radar had no axis labels at all.** Confirmed in source, not assumed: `renderMasteryRadar()`
+drew four grid polygons, five spokes, the data polygon, and five vertex dots, and nothing else. The
+only way to learn which vertex was which was to read the value list beside the canvas and infer that
+the order runs clockwise from twelve o'clock. The fifth axis is the one that most needed it —
+four subjects plus "Connections" reads as five subjects until something says otherwise.
+
+Fixed by drawing the name at each vertex. Inline rather than on hover, because hover does not exist
+on a touch screen. Only the name is drawn, never the value: the list beside the canvas already
+carries the numbers, and repeating them would put the same fact twice on one screen. Radius pulled
+from `.34` to `.30` to make room.
+
+Labels are clamped into the canvas, and the clamp is load-bearing rather than defensive —
+"Connections" is 70px against a 21px "IBM", sits on an outer vertex, and **is clamped at every
+size tested**, so without it the label would be cut off at the edge. Geometry re-derived from the
+running canvas and every label box measured:
+
+| Canvas | All labels fit | Overlaps | Clamped |
+| --- | --- | --- | --- |
+| 308px (desktop, live) | yes | none | Connections `[4–74]` |
+| 280px (375px viewport, live) | yes | none | Connections `[4–74]` |
+| 240px (the `Math.max` floor) | yes | none | Connections `[4–74]` |
+
+**3. The canvas was an unnamed `role="img"`.** It carried `aria-describedby` but no accessible
+name, so assistive technology announced an unlabelled image. It now carries an `aria-label` naming
+all five axes and stating plainly that *Connections is not a subject*, and pointing at the list that
+holds the values — deliberately without reciting the numbers, which would make a screen-reader user
+hear the whole dataset twice. The `<ul id="mastery-values" aria-label="Mastery matrix values">`
+remains the accessible value path required by C26.
+
+Re-verified after these changes: layout probe **0 findings** at 375×812 and 1280×800, no console
+errors, no horizontal page scroll, `npm test` 37/37, build clean.
+
+## Mobile pass (same day, second owner review)
+
+**4. The subject row was a scroller with no cue.** Below 700px the four cards become a swipe
+row, and cards were being clipped at the right edge with nothing to say more existed — a direct
+miss against "progressive disclosure needs a visible affordance; content hidden with zero cue may
+as well not exist". Added an edge fade on `.rail-scroll`, drawn **only on the side that still has
+cards behind it**, because an affordance that stays lit when there is nothing left to reach is
+decoration that lies. Measured with transitions disabled so the readings are settled values:
+
+| Scroll position | Left fade | Right fade |
+| --- | --- | --- |
+| At start | 0 | 1 |
+| Mid-scroll | 1 | 1 |
+| At end | 1 | 0 |
+| Not scrollable (any desktop width) | 0 | 0 |
+
+At 1280 the row reports `data-scroll="none"` and paints no fade at all.
+
+**5. Mastery values were desktop density on a phone.** `.mastery-values` label/value were
+11px/12px at every width. These five rows are the only place the exact percentages are stated, so
+they are read rather than glanced at: now 12px/14px below 700px, with the column minimum widened
+`115px → 126px` so the larger text cannot push anything out of the card. Verified: every row fits
+without truncation (`scrollWidth <= clientWidth` on all five), the list's right edge sits inside
+the card (`350` vs `365`), and the page still does not scroll horizontally.
+
+**6. A recommended action that scrolls out of reach.** The dashboard runs to ~6,800px on a phone,
+so a learner in the concept list had to scroll the whole way back to act. Added `.resume-bar`, a
+fixed bar shown only while the hero button is off screen (IntersectionObserver on
+`#start-recommended`).
+
+It is deliberately **not a second recommendation**: the label is read from the hero button and the
+click is delegated to it, so one place decides the next step (LAW-04), and the subject is named so
+the scope is explicit (LAW-18, C16). It carries the button's label rather than the hero heading —
+the heading is a sentence that ellipsised at this width, while the button already states the same
+thing as an action. Verified: label `"Practise these concepts"` **identical** to the hero button
+and not truncated; scope `SPMS` matches; the Go control is 56px; the bar sits inside the viewport
+inset 10px each side with `env(safe-area-inset-bottom)` honoured; `body.has-resume-bar` adds 96px
+of bottom padding so it never covers the last concept row (checked at maximum scroll:
+row bottom `287` against bar top `722`); clicking it enters practice; and because it lives inside
+`.dashboard-screen` it measures **zero height on the practice screen**, so no fixed element leaks
+between screens.
+
+Re-verified after all three: layout probe **0 findings** at 375×812 and 1280×800, scanned both at
+the top of the page *and* scrolled down with the resume bar showing. No console errors.
+`npm test` 37/37, build clean.
+
+**A second measurement artifact, recorded because it nearly became a false fix.** The first fade
+reading reported identical opacities in all three scroll states, which looked like broken CSS. It
+was the 180ms transition being sampled at time zero. The same shape appeared again when
+`scrollIntoView({behavior:'auto'})` moved nothing — `html { scroll-behavior: smooth }` wins, so
+`scrollY` read 0 while the animation was still running. Both are LAW-46: settle the layout, or
+disable the transition, before believing a probe.
+
 ## What is NOT verified
 
 - **No screenshots.** The Browser pane was not compositing frames in this session — the same

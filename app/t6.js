@@ -742,6 +742,8 @@
     renderCommunityReminder();
     renderLessonIndex();
     renderConceptShelf();
+    // The row is rebuilt above, so its scrollable width has just changed.
+    updateRailScrollCue();
   }
 
   // Blocks are the honest unit of this line: one practice block moves it at most once, so repeating
@@ -962,7 +964,10 @@
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
     context.clearRect(0, 0, size, size);
     var center = size / 2;
-    var radius = size * .34;
+    /* Pulled in from .34 to leave room for the vertex labels below. Five unlabelled
+     * spokes meant the only way to tell which point was which was to read the value
+     * list beside the chart and infer the order — a shape you had to decode. */
+    var radius = size * .30;
     function point(index, scale) {
       var angle = -Math.PI / 2 + index * Math.PI * 2 / axes.length;
       return {x:center + Math.cos(angle) * radius * scale, y:center + Math.sin(angle) * radius * scale};
@@ -1007,9 +1012,49 @@
       context.fillStyle = "#176b78";
       context.fill();
     });
+
+    /* Name every vertex on the chart itself.
+     *
+     * Inline rather than on hover: hover does not exist on a touch screen, and the
+     * fifth axis is the one most likely to be misread — four subjects plus
+     * "Connections" reads as five subjects until something says otherwise.
+     *
+     * Only the name is drawn, not the value. The list beside the canvas already
+     * carries the numbers, and repeating them here would put the same fact in two
+     * places on one screen. */
+    context.font = "800 11px Inter, ui-sans-serif, system-ui, sans-serif";
+    context.textBaseline = "middle";
+    context.fillStyle = "#4f5c53";
+    var labelPad = 4;
+    axes.forEach(function (axis, index) {
+      var angle = -Math.PI / 2 + index * Math.PI * 2 / axes.length;
+      var anchor = {x: center + Math.cos(angle) * (radius + 11), y: center + Math.sin(angle) * (radius + 11)};
+      // Push the text away from the spoke it belongs to, so a label never sits on
+      // top of the polygon it is naming.
+      var horizontal = Math.cos(angle);
+      var align = Math.abs(horizontal) < .3 ? "center" : horizontal > 0 ? "left" : "right";
+      context.textAlign = align;
+      /* Clamp into the canvas. "Connections" is nearly twice the width of a subject
+       * acronym and sits on an outer vertex, so at the narrow sizes this canvas is
+       * allowed to take it would otherwise be cut off at the edge. */
+      var width = context.measureText(axis.label).width;
+      var left = align === "left" ? anchor.x : align === "right" ? anchor.x - width : anchor.x - width / 2;
+      var shift = left < labelPad ? labelPad - left
+        : left + width > size - labelPad ? size - labelPad - (left + width) : 0;
+      context.fillText(axis.label, anchor.x + shift, anchor.y);
+    });
+
     $("mastery-values").innerHTML = axes.map(function (axis) {
       return "<li><span>" + escapeHtml(axis.label) + "</span><b>" + axis.value + "%</b></li>";
     }).join("");
+    /* A canvas is opaque to assistive technology, and `role="img"` without a name
+     * announces as an unlabelled image. Name it, say plainly that it has five axes
+     * and that the fifth is not a subject, and point at the list that carries the
+     * values — rather than reciting the numbers here and making a screen reader
+     * hear them twice. */
+    canvas.setAttribute("aria-label", "Radar chart with five axes: " +
+      axes.map(function (axis) { return axis.label; }).join(", ") +
+      ". Connections is not a subject. The value for each is listed beside the chart.");
     $("mastery-radar-copy").textContent = "Subject values reflect Strong and Developing evidence. Connections shows concepts already used in a case, link, or reasoning step.";
   }
 
@@ -1451,6 +1496,55 @@
       });
       grid.appendChild(button);
     });
+  }
+
+  /* The subject row's edge fade.
+   *
+   * Below 700px the four cards become a swipe row, and a scroller with nothing at its
+   * edge reads as a layout that has been cut off rather than one that continues. The
+   * fade is drawn only on the side that actually has more to reach, and disappears at
+   * each end — an affordance that stays on when there is nothing left to scroll to is
+   * just decoration that lies. */
+  function updateRailScrollCue() {
+    var scroller = $("course-grid");
+    var wrap = $("rail-scroll");
+    if (!scroller || !wrap) return;
+    // clientWidth and scrollWidth are equal when the row is not scrollable at all,
+    // which is every desktop width — so this reports "none" and paints nothing.
+    var slack = scroller.scrollWidth - scroller.clientWidth;
+    if (slack <= 1) return wrap.setAttribute("data-scroll", "none");
+    var atStart = scroller.scrollLeft <= 1;
+    var atEnd = scroller.scrollLeft >= slack - 1;
+    wrap.setAttribute("data-scroll", atStart ? "start" : atEnd ? "end" : "middle");
+  }
+
+  /* The recommended action, re-offered after it scrolls away.
+   *
+   * The dashboard runs to roughly 6,700px on a phone, so a learner who reaches the
+   * concept list has to scroll the whole way back to act on the recommendation. This
+   * is deliberately not a second recommendation: the copy is read from the hero and
+   * the click is delegated to it, so there is exactly one place that decides what the
+   * next step is (LAW-04, LAW-18 — the scope is named). */
+  function bindResumeBar() {
+    var bar = $("resume-bar");
+    var hero = $("start-recommended");
+    if (!bar || !hero || !window.IntersectionObserver) return;
+    $("resume-bar-go").addEventListener("click", function () { hero.click(); });
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var away = !entry.isIntersecting;
+        bar.hidden = !away;
+        document.body.classList.toggle("has-resume-bar", away);
+        if (away) {
+          $("resume-bar-scope").textContent = $("selected-course-code").textContent;
+          /* The button's label, not the hero heading. The heading is a sentence
+           * ("Practise the concepts that need work first") and truncated to an
+           * ellipsis in this width; the button already says the same thing as an
+           * action in four words, and it is the thing this bar clicks. */
+          $("resume-bar-title").textContent = hero.textContent.replace(/\s*→\s*$/, "").trim();
+        }
+      });
+    }, {threshold: 0}).observe(hero);
   }
 
   // A route's label and its one-line description are set together, so the two can
@@ -3757,6 +3851,9 @@
   }
 
   function bindEvents() {
+    bindResumeBar();
+    $("course-grid").addEventListener("scroll", updateRailScrollCue, {passive: true});
+    window.addEventListener("resize", updateRailScrollCue);
     $("subject-sort").addEventListener("change", function (event) {
       profile.subjectSort = event.target.value === "hardest" ? "hardest" : "exam";
       saveProfile();

@@ -50,7 +50,7 @@
         <section class="home-block" id="home-now" aria-labelledby="now-title">
           <div class="block-heading">
             <p class="eyebrow">1 — Right now</p>
-            <h2 id="now-title">What am I doing</h2>
+            <h2 id="now-title">Your next step</h2>
           </div>
 
           <div class="subject-rail">
@@ -65,7 +65,11 @@
                 <span class="info" id="subject-sort-hint" tabindex="0" role="note" aria-label="Exam order is the order you sit the papers.">i</span>
               </div>
             </div>
-            <div class="course-grid" id="course-grid" role="group" aria-label="Term 6 subjects" aria-describedby="subjects-title"></div>
+            <!-- The grid becomes a swipe row on narrow screens. The wrapper carries the
+                 edge fade that says so; a scroller with no cue reads as a clipped layout. -->
+            <div class="rail-scroll" id="rail-scroll">
+              <div class="course-grid" id="course-grid" role="group" aria-label="Term 6 subjects" aria-describedby="subjects-title"></div>
+            </div>
             <p class="subject-identity"><b id="subject-title">Business Research, Growth Strategies and Analytics</b><span id="subject-description"></span></p>
           </div>
 
@@ -232,6 +236,14 @@
             </div>
           </details>
         </section>
+
+        <!-- The recommended action, re-offered once it scrolls out of reach. It is not a
+             second recommendation: the label and the click are taken from the hero button
+             itself, so the two cannot drift apart. Hidden while the hero is on screen. -->
+        <div class="resume-bar" id="resume-bar" hidden>
+          <p><span id="resume-bar-scope">SPMS</span><b id="resume-bar-title">Start this study set</b></p>
+          <button class="button primary compact" id="resume-bar-go" type="button">Go <span aria-hidden="true">→</span></button>
+        </div>
       </div>
     </section>
 

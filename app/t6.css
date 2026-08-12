@@ -83,6 +83,16 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .rail-heading h3 { margin: 0; color: var(--muted); font: 800 11px/1 Inter, sans-serif; letter-spacing: .13em; text-transform: uppercase; }
 /* The full name of what you just picked, answering the block's question directly.
    It used to sit three sections lower, inside a tab. */
+/* Edge fade for the subject swipe row. Drawn only on the side that still has cards
+   behind it, and only when the row actually scrolls — data-scroll="none" on every
+   width where all four fit. Pointer-events off so it never eats a tap. */
+.rail-scroll { position: relative; min-width: 0; }
+.rail-scroll::before, .rail-scroll::after { content: ""; position: absolute; top: 0; bottom: 0; width: 34px; pointer-events: none; opacity: 0; transition: opacity .18s ease; }
+.rail-scroll::before { inset-inline-start: 0; background: linear-gradient(to right, var(--paper), rgba(244,241,232,0)); }
+.rail-scroll::after { inset-inline-end: 0; background: linear-gradient(to left, var(--paper), rgba(244,241,232,0)); }
+.rail-scroll[data-scroll="start"]::after, .rail-scroll[data-scroll="middle"]::after { opacity: 1; }
+.rail-scroll[data-scroll="middle"]::before, .rail-scroll[data-scroll="end"]::before { opacity: 1; }
+
 .subject-identity { margin: 0; }
 .subject-identity b { font-size: 14px; }
 .subject-identity span { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; }
@@ -643,6 +653,17 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .reset-dialog h2 { margin: 0 0 9px; font: 650 32px Georgia, serif; }
 .reset-dialog p { color: var(--muted); }
 .reset-dialog > div { margin-top: 22px; display: flex; justify-content: flex-end; gap: 9px; }
+/* The recommended action, re-offered once the hero button scrolls away. Inside
+   .dashboard-screen on purpose: when that screen is inactive it is display:none, so a
+   fixed child cannot survive into the practice or results screens. */
+.resume-bar { position: fixed; left: 50%; bottom: 0; z-index: 55; width: min(560px, calc(100% - 20px)); margin-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); padding: 11px 12px 11px 16px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 14px; color: white; background: var(--ink); border-radius: 14px; box-shadow: 0 14px 40px rgba(20,28,23,.34); transform: translateX(-50%); }
+.resume-bar p { min-width: 0; margin: 0; }
+.resume-bar span { display: block; color: #9fb4ad; font-size: 10px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+.resume-bar b { display: block; margin-top: 2px; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.resume-bar .button.primary { color: var(--ink); background: var(--saffron); box-shadow: none; }
+/* Clear the bar so it never covers the last row of the concept list. */
+body.has-resume-bar .dashboard-wrap { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+
 .toast { position: fixed; left: 50%; bottom: 22px; z-index: 60; max-width: calc(100% - 30px); padding: 11px 16px; color: white; background: var(--ink); border-radius: 9px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translate(-50%,16px); transition: .2s ease; }
 .toast.show { opacity: 1; transform: translate(-50%,0); }
 
@@ -681,7 +702,13 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
   .hero-actions .button { width: 100%; }
   .focus-goal { padding: 22px 20px 24px; }
   .mastery-matrix, .evidence-pair .trend-card { padding: 17px 14px; }
-  .radar-layout { grid-template-columns: minmax(190px,1fr) minmax(115px,.55fr); }
+  .radar-layout { grid-template-columns: minmax(190px,1fr) minmax(126px,.55fr); }
+  /* 11px/12px was the desktop density carried onto a phone. These five rows are the
+     only place the exact percentages are stated, so they get read, not glanced at.
+     The column minimum above widens with them so nothing is pushed out of the card. */
+  .mastery-values span { font-size: 12px; }
+  .mastery-values b { font-size: 14px; }
+  .mastery-values li { padding: 7px 0; }
   .practice-builder { padding: 17px 14px; }
   .home-block { margin-top: 40px; }
   .block-heading h2 { font-size: 27px; }

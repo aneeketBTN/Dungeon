@@ -30,6 +30,24 @@ changed, decisions, verification/evidence, and deferrals.
   directions on all three toggles: `hidden` ⟺ `height: 0`. LAW-47 in-page: `ok: true`, 0 violations
   across sets 1–9 and the mixed builder. `npm test` 37/37, build clean, net −21 lines.
   Evidence: `evidence/2026-08-12/t6-homepage-four-questions/verification.md`.
+- **Owner review, same day, two rounds.** Block 1's heading became **"Your next step"** — chosen
+  over "Today's focus" because the app models three time horizons, so "today" is wrong for anyone
+  on the seven-day plan, and because the results screen already uses the phrase. The radar had
+  **no axis labels at all**: five unlabelled spokes where the fifth is not a subject. Names are now
+  drawn at each vertex (inline, not hover — hover does not exist on touch), values deliberately left
+  to the list beside it so the same fact is not stated twice, and the labels are clamped into the
+  canvas because "Connections" is 70px against a 21px "IBM" and is clamped at every size tested.
+  The canvas was also an unnamed `role="img"`; it now carries a real `aria-label` that says plainly
+  Connections is not a subject.
+- **Mobile pass.** The subject swipe row had no cue that more cards existed — an edge fade now
+  paints only on the side that still has cards behind it, and not at all where the row does not
+  scroll. Mastery values went 11px/12px → 12px/14px below 700px with the column minimum widened so
+  nothing is pushed out. A `.resume-bar` re-offers the recommended action once the hero scrolls
+  away; it reads its label from the hero button and delegates the click to it, so it is a shortcut
+  and not a second recommendation.
+- **Two measurement artifacts recorded** under LAW-46, both of which nearly became false fixes: CSS
+  opacity sampled at time zero of a 180ms transition, and `scrollIntoView({behavior:'auto'})`
+  appearing to do nothing because `scroll-behavior: smooth` wins.
 - **Deferred.** No screenshots — the Browser pane was not compositing, so acceptance is DOM and
   computed-style level and a pixel pass is still owed. The route chart's new dark-surface colours
   were reasoned, not contrast-measured. Nothing is pushed, merged, or deployed; the branch is
