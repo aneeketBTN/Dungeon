@@ -340,8 +340,15 @@ laid out as `<root>/<SUBJECT>/<SUBJECT>_M<NN>_SUM_TRANSCRIPT.txt`: one file per 
 lectures in teaching order behind `## <code> | <title>` headers. A lecture's identity is its
 **position** in that file (the Nth section is `L<N>`), not the recording code in the header — module
 2 runs C10, C01, C02 … C12, so the codes are not even monotonic. `tools/lib/clean_transcripts.js` is
-the one loader; `tools/validate_t6_bank.js`, `tools/check_lesson_file.mjs`, and
-`tools/build_t6_lessons.mjs` each take this root as their first argument.
+the loader; `tools/validate_t6_bank.js` and `tools/check_lesson_file.mjs` go through it and take this
+root as their first argument.
+
+**`tools/build_t6_lessons.mjs` is the exception and still requires the old pack.** It reads
+`graph/LECTURE_MANIFEST.jsonl` and the `dense/` layer directly and has not been migrated to the
+loader, so it must be given the AI-Ready Pack root instead; pointed at the clean transcripts it dies
+with `ENOENT ... LECTURE_MANIFEST.jsonl`. It is an authoring aid that writes candidates to
+`work/t6_lessons/`, not a gate, so this does not affect verification — but do not assume one path
+argument serves all three tools.
 
 The older `Term 6 AI-Ready Pack` (`graph_source/`, `graph/LECTURE_MANIFEST.jsonl`, `dense/`,
 `subject_core/`, `indexes/`) is still *readable* so existing invocations do not hard-fail, but it is
@@ -479,7 +486,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   - T6 JavaScript syntax: `node --check app/t6.js`,
     `node --check app/sets/t6_brgsa.js`, `node --check app/sets/t6_catalog.js`,
     `node --check app/sets/t6_challenges.js`, and `node --check app/sets/t6_lessons.js`
-  - Lesson candidates: `node tools/build_t6_lessons.mjs "<Term 6 Clean Transcripts>"`
+  - Lesson candidates: `node tools/build_t6_lessons.mjs "<Term 6 AI-Ready Pack>" [SUBJECT]`
+    — the old pack, not the clean transcripts; this tool still reads `graph/LECTURE_MANIFEST.jsonl`.
   - Lesson file, and what to author next: `node tools/check_lesson_file.mjs "<Term 6 Clean Transcripts>"`
     — run this *before* the bank validator; a lesson file that does not parse makes the validator
     report nothing at all.
