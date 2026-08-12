@@ -68,7 +68,7 @@ test("static responses receive launch security and cache headers", async () => {
 
 test("release build includes only the allowlisted active app", async () => {
   const buildScript = await readFile(
-    new URL("../scripts/build-site.mjs", import.meta.url),
+    new URL("../tools/build-site.mjs", import.meta.url),
     "utf8"
   );
   assert.match(buildScript, /mock\/t6\.html/);

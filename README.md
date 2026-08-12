@@ -14,7 +14,7 @@ assessment envelope rather than claiming an exact paper blueprint.
 From this folder:
 
 ```text
-python mock/server.py 8099
+python tools/server.py 8099
 ```
 
 Open:

@@ -27,7 +27,7 @@ This does not erase or change the engine files above.
 
 ```bash
 cd ~/Documents/Dungeon
-python3 mock/server.py 8099
+python3 tools/server.py 8099
 ```
 
 4. Open [http://localhost:8099/](http://localhost:8099/). The root redirects to the active Term 6
@@ -38,7 +38,7 @@ There is no npm install or web build step. Alternatively:
 
 ```bash
 cd ~/Documents/Dungeon
-bash mock/start-mac.sh
+bash tools/start-mac.sh
 ```
 
 ## Active implementation
@@ -49,8 +49,8 @@ bash mock/start-mac.sh
 - `mock/sets/t6_brgsa.js` — original BRGSA authored bank
 - `mock/sets/t6_catalog.js` — all-subject catalogue and dashboard concept mapping
 - `mock/sets/t6_challenges.js` — mixed-format/boss augmentation and active rotation pools
-- `mock/validate_t6_bank.js` — bank/source/breadth validation utility
-- `mock/server.py` — local server and root redirect
+- `tools/validate_t6_bank.js` — bank/source/breadth validation utility
+- `tools/server.py` — local server and root redirect
 
 The earlier cinematic product slice remains at `legacy/rogue/rogue.html`. It is a legacy reference, not
 the active student route.
@@ -91,7 +91,7 @@ required = [
     "mock/sets/t6_brgsa.js",
     "mock/sets/t6_catalog.js",
     "mock/sets/t6_challenges.js",
-    "mock/validate_t6_bank.js",
+    "tools/validate_t6_bank.js",
     "state/game_state.json",
     "history/question_history.json",
 ]

@@ -5,7 +5,7 @@
 > with zero generic fallbacks, derived from generator provenance for 92.3% of slots and hand-authored
 > in `mock/sets/t6_diagnoses.js` for the remaining 78 texts. The wrong-answer panel was rebuilt as
 > verdict → what this choice assumed → catch it earlier → what governs this question → the complete
-> answer (no longer collapsed) → why it connects. `mock/validate_t6_bank.js` now fails the build when
+> answer (no longer collapsed) → why it connects. `tools/validate_t6_bank.js` now fails the build when
 > a scheduled distractor lacks a diagnosis, so questions drafted later inherit the contract in
 > `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. Two defects were repaired: a raw
 > `selected-belief:` tag reaching learner copy in the concept inspector (LAW-43) and a per-option
@@ -195,7 +195,7 @@ Rules:
 - `.agents/` — paused tester-agent charters, consent-safe data contracts, synthetic fixtures, and
   fail-closed activation gates; three project schedules are registered `PAUSED` and none is
   running.
-- `scripts/` — deterministic public-release build scripts.
+- `tools/` — deterministic public-release build scripts.
 - `site/` — production worker entrypoint, health route, and response security policy.
 - `cloudflare/` — deployed exact-path static edge, approved-email learner sessions, the agreement
   gate, signed owner Access validation, owner-only tester allowlist controller, applied D1
@@ -247,8 +247,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `.agents/README.md` | Paused tester-agent control plane, authority boundary, and activation order. | 2026-08-11 |
 | `.agents/deployment.json` | Fail-closed activation gates, paused automation IDs, models, cadence, and non-running declarations. | 2026-08-11 |
 | `package.json` | Dependency-free release build, validation, and test commands. | 2026-08-11 |
-| `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
-| `scripts/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
+| `tools/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
+| `tools/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
 | `site/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
 | `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, and tester management. | 2026-08-11 |
 | `cloudflare/migrations/` | Applied D1 history for auth/progress, browser/country locks, agreement acceptance, and community timestamps. | 2026-08-11 |
@@ -258,10 +258,10 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `mock/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery. | 2026-08-11 |
 | `docs/community/DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
 | `work/build_tester_agreement.py` | Builds the verified two-page agreement DOCX for Word/PDF delivery. | 2026-08-11 |
-| `cloudflare/scripts/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
+| `cloudflare/tools/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
 | `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
 | `cloudflare/README.md` | Live route, runtime-secret, Access-policy, owner-bootstrap, and rate-limit contract. | 2026-08-11 |
-| `cloudflare/scripts/build-standalone.mjs` | Builds the same protected allowlist as an embedded-asset fallback when an Assets upload path is unavailable. | 2026-08-11 |
+| `cloudflare/tools/build-standalone.mjs` | Builds the same protected allowlist as an embedded-asset fallback when an Assets upload path is unavailable. | 2026-08-11 |
 | `tests/site-release.test.mjs` | Release-boundary, anonymous-invite secrecy, privacy, routing, header, and setup checks. | 2026-08-11 |
 | `tests/cloudflare-access.test.mjs` | Owner auth, tester management, agreement/community state, bump, routing, health, and cache checks. | 2026-08-11 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
@@ -275,13 +275,13 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `mock/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
 | `mock/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, and the provenance-derived option-diagnosis pass. | 2026-08-12 |
 | `mock/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
-| `mock/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, scored-pool, and option-diagnosis validator. | 2026-08-12 |
+| `tools/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, scored-pool, and option-diagnosis validator. | 2026-08-12 |
 | `legacy/rogue/rogue.html` | Legacy character → Hall → run → failure/results product-flow markup. | 2026-08-10 |
 | `legacy/rogue/rogue.js` | Legacy product-slice state transitions, questions, rewards, quest, and outcome behavior. | 2026-08-10 |
 | `legacy/rogue/rogue.css` | Legacy product-slice responsive presentation, feedback states, and animation behavior. | 2026-08-10 |
-| `mock/server.py` | Portable local static/media server; `/` now opens the active T6 route; legacy leaderboard API remains. | 2026-08-10 |
-| `mock/start-mac.sh` | Dependency-free macOS launcher for the local prototype server. | 2026-07-16 |
-| `mock/serve-tunnel.cmd` | Fail-closed Windows launcher for the server and an explicitly installed LocalTunnel 2.0.2 CLI. | 2026-08-04 |
+| `tools/server.py` | Portable local static/media server; `/` now opens the active T6 route; legacy leaderboard API remains. | 2026-08-10 |
+| `tools/start-mac.sh` | Dependency-free macOS launcher for the local prototype server. | 2026-07-16 |
+| `tools/serve-tunnel.cmd` | Fail-closed Windows launcher for the server and an explicitly installed LocalTunnel 2.0.2 CLI. | 2026-08-04 |
 | `evidence/README.md` | Evidence naming, acceptance-source hierarchy, and artifact requirements. | 2026-07-16 |
 | `coordination/CHARTER.md` | Owner/agent/tool authority and delivery protocol. | 2026-07-16 |
 
@@ -334,9 +334,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   - T6 JavaScript syntax: `node --check mock/t6.js`,
     `node --check mock/sets/t6_brgsa.js`, `node --check mock/sets/t6_catalog.js`, and
     `node --check mock/sets/t6_challenges.js`
-  - T6 bank: `node mock/validate_t6_bank.js "<Term 6 AI-Ready Pack>"`
-  - Python server syntax on macOS: `python3 -m py_compile mock/server.py`
-  - Local server on macOS: `python3 mock/server.py 8099`
+  - T6 bank: `node tools/validate_t6_bank.js "<Term 6 AI-Ready Pack>"`
+  - Python server syntax on macOS: `python3 -m py_compile tools/server.py`
+  - Local server on macOS: `python3 tools/server.py 8099`
   - UI acceptance: declared scenarios in a real Browser; Computer Use for Windows-level flows.
 - A bug hit during build/debugging is logged in `docs/governance/BUG-LAWS.md` before close-out.
 - A change to a tracked quality axis is logged in `docs/governance/QUALITY-LOG.md` before close-out.

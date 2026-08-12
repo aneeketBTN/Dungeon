@@ -4,7 +4,8 @@ var fs = require("fs");
 var path = require("path");
 var vm = require("vm");
 
-var root = __dirname;
+// The validator lives in tools/; the question bank it reads lives in the app directory.
+var root = path.join(__dirname, "..", "mock");
 var context = {window: {}, atob: function (value) { return Buffer.from(value, "base64").toString("binary"); }};
 vm.createContext(context);
 ["sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_challenges.js"].forEach(function (relative) {

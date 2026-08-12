@@ -109,7 +109,7 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 ### LAW-10 🟡 — Optional helpers must not auto-download executable dependencies
 
 - **Tier/Status:** 🟡 · ACTIVE
-- **Origin:** 2026-08-04 npm supply-chain audit found that `mock/serve-tunnel.cmd` used
+- **Origin:** 2026-08-04 npm supply-chain audit found that `tools/serve-tunnel.cmd` used
   `npx -y localtunnel`, resolving and executing an unpinned package without review.
 - **Why:** A convenience launcher can execute malicious install or runtime code even when the
   application itself has no npm dependency graph.

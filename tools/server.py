@@ -15,9 +15,9 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
 
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else int(os.environ.get("PORT") or 8099)
-MOCK_ROOT = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(MOCK_ROOT)
-LB_FILE = os.path.join(MOCK_ROOT, "leaderboard.json")
+SERVER_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SERVER_DIR)
+LB_FILE = os.path.join(SERVER_DIR, "leaderboard.json")
 _lock = threading.Lock()
 
 

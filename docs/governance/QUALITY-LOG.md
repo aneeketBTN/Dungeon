@@ -64,7 +64,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 - **I5 (2026-07-16)** — Issue: moving only the project folder to macOS could leave launch steps,
   browser-local prototype state, and optional art dependencies ambiguous. Cause: the old transfer
   note predates the web vertical slice and current operating system. Fix: added `docs/ops/MAC_TRANSFER.md`,
-  a portable `mock/start-mac.sh`, Mac-targeted launch configuration, and integrity checks.
+  a portable `tools/start-mac.sh`, Mac-targeted launch configuration, and integrity checks.
   Evidence: `evidence/2026-07-16/mac-transfer-prep.md`.
 - **I6 (2026-08-10)** — Issue: the broad product slice put cinematic identity, character,
   currency, market, setup, and quests before a learner could reach exam practice. Cause: product
@@ -354,7 +354,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   the gap a specific choice reveals instead of reporting only correctness. 2,943 diagnoses on the
   active bank, zero generic fallbacks. Evidence:
   `evidence/2026-08-12/t6-option-diagnoses/verification.md`; prevention: `docs/governance/BUG-LAWS.md` LAW-43 and
-  LAW-44, plus a build gate in `mock/validate_t6_bank.js`.
+  LAW-44, plus a build gate in `tools/validate_t6_bank.js`.
 - **I41 (2026-08-12)** — Issue: rebuilding the panel to explain more made it repeat itself — the
   governing principle appeared in the diagnosis, again as `What governs this question`, and again in
   the answer key, with the causal chain appearing twice more. Cause: each block was written to stand

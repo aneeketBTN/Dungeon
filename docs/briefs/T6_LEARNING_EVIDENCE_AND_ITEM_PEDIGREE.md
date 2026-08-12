@@ -292,7 +292,7 @@ side by side); and the three constructed boss-integration errors (framework swap
 overreach, reversed determination). Hand-written distractors with no machine-knowable provenance are
 diagnosed in `mock/sets/t6_diagnoses.js`, keyed by question id and option index.
 
-**Enforcement.** `mock/validate_t6_bank.js` fails the build when any scheduled distractor lacks a
+**Enforcement.** `tools/validate_t6_bank.js` fails the build when any scheduled distractor lacks a
 diagnosis, when any of the four fields is empty, when a `why` restates the correct answer, or when a
 `why` addresses the learner instead of the reasoning. A new question cannot ship without this; adding
 one through any path picks the contract up automatically, because the diagnosis pass runs over every
