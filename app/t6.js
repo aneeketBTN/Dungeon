@@ -745,6 +745,7 @@
     renderProgressStory();
     renderCommunityReminder();
     renderLessonIndex();
+    renderConceptShelf();
     setDashboardView(dashboardView);
   }
 
@@ -1082,6 +1083,93 @@
     if (data.connects) block("p", "lesson-read-connects", data.connects);
   }
 
+  /* The concept shelf.
+   *
+   * Everything a learner needs per concept used to be split across two tabs: the
+   * "practise this one" button lived behind a module stepper and an inspector,
+   * and its lesson lived in a different panel entirely. Same information, three
+   * clicks apart. The shelf puts one row per concept with both actions on it.
+   *
+   * It does not re-render lesson prose — Lesson jumps to the existing lesson row
+   * and opens it, so there is one copy of that content, not two that can drift. */
+  function openLessonFor(lectureId) {
+    setDashboardView("lessons");
+    var row = document.querySelector('.lesson-row[data-lecture="' + lectureId + '"]');
+    if (!row) return;
+    if (row.tagName === "DETAILS") row.open = true;
+    row.scrollIntoView({block: "center", behavior: "smooth"});
+    var head = row.querySelector(".lesson-row-head");
+    if (head && head.focus) head.focus({preventScroll: true});
+  }
+
+  function renderConceptShelf() {
+    var host = $("concept-shelf-list");
+    if (!host) return;
+    host.textContent = "";
+    var courseId = profile.selectedCourse;
+    var course = getCourse(courseId);
+    var label = $("concept-shelf-label");
+    if (label) label.textContent = (course.shortTitle || courseId) + " · " + (course.concepts || []).length + " concepts";
+
+    var byModule = {};
+    (course.concepts || []).forEach(function (concept) {
+      (byModule[concept.module] = byModule[concept.module] || []).push(concept);
+    });
+
+    Object.keys(byModule).sort(function (a, b) { return Number(a) - Number(b); }).forEach(function (moduleKey) {
+      var group = document.createElement("div");
+      group.className = "shelf-group";
+      var heading = document.createElement("p");
+      heading.className = "shelf-module";
+      heading.textContent = "Module " + moduleKey;
+      group.appendChild(heading);
+
+      byModule[moduleKey].forEach(function (concept) {
+        var status = conceptStatus(courseId, concept.id);
+        var row = document.createElement("div");
+        row.className = "shelf-row";
+
+        var name = document.createElement("span");
+        name.className = "shelf-name";
+        name.innerHTML = "<i class='dot " + status + "' aria-hidden='true'></i><b>" + escapeHtml(concept.name) + "</b>";
+        row.appendChild(name);
+
+        var state = document.createElement("span");
+        state.className = "shelf-state " + status;
+        state.textContent = STATUS_LABEL[status] || status;
+        row.appendChild(state);
+
+        var actions = document.createElement("span");
+        actions.className = "shelf-actions";
+
+        var practise = document.createElement("button");
+        practise.type = "button";
+        practise.className = "button compact primary";
+        practise.textContent = "Practise";
+        practise.setAttribute("aria-label", "Practise " + concept.name + " on its own");
+        practise.addEventListener("click", function () { startConceptPractice(courseId, concept.id); });
+        actions.appendChild(practise);
+
+        // Only offer a lesson where one actually exists; a dead button that
+        // explains nothing is worse than no button.
+        var lectureId = concept.source;
+        if (lectureId && LESSONS[lectureId]) {
+          var lesson = document.createElement("button");
+          lesson.type = "button";
+          lesson.className = "button compact quiet";
+          lesson.textContent = "Lesson";
+          lesson.setAttribute("aria-label", "Read the lesson for " + concept.name + ", unscored");
+          lesson.addEventListener("click", function () { openLessonFor(lectureId); });
+          actions.appendChild(lesson);
+        }
+
+        row.appendChild(actions);
+        group.appendChild(row);
+      });
+      host.appendChild(group);
+    });
+  }
+
   function renderLessonIndex() {
     var host = $("lesson-index");
     var summary = $("lesson-coverage");
@@ -1150,6 +1238,8 @@
 
           var row = document.createElement(data ? "details" : "div");
           row.className = "lesson-row " + status.key;
+          // Lets the concept shelf open this exact lesson rather than reprinting it.
+          row.setAttribute("data-lecture", lectureId);
 
           var head = document.createElement(data ? "summary" : "div");
           head.className = "lesson-row-head";
@@ -1597,6 +1687,11 @@
   // The homepage builder is the single place to configure generic practice, so every entry point
   // that used to open a modal now brings the learner to those controls.
   function openPracticeSetup(courseId) {
+    /* The builder now sits inside a disclosure so it is not part of the homepage's
+     * first read. Anything that sends a learner to it has to open that disclosure
+     * first, or the scroll and focus below land on a collapsed element. */
+    var disclosure = $("builder-disclosure");
+    if (disclosure) disclosure.open = true;
     if (courseId && courseId !== profile.selectedCourse) {
       profile.selectedCourse = courseId;
       selectedModule = 1;

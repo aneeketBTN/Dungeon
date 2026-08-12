@@ -412,6 +412,38 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .numeric-row input:disabled { background: var(--card-soft); }
 .numeric-unit { color: var(--muted); font-size: 13px; }
 .numeric-verdict { margin: 10px 0 0; font-size: 13px; font-variant-numeric: tabular-nums; }
+
+/* Progressive disclosure for the homepage's secondary blocks. The builder and the
+   full evidence breakdown are real features, but neither answers "what do I do
+   next", so neither earns space in the first read. */
+.disclosure { border: 1px solid var(--line); border-radius: 12px; background: var(--card-soft); }
+.disclosure > summary { padding: 14px 16px; display: grid; gap: 2px; cursor: pointer; list-style: none; border-radius: 12px; }
+.disclosure > summary::-webkit-details-marker { display: none; }
+.disclosure > summary::after { content: "Show"; grid-column: 2; grid-row: 1 / span 2; align-self: center; color: var(--blue); font-size: 12px; font-weight: 700; }
+.disclosure[open] > summary::after { content: "Hide"; }
+.disclosure > summary { grid-template-columns: 1fr auto; }
+.disclosure > summary b { font-size: 14px; }
+.disclosure > summary small { color: var(--muted); font-size: 12px; }
+.disclosure > summary:hover { background: white; }
+.disclosure > summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.disclosure[open] > summary { border-bottom: 1px solid var(--line); border-radius: 12px 12px 0 0; }
+.disclosure > section { margin: 0; border: 0; border-radius: 0 0 12px 12px; }
+
+/* One row per concept: status, then both things you can do with it. */
+.concept-shelf { display: grid; gap: 12px; }
+.shelf-group { display: grid; gap: 6px; }
+.shelf-module { margin: 10px 0 2px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.shelf-row { padding: 10px 12px; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 10px; background: white; }
+.shelf-name { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.shelf-name b { font-size: 13px; font-weight: 650; }
+.shelf-state { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.shelf-state.strong { color: var(--green); }
+.shelf-state.needs { color: var(--red); }
+.shelf-actions { display: flex; gap: 6px; }
+@media (max-width: 640px) {
+  .shelf-row { grid-template-columns: 1fr auto; }
+  .shelf-actions { grid-column: 1 / -1; }
+}
 .format-note { margin: 0 0 4px; color: var(--muted); font-size: 12px; }
 .cloze-sentence { padding: 0; color: #2f3e35; background: transparent; border: 0; border-radius: 0; font: 650 clamp(17px,2vw,21px)/1.8 Georgia, serif; }
 .inline-blank { display: block; width: 100%; margin: 8px 0; }
