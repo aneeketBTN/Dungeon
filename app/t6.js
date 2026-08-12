@@ -27,7 +27,7 @@
   var localChangeSequence = 0;
   var saveChain = Promise.resolve();
   var communityState = {joined:true, inviteOpenedAt:null, reminderAt:null};
-  var DASHBOARD_VIEWS = ["overview", "concepts", "plan"];
+  var DASHBOARD_VIEWS = ["overview", "concepts", "plan", "lessons"];
   var HORIZON_PLANS = {
     today: {
       title: "A focused day, with recovery time",
@@ -84,7 +84,8 @@
       blockSequence: 0,
       horizon: "today",
       builder: clone(DEFAULT_BUILDER),
-      primerState: {}
+      primerState: {},
+      lessonsRead: {}
     };
   }
 
@@ -261,7 +262,95 @@
   function getConcept(courseId, conceptId) {
     return getCourse(courseId).concepts.filter(function (concept) { return concept.id === conceptId; })[0] || null;
   }
-  function getQuestion(courseId, questionId) { return getCourse(courseId).questions[questionId] || null; }
+  /* ------------------------------------------------------------------
+   * Teaching layer
+   *
+   * A lesson is the surface that makes 0→80 possible: one lecture, taught once,
+   * before anything about that lecture is scored. The scheduling invariant is
+   * enforced in layeredQueue — a scored question citing lecture L cannot appear
+   * before L's lesson has been delivered — so a cold learner never meets a
+   * graded item in vocabulary nobody introduced.
+   *
+   * Lesson queue items encode their lecture and concept in the id
+   * ("lesson:<lectureId>|<conceptId>") because the live session is cloned into
+   * profile.active and must survive save/resume as plain JSON.
+   * ---------------------------------------------------------------- */
+  var LESSONS = window.T6_LESSONS || {};
+
+  function lessonFor(lectureId) { return LESSONS[lectureId] || null; }
+
+  function lessonsReadMap() {
+    if (!profile.lessonsRead || typeof profile.lessonsRead !== "object") profile.lessonsRead = {};
+    return profile.lessonsRead;
+  }
+
+  function lessonIsRead(lectureId) { return !!lessonsReadMap()[lectureId]; }
+
+  function markLessonRead(lectureId) {
+    if (!lectureId) return;
+    lessonsReadMap()[lectureId] = Date.now();
+    saveProfile();
+  }
+
+  function lectureIdsFor(question) {
+    if (!question) return [];
+    return unique((question.sourceIds && question.sourceIds.length ? question.sourceIds : [question.source]) || [])
+      .filter(Boolean);
+  }
+
+  // Lessons a question depends on that the learner has not been taught yet.
+  function pendingLessonsFor(question) {
+    return lectureIdsFor(question).filter(function (lectureId) {
+      return lessonFor(lectureId) && !lessonIsRead(lectureId);
+    });
+  }
+
+  function lessonItemId(lectureId, conceptId) { return "lesson:" + lectureId + "|" + conceptId; }
+
+  function parseLessonItemId(questionId) {
+    if (String(questionId).indexOf("lesson:") !== 0) return null;
+    var body = String(questionId).slice("lesson:".length).split("|");
+    return {lectureId: body[0], conceptId: body[1] || null};
+  }
+
+  /* A lesson is presented as a synthetic question so the existing session
+   * machinery — topic list, progress, save/resume — keeps working unchanged.
+   * It is never scored and never creates evidence. */
+  function lessonQuestion(courseId, questionId) {
+    var parsed = parseLessonItemId(questionId);
+    if (!parsed) return null;
+    var data = lessonFor(parsed.lectureId);
+    if (!data) return null;
+    return {
+      id: questionId,
+      courseId: courseId,
+      conceptId: parsed.conceptId,
+      supportingConceptIds: [],
+      module: data.module,
+      source: data.lectureId,
+      sourceIds: [data.lectureId],
+      node: data.title,
+      pattern: "Lesson",
+      perspective: "learn",
+      type: "lesson",
+      skills: ["recognise"],
+      difficulty: 0,
+      variantFamily: data.lectureId + "_lesson",
+      boss: false,
+      lessonOnly: true,
+      lesson: data,
+      caselet: null,
+      stem: data.objective,
+      explanation: data.objective,
+      link: data.connects || "",
+      misconceptions: []
+    };
+  }
+
+  function getQuestion(courseId, questionId) {
+    if (String(questionId).indexOf("lesson:") === 0) return lessonQuestion(courseId, questionId);
+    return getCourse(courseId).questions[questionId] || null;
+  }
   function getStudySet(courseId, setId) {
     return getCourse(courseId).runs.filter(function (item) { return item.id === Number(setId); })[0] || null;
   }
@@ -615,6 +704,7 @@
     renderPracticeBuilder();
     renderProgressStory();
     renderCommunityReminder();
+    renderLessonIndex();
     setDashboardView(dashboardView);
   }
 
@@ -857,6 +947,202 @@
     $("community-reminder-copy").textContent = "Open the WhatsApp invite, join the group, and share feedback during testing. Testers who do not join and participate will be removed from the cohort.";
     $("community-joined").disabled = !communityState.inviteOpenedAt;
     $("community-joined").textContent = communityState.inviteOpenedAt ? "I joined the group" : "Open the invite first";
+  }
+
+  /* ------------------------------------------------------------------
+   * Read-through mode.
+   *
+   * A lesson normally reaches a learner only because layeredQueue() puts it
+   * ahead of a scored question citing its lecture. That is the right default —
+   * teaching arrives just before it is tested — but it has two consequences
+   * this panel exists to answer.
+   *
+   * For the learner: there was no way to read the material as a course, only to
+   * meet it one lesson at a time inside practice.
+   *
+   * For whoever is authoring: a lesson for a lecture no question cites is never
+   * delivered to anyone, and nothing in the app said so. IBM module 1 was
+   * authored in full before that was noticed; 8 of its 10 lessons are
+   * unreachable in practice. This panel labels each lesson with whether
+   * practice can actually deliver it, and lists cited lectures that have no
+   * lesson yet, which is the authoring queue.
+   *
+   * Reading here is deliberately NOT recorded. profile.lessonsRead drives the
+   * teach-before-test gate, so writing to it here would let someone skim the
+   * index and silently disable the gate for every lesson they skimmed.
+   * ------------------------------------------------------------------ */
+  /* Which lectures can practice actually reach?
+   *
+   * Not simply "cited by any question in the bank". An optionShapeRisk question
+   * is excluded from every scheduling path, so a lecture cited only by one of
+   * those is unreachable and its lesson is never delivered. For BRGSA that is
+   * the difference between 44 and 33 — eleven lessons this panel would
+   * otherwise report as live. Primers are kept, because teachFirst() runs on
+   * the primer too and a primer really does pull its lecture's lesson in. */
+  function citedLectureIds(courseId) {
+    var course = getCourse(courseId);
+    var cited = {};
+    if (!course) return cited;
+    Object.keys(course.questions).forEach(function (id) {
+      var question = course.questions[id];
+      if (question.optionShapeRisk) return;
+      lectureIdsFor(question).forEach(function (lectureId) { cited[lectureId] = true; });
+    });
+    return cited;
+  }
+
+  function lessonStatusFor(lectureId, cited) {
+    if (!LESSONS[lectureId]) return {key: "missing", label: "No lesson yet"};
+    if (cited[lectureId]) return {key: "live", label: "Taught in practice"};
+    return {key: "readonly", label: "Read-only — no question cites this"};
+  }
+
+  function appendLessonBody(container, data) {
+    function block(tag, className, text) {
+      var node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text) node.textContent = text;
+      container.appendChild(node);
+      return node;
+    }
+
+    if (data.objective) block("p", "lesson-read-objective", "After this you can: " + data.objective);
+    (data.explainer || []).forEach(function (paragraph) { block("p", null, paragraph); });
+
+    if (data.worked) {
+      block("h5", "lesson-read-label", "Worked through");
+      var worked = block("div", "lesson-read-worked");
+      [["Situation", data.worked.setup], ["Move", data.worked.move], ["Why", data.worked.because]]
+        .forEach(function (pair) {
+          if (!pair[1]) return;
+          var line = document.createElement("p");
+          var name = document.createElement("b");
+          name.textContent = pair[0] + ". ";
+          line.appendChild(name);
+          line.appendChild(document.createTextNode(pair[1]));
+          worked.appendChild(line);
+        });
+    }
+
+    if ((data.glossary || []).length) {
+      block("h5", "lesson-read-label", "Words this lecture introduces");
+      var list = document.createElement("dl");
+      list.className = "lesson-read-glossary";
+      data.glossary.forEach(function (entry) {
+        var term = document.createElement("dt");
+        term.textContent = entry.term;
+        var plain = document.createElement("dd");
+        plain.textContent = entry.plain;
+        list.appendChild(term);
+        list.appendChild(plain);
+      });
+      container.appendChild(list);
+    }
+
+    if (data.connects) block("p", "lesson-read-connects", data.connects);
+  }
+
+  function renderLessonIndex() {
+    var host = $("lesson-index");
+    var summary = $("lesson-coverage");
+    if (!host || !summary) return;
+    host.textContent = "";
+    summary.textContent = "";
+
+    var courseId = profile.selectedCourse;
+    var course = getCourse(courseId);
+    var label = $("lessons-course-label");
+    if (label) label.textContent = (course ? course.shortTitle || course.id : courseId) + " · Teaching layer";
+
+    var cited = citedLectureIds(courseId);
+    // Every lecture this subject knows about: one with a lesson, one a question cites, or both.
+    var lectureIds = unique(Object.keys(LESSONS)
+      .filter(function (id) { return LESSONS[id].courseId === courseId; })
+      .concat(Object.keys(cited).filter(function (id) { return id.indexOf(courseId) === 0; })));
+
+    if (!lectureIds.length) {
+      summary.textContent = "No lessons have been authored for this subject yet.";
+      return;
+    }
+
+    var counts = {live: 0, readonly: 0, missing: 0};
+    lectureIds.forEach(function (id) { counts[lessonStatusFor(id, cited).key] += 1; });
+
+    [
+      counts.live + " taught in practice",
+      counts.readonly ? counts.readonly + " readable here only" : null,
+      counts.missing ? counts.missing + " still to write" : null
+    ].filter(Boolean).forEach(function (text, index) {
+      var chip = document.createElement("span");
+      chip.className = "lesson-coverage-chip" + (index === 0 ? " primary" : "");
+      chip.textContent = text;
+      summary.appendChild(chip);
+    });
+
+    // Group by module, using the lesson's own module when we have one and the
+    // lecture id when we do not.
+    var modules = {};
+    lectureIds.forEach(function (id) {
+      var lesson = LESSONS[id];
+      var match = /-M(\d+)-/.exec(id);
+      var moduleNumber = lesson ? lesson.module : (match ? Number(match[1]) : 0);
+      modules[moduleNumber] = modules[moduleNumber] || [];
+      modules[moduleNumber].push(id);
+    });
+
+    Object.keys(modules).map(Number).sort(function (a, b) { return a - b; }).forEach(function (moduleNumber) {
+      var group = document.createElement("section");
+      group.className = "lesson-module";
+
+      var heading = document.createElement("h4");
+      heading.textContent = "Module " + moduleNumber;
+      group.appendChild(heading);
+
+      modules[moduleNumber]
+        .sort(function (a, b) {
+          var left = LESSONS[a], right = LESSONS[b];
+          if (left && right) return left.order - right.order;
+          return a < b ? -1 : 1;
+        })
+        .forEach(function (lectureId) {
+          var data = LESSONS[lectureId];
+          var status = lessonStatusFor(lectureId, cited);
+
+          var row = document.createElement(data ? "details" : "div");
+          row.className = "lesson-row " + status.key;
+
+          var head = document.createElement(data ? "summary" : "div");
+          head.className = "lesson-row-head";
+
+          var title = document.createElement("span");
+          title.className = "lesson-row-title";
+          title.textContent = data ? data.title : lectureId;
+          head.appendChild(title);
+
+          var pill = document.createElement("span");
+          pill.className = "lesson-row-pill " + status.key;
+          pill.textContent = status.label;
+          head.appendChild(pill);
+
+          var source = document.createElement("small");
+          source.className = "lesson-row-source";
+          source.textContent = lectureId;
+          head.appendChild(source);
+
+          row.appendChild(head);
+
+          if (data) {
+            var body = document.createElement("div");
+            body.className = "lesson-row-body";
+            appendLessonBody(body, data);
+            row.appendChild(body);
+          }
+
+          group.appendChild(row);
+        });
+
+      host.appendChild(group);
+    });
   }
 
   function setDashboardView(view, options) {
@@ -1159,15 +1445,47 @@
   function layeredQueue(courseId, questionIds, mode) {
     var queue = [];
     var introduced = [];
+    var taughtHere = [];
     var previousConceptId = null;
     questionIds.forEach(function (id) {
       var question = getQuestion(courseId, id);
       if (!question) return;
       var conceptIds = [question.conceptId];
+
+      /* Teach before testing. Any surface citing a lecture the learner has never
+       * been taught gets that lecture's lesson placed ahead of it. This is the
+       * invariant the whole 0→80 path rests on.
+       *
+       * It applies to the primer on its own terms, not by inheritance from the
+       * question it precedes. A primer is a separate authored surface with its
+       * own sourceIds, and they routinely differ: `brgsa_m1_demand_primer` cites
+       * M01-L01 while the `survey_bias` it introduces cites M01-L05. Gating only
+       * on the scored question let that primer run five steps ahead of its own
+       * lesson — the original defect in miniature. */
+      function teachFirst(surface, conceptId) {
+        if (mode === "simulation") return;
+        pendingLessonsFor(surface).forEach(function (lectureId) {
+          if (taughtHere.indexOf(lectureId) >= 0) return;
+          queue.push({
+            id: lessonItemId(lectureId, conceptId),
+            initial: false,
+            isReattempt: false,
+            origin: null,
+            lesson: true,
+            lectureId: lectureId,
+            previousConceptId: previousConceptId
+          });
+          taughtHere.push(lectureId);
+        });
+      }
+
+      teachFirst(question, question.conceptId);
+
       if (mode !== "simulation") conceptIds.forEach(function (conceptId) {
         if (introduced.indexOf(conceptId) >= 0 || primerSupportLevel(courseId, conceptId) <= 0) return;
         var primer = primerQuestionFor(courseId, conceptId);
         if (!primer) return;
+        teachFirst(primer, conceptId);
         queue.push({
           id: primer.id,
           initial: false,
@@ -1556,12 +1874,17 @@
     if (!session || session.index >= session.queue.length) return finishSession();
     var item = currentItem();
     var question = currentQuestion();
+    if (question && question.type === "lesson") return renderLesson(question, item);
     shouldAskConfidence(question, item);
     selected = session.answered ? session.selected : (session.selected === undefined ? null : session.selected);
     confidence = session.answered ? (session.confidence || (session.responses.length && session.responses[session.responses.length - 1].confidence) || null) : (session.confidence || null);
     var isPrimer = question.type === "primer";
-    $("question-card").classList.remove("is-correct", "is-wrong", "is-primer");
+    $("question-card").classList.remove("is-correct", "is-wrong", "is-primer", "is-lesson");
     $("question-card").classList.toggle("is-primer", isPrimer);
+    // Leaving a lesson: restore the question layout the lesson surface hid.
+    $("lesson-panel").hidden = true;
+    $("task-prompt").hidden = false;
+    renderGlossaryBlock(question);
     $("question-pattern").textContent = isPrimer ? "Adaptive primer" : item.isReattempt ? "Re-attempt · new perspective" : question.pattern;
     $("question-count").textContent = isPrimer ? "Primer before the next challenge" : "Question " + challengePosition() + " of " + session.baseCount;
     $("question-node").textContent = question.node;
@@ -1588,10 +1911,99 @@
     updatePracticeProgress();
   }
 
+  // Lessons and primers are support, not challenges, so neither advances the
+  // "Question N of M" count the learner is pacing themselves against.
   function challengePosition() {
     return session.queue.slice(0, session.index + 1).filter(function (item) {
-      return getQuestion(session.courseId, item.id).type !== "primer";
+      var question = getQuestion(session.courseId, item.id);
+      return question && question.type !== "primer" && question.type !== "lesson";
     }).length;
+  }
+
+  /* The lesson surface. It teaches and then gets out of the way: no options, no
+   * confidence prompt, no correctness, and no evidence. Reading it is not an
+   * achievement to be scored — it is the precondition for the questions that
+   * follow being answerable at all. */
+  function renderLesson(question, item) {
+    var data = question.lesson;
+    var card = $("question-card");
+    card.classList.remove("is-correct", "is-wrong", "is-primer");
+    card.classList.add("is-lesson");
+    $("question-pattern").textContent = "Lesson";
+    $("question-node").textContent = data.title;
+    $("question-status").className = "status-pill lesson";
+    $("question-status").textContent = "Teaching first";
+    $("source-ref").textContent = data.lectureId + " · supplied Term 6 course pack";
+
+    $("lesson-panel").hidden = false;
+    $("primer-panel").hidden = true;
+    $("case-block").hidden = true;
+    $("glossary-block").hidden = true;
+    $("task-prompt").hidden = true;
+    $("options").innerHTML = "";
+    $("confidence-check").hidden = true;
+    $("feedback").className = "feedback";
+    $("feedback").innerHTML = "";
+    $("prompt-flow").classList.remove("has-case");
+
+    $("lesson-kicker").textContent = "Module " + data.module + " · lesson " + data.order +
+      (item && item.previousConceptId ? " · builds on what you just did" : "");
+    $("lesson-heading").textContent = data.title;
+    $("lesson-objective").innerHTML = "<b>After this you can:</b> " + escapeHtml(data.objective);
+    $("lesson-body").innerHTML = (data.explainer || []).map(function (paragraph) {
+      return "<p>" + escapeHtml(paragraph) + "</p>";
+    }).join("");
+
+    var worked = data.worked;
+    $("lesson-worked").innerHTML = worked
+      ? "<p class='worked-head'>Worked through</p>" +
+        "<p><b>Situation.</b> " + escapeHtml(worked.setup) + "</p>" +
+        "<p><b>Move.</b> " + escapeHtml(worked.move) + "</p>" +
+        "<p><b>Why.</b> " + escapeHtml(worked.because) + "</p>"
+      : "";
+
+    $("lesson-glossary").innerHTML = (data.glossary || []).length
+      ? "<p class='glossary-head'>Words this lecture introduces</p><dl>" + (data.glossary || []).map(function (entry) {
+          return "<dt>" + escapeHtml(entry.term) + "</dt><dd>" + escapeHtml(entry.plain) + "</dd>";
+        }).join("") + "</dl>"
+      : "";
+
+    $("lesson-connects").textContent = data.connects || "";
+
+    $("commit-answer").hidden = true;
+    $("next-question").hidden = false;
+    $("next-question").innerHTML = "I have read this <span aria-hidden='true'>→</span>";
+    $("question-help").textContent = "Nothing here is scored. The questions after it use these words.";
+
+    // Reading is recorded immediately: the learner has been shown the material,
+    // and the queue must not re-teach it on resume.
+    markLessonRead(data.lectureId);
+    session.answered = true;
+
+    renderTopicList();
+    updatePracticeProgress();
+    $("lesson-heading").focus({preventScroll: true});
+  }
+
+  /* On a scored question, the lecture's glossary stays one disclosure away. A
+   * learner who met "MDE" once should not have to abandon the question to
+   * recover what it meant. */
+  function renderGlossaryBlock(question) {
+    var block = $("glossary-block");
+    var terms = [];
+    lectureIdsFor(question).forEach(function (lectureId) {
+      var data = lessonFor(lectureId);
+      if (data) terms = terms.concat(data.glossary || []);
+    });
+    if (!terms.length) {
+      block.hidden = true;
+      return;
+    }
+    block.hidden = false;
+    $("glossary-summary").textContent = "Terms used here (" + terms.length + ")";
+    $("glossary-list").innerHTML = terms.map(function (entry) {
+      return "<dt>" + escapeHtml(entry.term) + "</dt><dd>" + escapeHtml(entry.plain) + "</dd>";
+    }).join("");
   }
 
   function renderPrimerPanel(question, item) {
@@ -2180,6 +2592,11 @@
     if (responsesForConcept >= 4) return false;
     var laterIndex = -1;
     for (var index = session.index + 1; index < session.queue.length; index += 1) {
+      // A lesson carries the concept id of the question it precedes, so without
+      // this guard the re-attempt scheduler treats teaching as a re-attemptable
+      // surface and drags it out of position — which is how a sample-size case
+      // ended up scheduled ahead of the sample-size lesson.
+      if (session.queue[index].lesson) continue;
       var laterQuestion = getQuestion(session.courseId, session.queue[index].id);
       if (laterQuestion.conceptId === question.conceptId && laterQuestion.id !== question.id && (laterQuestion.variantFamily || laterQuestion.id) !== (question.variantFamily || question.id)) { laterIndex = index; break; }
     }
@@ -2202,6 +2619,30 @@
     item.origin = question.id;
     item.reason = reason;
     var insertAt = Math.min(session.queue.length, session.index + 3);
+
+    /* Bringing a question forward must not overtake its own teaching. Any lesson
+     * the re-attempt depends on is placed immediately ahead of it, and removed
+     * from wherever it was queued later so it is not delivered twice. */
+    var reattemptQuestion = getQuestion(session.courseId, item.id);
+    pendingLessonsFor(reattemptQuestion).forEach(function (lectureId) {
+      for (var scan = session.queue.length - 1; scan > session.index; scan -= 1) {
+        if (session.queue[scan].lesson && session.queue[scan].lectureId === lectureId) {
+          session.queue.splice(scan, 1);
+          if (scan < insertAt) insertAt -= 1;
+        }
+      }
+      session.queue.splice(insertAt, 0, {
+        id: lessonItemId(lectureId, reattemptQuestion.conceptId),
+        initial: false,
+        isReattempt: false,
+        origin: null,
+        lesson: true,
+        lectureId: lectureId,
+        previousConceptId: question.conceptId
+      });
+      insertAt += 1;
+    });
+
     session.queue.splice(insertAt, 0, item);
     return true;
   }
@@ -2447,16 +2888,24 @@
     profile.active = clone(session);
     saveProfile();
     renderQuestion();
-    (currentQuestion().caselet ? $("case-block") : $("question-title")).focus({preventScroll: true});
+    // renderLesson moves focus to its own heading, so do not pull it back to a
+    // question title the lesson surface has hidden.
+    var next = currentQuestion();
+    if (next && next.type !== "lesson") (next.caselet ? $("case-block") : $("question-title")).focus({preventScroll: true});
   }
 
   function updatePracticeProgress() {
     if (!session) return;
-    var answered = session.responses.length;
+    // Lessons never produce a response, so they are counted as steps completed
+    // once passed; otherwise the progress bar could never reach the end.
+    var passedLessons = session.queue.slice(0, session.index).filter(function (item) { return item.lesson; }).length;
+    var answered = session.responses.length + passedLessons;
     var total = session.queue.length;
     var question = session.index < total ? currentQuestion() : null;
     $("practice-progress-text").textContent = Math.min(answered, total) + " of " + total + " steps";
-    $("question-count").textContent = question && question.type === "primer" ? "Primer before the next challenge" : "Question " + Math.min(challengePosition(), session.baseCount) + " of " + session.baseCount;
+    $("question-count").textContent = question && question.type === "lesson" ? "Lesson before the first question on it"
+      : question && question.type === "primer" ? "Primer before the next challenge"
+      : "Question " + Math.min(challengePosition(), session.baseCount) + " of " + session.baseCount;
     $("practice-progress-fill").style.width = (total ? answered / total * 100 : 0) + "%";
     $("due-count").textContent = String(session.queue.slice(session.index + 1).filter(function (item) { return item.isReattempt; }).length);
   }

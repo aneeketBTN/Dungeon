@@ -3,6 +3,142 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Collaboration handoff: `AGENTS.md` corrected, branch published
+
+- **Published `reorg/structure` to GitHub so a second contributor can work.** Nothing merged to
+  `main`, so nothing deployed and the live cohort is untouched. Verified before committing: 35 tests
+  pass, `node tools/build-site.mjs` prepares 15 public assets, `node --check` clean on all five T6
+  scripts, and `node tools/validate_t6_bank.js "<transcripts>"` reports **0 errors and 3 warnings**.
+- **Corrected the index against the working tree, which had moved past it.** `AGENTS.md` still
+  described a mid-session state: it claimed 50 lessons and "233 of 283 lectures still have no
+  lesson", with IBM/SCLM/SPMS at 100% untaught. The real numbers are **80 lessons authored** — BRGSA
+  50 of 50 lectures, IBM 16 of 16 *cited* lectures, SCLM 6 of 16, SPMS 0 of 16 — and **433 of 724
+  scheduled questions fully taught**. BRGSA and IBM are complete for everything a learner can reach.
+  Known Gaps, Key Files, and the status paragraph now carry those figures with an instruction to run
+  the gates rather than quote the file.
+- **Repointed the documented source of truth from the AI-Ready Pack to the clean transcripts.** The
+  code had already moved (`tools/lib/clean_transcripts.js` is now the single loader) but the index
+  still sent a reader to `graph_source/`, `dense/`, and `indexes/` — the layer LAW-49 exists to catch
+  content authored against. The Directory Map now documents the transcript layout, that a lecture's
+  identity is its **position** in the module file rather than its recording code, and that the old
+  pack remains readable but is not authority.
+- **Found and documented a silently-green gate.** `node tools/validate_t6_bank.js` with *no* path
+  argument returns `ok: true` with an empty `"coverage": {}`: the entire lecture-source block is
+  skipped, including the LAW-49 vocabulary gate, while still reporting success. A wrong path
+  correctly fails. `npm run validate:bank` passes no argument, so the script a new contributor would
+  naturally run is the one that verifies nothing. Documented in the baseline checks and the new
+  collaborator section; the tool contract itself is **not** changed here and is filed as follow-up.
+  Same failure family as I47 — the failure mode is silence, not a warning.
+- **Added a collaborator section to `AGENTS.md`**: `main` is the deploy trigger and must not be
+  pushed to directly; what runs straight from a clone (`npm test`, `build-site.mjs`, `server.py`);
+  what needs the external transcripts and why they cannot be committed; and that absent
+  `data/state/` is by design, not a bug.
+- **Corrected a stale production claim** left inside the 2026-08-11 status paragraph, which still
+  said the live site served `475837f`. The 2026-08-12 deploy note above it already recorded `0cc2c6d`
+  live as Worker version `c602c4b3`; the two now agree.
+- Deferred: the IBM option-length cue (correct answer at length-rank 3 in 45% of 68 sampled
+  questions against a 25% baseline) is recorded as a Known Gap, not fixed. The 8 IBM lessons for
+  uncited lectures are harmless but are never delivered and must not be counted as coverage. Lesson
+  pixel-level acceptance is still owed.
+
+## 2026-08-12 — Teaching layer: the 0→80 path
+
+- **Diagnosed why the app only served people who had already studied.** The bank generates ~12.8
+  surfaces per concept by recombining four harvested sentences, so a cold learner's first contact
+  with any idea was a scored item in vocabulary nothing had introduced. Measured: a case question's
+  own primer introduced **19%** of that case's vocabulary on average, none at all in 10 of 64 cases;
+  **59 of 64** case questions had zero same-concept distractors, making them answerable by topic
+  matching and unanswerable by reasoning; 9 explained a different lecture than they tested; and the
+  correct answer to one shipped question used "stopping rule", a phrase appearing **0 times** in 50
+  BRGSA transcripts.
+- **The teaching material already existed and was ~2% used.** The external Term 6 pack holds 92,489
+  dense words for BRGSA alone across 50 lectures, each with key terms, objectives, and worked
+  examples with real numbers. Added `tools/build_t6_lessons.mjs` to extract candidates and
+  `app/sets/t6_lessons.js` to hold authored lecture-grain lessons — objective, explainer, worked
+  example, glossary, handoff. **BRGSA is complete: 50 lectures across all 8 modules.** Every lesson
+  is written from that lecture's own transcript, using its own numbers — Clairo's ₹3,200 blended CAC
+  against ₹10,000 on LinkedIn, the 33% signup-to-activation constraint, the 70/20/10 capacity split,
+  the 12-week roadmap's five columns. The extractor supplies candidates and provenance; the prose is
+  authored, because the dense files are transcript bullets and some are incoherent out of context.
+- **Teach before testing is now a scheduling invariant.** `layeredQueue()` places a lecture's lesson
+  ahead of the first scored question citing it, ahead of the primer. Lessons are unscored, create no
+  evidence, and are recorded per lecture in `profile.lessonsRead`.
+- **Distractors compete on reasoning again.** `relevantWrong()` fills from the same concept first and
+  only trades a relevant option for a length-matched foreign one while the set would otherwise cue
+  the answer by length. Result: 0 of 64 case questions have zero same-concept distractors (was 59),
+  all 64 carry at least two, and the option-shape guard still passes with zero errors.
+- **Applied questions explain what they tested.** `conceptData()` now carries `caseSource`,
+  `caseExplanation`, and `caseLink`, so a case cites and reinforces the lecture its case came from.
+  The originating example moved from `BRGSA-M02-L01` to `BRGSA-M02-L02` and its correct-answer
+  feedback changed from the null hypothesis to sample-size noise.
+- **A vocabulary gate keeps it true for lectures authored later.** `tools/validate_t6_bank.js`
+  measures first use against the lossless `graph_source/` transcripts rather than the concept index,
+  which is unreliable for this (it reports "sample size" first seen at M02-L03 when M02-L02 is the
+  lecture titled "Sample Size Logic"). The gate caught three real authoring errors this session,
+  including an invented "sampling bias" — the course names social desirability, hypothetical,
+  acquiescence, leading question, and researcher confirmation.
+- **Repaired the question this work started from.** `sample_logic` asked what to do when a variant
+  leads after 18 visitors, and its *correct* answer read "Continue to the planned sample bound unless
+  a pre-registered stopping rule applies" — "stopping rule" appears 0 times in all 50 BRGSA
+  transcripts, and "sample bound" is not used until M08-L03, six modules after the question. Rewrote
+  it in the course's own M02 words: "Run the test to completion at the pre-calculated sample size"
+  (the lecture says *sample size should be pre-calculated, you should test run to completion, no
+  peeking*). The shorter answer also cleared the length cue that had been excluding the question —
+  `excludedLegacyMcqs` 37 → 36, scheduled questions 151 → 152.
+- **Closed a hole in the invariant itself.** Re-running LAW-47's verify step against a live queue
+  (rather than trusting the code comment) showed a primer could still precede its own lecture's
+  lesson: `layeredQueue()` gated on the scored question's lectures and then pushed the primer
+  unchecked, but a primer is separately authored and cites different lectures —
+  `brgsa_m1_demand_primer` cites M01-L01 while the `survey_bias` it introduces cites M01-L05, so the
+  primer ran at step 4 against a lesson arriving at step 9. Extracted `teachFirst(surface, conceptId)`
+  and applied it to the primer on its own terms. Verified from an empty `lessonsRead` across all 9
+  BRGSA sets and the mixed builder: zero violations.
+- **Coverage is reported, never rounded up.** The validator prints the untaught backlog: **BRGSA 0 of
+  152** scheduled questions untaught, 33 of 33 cited lectures taught; IBM/SCLM/SPMS still 100%.
+- **Verification.** `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+  `evidence/2026-08-12/t6-teaching-layer/verification.md`. 35 tests pass, the bank validator is
+  clean, the build ships 15 assets. One defect was found in the browser and fixed: `ensureReattempt`
+  treated a lesson as a re-attemptable surface and put a sample-size case ahead of its own lesson.
+- **Made the work handoff-able, because one session cannot finish 283 lectures.** The procedure had
+  been living in session context — which figures to grep, which gates in which order, why the browser
+  check cannot be a unit test. Three artifacts move it into the repository:
+  `docs/authoring/LESSON-AUTHORING-PROTOCOL.md` (sources, lesson contract, batch procedure, gates,
+  the four traps already paid for, per-subject definition of done);
+  `tools/check_lesson_file.mjs`, which reports **every** structural defect in one pass instead of the
+  parse-fix-reparse loop that cost this session the most time, and — given the pack — prints the
+  exact next batch of lectures to author, so a cold session can resume mid-subject; and
+  `tools/browser-checks/teach-before-test.js`, LAW-47's verification as a checked-in script evaluated
+  in the page. It stays a browser check deliberately: re-implementing `layeredQueue()` in Node would
+  create a second copy of the scheduling rules that reports green while the app is broken.
+  `check_lesson_file.mjs` was negative-tested — three deliberately broken brackets, all three
+  reported at once.
+- **IBM is complete on the measure that matters: 16 of 16 cited lectures, 140 of 140 scheduled
+  questions taught.** Authored against the citation list rather than the module list. The
+  verification step earned itself repeatedly: `shared value` appears **0** times in the IBM
+  transcripts — the course says *value sharing*, Porter and Kramer's term — and `public good`
+  singular fails the word-boundary gate because the course says *public goods*. Both were caught
+  before shipping. Figures come from the lectures: Aravind's 1,200–2,400 surgeries per
+  ophthalmologist against a national 220–250; Grameen's 94% poor-owned equity and 96%+ repayment;
+  Andhra Pradesh's 935 loans per 100 households; SELCO's ₹15/day kerosene against ₹10/day solar;
+  44,000 FPOs by March 2025.
+- **Added read-through mode** (`Read the lessons`, fourth dashboard tab). Lessons were previously
+  reachable only inside practice, one at a time. The panel lists every lecture a subject knows about,
+  grouped by module, each expandable to the full lesson. Reading here deliberately does **not** write
+  `profile.lessonsRead` — that map drives the teach-before-test gate, so recording a skim would
+  silently disable the gate for every lesson skimmed. Verified: opening all 50 BRGSA lessons leaves
+  `lessonsRead` at 0.
+- **The panel labels deliverability, which nothing else did.** Each row reads *Taught in practice*,
+  *Read-only — no question cites this*, or *No lesson yet*. Building it caught an over-report in my
+  own first cut: counting every citing question gave BRGSA 44 reachable lectures, but 11 of those are
+  cited only by `optionShapeRisk` questions, which no scheduling path serves. Filtering those lands
+  on 33, matching the validator exactly. The *No lesson yet* rows are the live authoring queue.
+- **Deferred.** No screenshots — the Browser pane was not compositing in this environment, so visual
+  acceptance stays DOM- and computed-style-level. SCLM and SPMS remain: 32 cited lectures. 233 of 283 lectures still have no lesson: IBM,
+  SCLM, and SPMS are untouched, and their dense layers carry almost no faculty objectives, so those
+  lessons will need objectives authored from scratch rather than extracted. Authored question copy
+  still says "18 visitors per arm"; the gloss covers `arm`. All lesson prose is new and stays
+  `WAITING_OWNER_CONTENT_ACCEPTANCE`. Nothing pushed or deployed.
+
 ## 2026-08-12 — Lossless workspace restructure for collaboration
 
 - **Reorganized the repository in seven verified phases**, no behaviour changes intended and none

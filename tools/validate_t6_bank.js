@@ -8,7 +8,7 @@ var vm = require("vm");
 var root = path.join(__dirname, "..", "app");
 var context = {window: {}, atob: function (value) { return Buffer.from(value, "base64").toString("binary"); }};
 vm.createContext(context);
-["sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_challenges.js"].forEach(function (relative) {
+["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_challenges.js"].forEach(function (relative) {
   var filename = path.join(root, relative);
   vm.runInContext(fs.readFileSync(filename, "utf8"), context, {filename: filename});
 });
@@ -36,6 +36,86 @@ function checkOptionShape(question, label, options, answer, allowExcludedLegacy)
       errors.push(questionId + " exposes the correct " + label + " by option length");
     }
   }
+}
+
+/* Bank-level length bias.
+ *
+ * checkOptionShape() above is a PER-QUESTION guard: it fires when one correct
+ * answer towers over its distractors. It cannot see that the whole bank leans
+ * the same way. Measured 2026-08-12: every excluded question in IBM, SCLM, and
+ * SPMS (125 of them) was excluded because the correct answer was longest, and
+ * the questions that passed the per-question threshold leaned the same way —
+ * SCLM's 10 scheduled MCQs were 10 for 10. So the guard was catching the tail
+ * of a distribution whose whole body was skewed.
+ *
+ * The number that matters to a learner is simpler than any threshold: if I
+ * always pick the longest option and never read the stem, what do I score? At
+ * the time this check was written the answer was 80-84% against 25% chance,
+ * across all four subjects. A bank that can be beaten that way produces
+ * confident, false evidence of mastery, which is worse than producing none.
+ *
+ * Ties are counted fractionally — picking at random among equally-long options
+ * is what the strategy actually does — so padding one distractor to match does
+ * not game the metric.
+ *
+ * Currently a WARNING, not an error, because it fails today and a hard error
+ * would block every unrelated run. Promote it to an error once the content is
+ * repaired and the score sits under the threshold; that is the point of
+ * recording the number in totals rather than only complaining about it. */
+var LENGTH_BIAS_LIMIT = 0.4;
+
+function longestOptionScore(questions) {
+  var scored = 0;
+  var wins = 0;
+  questions.forEach(function (question) {
+    if (!Array.isArray(question.options) || typeof question.answer !== "number") return;
+    if (question.options.length < 2) return;
+    var lengths = question.options.map(words);
+    var longest = Math.max.apply(null, lengths);
+    var tied = lengths.filter(function (length) { return length === longest; }).length;
+    scored += 1;
+    if (lengths[question.answer] === longest) wins += 1 / tied;
+  });
+  return scored ? {scored: scored, score: wins / scored} : {scored: 0, score: 0};
+}
+
+/* Length RANK spread — the generalisation of the check above.
+ *
+ * longestOptionScore() only watches rank 4. Repairing the bank against it alone
+ * moved the tell rather than removing it: lengthening exactly one distractor past
+ * each correct answer drove the correct answer to rank 3 in 64% of BRGSA and 49%
+ * of SPMS, so "pick the second-longest option" replaced "pick the longest" and
+ * scored nearly as well. The metric was satisfied while the defect survived.
+ *
+ * So measure the whole distribution: sort each question's options by length and
+ * record which rank the correct answer lands on. A bank with no length signal is
+ * uniform — 25% at each rank. What matters is the largest deviation from uniform,
+ * because that is exactly the edge available to a learner who has noticed the
+ * pattern and reads nothing else. Ties split their credit across the ranks they
+ * span, so padding one option to match does not launder the number.
+ *
+ * Reported for four-option questions only; ranks are not comparable across
+ * different option counts. */
+var RANK_SPREAD_LIMIT = 0.15;
+
+function lengthRankSpread(questions) {
+  var bins = [0, 0, 0, 0];
+  var scored = 0;
+  questions.forEach(function (question) {
+    if (!Array.isArray(question.options) || typeof question.answer !== "number") return;
+    if (question.options.length !== 4) return;
+    var lengths = question.options.map(words);
+    var correct = lengths[question.answer];
+    var sorted = lengths.slice().sort(function (a, b) { return a - b; });
+    var ranks = [];
+    sorted.forEach(function (value, index) { if (value === correct) ranks.push(index); });
+    scored += 1;
+    ranks.forEach(function (index) { bins[index] += 1 / ranks.length; });
+  });
+  if (!scored) return {scored: 0, spread: 0, shares: [0, 0, 0, 0]};
+  var shares = bins.map(function (count) { return count / scored; });
+  var spread = Math.max.apply(null, shares.map(function (share) { return Math.abs(share - 0.25); }));
+  return {scored: scored, spread: spread, shares: shares};
 }
 
 function questionConceptIds(question) {
@@ -115,6 +195,26 @@ courseIds.forEach(function (courseId) {
     return;
   }
   var questions = Object.keys(course.questions).map(function (id) { return course.questions[id]; });
+
+  var lengthBias = longestOptionScore(questions);
+  if (lengthBias.scored && lengthBias.score > LENGTH_BIAS_LIMIT) {
+    warnings.push(courseId + ": answering \"always pick the longest option\" without reading the stem scores " +
+      Math.round(lengthBias.score * 100) + "% across " + lengthBias.scored + " option-questions (chance is 25%). " +
+      "The correct answer is written as a full principle and the distractors as terse wrong claims, so length leaks the answer. " +
+      "Lengthen the distractors rather than shortening the correct answer.");
+  }
+
+  var rankSpread = lengthRankSpread(questions);
+  if (rankSpread.scored && rankSpread.spread > RANK_SPREAD_LIMIT) {
+    var best = rankSpread.shares.indexOf(Math.max.apply(null, rankSpread.shares));
+    var ordinal = ["shortest", "second-shortest", "second-longest", "longest"][best];
+    warnings.push(courseId + ": sorting each question's options by length puts the correct answer at rank " +
+      (best + 1) + " of 4 in " + Math.round(rankSpread.shares[best] * 100) + "% of " + rankSpread.scored +
+      " questions (chance is 25%), so \"always pick the " + ordinal + " option\" is a strategy. " +
+      "Shares by rank, shortest first: " + rankSpread.shares.map(function (share) { return Math.round(share * 100) + "%"; }).join(" / ") +
+      ". Vary how many distractors run longer than the correct answer instead of lengthening a fixed number of them.");
+  }
+
   questions.forEach(function (question) {
     ["id", "courseId", "conceptId", "source", "sourceIds", "type", "skills", "difficulty", "variantFamily", "explanation", "link"].forEach(function (field) {
       if (question[field] === undefined || question[field] === null || question[field] === "") errors.push(courseId + "/" + question.id + " is missing " + field);
@@ -176,12 +276,52 @@ courseIds.forEach(function (courseId) {
   });
 });
 
+/* ---------------------------------------------------------------------------
+ * Teaching-layer gates
+ *
+ * The bank can be structurally perfect and still be unusable by someone who has
+ * not taken the course, because nothing in it explains anything. These checks
+ * hold the 0→80 path open: a lesson must be real teaching, it must not teach a
+ * word earlier than the course introduces it, and the share of scheduled
+ * questions still shipping without a lesson is reported rather than hidden.
+ * ------------------------------------------------------------------------- */
+var lessons = context.window.T6_LESSONS || {};
+var lessonCoverage = {};
+
+Object.keys(lessons).forEach(function (lectureId) {
+  var lesson = lessons[lectureId];
+  var label = "lesson " + lectureId;
+  if (lesson.lectureId !== lectureId) errors.push(label + " disagrees with its own key");
+  if (courseIds.indexOf(lesson.courseId) < 0) errors.push(label + " has unknown courseId " + lesson.courseId);
+  if (!lesson.objective || String(lesson.objective).trim().length < 20) errors.push(label + " has no usable objective");
+  if (!Array.isArray(lesson.explainer) || lesson.explainer.length < 2) errors.push(label + " needs at least two explainer paragraphs");
+  if (!lesson.worked || !lesson.worked.setup || !lesson.worked.move || !lesson.worked.because) errors.push(label + " needs a worked example with setup, move and reason");
+  if (!Array.isArray(lesson.glossary) || lesson.glossary.length < 2) errors.push(label + " needs at least two glossary terms");
+  (lesson.glossary || []).forEach(function (entry, index) {
+    if (!entry || !entry.term || !entry.plain) errors.push(label + " glossary entry " + index + " is incomplete");
+    else if (String(entry.plain).trim().length < 15) errors.push(label + " glossary term \"" + entry.term + "\" has no real definition");
+  });
+  if (!lesson.connects) errors.push(label + " does not hand off to what comes next");
+});
+
+/* Lecture source. The clean transcripts are the authority; the old AI-Ready Pack
+ * is still readable so existing invocations do not break, but content authored
+ * against its dense layer is what LAW-49 exists to catch. See tools/lib/. */
+var lectureSource = require("./lib/clean_transcripts.js");
 var packPath = process.argv[2];
 if (packPath) {
-  var manifestPath = path.join(packPath, "graph", "LECTURE_MANIFEST.jsonl");
-  if (!fs.existsSync(manifestPath)) errors.push("Missing lecture manifest at " + manifestPath);
+  var loaded = null;
+  try {
+    loaded = fs.existsSync(packPath) ? lectureSource.loadLectures(packPath) : null;
+  } catch (error) {
+    errors.push("Could not read lecture source at " + packPath + ": " + error.message);
+  }
+  if (!loaded) errors.push("Missing lecture source at " + packPath);
   else {
-    var sourceIds = new Set(fs.readFileSync(manifestPath, "utf8").trim().split(/\r?\n/).map(function (line) { return JSON.parse(line).lecture_id; }));
+    var manifest = loaded.lectures;
+    var byLecture = {};
+    manifest.forEach(function (entry) { byLecture[entry.lecture_id] = entry; });
+    var sourceIds = new Set(Object.keys(byLecture));
     courseIds.forEach(function (courseId) {
       Object.keys(courses[courseId].questions).forEach(function (id) {
         courses[courseId].questions[id].sourceIds.forEach(function (sourceId) {
@@ -189,21 +329,175 @@ if (packPath) {
         });
       });
     });
+
+    // A lesson must describe a real lecture, in the position the course puts it.
+    Object.keys(lessons).forEach(function (lectureId) {
+      var lesson = lessons[lectureId];
+      var entry = byLecture[lectureId];
+      if (!entry) {
+        errors.push("lesson " + lectureId + " does not match any lecture in the pack");
+        return;
+      }
+      if (entry.module !== lesson.module) errors.push("lesson " + lectureId + " claims module " + lesson.module + " but the pack says " + entry.module);
+      if (entry.order !== lesson.order) errors.push("lesson " + lectureId + " claims order " + lesson.order + " but the pack says " + entry.order);
+    });
+
+    /* The vocabulary gate.
+     *
+     * "Is this word available to the learner yet" has to be decidable, or the
+     * teaching layer drifts back into inventing terminology — the bank already
+     * shipped a correct answer built on "pre-registered stopping rule", a phrase
+     * that appears nowhere in the course.
+     *
+     * The concept index is NOT the authority for this. Its own README says the
+     * terms are retrieval candidates, and it reports "sample size" as first seen
+     * in M02-L03 when M02-L02 is the lecture *titled* "Sample Size Logic". The
+     * lossless graph_source chunks are the immutable evidence layer, so first
+     * use is measured there, in the course's own teaching order. */
+    function lectureRank(lectureId) {
+      var entry = byLecture[lectureId];
+      return entry ? entry.module * 1000 + entry.order : Number.MAX_SAFE_INTEGER;
+    }
+
+    /* Compare on words, not on punctuation. A transcript writes "sales-led growth"
+     * while a lesson glosses "sales led growth"; an exact substring match calls that
+     * invented vocabulary and sends the author to delete a term the course teaches in
+     * a lecture TITLE. Hyphens, slashes, and repeated whitespace all collapse to one
+     * space on both sides before matching. The title is included in the searched text
+     * for the same reason — naming a concept in the title is teaching it. */
+    function normaliseForVocab(value) {
+      return String(value || "").toLowerCase().replace(/[‐-―\-\/]+/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    var transcriptsBySubject = {};
+    function lectureTexts(courseId) {
+      if (transcriptsBySubject[courseId]) return transcriptsBySubject[courseId];
+      var ordered = manifest
+        .filter(function (entry) { return entry.subject === courseId; })
+        .sort(function (a, b) { return a.module - b.module || a.order - b.order; })
+        .map(function (entry) {
+          return {
+            lectureId: entry.lecture_id,
+            text: normaliseForVocab((entry.title || "") + " \n " + (entry.text || ""))
+          };
+        });
+      transcriptsBySubject[courseId] = ordered;
+      return ordered;
+    }
+
+    function firstUse(courseId, term) {
+      var needle = normaliseForVocab(term);
+      if (!needle) return null;
+      var pattern = new RegExp("\\b" + needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i");
+      var texts = lectureTexts(courseId);
+      for (var index = 0; index < texts.length; index += 1) {
+        if (pattern.test(texts[index].text)) return texts[index].lectureId;
+      }
+      return null;
+    }
+
+    Object.keys(lessons).forEach(function (lectureId) {
+      var lesson = lessons[lectureId];
+      (lesson.glossary || []).forEach(function (entry) {
+        var term = String(entry.term || "").trim();
+        var seen = firstUse(lesson.courseId, term);
+        if (!seen) {
+          // A plain-language label for an idea the course teaches without naming
+          // it is legitimate; a technical-sounding phrase the course never uses
+          // is the defect this gate exists to catch.
+          if (term.split(/\s+/).length > 1) {
+            warnings.push("lesson " + lectureId + " defines \"" + term + "\", which does not appear in the " + lesson.courseId + " transcripts — confirm it is not invented vocabulary.");
+          }
+          return;
+        }
+        if (lectureRank(seen) > lectureRank(lectureId)) {
+          errors.push("lesson " + lectureId + " defines \"" + term + "\" but the course does not use it until " + seen);
+        }
+      });
+    });
+
+    /* The same authority applied to answer copy. Pure n-gram scanning cannot
+     * tell terminology ("pre-registered stopping rule") from ordinary English
+     * ("placed under"), so this runs as an opt-in content report rather than a
+     * build signal — a noisy warning stream would train everyone to ignore the
+     * precise gates above. Enable with --vocab-report. */
+    if (process.argv.indexOf("--vocab-report") >= 0) courseIds.forEach(function (courseId) {
+      var taughtLectures = Object.keys(lessons).filter(function (lectureId) { return lessons[lectureId].courseId === courseId; });
+      if (!taughtLectures.length) return;
+      var glossed = {};
+      taughtLectures.forEach(function (lectureId) {
+        (lessons[lectureId].glossary || []).forEach(function (entry) { glossed[String(entry.term).toLowerCase()] = true; });
+      });
+      Object.keys(courses[courseId].questions).forEach(function (id) {
+        var question = courses[courseId].questions[id];
+        if (question.optionShapeRisk || question.primerOnly) return;
+        if (!(question.sourceIds || []).some(function (sourceId) { return !!lessons[sourceId]; })) return;
+        var answerText = [];
+        if (Array.isArray(question.options) && typeof question.answer === "number") answerText.push(question.options[question.answer]);
+        (question.blanks || []).forEach(function (blank) { answerText.push((blank.options || [])[blank.answer]); });
+        answerText.filter(Boolean).forEach(function (copy) {
+          // Technical-looking multi-word phrases only: two adjacent words of
+          // four or more letters, which is where invented jargon lives.
+          var phrases = String(copy).toLowerCase().match(/\b[a-z][a-z-]{3,}\s+[a-z][a-z-]{3,}\b/g) || [];
+          phrases.forEach(function (phrase) {
+            if (glossed[phrase]) return;
+            if (firstUse(courseId, phrase)) return;
+            warnings.push(courseId + "/" + id + " answers with \"" + phrase + "\", which appears nowhere in the course transcripts.");
+          });
+        });
+      });
+    });
+
+    /* Coverage: how much of the scheduled bank a cold learner can currently
+     * reach with teaching in front of it. Reported, never silently rounded up. */
+    courseIds.forEach(function (courseId) {
+      var scheduled = Object.keys(courses[courseId].questions)
+        .map(function (id) { return courses[courseId].questions[id]; })
+        .filter(function (question) { return !question.optionShapeRisk && !question.primerOnly; });
+      var taught = scheduled.filter(function (question) {
+        return (question.sourceIds || []).every(function (sourceId) { return !!lessons[sourceId]; });
+      });
+      var lectures = new Set();
+      scheduled.forEach(function (question) { (question.sourceIds || []).forEach(function (sourceId) { lectures.add(sourceId); }); });
+      var taughtLectures = Array.from(lectures).filter(function (lectureId) { return !!lessons[lectureId]; });
+      lessonCoverage[courseId] = {
+        scheduledQuestions: scheduled.length,
+        questionsFullyTaught: taught.length,
+        questionsWithoutLesson: scheduled.length - taught.length,
+        lecturesCited: lectures.size,
+        lecturesWithLesson: taughtLectures.length
+      };
+      if (taught.length < scheduled.length) {
+        warnings.push(courseId + ": " + (scheduled.length - taught.length) + " of " + scheduled.length +
+          " scheduled questions still have no lesson for at least one lecture they cite (0→80 backlog).");
+      }
+    });
   }
-} else warnings.push("Lecture-source existence was not checked; pass the T6 pack path to enable it.");
+} else warnings.push("Lecture-source existence, the vocabulary gate, and lesson coverage were not checked; pass the T6 pack path to enable them.");
 
 var total = courseIds.reduce(function (sum, courseId) { return sum + Object.keys(courses[courseId].questions).length; }, 0);
 if (total !== 792) errors.push("Expected 792 bank items (728 challenges + 64 adaptive primers), found " + total);
 
 console.log(JSON.stringify({
   ok: errors.length === 0,
+  lessons: {authored: Object.keys(lessons).length, coverage: lessonCoverage},
   totals: courseIds.reduce(function (result, courseId) {
     var questions = Object.keys(courses[courseId].questions).map(function (id) { return courses[courseId].questions[id]; });
+    var bias = longestOptionScore(questions);
+    var spread = lengthRankSpread(questions);
     result[courseId] = {
       questions: questions.length,
       bosses: questions.filter(function (question) { return question.boss; }).length,
       constructedResponses: questions.filter(function (question) { return question.type === "short-answer"; }).length,
-      excludedLegacyMcqs: questions.filter(function (question) { return question.optionShapeRisk; }).length
+      excludedLegacyMcqs: questions.filter(function (question) { return question.optionShapeRisk; }).length,
+      // "Always pick the longest option, never read the stem." 25% is chance.
+      longestOptionScore: Math.round(bias.score * 100) / 100,
+      longestOptionSample: bias.scored,
+      // Where the correct answer sits once options are sorted by length, shortest
+      // first. Four 0.25s means length carries no signal at all; one tall bar is a
+      // strategy, whichever rank it sits on. Watches what longestOptionScore cannot.
+      lengthRankShares: spread.shares.map(function (share) { return Math.round(share * 100) / 100; }),
+      lengthRankSpread: Math.round(spread.spread * 100) / 100
     };
     return result;
   }, {}),

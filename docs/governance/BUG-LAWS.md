@@ -627,3 +627,83 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   ones so the reasoning survives.
 - **Verify:** Re-run the probe after the layout settles; a real finding reproduces, an artifact does
   not.
+
+### LAW-47 🔴 — A scored question may not precede the teaching of the lecture it cites
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-12 teaching layer. A cold learner's first contact with every concept was a
+  graded item. Measured: a case question's own primer introduced 19% of that case's vocabulary on
+  average, and none of it in 10 of 64 cases. Learners reported guessing, which was the correct
+  response to the material as presented.
+- **Why:** Scoring someone on words nobody gave them measures prior study, not learning. It also
+  poisons the evidence model: the mastery matrix reads "Needs practice" for a gap the app created.
+- **Comply:** `layeredQueue()` places a lecture's lesson ahead of the first scored question citing
+  it, ahead of the primer. Any scheduler that reorders the queue — `ensureReattempt()` today — must
+  carry pending lessons with the question it moves, and must never select a lesson as a question.
+  **Every surface is gated on its own `sourceIds`, never on the surface it accompanies.** A primer is
+  separately authored and cites different lectures than the question it introduces; inheriting the
+  question's lectures silently exempts it.
+- **Verify:** Build a session in the browser and read the queue: for every scored item **and every
+  primer**, each lecture in its own `sourceIds` that has a lesson appears earlier in the queue or is
+  already in `profile.lessonsRead`. Run it across all study sets and the mixed builder, from an empty
+  `lessonsRead` — the strictest case — not just the first set.
+- **Recurrence 2026-08-12 (same session, caught by that verify step):** the gate computed pending
+  lessons for the scored question only, then pushed the primer without checking it.
+  `brgsa_m1_demand_primer` cites M01-L01 while the `survey_bias` it introduces cites M01-L05, so the
+  primer ran at step 4 against a lesson that did not arrive until step 9. The code comment claimed
+  the primer was covered — "ahead of the primer too, because the primer assumes the vocabulary the
+  lesson introduces" — while the implementation never looked at it. Fixed by extracting `teachFirst`
+  and calling it for the primer on its own terms. **A comment asserting an invariant is not the
+  invariant; only an executed check is.**
+
+### LAW-48 🔴 — Distractor relevance is a constraint, not a residue of length matching
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-12. `comparableWrong()` sorted every candidate by word-count distance to defeat
+  the "longest option is correct" cue, which systematically evicted authored same-concept wrong
+  answers (short, pointed) in favour of other concepts' decision sentences (long, template-shaped).
+  59 of 64 case questions ended up with zero same-concept distractors.
+- **Why:** A question whose distractors come from other topics is answerable by topic matching and
+  unanswerable by reasoning. It teaches nothing whether the learner is right or wrong, and it reads
+  as arbitrary — the same failure the length cue was fixing, pointing the other way.
+- **Comply:** Fill distractors from the same concept first. Treat the option-shape guard as a
+  constraint to satisfy, not a ranking: trade the shortest relevant option for a length-matched
+  foreign one only while the set would otherwise cue the answer, one swap at a time.
+- **Verify:** Every case-cloze decision blank keeps at least two same-concept distractors, and
+  `tools/validate_t6_bank.js` reports zero "exposes the correct … by option length" errors.
+
+### LAW-49 🟡 — Course vocabulary is decided by the transcripts, not by the concept index
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-12. A shipped correct answer used "pre-registered stopping rule"; "stopping
+  rule" appears 0 times in 50 BRGSA transcripts, which say *pre-registered decision rule*. When the
+  gate was first built on `indexes/*_CONCEPT_INDEX.tsv` it reported "sample size" as first seen in
+  M02-L03 — the lecture *titled* "Sample Size Logic" is M02-L02.
+- **Why:** Inventing terminology recreates the original defect one layer up: the learner is tested,
+  or taught, in words the course never uses. The concept index is explicitly a retrieval candidate
+  list in the pack's own README, so treating it as authority produces false positives and negatives.
+- **Comply:** Measure first use against the lossless `graph_source/` chunks in course order. A lesson
+  may not define a term earlier than the course uses it. Plain-language labels for unnamed ideas are
+  allowed but surface as warnings for confirmation.
+- **Verify:** `node tools/validate_t6_bank.js "<pack>"` with zero errors; `--vocab-report` for the
+  answer-copy review list, which is opt-in because n-gram scanning cannot separate terminology from
+  ordinary English.
+- **Origin instance closed 2026-08-12:** rewritten to *"Run the test to completion at the
+  pre-calculated sample size"*, the M02 lecture's own words. The law stays ACTIVE — it governs the
+  233 lectures still unauthored.
+
+### LAW-50 🟡 — A lesson array closed with the wrong bracket is invisible until the file is parsed
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-12. While authoring `app/sets/t6_lessons.js`, `explainer: [ … ]` was closed
+  with `},` instead of `],` eight times across three authoring batches. Each occurrence threw a bare
+  `SyntaxError: Unexpected token '}'` naming only the first failure, so a batch of six defects
+  surfaced one at a time, and the validator could report nothing at all until the file parsed.
+- **Why:** The lesson record mixes arrays (`explainer`, `glossary`) with objects (`worked`) at the
+  same indent, so the closing bracket is the only thing distinguishing them and the eye supplies the
+  wrong one. Authoring in large batches makes it systematic rather than occasional.
+- **Comply:** After any batch edit to a lesson file, scan for the defect class directly rather than
+  parsing and fixing one error at a time.
+- **Verify:** `awk 'BEGIN{a=0} /^    (explainer|glossary): \[/{a=1;s=NR;next} a && /^    \},$/{print
+  "BAD close "NR" (opened "s")"; a=0; next} a && /^    \],$/{a=0}' app/sets/t6_lessons.js` prints
+  nothing, then `node tools/validate_t6_bank.js "<pack>"` reports zero errors.

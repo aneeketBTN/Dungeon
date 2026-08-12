@@ -129,6 +129,7 @@
           <button id="tab-overview" role="tab" type="button" aria-selected="true" aria-controls="panel-overview" tabindex="0" data-view="overview"><span>1</span>Subject focus</button>
           <button id="tab-concepts" role="tab" type="button" aria-selected="false" aria-controls="panel-concepts" tabindex="-1" data-view="concepts"><span>2</span>Concepts</button>
           <button id="tab-plan" role="tab" type="button" aria-selected="false" aria-controls="panel-plan" tabindex="-1" data-view="plan"><span>3</span>Study plan</button>
+          <button id="tab-lessons" role="tab" type="button" aria-selected="false" aria-controls="panel-lessons" tabindex="-1" data-view="lessons"><span>4</span>Read the lessons</button>
         </nav>
 
         <div class="stage-panels">
@@ -198,6 +199,15 @@
               <p>This is the first Term 6 final, so no same-course final exists to copy. Practice covers recognition, application, explanation, and connected reasoning across several plausible formats. It does not predict section order, marks, duration, or negative-marking rules.</p>
             </details>
           </section>
+
+          <section class="stage-panel" id="panel-lessons" role="tabpanel" aria-labelledby="tab-lessons" tabindex="-1" hidden>
+            <div class="section-heading">
+              <div><p class="eyebrow" id="lessons-course-label">BRGSA · Teaching layer</p><h2>Read the lessons on their own</h2></div>
+              <p class="section-note">Nothing here is scored and nothing is recorded. Reading a lesson in practice marks it taught; reading it here does not.</p>
+            </div>
+            <div class="lesson-coverage" id="lesson-coverage" aria-live="polite"></div>
+            <div class="lesson-index" id="lesson-index"></div>
+          </section>
         </div>
 
         <details class="dashboard-tools">
@@ -228,6 +238,15 @@
           <div class="question-meta"><span id="question-pattern">Concept check</span><span id="question-count">Question 1 of 4</span></div>
           <div class="concept-label"><span id="question-status" class="status-pill unseen">Not started</span><b id="question-node">Concept</b></div>
           <div class="prompt-flow" id="prompt-flow">
+            <section class="lesson-panel" id="lesson-panel" aria-labelledby="lesson-heading" hidden>
+              <p class="lesson-kicker" id="lesson-kicker">Lesson</p>
+              <h1 class="lesson-heading" id="lesson-heading" tabindex="-1">Lesson</h1>
+              <p class="lesson-objective" id="lesson-objective"></p>
+              <div class="lesson-body" id="lesson-body"></div>
+              <div class="lesson-worked" id="lesson-worked"></div>
+              <div class="lesson-glossary" id="lesson-glossary"></div>
+              <p class="lesson-connects" id="lesson-connects"></p>
+            </section>
             <section class="primer-panel" id="primer-panel" aria-labelledby="primer-level" hidden>
               <p class="primer-level" id="primer-level">Layer 1 · minimum to carry</p>
               <div id="primer-content"></div>
@@ -237,7 +256,11 @@
               <p class="caselet" id="caselet"></p>
             </section>
             <p class="source-ref" id="source-ref">Source</p>
-            <div class="task-prompt">
+            <details class="glossary-block" id="glossary-block" hidden>
+              <summary id="glossary-summary">Terms used here</summary>
+              <dl id="glossary-list"></dl>
+            </details>
+            <div class="task-prompt" id="task-prompt">
               <span id="task-kicker">Your task</span>
               <h1 id="question-title" tabindex="-1">Question</h1>
             </div>
@@ -300,6 +323,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="sets/t6_lessons.js"></script>
   <script src="sets/t6_diagnoses.js"></script>
   <script src="sets/t6_brgsa.js"></script>
   <script src="sets/t6_catalog.js"></script>

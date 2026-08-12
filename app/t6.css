@@ -320,6 +320,40 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .primer-panel .primer-connection { padding-top: 10px; border-top: 1px solid #d5dfda; }
 .question-card.is-primer h1 { max-width: 680px; font-size: clamp(24px,2.7vw,34px); }
 .question-card.is-primer .options { margin-top: 20px; }
+
+/* Lesson surface. Teaching is guidance, so it carries the blue accent the
+ * primer already uses. It stays one flat reading surface — dividers separate
+ * explanation, worked example, and vocabulary rather than nested cards. */
+.status-pill.lesson { color: var(--blue); background: #e4eff2; }
+.lesson-panel { margin: 0; max-width: 720px; }
+.lesson-kicker { margin: 0 0 10px; color: var(--blue); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.lesson-heading { margin: 0 0 6px; font-size: clamp(26px,3vw,38px); line-height: 1.18; }
+.lesson-heading:focus-visible { outline: 3px solid #2d8290; outline-offset: 6px; }
+.lesson-objective { margin: 0 0 22px; padding-bottom: 18px; border-bottom: 1px solid #dfe6e2; color: var(--muted); font-size: 14px; }
+.lesson-objective b { color: var(--ink); }
+.lesson-body p { margin: 0 0 16px; font: 400 clamp(16px,1.5vw,18px)/1.62 Georgia, "Times New Roman", serif; }
+.lesson-worked { margin: 8px 0 0; padding: 18px 20px; background: #f1f6f4; border: 1px solid #c7d9d4; border-left: 5px solid var(--blue); border-radius: 11px; }
+.lesson-worked p { margin: 8px 0 0; font-size: 14px; }
+.lesson-worked p:first-child { margin-top: 0; }
+.worked-head, .glossary-head { color: var(--blue); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.lesson-glossary { margin-top: 24px; padding-top: 18px; border-top: 1px solid #dfe6e2; }
+.lesson-glossary p { margin: 0 0 12px; }
+.lesson-glossary dl, .glossary-block dl { display: grid; grid-template-columns: minmax(120px, max-content) 1fr; gap: 8px 18px; margin: 0; }
+.lesson-glossary dt, .glossary-block dt { font-size: 14px; font-weight: 800; }
+.lesson-glossary dd, .glossary-block dd { margin: 0; color: var(--muted); font-size: 14px; }
+.lesson-connects { margin: 24px 0 0; padding-top: 16px; border-top: 1px solid #dfe6e2; color: var(--muted); font-size: 13px; font-style: italic; }
+
+/* On a scored question the vocabulary stays one disclosure away, closed by
+ * default so it never competes with the learner's question. */
+.glossary-block { margin: 14px 0 0; }
+.glossary-block > summary { color: var(--blue); cursor: pointer; font-size: 12px; font-weight: 800; }
+.glossary-block > summary:focus-visible { outline: 3px solid #2d8290; outline-offset: 3px; }
+.glossary-block[open] > summary { margin-bottom: 12px; }
+
+@media (max-width: 620px) {
+  .lesson-glossary dl, .glossary-block dl { grid-template-columns: 1fr; gap: 4px; }
+  .lesson-glossary dd, .glossary-block dd { margin-bottom: 10px; }
+}
 .case-block { margin: 0; padding: 0; color: inherit; background: transparent; border: 0; border-radius: 0; }
 .case-block:focus-visible { outline: 3px solid #2d8290; outline-offset: 4px; }
 .case-label { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -620,6 +654,50 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
   .radar-layout { grid-template-columns: 1fr; }
   #mastery-radar { width: min(100%,280px); }
   .mastery-values { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 12px; }
+}
+
+/* Read-through mode. The practice lesson surface is one lesson at a time and
+   sized for reading; this is the index across a whole subject, so rows stay
+   compact until opened. The status pill is the part that earns its place: it
+   says whether practice can actually deliver this lesson, which nothing else in
+   the app reports. */
+.lesson-coverage { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+.lesson-coverage-chip { padding: 5px 11px; color: var(--muted); background: var(--grey-soft); border-radius: 999px; font-size: 11px; font-weight: 800; }
+.lesson-coverage-chip.primary { color: var(--green); background: var(--green-soft); }
+
+.lesson-index { display: grid; gap: 22px; }
+.lesson-module > h4 { margin: 0 0 10px; color: var(--muted); font-size: 11px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+
+.lesson-row { margin-bottom: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 11px; }
+.lesson-row.readonly { background: var(--card-soft); }
+.lesson-row.missing { border-style: dashed; background: transparent; }
+.lesson-row-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 13px 16px; list-style: none; }
+details.lesson-row > summary.lesson-row-head { cursor: pointer; }
+details.lesson-row > summary.lesson-row-head::-webkit-details-marker { display: none; }
+details.lesson-row[open] > .lesson-row-head { border-bottom: 1px solid var(--line); }
+.lesson-row-title { flex: 1 1 auto; min-width: 180px; font-size: 15px; font-weight: 800; }
+.lesson-row.missing .lesson-row-title { color: var(--muted); font-weight: 700; }
+.lesson-row-source { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.lesson-row-pill { padding: 4px 10px; border-radius: 999px; font-size: 10px; font-weight: 900; letter-spacing: .04em; }
+.lesson-row-pill.live { color: var(--green); background: var(--green-soft); }
+.lesson-row-pill.readonly { color: var(--blue); background: var(--blue-soft); }
+.lesson-row-pill.missing { color: var(--amber); background: var(--amber-soft); }
+
+.lesson-row-body { padding: 18px 20px 20px; max-width: 70ch; }
+.lesson-row-body p { margin: 0 0 14px; font: 400 16px/1.6 Georgia, "Times New Roman", serif; }
+.lesson-read-objective { color: var(--muted); font-size: 14px !important; font-family: inherit !important; }
+.lesson-read-label { margin: 20px 0 8px; color: var(--blue); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.lesson-read-worked { padding: 15px 17px; background: #f1f6f4; border: 1px solid #c7d9d4; border-left: 5px solid var(--blue); border-radius: 10px; }
+.lesson-read-worked p { margin: 7px 0 0; font: 400 14px/1.55 inherit; }
+.lesson-read-worked p:first-child { margin-top: 0; }
+.lesson-read-glossary { display: grid; grid-template-columns: minmax(110px, max-content) 1fr; gap: 7px 16px; margin: 0; }
+.lesson-read-glossary dt { font-size: 14px; font-weight: 800; }
+.lesson-read-glossary dd { margin: 0; color: var(--muted); font-size: 14px; }
+.lesson-read-connects { margin: 20px 0 0 !important; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px !important; font-family: inherit !important; font-style: italic; }
+
+@media (max-width: 640px) {
+  .lesson-read-glossary { grid-template-columns: 1fr; gap: 3px; }
+  .lesson-read-glossary dd { margin-bottom: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

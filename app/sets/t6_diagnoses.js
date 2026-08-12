@@ -556,9 +556,18 @@
 
   // The catalogue "connect" questions reuse three fixed distractors verbatim.
   var SHARED_BY_TEXT = {
-    "It works independently of the people, constraints, and decisions around it.": SHARED.isolation,
-    "It improves one local measure, so effects elsewhere in the system no longer matter.": SHARED.localOptimum,
-    "Once this choice is made, later evidence should not change the decision.": SHARED.evidenceClosed
+    // Each misconception ships in three lengths so the connect questions do not all
+    // put the correct bridge at the same length rank (see CONNECT_WRONG in
+    // `t6_catalog.js`). The phrasings are interchangeable; the diagnosis is not.
+    "It works independently of the people, the constraints, and the decisions around it.": SHARED.isolation,
+    "It works in exactly the same way independently of the people, the constraints, and the decisions that surround it.": SHARED.isolation,
+    "It works in exactly the same way regardless of the people involved, the constraints in force, and the decisions being taken around it at the time.": SHARED.isolation,
+    "It improves one local measure, so effects elsewhere in the system stop mattering.": SHARED.localOptimum,
+    "It improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.": SHARED.localOptimum,
+    "It improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.": SHARED.localOptimum,
+    "Once this choice is made, later evidence should not change the decision.": SHARED.evidenceClosed,
+    "Once this choice has been made, later evidence should not be allowed to reopen or change the decision.": SHARED.evidenceClosed,
+    "Once this choice has been made, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision.": SHARED.evidenceClosed
   };
 
   window.T6_AUTHORED_DIAGNOSES = {byQuestion: AUTHORED, byText: SHARED_BY_TEXT};

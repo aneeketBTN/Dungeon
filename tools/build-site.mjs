@@ -16,6 +16,7 @@ const publicFiles = [
   "app/admin.css",
   "app/admin.js",
   "app/robots.txt",
+  "app/sets/t6_lessons.js",
   "app/sets/t6_diagnoses.js",
   "app/sets/t6_brgsa.js",
   "app/sets/t6_catalog.js",

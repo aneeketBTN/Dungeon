@@ -98,7 +98,20 @@
       caselet: concept.caselet || applicationSeed.caselet || brgsaCaseOverrides[concept.id] || applicationSeed.stem,
       application: concept.application || (Array.isArray(applicationSeed.options) ? applicationSeed.options[applicationSeed.answer] : seed.explanation),
       applicationWrong: concept.applicationWrong || applicationWrong,
-      bridge: concept.bridge || seed.link || seed.explanation
+      bridge: concept.bridge || seed.link || seed.explanation,
+      /*
+       * A concept is stitched from more than one authored question: `seed`
+       * supplies the principle, `applicationSeed` supplies the case and the
+       * decision. When those are different lectures, a case question that
+       * explained `seed.explanation` was reinforcing a lecture the learner had
+       * not just reasoned about — nine case questions did exactly that, e.g. a
+       * sample-size case answered correctly and then explained with the null
+       * hypothesis. The case's own lecture is carried here so applied surfaces
+       * can explain, link, and cite what they actually tested.
+       */
+      caseSource: applicationSeed.source || concept.source || seed.source,
+      caseExplanation: applicationSeed.explanation || concept.summary || seed.explanation,
+      caseLink: applicationSeed.link || concept.bridge || seed.link
     };
   }
 
@@ -119,6 +132,70 @@
     return unique(values || []).filter(function (value) { return value !== correct; }).sort(function (a, b) {
       return Math.abs(wordCount(a) - wordCount(correct)) - Math.abs(wordCount(b) - wordCount(correct));
     }).slice(0, count || 3);
+  }
+
+  /*
+   * Distractor selection has two duties that pull against each other: the option
+   * set must not cue the answer by length, and it must not be answerable by
+   * topic alone. `comparableWrong` honours only the first — it sorts every
+   * candidate by word-count distance, which systematically evicted the authored
+   * same-concept wrong answers (short and pointed) in favour of other concepts'
+   * decision sentences (long, and structurally similar because they come from
+   * the same template). Measured before this change: 59 of 64 case questions
+   * carried no same-concept distractor at all, so the reasoning actually under
+   * test was "which of these four sentences is about A/B testing" — answerable
+   * without understanding, and unanswerable by understanding alone.
+   *
+   * Relevance now wins, with length parity kept as the tiebreaker inside each
+   * tier. Cross-concept options still backfill when a concept does not carry
+   * enough authored wrong answers of its own, so breadth is never lost.
+   */
+  /*
+   * The two duties genuinely conflict for this bank, because the authored
+   * correct decisions carry qualifiers ("...unless a pre-registered rule
+   * applies") while the authored wrong ones are punchy ("Delete Variant A from
+   * the report"). Taking only same-concept distractors makes the correct answer
+   * the longest option in 130 places, which is a different way of giving the
+   * answer away.
+   *
+   * So relevance is maximised subject to the length guard rather than instead of
+   * it: fill from the same concept first, and only if the set would still cue by
+   * length, trade the shortest relevant option for the longest available
+   * cross-concept one — one swap at a time, stopping the moment the cue is gone.
+   * A case that cannot be made safe with three same-concept distractors still
+   * keeps two, which is enough to force reasoning rather than topic-matching.
+   */
+  function shapeSafe(correct, wrongs) {
+    if (!wrongs.length) return false;
+    var longest = Math.max.apply(null, wrongs.map(wordCount));
+    var correctLength = wordCount(correct);
+    return !(correctLength > longest * 1.35 && correctLength - longest >= 4);
+  }
+
+  function relevantWrong(correct, preferred, fallback, count) {
+    var limit = count || 3;
+    var chosen = comparableWrong(correct, preferred, limit);
+    var used = {};
+    chosen.concat([correct]).forEach(function (value) { used[String(value)] = true; });
+    var spare = unique(fallback || []).filter(function (value) {
+      return value !== correct && !used[String(value)];
+    });
+
+    while (chosen.length < limit && spare.length) {
+      var next = comparableWrong(correct, spare, 1)[0];
+      if (!next) break;
+      chosen.push(next);
+      spare = spare.filter(function (value) { return value !== next; });
+    }
+
+    while (!shapeSafe(correct, chosen) && spare.length) {
+      var longest = spare.slice().sort(function (a, b) { return wordCount(b) - wordCount(a); })[0];
+      chosen.sort(function (a, b) { return wordCount(a) - wordCount(b); });
+      chosen.shift();
+      chosen.push(longest);
+      spare = spare.filter(function (value) { return value !== longest; });
+    }
+    return chosen;
   }
 
   function nearbyConcepts(course, concept) {
@@ -470,7 +547,7 @@
   }
 
   function addCaseCloze(course, concept, data, allData) {
-    var actionWrong = comparableWrong(data.application, (data.applicationWrong || []).concat(nearbyApplications(data, allData)));
+    var actionWrong = relevantWrong(data.application, data.applicationWrong || [], nearbyApplications(data, allData));
     var actionChoices = choiceSet(data.application, actionWrong, stableNumber(concept.id + "case"));
     var termChoices = choiceSet(data.name, nearbyConcepts(course, concept).map(function (entry) { return entry.name; }), stableNumber(concept.id + "term2"));
     addQuestion(course, {
@@ -479,8 +556,8 @@
       conceptId: concept.id,
       supportingConceptIds: [],
       module: concept.module,
-      source: data.source,
-      sourceIds: [data.source],
+      source: data.caseSource || data.source,
+      sourceIds: unique([data.caseSource || data.source]),
       node: data.name,
       pattern: "Complete the case",
       perspective: "apply",
@@ -496,8 +573,8 @@
         {label: "Choose the decision", options: actionChoices.options, answer: actionChoices.answer},
         {label: "Choose the framework", options: termChoices.options, answer: termChoices.answer}
       ],
-      explanation: data.summary,
-      link: data.bridge,
+      explanation: data.caseExplanation || data.summary,
+      link: data.caseLink || data.bridge,
       misconceptions: ["wrong-decision", "wrong-framework"],
       repairId: concept.id + "_bridge_cloze"
     });
@@ -584,8 +661,10 @@
     var second = dataById[pair[1].id];
     variant = variant || 1;
     var allData = Object.keys(dataById).map(function (id) { return dataById[id]; });
-    var firstWrong = comparableWrong(first.application, (first.applicationWrong || []).concat([second.application]).concat(nearbyApplications(first, allData)));
-    var secondWrong = comparableWrong(second.application, (second.applicationWrong || []).concat([first.application]).concat(nearbyApplications(second, allData)));
+    // A boss tests telling the module's two concepts apart, so the paired
+    // concept's decision is a relevant distractor here rather than a borrowed one.
+    var firstWrong = relevantWrong(first.application, (first.applicationWrong || []).concat([second.application]), nearbyApplications(first, allData));
+    var secondWrong = relevantWrong(second.application, (second.applicationWrong || []).concat([first.application]), nearbyApplications(second, allData));
     var firstChoices = choiceSet(first.application, firstWrong, stableNumber(course.id + module + "a" + variant));
     var secondChoices = choiceSet(second.application, secondWrong, stableNumber(course.id + module + "b" + variant));
     var integrationCorrect = "Use " + first.name + " for the first decision and " + second.name + " for the second; neither result replaces the other.";

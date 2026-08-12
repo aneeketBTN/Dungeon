@@ -380,6 +380,90 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   rejected before any change. Truthful-reporting axis: an audit that cannot distinguish its own
   artifacts from defects will quietly damage a working layout. Evidence: same file.
 
+- **I44 (2026-08-12)** — Issue: the app could measure a learner but could not teach one, so it only
+  served people who had already studied. Cause: the bank generates ~12.8 surfaces per concept by
+  recombining four harvested sentences, and the "primer" meant to introduce each idea drew its text
+  from a different seed question than the case it preceded — measured at 19% mean vocabulary overlap
+  with the case it was supposed to prepare, 0% in 10 of 64 cases. Fix: added a lecture-grain teaching
+  layer (`app/sets/t6_lessons.js`, `tools/build_t6_lessons.mjs`) and made teach-before-test a
+  scheduling invariant in `layeredQueue()`; lessons are unscored and create no evidence. Evidence:
+  `evidence/2026-08-12/t6-teaching-layer/verification.md`. BRGSA is complete at 50 of 50 lectures
+  (152 of 152 scheduled questions taught); 233 of 283 lectures across IBM/SCLM/SPMS remain, and the
+  validator reports that backlog rather than hiding it. Content stays
+  `WAITING_OWNER_CONTENT_ACCEPTANCE`.
+- **I45 (2026-08-12)** — Issue: applied questions were answerable by topic matching and not by
+  reasoning, and reinforced the wrong lecture when answered correctly. Cause: distractor selection
+  ranked candidates purely by word-count distance to defeat a length cue, evicting authored
+  same-concept wrong answers in 59 of 64 case questions; and `conceptData()` drew the explanation
+  from a different seed question than the case. Fix: `relevantWrong()` maximises relevance subject to
+  the length guard rather than instead of it, and case questions now carry `caseSource`,
+  `caseExplanation`, and `caseLink`. Result: 0 of 64 with zero same-concept distractors, 64 of 64
+  with at least two, option-shape errors still zero. Evidence: same file. Laws: LAW-47, LAW-48.
+- **I46 (2026-08-12)** — Issue: learner-facing copy used terminology the course never uses
+  ("pre-registered stopping rule", 0 occurrences in 50 BRGSA transcripts). Cause: nothing checked
+  question or teaching vocabulary against the source material. Fix: a vocabulary gate in
+  `tools/validate_t6_bank.js` measuring first use against the lossless `graph_source/` chunks in
+  course order; it caught three authoring errors in the pilot lessons during the same session.
+  The originating instance is now closed: `sample_logic`'s correct answer reads "Run the test to
+  completion at the pre-calculated sample size", the M02 lecture's own phrasing. The shorter answer
+  also cleared a length cue that had been excluding the question from scheduling entirely
+  (`excludedLegacyMcqs` 37 → 36, scheduled 151 → 152) — so vocabulary accuracy and answerability
+  turned out to be the same fix. Deferred: `18 visitors per arm` remains, covered by the gloss.
+  Law: LAW-49.
+- **I47 (2026-08-12)** — Issue: a batch of six lesson records failed to parse, and the file could not
+  be validated at all until every one was found. Cause: `explainer: [ … ]` closed with `},` instead of
+  `],` — eight times across three authoring batches — because arrays and objects sit at the same
+  indent inside a lesson record, and `SyntaxError` names only the first failure. Fix: scan the whole
+  file for the defect class with one `awk` pass after any batch edit instead of parse-fix-repeat.
+  Truthful-reporting axis: a file that does not parse yields no validator signal, so a green run is
+  unavailable rather than merely absent — the failure mode is silence, not a warning. Evidence:
+  `evidence/2026-08-12/t6-teaching-layer/verification.md`. Law: LAW-50.
+- **I48 (2026-08-12)** — Issue: a primer could still run ahead of its own lecture's lesson, which is
+  the exact defect the teaching layer exists to prevent. Cause: `layeredQueue()` computed pending
+  lessons from the *scored question* and then pushed the primer without checking the primer's own
+  `sourceIds`; the two differ routinely (`brgsa_m1_demand_primer` cites M01-L01, the `survey_bias` it
+  introduces cites M01-L05), so the primer appeared at step 4 against a lesson arriving at step 9.
+  The code comment asserted the primer was covered while the implementation never inspected it.
+  Fix: extracted `teachFirst(surface, conceptId)` and applied it to the primer on its own terms.
+  Learning-integrity axis: the invariant was believed rather than measured for a full session.
+  Found by executing LAW-47's own verify step across a live queue instead of trusting the comment —
+  now re-run across all 9 BRGSA study sets and the mixed builder from an empty `lessonsRead`, zero
+  violations. Evidence: `evidence/2026-08-12/t6-teaching-layer/verification.md`. Law: LAW-47.
+
+- **I49 (2026-08-12)** — Issue: eight of ten newly authored IBM lessons are undeliverable — no learner
+  will ever see them. Cause: a lesson reaches a session only via `layeredQueue()` placing it ahead of
+  a scored question that cites its lecture, and the bank cites just 16 of IBM's 78 lectures (two per
+  module). Authoring by module rather than by citation produces ~2 useful lessons per 10. Found by
+  checking which lecture ids the banks actually cite, then confirming in the browser that only
+  `IBM-M01-L03` and `IBM-M01-L07` are ever queued. Fix: `tools/check_lesson_file.mjs` now loads the
+  banks, warns when authored lessons are undeliverable, and prints the remaining **cited** lectures
+  as the work queue; the protocol leads with the distinction. Truthful-reporting axis: "10 lessons
+  authored" read as progress while 8 of them moved no coverage. Remaining work for full scored
+  coverage is 46 lectures, not 233. BRGSA carries 17 undeliverable lessons from the same cause,
+  retained because that subject is deliberately complete. Evidence:
+  `evidence/2026-08-12/t6-teaching-layer/verification.md`.
+
+- **I50 (2026-08-12)** — Issue: the teaching layer could only be met one lesson at a time inside
+  practice, and nothing in the app said whether a given lesson was reachable at all. Fix: a
+  `Read the lessons` dashboard tab listing every lecture per subject, expandable to the full lesson,
+  each labelled *Taught in practice* / *Read-only* / *No lesson yet*. Learning-integrity axis:
+  reading here does not write `profile.lessonsRead`, because that map is the teach-before-test gate
+  and recording a skim would disable the gate for every lesson skimmed — verified by opening all 50
+  BRGSA lessons and confirming `lessonsRead` stayed 0. Truthful-reporting axis: the first cut counted
+  any citing question and reported 44 reachable BRGSA lectures; 11 are cited only by
+  `optionShapeRisk` questions that no scheduling path serves, so the honest number is 33, matching
+  the validator. Evidence: `evidence/2026-08-12/t6-teaching-layer/verification.md`.
+- **I51 (2026-08-12)** — Issue: an ad-hoc LAW-47 check reported 31 violations across BRGSA and IBM
+  set 9 that did not exist. Cause: two harness defects, not app defects — the first captured set
+  buttons before switching dashboard tabs, so `#set-list` re-rendered and the captured nodes were
+  detached; the second omitted the `read[lectureId]` condition, flagging lessons already legitimately
+  taught by earlier sets in the same walk. Built cleanly, set 9 has 43 items with 19 correctly placed
+  lessons. Fix: use the checked-in `tools/browser-checks/teach-before-test.js`, which re-queries
+  buttons per iteration and includes the already-taught condition; re-run clean across 36 sets in all
+  four subjects, zero violations. Truthful-reporting axis: a verification script is itself code and
+  can report a failure that is not there — a red result needs the same scrutiny as a green one before
+  it is acted on or reported. Law: LAW-47.
+
 ## Watch Items
 
 - Painterly production target is confirmed; current pixel-like Door media remains interim.
