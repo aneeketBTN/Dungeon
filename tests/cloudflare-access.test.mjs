@@ -133,6 +133,32 @@ function createMemoryStore({agreementAccepted = true} = {}) {
       countries.delete(email);
       return wasLocked;
     },
+    /* Sign-out touches sessions and nothing else — the memory store mirrors that
+     * deliberately, so a test asserting progress survives is testing the contract
+     * rather than a convenient fake. */
+    async signOutTester(env, email) {
+      let cleared = 0;
+      for (const [tokenHash, sessionEmail] of sessions) {
+        if (sessionEmail === email) { sessions.delete(tokenHash); cleared += 1; }
+      }
+      return cleared;
+    },
+    async signOutTesters(env, emails) {
+      const targets = new Set(emails);
+      let cleared = 0;
+      for (const [tokenHash, sessionEmail] of sessions) {
+        if (targets.has(sessionEmail)) { sessions.delete(tokenHash); cleared += 1; }
+      }
+      return cleared;
+    },
+    async countActiveSessions(env, emails) {
+      const counts = {};
+      emails.forEach((email) => { counts[email] = 0; });
+      for (const sessionEmail of sessions.values()) {
+        if (sessionEmail in counts) counts[sessionEmail] += 1;
+      }
+      return counts;
+    },
     async getProgress(env, email) { return progress.get(email) || null; },
     async saveProgress(env, email, stateJson) {
       const prior = progress.get(email);
@@ -380,6 +406,78 @@ test("one request onboards a whole cohort and reports duplicates and rejects", a
   assert.equal(store.active.has("beta@example.com"), true);
   assert.equal(store.active.has("gamma@example.com"), true);
   assert.equal(store.active.has(owner), false);
+});
+
+test("signing a tester out ends their session but keeps approval and progress", async () => {
+  const sampleState = {version: 2, selectedCourse: "SPMS", conceptAttempts: {SPMS: {C1: [{correct: true}]}}, completed: {SPMS: [1]}};
+  let wroteGroup = false;
+  const store = createMemoryStore();
+  const worker = workerWithGroup(["alpha@example.com"], {
+    store,
+    fetchImpl: async (input, init = {}) => {
+      if (init.method === "PUT") wroteGroup = true;
+      return Response.json(groupResult(["alpha@example.com"]));
+    }
+  });
+
+  const firstLogin = await login(worker, "alpha@example.com", baseEnv, "IN");
+  const cookie = cookieFrom(firstLogin);
+  await worker.fetch(request("/dungeon/api/progress", {
+    method: "PUT",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com", Cookie: cookie},
+    body: JSON.stringify({state: sampleState})
+  }), baseEnv);
+
+  const before = await worker.fetch(request("/dungeon/admin/api/testers"), baseEnv);
+  assert.equal((await before.json()).security["alpha@example.com"].activeSessions, 1,
+    "the control room must show the live session the owner is about to end");
+
+  const signOut = await worker.fetch(request("/dungeon/admin/api/testers", {
+    method: "PATCH",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com"},
+    body: JSON.stringify({email: "alpha@example.com", action: "sign-out"})
+  }), baseEnv);
+  assert.equal(signOut.status, 200);
+  const signOutBody = await signOut.json();
+  assert.equal(signOutBody.signedOut, "alpha@example.com");
+  assert.equal(signOutBody.sessionsCleared, 1);
+  assert.equal(signOutBody.security["alpha@example.com"].activeSessions, 0);
+  assert.equal(wroteGroup, false, "sign-out must not rewrite the Access group");
+  assert.ok(signOutBody.testers.includes("alpha@example.com"), "sign-out must not remove approval");
+
+  // The old cookie is dead: the learner is pushed back to sign-in.
+  const staleRequest = await worker.fetch(request("/dungeon/api/progress", {headers: {Cookie: cookie}}), baseEnv);
+  assert.equal(staleRequest.status, 401, "the ended session must no longer reach the learner backend");
+
+  // And signing back in returns every byte of saved work.
+  const secondLogin = await login(worker, "alpha@example.com", baseEnv, "IN");
+  assert.equal(secondLogin.status, 200, "an approved tester can sign straight back in");
+  const restored = await worker.fetch(request("/dungeon/api/progress", {
+    headers: {Cookie: cookieFrom(secondLogin)}
+  }), baseEnv);
+  assert.equal(restored.status, 200);
+  assert.deepEqual((await restored.json()).state, sampleState, "progress must survive a forced sign-out");
+});
+
+test("signing everyone out clears tester sessions and leaves the owner alone", async () => {
+  const store = createMemoryStore();
+  const worker = workerWithGroup(["alpha@example.com", "beta@example.com"], {store});
+
+  await login(worker, "alpha@example.com", baseEnv, "IN");
+  await login(worker, "beta@example.com", baseEnv, "IN");
+
+  const response = await worker.fetch(request("/dungeon/admin/api/testers", {
+    method: "PATCH",
+    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com"},
+    body: JSON.stringify({action: "sign-out-all"})
+  }), baseEnv);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.sessionsCleared, 2);
+  assert.deepEqual(body.signedOut.sort(), ["alpha@example.com", "beta@example.com"]);
+  assert.equal(body.security["alpha@example.com"].activeSessions, 0);
+  assert.equal(body.security["beta@example.com"].activeSessions, 0);
+  assert.ok(!body.signedOut.includes(baseEnv.OWNER_EMAIL), "the owner must never be signed out by the bulk control");
 });
 
 test("unlocking a country lock keeps the tester's saved progress", async () => {

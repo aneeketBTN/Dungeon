@@ -3,6 +3,32 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Control Room: force sign-out that preserves progress
+
+- **Added a sign-out control that is deliberately narrower than revoke.** `revokeTester` deletes the
+  tester row, and both `learner_progress` and `learner_sessions` cascade from it, so revoking has
+  always destroyed the learner's saved work. The new `signOutTester` / `signOutTesters` clear session
+  rows only: the tester stays approved, every byte of progress survives, and their next visit is a
+  normal sign-in that resumes where they were. The country lock is deliberately untouched — signing
+  someone out is routine, clearing a lock is a security decision with its own control.
+- **Per-tester and bulk.** A row-level `Sign out`, and a toolbar `Sign everyone out` for the
+  "release changed, send everyone back through sign-in" case. The bulk path excludes the owner, so a
+  mistake cannot lock the owner out of the Control Room that issued it.
+- **Live session counts are surfaced in the same payload the row already renders**
+  (`countActiveSessions`), because otherwise `Sign out` is a control with nothing to act on — the
+  owner could not tell whether it would do anything or whether it already had. A tester with one
+  session shows `Signed in`; more than one shows `Signed in ×N` in alert styling, since that means
+  the same email is open in several browsers. With zero sessions the button is not rendered at all
+  rather than offered as a no-op.
+- Two tests added (35 → 37). The first proves the actual promise end to end: write progress, sign
+  out, confirm the old cookie is rejected with 401, sign back in, and assert the restored state is
+  byte-identical. The second proves the bulk path clears tester sessions and never includes the
+  owner. The memory store mirrors the real contract — sign-out touches sessions and nothing else — so
+  the test exercises the guarantee rather than a convenient fake.
+- `VERIFIED(REAL_BROWSER)` for the UI: rows with 1, 3, and 0 sessions render the chip and control
+  correctly. Console 404s during that check are the Worker-backed API routes absent from the static
+  dev server, not a regression.
+
 ## 2026-08-12 — Exam pattern received; coverage plan reversed before authoring
 
 - **`EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` is closed.** The owner supplied the Batch 1 pattern for all

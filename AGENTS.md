@@ -172,6 +172,10 @@
 > `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` at
 > `evidence/2026-08-11/learner-backend-and-agreement/verification.md`. The Control Room adds cohort
 > paste-onboarding, a `Clear lock` recovery that forgives a country lock without deleting progress,
+> per-tester and bulk **force sign-out** that ends browser sessions so a tester must sign in again
+> while keeping approval and every byte of progress — unlike `Revoke`, which cascades and deletes
+> their saved work — with live session counts shown on each row so the control has something visible
+> to act on,
 > per-tester state chips, two panels computed from real saved progress (Participation and Where
 > testers struggle), and per-person or bulk `Bump` actions for missing group acknowledgements; a bump
 > records an in-app reminder and copies a firm manual message, but never claims to send it or
@@ -419,7 +423,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
 | `app/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
 | `app/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
-| `app/admin.js` | Cohort onboarding, revoke/unlock, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-11 |
+| `app/admin.js` | Cohort onboarding, revoke/unlock, per-tester and bulk **force sign-out** with live session counts, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-12 |
 | `app/t6.html` | Subject rail, trendline hero, inline practice builder, distance-travelled strip, holistic matrix/totals, lesson surface, layered questions, in-question glossary, plans, and results. | 2026-08-12 |
 | `app/t6.css` | Dynamic homepage, chip builder, matching board, lesson/glossary presentation, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-12 |
 | `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, builder pool rules, matching board, persistence, and scenarios. | 2026-08-12 |
