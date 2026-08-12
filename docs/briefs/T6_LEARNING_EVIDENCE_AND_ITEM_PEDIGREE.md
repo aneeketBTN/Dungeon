@@ -433,7 +433,7 @@ states own the semantic feedback colors.
   plus arrow-key MCQ selection;
 - miss, correction, delayed re-attempt, and boss-credit paths;
 - bank/source/tag/schema validation and option-shape checks;
-- save/resume compatibility with version-2 learner data and no writes to `state/` or `history/`;
+- save/resume compatibility with version-2 learner data and no writes to `data/state/` or `data/history/`;
 - desktop and 390-pixel narrow-layout acceptance without horizontal overflow.
 
 Evidence: `evidence/2026-08-11/t6-evidence-challenges/verification.md`, with the later prompt

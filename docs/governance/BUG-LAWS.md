@@ -67,7 +67,7 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 ### LAW-06 🔴 — Fresh-user testing must never erase real learner data
 
 - **Tier/Status:** 🔴 · ACTIVE
-- **Origin:** 2026-07-16 operating-system installation: current `state/` and `history/` may contain
+- **Origin:** 2026-07-16 operating-system installation: current `data/state/` and `data/history/` may contain
   real learner progress while the UX loop requires clean scenarios.
 - **Why:** Clearing real state to test onboarding causes irreversible learning-history loss.
 - **Comply:** Use an isolated test profile or deterministic scenario loader outside live data.
@@ -99,7 +99,7 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 
 - **Tier/Status:** 🟡 · ACTIVE
 - **Origin:** 2026-07-16 Mac transfer audit: the web prototype stores its profile in browser local
-  storage while the learning engine stores durable state under `state/` and `history/`.
+  storage while the learning engine stores durable state under `data/state/` and `data/history/`.
 - **Why:** A folder transfer can appear complete while onboarding, cosmetics, currency, or an
   unfinished prototype run silently remains on the old machine.
 - **Comply:** Document storage boundaries in every machine-transfer handoff; never imply that

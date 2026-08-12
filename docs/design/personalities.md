@@ -220,11 +220,11 @@ confirm-gates (engineer auto-confirms), done once and precisely.**
 
 | Subject | Graph | Nodes | Source read | Status |
 |---|---|---|---|---|
-| BEHECON | `graphs/BEHECON.json` | 58 | M1–M4 verbatim | ✅ confirmed; in play (paused L1 Q3) |
-| MACRO | `graphs/MACRO.json` | 63 | M1–M4 verbatim (incl. C25-31, M3, M4) | ✅ confirmed; fully verbatim, 0 outline nodes |
-| NABM | `graphs/NABM.json` | — | — | ⬜ pending (8 mod / 145 ch, ~477K) |
-| NPD | `graphs/NPD.json` | — | — | ⬜ pending (8 mod / 175 ch, ~786K) |
-| GER | `graphs/GER.json` | — | — | ⬜ pending (8 mod / 130 ch, ~1.2M) |
+| BEHECON | `data/graphs/BEHECON.json` | 58 | M1–M4 verbatim | ✅ confirmed; in play (paused L1 Q3) |
+| MACRO | `data/graphs/MACRO.json` | 63 | M1–M4 verbatim (incl. C25-31, M3, M4) | ✅ confirmed; fully verbatim, 0 outline nodes |
+| NABM | `data/graphs/NABM.json` | — | — | ⬜ pending (8 mod / 145 ch, ~477K) |
+| NPD | `data/graphs/NPD.json` | — | — | ⬜ pending (8 mod / 175 ch, ~786K) |
+| GER | `data/graphs/GER.json` | — | — | ⬜ pending (8 mod / 130 ch, ~1.2M) |
 
 **Method for remaining subjects (NABM, NPD, GER):** each is its own intensive
 verbatim read+build and must be done in a FRESH context (new session or after

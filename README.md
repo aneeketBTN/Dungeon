@@ -75,14 +75,14 @@ term6.revision.v2
 
 An unfinished set resumes automatically after reload. **Reset local progress** asks for
 confirmation and removes only this browser profile. The web app does not write to the learning
-engine's live `state/` or `history/` files. The controlled tester release does not add accounts,
+engine's live `data/state/` or `data/history/` files. The controlled tester release does not add accounts,
 analytics, advertising trackers, or a server-side learner database. See `docs/community/PRIVACY.md`.
 
 ## Controlled tester release
 
 `npm run build` creates a ten-asset deployment artifact containing only the active T6 learner
 route, three course-bank scripts, the owner control room, and `robots.txt`. It excludes live
-`state/`, `history/`, local CLA analysis, owner source packs, transfer notes, work files, test
+`data/state/`, `data/history/`, local CLA analysis, owner source packs, transfer notes, work files, test
 fixtures, credentials, tester addresses, and community invites. `npm test` checks that boundary,
 the health route, learner/admin redirects, private-cache policy, no-index rules, and security
 headers. No package installation is required.
@@ -145,7 +145,7 @@ Scenario routes do not save normal browser progress.
 
 ## Legacy references
 
-The Term 5 procedural engine in `docs/engine/PROMPT.md`, its live state/history, the earlier cinematic product
+The Term 5 procedural engine in `docs/engine/PROMPT.md`, its live data/state/history, the earlier cinematic product
 prototype at `/legacy/rogue/rogue.html`, and the older Open Mock pages remain preserved for reference. They
 are not part of the active student path.
 

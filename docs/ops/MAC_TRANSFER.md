@@ -10,9 +10,9 @@ that must be preserved.
 
 The learning engine's durable data is in:
 
-- `state/`
-- `history/`
-- `graphs/`
+- `data/state/`
+- `data/history/`
+- `data/graphs/`
 
 The active Term 6 dashboard stores its separate browser profile under
 `term6.revision.v2`. The legacy product slice uses `dungeon.product.v1`. Browser local
@@ -92,8 +92,8 @@ required = [
     "mock/sets/t6_catalog.js",
     "mock/sets/t6_challenges.js",
     "tools/validate_t6_bank.js",
-    "state/game_state.json",
-    "history/question_history.json",
+    "data/state/game_state.json",
+    "data/history/question_history.json",
 ]
 missing = [item for item in required if not Path(item).is_file()]
 print("Transfer OK" if not missing else "Missing: " + ", ".join(missing))

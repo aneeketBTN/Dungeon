@@ -89,7 +89,7 @@ remains owner-only as a backup, but no origin bypass credential is needed or sto
 
 The production build exposes only thirteen allowlisted assets: the login HTML/CSS/application, the
 learner HTML/CSS/application, the three embedded T6 banks, the owner dashboard
-HTML/CSS/application, and `robots.txt`. It excludes live `state/`, `history/`, owner source packs,
+HTML/CSS/application, and `robots.txt`. It excludes live `data/state/`, `data/history/`, owner source packs,
 CLA analysis, work files, transfer material, credentials, and the private community invite. The
 invite is returned dynamically only after an approved email reaches the agreement gate; the same
 link appears inside the session-protected learner dashboard for existing testers.

@@ -88,7 +88,7 @@ not make it authoritative.
      gate. Third-party research is inspiration, never a source to copy.
 
 10. **Content and live data**
-   - `graphs/`, `state/`, and `history/`.
+   - `data/graphs/`, `data/state/`, and `data/history/`.
    - Canonical for available subject content, current player state, and learning history. Do not
      rewrite or erase real player data to create a test scenario.
 
@@ -107,7 +107,7 @@ not make it authoritative.
 | Learner personas | `docs/engine/PROMPT.md` §7.8; `docs/design/personalities.md` history | profile and adaptive routing |
 | Proficiency rank | `docs/engine/PROMPT.md` §17 | profile, dashboard, reassurance language |
 | Subject-specific exams | `docs/engine/PROMPT.md` §4 and graphs | setup, question formats, scoring, dashboard |
-| Persistence/stats | `docs/engine/PROMPT.md`, `state/` | resume, results, recommendations, player history |
+| Persistence/stats | `docs/engine/PROMPT.md`, `data/state/` | resume, results, recommendations, player history |
 | Prototype interaction | `mock/rogue.*` | current Hall/run/results behavior |
 | T6 exam fallback | `docs/briefs/T6_REVISION_FALLBACK.md`; `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`; `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md`; owner-supplied T6 AI-ready pack | four-subject dashboard, evidence-based progress, adaptive repetition, mixed formats, confidence, constructed response, first-cohort boundary |
 | Controlled tester release | current owner direction; `docs/briefs/TESTER_ACCESS_AND_ADMIN.md`; `docs/community/TESTER_GUIDE.md`; `docs/community/PRIVACY.md`; `SECURITY.md`; `docs/community/COMMUNITY_PLAYBOOK.md` | hosting boundary, identity access, source publication, feedback, moderation, announcements, incident intake |

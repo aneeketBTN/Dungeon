@@ -203,9 +203,9 @@ Rules:
 - `db/` — the current shared learner-backend table shapes as one readable reference; the applied
   change history lives in `cloudflare/migrations/`.
 - `tests/` — release-boundary, routing, access-management, and security-header checks.
-- `graphs/` — generated subject concept graphs. Do not hand-edit during product/UI work.
-- `state/` — live game and learner state. Treat as real player data; do not clear for testing.
-- `history/` — real question and flag history. Do not repurpose as test fixtures.
+- `data/graphs/` — generated subject concept graphs. Do not hand-edit during product/UI work.
+- `data/state/` — live game and learner state. Treat as real player data; do not clear for testing.
+- `data/history/` — real question and flag history. Do not repurpose as test fixtures.
 - `outputs/` — rendered/candidate media and separated production assets.
 - `work/` — source research, animation frames, scripts, and intermediate art outputs.
 - `evidence/` — named acceptance evidence, organized by date/task.
@@ -313,7 +313,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   labeling, persistence, and dashboard treatment before implementation.
 - Persona and rank displays must obey the evidence thresholds and language restrictions in
   `docs/engine/PROMPT.md`.
-- Test profiles and scenario loaders must be separate from `state/` and `history/`.
+- Test profiles and scenario loaders must be separate from `data/state/` and `data/history/`.
 
 ## Conventions
 
@@ -322,7 +322,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - `docs/engine/PROMPT.md` is current procedural-engine authority; the T6 fallback's authored questions follow
   its indexed pack and brief. `docs/engine/REVIEW_LOG.md` and `docs/design/personalities.md` are rationale and history.
 - `mock/` shows implemented behavior, not intended behavior.
-- Do not edit `graphs/`, `state/`, or `history/` during UI testing unless the task explicitly
+- Do not edit `data/graphs/`, `data/state/`, or `data/history/` during UI testing unless the task explicitly
   authorizes engine/data changes and a backup-safe plan exists.
 - Do not call an asset production-ready without the acceptance gate in
   `docs/design/ART_DIRECTION_SYSTEM.md`.

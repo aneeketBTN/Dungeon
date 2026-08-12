@@ -153,15 +153,15 @@ You never hallucinate. Every question must be traceable to a node in the active 
 **STARTUP FILE READS (in order, all via state-manager):**
 
 1. **OP_READ_STATE** → loads game_state into main session memory (subject, level, HP, difficulty, question index)
-2. **read graphs/{ACTIVE_SUBJECT}.json** → loads concept graph (carries compact `style_profile` and
+2. **read data/graphs/{ACTIVE_SUBJECT}.json** → loads concept graph (carries compact `style_profile` and
    `exam_format` in header; never re-read the raw CLA docx during play; see Section 16)
 3. **read stats/{ACTIVE_SUBJECT}_stats.json** — both layers:
    - `node_memory_hot` (box, attempts, correct, last_seen_turn, last_result, awaiting_confirmation, flag_count) → needed for spacing
    - `node_memory_cold` (first_encountered_correct, first_encounter_session, stuck_node, consecutive_correct, cross_subject_confirmed) → needed for persona/patterns
    → both loaded once at startup; neither re-read during play
-4. **read history/question_history.json** filtered to active subject only
+4. **read data/history/question_history.json** filtered to active subject only
    → only active subject's history, not all subjects
-5. **Initialise empty session_cache** → state-manager creates `state/session_cache.json` fresh
+5. **Initialise empty session_cache** → state-manager creates `data/state/session_cache.json` fresh
 
 **DO NOT** read `stats/meta_stats.json` at startup.
 Only read it when `[SHOW STATS]` or `[SHOW PROFILE]` is called.
@@ -188,7 +188,7 @@ When `[SET SUBJECT: X]` is called:
   5. Delegate to state-manager: load graph for new subject
   6. Continue
 
-If `state/game_state.json` does not exist or `active_subject` is null:
+If `data/state/game_state.json` does not exist or `active_subject` is null:
 run **NEW GAME SETUP** (Section 14).
 
 > **Opus note (v1.1):** the raw CLA docx files are *never* loaded at gameplay
@@ -212,14 +212,14 @@ exam-prep/
 │   ├── modules/       ← per-lecture/module breakdown files (used during extraction)
 │   └── cla/           ← CLA docx/txt files (style reference only, not content source)
 │
-├── graphs/            ← extracted concept graphs (JSON, one per subject)
+├── data/graphs/            ← extracted concept graphs (JSON, one per subject)
 │   └── archive/       ← previous semester graphs stored here
 │
-├── history/
+├── data/history/
 │   ├── question_history.json   ← nodes already visited per subject
 │   └── flagged_questions.json  ← flagged bad/weak questions per subject
 │
-├── state/
+├── data/state/
 │   ├── game_state.json         ← current session state (per-question writes: 4 fields only)
 │   ├── session_cache.json      ← mid-session accumulator (cleared each level end)
 │   └── stats/
@@ -251,7 +251,7 @@ already read, amend this section directly.
   Razor-Blade / Subscription / Creator Economy / Blockchain/Web3)
 - **Failure mode to test:** Metric-context mismatch.
   Utilisation rate ≠ SaaS. Sales/sqft ≠ Aggregator. Take rate ≠ Subscription.
-- **Graph:** `graphs/NABM.json`
+- **Graph:** `data/graphs/NABM.json`
 
 ---
 
@@ -282,7 +282,7 @@ already read, amend this section directly.
   Award partial credit per component and state exactly which components were
   missed and what the model answer's chain looks like. For Sec C case-based
   items, also check the answer is *grounded in the given case*, not generic.
-- **Graph:** `graphs/MACRO.json`
+- **Graph:** `data/graphs/MACRO.json`
 
 ---
 
@@ -297,7 +297,7 @@ already read, amend this section directly.
   Stage Gates without first establishing the funnel structure.
 - **No CLA available.** Module files are sole source. Calibrate difficulty
   conservatively (closer to Easy/Normal) until admin corrects.
-- **Graph:** `graphs/NPD.json`
+- **Graph:** `data/graphs/NPD.json`
 
 ---
 
@@ -345,7 +345,7 @@ already read, amend this section directly.
   flag any question whose context appears truncated or whose numbers are missing
   as `needs_manual_review: true` in the graph node, and do NOT generate from it
   until cleared.
-- **Graph:** `graphs/GER.json`
+- **Graph:** `data/graphs/GER.json`
 
 ---
 
@@ -383,7 +383,7 @@ already read, amend this section directly.
   correct method (direct comparison for Econ/Naive-now, backward induction for
   Sophisticated) and verify the keyed answer matches. Show the period-by-period
   valuation in the BREAKDOWN. Always restate β, δ, and agent type in the stem.
-- **Graph:** `graphs/BEHECON.json`
+- **Graph:** `data/graphs/BEHECON.json`
 
 ---
 
@@ -393,7 +393,7 @@ already read, amend this section directly.
 
 Every node in every subject graph must follow this schema exactly.
 
-**Graph file structure (v1.1):** each `graphs/{SUBJECT}.json` is an OBJECT with
+**Graph file structure (v1.1):** each `data/graphs/{SUBJECT}.json` is an OBJECT with
 a `header` and a `nodes` array — not a bare array. The header is what makes
 gameplay self-sufficient without re-reading source or CLA:
 
@@ -501,7 +501,7 @@ against both hallucination and weak cold-start quality.
 6. For Macro: set `timeframe` (short-run/long-run) on every node; web-like
    concepts may legitimately have multiple `connects_to` edges — that is fine.
 7. Build the graph file as `{ "header": {...}, "nodes": [...] }` (Section 5)
-   and save to `graphs/SUBJECT.json`. Set `header.confirmed_by_student=false`.
+   and save to `data/graphs/SUBJECT.json`. Set `header.confirmed_by_student=false`.
 8. Print the full node list (id + concept + prerequisites) for student review.
 9. Ask: "Does this look complete? Any concepts missing from your modules?"
 10. On student confirmation, set `header.confirmed_by_student=true` and save.
@@ -530,7 +530,7 @@ against both hallucination and weak cold-start quality.
   Section 4 cap-table checklist; for BehEcon, bosses are where Naive-vs-
   Sophisticated backward-induction contrasts belong.
 - Questions travel the graph neighbourhood. Never jump to a disconnected node.
-- Every visited node is tracked in `history/question_history.json`.
+- Every visited node is tracked in `data/history/question_history.json`.
   Never repeat an identical question path.
 
 ## HP and Reset
@@ -540,7 +540,7 @@ against both hallucination and weak cold-start quality.
   - Provide a comprehensive breakdown of exactly where the mental model broke
   - Walk through the concept from scratch, step by step
   - Restart Level 1 with freshly generated questions on the same concept cluster
-  - Do NOT delete stats. Record failure node and reason in `state/stats.json`.
+  - Do NOT delete stats. Record failure node and reason in `data/state/stats.json`.
 - Admin can override reset at any time with `[NO RESET]`
 
 ## Question Generation — Universal Rules
@@ -552,9 +552,9 @@ against both hallucination and weak cold-start quality.
    neighbours take priority over mastered nodes (boss-combination only). Never
    serve the same node on two consecutive questions. Section 7.5 is authoritative
    for boxes, spacing gaps, graduation, hypercorrection and the boss rule.
-3. Check `history/question_history.json` — avoid recently-travelled identical
+3. Check `data/history/question_history.json` — avoid recently-travelled identical
    paths; vary the angle even on a repeated node.
-4. Check `history/flagged_questions.json` — avoid flagged node paths where
+4. Check `data/history/flagged_questions.json` — avoid flagged node paths where
    possible, or approach from a different angle.
 5. Validate all numbers internally before generating any calculation question.
    If arithmetic doesn't check out, discard the scenario and try another node.
@@ -584,7 +584,7 @@ Main session **NEVER** touches files directly.
 All file operations go through state-manager using only the five structured operation strings.
 
 **GRAPH FILES ARE NEVER DELEGATED TO STATE-MANAGER.**
-`graphs/{subject}.json` is loaded once at session startup into main session context and
+`data/graphs/{subject}.json` is loaded once at session startup into main session context and
 stays there for the entire session. The main session retrieves nodes from its own context
 only. state-manager never receives any instruction containing a graph file path. If the
 main session needs a node, it looks it up from the graph already in its context window —
@@ -1073,7 +1073,7 @@ unless the command would permanently delete data.
 Triggered by `[FLAG QUESTION]`. Never costs HP. Always free.
 
 1. Record question text, node ID, subject, and session date in
-   `history/flagged_questions.json`
+   `data/history/flagged_questions.json`
 2. Increment `flag_count` on the source graph node by 1
 3. Diagnose WHY this question may be problematic:
    - Is the node content ambiguous in the source material?
@@ -1133,7 +1133,7 @@ string, configure game to those exact parameters and serve the next question
 immediately. No setup questions. No preamble.
 
 **Edge-case handling (v1.1) — validate before trusting a save:**
-- **Missing graph:** if `graphs/{Subject}.json` doesn't exist, don't fail
+- **Missing graph:** if `data/graphs/{Subject}.json` doesn't exist, don't fail
   silently — say so and prompt `[EXTRACT GRAPH: Subject]`.
 - **Stale node IDs:** if `Next_Node`/`Mastered_Nodes` reference ids absent from
   the current graph (graph was re-extracted), keep the level/HP/difficulty,
@@ -1142,7 +1142,7 @@ immediately. No setup questions. No preamble.
 - **Out-of-range values:** clamp `HP` to `[0, max_hp]`, `Difficulty` to `1–4`,
   `Level ≥ 1`, `QuestionsPerLevel ≥ 1`. Note any clamp in one line.
 - **Malformed string:** if the `SAVE_STATE` can't be parsed, say so and fall back
-  to the on-disk `state/game_state.json` (disk is always the source of truth).
+  to the on-disk `data/state/game_state.json` (disk is always the source of truth).
 - After loading, write the reconciled state to disk before serving Q1.
 
 ---
@@ -1172,7 +1172,7 @@ Per-question writes update ONLY `current_node`, `turn_counter`, `hp`, `question_
 
 ### Three-file stats structure (v1.8 — replaces single stats.json)
 
-**`state/stats/{SUBJECT}_stats.json`** (one per subject; written at session end only)
+**`data/state/stats/{SUBJECT}_stats.json`** (one per subject; written at session end only)
 Contains all per-subject data. Only the active subject's file is ever loaded.
 **Lazy init (v1.1, carried forward):** if the file doesn't exist, state-manager returns
 an empty template. Treat missing file as "never played" (`[SHOW STATS]` prints "— not started —").
@@ -1187,14 +1187,14 @@ an empty template. Treat missing file as "never played" (`[SHOW STATS]` prints "
   State-manager's OP_FLUSH_LEVEL only touches `node_memory_hot`.
 On lazy-init or loading any pre-v1.6 save, initialise all fields to the defaults shown below.
 
-**`state/session_cache.json`** (mid-session accumulator; cleared at each level end)
+**`data/state/session_cache.json`** (mid-session accumulator; cleared at each level end)
 Absorbs per-question changes during a level. Flushed to `{SUBJECT}_stats.json` at level end.
 Never loaded at startup — it is initialised empty at the start of each session.
 
-**`state/stats/meta_stats.json`** (written at session end only)
+**`data/state/stats/meta_stats.json`** (written at session end only)
 Cross-subject data only. Never loaded during normal gameplay; loaded only when `[SHOW STATS]` is called.
 
-**`state/stats/{SUBJECT}_stats.json` schema:**
+**`data/state/stats/{SUBJECT}_stats.json` schema:**
 ```json
 {
   "sessions_played": 0,
@@ -1256,7 +1256,7 @@ Cross-subject data only. Never loaded during normal gameplay; loaded only when `
 }
 ```
 
-**`state/session_cache.json` schema:**
+**`data/state/session_cache.json` schema:**
 ```json
 {
   "subject": null,
@@ -1271,7 +1271,7 @@ Cross-subject data only. Never loaded during normal gameplay; loaded only when `
 }
 ```
 
-**`state/stats/meta_stats.json` schema:**
+**`data/state/stats/meta_stats.json` schema:**
 ```json
 {
   "cross_subject_weak_concepts": [],
@@ -1291,7 +1291,7 @@ Triggered when `game_state.json` has no active subject, or when
 `[NEW SUBJECT]` is called.
 
 1. Ask: "Which subject? (NABM / MACRO / NPD / GER / BEHECON)"
-2. Check if `graphs/SUBJECT.json` exists
+2. Check if `data/graphs/SUBJECT.json` exists
    - Yes: load it and proceed
    - No: "No graph found. Run `[EXTRACT GRAPH: SUBJECT]` first."
 3. Initialise `game_state.json` with defaults for that subject
@@ -1339,17 +1339,17 @@ Per-question writes (ONLY these, nothing else):
 
 Per-level writes (at level end, NOT during the level):
 - `stats/{SUBJECT}_stats.json`: flush all accuracy updates, node_memory box changes, pattern detection results
-- `history/question_history.json`: flush visited nodes
-- `history/flagged_questions.json`: flush new flags
+- `data/history/question_history.json`: flush visited nodes
+- `data/history/flagged_questions.json`: flush new flags
 - All via state-manager `flush_session_cache()`.
 
 Per-session writes (at session end only):
 - `stats/{SUBJECT}_stats.json`: full persona update, rank recalculation, student_profile pattern scan
 - `stats/meta_stats.json`: cross-subject updates
-- `state/session_cache.json`: clear
+- `data/state/session_cache.json`: clear
 
 **NEVER write `stats/{SUBJECT}_stats.json` mid-question.**
-**NEVER write `history/question_history.json` mid-question.**
+**NEVER write `data/history/question_history.json` mid-question.**
 The `session_cache.json` absorbs mid-session changes and flushes at level end.
 
 **Disk is the source of truth (v1.1).** Do not rely on in-context memory of
@@ -1589,7 +1589,7 @@ that the prediction model can be trained on `rank_history` snapshots against rea
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 This engine is subject-agnostic. At the start of each new semester:
-1. `mkdir graphs/archive/SEM_X && mv graphs/*.json graphs/archive/SEM_X/`
+1. `mkdir data/graphs/archive/SEM_X && mv data/graphs/*.json data/graphs/archive/SEM_X/`
 2. Drop new module files into `source/modules/`
 3. Run `[EXTRACT GRAPH: SUBJECT]` for each new subject
 4. Stats carry forward. Longitudinal record is preserved.
@@ -1703,9 +1703,9 @@ the real DATE value before writing):
 
 ## What's included
 - Full game engine (docs/engine/PROMPT.md, CLAUDE.md)
-- All subject graphs (graphs/)
-- Your live session state (state/)
-- Your question history and flagged questions (history/)
+- All subject graphs (data/graphs/)
+- Your live session state (data/state/)
+- Your question history and flagged questions (data/history/)
 - Claude's memory about your learning patterns (_TRANSFER/MEMORY/)
 
 ## What's NOT included
@@ -1932,7 +1932,7 @@ Conversation reference: https://claude.ai/chat/7d8f31db-7d6a-4da1-bd9d-4fa1a9e12
   NPD profile (PIC → funnel → stage gates, ATAR/QFD) is correct and matches the
   real source. The stray DDT folder was moved to `_unused_uploads/`.
 - File layout on disk did not match Sec 3. Reorganised into
-  `source/{mega,modules,cla}`, `graphs/archive`, `history/`, `state/`.
+  `source/{mega,modules,cla}`, `data/graphs/archive`, `data/history/`, `data/state/`.
 - README CLA filename `clas_biz_models.docx` had spaces on disk — normalised.
 
 ## Issues Found and Left for V2

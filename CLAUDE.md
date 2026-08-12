@@ -19,12 +19,12 @@ For an explicitly requested in-chat engine session:
 Core locations:
 
 - Engine: `docs/engine/PROMPT.md`
-- State: `state/game_state.json`
-- Stats: `state/stats/{SUBJECT}_stats.json` and `state/stats/meta_stats.json`
-- Session buffer: `state/session_cache.json`
-- Graphs: `graphs/{SUBJECT}.json`
-- History: `history/question_history.json`
-- Flags: `history/flagged_questions.json`
+- State: `data/state/game_state.json`
+- Stats: `data/state/stats/{SUBJECT}_stats.json` and `data/state/stats/meta_stats.json`
+- Session buffer: `data/state/session_cache.json`
+- Graphs: `data/graphs/{SUBJECT}.json`
+- History: `data/history/question_history.json`
+- Flags: `data/history/flagged_questions.json`
 
 The existing state-manager/token-optimization contract remains governed by `docs/engine/PROMPT.md` and
 `.claude/agents/state-manager.md`.

@@ -7,10 +7,10 @@
 **Date:** 2026-06-04
 **Version bump:** 1.9 → 1.10
 
-Graph files (`graphs/{subject}.json`) are never delegated to state-manager.
+Graph files (`data/graphs/{subject}.json`) are never delegated to state-manager.
 
 **Rule added to `docs/engine/PROMPT.md` FILE OPERATION RULES section:**
-`graphs/{subject}.json` is loaded once at session startup into main session context and stays there for the entire session. The main session retrieves nodes from its own context only. state-manager never receives any instruction containing a graph file path. If the main session needs a node, it looks it up from the graph already in its context window — it never asks state-manager to read a graph file.
+`data/graphs/{subject}.json` is loaded once at session startup into main session context and stays there for the entire session. The main session retrieves nodes from its own context only. state-manager never receives any instruction containing a graph file path. If the main session needs a node, it looks it up from the graph already in its context window — it never asks state-manager to read a graph file.
 
 **Rule added to `state-manager.md` ERROR HANDLING table:**
 Graph file path in instruction → return `ERR_UNKNOWN_OP` immediately. Do not read the file.
@@ -115,8 +115,8 @@ current state in memory; it does not need the echo to reconcile.
 ### Migration Steps Applied
 
 1. `.claude/agents/state-manager.md` — replaced with five-operation vocabulary (Step 1)
-2. `state/stats/BEHECON_stats.json` — flat `node_memory` migrated to `node_memory_hot` + `node_memory_cold` (Step 2)
-3. `state/stats/MACRO_stats.json` — empty `node_memory: {}` replaced with `node_memory_hot: {}` + `node_memory_cold: {}` (Step 2)
+2. `data/state/stats/BEHECON_stats.json` — flat `node_memory` migrated to `node_memory_hot` + `node_memory_cold` (Step 2)
+3. `data/state/stats/MACRO_stats.json` — empty `node_memory: {}` replaced with `node_memory_hot: {}` + `node_memory_cold: {}` (Step 2)
 4. `docs/engine/PROMPT.md` Section 2 — startup sequence updated to use OP_READ_STATE and reference node_memory_hot/cold layers (Step 2)
 5. `docs/engine/PROMPT.md` Section 7 — FILE OPERATION DELEGATION replaced with FILE OPERATION RULES (five ops) + ASYNC LEVEL FLUSH block (Steps 3 & 4)
 6. `docs/engine/PROMPT.md` Section 13 — `node_memory` schema replaced with `node_memory_hot` + `node_memory_cold` schemas; v1.9 annotation added (Step 2)
@@ -155,18 +155,18 @@ written per-question, so level progress is never lost.
 ### Fix 2: Three-File Stats Split
 
 **What changed:**
-Replaced the single `state/stats.json` with three files:
+Replaced the single `data/state/stats.json` with three files:
 
 | File | Written | Contains |
 |---|---|---|
-| `state/game_state.json` | Per-question (4 fields only) | Level, HP, node, turn, session metadata |
-| `state/session_cache.json` | Per-question (append) | Mid-level accumulator; cleared at level end |
-| `state/stats/{SUBJECT}_stats.json` | Per-session | node_memory, student_profile, rank, transfer_stats, failure_log, session_history |
-| `state/stats/meta_stats.json` | Per-session | cross_subject_weak_concepts, total_sessions, cross_subject_confirmed |
+| `data/state/game_state.json` | Per-question (4 fields only) | Level, HP, node, turn, session metadata |
+| `data/state/session_cache.json` | Per-question (append) | Mid-level accumulator; cleared at level end |
+| `data/state/stats/{SUBJECT}_stats.json` | Per-session | node_memory, student_profile, rank, transfer_stats, failure_log, session_history |
+| `data/state/stats/meta_stats.json` | Per-session | cross_subject_weak_concepts, total_sessions, cross_subject_confirmed |
 
-**Migration:** Existing `state/stats.json` retained on disk for backup. BEHECON and MACRO
-data extracted to `state/stats/BEHECON_stats.json` and `state/stats/MACRO_stats.json`.
-Cross-subject data moved to `state/stats/meta_stats.json`.
+**Migration:** Existing `data/state/stats.json` retained on disk for backup. BEHECON and MACRO
+data extracted to `data/state/stats/BEHECON_stats.json` and `data/state/stats/MACRO_stats.json`.
+Cross-subject data moved to `data/state/stats/meta_stats.json`.
 
 **game_state.json field changes:** Removed `mastered_nodes` and `failed_nodes` arrays.
 These were maintained redundantly — the authoritative record is `node_memory` in the
@@ -191,7 +191,7 @@ data too. Split eliminates this: only the active subject file is ever loaded.
 - `read_subject_stats(subject)` — read stats/{subject}_stats.json
 - `write_subject_stats(subject, data)` — write stats/{subject}_stats.json
 - `flush_session_cache()` — merge session_cache into subject stats, clear cache
-- `read_graph(subject)` — read graphs/{subject}.json
+- `read_graph(subject)` — read data/graphs/{subject}.json
 - `append_session_cache(update_type, data)` — accumulate mid-level changes
 
 **What the main session no longer does:**
@@ -248,14 +248,14 @@ flat rather than growing linearly.
 - `docs/engine/PROMPT.md`: version 1.7 → 1.8; Section 2 startup sequence; Section 3 file map;
   Section 7 delegation block; Section 13 schemas; Section 16 write schedule
 - `CLAUDE.md`: file locations + TOKEN OPTIMISATION block
-- `state/game_state.json`: removed `mastered_nodes`, `failed_nodes`
+- `data/state/game_state.json`: removed `mastered_nodes`, `failed_nodes`
 - `.claude/agents/state-manager.md`: created (Haiku subagent)
-- `state/stats/BEHECON_stats.json`: created (migrated from stats.json)
-- `state/stats/MACRO_stats.json`: created (migrated from stats.json)
-- `state/stats/meta_stats.json`: created (cross-subject data)
-- `state/session_cache.json`: created (empty template)
+- `data/state/stats/BEHECON_stats.json`: created (migrated from stats.json)
+- `data/state/stats/MACRO_stats.json`: created (migrated from stats.json)
+- `data/state/stats/meta_stats.json`: created (cross-subject data)
+- `data/state/session_cache.json`: created (empty template)
 - `docs/engine/REVIEW_LOG.md`: created (this file)
-- `state/stats.json`: retained on disk as backup; no longer loaded by engine
+- `data/state/stats.json`: retained on disk as backup; no longer loaded by engine
 
 ---
 

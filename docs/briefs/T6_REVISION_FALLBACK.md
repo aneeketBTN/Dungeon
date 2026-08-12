@@ -204,7 +204,7 @@ Normal progress is stored locally in the current browser under:
 
 The internal storage name is not student-facing language. An unfinished question, including
 resolved feedback, resumes on reload. Reset requires confirmation and removes only this T6 browser
-profile. The active web route does not write to the learning engine's `state/` or `history/` files.
+profile. The active web route does not write to the learning engine's `data/state/` or `data/history/` files.
 Deterministic `?scenario=` fixtures do not save normal progress.
 
 ## Acceptance
@@ -225,7 +225,7 @@ The route is `VERIFIED` because the following passed:
   dashboard state;
 - an unscored primer-to-challenge handoff, quick primer fade after success, stronger level-3 repair
   after misses, and zero primer credit in mastery or held-feedback practice;
-- unchanged hashes for all nine files under `state/` and `history/` after Browser practice and
+- unchanged hashes for all nine files under `data/state/` and `data/history/` after Browser practice and
   reset.
 
 Primary evidence is recorded at
