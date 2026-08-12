@@ -32,7 +32,7 @@ for (const relativePath of publicFiles) {
   await cp(join(root, relativePath), destination);
 }
 
-const workerSource = await readFile(join(root, "site", "worker.mjs"), "utf8");
+const workerSource = await readFile(join(root, "sites-backup", "worker.mjs"), "utf8");
 await writeFile(join(dist, "server", "index.js"), workerSource, "utf8");
 
 const releaseManifest = {

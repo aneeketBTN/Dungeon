@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-import worker from "../site/worker.mjs";
+import worker from "../sites-backup/worker.mjs";
 
 const env = {
   ASSETS: {
