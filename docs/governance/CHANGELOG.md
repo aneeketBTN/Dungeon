@@ -3,6 +3,34 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Numeric entry for SCLM Section B
+
+- **Added the second missing format.** SCLM Section B is 6 numericals worth 24 marks — 30% of that
+  paper — and the app had no way to take a typed figure. Marks there go to the final answer within a
+  stated tolerance, with none for working, so the surface grades exactly that: a number against a
+  per-question tolerance, no options to eliminate and no credit for method.
+- **Tolerance is per question and must exceed zero.** Exact float equality would fail honest
+  arithmetic, so the validator rejects a tolerance of zero rather than letting one ship.
+- **`nearMisses` name the method, not just the miss.** A figure matching a known wrong approach gets
+  that approach explained — dropping the 2 under the EOQ root, charging holding on the full order
+  rather than Q/2, inverting the critical ratio, carrying the smoothing correction the wrong way. The
+  validator rejects a near-miss that overlaps the accepted band, since that would mark a right answer
+  wrong.
+- Four items authored: exponential smoothing, EOQ quantity, EOQ total cost, and the newsvendor
+  critical ratio. Scenario numbers are fresh — the paper states every question is self-contained —
+  but the *methods* are the course's own, taken from the lessons already authored against those
+  lectures rather than from standard textbook forms.
+- **A dimensionless answer must say so.** The critical ratio has no unit, and the first draft of the
+  gate demanded one unconditionally. Rather than invent a fake unit, a question may declare itself
+  dimensionless, and must then say in its prompt what form to enter. An omission and a ratio should
+  not look identical to the gate.
+- `VERIFIED(REAL_BROWSER)`: the input renders with its unit and tolerance, commit stays disabled
+  until a figure is present, `1,176` parses through the comma and is diagnosed as the specific wrong
+  method, and `1224.4` is accepted inside a ±1 band. No console errors.
+- Deferred: two more items are needed for Section B's six. Safety stock and service level are the
+  obvious candidates since the paper supplies standard normal tables, but it is **not yet confirmed
+  that SCLM teaches the z-based formula** — that must be checked against the transcripts first.
+
 ## 2026-08-12 — Subjects ordered by the timetable, and by where the learner is weakest
 
 - **The subject rail is now a timetable.** Order defaults to the order the papers are sat — SPMS

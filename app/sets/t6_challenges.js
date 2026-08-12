@@ -591,6 +591,121 @@
     });
   }
 
+  /* Authored numericals for SCLM Section B.
+   *
+   * Six questions, 4 marks each, 24 of that paper's 80 — and the paper is explicit
+   * that marks go to the final figure within a tolerance, with none for working.
+   * No generated surface can stand in: a numerical needs a scenario whose numbers
+   * resolve cleanly and a tolerance chosen for the quantity's kind.
+   *
+   * Scenario figures are fresh rather than lifted from the lectures, because the
+   * skill tested is applying the method, and the paper states every question is
+   * self-contained. The *methods* are the course's own, taken from the lessons
+   * already authored against these lectures: Ft = Ft−1 + α(At−1 − Ft−1); EOQ from
+   * D, K, and h distinguished by their units; the critical ratio from underage
+   * over the total mismatch cost.
+   *
+   * `nearMisses` name the figure a specific wrong method produces, so a learner
+   * who is 40 out because they dropped the 2 under the root is told that, rather
+   * than just "wrong". */
+  var SCLM_NUMERIC = [
+    {concept: "sclm_smoothing", source: "SCLM-M02-L06", node: "Exponential smoothing",
+     stem: "A regional warehouse forecast 1,200 units for last month. Actual demand came in at 1,320 units. The smoothing constant in use is 0.2.",
+     prompt: "What is the forecast for this month?", unit: "units", answer: 1224, tolerance: 1,
+     nearMisses: [
+       {value: 1176, tolerance: 1, tag: "Subtracted the correction", label: "Moved the forecast away from the error",
+        why: "This choice assumed the correction is subtracted. Actual demand exceeded the forecast, so the error is positive and the next forecast has to rise towards it. Ft = 1200 + 0.2 × (1320 − 1200) = 1224.",
+        cue: "Sanity-check the direction before the arithmetic: if actual came in above forecast, the new forecast must be higher than the old one."},
+       {value: 1320, tolerance: 1, tag: "Used the actual as the forecast", label: "Let last month's outcome become the prediction",
+        why: "This choice assumed the next forecast is simply what just happened. That is exponential smoothing with alpha set to 1, which carries the whole error — including all the noise — into the next period.",
+        cue: "If your answer equals the actual, you have used alpha = 1 whatever the question stated."}
+     ],
+     explanation: "Exponential smoothing adds a proportion of the last forecast error to the last forecast: Ft = Ft−1 + α(At−1 − Ft−1). Here that is 1200 + 0.2 × (1320 − 1200) = 1200 + 24 = 1224 units.",
+     link: "Alpha is a choice about responsiveness, not a fitting parameter — which is why the same data can justify different forecasts."},
+
+    {concept: "sclm_eoq", source: "SCLM-M03-L03", node: "Economic order quantity",
+     stem: "A distributor expects steady annual demand of 12,000 units. Each order placed costs ₹600 regardless of its size. Holding one unit for a year costs ₹40.",
+     prompt: "What order quantity minimises the total of ordering and holding cost?", unit: "units", answer: 600, tolerance: 1,
+     nearMisses: [
+       {value: 424, tolerance: 3, tag: "Dropped the 2 under the root", label: "Left the factor of 2 out of the formula",
+        why: "This choice assumed the quantity is the root of D·K/h. The 2 comes from average cycle stock being Q/2 rather than Q — you hold half an order on average across the cycle, not all of it.",
+        cue: "The 2 is not decoration. If it is missing, the answer is low by a factor of about 1.41."},
+       {value: 40, tolerance: 2, tag: "Swapped the ordering and holding costs", label: "Put the costs in the wrong places",
+        why: "This choice assumed K and h are interchangeable. They are told apart by their units: K is currency per order, charged once however large the order; h is currency per unit per year, charged on stock you are holding.",
+        cue: "Read the units before substituting. Per order and per unit per year cannot swap places."}
+     ],
+     explanation: "EOQ = √(2DK/h) = √(2 × 12,000 × 600 ÷ 40) = √360,000 = 600 units. The purchase cost drops out because it does not depend on the order size.",
+     link: "The order size fixes how often you reorder, which is what the next decision — when to place the order — is built on."},
+
+    {concept: "sclm_eoq", source: "SCLM-M03-L03", node: "Economic order quantity",
+     stem: "The same distributor settles on an order quantity of 600 units against annual demand of 12,000 units, an ordering cost of ₹600 per order, and a holding cost of ₹40 per unit per year.",
+     prompt: "What is the total annual ordering plus holding cost at that order quantity?", unit: "₹", answer: 24000, tolerance: 50,
+     nearMisses: [
+       {value: 36000, tolerance: 50, tag: "Charged holding on the whole order", label: "Held the full order quantity all year",
+        why: "This choice assumed holding cost applies to Q rather than Q/2. Stock is drawn down between deliveries, so the average holding across a cycle is half the order quantity — which is also where the 2 in the EOQ formula comes from.",
+        cue: "Holding cost is always charged on average stock. If you used Q, your answer is high by (Q/2)·h."}
+     ],
+     explanation: "Ordering cost is (D/Q)·K = (12,000 ÷ 600) × 600 = ₹12,000. Holding cost is (Q/2)·h = 300 × 40 = ₹12,000. Total ₹24,000. That the two halves are equal is not a coincidence — it is the property that defines the EOQ.",
+     link: "Equal ordering and holding cost at the optimum is the quickest check that a computed EOQ is right."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L05", node: "Newsvendor decision",
+     stem: "A seasonal item sells for ₹900 and costs ₹500 to buy. There is one buying opportunity, and anything unsold at the end of the season clears at ₹200.",
+     prompt: "What is the critical ratio? Give it as a decimal.", unit: "", dimensionless: true, answer: 0.57, tolerance: 0.01,
+     nearMisses: [
+       {value: 0.43, tolerance: 0.01, tag: "Inverted the ratio", label: "Divided the overage cost by the total instead",
+        why: "This choice assumed the ratio is built from the cost of having too many. It is built from underage — the margin lost on a sale you could not fulfil — over the total mismatch cost. Cu = 900 − 500 = 400, Co = 500 − 200 = 300, so the ratio is 400/700.",
+        cue: "Ask which mistake hurts more. When underage exceeds overage the ratio must be above 0.5, so you order generously."},
+       {value: 1.33, tolerance: 0.02, tag: "Took the ratio of the two costs", label: "Compared the costs instead of taking a share",
+        why: "This choice assumed the critical ratio is Cu divided by Co. It is a share of total mismatch cost, so it always falls between 0 and 1 — a value above 1 cannot be a position in a demand distribution.",
+        cue: "The critical ratio is a probability. Anything outside 0 to 1 is the wrong construction."}
+     ],
+     explanation: "Underage is Cu = P − C = 900 − 500 = ₹400. Overage is C − salvage = 500 − 200 = ₹300. The critical ratio is Cu ÷ (Cu + Co) = 400 ÷ 700 = 0.571, so you order at roughly the 57th percentile of demand.",
+     link: "The ratio sets how far up the demand distribution to order, which is where the supplied normal table is used."}
+  ];
+
+  function addAuthoredNumeric(course) {
+    if (course.id !== "SCLM") return;
+    var seen = {};
+    SCLM_NUMERIC.forEach(function (item) {
+      var concept = (course.concepts || []).filter(function (entry) { return entry.id === item.concept; })[0];
+      if (!concept) return;
+      seen[item.concept] = (seen[item.concept] || 0) + 1;
+      addQuestion(course, {
+        id: item.concept + "_numeric" + (seen[item.concept] > 1 ? "_" + seen[item.concept] : ""),
+        courseId: course.id,
+        conceptId: item.concept,
+        supportingConceptIds: [],
+        module: concept.module,
+        source: item.source,
+        sourceIds: [item.source],
+        node: item.node,
+        pattern: "Enter the final figure",
+        perspective: "apply",
+        type: "numeric",
+        skills: ["apply", "compute"],
+        difficulty: 4,
+        variantFamily: item.concept + "_numeric",
+        boss: false,
+        caselet: item.stem,
+        stem: item.stem,
+        prompt: item.prompt,
+        unit: item.unit,
+        dimensionless: !!item.dimensionless,
+        answer: item.answer,
+        tolerance: item.tolerance,
+        nearMisses: item.nearMisses,
+        missDiagnosis: {
+          tag: "Final figure did not land",
+          label: "The method may be right, but the figure is not",
+          why: "This section awards marks for the final answer within a tolerance and none for working, so an approach that is nearly right scores the same as one that is wrong. The full calculation is set out below.",
+          cue: "Recompute from the stated numbers before moving on. Reading a figure back from the working is where most of these are lost."
+        },
+        explanation: item.explanation,
+        link: item.link
+      });
+    });
+  }
+
   function addTermCloze(course, concept, data) {
     var choices = choiceSet(data.name, nearbyConcepts(course, concept).map(function (entry) { return entry.name; }), stableNumber(concept.id));
     addQuestion(course, {
@@ -977,6 +1092,7 @@
     // Runs last, over every question in the course — authored MCQs included — so a
     // question added by any path is diagnosed without its author wiring anything up.
     addAuthoredMultiSelect(course);
+    addAuthoredNumeric(course);
 
     var provenance = buildProvenance(allData);
     Object.keys(course.questions).forEach(function (id) {

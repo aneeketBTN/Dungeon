@@ -1623,7 +1623,7 @@
 
   function shapeMatches(shape, question) {
     if (shape === "recognition") return question.type === "mcq" || question.type === "cloze" || question.type === "msq";
-    if (shape === "application") return question.type === "case-cloze" || question.type === "match" || question.type === "boss" || question.perspective === "apply";
+    if (shape === "application") return question.type === "case-cloze" || question.type === "match" || question.type === "boss" || question.type === "numeric" || question.perspective === "apply";
     if (shape === "generation") return question.type === "short-answer" || question.type === "cloze" || question.type === "case-cloze";
     return true;
   }
@@ -2089,6 +2089,7 @@
      * the paper's marking a blank scores zero either way, but committing an empty
      * answer is almost always a mis-click rather than a decision. */
     if (question.type === "msq") return Array.isArray(selected) && selected.length > 0;
+    if (question.type === "numeric") return parseNumericEntry(selected) !== null;
     var count = question.type === "boss" ? question.steps.length : question.type === "match" ? question.rows.length : question.blanks.length;
     return Array.isArray(selected) && selected.length === count && selected.every(function (value) { return typeof value === "number" && value >= 0; });
   }
@@ -2105,6 +2106,7 @@
     if (question.type === "match") return renderMatch(question);
     if (question.type === "boss") return renderBoss(question);
     if (question.type === "msq") return renderMultiOptions(question);
+    if (question.type === "numeric") return renderNumeric(question);
     renderOptions(question);
   }
 
@@ -2453,6 +2455,59 @@
     updateCommitState();
   }
 
+  /* Numeric entry, for SCLM Section B.
+   *
+   * The paper is explicit: enter the requested final numerical answer, marks are
+   * awarded for the final answer within a stated grading tolerance, and no marks
+   * are given for working. So this surface takes a number and grades it against a
+   * tolerance — no options to eliminate, no partial credit for method. A learner
+   * who reaches the right approach and fumbles the arithmetic scores zero here,
+   * exactly as they would in the hall, which is the point of practising it.
+   *
+   * Tolerance is per question because the quantities differ in kind: a reorder
+   * point in units rounds differently from a cost in rupees or a z-value. */
+  function parseNumericEntry(value) {
+    // Accept what a learner actually types off a calculator: 1,240 · ₹1240 · 1240.5
+    var cleaned = String(value == null ? "" : value).replace(/[₹,\s]/g, "");
+    if (!cleaned || !/^-?\d*\.?\d+$/.test(cleaned)) return null;
+    var parsed = Number(cleaned);
+    return isFinite(parsed) ? parsed : null;
+  }
+
+  function renderNumeric(question) {
+    var holder = prepareResponseHolder("numeric-entry");
+    var label = document.createElement("label");
+    label.className = "numeric-label";
+    label.innerHTML = "<span>" + escapeHtml(question.prompt || "Your answer") + "</span>" +
+      "<small>Enter the final figure only. Working is not marked, here or in the paper.</small>";
+    var row = document.createElement("span");
+    row.className = "numeric-row";
+    var input = document.createElement("input");
+    input.type = "text";
+    input.inputMode = "decimal";
+    input.autocomplete = "off";
+    input.setAttribute("aria-label", question.prompt || "Your numerical answer");
+    input.value = typeof selected === "string" ? selected : "";
+    input.disabled = !!session.answered;
+    input.addEventListener("input", function () {
+      selected = input.value;
+      session.selected = selected;
+      updateCommitState();
+    });
+    row.appendChild(input);
+    if (question.unit) {
+      var unit = document.createElement("b");
+      unit.className = "numeric-unit";
+      unit.textContent = question.unit;
+      row.appendChild(unit);
+    }
+    label.appendChild(row);
+    holder.appendChild(label);
+    $("question-help").textContent = question.tolerance
+      ? "Marked on the final figure, within ±" + question.tolerance + (question.unit ? " " + question.unit : "") + ". A scientific calculator is allowed in this paper."
+      : "Marked on the final figure only.";
+  }
+
   function renderShortAnswer(question) {
     var holder = prepareResponseHolder("short-answer-options");
     var label = document.createElement("label");
@@ -2682,6 +2737,14 @@
       if (wrongPick === undefined) return null;
       return (question.diagnoses || [])[wrongPick] || null;
     }
+    /* A numeric answer has no option to diagnose, so the diagnosis comes from the
+     * figure itself: a value matching a known wrong method gets that method named.
+     * Anything else falls back to the question's general miss, if one is authored. */
+    if (question.type === "numeric") {
+      var entry = response.numericEntry || {};
+      if (entry.trap) return entry.trap;
+      return question.missDiagnosis || null;
+    }
     var failedIndex = (response.partResults || []).indexOf(false);
     if (failedIndex < 0) return null;
     var chosen = (response.selected || [])[failedIndex];
@@ -2693,6 +2756,33 @@
       var mcqCorrect = selected === question.answer;
       var mcqDiagnosis = mcqCorrect ? null : (question.diagnoses || [])[selected];
       return {correct: mcqCorrect, partial: mcqCorrect ? 1 : 0, partResults: [mcqCorrect], conceptResults: {}, misconception: mcqCorrect ? null : (mcqDiagnosis ? mcqDiagnosis.tag : (question.misconceptions || [])[selected] || "wrong-option")};
+    }
+    if (question.type === "numeric") {
+      /* All or nothing, within the tolerance, because that is the paper's rule:
+       * marks for the final answer only, none for working. The diagnosis is
+       * chosen by *how* the figure is wrong — a near miss is a rounding problem,
+       * a value matching a known wrong method is a method problem, and those need
+       * different corrections. `nearMisses` lets an author name the specific
+       * wrong figure a common mistake produces. */
+      var given = parseNumericEntry(selected);
+      var target = Number(question.answer);
+      var tolerance = Number(question.tolerance || 0);
+      var numericCorrect = given !== null && Math.abs(given - target) <= tolerance;
+      var trap = null;
+      if (!numericCorrect && given !== null) {
+        (question.nearMisses || []).some(function (entry) {
+          if (Math.abs(given - Number(entry.value)) <= Number(entry.tolerance || tolerance)) { trap = entry; return true; }
+          return false;
+        });
+      }
+      return {
+        correct: numericCorrect,
+        partial: numericCorrect ? 1 : 0,
+        partResults: [numericCorrect],
+        conceptResults: {},
+        numericEntry: {given: given, target: target, tolerance: tolerance, unit: question.unit || "", trap: trap},
+        misconception: numericCorrect ? null : (trap ? trap.tag : given === null ? "no-figure-entered" : "wrong-figure")
+      };
     }
     if (question.type === "msq") {
       /* Scored exactly as the paper scores it: +1 per correct option selected,
@@ -2892,6 +2982,7 @@
       partResults: evaluation.partResults,
       conceptResults: evaluation.conceptResults,
       msqMarks: evaluation.msqMarks || null,
+      numericEntry: evaluation.numericEntry || null,
       misconception: evaluation.misconception,
       isReattempt: !!item.isReattempt,
       initial: !!item.initial,
@@ -2917,6 +3008,7 @@
   function correctAnswerKey(question) {
     if (question.type === "mcq" || question.type === "primer" || !question.type) return [question.options[question.answer]];
     if (question.type === "msq") return (question.answers || []).map(function (index) { return question.options[index]; });
+    if (question.type === "numeric") return [String(question.answer) + (question.unit ? " " + question.unit : "")];
     if (question.type === "match") return question.rows.map(function (row) { return row.label + " → " + question.choices[row.answer]; });
     if (question.type === "boss") return question.steps.map(function (step) { return step.label + ": " + step.options[step.answer]; });
     if (question.type === "short-answer") return [question.exemplar];
@@ -3010,6 +3102,21 @@
      * paper part-marks it, so a learner who took two of three and left the trap
      * alone did better than one who selected everything. Showing the marks makes
      * the negative marking concrete instead of abstract advice. */
+    /* Numeric feedback states the figure entered against the accepted band, so a
+     * near miss is legible as a near miss rather than a flat "wrong". */
+    var numeric = response.numericEntry;
+    var numericCopy = "";
+    if (numeric) {
+      var unitCopy = numeric.unit ? " " + numeric.unit : "";
+      numericCopy = response.correct
+        ? "You entered " + numeric.given + unitCopy + ". Accepted: " + numeric.target + unitCopy +
+          (numeric.tolerance ? " ± " + numeric.tolerance : "") + "."
+        : (numeric.given === null ? "No figure was read from your answer." : "You entered " + numeric.given + unitCopy + ".") +
+          " The answer is " + numeric.target + unitCopy +
+          (numeric.tolerance ? ", accepted within ± " + numeric.tolerance : "") +
+          ". This section marks the final figure only, so there is no part credit for method.";
+    }
+
     var marks = response.msqMarks;
     var marksCopy = marks
       ? marks.awarded + " of " + marks.available + (marks.available === 1 ? " mark" : " marks") +
@@ -3018,7 +3125,8 @@
       : "";
 
     feedback.innerHTML = "<span class='feedback-label'>" + escapeHtml(label) + "</span>" +
-      (marksCopy ? "<p class='msq-marks'>" + escapeHtml(marksCopy) + "</p>" : "") + body +
+      (marksCopy ? "<p class='msq-marks'>" + escapeHtml(marksCopy) + "</p>" : "") +
+      (numericCopy ? "<p class='numeric-verdict'>" + escapeHtml(numericCopy) + "</p>" : "") + body +
       (bossCopy ? "<p class='still-valid'><b>What remains valid:</b> " + escapeHtml(bossCopy) + "</p>" : "") +
       (!response.correct ? "<div class='answer-key'><p class='answer-key-head'>The complete answer</p><ul>" + answerKey.map(function (answer) { return "<li>" + escapeHtml(answer) + "</li>"; }).join("") + "</ul></div>" : "") +
       "<p class='bridge'><b>Why it connects:</b> " + escapeHtml(question.link) + "</p>" +

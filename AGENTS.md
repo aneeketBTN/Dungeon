@@ -568,9 +568,14 @@ after the version is live, since a push to `main` deploys.
   `diagnosisFor` MSQ branch was added but does not fire — likely `response.selected` is not carried
   for this type), and `msqMarks` is computed but never rendered, so the learner is not shown "1 of 3
   marks". Only 8 of the paper's 20 MSQs are authored.
-- [ ] **SCLM numerical entry does not exist** — 6 tolerance-graded numericals, 24 marks, 30% of that
-  paper. Needs a numeric-answer surface with a grading tolerance, since the exam awards marks for the
-  final answer only and gives none for working. This is now the largest missing format.
+- [~] **SCLM numeric entry built; 4 of 6 items authored.** `VERIFIED(REAL_BROWSER)`: a typed figure
+  is graded against a per-question tolerance, comma and ₹ formatting is parsed, and the verdict states
+  the entry against the accepted band. A wrong figure matching a known wrong method names that method
+  (`nearMisses`) instead of reporting a bare "wrong". Items cover exponential smoothing, EOQ quantity,
+  EOQ total cost, and the newsvendor critical ratio. **Two more are needed** to match Section B's six,
+  and the obvious candidates are safety stock and service level — the paper supplies standard normal
+  tables, which points there — but *it is not yet confirmed that SCLM teaches the z-based formula*.
+  Verify that against the transcripts before authoring, rather than assuming the standard form.
 - [ ] **IBM's paper contains no objective questions at all** — ten subjective answers on a caselet
   released two days beforehand. Its 196 MCQ-derived surfaces contribute nothing to it, and authoring
   its 62 uncited lectures would add zero marks. Do not spend bank effort there; the useful work is

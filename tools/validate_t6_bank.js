@@ -256,6 +256,31 @@ courseIds.forEach(function (courseId) {
         if ((question.answers || []).indexOf(index) >= 0) return;
         if (!(question.diagnoses || [])[index]) errors.push(question.id + " option " + index + " is a distractor with no diagnosis");
       });
+    } else if (question.type === "numeric") {
+      /* SCLM Section B: enter the final figure, marks awarded within a stated
+       * tolerance, none for working. A tolerance of zero would demand an exact
+       * float match and fail honest arithmetic, so it must be present and above
+       * zero. `nearMisses` are optional but must not overlap the accepted band —
+       * a trap that is also a correct answer would mark a right answer wrong. */
+      if (typeof question.answer !== "number" || !isFinite(question.answer)) errors.push(question.id + " has no numeric answer");
+      if (typeof question.tolerance !== "number" || !(question.tolerance > 0)) errors.push(question.id + " needs a grading tolerance above zero; exact float equality fails honest arithmetic");
+      if (!question.prompt) errors.push(question.id + " does not say what figure to enter");
+      /* The learner has to know what form to type. Usually that is a unit; for a
+       * genuinely dimensionless quantity like a critical ratio it is not, so the
+       * question must say so deliberately rather than leaving the field blank —
+       * an omission and a ratio should not look the same to this gate. */
+      if (!question.unit && !question.dimensionless) errors.push(question.id + " does not state the unit of the answer, and is not marked dimensionless");
+      if (question.dimensionless && !/decimal|ratio|proportion|percentage|fraction/i.test(String(question.prompt))) {
+        errors.push(question.id + " is dimensionless but its prompt does not say what form to enter");
+      }
+      if (question.options !== undefined) errors.push(question.id + " must not offer options; the paper takes a typed figure");
+      (question.nearMisses || []).forEach(function (entry, index) {
+        if (typeof entry.value !== "number" || !isFinite(entry.value)) errors.push(question.id + " nearMiss " + index + " has no value");
+        if (!entry.label || !entry.why) errors.push(question.id + " nearMiss " + index + " does not explain the method that produces it");
+        if (Math.abs(Number(entry.value) - question.answer) <= question.tolerance) {
+          errors.push(question.id + " nearMiss " + index + " sits inside the accepted tolerance, so it would mark a correct answer wrong");
+        }
+      });
     } else if (question.type === "short-answer") {
       if (!question.selfReviewOnly || !Array.isArray(question.rubric) || question.rubric.length < 3 || !question.exemplar) errors.push(question.id + " lacks a transparent self-review rubric or exemplar");
       if ((question.options || question.answer) !== undefined) errors.push(question.id + " must not imply opaque automatic grading");

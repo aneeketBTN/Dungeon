@@ -402,6 +402,16 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .option.option-multi.missed { border-color: var(--green); background: transparent; border-style: dashed; }
 .option.option-multi.missed .option-box { border-color: var(--green); background: white; }
 .msq-marks { margin: 10px 0 0; font-size: 13px; font-weight: 700; }
+/* Numeric entry. A single field, sized for a figure rather than a sentence, so
+   the format reads as "final answer only" before the instruction is read. */
+.numeric-label { display: grid; gap: 4px; }
+.numeric-label > span { font-size: 13px; font-weight: 700; }
+.numeric-label small { color: var(--muted); font-size: 11px; }
+.numeric-row { margin-top: 6px; display: flex; align-items: center; gap: 8px; }
+.numeric-row input { width: min(220px, 100%); min-height: 46px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: white; font: inherit; font-size: 16px; font-variant-numeric: tabular-nums; }
+.numeric-row input:disabled { background: var(--card-soft); }
+.numeric-unit { color: var(--muted); font-size: 13px; }
+.numeric-verdict { margin: 10px 0 0; font-size: 13px; font-variant-numeric: tabular-nums; }
 .format-note { margin: 0 0 4px; color: var(--muted); font-size: 12px; }
 .cloze-sentence { padding: 0; color: #2f3e35; background: transparent; border: 0; border-radius: 0; font: 650 clamp(17px,2vw,21px)/1.8 Georgia, serif; }
 .inline-blank { display: block; width: 100%; margin: 8px 0; }
