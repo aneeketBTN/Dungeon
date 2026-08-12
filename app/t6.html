@@ -45,8 +45,16 @@
         <section class="subject-rail" aria-labelledby="subjects-title">
           <div class="rail-heading">
             <div><p class="eyebrow">Your subjects</p><h2 id="subjects-title">Choose a subject</h2></div>
-            <p>Everything below follows your choice.</p>
+            <div class="rail-sort">
+              <label for="subject-sort">Order by</label>
+              <select id="subject-sort">
+                <option value="exam">Exam order</option>
+                <option value="hardest">Hardest for you</option>
+              </select>
+              <p class="rail-sort-hint" id="subject-sort-hint">The order you sit them.</p>
+            </div>
           </div>
+          <p class="rail-note">Everything below follows your choice. Both papers on a day run back to back, so the subject you sit first is the one you can least afford to leave until the end.</p>
           <div class="course-grid" id="course-grid" role="group" aria-label="Term 6 subjects"></div>
         </section>
 

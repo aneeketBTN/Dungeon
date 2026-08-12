@@ -3,6 +3,27 @@
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
 
+## 2026-08-12 — Subjects ordered by the timetable, and by where the learner is weakest
+
+- **The subject rail is now a timetable.** Order defaults to the order the papers are sat — SPMS
+  (Sat 22 Aug 09:00), BRGSA (Sat 22 Aug 13:00), IBM (Sun 23 Aug 09:00), SCLM (Sun 23 Aug 13:00) —
+  and each card carries its day, sitting time, and total marks. A new profile now opens on **SPMS**
+  rather than BRGSA: the first paper sat, not the first alphabetically. Both papers on a day run back
+  to back, so the sitting order is a real constraint on revision, not a preference.
+- **Negative marking is a permanent mark on the card**, not a line of copy to remember. SPMS is the
+  only paper with it, and it is the one rule that changes how you answer.
+- **A second order, "Hardest for you"**, sorts by weakest evidence first using the learner's own
+  attempts, with the sitting order as a stable tie-break so the list is not accidentally alphabetical
+  before any practice exists. Sorting is presentation only — it never changes what is scheduled
+  inside a subject, so switching it cannot alter anyone's practice or evidence. The choice persists.
+- The day-boundary marker only renders in exam order, where it means something; in any other order it
+  would mislead.
+- `VERIFIED(REAL_BROWSER)`: exam order renders the full timetable with the boundary at IBM; seeding
+  BRGSA and SCLM with evidence moves IBM ahead of BRGSA and SCLM last under "Hardest for you", while
+  exam order stays fixed. Preference persists across reload. No console errors. Synthetic data was
+  seeded on the `127.0.0.1` origin and cleared afterwards, so the owner's `localhost` session was
+  never touched.
+
 ## 2026-08-12 — Control Room: force sign-out that preserves progress
 
 - **Added a sign-out control that is deliberately narrower than revoke.** `revokeTester` deletes the

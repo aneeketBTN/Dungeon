@@ -3,6 +3,43 @@
 
   var COURSES = window.T6_COURSES || {};
   var COURSE_IDS = ["BRGSA", "IBM", "SCLM", "SPMS"];
+
+  /* The Batch 1 timetable, from docs/briefs/T6_EXAM_PATTERN.md.
+   *
+   * Two papers a day, back to back, and the gap between the first and last is
+   * about 28 hours — so the order you revise in is a real constraint, not a
+   * preference. `seat` is the sitting order across both days and is what the
+   * default sort uses: whatever you sit first is what you can least afford to
+   * leave until the end. */
+  var EXAM_SCHEDULE = {
+    SPMS:  {seat: 1, day: "Sat 22 Aug", start: "09:00", end: "11:00", marks: 75,  negative: true,  note: "35 MCQs + 20 multi-select"},
+    BRGSA: {seat: 2, day: "Sat 22 Aug", start: "13:00", end: "15:00", marks: 80,  negative: false, note: "20 MCQs + 4 cases + 2 written"},
+    IBM:   {seat: 3, day: "Sun 23 Aug", start: "09:00", end: "11:00", marks: 100, negative: false, note: "10 written answers on a released caselet"},
+    SCLM:  {seat: 4, day: "Sun 23 Aug", start: "13:00", end: "15:00", marks: 80,  negative: false, note: "50 MCQs + 6 numericals + 3 matches"}
+  };
+
+  var EXAM_ORDER = COURSE_IDS.slice().sort(function (a, b) {
+    return (EXAM_SCHEDULE[a] || {}).seat - (EXAM_SCHEDULE[b] || {}).seat;
+  });
+
+  var SORT_MODES = {
+    exam: {label: "Exam order", hint: "The order you sit them."},
+    hardest: {label: "Hardest for you", hint: "Least evidence first, using your own attempts."}
+  };
+
+  /* Sort is presentation only — it never changes what is scheduled inside a
+   * subject, so switching it cannot alter anyone's practice or evidence. */
+  function orderedCourseIds(mode) {
+    if (mode !== "hardest") return EXAM_ORDER.slice();
+    return EXAM_ORDER.slice().sort(function (a, b) {
+      var left = courseStats(a);
+      var right = courseStats(b);
+      // Weakest first. Ties fall back to the sitting order, so the list is stable
+      // before any practice exists rather than alphabetical by accident.
+      if (left.weighted !== right.weighted) return left.weighted - right.weighted;
+      return EXAM_SCHEDULE[a].seat - EXAM_SCHEDULE[b].seat;
+    });
+  }
   var STORAGE_KEY = "term6.revision.v2";
   var LEGACY_CLAIM_KEY = "term6.revision.v2.claimed-by";
   var BACKEND_ACTIVE = window.location.pathname.indexOf("/dungeon") === 0;
@@ -75,7 +112,10 @@
   function defaultProfile() {
     return {
       version: 2,
-      selectedCourse: "BRGSA",
+      // The first paper sat, not the first alphabetically. A learner opening this
+      // for the first time should land on the subject with the least time left.
+      selectedCourse: EXAM_ORDER[0],
+      subjectSort: "exam",
       conceptAttempts: {},
       completed: {},
       lastMock: {},
@@ -1182,17 +1222,35 @@
   function renderCourseCards() {
     var grid = $("course-grid");
     grid.innerHTML = "";
-    COURSE_IDS.forEach(function (courseId) {
+    var mode = profile.subjectSort === "hardest" ? "hardest" : "exam";
+    var sortControl = $("subject-sort");
+    if (sortControl) {
+      sortControl.value = mode;
+      $("subject-sort-hint").textContent = SORT_MODES[mode].hint;
+    }
+    var order = orderedCourseIds(mode);
+    var previousDay = null;
+    order.forEach(function (courseId) {
       var course = getCourse(courseId);
       var stats = courseStats(courseId);
+      var exam = EXAM_SCHEDULE[courseId] || {};
       var button = document.createElement("button");
       button.type = "button";
       button.className = "course-card" + (profile.selectedCourse === courseId ? " selected" : "");
+      /* In exam order the cards read as a timetable, so mark where the day turns
+       * over. In any other order that boundary is meaningless and would mislead. */
+      if (mode === "exam" && exam.day && exam.day !== previousDay) button.classList.add("day-start");
+      previousDay = exam.day;
       button.setAttribute("aria-pressed", String(profile.selectedCourse === courseId));
-      button.setAttribute("aria-label", course.title + ". " + stats.strong + " of " + stats.total + " concepts strong. Open subject dashboard.");
+      button.setAttribute("aria-label", course.title + ". " +
+        (exam.day ? "Sat " + exam.day + " at " + exam.start + ", " + exam.marks + " marks. " : "") +
+        stats.strong + " of " + stats.total + " concepts strong. Open subject dashboard.");
       var targetCopy = stats.strong === stats.total ? "Complete" : (stats.total - stats.strong) + " left";
-      button.innerHTML = "<span class='course-code'>" + escapeHtml(course.shortTitle) + "</span>" +
+      button.innerHTML = "<span class='course-code'>" + escapeHtml(course.shortTitle) +
+          (exam.negative ? "<em class='course-flag' title='Negative marking in Section B'>−1</em>" : "") + "</span>" +
         "<span class='course-name'>" + escapeHtml(course.title) + "</span>" +
+        (exam.day ? "<span class='course-when'><b>" + escapeHtml(exam.day) + "</b> " + escapeHtml(exam.start) + "–" + escapeHtml(exam.end) +
+          " <small>" + exam.marks + " marks</small></span>" : "") +
         "<span class='course-bottom'><b>" + stats.strong + " / " + stats.total + " strong</b><small>" + escapeHtml(targetCopy) + "</small>" +
         "<span class='mini-track' aria-hidden='true'><i style='width:" + stats.weighted + "%'></i></span></span>";
       button.addEventListener("click", function () {
@@ -3408,6 +3466,11 @@
 
   function bindEvents() {
     bindStageTabs();
+    $("subject-sort").addEventListener("change", function (event) {
+      profile.subjectSort = event.target.value === "hardest" ? "hardest" : "exam";
+      saveProfile();
+      renderCourseCards();
+    });
     $("brand-home").addEventListener("click", goDashboard);
     $("start-recommended").addEventListener("click", executeRecommendation);
     $("start-selected-mock").addEventListener("click", function () { openPracticeSetup(profile.selectedCourse); });
