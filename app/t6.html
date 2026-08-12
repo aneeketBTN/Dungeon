@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Term 6 Revision — Learn, practise, improve</title>
+  <meta name="description" content="A clear Term 6 revision dashboard with source-based practice, progress tracking, and targeted re-attempts.">
+  <link rel="stylesheet" href="t6.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="app-header">
+    <button class="brand" id="brand-home" type="button" aria-label="Open revision dashboard">
+      <span class="brand-mark" aria-hidden="true">T6</span>
+      <span><b>Term 6 Revision</b><small>One useful step at a time.</small></span>
+    </button>
+    <div class="header-trend" aria-live="polite">
+      <span><small>Term 6 evidence</small><b id="header-trend-value">0%</b></span>
+      <svg id="header-spark" class="header-spark" viewBox="0 0 96 30" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <small class="header-trend-note" id="header-trend-note">No practice block yet</small>
+    </div>
+    <div class="account-controls" id="account-controls" hidden>
+      <span id="sync-status" role="status" aria-live="polite">Saved online</span>
+      <button id="sign-out" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="screen dashboard-screen active" id="dashboard-screen" aria-labelledby="next-step-title">
+      <div class="dashboard-wrap">
+        <aside class="community-reminder" id="community-reminder" aria-labelledby="community-reminder-title" hidden>
+          <div>
+            <p class="eyebrow">Tester requirement</p>
+            <h2 id="community-reminder-title">Join the tester group to keep testing</h2>
+            <p id="community-reminder-copy">Open the WhatsApp invite, join the group, and share feedback during testing.</p>
+          </div>
+          <div class="community-actions">
+            <a class="button secondary" id="community-link" href="https://chat.whatsapp.com/E9RThdcAzqFDTiWPUYcE3I" target="_blank" rel="noopener noreferrer">Open WhatsApp invite</a>
+            <button class="button primary" id="community-joined" type="button" disabled>Open the invite first</button>
+          </div>
+        </aside>
+
+        <section class="subject-rail" aria-labelledby="subjects-title">
+          <div class="rail-heading">
+            <div><p class="eyebrow">Your subjects</p><h2 id="subjects-title">Choose a subject</h2></div>
+            <p>Everything below follows your choice.</p>
+          </div>
+          <div class="course-grid" id="course-grid" role="group" aria-label="Term 6 subjects"></div>
+        </section>
+
+        <section class="focus-panel">
+          <div class="focus-copy">
+            <p class="eyebrow"><span id="selected-course-code">BRGSA</span></p>
+            <h1 id="next-step-title">Begin with one short study set</h1>
+            <p id="next-step-copy">Start small. Every answer updates your concept progress and makes the next recommendation more useful.</p>
+            <div class="next-meta" id="next-step-meta"><span>~7 minutes</span><span>4 questions</span></div>
+            <div class="hero-actions">
+              <button class="button primary" id="start-recommended" type="button">Start this study set <span aria-hidden="true">→</span></button>
+              <button class="button quiet-light" id="start-selected-mock" type="button">Mix your own practice</button>
+            </div>
+          </div>
+          <aside class="momentum-card" aria-labelledby="momentum-title">
+            <p class="eyebrow" id="momentum-scope">Selected subject</p>
+            <h2 id="momentum-title">How your evidence is moving</h2>
+            <div class="momentum-figure"><b id="momentum-value">0%</b><span class="momentum-delta" id="momentum-delta"></span></div>
+            <svg id="hero-trend" class="hero-trend" viewBox="0 0 320 88" preserveAspectRatio="none" role="img" aria-labelledby="momentum-title" aria-describedby="momentum-message"></svg>
+            <p id="momentum-message">Your first practice block starts the line.</p>
+            <small>The line moves with demonstrated evidence, never with time spent.</small>
+          </aside>
+        </section>
+
+        <section class="practice-builder" id="practice-builder" aria-labelledby="builder-title" tabindex="-1">
+          <div class="section-heading compact-heading">
+            <div><p class="eyebrow">Mix and match</p><h2 id="builder-title">Build your own practice</h2></div>
+            <p>Every choice below changes the questions you actually get. This is practice, not a copy of the final paper.</p>
+          </div>
+          <div class="builder-groups">
+            <fieldset class="builder-group"><legend>What it tests</legend><div class="chip-row" id="builder-shape"></div></fieldset>
+            <fieldset class="builder-group"><legend>Which concepts</legend><div class="chip-row" id="builder-focus"></div></fieldset>
+            <fieldset class="builder-group"><legend>How long</legend><div class="chip-row" id="builder-length"></div></fieldset>
+            <fieldset class="builder-group"><legend>When explanations appear</legend><div class="chip-row" id="builder-mode"></div></fieldset>
+          </div>
+          <div class="builder-footer">
+            <p class="builder-summary" id="builder-summary" aria-live="polite"></p>
+            <button class="button primary" id="builder-start" type="button">Start this practice <span aria-hidden="true">→</span></button>
+          </div>
+        </section>
+
+        <section class="progress-story" aria-labelledby="story-title">
+          <div class="section-heading compact-heading">
+            <div><p class="eyebrow">How far you have come</p><h2 id="story-title">Your record so far</h2></div>
+            <p id="story-note">Counts describe what you have done, not what you are worth.</p>
+          </div>
+          <div class="story-stats" id="story-stats"></div>
+        </section>
+
+        <section class="evidence-summary" aria-labelledby="mastery-matrix-title">
+          <article class="mastery-matrix">
+            <div class="summary-heading"><div><p class="eyebrow">Your evidence</p><h2 id="mastery-matrix-title">Term 6 mastery matrix</h2></div><span>Four subjects + connections</span></div>
+            <div class="radar-layout">
+              <canvas id="mastery-radar" role="img" aria-describedby="mastery-radar-copy"></canvas>
+              <div><ul class="mastery-values" id="mastery-values" aria-label="Mastery matrix values"></ul><p id="mastery-radar-copy"></p></div>
+            </div>
+          </article>
+          <article class="overview-summary" aria-labelledby="overall-title">
+            <div class="summary-heading"><div><p class="eyebrow">All four subjects</p><h3 id="overall-title">All of Term 6</h3></div><span>64 core concepts</span></div>
+            <div class="overall-stats" aria-live="polite">
+              <article class="stat strong"><span>Strong</span><b id="overall-strong">0</b><small>Broad evidence</small></article>
+              <article class="stat developing"><span>Developing</span><b id="overall-developing">0</b><small>Evidence is building</small></article>
+              <article class="stat needs"><span>Needs practice</span><b id="overall-needs">0</b><small>Comes first</small></article>
+              <article class="stat unseen"><span>Not started</span><b id="overall-unseen">64</b><small>Still ahead</small></article>
+            </div>
+            <details class="explain-details">
+              <summary>How progress is decided</summary>
+              <div class="mastery-key" aria-label="Concept status guide">
+                <span><i class="dot strong"></i><b>Strong</b> — repeated across types, blocks, and a new case or reasoning step</span>
+                <span><i class="dot developing"></i><b>Developing</b> — some evidence, with a named next proof</span>
+                <span><i class="dot needs"></i><b>Needs practice</b> — a misconception or repeated miss is still open</span>
+                <span><i class="dot unseen"></i><b>Not started</b></span>
+              </div>
+              <p class="calibration-summary" id="calibration-summary">Confidence is sampled on diagnostic questions; there is not enough evidence for an overall summary yet.</p>
+            </details>
+          </article>
+        </section>
+
+        <nav class="stage-tabs" role="tablist" aria-label="Revision dashboard sections">
+          <button id="tab-overview" role="tab" type="button" aria-selected="true" aria-controls="panel-overview" tabindex="0" data-view="overview"><span>1</span>Subject focus</button>
+          <button id="tab-concepts" role="tab" type="button" aria-selected="false" aria-controls="panel-concepts" tabindex="-1" data-view="concepts"><span>2</span>Concepts</button>
+          <button id="tab-plan" role="tab" type="button" aria-selected="false" aria-controls="panel-plan" tabindex="-1" data-view="plan"><span>3</span>Study plan</button>
+          <button id="tab-lessons" role="tab" type="button" aria-selected="false" aria-controls="panel-lessons" tabindex="-1" data-view="lessons"><span>4</span>Read the lessons</button>
+        </nav>
+
+        <div class="stage-panels">
+          <section class="stage-panel" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="-1">
+            <div class="section-heading subject-heading">
+              <div>
+                <p class="eyebrow">Selected subject</p>
+                <h2 id="subject-title">Business Research, Growth Strategies and Analytics</h2>
+                <p id="subject-description"></p>
+              </div>
+              <div class="subject-actions">
+                <button class="button compact primary" id="practice-priority" type="button">Practise what needs work</button>
+                <button class="button compact secondary" id="start-course" type="button">Start from the beginning</button>
+              </div>
+            </div>
+            <div class="subject-finish">
+              <div class="summary-heading"><h3 id="subject-finish-title">Your finish line</h3><span id="subject-strong">0 of 16 strong</span></div>
+              <div class="progress-track" aria-hidden="true"><i id="subject-progress-fill"></i></div>
+              <p id="subject-progress-copy">Choose any concept or begin the next study set.</p>
+              <small>Strong requires repeated evidence across types, blocks, and an applied check.</small>
+            </div>
+          </section>
+
+          <section class="stage-panel" id="panel-concepts" role="tabpanel" aria-labelledby="tab-concepts" tabindex="-1" hidden>
+            <div class="section-heading">
+              <div><p class="eyebrow" id="concepts-course-label">BRGSA · Concept evidence</p><h2>Inspect the concepts underneath the trend</h2></div>
+              <p class="section-note">Open one concept to see the exact evidence still missing.</p>
+            </div>
+            <section class="trend-card" aria-labelledby="trend-title">
+              <div class="trend-heading"><div><small>Selected subject</small><h3 id="trend-title">Evidence trend</h3></div><b id="trend-current">0%</b></div>
+              <svg id="progress-trend" class="progress-trend" role="img" aria-labelledby="trend-title trend-description" viewBox="0 0 760 220" preserveAspectRatio="none"></svg>
+              <p id="trend-description">Complete a practice block to create the first evidence point.</p>
+            </section>
+            <section class="module-browser" aria-labelledby="module-browser-title">
+              <div class="module-stepper">
+                <button class="icon-button" id="previous-module" type="button" aria-label="Previous module">←</button>
+                <div><small id="module-position">Module 1 of 8</small><h3 id="module-browser-title">Module</h3></div>
+                <button class="icon-button" id="next-module" type="button" aria-label="Next module">→</button>
+              </div>
+              <div class="concept-map" id="concept-map" aria-label="Concepts in the selected module"></div>
+              <article class="concept-inspector" id="concept-inspector" hidden aria-live="polite">
+                <div><span class="status-pill unseen" id="inspector-status">Not started</span><h3 id="inspector-title">Concept</h3></div>
+                <p id="inspector-summary"></p>
+                <ul id="inspector-evidence"></ul>
+                <div class="inspector-actions"><button class="button primary compact" id="practice-inspected" type="button">Practise this concept</button><span id="inspector-confidence"></span></div>
+              </article>
+            </section>
+          </section>
+
+          <section class="stage-panel" id="panel-plan" role="tabpanel" aria-labelledby="tab-plan" tabindex="-1" hidden>
+            <div class="section-heading">
+              <div><p class="eyebrow">Study plan</p><h2 id="sets-title">Ten study sets are available</h2></div>
+              <p class="section-note">You do not have to complete all ten. Later practice narrows to evidence that is still missing.</p>
+            </div>
+            <details class="explain-details horizon-details">
+              <summary>Make a plan for the time you have</summary>
+              <div class="horizon-picker" role="group" aria-label="Time until the exam">
+                <button type="button" class="horizon-choice selected" data-horizon="today" aria-pressed="true">Less than 24 hours</button>
+                <button type="button" class="horizon-choice" data-horizon="three" aria-pressed="false">Three days</button>
+                <button type="button" class="horizon-choice" data-horizon="seven" aria-pressed="false">Seven days</button>
+              </div>
+              <div class="horizon-plan" id="horizon-plan" aria-live="polite"></div>
+            </details>
+            <div class="set-list" id="set-list" role="group" aria-label="Study sets"></div>
+            <details class="explain-details exam-details">
+              <summary>What this can and cannot predict</summary>
+              <p>This is the first Term 6 final, so no same-course final exists to copy. Practice covers recognition, application, explanation, and connected reasoning across several plausible formats. It does not predict section order, marks, duration, or negative-marking rules.</p>
+            </details>
+          </section>
+
+          <section class="stage-panel" id="panel-lessons" role="tabpanel" aria-labelledby="tab-lessons" tabindex="-1" hidden>
+            <div class="section-heading">
+              <div><p class="eyebrow" id="lessons-course-label">BRGSA · Teaching layer</p><h2>Read the lessons on their own</h2></div>
+              <p class="section-note">Nothing here is scored and nothing is recorded. Reading a lesson in practice marks it taught; reading it here does not.</p>
+            </div>
+            <div class="lesson-coverage" id="lesson-coverage" aria-live="polite"></div>
+            <div class="lesson-index" id="lesson-index"></div>
+          </section>
+        </div>
+
+        <details class="dashboard-tools">
+          <summary>Progress settings</summary>
+          <p>Your progress is saved to your approved email and kept locally as a backup. Resetting cannot be undone.</p>
+          <button class="text-button danger-text" id="reset-progress" type="button">Reset my progress</button>
+        </details>
+      </div>
+    </section>
+
+    <section class="screen practice-screen" id="practice-screen" aria-labelledby="question-title">
+      <header class="practice-header">
+        <button class="text-button light" id="leave-practice" type="button">← Save and return to dashboard</button>
+        <div class="practice-identity"><small id="practice-kicker">Study set</small><b id="practice-title">Title</b></div>
+        <div class="practice-count"><small>Progress</small><b id="practice-progress-text">1 of 4</b></div>
+      </header>
+      <div class="practice-progress" aria-hidden="true"><i id="practice-progress-fill"></i></div>
+
+      <div class="practice-shell">
+        <aside class="topic-panel" aria-labelledby="topic-panel-title">
+          <p class="eyebrow">In this set</p>
+          <h2 id="topic-panel-title">Topics</h2>
+          <ol id="topic-list"></ol>
+          <div class="due-box"><small>Re-attempts due</small><b id="due-count">0</b><p>A missed idea returns in a different question.</p></div>
+        </aside>
+
+        <article class="question-card" id="question-card">
+          <div class="question-meta"><span id="question-pattern">Concept check</span><span id="question-count">Question 1 of 4</span></div>
+          <div class="concept-label"><span id="question-status" class="status-pill unseen">Not started</span><b id="question-node">Concept</b></div>
+          <div class="prompt-flow" id="prompt-flow">
+            <section class="lesson-panel" id="lesson-panel" aria-labelledby="lesson-heading" hidden>
+              <p class="lesson-kicker" id="lesson-kicker">Lesson</p>
+              <h1 class="lesson-heading" id="lesson-heading" tabindex="-1">Lesson</h1>
+              <p class="lesson-objective" id="lesson-objective"></p>
+              <div class="lesson-body" id="lesson-body"></div>
+              <div class="lesson-worked" id="lesson-worked"></div>
+              <div class="lesson-glossary" id="lesson-glossary"></div>
+              <p class="lesson-connects" id="lesson-connects"></p>
+            </section>
+            <section class="primer-panel" id="primer-panel" aria-labelledby="primer-level" hidden>
+              <p class="primer-level" id="primer-level">Layer 1 · minimum to carry</p>
+              <div id="primer-content"></div>
+            </section>
+            <section class="case-block" id="case-block" aria-labelledby="case-label" tabindex="-1" hidden>
+              <p class="case-label" id="case-label">Case</p>
+              <p class="caselet" id="caselet"></p>
+            </section>
+            <p class="source-ref" id="source-ref">Source</p>
+            <details class="glossary-block" id="glossary-block" hidden>
+              <summary id="glossary-summary">Terms used here</summary>
+              <dl id="glossary-list"></dl>
+            </details>
+            <div class="task-prompt" id="task-prompt">
+              <span id="task-kicker">Your task</span>
+              <h1 id="question-title" tabindex="-1">Question</h1>
+            </div>
+          </div>
+          <div class="options" id="options" role="radiogroup" aria-label="Answer options"></div>
+          <fieldset class="confidence-check" id="confidence-check" hidden>
+            <legend>Before checking, which best describes your answer?</legend>
+            <div>
+              <label><input type="radio" name="confidence" value="low"><span>Guessing / not sure</span></label>
+              <label><input type="radio" name="confidence" value="medium"><span>Narrowed it down, but unsure</span></label>
+              <label><input type="radio" name="confidence" value="high"><span>Could explain my choice</span></label>
+            </div>
+            <button class="text-button confidence-skip" id="skip-confidence" type="button">Skip confidence</button>
+            <small>Confidence helps choose what to check next. It never changes correctness.</small>
+          </fieldset>
+          <div class="feedback" id="feedback" aria-live="polite"></div>
+          <div class="question-actions">
+            <button class="button primary" id="commit-answer" type="button" disabled>Check answer</button>
+            <button class="button primary" id="next-question" type="button" hidden>Continue <span aria-hidden="true">→</span></button>
+            <small id="question-help">Choose an answer, then check it.</small>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="screen results-screen" id="results-screen" aria-labelledby="results-title">
+      <div class="results-wrap">
+        <button class="text-button" id="results-home" type="button">← Revision dashboard</button>
+        <div class="results-hero">
+          <div><p class="eyebrow" id="results-kicker">Study set complete</p><h1 id="results-title">Your next step is clear.</h1><p id="results-copy">Your next practice is based on what this set revealed.</p></div>
+          <div class="score-ring" id="score-ring"><strong id="result-score">0%</strong><small id="score-caption">scored questions</small></div>
+        </div>
+        <div class="result-stats">
+          <article><small>Correct first try</small><b id="result-correct">0</b></article>
+          <article><small>Missed first try</small><b id="result-missed">0</b></article>
+          <article><small id="result-third-label">Re-attempts passed</small><b id="result-reattempts">0</b></article>
+          <article><small>Concepts improved</small><b id="result-improved">0</b></article>
+        </div>
+        <section class="result-review-section" aria-labelledby="review-title">
+          <div class="section-heading"><div><p class="eyebrow">What changed</p><h2 id="review-title">Your concept progress</h2></div></div>
+          <div class="result-review" id="result-review"></div>
+        </section>
+        <section class="answer-review-section" id="answer-review-section" aria-labelledby="answer-review-title" hidden>
+          <div class="section-heading"><div><p class="eyebrow">Practice-check review</p><h2 id="answer-review-title">Review every decision</h2></div></div>
+          <div class="answer-review" id="answer-review"></div>
+        </section>
+        <div class="results-actions">
+          <button class="button primary" id="result-primary" type="button">Continue this subject <span aria-hidden="true">→</span></button>
+          <button class="button secondary" id="repeat-set" type="button">Repeat this set</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="reset-dialog" id="reset-dialog" aria-labelledby="reset-title">
+    <h2 id="reset-title">Reset all Term 6 progress?</h2>
+    <p>This clears your saved revision progress on this account and this browser. It does not alter the supplied course pack.</p>
+    <div><button class="button secondary" id="cancel-reset" type="button">Keep progress</button><button class="button danger" id="confirm-reset" type="button">Reset progress</button></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="sets/t6_lessons.js"></script>
+  <script src="sets/t6_diagnoses.js"></script>
+  <script src="sets/t6_brgsa.js"></script>
+  <script src="sets/t6_catalog.js"></script>
+  <script src="sets/t6_challenges.js"></script>
+  <script src="t6.js"></script>
+</body>
+</html>

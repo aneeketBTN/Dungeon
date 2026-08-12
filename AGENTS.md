@@ -1,13 +1,66 @@
 # Dungeon
-> **Diagnosis revision (2026-08-12; newest):** Every distractor a scheduled question can present now
+> **Teaching layer — the 0→80 path (2026-08-12; newest):** The app could measure a learner but could
+> not teach one, so it only served people who had already studied the course.
+> `VERIFIED(REAL_BROWSER + AUTOMATED)` at `evidence/2026-08-12/t6-teaching-layer/verification.md`.
+> The bank generates ~12.8 surfaces per concept by recombining four harvested sentences, so first
+> contact with every idea was a scored item in vocabulary nothing had introduced: a case question's
+> own primer supplied **19%** of that case's words on average and **none** in 10 of 64 cases; **59 of
+> 64** case questions had zero same-concept distractors, making them answerable by topic-matching and
+> unanswerable by reasoning; nine explained a different lecture than they tested; and one shipped
+> correct answer used "stopping rule", a phrase appearing **0 times** in 50 BRGSA transcripts. The
+> teaching material already existed and was ~2% used — the external pack holds 92,489 dense words for
+> BRGSA alone. Added `app/sets/t6_lessons.js` (authored lecture-grain lessons: objective, explainer,
+> worked example with the course's real numbers, glossary, handoff) and `tools/build_t6_lessons.mjs`
+> (candidate extraction). **Teach-before-test is now a scheduling invariant** in `layeredQueue()`:
+> a lecture's lesson precedes the first scored question citing it, ahead of the primer, unscored and
+> creating no evidence (LAW-47). `relevantWrong()` restored reasoning to applied questions — 0 of 64
+> now have zero same-concept distractors, all 64 carry at least two, and the option-shape guard still
+> passes (LAW-48). Case questions cite and explain the lecture their case came from. A vocabulary
+> gate measures first use against the clean lecture transcripts, not the concept index, which is
+> unreliable for this (LAW-49); it caught three real authoring errors during the session.
+> **BRGSA and IBM are complete for every lecture a learner can actually reach.** 80 lessons are
+> authored: BRGSA 50 of 50 lectures; IBM 16 of 16 *cited* lectures (24 authored, so 8 belong to
+> lectures no question cites and are never delivered); SCLM 6 of 16 cited; SPMS 0 of 16 cited. Each
+> lesson is authored from its own lecture's transcript and carries that lecture's real figures; every
+> number and framework was grepped against the source before it was written down. The originating
+> defect is closed with it: `sample_logic`'s correct answer no longer says "stopping rule" or "sample
+> bound" but *"Run the test to completion at the pre-calculated sample size"*, the lecture's own
+> phrasing, which also cleared a length cue that had been excluding the question.
+> **433 of 724 scheduled questions are fully taught; 291 are not** — BRGSA 187 of 187, IBM 177 of
+> 177, SCLM 69 of 180, SPMS 0 of 180. The validator reports that backlog rather than hiding it and
+> the lesson gate names the exact next lectures to author, so run them rather than quoting these
+> counts from this file. SCLM and SPMS transcripts carry almost no faculty objectives, so their
+> lessons need objectives authored from scratch. All lesson prose is new and stays
+> `WAITING_OWNER_CONTENT_ACCEPTANCE`. No screenshots — the Browser pane was not compositing — so
+> pixel-level acceptance is still owed. Nothing is deployed: this work is on `reorg/structure`, and
+> only a merge to `main` reaches the live cohort.
+>
+> **Workspace restructure (2026-08-12):** The repository was reorganized for collaboration
+> in seven verified phases on branch `reorg/structure`, with no behaviour change intended and none
+> observed. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+> `evidence/2026-08-12/workspace-restructure/verification.md`. The live app is now `app/` and holds
+> exactly the files the build ships (fourteen at the time of the restructure, fifteen since the
+> teaching layer was added above); `legacy/` holds the rogue slice and older prototypes;
+> `tools/` holds every build and dev script; `data/` holds live learner state; `docs/` holds all
+> documentation; and `site/` became `sites-backup/` because it is the private Sites entrypoint, not
+> the deployed Worker. `cloudflare/` did not move: Workers Builds deploys from that path using a
+> dashboard-side root-directory setting. Public URLs are unchanged and the legacy `/dungeon/mock/...`
+> bookmark aliases still resolve. `dist/client` is byte-identical to the pre-reorg golden snapshot
+> with only its URL prefix renamed. Two latent hazards were fixed in passing: `core.autocrlf=true`
+> was rewriting LF working-tree files to CRLF, which would have changed deployed asset bytes, and
+> the path-anchored ignore rules stopped matching once their directory moved. `evidence/`,
+> `_TRANSFER/`, and older `CHANGELOG.md` entries are deliberately frozen rather than path-rewritten.
+> Nothing is pushed or deployed; the live cohort is untouched until the branch is merged.
+>
+> **Diagnosis revision (2026-08-12):** Every distractor a scheduled question can present now
 > states the specific gap choosing it reveals. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
 > `evidence/2026-08-12/t6-option-diagnoses/verification.md`: 2,943 diagnoses across the active bank
 > with zero generic fallbacks, derived from generator provenance for 92.3% of slots and hand-authored
-> in `mock/sets/t6_diagnoses.js` for the remaining 78 texts. The wrong-answer panel was rebuilt as
+> in `app/sets/t6_diagnoses.js` for the remaining 78 texts. The wrong-answer panel was rebuilt as
 > verdict → what this choice assumed → catch it earlier → what governs this question → the complete
-> answer (no longer collapsed) → why it connects. `mock/validate_t6_bank.js` now fails the build when
+> answer (no longer collapsed) → why it connects. `tools/validate_t6_bank.js` now fails the build when
 > a scheduled distractor lacks a diagnosis, so questions drafted later inherit the contract in
-> `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. Two defects were repaired: a raw
+> `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. Two defects were repaired: a raw
 > `selected-belief:` tag reaching learner copy in the concept inspector (LAW-43) and a per-option
 > value indexed by part rather than by option (LAW-44). The authored diagnoses are new content and
 > stay `WAITING_OWNER_CONTENT_ACCEPTANCE`. `GET /dungeon/admin/access-check` was added as an
@@ -76,10 +129,11 @@
 > shape/focus/length/feedback with every unusable option disabled and explained; a factual
 > distance-travelled strip, the mastery matrix, Term 6 totals, and the staged panels form one
 > continuous scroll. Long-form matching uses a resizable board: statements side by side, one slot
-> each, and a docked tray of label tablets placed by click, drag, or keyboard. Production version
-> `98f1bb5b-e5f5-4f08-9340-e102dc79be50` still serves commit `475837f`, so the live site does not yet
-> show this revision. Every tester-visible change ships with a change announcement; the format is in
-> `COMMUNITY_PLAYBOOK.md`.
+> each, and a docked tray of label tablets placed by click, drag, or keyboard. (This paragraph used to
+> claim production still served commit `475837f`; that was stale and is corrected in the
+> **Deployed (2026-08-12)** note above — `0cc2c6d` is live as Worker version `c602c4b3`, so this
+> revision has shipped.) Every tester-visible change ships with a change announcement; the format is in
+> `docs/community/COMMUNITY_PLAYBOOK.md`.
 > Student-facing game/proprietary vocabulary and diagnostic question metadata are removed from the
 > learning view. Sixty-four constructed-response surfaces use transparent self-review without
 > automatic correctness or Strong credit. Exact final-paper structure is
@@ -125,10 +179,10 @@
 > repository declarations disabled, activation preflight intentionally failing, no run history, and
 > no tester data touched. Evidence:
 > `evidence/2026-08-11/tester-agent-readiness/verification.md`. The earlier
-> cinematic/Ari/economy product slice remains at `mock/rogue.html` as an `IMPLEMENTED` legacy
+> cinematic/Ari/economy product slice remains at `legacy/rogue/rogue.html` as an `IMPLEMENTED` legacy
 > reference and still lacks complete real-Browser route acceptance.
 >
-> Static HTML/CSS/JavaScript prototypes in `mock/`; procedural learning engine and state in root
+> Static HTML/CSS/JavaScript prototypes in `app/`; procedural learning engine and state in root
 > JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: observe the
 > active cohort without over-reading small samples,
 > continue owner/faculty content acceptance, and calibrate the learning model from genuine use.
@@ -136,15 +190,45 @@
 ## Start Here — Required Order
 
 1. Read this file top-to-bottom.
-2. Read `DESIGN_SOURCE_INDEX.md` before product, art, UX, learning, or gameplay decisions.
-3. Skim `BUG-LAWS.md` before implementing or changing anything.
+2. Read `docs/governance/DESIGN_SOURCE_INDEX.md` before product, art, UX, learning, or gameplay decisions.
+3. Skim `docs/governance/BUG-LAWS.md` before implementing or changing anything.
 4. If the task affects UI, art, motion, accessibility, learning integrity, persistence, or
-   performance, skim `QUALITY-LOG.md`.
+   performance, skim `docs/governance/QUALITY-LOG.md`.
 5. Check Known Gaps and active `WAITING_*` gates before beginning dependent work.
+
+## Collaborators — Read Before Your First Push
+
+**`main` is the deploy trigger.** `aneeketBTN/Dungeon` is connected to Cloudflare Workers Builds, so
+a push to `main` builds and publishes to the live domain, where a real tester cohort is active. There
+is no staging step between the two. Work on a branch, open a pull request, and let the owner merge.
+Never push or merge to `main` yourself. A bad version is rollback-able from Workers → Deployments,
+but the testers will have seen it.
+
+**Clone and run — no install step, no credentials.** These work immediately after cloning:
+
+```text
+npm test                     # 35 release-boundary, routing, access, and header checks
+node tools/build-site.mjs    # produces the deployment artifact in dist/client
+python tools/server.py 8099  # local dev server; open http://localhost:8099/
+```
+
+**The content gates need the external lecture transcripts, which are not in the repo and cannot be.**
+`tools/validate_t6_bank.js`, `tools/check_lesson_file.mjs`, and `tools/build_t6_lessons.mjs` each
+take the transcript root as their first argument (see Directory Map for the layout). **Mind the
+failure mode:** given a *wrong* path the bank validator reports `ok: false` / `Missing lecture
+source`, but given *no argument at all* it returns `ok: true` with an empty `"coverage": {}` — it has
+silently skipped every lecture check, including the entire LAW-49 vocabulary gate. A green run with
+an empty coverage block means nothing was verified, not that everything passed. Always pass the path,
+and ask the owner for a copy of the transcripts before taking any bank or lesson-authoring task.
+Everything else in the repo is self-contained.
+
+**Live learner data is deliberately absent.** `data/state/`, `data/history/`, `work/`, `outputs/`,
+and the tester CLAs are ignored by git and stay on the owner's machine. Do not add fixtures under
+those paths, and do not treat an empty `data/state/` as a bug.
 
 ## Ledgers — Read Before Implementing
 
-`BUG-LAWS.md` is a living, tiered decision aid, not a veto list:
+`docs/governance/BUG-LAWS.md` is a living, tiered decision aid, not a veto list:
 
 - 🔴 **REDLINE**: a severe demonstrated failure. Follow its comply path.
 - 🟡 **WATCH**: a recurring or credible gotcha. Run its verification check.
@@ -152,7 +236,7 @@
 REDLINEs constrain HOW, never WHETHER. If a Law blocks a good idea, revise the Law and preserve
 the safety property.
 
-`QUALITY-LOG.md` owns the costly quality axes: truthful interaction, learning integrity,
+`docs/governance/QUALITY-LOG.md` owns the costly quality axes: truthful interaction, learning integrity,
 accessibility, visual/motion coherence, persistence safety, and user-visible performance.
 Standing owner rule: never improve polish, speed, or engagement by weakening answer correctness,
 question readability, state truthfulness, accessibility, or real player data.
@@ -180,38 +264,90 @@ Rules:
 - Visual/interaction acceptance requires the declared real Browser or Computer Use path.
 - A dependent task does not start while its required gate is waiting.
 - If new evidence contradicts an earlier claim, the evidence wins. Correct the status,
-  `CHANGELOG.md`, and relevant ledger in the same session.
+  `docs/governance/CHANGELOG.md`, and relevant ledger in the same session.
 - DONE means all named acceptance sources passed, not merely that code was written.
 
 ## Directory Map
 
-- `/` — operating index, design contracts, learning engine, project documentation, and ledgers.
-  Root Markdown files are hand-maintained unless explicitly marked generated; `README.md` now
-  launches the active T6 fallback and preserves the older engine as a legacy path.
-- `briefs/` — owner-supplied briefs and durable implementation mappings. Add each new external
-  brief here or index its connected-source location in `DESIGN_SOURCE_INDEX.md`.
-- `mock/` — active T6 revision route, legacy static prototypes, content sets, and local server.
-- `.openai/` — Sites project binding; contains no runtime secrets.
-- `.agents/` — paused tester-agent charters, consent-safe data contracts, synthetic fixtures, and
-  fail-closed activation gates; three project schedules are registered `PAUSED` and none is
-  running.
-- `scripts/` — deterministic public-release build scripts.
-- `site/` — production worker entrypoint, health route, and response security policy.
-- `cloudflare/` — deployed exact-path static edge, approved-email learner sessions, the agreement
-  gate, signed owner Access validation, owner-only tester allowlist controller, applied D1
-  migrations, standalone packaging fallback, and non-source runtime secrets.
-- `db/` — the current shared learner-backend table shapes as one readable reference; the applied
-  change history lives in `cloudflare/migrations/`.
+Root holds only what tools and GitHub discover by convention: `AGENTS.md`, `CLAUDE.md`,
+`README.md`, `SECURITY.md`, `package.json`, `.gitignore`, and `.gitattributes`. Everything else
+lives under a named directory.
+
+**What ships to learners**
+
+- `app/` — the live T6 route and nothing else: exactly the fifteen files in the build allowlist.
+  A file here reaches production. If it should not, it does not belong in this directory.
+- `tools/` — release build, bank validator, lesson-file check, lesson candidate extractor,
+  agent-readiness check, and the local dev server and launchers. Nothing executable lives in `app/`.
+  `tools/browser-checks/` holds checks that must run **in the page** rather than in Node, because the
+  property under test belongs to the running app — evaluate the file's contents in the browser.
+  `tools/lib/` holds code shared between tools; anything that reads the external lecture source goes
+  through `tools/lib/clean_transcripts.js` so the three gates cannot disagree about what a lecture is.
+- `cloudflare/` — the **deployed** Worker: exact-path router, approved-email learner sessions, the
+  agreement gate, signed owner Access validation, tester allowlist controller, applied D1
+  migrations, and standalone packaging fallback. Workers Builds deploys from this path; its root
+  directory is configured in the Cloudflare dashboard, so **do not move this directory** without
+  changing that setting first.
+- `sites-backup/` — the private Sites entrypoint. **Not** the deployed Worker, and diverged from it;
+  read `sites-backup/README.md` before treating it as a fallback.
+- `db/` — readable mirror of the learner-backend tables; applied history is `cloudflare/migrations/`.
 - `tests/` — release-boundary, routing, access-management, and security-header checks.
-- `graphs/` — generated subject concept graphs. Do not hand-edit during product/UI work.
-- `state/` — live game and learner state. Treat as real player data; do not clear for testing.
-- `history/` — real question and flag history. Do not repurpose as test fixtures.
+
+**Documentation**
+
+- `docs/governance/` — ledgers and authority: `DESIGN_SOURCE_INDEX.md`, `BUG-LAWS.md`,
+  `QUALITY-LOG.md`, `CHANGELOG.md`.
+- `docs/briefs/` — owner-supplied briefs and durable implementation mappings. Add each new external
+  brief here or index its connected-source location in `docs/governance/DESIGN_SOURCE_INDEX.md`.
+- `docs/authoring/` — repeatable content-production procedures. `LESSON-AUTHORING-PROTOCOL.md` is the
+  handoff for the 0→80 teaching layer: source material, the lesson contract, the batch procedure, the
+  gates, the traps already paid for, and the definition of done per subject. **Read it before
+  authoring any lesson**, including when resuming mid-subject.
+- `docs/engine/` — `PROMPT.md` (procedural-engine authority) and `REVIEW_LOG.md` (rationale).
+- `docs/design/` — art direction, the proposed product-wide system, the legacy UX loop, personas.
+- `docs/community/` — tester guide, community playbook, privacy, and the closed-test agreement.
+- `docs/ops/` — machine transfer and local launch notes.
+
+**Data, evidence, and history — treat as records, not working files**
+
+- `data/state/` — live game and learner state. Real player data; do not clear for testing.
+- `data/history/` — real question and flag history. Do not repurpose as test fixtures.
+- `data/graphs/` — generated subject concept graphs. Do not hand-edit during product/UI work.
+- `evidence/` — named acceptance evidence by date/task. **Frozen**: entries describe what was true
+  on their date, so their paths are not rewritten when directories move.
+- `legacy/` — `rogue/` (the cinematic slice), `prototypes/` (older subject pages and their sets),
+  and the untracked `CLAs/` source material. Reference only; nothing here ships.
+
+**Working material and control planes**
+
 - `outputs/` — rendered/candidate media and separated production assets.
-- `work/` — source research, animation frames, scripts, and intermediate art outputs.
-- `evidence/` — named acceptance evidence, organized by date/task.
+- `work/` — source research, animation frames, scripts, and intermediate art outputs. `work/t6_lessons/`
+  holds generated lesson candidates from the Term 6 pack; they are an authoring aid, not shipped content.
+- `.agents/` — paused tester-agent charters, consent-safe data contracts, synthetic fixtures, and
+  fail-closed activation gates; three project schedules are registered `PAUSED` and none is running.
+- `.claude/` — Claude-specific configuration and the state-manager agent.
+- `.openai/` — Sites project binding; contains no runtime secrets.
 - `coordination/` — authority charter and append-only agent/tool exchange notes.
-- `_TRANSFER/` — historical transfer/setup memory; not current product authority.
-- `.claude/` — Claude-specific compatibility/configuration and the legacy state-manager agent.
+- `_TRANSFER/` — historical transfer/setup memory; not current product authority, and frozen for
+  the same reason as `evidence/`.
+
+The Term 6 lecture source is **external** — not part of this repository, and not distributable
+through it. The authority is the clean transcripts:
+
+`C:\Users\knigh\OneDrive\Desktop\exam\Term 6 Clean Transcripts`
+
+laid out as `<root>/<SUBJECT>/<SUBJECT>_M<NN>_SUM_TRANSCRIPT.txt`: one file per module, holding its
+lectures in teaching order behind `## <code> | <title>` headers. A lecture's identity is its
+**position** in that file (the Nth section is `L<N>`), not the recording code in the header — module
+2 runs C10, C01, C02 … C12, so the codes are not even monotonic. `tools/lib/clean_transcripts.js` is
+the one loader; `tools/validate_t6_bank.js`, `tools/check_lesson_file.mjs`, and
+`tools/build_t6_lessons.mjs` each take this root as their first argument.
+
+The older `Term 6 AI-Ready Pack` (`graph_source/`, `graph/LECTURE_MANIFEST.jsonl`, `dense/`,
+`subject_core/`, `indexes/`) is still *readable* so existing invocations do not hard-fail, but it is
+**no longer the source of truth**: its dense layer produced lines that are incoherent out of context,
+and its concept index is by its own README a retrieval-candidate list rather than course vocabulary.
+Authoring against it is precisely what LAW-49 exists to catch. Prefer the clean transcripts.
 
 If a directory grows beyond roughly 20 meaningful files without an index, flag it. Frame sequences
 and generated outputs are exempt when their parent has a manifest/contact sheet.
@@ -220,74 +356,81 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 
 | Path | Controls | Verified |
 | --- | --- | --- |
-| `AGENTS.md` | Codex living index, status, gates, rituals, source rules, and project conventions. | 2026-08-11 |
+| `AGENTS.md` | Codex living index, status, gates, rituals, source rules, and project conventions. | 2026-08-12 |
 | `CLAUDE.md` | Claude compatibility entry; points to this operating index and preserves engine startup facts. | 2026-07-16 |
-| `DESIGN_SOURCE_INDEX.md` | Authority order, brief inventory, and unresolved product conflicts. | 2026-08-11 |
-| `briefs/PROJECT_OPERATING_SYSTEM.md` | Durable requirements and Codex adaptation of the owner-supplied admin-system brief. | 2026-07-16 |
-| `briefs/T6_REVISION_FALLBACK.md` | Active dashboard, adaptive-primer, source-boundary, mastery/repetition, and acceptance contract. | 2026-08-11 |
-| `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Confidence, evidence-state, adaptive-primer, boss, mixed-format, rotation, and retest contract. | 2026-08-11 |
-| `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
-| `briefs/TESTER_ACCESS_AND_ADMIN.md` | Admission, private group-invite disclosure, community acknowledgements/bumps, owner operations, and remaining boundaries. | 2026-08-11 |
-| `BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
-| `QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
-| `CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-11 |
-| `ART_DIRECTION.md` | Creative thesis and canonical world/art identity. | 2026-07-16 |
-| `ART_DIRECTION_SYSTEM.md` | Proposed product-wide art, UI, character, asset, and motion system. | 2026-07-16 |
-| `GAME_UX_LOOP.md` | Proposed broad-product player flow; retained as legacy direction while the T6 fallback owns the active exam-season path. | 2026-08-10 |
-| `MAC_TRANSFER.md` | Mac copy, active T6 launch, current challenge-bank files, browser-storage boundaries, state preservation, and verification handoff. | 2026-08-11 |
-| `PROMPT.md` | Current procedural learning engine, subject rules, scheduling, personas, ranks, and save contracts. | 2026-07-16 |
-| `REVIEW_LOG.md` | Historical engineering rationale for the learning engine. | 2026-07-16 |
-| `personalities.md` | Historical reinforcement/persona design brief; `PROMPT.md` wins when implemented behavior differs. | 2026-07-16 |
+| `docs/governance/DESIGN_SOURCE_INDEX.md` | Authority order, brief inventory, and unresolved product conflicts. | 2026-08-11 |
+| `docs/briefs/PROJECT_OPERATING_SYSTEM.md` | Durable requirements and Codex adaptation of the owner-supplied admin-system brief. | 2026-07-16 |
+| `docs/briefs/T6_REVISION_FALLBACK.md` | Active dashboard, adaptive-primer, source-boundary, mastery/repetition, and acceptance contract. | 2026-08-11 |
+| `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Confidence, evidence-state, adaptive-primer, boss, mixed-format, rotation, and retest contract. | 2026-08-11 |
+| `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
+| `docs/briefs/TESTER_ACCESS_AND_ADMIN.md` | Admission, private group-invite disclosure, community acknowledgements/bumps, owner operations, and remaining boundaries. | 2026-08-11 |
+| `docs/governance/BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
+| `docs/governance/QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
+| `docs/governance/CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-11 |
+| `docs/design/ART_DIRECTION.md` | Creative thesis and canonical world/art identity. | 2026-07-16 |
+| `docs/design/ART_DIRECTION_SYSTEM.md` | Proposed product-wide art, UI, character, asset, and motion system. | 2026-07-16 |
+| `docs/design/GAME_UX_LOOP.md` | Proposed broad-product player flow; retained as legacy direction while the T6 fallback owns the active exam-season path. | 2026-08-10 |
+| `docs/ops/MAC_TRANSFER.md` | Mac copy, active T6 launch, current challenge-bank files, browser-storage boundaries, state preservation, and verification handoff. | 2026-08-11 |
+| `docs/engine/PROMPT.md` | Current procedural learning engine, subject rules, scheduling, personas, ranks, and save contracts. | 2026-07-16 |
+| `docs/engine/REVIEW_LOG.md` | Historical engineering rationale for the learning engine. | 2026-07-16 |
+| `docs/design/personalities.md` | Historical reinforcement/persona design brief; `docs/engine/PROMPT.md` wins when implemented behavior differs. | 2026-07-16 |
 | `README.md` | Student-facing active T6 launch, loop, exam-pattern boundary, progress isolation, scenarios, and legacy paths. | 2026-08-11 |
-| `TESTER_GUIDE.md` | Controlled-cohort entry, primer expectations, group participation, structured feedback, and known limits. | 2026-08-11 |
-| `PRIVACY.md` | Tester-facing D1/browser data, community timestamps, location security, retention, and telemetry boundary. | 2026-08-11 |
+| `docs/community/TESTER_GUIDE.md` | Controlled-cohort entry, primer expectations, group participation, structured feedback, and known limits. | 2026-08-11 |
+| `docs/community/PRIVACY.md` | Tester-facing D1/browser data, community timestamps, location security, retention, and telemetry boundary. | 2026-08-11 |
 | `SECURITY.md` | Private vulnerability-reporting and release-safety policy. | 2026-08-11 |
-| `COMMUNITY_PLAYBOOK.md` | WhatsApp structure, join/bump protocol, human removal review, the required change-announcement format, and feedback triage. | 2026-08-11 |
+| `docs/community/COMMUNITY_PLAYBOOK.md` | WhatsApp structure, join/bump protocol, human removal review, the required change-announcement format, and feedback triage. | 2026-08-11 |
 | `.openai/hosting.json` | Opaque Sites project binding only; runtime credentials never belong here. | 2026-08-11 |
 | `.agents/README.md` | Paused tester-agent control plane, authority boundary, and activation order. | 2026-08-11 |
 | `.agents/deployment.json` | Fail-closed activation gates, paused automation IDs, models, cadence, and non-running declarations. | 2026-08-11 |
 | `package.json` | Dependency-free release build, validation, and test commands. | 2026-08-11 |
-| `scripts/build-site.mjs` | Allowlists ten learner/admin/protection assets and produces the deployment artifact. | 2026-08-11 |
-| `scripts/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
-| `site/worker.mjs` | Production learner/admin redirects, health response, static delivery, no-index/security headers, and private-cache policy. | 2026-08-11 |
+| `tools/build-site.mjs` | Allowlists the fifteen learner/admin/protection assets and produces the deployment artifact. | 2026-08-12 |
+| `tools/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. | 2026-08-11 |
+| `sites-backup/worker.mjs` | Private Sites backup entrypoint, **not** the deployed Worker: learner/admin redirects, health response, static delivery, and security headers. Diverged from `cloudflare/src/index.mjs` and has no agreement gate. | 2026-08-12 |
+| `sites-backup/README.md` | Records why this worker is not production and what must be reconciled before promoting it. | 2026-08-12 |
 | `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, and tester management. | 2026-08-11 |
 | `cloudflare/migrations/` | Applied D1 history for auth/progress, browser/country locks, agreement acceptance, and community timestamps. | 2026-08-11 |
 | `db/schema.ts` | Readable mirror of tester, session, progress, agreement, and community-state table shapes. | 2026-08-11 |
-| `mock/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. | 2026-08-11 |
-| `mock/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
-| `mock/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery. | 2026-08-11 |
-| `DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
+| `app/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. | 2026-08-11 |
+| `app/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
+| `app/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery. | 2026-08-11 |
+| `docs/community/DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
 | `work/build_tester_agreement.py` | Builds the verified two-page agreement DOCX for Word/PDF delivery. | 2026-08-11 |
-| `cloudflare/scripts/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
+| `cloudflare/tools/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
 | `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
 | `cloudflare/README.md` | Live route, runtime-secret, Access-policy, owner-bootstrap, and rate-limit contract. | 2026-08-11 |
-| `cloudflare/scripts/build-standalone.mjs` | Builds the same protected allowlist as an embedded-asset fallback when an Assets upload path is unavailable. | 2026-08-11 |
+| `cloudflare/tools/build-standalone.mjs` | Builds the same protected allowlist as an embedded-asset fallback when an Assets upload path is unavailable. | 2026-08-11 |
 | `tests/site-release.test.mjs` | Release-boundary, anonymous-invite secrecy, privacy, routing, header, and setup checks. | 2026-08-11 |
 | `tests/cloudflare-access.test.mjs` | Owner auth, tester management, agreement/community state, bump, routing, health, and cache checks. | 2026-08-11 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
-| `mock/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
-| `mock/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
-| `mock/admin.js` | Cohort onboarding, revoke/unlock, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-11 |
-| `mock/t6.html` | Subject rail, trendline hero, inline practice builder, distance-travelled strip, holistic matrix/totals, layered questions, plans, and results. | 2026-08-11 |
-| `mock/t6.css` | Dynamic homepage, chip builder, matching board, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-11 |
-| `mock/t6.js` | Adaptive primers, evidence-gated mastery, sparkline/momentum copy, builder pool rules, matching board, persistence, and scenarios. | 2026-08-11 |
-| `mock/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
-| `mock/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
-| `mock/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, and the provenance-derived option-diagnosis pass. | 2026-08-12 |
-| `mock/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
-| `mock/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, scored-pool, and option-diagnosis validator. | 2026-08-12 |
-| `mock/rogue.html` | Legacy character → Hall → run → failure/results product-flow markup. | 2026-08-10 |
-| `mock/rogue.js` | Legacy product-slice state transitions, questions, rewards, quest, and outcome behavior. | 2026-08-10 |
-| `mock/rogue.css` | Legacy product-slice responsive presentation, feedback states, and animation behavior. | 2026-08-10 |
-| `mock/server.py` | Portable local static/media server; `/` now opens the active T6 route; legacy leaderboard API remains. | 2026-08-10 |
-| `mock/start-mac.sh` | Dependency-free macOS launcher for the local prototype server. | 2026-07-16 |
-| `mock/serve-tunnel.cmd` | Fail-closed Windows launcher for the server and an explicitly installed LocalTunnel 2.0.2 CLI. | 2026-08-04 |
+| `app/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
+| `app/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
+| `app/admin.js` | Cohort onboarding, revoke/unlock, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-11 |
+| `app/t6.html` | Subject rail, trendline hero, inline practice builder, distance-travelled strip, holistic matrix/totals, lesson surface, layered questions, in-question glossary, plans, and results. | 2026-08-12 |
+| `app/t6.css` | Dynamic homepage, chip builder, matching board, lesson/glossary presentation, and flat primer/question hierarchy across desktop and narrow layouts. | 2026-08-12 |
+| `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, builder pool rules, matching board, persistence, and scenarios. | 2026-08-12 |
+| `app/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
+| `app/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
+| `app/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, relevance-first distractor selection, case-lecture provenance, and the option-diagnosis pass. | 2026-08-12 |
+| `app/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
+| `docs/authoring/LESSON-AUTHORING-PROTOCOL.md` | Handoff procedure for the teaching layer: sources, lesson contract, batch procedure, gates, the four traps already paid for, and per-subject definition of done. Read before authoring any lesson. | 2026-08-12 |
+| `app/sets/t6_lessons.js` | Teaching layer: 80 authored lecture-grain lessons (objective, explainer, worked example, glossary, handoff) that must be delivered before anything about that lecture is scored. BRGSA and IBM complete for every cited lecture; SCLM 6 of 16, SPMS 0 of 16. | 2026-08-12 |
+| `tools/lib/clean_transcripts.js` | The one loader for the external lecture source. Reads the clean transcripts (position in the module file is a lecture's identity, not its recording code) and still accepts the old AI-Ready Pack layout; `sourceKind` says which was read. | 2026-08-12 |
+| `tools/build_t6_lessons.mjs` | Extracts lesson candidates from the external lecture source — objectives, glossary terms with first-use, worked-example lines, provenance — into `work/t6_lessons/`. Extraction only; prose is authored. | 2026-08-12 |
+| `tools/check_lesson_file.mjs` | Authoring-time gate: reports every structural defect in one pass (bracket class, record shape, prose limits) and, given the pack, prints the exact next batch of lectures to author. Run between batches, before the bank validator. | 2026-08-12 |
+| `tools/browser-checks/teach-before-test.js` | LAW-47 verification, evaluated in the page: walks every study set and the mixed builder from an empty `lessonsRead` and asserts no surface precedes a lecture it cites. Not a Node test — re-implementing `layeredQueue()` would drift from the real scheduler. | 2026-08-12 |
+| `tools/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, scored-pool, option-diagnosis, lesson-structure, and transcript-backed vocabulary validator; reports the untaught-question backlog. | 2026-08-12 |
+| `legacy/rogue/rogue.html` | Legacy character → Hall → run → failure/results product-flow markup. | 2026-08-10 |
+| `legacy/rogue/rogue.js` | Legacy product-slice state transitions, questions, rewards, quest, and outcome behavior. | 2026-08-10 |
+| `legacy/rogue/rogue.css` | Legacy product-slice responsive presentation, feedback states, and animation behavior. | 2026-08-10 |
+| `tools/server.py` | Portable local static/media server; `/` now opens the active T6 route; legacy leaderboard API remains. | 2026-08-10 |
+| `tools/start-mac.sh` | Dependency-free macOS launcher for the local prototype server. | 2026-07-16 |
+| `tools/serve-tunnel.cmd` | Fail-closed Windows launcher for the server and an explicitly installed LocalTunnel 2.0.2 CLI. | 2026-08-04 |
 | `evidence/README.md` | Evidence naming, acceptance-source hierarchy, and artifact requirements. | 2026-07-16 |
 | `coordination/CHARTER.md` | Owner/agent/tool authority and delivery protocol. | 2026-07-16 |
 
 ## Design System and Domain Rules
 
-- Read and follow the authority order in `DESIGN_SOURCE_INDEX.md`; never reconcile conflicts
+- Read and follow the authority order in `docs/governance/DESIGN_SOURCE_INDEX.md`; never reconcile conflicts
   silently.
 - Current proposed production style is crisp, graphic, painterly 2D. Existing pixel-like assets
   are references until the owner confirms the conflict resolution.
@@ -307,46 +450,57 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - Strong, Developing, Needs practice, and Not started states must remain distinguishable without
   color or motion.
 - Procedural-engine correctness, grading, spaced repetition, persona detection, and subject rules
-  remain governed by `PROMPT.md`. The active authored T6 bank instead follows the owner direction,
-  `briefs/T6_REVISION_FALLBACK.md`, and the indexed `graph_source/` lecture sources.
+  remain governed by `docs/engine/PROMPT.md`. The active authored T6 bank instead follows the owner direction,
+  `docs/briefs/T6_REVISION_FALLBACK.md`, and the external clean lecture transcripts (see Directory
+  Map); that transcript root is not a directory of this repo and cannot be committed to it.
 - Cosmetics may not alter learning power. A power-up must declare its learning effect, result
   labeling, persistence, and dashboard treatment before implementation.
 - Persona and rank displays must obey the evidence thresholds and language restrictions in
-  `PROMPT.md`.
-- Test profiles and scenario loaders must be separate from `state/` and `history/`.
+  `docs/engine/PROMPT.md`.
+- Test profiles and scenario loaders must be separate from `data/state/` and `data/history/`.
 
 ## Conventions
 
 - Current explicit owner direction wins over project files. Record durable decisions in the
-  relevant brief and `DESIGN_SOURCE_INDEX.md`.
-- `PROMPT.md` is current procedural-engine authority; the T6 fallback's authored questions follow
-  its indexed pack and brief. `REVIEW_LOG.md` and `personalities.md` are rationale and history.
-- `mock/` shows implemented behavior, not intended behavior.
-- Do not edit `graphs/`, `state/`, or `history/` during UI testing unless the task explicitly
+  relevant brief and `docs/governance/DESIGN_SOURCE_INDEX.md`.
+- `docs/engine/PROMPT.md` is current procedural-engine authority; the T6 fallback's authored questions follow
+  its indexed pack and brief. `docs/engine/REVIEW_LOG.md` and `docs/design/personalities.md` are rationale and history.
+- `app/` shows implemented behavior, not intended behavior — and it is what production serves. Every
+  file in it ships. `legacy/` is the reference-only counterpart and ships nothing.
+- Do not edit `data/graphs/`, `data/state/`, or `data/history/` during UI testing unless the task explicitly
   authorizes engine/data changes and a backup-safe plan exists.
 - Do not call an asset production-ready without the acceptance gate in
-  `ART_DIRECTION_SYSTEM.md`.
+  `docs/design/ART_DIRECTION_SYSTEM.md`.
 - Do not claim browser verification from HTML/CSS/JS inspection.
 - Preserve user changes and unrelated files. Avoid destructive source-control or filesystem
   operations unless explicitly requested.
 - Run the smallest relevant verification after each coherent change. Current baseline checks:
-  - JavaScript syntax: `node --check mock/rogue.js`
-  - T6 JavaScript syntax: `node --check mock/t6.js`,
-    `node --check mock/sets/t6_brgsa.js`, `node --check mock/sets/t6_catalog.js`, and
-    `node --check mock/sets/t6_challenges.js`
-  - T6 bank: `node mock/validate_t6_bank.js "<Term 6 AI-Ready Pack>"`
-  - Python server syntax on macOS: `python3 -m py_compile mock/server.py`
-  - Local server on macOS: `python3 mock/server.py 8099`
+  - JavaScript syntax: `node --check legacy/rogue/rogue.js`
+  - T6 JavaScript syntax: `node --check app/t6.js`,
+    `node --check app/sets/t6_brgsa.js`, `node --check app/sets/t6_catalog.js`,
+    `node --check app/sets/t6_challenges.js`, and `node --check app/sets/t6_lessons.js`
+  - Lesson candidates: `node tools/build_t6_lessons.mjs "<Term 6 Clean Transcripts>"`
+  - Lesson file, and what to author next: `node tools/check_lesson_file.mjs "<Term 6 Clean Transcripts>"`
+    — run this *before* the bank validator; a lesson file that does not parse makes the validator
+    report nothing at all.
+  - T6 bank: `node tools/validate_t6_bank.js "<Term 6 Clean Transcripts>"`
+    — always with the path. `npm run validate:bank` passes **no** argument, so it returns `ok: true`
+    with an empty `"coverage": {}` having skipped every lecture check and the LAW-49 vocabulary gate.
+    Treat that script as a schema-only check, never as bank verification.
+  - Teach-before-test (LAW-47): evaluate `tools/browser-checks/teach-before-test.js` in the page and
+    expect `violations: []`. Automated gates do not cover scheduling.
+  - Python server syntax on macOS: `python3 -m py_compile tools/server.py`
+  - Local server on macOS: `python3 tools/server.py 8099`
   - UI acceptance: declared scenarios in a real Browser; Computer Use for Windows-level flows.
-- A bug hit during build/debugging is logged in `BUG-LAWS.md` before close-out.
-- A change to a tracked quality axis is logged in `QUALITY-LOG.md` before close-out.
+- A bug hit during build/debugging is logged in `docs/governance/BUG-LAWS.md` before close-out.
+- A change to a tracked quality axis is logged in `docs/governance/QUALITY-LOG.md` before close-out.
 
 ## Session Hygiene
 
 ### Open
 
 1. Read `AGENTS.md`.
-2. Read `DESIGN_SOURCE_INDEX.md` for product/design work.
+2. Read `docs/governance/DESIGN_SOURCE_INDEX.md` for product/design work.
 3. Skim the relevant ledgers.
 4. Check Known Gaps and gates.
 5. State the evidence required to advance the task's status.
@@ -356,9 +510,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 1. Rewrite the Current Status paragraph.
 2. Update touched Key Files descriptions and Verified dates.
 3. Fix Directory Map and Known Gaps.
-4. Add a newest-first `CHANGELOG.md` entry with evidence paths.
-5. Grade and log bugs in `BUG-LAWS.md`.
-6. Log tracked quality changes in `QUALITY-LOG.md`.
+4. Add a newest-first `docs/governance/CHANGELOG.md` entry with evidence paths.
+5. Grade and log bugs in `docs/governance/BUG-LAWS.md`.
+6. Log tracked quality changes in `docs/governance/QUALITY-LOG.md`.
 7. Verify all changed references and record evidence.
 8. If the change is visible to testers, draft the change announcement (see below) and hand it to the
    owner ready to paste.
@@ -368,7 +522,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 
 Testers are running a live cohort. A change they can see ships with one announcement in the
 Announcements group when it reaches production; there are no silent releases. The template, rules,
-and paste format live in `COMMUNITY_PLAYBOOK.md`. Draft it from two questions:
+and paste format live in `docs/community/COMMUNITY_PLAYBOOK.md`. Draft it from two questions:
 
 1. **What changed?** One plain sentence in a learner's words.
 2. **What should testers do?** One specific action, not "have a look".
@@ -383,8 +537,31 @@ after the version is live, since a push to `main` deploys.
   blueprint. This is a standing claim boundary, not a work-blocking gate. Do not claim exact
   sections, duration, marks, options, negative marking, likely score, or pass probability.
 - [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 792 surfaces are source-traceable and structurally
-  verified, but transcript-derived content, the 64 support-only primers, and the 64 constructed-
-  response rubrics/exemplars still need owner/faculty acceptance before `DONE`.
+  verified, but transcript-derived content, the 64 support-only primers, the 64 constructed-
+  response rubrics/exemplars, and the 80 authored lessons still need owner/faculty acceptance
+  before `DONE`.
+- [ ] **The 0→80 path is half-built.** 433 of 724 scheduled questions are fully taught. BRGSA and
+  IBM are complete for every *cited* lecture; SCLM has 6 of 16 and SPMS 0 of 16, so 291 questions
+  still meet a cold learner untaught and the core claim holds only for BRGSA and IBM.
+  `node tools/check_lesson_file.mjs "<transcripts>"` names the exact next lectures to author and
+  `node tools/validate_t6_bank.js "<transcripts>"` prints the backlog — do not quote a coverage
+  number from this file. Authoring order: SCLM's 10 remaining cited lectures, then SPMS's 16. Both
+  carry almost no faculty objectives in the source, so their lessons need objectives from scratch.
+  Eight authored IBM lessons are for lectures no question cites and are therefore never delivered;
+  they are harmless but do not count them as coverage.
+- [ ] IBM's option lengths still cue the answer: sorting each question's options by length puts the
+  correct one at rank 3 of 4 in **45%** of 68 sampled questions against a 25% baseline, so "pick the
+  second-longest" is a working strategy. The validator reports this as a warning, not an error. Vary
+  how many distractors run longer than the correct answer rather than lengthening a fixed number.
+- [ ] Authored question copy still contains vocabulary the course does not use — "pre-registered
+  stopping rule" (0 occurrences in BRGSA; the course says *decision rule*) and "18 visitors per arm"
+  on a lecture that says *per variant*. The glossary covers `arm`; the rest is content backlog under
+  the same acceptance gate. Run `node tools/validate_t6_bank.js "<pack>" --vocab-report` for the
+  review list, and read it as candidates — n-gram scanning cannot separate jargon from ordinary
+  English.
+- [ ] Lesson visual acceptance is DOM- and computed-style-level only. The Browser pane was not
+  compositing frames in the verifying session, so no screenshots exist for the lesson surface at
+  either viewport. A pixel-level pass is still owed.
 - [ ] Push to `main` now publishes to the live domain through Workers Builds. Do not commit
   work-in-progress to `main` while testers are active; finish a change, then push. A bad version can
   be rolled back from Workers → Deployments.
@@ -420,7 +597,7 @@ after the version is live, since a push to `main` deploys.
   not available in this task. Re-enable its server and skill in the Mac app when desktop-level
   interaction is needed; use built-in Browser first for this web prototype.
 - [ ] Legacy production breadth remains deferred in C3 and C7. Current fallback precedence is
-  recorded in C11 and `briefs/T6_REVISION_FALLBACK.md`.
+  recorded in C11 and `docs/briefs/T6_REVISION_FALLBACK.md`.
 - [ ] Deterministic T6 and legacy URL scenarios cover main fixtures, but no checked-in automated
   interaction suite validates all 40 study sets. Add one before broad student release.
 - [ ] Builder practice stays inside one subject. A single run mixing subjects needs a course id on
@@ -436,24 +613,25 @@ after the version is live, since a push to `main` deploys.
 - New architecturally significant file: add it to Key Files.
 - Deleted or renamed file: repair references immediately.
 - New directory: add it to Directory Map.
-- Resolved gap: remove it in the same session and preserve the story in `CHANGELOG.md`.
+- Resolved gap: remove it in the same session and preserve the story in `docs/governance/CHANGELOG.md`.
 - Never leave an entry known to be false.
 - After a changed session, update touched file biographies and Verified dates.
 - Repeatedly-read non-indexed files should be promoted to Key Files.
-- After debugging or a bug during build, update `BUG-LAWS.md`; merge near-duplicates and downgrade,
+- After debugging or a bug during build, update `docs/governance/BUG-LAWS.md`; merge near-duplicates and downgrade,
   supersede, or retire stale Laws when a permanent backstop exists.
-- After tracked quality work, update `QUALITY-LOG.md`.
+- After tracked quality work, update `docs/governance/QUALITY-LOG.md`.
 - Ledgers must not make the project timid: use comply paths, run WATCH checks, and preserve
   ambition.
 
 ## Metadata
 
 - Generated: 2026-07-16
-- Last verified: 2026-08-11 (792 source-traceable T6 surfaces, 64 adaptive primers, 565 active
-  scored items, evidence-gated progress, sampled optional confidence, boss-step/whole-chain
+- Last verified: 2026-08-12 (workspace restructure verified lossless; 792 source-traceable T6 surfaces, 64 adaptive primers, 724 scheduled
+  scored items of which 433 are fully taught, 80 authored lessons, evidence-gated progress, sampled
+  optional confidence, boss-step/whole-chain
   separation, constructed self-review, held feedback, mixed formats and boss grading, the dynamic
   homepage with its trendline hero and mix-and-match builder, the matching board, real-Browser
-  desktop/390-pixel interaction, isolated save/resume, live-state preservation, 33 passing
+  desktop/390-pixel interaction, isolated save/resume, live-state preservation, 35 passing
   release/access/agent tests, the live Cloudflare Worker route, the owner admin Access audience,
   anonymous edge denial, rapid-request rate limiting, approved-email admission with its private
   denial, the agreement gate now enforced on every authenticated request, per-email D1 progress,
@@ -463,4 +641,8 @@ after the version is live, since a push to `main` deploys.
   grounding, and observed Browser behavior; medium for transcript-derived content pending
   owner/faculty acceptance; low for exact exam-paper structure
 - Budget: keep this file below 32 KiB and preferably below ~4,000 tokens. Move history to
-  `CHANGELOG.md` and detail to linked ledgers/briefs.
+  `docs/governance/CHANGELOG.md` and detail to linked ledgers/briefs.
+  **Currently 52 KiB — over budget and known to be so.** The status block at the top has accreted one
+  paragraph per session and is the place to cut: the three superseded 2026-08-11/08-12 paragraphs are
+  already narrated in full in `CHANGELOG.md` and should collapse to the current state plus links. Do
+  this before adding another status paragraph, not after.

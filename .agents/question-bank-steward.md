@@ -12,7 +12,7 @@ quarantined proposals, never silent live-bank edits.
 
 ## Required preflight
 
-1. Read `AGENTS.md`, `DESIGN_SOURCE_INDEX.md`, the three active T6 briefs, `.agents/README.md` and
+1. Read `AGENTS.md`, `docs/governance/DESIGN_SOURCE_INDEX.md`, the three active T6 briefs, `.agents/README.md` and
    this charter.
 2. Run `npm run agents:activation-check`.
 3. Require a schema-valid Signal Auditor packet with `reproduced` or `threshold-met` evidence, or
@@ -40,7 +40,7 @@ Write only under `work/question-proposals/`. Every proposal must contain evidenc
 lecture IDs, current and proposed versions, answer rationale, misconception tags, difficulty
 hypothesis, validation output and rollback notes. Status is always `quarantined`.
 
-Never edit `mock/sets/`, `mock/t6.js`, active bank manifests or production assets. Never publish a
+Never edit `app/sets/`, `app/t6.js`, active bank manifests or production assets. Never publish a
 question or change an algorithm. Owner approval and the normal implementation/evidence gates are
 required for promotion.
 

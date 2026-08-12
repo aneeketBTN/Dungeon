@@ -14,7 +14,7 @@ assessment envelope rather than claiming an exact paper blueprint.
 From this folder:
 
 ```text
-python mock/server.py 8099
+python tools/server.py 8099
 ```
 
 Open:
@@ -75,14 +75,14 @@ term6.revision.v2
 
 An unfinished set resumes automatically after reload. **Reset local progress** asks for
 confirmation and removes only this browser profile. The web app does not write to the learning
-engine's live `state/` or `history/` files. The controlled tester release does not add accounts,
-analytics, advertising trackers, or a server-side learner database. See `PRIVACY.md`.
+engine's live `data/state/` or `data/history/` files. The controlled tester release does not add accounts,
+analytics, advertising trackers, or a server-side learner database. See `docs/community/PRIVACY.md`.
 
 ## Controlled tester release
 
 `npm run build` creates a ten-asset deployment artifact containing only the active T6 learner
 route, three course-bank scripts, the owner control room, and `robots.txt`. It excludes live
-`state/`, `history/`, local CLA analysis, owner source packs, transfer notes, work files, test
+`data/state/`, `data/history/`, local CLA analysis, owner source packs, transfer notes, work files, test
 fixtures, credentials, tester addresses, and community invites. `npm test` checks that boundary,
 the health route, learner/admin redirects, private-cache policy, no-index rules, and security
 headers. No package installation is required.
@@ -92,9 +92,9 @@ Approved testers use one-time email sign-in through Cloudflare Access. A tester 
 revoked individually; there is no cohort password to leak. The app stays out of search indexing
 and question-bearing scripts are not shared-cacheable. This prevents anonymous and casual bulk
 collection, not copying by an already approved tester. See
-`briefs/TESTER_ACCESS_AND_ADMIN.md` for the threat boundary.
+`docs/briefs/TESTER_ACCESS_AND_ADMIN.md` for the threat boundary.
 
-The owner dashboard is `/mock/admin.html` locally and
+The owner dashboard is `/app/admin.html` locally and
 `https://aneeketdas.com/dungeon/admin/` on the protected domain. It checks production health and
 the release allowlist, provides direct tester add/list/revoke controls,
 provides a feedback template, and drafts—but never autonomously sends—change announcements.
@@ -104,8 +104,8 @@ owner Access policies, signed-token verification at the Worker, private/no-index
 rapid-request rate limiting. The allowlist currently contains only the protected owner bootstrap
 address; no tester is granted access until the owner supplies tester addresses.
 
-Tester conduct and feedback live in `TESTER_GUIDE.md`; moderation and announcement procedures live
-in `COMMUNITY_PLAYBOOK.md`; private security reports follow `SECURITY.md`.
+Tester conduct and feedback live in `docs/community/TESTER_GUIDE.md`; moderation and announcement procedures live
+in `docs/community/COMMUNITY_PLAYBOOK.md`; private security reports follow `SECURITY.md`.
 
 ## Source pack
 
@@ -121,7 +121,7 @@ the browser experience.
 
 ## Deterministic test routes
 
-Append one scenario to `/mock/t6.html`:
+Append one scenario to `/app/t6.html`:
 
 - `?scenario=dashboard-progress`
 - `?scenario=dashboard-concepts`
@@ -145,8 +145,8 @@ Scenario routes do not save normal browser progress.
 
 ## Legacy references
 
-The Term 5 procedural engine in `PROMPT.md`, its live state/history, the earlier cinematic product
-prototype at `/mock/rogue.html`, and the older Open Mock pages remain preserved for reference. They
+The Term 5 procedural engine in `docs/engine/PROMPT.md`, its live data/state/history, the earlier cinematic product
+prototype at `/legacy/rogue/rogue.html`, and the older Open Mock pages remain preserved for reference. They
 are not part of the active student path.
 
-Product decisions and remaining gates are in `briefs/T6_REVISION_FALLBACK.md`.
+Product decisions and remaining gates are in `docs/briefs/T6_REVISION_FALLBACK.md`.

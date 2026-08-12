@@ -19,7 +19,7 @@ explicitly completed.
 
 - Agents may read only consented, pseudonymous events from the future backend adapter.
 - Agents may write evidence packets and quarantined proposals only to their declared work roots.
-- They may not edit `mock/sets/`, mastery/scheduling logic, `state/`, `history/`, learner profiles,
+- They may not edit `app/sets/`, mastery/scheduling logic, `data/state/`, `data/history/`, learner profiles,
   privacy text, production configuration or active access controls.
 - No agent may message, suspend or remove a tester without the authority declared in the Cohort
   Steward charter. Initial permanent removals require owner approval.

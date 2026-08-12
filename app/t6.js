@@ -1,0 +1,3398 @@
+(function () {
+  "use strict";
+
+  var COURSES = window.T6_COURSES || {};
+  var COURSE_IDS = ["BRGSA", "IBM", "SCLM", "SPMS"];
+  var STORAGE_KEY = "term6.revision.v2";
+  var LEGACY_CLAIM_KEY = "term6.revision.v2.claimed-by";
+  var BACKEND_ACTIVE = window.location.pathname.indexOf("/dungeon") === 0;
+  var SESSION_ENDPOINT = "api/session";
+  var PROGRESS_ENDPOINT = "api/progress";
+  var COMMUNITY_ENDPOINT = "api/community";
+  var STATUS_ORDER = {unseen: 0, needs: 1, developing: 2, strong: 3};
+  var STATUS_LABEL = {unseen: "Not started", needs: "Needs practice", developing: "Developing", strong: "Strong"};
+  var profile;
+  var session = null;
+  var selected = null;
+  var confidence = null;
+  var lastFinished = null;
+  var scenarioMode = false;
+  var toastTimer = null;
+  var dashboardView = "overview";
+  var selectedModule = 1;
+  var inspectedConceptId = null;
+  var learnerEmail = null;
+  var backendReady = false;
+  var serverRevision = 0;
+  var localChangeSequence = 0;
+  var saveChain = Promise.resolve();
+  var communityState = {joined:true, inviteOpenedAt:null, reminderAt:null};
+  var DASHBOARD_VIEWS = ["overview", "concepts", "plan", "lessons"];
+  var HORIZON_PLANS = {
+    today: {
+      title: "A focused day, with recovery time",
+      steps: ["Begin with a 15–20 minute broad diagnostic.", "Use 60–75 minutes for unfamiliar foundations, then take a 10–15 minute break.", "Spend 45–60 minutes comparing concepts you confuse, then take another short break.", "Use 45–60 minutes for cases and reasoning chains.", "Finish with a 30–45 minute mixed practice check and 20–30 minutes on open flags."],
+      note: "Protect at least seven hours of sleep where possible. Same-day success is labelled current evidence, not delayed retention."
+    },
+    three: {
+      title: "Three distinct retrieval days",
+      steps: ["Day 0: diagnose, build short foundations, and repair misses on a different surface.", "Day 1: retrieve closed-book after a genuine gap, compare confusable ideas, and write short responses.", "Day 2: take a mixed generic practice check, classify errors, and revisit only unresolved causes.", "Exam day: briefly retrieve open flags and core distinctions."],
+      note: "Do not import guessing, timing, or negative-marking rules that have not been published for this final."
+    },
+    seven: {
+      title: "A seven-day evidence cycle",
+      steps: ["Day 0: diagnose and retrieve foundations.", "Day 1: delayed retrieval and misconception repair.", "Day 2: weak concepts, one constructed response, and one case.", "Day 3: interleave useful contrasts and try a new case.", "Days 4–5: open flags, untouched coverage, and failed reasoning steps only.", "Day 6: whole-chain reasoning and a mixed practice check.", "Day 7: a brief refresh of core distinctions."],
+      note: "Ten study sets remain available, but later practice should narrow instead of forcing every set."
+    }
+  };
+
+  var PRACTICE_SHAPES = [
+    {id: "mixed", label: "Mixed formats", hint: "Recognition, cases, writing, and reasoning", runTitle: "Mixed-format practice"},
+    {id: "recognition", label: "Recognition", hint: "Multiple choice and precise recall", runTitle: "Recognition practice"},
+    {id: "application", label: "Cases and application", hint: "Decisions, matching, and reasoning chains", runTitle: "Case and application practice"},
+    {id: "generation", label: "In your own words", hint: "Short answers with a visible rubric", runTitle: "Explain in your own words"}
+  ];
+  var PRACTICE_FOCUS = [
+    {id: "all", label: "Anything", hint: "Every concept in this subject", summary: "anything in the subject"},
+    {id: "weak", label: "What needs work", hint: "Open misses and missing evidence first", summary: "concepts that need work"},
+    {id: "new", label: "New ground", hint: "Concepts you have not started", summary: "concepts you have not started"}
+  ];
+  var PRACTICE_LENGTHS = [
+    {id: "quick", label: "Quick", target: 6},
+    {id: "standard", label: "Standard", target: 12},
+    {id: "deep", label: "Deep", target: 18}
+  ];
+  var PRACTICE_MODES = [
+    {id: "learning", label: "After each answer", hint: "Explanation and repair straight away"},
+    {id: "simulation", label: "Held to the end", hint: "Answers and rubrics wait for the review"}
+  ];
+  var DEFAULT_BUILDER = {shape: "mixed", focus: "all", length: "standard", mode: "learning"};
+
+  function $(id) { return document.getElementById(id); }
+  function $all(selector) { return Array.prototype.slice.call(document.querySelectorAll(selector)); }
+  function clone(value) { return JSON.parse(JSON.stringify(value)); }
+
+  function defaultProfile() {
+    return {
+      version: 2,
+      selectedCourse: "BRGSA",
+      conceptAttempts: {},
+      completed: {},
+      lastMock: {},
+      active: null,
+      totalAnswers: 0,
+      blockSequence: 0,
+      horizon: "today",
+      builder: clone(DEFAULT_BUILDER),
+      primerState: {},
+      lessonsRead: {}
+    };
+  }
+
+  function optionById(options, id) {
+    return options.filter(function (option) { return option.id === id; })[0] || null;
+  }
+
+  function validBuilder(candidate) {
+    return Boolean(candidate) && Boolean(optionById(PRACTICE_SHAPES, candidate.shape)) &&
+      Boolean(optionById(PRACTICE_FOCUS, candidate.focus)) && Boolean(optionById(PRACTICE_LENGTHS, candidate.length)) &&
+      Boolean(optionById(PRACTICE_MODES, candidate.mode));
+  }
+
+  function validProfile(candidate) {
+    return candidate && candidate.version === 2 && COURSE_IDS.indexOf(candidate.selectedCourse) >= 0 &&
+      candidate.conceptAttempts && candidate.completed && (!candidate.active || validSession(candidate.active));
+  }
+
+  function validSession(candidate) {
+    return candidate && COURSES[candidate.courseId] && Array.isArray(candidate.queue) &&
+      typeof candidate.index === "number" && Array.isArray(candidate.responses);
+  }
+
+  function normalizeProfileShape(candidate) {
+    candidate.primerState = candidate.primerState && typeof candidate.primerState === "object" ? candidate.primerState : {};
+    if (!validBuilder(candidate.builder)) candidate.builder = clone(DEFAULT_BUILDER);
+    if (candidate.active) {
+      candidate.active.baseCount = candidate.active.baseCount || candidate.active.queue.filter(function (item) {
+        var question = getQuestion(candidate.active.courseId, item.id);
+        return question && question.type !== "primer";
+      }).length;
+      candidate.active.supportCount = candidate.active.queue.length - candidate.active.baseCount;
+    }
+    return candidate;
+  }
+
+  function profileStorageKey() {
+    return learnerEmail ? STORAGE_KEY + "." + learnerEmail : STORAGE_KEY;
+  }
+
+  function syncMetaKey() {
+    return learnerEmail ? STORAGE_KEY + ".sync." + learnerEmail : null;
+  }
+
+  function readSyncMeta() {
+    var key = syncMetaKey();
+    if (!key) return null;
+    try { return JSON.parse(localStorage.getItem(key)); } catch (error) { return null; }
+  }
+
+  function writeSyncMeta(dirty) {
+    var key = syncMetaKey();
+    if (!key) return;
+    try {
+      localStorage.setItem(key, JSON.stringify({email:learnerEmail, serverRevision:serverRevision, dirty:Boolean(dirty)}));
+    } catch (error) {}
+  }
+
+  function writeLocalProfile(value) {
+    try { localStorage.setItem(profileStorageKey(), JSON.stringify(value)); } catch (error) {}
+  }
+
+  function loadProfile() {
+    try {
+      var raw = localStorage.getItem(profileStorageKey());
+      if (!raw && learnerEmail) {
+        var claimedBy = localStorage.getItem(LEGACY_CLAIM_KEY);
+        var legacy = localStorage.getItem(STORAGE_KEY);
+        if (legacy && (!claimedBy || claimedBy === learnerEmail)) {
+          raw = legacy;
+          localStorage.setItem(LEGACY_CLAIM_KEY, learnerEmail);
+        }
+      }
+      var parsed = JSON.parse(raw);
+      if (!validProfile(parsed)) return defaultProfile();
+      if (parsed.active && parsed.active.kind === "mock") {
+        parsed.active.kind = "practice-shape";
+        parsed.active.mode = "learning";
+        parsed.active.shape = "mixed";
+        parsed.active.title = "Mixed-format practice";
+        parsed.active.kicker = "Learning mode · feedback after each answer";
+      }
+      return normalizeProfileShape(parsed);
+    } catch (error) {
+      return defaultProfile();
+    }
+  }
+
+  function setSyncStatus(copy) {
+    var node = $("sync-status");
+    if (node) node.textContent = copy;
+  }
+
+  function queueBackendSave(snapshot) {
+    if (!backendReady || scenarioMode) return;
+    var sequence = ++localChangeSequence;
+    writeSyncMeta(true);
+    setSyncStatus("Saving…");
+    saveChain = saveChain.catch(function () {}).then(async function () {
+      var response = await fetch(PROGRESS_ENDPOINT, {
+        method: "PUT",
+        credentials: "same-origin",
+        cache: "no-store",
+        keepalive: true,
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({state:snapshot})
+      });
+      var payload = {};
+      try { payload = await response.json(); } catch (error) {}
+      if (!response.ok) throw new Error(payload.message || "Progress could not be saved online.");
+      serverRevision = Number(payload.revision || serverRevision);
+      if (sequence === localChangeSequence) {
+        writeSyncMeta(false);
+        setSyncStatus("Saved online");
+      }
+    }).catch(function () {
+      setSyncStatus("Saved on this device");
+    });
+  }
+
+  function saveProfile() {
+    if (scenarioMode) return;
+    writeLocalProfile(profile);
+    queueBackendSave(clone(profile));
+  }
+
+  async function loadBackendProfile() {
+    var sessionResponse = await fetch(SESSION_ENDPOINT, {cache:"no-store", credentials:"same-origin"});
+    if (!sessionResponse.ok) {
+      window.location.replace("./");
+      return defaultProfile();
+    }
+    var identity = await sessionResponse.json();
+    learnerEmail = identity.email;
+    communityState = identity.community || {joined:false, inviteOpenedAt:null, reminderAt:null};
+    backendReady = true;
+    $("account-controls").hidden = false;
+
+    var localProfile = loadProfile();
+    try {
+      var progressResponse = await fetch(PROGRESS_ENDPOINT, {cache:"no-store", credentials:"same-origin"});
+      if (!progressResponse.ok) throw new Error("Progress could not be loaded.");
+      var remote = await progressResponse.json();
+      serverRevision = Number(remote.revision || 0);
+      var meta = readSyncMeta();
+      var localIsUnsynced = meta && meta.email === learnerEmail && meta.dirty === true && Number(meta.serverRevision || 0) === serverRevision;
+
+      if (remote.state && validProfile(remote.state) && !localIsUnsynced) {
+        remote.state = normalizeProfileShape(remote.state);
+        writeLocalProfile(remote.state);
+        writeSyncMeta(false);
+        setSyncStatus("Saved online");
+        return remote.state;
+      }
+
+      profile = localProfile;
+      writeLocalProfile(localProfile);
+      queueBackendSave(clone(localProfile));
+      await saveChain;
+      return localProfile;
+    } catch (error) {
+      setSyncStatus("Saved on this device");
+      return localProfile;
+    }
+  }
+
+  function showScreen(id) {
+    $all(".screen").forEach(function (screen) { screen.classList.toggle("active", screen.id === id); });
+    window.scrollTo(0, 0);
+    if (id === "dashboard-screen") window.requestAnimationFrame(renderMasteryRadar);
+  }
+
+  function getCourse(courseId) { return COURSES[courseId]; }
+  function getConcept(courseId, conceptId) {
+    return getCourse(courseId).concepts.filter(function (concept) { return concept.id === conceptId; })[0] || null;
+  }
+  /* ------------------------------------------------------------------
+   * Teaching layer
+   *
+   * A lesson is the surface that makes 0→80 possible: one lecture, taught once,
+   * before anything about that lecture is scored. The scheduling invariant is
+   * enforced in layeredQueue — a scored question citing lecture L cannot appear
+   * before L's lesson has been delivered — so a cold learner never meets a
+   * graded item in vocabulary nobody introduced.
+   *
+   * Lesson queue items encode their lecture and concept in the id
+   * ("lesson:<lectureId>|<conceptId>") because the live session is cloned into
+   * profile.active and must survive save/resume as plain JSON.
+   * ---------------------------------------------------------------- */
+  var LESSONS = window.T6_LESSONS || {};
+
+  function lessonFor(lectureId) { return LESSONS[lectureId] || null; }
+
+  function lessonsReadMap() {
+    if (!profile.lessonsRead || typeof profile.lessonsRead !== "object") profile.lessonsRead = {};
+    return profile.lessonsRead;
+  }
+
+  function lessonIsRead(lectureId) { return !!lessonsReadMap()[lectureId]; }
+
+  function markLessonRead(lectureId) {
+    if (!lectureId) return;
+    lessonsReadMap()[lectureId] = Date.now();
+    saveProfile();
+  }
+
+  function lectureIdsFor(question) {
+    if (!question) return [];
+    return unique((question.sourceIds && question.sourceIds.length ? question.sourceIds : [question.source]) || [])
+      .filter(Boolean);
+  }
+
+  // Lessons a question depends on that the learner has not been taught yet.
+  function pendingLessonsFor(question) {
+    return lectureIdsFor(question).filter(function (lectureId) {
+      return lessonFor(lectureId) && !lessonIsRead(lectureId);
+    });
+  }
+
+  function lessonItemId(lectureId, conceptId) { return "lesson:" + lectureId + "|" + conceptId; }
+
+  function parseLessonItemId(questionId) {
+    if (String(questionId).indexOf("lesson:") !== 0) return null;
+    var body = String(questionId).slice("lesson:".length).split("|");
+    return {lectureId: body[0], conceptId: body[1] || null};
+  }
+
+  /* A lesson is presented as a synthetic question so the existing session
+   * machinery — topic list, progress, save/resume — keeps working unchanged.
+   * It is never scored and never creates evidence. */
+  function lessonQuestion(courseId, questionId) {
+    var parsed = parseLessonItemId(questionId);
+    if (!parsed) return null;
+    var data = lessonFor(parsed.lectureId);
+    if (!data) return null;
+    return {
+      id: questionId,
+      courseId: courseId,
+      conceptId: parsed.conceptId,
+      supportingConceptIds: [],
+      module: data.module,
+      source: data.lectureId,
+      sourceIds: [data.lectureId],
+      node: data.title,
+      pattern: "Lesson",
+      perspective: "learn",
+      type: "lesson",
+      skills: ["recognise"],
+      difficulty: 0,
+      variantFamily: data.lectureId + "_lesson",
+      boss: false,
+      lessonOnly: true,
+      lesson: data,
+      caselet: null,
+      stem: data.objective,
+      explanation: data.objective,
+      link: data.connects || "",
+      misconceptions: []
+    };
+  }
+
+  function getQuestion(courseId, questionId) {
+    if (String(questionId).indexOf("lesson:") === 0) return lessonQuestion(courseId, questionId);
+    return getCourse(courseId).questions[questionId] || null;
+  }
+  function getStudySet(courseId, setId) {
+    return getCourse(courseId).runs.filter(function (item) { return item.id === Number(setId); })[0] || null;
+  }
+
+  function attemptsFor(courseId, conceptId) {
+    var courseAttempts = profile.conceptAttempts[courseId] || {};
+    return courseAttempts[conceptId] || [];
+  }
+
+  function attemptType(attempt) {
+    if (attempt.type) return attempt.type;
+    if (attempt.perspective === "apply") return "mcq-apply";
+    if (attempt.perspective === "connect") return "mcq-connect";
+    return "legacy-mcq";
+  }
+
+  function attemptBlock(attempt) {
+    return attempt.blockId || "legacy-history";
+  }
+
+  function unresolvedAttempt(attempts, predicate, resolver) {
+    for (var index = attempts.length - 1; index >= 0; index -= 1) {
+      if (!predicate(attempts[index])) continue;
+      return !attempts.slice(index + 1).some(function (later) { return resolver(later, attempts[index]); });
+    }
+    return false;
+  }
+
+  function confidenceWasDiagnostic(attempt) {
+    return ["low", "medium", "high"].indexOf(attempt.confidence) >= 0 && attempt.confidencePrompted !== false && attempt.scored !== false;
+  }
+
+  function confidentErrorRemainsOpen(attempts) {
+    for (var index = attempts.length - 1; index >= 0; index -= 1) {
+      var error = attempts[index];
+      if (error.scored === false || error.correct || error.confidence !== "high") continue;
+      var repairs = attempts.slice(index + 1).filter(function (later) {
+        return later.scored !== false && later.correct && (later.variantFamily || later.questionId) !== (error.variantFamily || error.questionId);
+      });
+      if (unique(repairs.map(function (attempt) { return attempt.variantFamily || attempt.questionId; })).length < 2 || unique(repairs.map(attemptBlock)).length < 2) return true;
+    }
+    return false;
+  }
+
+  function recurringMisconception(attempts) {
+    var wrong = attempts.filter(function (attempt) { return attempt.scored !== false && !attempt.correct && attempt.misconception; });
+    return unique(wrong.map(function (attempt) { return attempt.misconception; })).filter(function (tag) {
+      var events = wrong.filter(function (attempt) { return attempt.misconception === tag; });
+      return unique(events.map(function (attempt) { return attempt.variantFamily || attempt.questionId; })).length >= 2 || unique(events.map(attemptBlock)).length >= 2;
+    })[0] || null;
+  }
+
+  function evidenceFromAttempts(attempts, now) {
+    now = now || Date.now();
+    var scored = attempts.filter(function (attempt) { return attempt.scored !== false; });
+    var constructed = attempts.filter(function (attempt) { return attempt.scored === false && attempt.type === "short-answer"; });
+    var correct = scored.filter(function (attempt) { return attempt.correct; });
+    var latest = scored[scored.length - 1] || null;
+    var recent = scored.slice(-3);
+    var wrongRecent = recent.filter(function (attempt) { return !attempt.correct; }).length;
+    var correctTypes = unique(correct.map(attemptType));
+    var correctBlocks = unique(correct.map(attemptBlock).filter(function (block) { return block !== "legacy-history"; }));
+    var bossStepEvidence = scored.some(function (attempt) { return attempt.boss && !attempt.hintUsed && (attempt.bossStepsPassed > 0 || (attempt.bossStepsPassed === undefined && attempt.correct)); });
+    var wholeChainSuccess = scored.some(function (attempt) { return attempt.boss && !attempt.hintUsed && (attempt.wholeItemCorrect === true || (attempt.wholeItemCorrect === undefined && attempt.correct)); });
+    var transferCorrect = correct.some(function (attempt) {
+      return attempt.transfer || attempt.boss || attempt.type === "case-cloze" || ["apply", "connect", "evaluate", "synthesis"].indexOf(attempt.perspective) >= 0;
+    });
+    var integrativeEvidence = transferCorrect || bossStepEvidence;
+    var openConfidentError = confidentErrorRemainsOpen(scored);
+    var openUnderconfidentCorrect = unresolvedAttempt(scored, function (attempt) {
+      return attempt.correct && attempt.confidence === "low";
+    }, function (later, event) {
+      return later.correct && (later.variantFamily || later.questionId) !== (event.variantFamily || event.questionId);
+    });
+    var recurringError = recurringMisconception(scored);
+    var openBossFailure = unresolvedAttempt(scored, function (attempt) {
+      return attempt.boss && (attempt.bossStepsFailed > 0 || (attempt.bossStepsFailed === undefined && !attempt.correct));
+    }, function (later) { return later.boss && later.correct && !later.hintUsed; });
+    var status = "developing";
+    if (!attempts.length) status = "unseen";
+    else if (scored.length && (!correct.length || wrongRecent >= 2 || openConfidentError || recurringError || openBossFailure)) status = "needs";
+    else if (scored.length >= 5 && correct.length >= 4 && correctTypes.length >= 3 && correctBlocks.length >= 2 && integrativeEvidence && !openUnderconfidentCorrect && latest && latest.correct) status = "strong";
+
+    var firstCorrectAt = correct.length ? correct[0].at : 0;
+    var delayedCorrect = correct.some(function (attempt) { return firstCorrectAt && attempt.at - firstCorrectAt >= 20 * 60 * 60 * 1000; });
+    var lastCorrectAt = correct.length ? correct[correct.length - 1].at : 0;
+    var refreshDue = !!lastCorrectAt && now - lastCorrectAt > 4 * 24 * 60 * 60 * 1000;
+    var confidenceAttempts = scored.filter(confidenceWasDiagnostic);
+    var highAttempts = confidenceAttempts.filter(function (attempt) { return attempt.confidence === "high"; });
+    var lowCorrect = confidenceAttempts.filter(function (attempt) { return attempt.confidence === "low" && attempt.correct; }).length;
+    var highAccuracy = highAttempts.length ? highAttempts.filter(function (attempt) { return attempt.correct; }).length / highAttempts.length : null;
+    var confidenceBlocks = unique(confidenceAttempts.map(attemptBlock));
+    var confidenceTypes = unique(confidenceAttempts.map(attemptType));
+    var enoughConfidenceEvidence = confidenceAttempts.length >= 20 && confidenceBlocks.length >= 3 && confidenceTypes.length >= 2;
+    var confidenceLabel = "Not enough diagnostic confidence evidence yet (" + confidenceAttempts.length + " of 20 checks)";
+    if (openConfidentError) confidenceLabel = "One confident mistake needs two independent checks";
+    else if (enoughConfidenceEvidence && lowCorrect >= Math.ceil(confidenceAttempts.filter(function (attempt) { return attempt.confidence === "low"; }).length / 2)) confidenceLabel = "Your confidence is still catching up to demonstrated results";
+    else if (enoughConfidenceEvidence && (highAccuracy === null || highAccuracy >= .75)) confidenceLabel = "Your confidence broadly matches your demonstrated results";
+
+    var reasons = [];
+    if (status === "unseen") reasons.push("No scored attempt yet.");
+    else {
+      reasons.push(correct.length + " of " + scored.length + " scored attempts correct.");
+      if (constructed.length) reasons.push(constructed.length + " constructed response" + (constructed.length === 1 ? "" : "s") + " self-reviewed; these do not receive automatic correctness credit.");
+      reasons.push(correctTypes.length + " distinct question type" + (correctTypes.length === 1 ? "" : "s") + " passed (3 required)." );
+      reasons.push(correctBlocks.length + " of 2 required practice blocks passed.");
+      reasons.push(integrativeEvidence ? "Applied evidence is present from a new case or reasoning step." : "A new case or successful reasoning step is still needed.");
+      if (bossStepEvidence && !wholeChainSuccess) reasons.push("A boss step supports this concept; the whole reasoning chain remains open.");
+      else if (wholeChainSuccess) reasons.push("An unassisted whole reasoning chain is complete.");
+      if (openConfidentError) reasons.push("One ‘could explain’ mistake needs two independent repairs before it closes.");
+      else if (openUnderconfidentCorrect) reasons.push("A correct guessing/not-sure answer needs one independent new-family confirmation.");
+      else if (recurringError) reasons.push("The same misconception returned across independent evidence: " + recurringError + ".");
+      else if (openBossFailure) reasons.push("A failed reasoning step still needs a later whole-chain check.");
+      else if (status === "strong" && refreshDue) reasons.push("Strong evidence is more than four days old; a short refresh is due.");
+      else if (status === "strong") reasons.push(delayedCorrect ? "Recalled again after a gap of at least 20 hours." : "Strong current evidence; a later retest will check retention.");
+      else if (latest && !latest.correct) reasons.push("The latest answer was wrong; one miss does not erase earlier evidence.");
+    }
+    return {
+      status: status,
+      attempts: scored.length,
+      correct: correct.length,
+      constructed: constructed.length,
+      correctTypes: correctTypes.length,
+      correctBlocks: correctBlocks.length,
+      bossStepEvidence: bossStepEvidence,
+      wholeChainSuccess: wholeChainSuccess,
+      transferCorrect: transferCorrect,
+      integrativeEvidence: integrativeEvidence,
+      openConfidentError: openConfidentError,
+      openUnderconfidentCorrect: openUnderconfidentCorrect,
+      recurringMisconception: recurringError,
+      openBossFailure: openBossFailure,
+      delayedCorrect: delayedCorrect,
+      refreshDue: refreshDue,
+      confidenceCount: confidenceAttempts.length,
+      confidenceLabel: confidenceLabel,
+      reasons: reasons,
+      latestAt: latest ? latest.at : 0
+    };
+  }
+
+  function conceptEvidence(courseId, conceptId) {
+    return evidenceFromAttempts(attemptsFor(courseId, conceptId));
+  }
+
+  function conceptStatus(courseId, conceptId) {
+    return conceptEvidence(courseId, conceptId).status;
+  }
+
+  function courseStats(courseId) {
+    var counts = {strong: 0, developing: 0, needs: 0, unseen: 0};
+    getCourse(courseId).concepts.forEach(function (concept) { counts[conceptStatus(courseId, concept.id)] += 1; });
+    counts.total = getCourse(courseId).concepts.length;
+    counts.weighted = Math.round((counts.strong + counts.developing * .5) / counts.total * 100);
+    return counts;
+  }
+
+  function overallStats() {
+    return COURSE_IDS.reduce(function (total, courseId) {
+      var stats = courseStats(courseId);
+      total.strong += stats.strong;
+      total.developing += stats.developing;
+      total.needs += stats.needs;
+      total.unseen += stats.unseen;
+      total.total += stats.total;
+      return total;
+    }, {strong: 0, developing: 0, needs: 0, unseen: 0, total: 0});
+  }
+
+  function overallConfidenceSummary() {
+    var seen = {};
+    var attempts = [];
+    COURSE_IDS.forEach(function (courseId) {
+      getCourse(courseId).concepts.forEach(function (concept) {
+        attemptsFor(courseId, concept.id).forEach(function (attempt) {
+          var key = courseId + "|" + attempt.questionId + "|" + attemptBlock(attempt) + "|" + attempt.at;
+          if (!seen[key]) { seen[key] = true; attempts.push(attempt); }
+        });
+      });
+    });
+    var diagnostic = attempts.filter(confidenceWasDiagnostic);
+    var blocks = unique(diagnostic.map(attemptBlock));
+    var types = unique(diagnostic.map(attemptType));
+    if (diagnostic.length < 20 || blocks.length < 3 || types.length < 2) return "Confidence is sampled on diagnostic questions. An overall summary needs 20 checks across three study blocks and two formats; " + diagnostic.length + " are available.";
+    var high = diagnostic.filter(function (attempt) { return attempt.confidence === "high"; });
+    var highWrong = high.filter(function (attempt) { return !attempt.correct; }).length;
+    var low = diagnostic.filter(function (attempt) { return attempt.confidence === "low"; });
+    var lowCorrect = low.filter(function (attempt) { return attempt.correct; }).length;
+    if (highWrong) return "Across diagnostic checks, " + highWrong + " of " + high.length + " ‘could explain’ answers were wrong. Those concepts receive contrastive repair; this is not a learner label.";
+    if (lowCorrect >= 2) return lowCorrect + " of " + low.length + " guessing/not-sure answers were correct. New-family checks will test whether that knowledge is reliable.";
+    return "Diagnostic confidence and scored results are broadly aligned so far. Counts remain visible and no personality or permanent trait is inferred.";
+  }
+
+  function questionSurfaces(courseId, conceptId) {
+    var surfaces = Object.keys(getCourse(courseId).questions).map(function (id) { return getCourse(courseId).questions[id]; })
+      .filter(function (question) {
+        return !question.primerOnly && (question.conceptId === conceptId || (question.supportingConceptIds || []).indexOf(conceptId) >= 0);
+      });
+    var activeSurfaces = surfaces.filter(function (question) { return !question.optionShapeRisk; });
+    return activeSurfaces.length ? activeSurfaces : surfaces;
+  }
+
+  function questionLastAttemptAt(courseId, questionId) {
+    var question = getQuestion(courseId, questionId);
+    if (!question) return 0;
+    var conceptIds = [question.conceptId].concat(question.supportingConceptIds || []);
+    var attempts = conceptIds.reduce(function (all, conceptId) {
+      return all.concat(attemptsFor(courseId, conceptId).filter(function (attempt) { return attempt.questionId === questionId; }));
+    }, []);
+    attempts.sort(function (a, b) { return a.at - b.at; });
+    return attempts.length ? attempts[attempts.length - 1].at : 0;
+  }
+
+  function chooseQuestion(courseId, conceptId, avoidId, queuedIds) {
+    var attempts = attemptsFor(courseId, conceptId);
+    var usedTypes = attempts.map(attemptType);
+    var usedFamilies = attempts.map(function (attempt) { return attempt.variantFamily || attempt.questionId; });
+    var surfaces = questionSurfaces(courseId, conceptId).filter(function (question) {
+      return question.id !== avoidId && queuedIds.indexOf(question.id) < 0;
+    });
+    if (!surfaces.length) surfaces = questionSurfaces(courseId, conceptId).filter(function (question) { return question.id !== avoidId; });
+    if (!surfaces.length) return null;
+    surfaces.sort(function (a, b) {
+      var aFamilyNew = usedFamilies.indexOf(a.variantFamily || a.id) < 0 ? 0 : 1;
+      var bFamilyNew = usedFamilies.indexOf(b.variantFamily || b.id) < 0 ? 0 : 1;
+      var aTypeNew = usedTypes.indexOf(a.type || "mcq") < 0 ? 0 : 1;
+      var bTypeNew = usedTypes.indexOf(b.type || "mcq") < 0 ? 0 : 1;
+      return aFamilyNew - bFamilyNew || aTypeNew - bTypeNew || questionLastAttemptAt(courseId, a.id) - questionLastAttemptAt(courseId, b.id);
+    });
+    return surfaces[0];
+  }
+
+  function recordAttempt(courseId, question, outcome, confidenceValue, item, blockId) {
+    var evaluation = typeof outcome === "boolean" ? {correct: outcome, partial: outcome ? 1 : 0, conceptResults: {}} : outcome;
+    var conceptIds = unique([question.conceptId].concat(question.supportingConceptIds || []));
+    profile.conceptAttempts[courseId] = profile.conceptAttempts[courseId] || {};
+    conceptIds.forEach(function (conceptId) {
+      var attempts = profile.conceptAttempts[courseId][conceptId] || [];
+      var hasConceptResult = Object.prototype.hasOwnProperty.call(evaluation.conceptResults || {}, conceptId);
+      var conceptCorrect = hasConceptResult ? evaluation.conceptResults[conceptId] : evaluation.correct;
+      var relevantBossSteps = [];
+      if (question.boss && Array.isArray(evaluation.partResults)) question.steps.forEach(function (step, index) {
+        if ((step.conceptIds || []).indexOf(conceptId) >= 0) relevantBossSteps.push(evaluation.partResults[index]);
+      });
+      var scored = evaluation.scored !== false;
+      attempts.push({
+        questionId: question.id,
+        variantFamily: question.variantFamily || question.id,
+        perspective: question.perspective || "explain",
+        type: question.type || "mcq",
+        skills: question.skills || [],
+        difficulty: question.difficulty || 2,
+        boss: !!question.boss,
+        scored: scored,
+        correct: scored ? !!conceptCorrect : null,
+        wholeItemCorrect: scored ? !!evaluation.correct : null,
+        partial: evaluation.partial || 0,
+        confidence: confidenceValue || null,
+        confidencePrompted: item && typeof item.askConfidence === "boolean" ? item.askConfidence : ["low", "medium", "high", "skipped"].indexOf(confidenceValue) >= 0,
+        confidenceSkipped: confidenceValue === "skipped",
+        misconception: evaluation.misconception || null,
+        hintUsed: !!evaluation.hintUsed,
+        assistanceUsed: !!evaluation.assistanceUsed,
+        revealedSteps: !!evaluation.revealedSteps,
+        bossStepsPassed: relevantBossSteps.filter(Boolean).length,
+        bossStepsFailed: relevantBossSteps.filter(function (result) { return !result; }).length,
+        bossStepsTotal: relevantBossSteps.length,
+        constructedScore: evaluation.constructedScore === undefined ? null : evaluation.constructedScore,
+        constructedTotal: evaluation.constructedTotal === undefined ? null : evaluation.constructedTotal,
+        transfer: question.boss || question.type === "case-cloze" || ["apply", "connect", "evaluate", "synthesis"].indexOf(question.perspective) >= 0,
+        isReattempt: !!(item && item.isReattempt),
+        blockId: blockId || (session && session.blockId) || null,
+        at: item && item.at ? item.at : Date.now()
+      });
+      profile.conceptAttempts[courseId][conceptId] = attempts.slice(-60);
+      updatePrimerFromChallenge(courseId, conceptId, question, scored ? !!conceptCorrect : null);
+    });
+    profile.totalAnswers += 1;
+  }
+
+  function primerStateFor(courseId, conceptId) {
+    profile.primerState = profile.primerState || {};
+    profile.primerState[courseId] = profile.primerState[courseId] || {};
+    profile.primerState[courseId][conceptId] = profile.primerState[courseId][conceptId] || {
+      support: 1,
+      easyStreak: 0,
+      shown: 0,
+      correct: 0,
+      wrong: 0,
+      lastAt: 0
+    };
+    return profile.primerState[courseId][conceptId];
+  }
+
+  function primerQuestionFor(courseId, conceptId) {
+    return getQuestion(courseId, conceptId + "_primer");
+  }
+
+  function primerSupportLevel(courseId, conceptId) {
+    var state = primerStateFor(courseId, conceptId);
+    var attempts = attemptsFor(courseId, conceptId).filter(function (attempt) { return attempt.scored !== false; });
+    var recent = attempts.slice(-2);
+    if (conceptStatus(courseId, conceptId) === "strong" || state.easyStreak >= 2 || (recent.length === 2 && recent.every(function (attempt) { return attempt.correct && attempt.difficulty >= 3; }))) return 0;
+    if (!attempts.length) return Math.max(1, Math.min(3, state.support || 1));
+    var misses = recent.filter(function (attempt) { return !attempt.correct; }).length;
+    if (misses === 2) return 3;
+    if (misses === 1 || conceptStatus(courseId, conceptId) === "needs") return Math.max(2, Math.min(3, state.support || 1));
+    return Math.max(0, Math.min(3, state.support || 0));
+  }
+
+  function recordPrimerAttempt(courseId, question, correct) {
+    var state = primerStateFor(courseId, question.conceptId);
+    state.shown += 1;
+    state.lastAt = Date.now();
+    if (correct) {
+      state.correct += 1;
+      state.easyStreak += 1;
+      state.support = Math.max(0, state.support - 1);
+    } else {
+      state.wrong += 1;
+      state.easyStreak = 0;
+      state.support = Math.min(3, Math.max(2, state.support + 1));
+    }
+  }
+
+  function updatePrimerFromChallenge(courseId, conceptId, question, correct) {
+    if (correct === null || question.primerOnly) return;
+    var state = primerStateFor(courseId, conceptId);
+    if (!correct) {
+      state.easyStreak = 0;
+      state.support = Math.min(3, Math.max(2, state.support + 1));
+      return;
+    }
+    if ((question.difficulty || 2) >= 3) state.easyStreak += 1;
+    state.support = state.easyStreak >= 2 ? 0 : Math.max(0, state.support - 1);
+  }
+
+  function renderDashboard(options) {
+    options = options || {};
+    var overall = overallStats();
+    $("overall-strong").textContent = String(overall.strong);
+    $("overall-developing").textContent = String(overall.developing);
+    $("overall-needs").textContent = String(overall.needs);
+    $("overall-unseen").textContent = String(overall.unseen);
+    $("calibration-summary").textContent = overallConfidenceSummary();
+    renderCourseCards();
+    renderHeaderTrend(overall);
+    renderMasteryRadar();
+    renderSelectedSubject();
+    renderRecommendation();
+    renderPracticeBuilder();
+    renderProgressStory();
+    renderCommunityReminder();
+    renderLessonIndex();
+    setDashboardView(dashboardView);
+  }
+
+  // Blocks are the honest unit of this line: one practice block moves it at most once, so repeating
+  // the same questions inside a block cannot inflate it.
+  function trendFromCourses(courseIds) {
+    var blocks = {};
+    var conceptTotal = 0;
+    courseIds.forEach(function (courseId) {
+      getCourse(courseId).concepts.forEach(function (concept) {
+        conceptTotal += 1;
+        attemptsFor(courseId, concept.id).forEach(function (attempt) {
+          var id = attemptBlock(attempt);
+          blocks[id] = blocks[id] || {id: id, at: attempt.at};
+          blocks[id].at = Math.max(blocks[id].at, attempt.at);
+        });
+      });
+    });
+    var ordered = Object.keys(blocks).map(function (id) { return blocks[id]; })
+      .sort(function (a, b) { return a.at - b.at; }).slice(-12);
+    return ordered.map(function (block) {
+      var total = 0;
+      courseIds.forEach(function (courseId) {
+        getCourse(courseId).concepts.forEach(function (concept) {
+          var past = attemptsFor(courseId, concept.id).filter(function (attempt) { return attempt.at <= block.at; });
+          var status = evidenceFromAttempts(past, block.at).status;
+          total += status === "strong" ? 1 : status === "developing" ? .5 : 0;
+        });
+      });
+      return {at: block.at, value: Math.round(total / Math.max(1, conceptTotal) * 100)};
+    });
+  }
+
+  // A fixed 0-100 scale: an autoscaled sparkline would make three points of evidence look like a
+  // steep climb.
+  function sparklineMarkup(points, width, height, pad) {
+    pad = pad || 4;
+    var innerWidth = width - pad * 2;
+    var innerHeight = height - pad * 2;
+    var baseline = height - pad;
+    if (!points.length) return "<path class='spark-empty' d='M" + pad + " " + baseline + " H" + (width - pad) + "'/>";
+    var plotted = points.map(function (point, index) {
+      var x = points.length === 1 ? width - pad : pad + index / (points.length - 1) * innerWidth;
+      return {x: x, y: baseline - Math.max(0, Math.min(100, point.value)) / 100 * innerHeight};
+    });
+    var last = plotted[plotted.length - 1];
+    if (plotted.length === 1) {
+      return "<path class='spark-empty' d='M" + pad + " " + last.y.toFixed(1) + " H" + (width - pad) + "'/>" +
+        "<circle class='spark-dot' cx='" + last.x.toFixed(1) + "' cy='" + last.y.toFixed(1) + "' r='4'/>";
+    }
+    var line = plotted.map(function (point, index) {
+      return (index ? "L" : "M") + point.x.toFixed(1) + " " + point.y.toFixed(1);
+    }).join(" ");
+    var area = line + " L" + last.x.toFixed(1) + " " + baseline + " L" + plotted[0].x.toFixed(1) + " " + baseline + " Z";
+    return "<path class='spark-area' d='" + area + "'/><path class='spark-line' d='" + line + "'/>" +
+      "<circle class='spark-dot' cx='" + last.x.toFixed(1) + "' cy='" + last.y.toFixed(1) + "' r='4'/>";
+  }
+
+  function trendDirectionCopy(points, upper, lower, level) {
+    if (!points.length) return null;
+    if (points.length === 1) return "first";
+    var change = points[points.length - 1].value - points[points.length - 2].value;
+    if (change > 0) return upper.replace("{n}", String(change));
+    if (change < 0) return lower.replace("{n}", String(Math.abs(change)));
+    return level;
+  }
+
+  function renderHeaderTrend(overall) {
+    var points = trendFromCourses(COURSE_IDS);
+    var current = Math.round((overall.strong + overall.developing * .5) / Math.max(1, overall.total) * 100);
+    $("header-trend-value").textContent = current + "%";
+    $("header-spark").innerHTML = sparklineMarkup(points, 96, 30, 3);
+    var direction = trendDirectionCopy(points, "Up {n} since the last block", "Down {n} since the last block", "Level since the last block");
+    $("header-trend-note").textContent = !direction ? "No practice block yet"
+      : direction === "first" ? "First block recorded" : direction;
+  }
+
+  function renderMomentum(courseId) {
+    var course = getCourse(courseId);
+    var stats = courseStats(courseId);
+    var points = courseTrend(courseId);
+    var delta = points.length > 1 ? points[points.length - 1].value - points[points.length - 2].value : null;
+    $("momentum-scope").textContent = course.shortTitle;
+    $("momentum-value").textContent = stats.weighted + "%";
+    var deltaNode = $("momentum-delta");
+    deltaNode.className = "momentum-delta " + (delta === null ? "flat" : delta > 0 ? "up" : delta < 0 ? "down" : "flat");
+    deltaNode.textContent = delta === null ? (points.length ? "first block" : "no block yet")
+      : delta > 0 ? "+" + delta + " points" : delta < 0 ? delta + " points" : "level";
+    $("hero-trend").innerHTML = sparklineMarkup(points, 320, 88, 6);
+    $("momentum-message").textContent = momentumMessage(course, stats, points, delta);
+  }
+
+  function momentumMessage(course, stats, points, delta) {
+    var short = course.shortTitle;
+    if (!points.length) return "Nothing is recorded for " + short + " yet. One short block is enough to put the first point on this line.";
+    if (points.length === 1) return "First block recorded for " + short + ". A second block is what turns one point into a direction.";
+    if (stats.strong === stats.total) return "Every " + short + " concept has broad current evidence. A delayed retrieval check keeps that honest better than more of the same.";
+    if (delta > 0) return "Up " + delta + " points in " + short + ". " + stats.strong + " concept" + (stats.strong === 1 ? " is" : "s are") + " Strong and " + stats.developing + " " + (stats.developing === 1 ? "is" : "are") + " still building.";
+    if (delta < 0) return "The last block cost " + Math.abs(delta) + " points, which is the signal worth having. The concepts that slipped now come first.";
+    if (stats.needs) return "Level since your last block. " + stats.needs + " concept" + (stats.needs === 1 ? " has" : "s have") + " an open miss, and those come first when you practise.";
+    return "Level since your last block. A different question type on the same concept is what moves it next.";
+  }
+
+  function progressStory() {
+    var seen = {};
+    var blocks = {};
+    var story = {answers: 0, blocks: 0, touched: 0, subjects: 0, latest: 0};
+    COURSE_IDS.forEach(function (courseId) {
+      var subjectTouched = false;
+      getCourse(courseId).concepts.forEach(function (concept) {
+        var attempts = attemptsFor(courseId, concept.id);
+        if (attempts.length) { story.touched += 1; subjectTouched = true; }
+        attempts.forEach(function (attempt) {
+          blocks[attemptBlock(attempt)] = true;
+          if (attempt.at > story.latest) story.latest = attempt.at;
+          // One question can carry several concepts; count the answer once.
+          var key = courseId + "|" + attempt.questionId + "|" + attemptBlock(attempt) + "|" + attempt.at;
+          if (seen[key]) return;
+          seen[key] = true;
+          story.answers += 1;
+        });
+      });
+      if (subjectTouched) story.subjects += 1;
+    });
+    story.blocks = Object.keys(blocks).length;
+    return story;
+  }
+
+  function relativeDay(timestamp) {
+    if (!timestamp) return "not yet";
+    var hours = Math.floor((Date.now() - timestamp) / 3600000);
+    if (hours < 1) return "within the hour";
+    if (hours < 24) return hours + (hours === 1 ? " hour ago" : " hours ago");
+    var days = Math.floor(hours / 24);
+    return days === 1 ? "yesterday" : days + " days ago";
+  }
+
+  function renderProgressStory() {
+    var story = progressStory();
+    var overall = overallStats();
+    $("story-title").textContent = story.answers
+      ? story.blocks + " practice block" + (story.blocks === 1 ? "" : "s") + " behind you"
+      : "Your record starts with one block";
+    $("story-note").textContent = story.answers
+      ? "A record of what you have done, not a verdict on you. Last answer " + relativeDay(story.latest) + "."
+      : "Nothing is recorded yet. The first short block fills in every number here.";
+    var cards = [
+      {label: "Answers recorded", value: String(story.answers), note: "Across every subject"},
+      {label: "Practice blocks", value: String(story.blocks), note: "Separate sittings, not repeats"},
+      {label: "Concepts with evidence", value: story.touched + " of " + overall.total, note: story.touched === overall.total ? "All of them are underway" : (overall.total - story.touched) + " still untouched"},
+      {label: "Subjects started", value: story.subjects + " of " + COURSE_IDS.length, note: story.subjects === COURSE_IDS.length ? "All four are underway" : story.subjects ? "Switch at the top to start another" : "Pick one at the top to begin"}
+    ];
+    $("story-stats").innerHTML = cards.map(function (card) {
+      return "<article class='story-stat'><span>" + escapeHtml(card.label) + "</span><b>" + escapeHtml(card.value) +
+        "</b><small>" + escapeHtml(card.note) + "</small></article>";
+    }).join("");
+  }
+
+  function renderMasteryRadar() {
+    var canvas = $("mastery-radar");
+    if (!canvas) return;
+    var connections = 0;
+    var conceptCount = 0;
+    var axes = COURSE_IDS.map(function (courseId) {
+      return {label:getCourse(courseId).shortTitle, value:courseStats(courseId).weighted};
+    });
+    COURSE_IDS.forEach(function (courseId) {
+      getCourse(courseId).concepts.forEach(function (concept) {
+        conceptCount += 1;
+        if (conceptEvidence(courseId, concept.id).integrativeEvidence) connections += 1;
+      });
+    });
+    axes.push({label:"Connections", value:Math.round(connections / Math.max(1, conceptCount) * 100)});
+    var size = Math.max(240, Math.min(340, canvas.clientWidth || 320));
+    var ratio = window.devicePixelRatio || 1;
+    canvas.width = Math.round(size * ratio);
+    canvas.height = Math.round(size * ratio);
+    canvas.style.height = size + "px";
+    var context = canvas.getContext("2d");
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    context.clearRect(0, 0, size, size);
+    var center = size / 2;
+    var radius = size * .34;
+    function point(index, scale) {
+      var angle = -Math.PI / 2 + index * Math.PI * 2 / axes.length;
+      return {x:center + Math.cos(angle) * radius * scale, y:center + Math.sin(angle) * radius * scale};
+    }
+    function polygon(scale, fill, stroke, width) {
+      context.beginPath();
+      axes.forEach(function (_, index) {
+        var vertex = point(index, scale);
+        if (!index) context.moveTo(vertex.x, vertex.y); else context.lineTo(vertex.x, vertex.y);
+      });
+      context.closePath();
+      if (fill) { context.fillStyle = fill; context.fill(); }
+      context.strokeStyle = stroke;
+      context.lineWidth = width;
+      context.stroke();
+    }
+    [1,.75,.5,.25].forEach(function (scale) { polygon(scale, null, "#d6ddd6", 1); });
+    axes.forEach(function (_, index) {
+      var vertex = point(index, 1);
+      context.beginPath();
+      context.moveTo(center, center);
+      context.lineTo(vertex.x, vertex.y);
+      context.strokeStyle = "#e2e6e0";
+      context.lineWidth = 1;
+      context.stroke();
+    });
+    context.beginPath();
+    axes.forEach(function (axis, index) {
+      var vertex = point(index, Math.max(.02, axis.value / 100));
+      if (!index) context.moveTo(vertex.x, vertex.y); else context.lineTo(vertex.x, vertex.y);
+    });
+    context.closePath();
+    context.fillStyle = "rgba(23,107,120,.18)";
+    context.fill();
+    context.strokeStyle = "#176b78";
+    context.lineWidth = 3;
+    context.stroke();
+    axes.forEach(function (axis, index) {
+      var vertex = point(index, Math.max(.02, axis.value / 100));
+      context.beginPath();
+      context.arc(vertex.x, vertex.y, 4, 0, Math.PI * 2);
+      context.fillStyle = "#176b78";
+      context.fill();
+    });
+    $("mastery-values").innerHTML = axes.map(function (axis) {
+      return "<li><span>" + escapeHtml(axis.label) + "</span><b>" + axis.value + "%</b></li>";
+    }).join("");
+    $("mastery-radar-copy").textContent = "Subject values reflect Strong and Developing evidence. Connections shows concepts already used in a case, link, or reasoning step.";
+  }
+
+  function renderCommunityReminder() {
+    var reminder = $("community-reminder");
+    if (!reminder) return;
+    reminder.hidden = !BACKEND_ACTIVE || !!communityState.joined;
+    if (reminder.hidden) return;
+    $("community-reminder-title").textContent = communityState.reminderAt ? "Aneeket bumped this reminder" : "Join the tester group to keep testing";
+    $("community-reminder-copy").textContent = "Open the WhatsApp invite, join the group, and share feedback during testing. Testers who do not join and participate will be removed from the cohort.";
+    $("community-joined").disabled = !communityState.inviteOpenedAt;
+    $("community-joined").textContent = communityState.inviteOpenedAt ? "I joined the group" : "Open the invite first";
+  }
+
+  /* ------------------------------------------------------------------
+   * Read-through mode.
+   *
+   * A lesson normally reaches a learner only because layeredQueue() puts it
+   * ahead of a scored question citing its lecture. That is the right default —
+   * teaching arrives just before it is tested — but it has two consequences
+   * this panel exists to answer.
+   *
+   * For the learner: there was no way to read the material as a course, only to
+   * meet it one lesson at a time inside practice.
+   *
+   * For whoever is authoring: a lesson for a lecture no question cites is never
+   * delivered to anyone, and nothing in the app said so. IBM module 1 was
+   * authored in full before that was noticed; 8 of its 10 lessons are
+   * unreachable in practice. This panel labels each lesson with whether
+   * practice can actually deliver it, and lists cited lectures that have no
+   * lesson yet, which is the authoring queue.
+   *
+   * Reading here is deliberately NOT recorded. profile.lessonsRead drives the
+   * teach-before-test gate, so writing to it here would let someone skim the
+   * index and silently disable the gate for every lesson they skimmed.
+   * ------------------------------------------------------------------ */
+  /* Which lectures can practice actually reach?
+   *
+   * Not simply "cited by any question in the bank". An optionShapeRisk question
+   * is excluded from every scheduling path, so a lecture cited only by one of
+   * those is unreachable and its lesson is never delivered. For BRGSA that is
+   * the difference between 44 and 33 — eleven lessons this panel would
+   * otherwise report as live. Primers are kept, because teachFirst() runs on
+   * the primer too and a primer really does pull its lecture's lesson in. */
+  function citedLectureIds(courseId) {
+    var course = getCourse(courseId);
+    var cited = {};
+    if (!course) return cited;
+    Object.keys(course.questions).forEach(function (id) {
+      var question = course.questions[id];
+      if (question.optionShapeRisk) return;
+      lectureIdsFor(question).forEach(function (lectureId) { cited[lectureId] = true; });
+    });
+    return cited;
+  }
+
+  function lessonStatusFor(lectureId, cited) {
+    if (!LESSONS[lectureId]) return {key: "missing", label: "No lesson yet"};
+    if (cited[lectureId]) return {key: "live", label: "Taught in practice"};
+    return {key: "readonly", label: "Read-only — no question cites this"};
+  }
+
+  function appendLessonBody(container, data) {
+    function block(tag, className, text) {
+      var node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text) node.textContent = text;
+      container.appendChild(node);
+      return node;
+    }
+
+    if (data.objective) block("p", "lesson-read-objective", "After this you can: " + data.objective);
+    (data.explainer || []).forEach(function (paragraph) { block("p", null, paragraph); });
+
+    if (data.worked) {
+      block("h5", "lesson-read-label", "Worked through");
+      var worked = block("div", "lesson-read-worked");
+      [["Situation", data.worked.setup], ["Move", data.worked.move], ["Why", data.worked.because]]
+        .forEach(function (pair) {
+          if (!pair[1]) return;
+          var line = document.createElement("p");
+          var name = document.createElement("b");
+          name.textContent = pair[0] + ". ";
+          line.appendChild(name);
+          line.appendChild(document.createTextNode(pair[1]));
+          worked.appendChild(line);
+        });
+    }
+
+    if ((data.glossary || []).length) {
+      block("h5", "lesson-read-label", "Words this lecture introduces");
+      var list = document.createElement("dl");
+      list.className = "lesson-read-glossary";
+      data.glossary.forEach(function (entry) {
+        var term = document.createElement("dt");
+        term.textContent = entry.term;
+        var plain = document.createElement("dd");
+        plain.textContent = entry.plain;
+        list.appendChild(term);
+        list.appendChild(plain);
+      });
+      container.appendChild(list);
+    }
+
+    if (data.connects) block("p", "lesson-read-connects", data.connects);
+  }
+
+  function renderLessonIndex() {
+    var host = $("lesson-index");
+    var summary = $("lesson-coverage");
+    if (!host || !summary) return;
+    host.textContent = "";
+    summary.textContent = "";
+
+    var courseId = profile.selectedCourse;
+    var course = getCourse(courseId);
+    var label = $("lessons-course-label");
+    if (label) label.textContent = (course ? course.shortTitle || course.id : courseId) + " · Teaching layer";
+
+    var cited = citedLectureIds(courseId);
+    // Every lecture this subject knows about: one with a lesson, one a question cites, or both.
+    var lectureIds = unique(Object.keys(LESSONS)
+      .filter(function (id) { return LESSONS[id].courseId === courseId; })
+      .concat(Object.keys(cited).filter(function (id) { return id.indexOf(courseId) === 0; })));
+
+    if (!lectureIds.length) {
+      summary.textContent = "No lessons have been authored for this subject yet.";
+      return;
+    }
+
+    var counts = {live: 0, readonly: 0, missing: 0};
+    lectureIds.forEach(function (id) { counts[lessonStatusFor(id, cited).key] += 1; });
+
+    [
+      counts.live + " taught in practice",
+      counts.readonly ? counts.readonly + " readable here only" : null,
+      counts.missing ? counts.missing + " still to write" : null
+    ].filter(Boolean).forEach(function (text, index) {
+      var chip = document.createElement("span");
+      chip.className = "lesson-coverage-chip" + (index === 0 ? " primary" : "");
+      chip.textContent = text;
+      summary.appendChild(chip);
+    });
+
+    // Group by module, using the lesson's own module when we have one and the
+    // lecture id when we do not.
+    var modules = {};
+    lectureIds.forEach(function (id) {
+      var lesson = LESSONS[id];
+      var match = /-M(\d+)-/.exec(id);
+      var moduleNumber = lesson ? lesson.module : (match ? Number(match[1]) : 0);
+      modules[moduleNumber] = modules[moduleNumber] || [];
+      modules[moduleNumber].push(id);
+    });
+
+    Object.keys(modules).map(Number).sort(function (a, b) { return a - b; }).forEach(function (moduleNumber) {
+      var group = document.createElement("section");
+      group.className = "lesson-module";
+
+      var heading = document.createElement("h4");
+      heading.textContent = "Module " + moduleNumber;
+      group.appendChild(heading);
+
+      modules[moduleNumber]
+        .sort(function (a, b) {
+          var left = LESSONS[a], right = LESSONS[b];
+          if (left && right) return left.order - right.order;
+          return a < b ? -1 : 1;
+        })
+        .forEach(function (lectureId) {
+          var data = LESSONS[lectureId];
+          var status = lessonStatusFor(lectureId, cited);
+
+          var row = document.createElement(data ? "details" : "div");
+          row.className = "lesson-row " + status.key;
+
+          var head = document.createElement(data ? "summary" : "div");
+          head.className = "lesson-row-head";
+
+          var title = document.createElement("span");
+          title.className = "lesson-row-title";
+          title.textContent = data ? data.title : lectureId;
+          head.appendChild(title);
+
+          var pill = document.createElement("span");
+          pill.className = "lesson-row-pill " + status.key;
+          pill.textContent = status.label;
+          head.appendChild(pill);
+
+          var source = document.createElement("small");
+          source.className = "lesson-row-source";
+          source.textContent = lectureId;
+          head.appendChild(source);
+
+          row.appendChild(head);
+
+          if (data) {
+            var body = document.createElement("div");
+            body.className = "lesson-row-body";
+            appendLessonBody(body, data);
+            row.appendChild(body);
+          }
+
+          group.appendChild(row);
+        });
+
+      host.appendChild(group);
+    });
+  }
+
+  function setDashboardView(view, options) {
+    options = options || {};
+    if (DASHBOARD_VIEWS.indexOf(view) < 0) view = "overview";
+    dashboardView = view;
+    $("dashboard-screen").setAttribute("data-view", view);
+    DASHBOARD_VIEWS.forEach(function (name) {
+      var active = name === view;
+      var tab = $("tab-" + name);
+      var panel = $("panel-" + name);
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      panel.hidden = !active;
+    });
+    if (options.focusPanel) $("panel-" + view).focus({preventScroll: true});
+  }
+
+  function bindStageTabs() {
+    var tabs = $all(".stage-tabs [role='tab']");
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener("click", function () { setDashboardView(tab.dataset.view); });
+      tab.addEventListener("keydown", function (event) {
+        var nextIndex = null;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % tabs.length;
+        if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === "Home") nextIndex = 0;
+        if (event.key === "End") nextIndex = tabs.length - 1;
+        if (nextIndex === null) return;
+        event.preventDefault();
+        setDashboardView(tabs[nextIndex].dataset.view);
+        tabs[nextIndex].focus();
+      });
+    });
+  }
+
+  function renderCourseCards() {
+    var grid = $("course-grid");
+    grid.innerHTML = "";
+    COURSE_IDS.forEach(function (courseId) {
+      var course = getCourse(courseId);
+      var stats = courseStats(courseId);
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "course-card" + (profile.selectedCourse === courseId ? " selected" : "");
+      button.setAttribute("aria-pressed", String(profile.selectedCourse === courseId));
+      button.setAttribute("aria-label", course.title + ". " + stats.strong + " of " + stats.total + " concepts strong. Open subject dashboard.");
+      var targetCopy = stats.strong === stats.total ? "Complete" : (stats.total - stats.strong) + " left";
+      button.innerHTML = "<span class='course-code'>" + escapeHtml(course.shortTitle) + "</span>" +
+        "<span class='course-name'>" + escapeHtml(course.title) + "</span>" +
+        "<span class='course-bottom'><b>" + stats.strong + " / " + stats.total + " strong</b><small>" + escapeHtml(targetCopy) + "</small>" +
+        "<span class='mini-track' aria-hidden='true'><i style='width:" + stats.weighted + "%'></i></span></span>";
+      button.addEventListener("click", function () {
+        profile.selectedCourse = courseId;
+        selectedModule = 1;
+        inspectedConceptId = null;
+        saveProfile();
+        renderDashboard();
+        var selectedCard = document.querySelector(".course-card.selected");
+        if (selectedCard) selectedCard.focus({preventScroll: true});
+      });
+      grid.appendChild(button);
+    });
+  }
+
+  function renderSelectedSubject() {
+    var courseId = profile.selectedCourse;
+    var course = getCourse(courseId);
+    var stats = courseStats(courseId);
+    $("selected-course-code").textContent = course.shortTitle;
+    $("subject-finish-title").textContent = course.shortTitle + " finish line";
+    $("subject-title").textContent = course.title;
+    $("subject-description").textContent = course.description;
+    $("concepts-course-label").textContent = course.shortTitle + " · Concept evidence";
+    $("sets-title").textContent = course.shortTitle + " · Ten available study sets";
+    $("subject-strong").textContent = stats.strong + " of " + stats.total + " strong";
+    $("subject-progress-fill").style.width = stats.weighted + "%";
+    $("subject-progress-copy").textContent = subjectProgressCopy(stats);
+    $("practice-priority").textContent = stats.needs ? "Practise " + stats.needs + " concepts that need work" : stats.developing ? "Build stronger evidence" : stats.unseen ? "Start the next new concepts" : "Refresh strong concepts";
+    renderMomentum(courseId);
+    renderTrend(courseId);
+    renderConceptMap(courseId);
+    renderSetList(courseId);
+    renderHorizonPlan(profile.horizon || "today");
+  }
+
+  function subjectProgressCopy(stats) {
+    if (stats.strong === stats.total) return "Every core concept has broad current evidence. Use a generic practice check and later retrieval to keep it fresh.";
+    if (stats.needs) return stats.needs + " need practice; these appear first when you practise this subject.";
+    if (stats.developing) return stats.developing + " are developing; open one to see exactly which evidence is still missing.";
+    return "Choose any concept or start with the first short study set.";
+  }
+
+  function courseTrend(courseId) {
+    return trendFromCourses([courseId]);
+  }
+
+  function renderTrend(courseId) {
+    var points = courseTrend(courseId);
+    var current = courseStats(courseId).weighted;
+    $("trend-current").textContent = current + "%";
+    var svg = $("progress-trend");
+    var width = 760, height = 220, left = 28, right = 18, top = 22, bottom = 30;
+    var chartWidth = width - left - right, chartHeight = height - top - bottom;
+    var grid = [0, 25, 50, 75, 100].map(function (value) {
+      var y = top + chartHeight - value / 100 * chartHeight;
+      return "<line x1='" + left + "' y1='" + y + "' x2='" + (width - right) + "' y2='" + y + "' class='trend-grid'/><text x='2' y='" + (y + 4) + "' class='trend-label'>" + value + "</text>";
+    }).join("");
+    if (!points.length) {
+      svg.innerHTML = grid + "<path class='trend-empty' d='M" + left + " " + (top + chartHeight) + " H" + (width - right) + "'/><text x='" + (width / 2) + "' y='" + (height / 2) + "' text-anchor='middle' class='trend-empty-copy'>Your first practice block will start the line</text>";
+      $("trend-description").textContent = "No practice block is recorded yet. The line will reflect demonstrated evidence, not raw effort.";
+      return;
+    }
+    var plotted = points.map(function (point, index) {
+      var x = points.length === 1 ? left + chartWidth : left + index / (points.length - 1) * chartWidth;
+      var y = top + chartHeight - point.value / 100 * chartHeight;
+      return {x:x, y:y, value:point.value};
+    });
+    var line = plotted.map(function (point, index) { return (index ? "L" : "M") + point.x.toFixed(1) + " " + point.y.toFixed(1); }).join(" ");
+    var area = line + " L" + plotted[plotted.length - 1].x.toFixed(1) + " " + (top + chartHeight) + " L" + plotted[0].x.toFixed(1) + " " + (top + chartHeight) + " Z";
+    var dots = plotted.map(function (point, index) {
+      return "<circle cx='" + point.x + "' cy='" + point.y + "' r='6'><title>Practice block " + (index + 1) + ": " + point.value + "% evidence</title></circle>";
+    }).join("");
+    svg.innerHTML = grid + "<path class='trend-area' d='" + area + "'/><path class='trend-line' d='" + line + "'/>" + dots + "<text x='" + left + "' y='" + (height - 6) + "' class='trend-axis-copy'>First block</text><text x='" + (width - right) + "' y='" + (height - 6) + "' text-anchor='end' class='trend-axis-copy'>Latest</text>";
+    var direction = points.length > 1 && points[points.length - 1].value < points[points.length - 2].value ? "The latest block revealed a dip, so the recommendation will revisit the affected concept." : "Correct evidence moves the line; misses can create an honest plateau or dip.";
+    $("trend-description").textContent = points.length + " practice block" + (points.length === 1 ? "" : "s") + " shown. " + direction;
+  }
+
+  function renderConceptMap(courseId) {
+    var course = getCourse(courseId);
+    var map = $("concept-map");
+    map.innerHTML = "";
+    selectedModule = Math.max(1, Math.min(8, selectedModule));
+    $("module-position").textContent = "Module " + selectedModule + " of 8";
+    $("module-browser-title").textContent = course.modules[selectedModule - 1];
+    $("previous-module").disabled = selectedModule === 1;
+    $("next-module").disabled = selectedModule === 8;
+    course.concepts.filter(function (concept) { return concept.module === selectedModule; }).forEach(function (concept) {
+      var evidence = conceptEvidence(courseId, concept.id);
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "concept-node " + evidence.status + (inspectedConceptId === concept.id ? " selected" : "");
+      button.setAttribute("aria-pressed", String(inspectedConceptId === concept.id));
+      button.setAttribute("aria-label", concept.name + ". " + STATUS_LABEL[evidence.status] + ". Inspect the evidence.");
+      button.innerHTML = "<b>" + escapeHtml(concept.name) + "</b><span>" + STATUS_LABEL[evidence.status] + "</span><small>" + escapeHtml(evidence.reasons[0]) + "</small>";
+      button.addEventListener("click", function () { showConceptInspector(courseId, concept.id); });
+      map.appendChild(button);
+    });
+    if (inspectedConceptId && getConcept(courseId, inspectedConceptId) && getConcept(courseId, inspectedConceptId).module === selectedModule) showConceptInspector(courseId, inspectedConceptId, true);
+    else $("concept-inspector").hidden = true;
+  }
+
+  function showConceptInspector(courseId, conceptId, skipMapRefresh) {
+    var concept = getConcept(courseId, conceptId);
+    if (!concept) return;
+    inspectedConceptId = conceptId;
+    var evidence = conceptEvidence(courseId, conceptId);
+    var surfaces = questionSurfaces(courseId, conceptId);
+    var summaryQuestion = surfaces.filter(function (question) { return question.explanation; })[0];
+    $("inspector-status").className = "status-pill " + evidence.status;
+    $("inspector-status").textContent = STATUS_LABEL[evidence.status];
+    $("inspector-title").textContent = concept.name;
+    $("inspector-summary").textContent = concept.summary || (summaryQuestion ? summaryQuestion.explanation : "Practice this concept to build visible evidence.");
+    $("inspector-evidence").innerHTML = evidence.reasons.map(function (reason) { return "<li>" + escapeHtml(reason) + "</li>"; }).join("");
+    $("inspector-confidence").textContent = evidence.openConfidentError ? evidence.confidenceLabel : evidence.confidenceCount ? evidence.confidenceCount + " diagnostic confidence check" + (evidence.confidenceCount === 1 ? "" : "s") + " on this concept; no stable trait is inferred." : "No diagnostic confidence check for this concept yet.";
+    $("concept-inspector").hidden = false;
+    if (!skipMapRefresh) renderConceptMap(courseId);
+  }
+
+  function renderSetList(courseId) {
+    var course = getCourse(courseId);
+    var holder = $("set-list");
+    holder.innerHTML = "";
+    course.runs.forEach(function (definition) {
+      var records = profile.completed[courseId] || {};
+      var record = records[String(definition.id)];
+      var active = profile.active && profile.active.courseId === courseId && profile.active.setId === definition.id;
+      var state = active ? "Resume" : record ? "Best " + record.best + "%" : definition.mock ? "Available now" : "Start";
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "set-card" + (record ? " complete" : "") + (definition.mock ? " mock" : "");
+      button.setAttribute("aria-label", (definition.mock ? "Flexible practice check" : "Study set " + definition.id) + ": " + definition.title + ". " + state);
+      button.innerHTML = "<span class='set-number'>" + (definition.mock ? "P" : definition.id) + "</span><span><b>" + escapeHtml(definition.title) + "</b>" +
+        "<small>" + (definition.questionCount || definition.questionIds.length) + " questions · ~" + definition.minutes + " min</small></span><span class='set-state'>" + state + "</span>";
+      button.addEventListener("click", function () { if (definition.mock) openPracticeSetup(courseId); else startStudySet(courseId, definition.id); });
+      holder.appendChild(button);
+    });
+  }
+
+  function renderHorizonPlan(key) {
+    var plan = HORIZON_PLANS[key] || HORIZON_PLANS.today;
+    $all(".horizon-choice").forEach(function (button) {
+      var selectedChoice = button.dataset.horizon === key;
+      button.classList.toggle("selected", selectedChoice);
+      button.setAttribute("aria-pressed", String(selectedChoice));
+    });
+    $("horizon-plan").innerHTML = "<h3>" + escapeHtml(plan.title) + "</h3><ol>" + plan.steps.map(function (step) { return "<li>" + escapeHtml(step) + "</li>"; }).join("") + "</ol><p class='rest-note'>" + escapeHtml(plan.note) + "</p>";
+  }
+
+  function recommendation(courseId) {
+    var course = getCourse(courseId);
+    if (profile.active && profile.active.courseId === courseId) {
+      return {kind: "resume", title: "Resume where you stopped", copy: profile.active.title + " is saved at question " + (profile.active.index + 1) + ".", minutes: "Saved", questions: (profile.active.queue.length - profile.active.index) + " left"};
+    }
+    var concepts = course.concepts.slice();
+    var needs = concepts.filter(function (concept) { return conceptStatus(courseId, concept.id) === "needs"; });
+    var developing = concepts.filter(function (concept) { return conceptStatus(courseId, concept.id) === "developing"; });
+    var unseen = concepts.filter(function (concept) { return conceptStatus(courseId, concept.id) === "unseen"; });
+    if (needs.length) {
+      needs.sort(function (a, b) { return conceptPriority(courseId, b).score - conceptPriority(courseId, a).score; });
+      return {kind:"priority",title:"Practise the concepts that need work first",copy:"Start with " + needs[0].name + " because " + conceptPriority(courseId, needs[0]).reason + ". The set uses a different question family before repeating wording.",minutes:"~10 minutes",questions:"Up to 8 questions"};
+    }
+    if (developing.length) {
+      developing.sort(function (a, b) { return conceptPriority(courseId, b).score - conceptPriority(courseId, a).score; });
+      return {kind:"priority",title:"Build the missing evidence",copy:"Start with " + developing[0].name + " because " + conceptPriority(courseId, developing[0]).reason + ".",minutes:"~12 minutes",questions:"Up to 8 questions"};
+    }
+    if (unseen.length) {
+      var firstModule = unseen[0].module;
+      return {kind:"set",setId:firstModule,title:"Start the next part of the subject",copy:"Study Module " + firstModule + ": " + course.modules[firstModule - 1] + ". It is a short set and updates the map immediately.",minutes:"~7 minutes",questions:getStudySet(courseId, firstModule).questionIds.length + " questions"};
+    }
+    return {kind:"mock",title:"All core concepts have strong current evidence",copy:"Build your own check below to see whether the subject still holds together. It is practice, not a prediction of the final paper.",minutes:"8–24 minutes",questions:"Choose the mix"};
+  }
+
+  function renderRecommendation() {
+    var courseId = profile.selectedCourse;
+    var rec = recommendation(courseId);
+    $("next-step-title").textContent = rec.title;
+    $("next-step-copy").textContent = rec.copy;
+    $("next-step-meta").innerHTML = "<span>" + escapeHtml(rec.minutes) + "</span><span>" + escapeHtml(rec.questions) + "</span>";
+    $("start-recommended").innerHTML = recommendationActionLabel(rec) + " <span aria-hidden='true'>→</span>";
+  }
+
+  function recommendationActionLabel(rec) {
+    if (rec.kind === "resume") return "Resume saved practice";
+    if (rec.kind === "set") return "Start this study set";
+    if (rec.kind === "mock") return "Mix your own practice";
+    return "Practise these concepts";
+  }
+
+  function executeRecommendation() {
+    var rec = recommendation(profile.selectedCourse);
+    if (rec.kind === "resume") return resumeActive();
+    if (rec.kind === "set") return startStudySet(profile.selectedCourse, rec.setId);
+    if (rec.kind === "mock") return openPracticeSetup(profile.selectedCourse);
+    startPriorityPractice(profile.selectedCourse);
+  }
+
+  function selectQuestionsFromPool(courseId, poolIds, count, requiredIds) {
+    var selectedIds = [];
+    var required = (requiredIds || []).slice().sort(function (a, b) {
+      return questionLastAttemptAt(courseId, a) - questionLastAttemptAt(courseId, b);
+    });
+    required.slice(0, Math.min(required.length, count)).forEach(function (id) {
+      if (selectedIds.indexOf(id) < 0) selectedIds.push(id);
+    });
+    var candidates = unique(poolIds).filter(function (id) {
+      var question = getQuestion(courseId, id);
+      return question && selectedIds.indexOf(id) < 0 && (!(requiredIds || []).length || !question.boss);
+    });
+    while (selectedIds.length < count && candidates.length) {
+      var usedTypes = selectedIds.map(function (id) { return getQuestion(courseId, id).type || "mcq"; });
+      var usedConcepts = selectedIds.reduce(function (values, id) {
+        var question = getQuestion(courseId, id);
+        return values.concat([question.conceptId].concat(question.supportingConceptIds || []));
+      }, []);
+      candidates.sort(function (aId, bId) {
+        var a = getQuestion(courseId, aId), b = getQuestion(courseId, bId);
+        var aNew = questionLastAttemptAt(courseId, aId) ? 1 : 0;
+        var bNew = questionLastAttemptAt(courseId, bId) ? 1 : 0;
+        var aTypeUsed = usedTypes.indexOf(a.type || "mcq") >= 0 ? 1 : 0;
+        var bTypeUsed = usedTypes.indexOf(b.type || "mcq") >= 0 ? 1 : 0;
+        var aConceptUsed = usedConcepts.indexOf(a.conceptId) >= 0 ? 1 : 0;
+        var bConceptUsed = usedConcepts.indexOf(b.conceptId) >= 0 ? 1 : 0;
+        return aNew - bNew || aTypeUsed - bTypeUsed || aConceptUsed - bConceptUsed || questionLastAttemptAt(courseId, aId) - questionLastAttemptAt(courseId, bId) || stableQuestionOrder(aId) - stableQuestionOrder(bId);
+      });
+      selectedIds.push(candidates.shift());
+    }
+    var bossIds = selectedIds.filter(function (id) { return getQuestion(courseId, id).boss; });
+    var constructedIds = selectedIds.filter(function (id) { return getQuestion(courseId, id).type === "short-answer"; });
+    return selectedIds.filter(function (id) { return bossIds.indexOf(id) < 0 && constructedIds.indexOf(id) < 0; }).concat(constructedIds, bossIds);
+  }
+
+  function stableQuestionOrder(value) {
+    return String(value).split("").reduce(function (total, character) { return ((total * 33) + character.charCodeAt(0)) >>> 0; }, 11);
+  }
+
+  function questionIdsForSet(courseId, definition) {
+    if (!definition.questionPoolIds) return definition.questionIds.slice();
+    var count = definition.questionCount || definition.questionIds.length;
+    var required = [];
+    if (definition.bossIds && definition.bossIds.length) {
+      var quota = definition.bossQuota || 1;
+      required = definition.bossIds.slice().sort(function (a, b) {
+        return questionLastAttemptAt(courseId, a) - questionLastAttemptAt(courseId, b);
+      }).slice(0, quota);
+    }
+    return selectQuestionsFromPool(courseId, definition.questionPoolIds, count, required);
+  }
+
+  function layeredQueue(courseId, questionIds, mode) {
+    var queue = [];
+    var introduced = [];
+    var taughtHere = [];
+    var previousConceptId = null;
+    questionIds.forEach(function (id) {
+      var question = getQuestion(courseId, id);
+      if (!question) return;
+      var conceptIds = [question.conceptId];
+
+      /* Teach before testing. Any surface citing a lecture the learner has never
+       * been taught gets that lecture's lesson placed ahead of it. This is the
+       * invariant the whole 0→80 path rests on.
+       *
+       * It applies to the primer on its own terms, not by inheritance from the
+       * question it precedes. A primer is a separate authored surface with its
+       * own sourceIds, and they routinely differ: `brgsa_m1_demand_primer` cites
+       * M01-L01 while the `survey_bias` it introduces cites M01-L05. Gating only
+       * on the scored question let that primer run five steps ahead of its own
+       * lesson — the original defect in miniature. */
+      function teachFirst(surface, conceptId) {
+        if (mode === "simulation") return;
+        pendingLessonsFor(surface).forEach(function (lectureId) {
+          if (taughtHere.indexOf(lectureId) >= 0) return;
+          queue.push({
+            id: lessonItemId(lectureId, conceptId),
+            initial: false,
+            isReattempt: false,
+            origin: null,
+            lesson: true,
+            lectureId: lectureId,
+            previousConceptId: previousConceptId
+          });
+          taughtHere.push(lectureId);
+        });
+      }
+
+      teachFirst(question, question.conceptId);
+
+      if (mode !== "simulation") conceptIds.forEach(function (conceptId) {
+        if (introduced.indexOf(conceptId) >= 0 || primerSupportLevel(courseId, conceptId) <= 0) return;
+        var primer = primerQuestionFor(courseId, conceptId);
+        if (!primer) return;
+        teachFirst(primer, conceptId);
+        queue.push({
+          id: primer.id,
+          initial: false,
+          isReattempt: false,
+          origin: null,
+          primer: true,
+          primerLevel: primerSupportLevel(courseId, conceptId),
+          previousConceptId: previousConceptId
+        });
+        introduced.push(conceptId);
+        previousConceptId = conceptId;
+      });
+      queue.push({id:id, initial:true, isReattempt:false, origin:null});
+      if (introduced.indexOf(question.conceptId) < 0) introduced.push(question.conceptId);
+      previousConceptId = question.conceptId;
+    });
+    return queue;
+  }
+
+  function createSession(courseId, details, questionIds) {
+    var initialStatuses = {};
+    getCourse(courseId).concepts.forEach(function (concept) { initialStatuses[concept.id] = conceptStatus(courseId, concept.id); });
+    var queue = layeredQueue(courseId, questionIds, details.mode || "learning");
+    return {
+      courseId: courseId,
+      kind: details.kind,
+      mode: details.mode || "learning",
+      shape: details.shape || null,
+      focus: details.focus || null,
+      length: details.length || null,
+      setId: details.setId || null,
+      conceptId: details.conceptId || null,
+      title: details.title,
+      kicker: details.kicker,
+      queue: queue,
+      baseCount: questionIds.length,
+      supportCount: queue.length - questionIds.length,
+      index: 0,
+      answered: false,
+      selected: null,
+      confidence: null,
+      subjectiveStage: null,
+      rubricSelection: [],
+      responses: [],
+      initialStatuses: initialStatuses,
+      blockId: "block-" + Date.now().toString(36) + "-" + String(profile.blockSequence = (profile.blockSequence || 0) + 1),
+      startedAt: Date.now()
+    };
+  }
+
+  // The homepage builder is the single place to configure generic practice, so every entry point
+  // that used to open a modal now brings the learner to those controls.
+  function openPracticeSetup(courseId) {
+    if (courseId && courseId !== profile.selectedCourse) {
+      profile.selectedCourse = courseId;
+      selectedModule = 1;
+      inspectedConceptId = null;
+      saveProfile();
+      renderDashboard();
+    }
+    // showScreen resets the scroll position, and with smooth scrolling that animation would
+    // outlive and override the jump to the builder.
+    if (!$("dashboard-screen").classList.contains("active")) showScreen("dashboard-screen");
+    var builder = $("practice-builder");
+    if (!builder) return;
+    builder.classList.add("summoned");
+    window.setTimeout(function () { builder.classList.remove("summoned"); }, 1600);
+    builder.focus({preventScroll: true});
+    window.requestAnimationFrame(function () { builder.scrollIntoView({block: "center", behavior: "smooth"}); });
+  }
+
+  function conceptStatusMap(courseId) {
+    var statuses = {};
+    getCourse(courseId).concepts.forEach(function (concept) { statuses[concept.id] = conceptStatus(courseId, concept.id); });
+    return statuses;
+  }
+
+  function shapeMatches(shape, question) {
+    if (shape === "recognition") return question.type === "mcq" || question.type === "cloze";
+    if (shape === "application") return question.type === "case-cloze" || question.type === "match" || question.type === "boss" || question.perspective === "apply";
+    if (shape === "generation") return question.type === "short-answer" || question.type === "cloze" || question.type === "case-cloze";
+    return true;
+  }
+
+  function focusMatches(focus, question, statuses) {
+    if (focus === "weak") {
+      return [question.conceptId].concat(question.supportingConceptIds || []).some(function (conceptId) {
+        return statuses[conceptId] === "needs" || statuses[conceptId] === "developing";
+      });
+    }
+    if (focus === "new") return statuses[question.conceptId] === "unseen";
+    return true;
+  }
+
+  function practiceCandidates(courseId, shape, focus, statuses) {
+    statuses = statuses || conceptStatusMap(courseId);
+    var course = getCourse(courseId);
+    return Object.keys(course.questions).map(function (id) { return course.questions[id]; })
+      .filter(function (question) {
+        return !question.optionShapeRisk && !question.primerOnly &&
+          shapeMatches(shape, question) && focusMatches(focus, question, statuses);
+      });
+  }
+
+  function practiceAnchors(courseId, shape, pool) {
+    function oldestFirst(questions, limit) {
+      return questions.slice().sort(function (a, b) {
+        return questionLastAttemptAt(courseId, a.id) - questionLastAttemptAt(courseId, b.id);
+      }).slice(0, limit).map(function (question) { return question.id; });
+    }
+    if (shape === "application") return oldestFirst(pool.filter(function (question) { return question.boss; }), 2);
+    if (shape === "generation") return oldestFirst(pool.filter(function (question) { return question.type === "short-answer"; }), 4);
+    if (shape !== "mixed") return [];
+    var anchors = [];
+    ["mcq", "cloze", "case-cloze", "match", "short-answer", "boss"].forEach(function (type) {
+      var candidate = oldestFirst(pool.filter(function (question) { return question.type === type; }), 1)[0];
+      if (candidate) anchors.push(candidate);
+    });
+    return anchors;
+  }
+
+  function lengthTarget(id) {
+    return (optionById(PRACTICE_LENGTHS, id) || PRACTICE_LENGTHS[1]).target;
+  }
+
+  function estimateMinutes(count) {
+    return Math.max(3, Math.round(count * 1.25));
+  }
+
+  function practicePlan(courseId, settings, statuses) {
+    var pool = practiceCandidates(courseId, settings.shape, settings.focus, statuses);
+    var target = Math.min(lengthTarget(settings.length), pool.length);
+    var anchors = practiceAnchors(courseId, settings.shape, pool).slice(0, target);
+    var ids = target ? selectQuestionsFromPool(courseId, pool.map(function (question) { return question.id; }), target, anchors) : [];
+    return {ids: ids, poolSize: pool.length, count: ids.length};
+  }
+
+  function practiceShapeQuestionIds(courseId, shape) {
+    return practicePlan(courseId, {shape: shape, focus: "all", length: "standard"}).ids;
+  }
+
+  function builderSettings() {
+    if (!validBuilder(profile.builder)) profile.builder = clone(DEFAULT_BUILDER);
+    return profile.builder;
+  }
+
+  function renderChipGroup(holderId, options, selectedId, describe, onSelect) {
+    var holder = $(holderId);
+    holder.innerHTML = "";
+    options.forEach(function (option) {
+      var state = describe(option);
+      var chosen = option.id === selectedId;
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "chip-option" + (chosen ? " selected" : "");
+      button.disabled = !state.available && !chosen;
+      button.setAttribute("aria-pressed", String(chosen));
+      button.innerHTML = "<b>" + escapeHtml(state.label || option.label) + "</b><small>" + escapeHtml(state.note) + "</small>";
+      button.addEventListener("click", function () { if (!button.disabled && !chosen) onSelect(option.id); });
+      holder.appendChild(button);
+    });
+  }
+
+  // LAW-01: a builder choice must change the run. Unavailable combinations are disabled with the
+  // reason, and a length that cannot add questions collapses to the shorter one that matches it.
+  function renderPracticeBuilder() {
+    var courseId = profile.selectedCourse;
+    var settings = builderSettings();
+    var statuses = conceptStatusMap(courseId);
+    function poolSize(shape, focus) { return practiceCandidates(courseId, shape, focus, statuses).length; }
+
+    // A narrowing choice that selects the whole pool is not a real choice, so it collapses to
+    // "Anything" instead of pretending to filter.
+    var wholePool = poolSize(settings.shape, "all");
+    if (settings.focus !== "all" && poolSize(settings.shape, settings.focus) >= wholePool) settings.focus = "all";
+    if (!poolSize(settings.shape, settings.focus)) settings.focus = "all";
+    if (!poolSize(settings.shape, settings.focus)) settings.shape = "mixed";
+    var available = poolSize(settings.shape, settings.focus);
+    function achievable(lengthId) { return Math.min(lengthTarget(lengthId), available); }
+    PRACTICE_LENGTHS.forEach(function (option) {
+      if (option.target >= lengthTarget(settings.length)) return;
+      if (achievable(option.id) === achievable(settings.length)) settings.length = option.id;
+    });
+
+    renderChipGroup("builder-shape", PRACTICE_SHAPES, settings.shape, function (option) {
+      var size = poolSize(option.id, settings.focus);
+      return {available: size > 0, note: size ? option.hint : "None of these are left for the concepts you chose"};
+    }, function (id) { settings.shape = id; commitBuilderChange(); });
+
+    renderChipGroup("builder-focus", PRACTICE_FOCUS, settings.focus, function (option) {
+      var size = poolSize(settings.shape, option.id);
+      var whole = poolSize(settings.shape, "all");
+      if (option.id === "all") return {available: size > 0, note: size ? option.hint + " · " + size + " to draw from" : "No question matches this combination"};
+      if (!size) return {available: false, note: option.id === "weak" ? "Nothing in this subject needs work yet" : "No untouched concept is left here"};
+      if (size >= whole) return {available: false, note: option.id === "weak" ? "Every concept here needs work, so this is the same as anything" : "Nothing is started yet, so this is the same as anything"};
+      return {available: true, note: option.hint + " · " + size + " to draw from"};
+    }, function (id) { settings.focus = id; commitBuilderChange(); });
+
+    renderChipGroup("builder-length", PRACTICE_LENGTHS, settings.length, function (option) {
+      var count = achievable(option.id);
+      var duplicateOf = PRACTICE_LENGTHS.filter(function (other) {
+        return other.target < option.target && achievable(other.id) === count;
+      })[0];
+      return {
+        available: count > 0 && !duplicateOf,
+        note: !count ? "No questions available"
+          : duplicateOf ? "Only " + count + " here, the same run as " + duplicateOf.label.toLowerCase()
+          : count + " questions · about " + estimateMinutes(count) + " min"
+      };
+    }, function (id) { settings.length = id; commitBuilderChange(); });
+
+    renderChipGroup("builder-mode", PRACTICE_MODES, settings.mode, function (option) {
+      return {available: true, note: option.hint};
+    }, function (id) { settings.mode = id; commitBuilderChange(); });
+
+    var count = achievable(settings.length);
+    $("builder-start").disabled = !count;
+    $("builder-summary").textContent = !count
+      ? "No question matches this combination yet. Change one choice above."
+      : count + " question" + (count === 1 ? "" : "s") + " from " + getCourse(courseId).shortTitle + " · " +
+        optionById(PRACTICE_SHAPES, settings.shape).label.toLowerCase() + " · " +
+        optionById(PRACTICE_FOCUS, settings.focus).summary + " · explanations " +
+        optionById(PRACTICE_MODES, settings.mode).label.toLowerCase() + " · about " + estimateMinutes(count) + " minutes.";
+  }
+
+  function commitBuilderChange() {
+    saveProfile();
+    renderPracticeBuilder();
+  }
+
+  function startBuiltPractice(override) {
+    var courseId = profile.selectedCourse;
+    var settings = validBuilder(override) ? override : builderSettings();
+    var plan = practicePlan(courseId, settings);
+    if (!plan.ids.length) return toast("No question matches that combination yet.");
+    var shape = optionById(PRACTICE_SHAPES, settings.shape);
+    var focus = optionById(PRACTICE_FOCUS, settings.focus);
+    var simulation = settings.mode === "simulation";
+    session = createSession(courseId, {
+      kind: simulation ? "practice-check" : "practice-shape",
+      mode: settings.mode,
+      shape: settings.shape,
+      focus: settings.focus,
+      length: settings.length,
+      title: shape.runTitle + (settings.focus === "all" ? "" : " · " + focus.summary),
+      kicker: (simulation ? "Explanations held to the end" : "Explanations after each answer") + " · " + plan.count + " questions"
+    }, plan.ids);
+    profile.active = clone(session);
+    saveProfile();
+    beginPractice();
+  }
+
+  function startStudySet(courseId, setId) {
+    var definition = getStudySet(courseId, setId);
+    if (!definition) return;
+    if (definition.mock) return openPracticeSetup(courseId);
+    profile.selectedCourse = courseId;
+    if (profile.active && profile.active.courseId === courseId && profile.active.setId === Number(setId)) {
+      session = clone(profile.active);
+    } else {
+      session = createSession(courseId, {kind: "set", setId: definition.id, title: definition.title, kicker: "Study set " + definition.id + " of 10"}, questionIdsForSet(courseId, definition));
+      profile.active = clone(session);
+      saveProfile();
+    }
+    beginPractice();
+  }
+
+  function startConceptPractice(courseId, conceptId) {
+    var concept = getConcept(courseId, conceptId);
+    var surfaceIds = questionSurfaces(courseId, conceptId).map(function (question) { return question.id; });
+    var ids = selectQuestionsFromPool(courseId, surfaceIds, Math.min(5, surfaceIds.length), []);
+    if (!ids.length) return;
+    profile.selectedCourse = courseId;
+    session = createSession(courseId, {kind:"concept", conceptId:conceptId, title:concept.name, kicker:"Focused concept practice"}, ids);
+    profile.active = clone(session);
+    saveProfile();
+    beginPractice();
+  }
+
+  function conceptPriority(courseId, concept) {
+    var evidence = conceptEvidence(courseId, concept.id);
+    var score = evidence.status === "needs" ? 100 : evidence.status === "developing" ? 60 : evidence.status === "unseen" ? 45 : evidence.refreshDue ? 30 : 0;
+    if (evidence.openConfidentError) score += 35;
+    if (evidence.openUnderconfidentCorrect) score += 12;
+    if (evidence.recurringMisconception) score += 30;
+    if (evidence.attempts && !evidence.delayedCorrect) score += 18;
+    if (evidence.attempts && !evidence.integrativeEvidence) score += 15;
+    if (evidence.openBossFailure) score += 12;
+    var attempts = attemptsFor(courseId, concept.id);
+    if (attempts.slice(-3).length >= 3 && attempts.slice(-3).every(function (attempt) { return attemptBlock(attempt) === attemptBlock(attempts[attempts.length - 1]); })) score -= 12;
+    var reason = evidence.openConfidentError ? "a confident error needs two independent repairs" : evidence.openUnderconfidentCorrect ? "a correct but uncertain answer needs a new-family confirmation" : evidence.recurringMisconception ? "the same misconception returned" : evidence.status === "needs" ? "recent errors are still open" : evidence.attempts && !evidence.delayedCorrect ? "it has not yet been retrieved after a genuine delay" : evidence.attempts && !evidence.integrativeEvidence ? "it still needs a new case or reasoning step" : evidence.status === "unseen" ? "it has no diagnostic evidence yet" : evidence.refreshDue ? "its last success is due for refresh" : "it has the least recent independent evidence";
+    return {score:score, reason:reason};
+  }
+
+  function startPriorityPractice(courseId) {
+    var course = getCourse(courseId);
+    profile.selectedCourse = courseId;
+    var concepts = course.concepts.slice().sort(function (a, b) {
+      var priorityDifference = conceptPriority(courseId, b).score - conceptPriority(courseId, a).score;
+      if (priorityDifference) return priorityDifference;
+      var aAttempts = attemptsFor(courseId, a.id);
+      var bAttempts = attemptsFor(courseId, b.id);
+      var aTime = aAttempts.length ? aAttempts[aAttempts.length - 1].at : 0;
+      var bTime = bAttempts.length ? bAttempts[bAttempts.length - 1].at : 0;
+      return aTime - bTime;
+    });
+    var targets = concepts.slice(0, 8);
+    var ids = targets.map(function (concept) { return chooseQuestion(courseId, concept.id, null, []) || questionSurfaces(courseId, concept.id)[0]; })
+      .filter(Boolean).map(function (question) { return question.id; });
+    var firstPriority = targets.length ? conceptPriority(courseId, targets[0]) : null;
+    session = createSession(courseId, {kind:"priority", title:"Focused practice", kicker:firstPriority ? "Starts here because " + firstPriority.reason : "Based on your concept evidence"}, ids);
+    profile.active = clone(session);
+    saveProfile();
+    beginPractice();
+  }
+
+  function resumeActive() {
+    if (!profile.active) return;
+    session = clone(profile.active);
+    if (!session.blockId) {
+      session.blockId = "block-" + Date.now().toString(36) + "-" + String(profile.blockSequence = (profile.blockSequence || 0) + 1);
+      profile.active = clone(session);
+      saveProfile();
+    }
+    profile.selectedCourse = session.courseId;
+    beginPractice();
+  }
+
+  function beginPractice() {
+    selected = session.selected;
+    confidence = session.confidence || null;
+    renderPracticeShell();
+    renderQuestion();
+    showScreen("practice-screen");
+  }
+
+  function currentItem() { return session.queue[session.index]; }
+  function currentQuestion() { return getQuestion(session.courseId, currentItem().id); }
+
+  function shouldAskConfidence(question, item) {
+    if (question.type === "primer") return false;
+    if (typeof item.askConfidence === "boolean") return item.askConfidence;
+    var attempts = attemptsFor(session.courseId, question.conceptId).filter(function (attempt) { return attempt.scored !== false; });
+    var latest = attempts[attempts.length - 1];
+    var usedFamilies = attempts.map(function (attempt) { return attempt.variantFamily || attempt.questionId; });
+    var newFamily = usedFamilies.indexOf(question.variantFamily || question.id) < 0;
+    var highValue = question.boss || question.type === "short-answer" || ["confident-error", "misconception-repair", "low-confidence-correct", "uncertain-error"].indexOf(item.reason) >= 0;
+    var delayed = latest && Date.now() - latest.at >= 20 * 60 * 60 * 1000;
+    var firstDiagnostic = !attempts.length;
+    var sampledTransfer = newFamily && stableQuestionOrder(question.id + session.blockId) % 100 < 30;
+    item.askConfidence = !!(highValue || delayed || firstDiagnostic || sampledTransfer);
+    return item.askConfidence;
+  }
+
+  function confidenceReady() {
+    return !shouldAskConfidence(currentQuestion(), currentItem()) || !!confidence;
+  }
+
+  function renderPracticeShell() {
+    $("practice-kicker").textContent = session.kicker;
+    $("practice-title").textContent = getCourse(session.courseId).shortTitle + " · " + session.title;
+    renderTopicList();
+    updatePracticeProgress();
+  }
+
+  function renderTopicList() {
+    var holder = $("topic-list");
+    holder.innerHTML = "";
+    var conceptIds = unique(session.queue.reduce(function (values, item) {
+      var question = getQuestion(session.courseId, item.id);
+      return values.concat([question.conceptId].concat(question.supportingConceptIds || []));
+    }, []));
+    var answeredIds = unique(session.responses.reduce(function (values, response) { return values.concat(response.conceptIds || [response.conceptId]); }, []));
+    var currentConceptId = session.index < session.queue.length ? currentQuestion().conceptId : null;
+    conceptIds.forEach(function (conceptId) {
+      var concept = getConcept(session.courseId, conceptId);
+      var li = document.createElement("li");
+      li.textContent = concept ? concept.name : getQuestion(session.courseId, session.queue.filter(function (item) { return getQuestion(session.courseId, item.id).conceptId === conceptId; })[0].id).node;
+      if (conceptId === currentConceptId) li.className = "active";
+      else if (answeredIds.indexOf(conceptId) >= 0) li.className = "done";
+      holder.appendChild(li);
+    });
+  }
+
+  function renderQuestion() {
+    if (!session || session.index >= session.queue.length) return finishSession();
+    var item = currentItem();
+    var question = currentQuestion();
+    if (question && question.type === "lesson") return renderLesson(question, item);
+    shouldAskConfidence(question, item);
+    selected = session.answered ? session.selected : (session.selected === undefined ? null : session.selected);
+    confidence = session.answered ? (session.confidence || (session.responses.length && session.responses[session.responses.length - 1].confidence) || null) : (session.confidence || null);
+    var isPrimer = question.type === "primer";
+    $("question-card").classList.remove("is-correct", "is-wrong", "is-primer", "is-lesson");
+    $("question-card").classList.toggle("is-primer", isPrimer);
+    // Leaving a lesson: restore the question layout the lesson surface hid.
+    $("lesson-panel").hidden = true;
+    $("task-prompt").hidden = false;
+    renderGlossaryBlock(question);
+    $("question-pattern").textContent = isPrimer ? "Adaptive primer" : item.isReattempt ? "Re-attempt · new perspective" : question.pattern;
+    $("question-count").textContent = isPrimer ? "Primer before the next challenge" : "Question " + challengePosition() + " of " + session.baseCount;
+    $("question-node").textContent = question.node;
+    var status = conceptStatus(session.courseId, question.conceptId);
+    $("question-status").className = "status-pill " + status;
+    $("question-status").textContent = STATUS_LABEL[status];
+    $("question-title").textContent = question.stem;
+    $("source-ref").textContent = unique(question.sourceIds || [question.source]).join(" + ") + " · supplied Term 6 course pack";
+    $("case-block").hidden = isPrimer || !question.caselet;
+    $("caselet").textContent = question.caselet || "";
+    $("prompt-flow").classList.toggle("has-case", !isPrimer && !!question.caselet);
+    renderPrimerPanel(question, item);
+    $("task-kicker").textContent = question.caselet ? "Then decide" : "Your task";
+    $("feedback").className = "feedback";
+    $("feedback").innerHTML = "";
+    $("commit-answer").hidden = false;
+    $("commit-answer").textContent = isPrimer ? "Check primer" : question.type === "short-answer" && session.mode === "simulation" ? "Save response" : question.type === "short-answer" && session.subjectiveStage === "rubric" ? "Compare with exemplar" : question.type === "short-answer" ? "Review with rubric" : "Check answer";
+    $("commit-answer").disabled = !hasCompleteResponse(question) || !confidenceReady() || session.answered;
+    $("next-question").hidden = true;
+    renderResponseControl(question);
+    renderConfidenceControl();
+    if (session.answered && session.responses.length) renderResolved(question, session.responses[session.responses.length - 1]);
+    renderTopicList();
+    updatePracticeProgress();
+  }
+
+  // Lessons and primers are support, not challenges, so neither advances the
+  // "Question N of M" count the learner is pacing themselves against.
+  function challengePosition() {
+    return session.queue.slice(0, session.index + 1).filter(function (item) {
+      var question = getQuestion(session.courseId, item.id);
+      return question && question.type !== "primer" && question.type !== "lesson";
+    }).length;
+  }
+
+  /* The lesson surface. It teaches and then gets out of the way: no options, no
+   * confidence prompt, no correctness, and no evidence. Reading it is not an
+   * achievement to be scored — it is the precondition for the questions that
+   * follow being answerable at all. */
+  function renderLesson(question, item) {
+    var data = question.lesson;
+    var card = $("question-card");
+    card.classList.remove("is-correct", "is-wrong", "is-primer");
+    card.classList.add("is-lesson");
+    $("question-pattern").textContent = "Lesson";
+    $("question-node").textContent = data.title;
+    $("question-status").className = "status-pill lesson";
+    $("question-status").textContent = "Teaching first";
+    $("source-ref").textContent = data.lectureId + " · supplied Term 6 course pack";
+
+    $("lesson-panel").hidden = false;
+    $("primer-panel").hidden = true;
+    $("case-block").hidden = true;
+    $("glossary-block").hidden = true;
+    $("task-prompt").hidden = true;
+    $("options").innerHTML = "";
+    $("confidence-check").hidden = true;
+    $("feedback").className = "feedback";
+    $("feedback").innerHTML = "";
+    $("prompt-flow").classList.remove("has-case");
+
+    $("lesson-kicker").textContent = "Module " + data.module + " · lesson " + data.order +
+      (item && item.previousConceptId ? " · builds on what you just did" : "");
+    $("lesson-heading").textContent = data.title;
+    $("lesson-objective").innerHTML = "<b>After this you can:</b> " + escapeHtml(data.objective);
+    $("lesson-body").innerHTML = (data.explainer || []).map(function (paragraph) {
+      return "<p>" + escapeHtml(paragraph) + "</p>";
+    }).join("");
+
+    var worked = data.worked;
+    $("lesson-worked").innerHTML = worked
+      ? "<p class='worked-head'>Worked through</p>" +
+        "<p><b>Situation.</b> " + escapeHtml(worked.setup) + "</p>" +
+        "<p><b>Move.</b> " + escapeHtml(worked.move) + "</p>" +
+        "<p><b>Why.</b> " + escapeHtml(worked.because) + "</p>"
+      : "";
+
+    $("lesson-glossary").innerHTML = (data.glossary || []).length
+      ? "<p class='glossary-head'>Words this lecture introduces</p><dl>" + (data.glossary || []).map(function (entry) {
+          return "<dt>" + escapeHtml(entry.term) + "</dt><dd>" + escapeHtml(entry.plain) + "</dd>";
+        }).join("") + "</dl>"
+      : "";
+
+    $("lesson-connects").textContent = data.connects || "";
+
+    $("commit-answer").hidden = true;
+    $("next-question").hidden = false;
+    $("next-question").innerHTML = "I have read this <span aria-hidden='true'>→</span>";
+    $("question-help").textContent = "Nothing here is scored. The questions after it use these words.";
+
+    // Reading is recorded immediately: the learner has been shown the material,
+    // and the queue must not re-teach it on resume.
+    markLessonRead(data.lectureId);
+    session.answered = true;
+
+    renderTopicList();
+    updatePracticeProgress();
+    $("lesson-heading").focus({preventScroll: true});
+  }
+
+  /* On a scored question, the lecture's glossary stays one disclosure away. A
+   * learner who met "MDE" once should not have to abandon the question to
+   * recover what it meant. */
+  function renderGlossaryBlock(question) {
+    var block = $("glossary-block");
+    var terms = [];
+    lectureIdsFor(question).forEach(function (lectureId) {
+      var data = lessonFor(lectureId);
+      if (data) terms = terms.concat(data.glossary || []);
+    });
+    if (!terms.length) {
+      block.hidden = true;
+      return;
+    }
+    block.hidden = false;
+    $("glossary-summary").textContent = "Terms used here (" + terms.length + ")";
+    $("glossary-list").innerHTML = terms.map(function (entry) {
+      return "<dt>" + escapeHtml(entry.term) + "</dt><dd>" + escapeHtml(entry.plain) + "</dd>";
+    }).join("");
+  }
+
+  function renderPrimerPanel(question, item) {
+    var panel = $("primer-panel");
+    var visible = question.type === "primer";
+    panel.hidden = !visible;
+    if (!visible) return;
+    var level = Math.max(1, Math.min(3, item.primerLevel || 1));
+    $("primer-level").textContent = level === 1 ? "Layer 1 · minimum to carry" : level === 2 ? "Primer returning · use it" : "Primer strengthened · repair the mix-up";
+    var parts = ["<p><b>Know this:</b> " + escapeHtml(question.primerFact) + "</p>"];
+    if (item.previousConceptId) {
+      var previous = getConcept(session.courseId, item.previousConceptId);
+      if (previous) parts.unshift("<p class='primer-carry'><b>Carry forward:</b> " + escapeHtml(previous.name) + ". Now add " + escapeHtml(question.node) + ".</p>");
+    }
+    if (level >= 2) parts.push("<p><b>Use it like this:</b> " + escapeHtml(question.primerApplication) + "</p>");
+    if (level >= 3) parts.push("<p><b>Do not confuse it with:</b> " + escapeHtml(question.primerMisconception) + "</p>");
+    parts.push("<p class='primer-connection'><b>Connection to keep:</b> " + escapeHtml(question.primerConnection) + "</p>");
+    $("primer-content").innerHTML = parts.join("");
+  }
+
+  function hasCompleteResponse(question) {
+    if (question.type === "short-answer") return session.subjectiveStage === "rubric" ? true : typeof selected === "string" && selected.trim().length >= 20;
+    if (question.type === "mcq" || question.type === "primer" || !question.type) return typeof selected === "number";
+    var count = question.type === "boss" ? question.steps.length : question.type === "match" ? question.rows.length : question.blanks.length;
+    return Array.isArray(selected) && selected.length === count && selected.every(function (value) { return typeof value === "number" && value >= 0; });
+  }
+
+  function updateCommitState() {
+    if (!session || session.answered) return;
+    $("commit-answer").disabled = !hasCompleteResponse(currentQuestion()) || !confidenceReady();
+    renderConfidenceControl();
+  }
+
+  function renderResponseControl(question) {
+    if (question.type === "short-answer") return renderShortAnswer(question);
+    if (question.type === "cloze" || question.type === "case-cloze") return renderCloze(question);
+    if (question.type === "match") return renderMatch(question);
+    if (question.type === "boss") return renderBoss(question);
+    renderOptions(question);
+  }
+
+  function prepareResponseHolder(className) {
+    var holder = $("options");
+    holder.innerHTML = "";
+    holder.className = "options " + className;
+    holder.removeAttribute("role");
+    holder.removeAttribute("aria-label");
+    return holder;
+  }
+
+  function renderOptions(question) {
+    var holder = prepareResponseHolder("mcq-options");
+    holder.setAttribute("role", "radiogroup");
+    holder.setAttribute("aria-label", "Answer options");
+    question.options.forEach(function (copy, index) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "option";
+      button.setAttribute("role", "radio");
+      button.setAttribute("aria-checked", String(selected === index));
+      button.tabIndex = selected === index || (selected === null && index === 0) ? 0 : -1;
+      button.disabled = !!session.answered;
+      button.innerHTML = "<span class='option-key'>" + String.fromCharCode(65 + index) + "</span><span>" + escapeHtml(copy) + "</span>";
+      if (session.answered && session.mode !== "simulation") {
+        if (index === question.answer) button.classList.add("correct");
+        if (selected === index && selected !== question.answer) button.classList.add("wrong");
+      }
+      button.addEventListener("click", function () { selectOption(index); });
+      holder.appendChild(button);
+    });
+    $("question-help").textContent = "Keyboard: 1–" + question.options.length + " or arrow keys to choose";
+  }
+
+  function selectOption(index) {
+    if (!session || session.answered) return;
+    selected = index;
+    session.selected = index;
+    $all(".option").forEach(function (button, optionIndex) {
+      button.setAttribute("aria-checked", String(optionIndex === index));
+      button.tabIndex = optionIndex === index ? 0 : -1;
+    });
+    session.selected = selected;
+    updateCommitState();
+  }
+
+  // A native select popup is sized by the operating system, so prose-length options overflow the
+  // card and run off screen. Anything beyond a short phrase becomes wrapping choice cards instead.
+  var LONG_OPTION_CHARS = 60;
+  var liftedLabel = null;
+  var matchLabels = [];
+  var matchAnswerRows = [];
+  var choiceGroupSeq = 0;
+
+  function hasLongOptions(options) {
+    return (options || []).some(function (copy) { return String(copy).length > LONG_OPTION_CHARS; });
+  }
+
+  function renderChoiceGroup(container, options, partIndex, groupLabel, correctAnswer) {
+    var group = document.createElement("div");
+    group.className = "choice-group";
+    group.setAttribute("role", "radiogroup");
+    group.setAttribute("aria-label", groupLabel);
+    var name = "choice-" + (choiceGroupSeq += 1);
+    (options || []).forEach(function (copy, index) {
+      var choice = document.createElement("label");
+      var input = document.createElement("input");
+      var key = document.createElement("span");
+      var text = document.createElement("span");
+      var chosen = Array.isArray(selected) && selected[partIndex] === index;
+      choice.className = "choice";
+      input.type = "radio";
+      input.name = name;
+      input.value = String(index);
+      input.checked = chosen;
+      input.disabled = !!session.answered;
+      key.className = "option-key";
+      key.textContent = String.fromCharCode(65 + index);
+      text.textContent = copy;
+      if (session.answered && session.mode !== "simulation") {
+        if (index === correctAnswer) choice.classList.add("correct");
+        if (chosen && index !== correctAnswer) choice.classList.add("wrong");
+      }
+      input.addEventListener("change", function () {
+        if (!input.checked) return;
+        selectResponsePart(partIndex, index);
+        var slot = $all(".blank-slot")[partIndex];
+        if (slot) slot.classList.add("filled");
+      });
+      choice.appendChild(input);
+      choice.appendChild(key);
+      choice.appendChild(text);
+      group.appendChild(choice);
+    });
+    container.appendChild(group);
+    return group;
+  }
+
+  // Inverted match board. Statements sit side by side, each with a slot underneath, and the unused
+  // labels wait in a tray docked to the bottom of the board. The part index is still the row, so
+  // stored responses, grading, and the answer review keep the row-first shape.
+  function renderMatchBoard(question, labels, holder) {
+    liftedLabel = null;
+    var board = document.createElement("div");
+    var columns = document.createElement("div");
+    var tray = document.createElement("div");
+    var trayLabel = document.createElement("p");
+    var trayItems = document.createElement("div");
+    board.className = "match-board";
+    columns.className = "match-columns";
+    // One row, one column per statement: the comparison is the task, so they must be side by side.
+    // The count lives on the board so the tray can share the same column track as the
+    // statements above it — a tablet then sits directly under the slot it can fill,
+    // and every tablet is the same width instead of sized by its own text.
+    board.style.setProperty("--statement-count", String(question.choices.length));
+    tray.className = "match-tray";
+    trayLabel.className = "tray-label";
+    trayItems.className = "tray-items";
+    tray.appendChild(trayLabel);
+    tray.appendChild(trayItems);
+
+    question.choices.forEach(function (statement, choiceIndex) {
+      var column = document.createElement("div");
+      var index = document.createElement("span");
+      var text = document.createElement("p");
+      var slot = document.createElement("button");
+      column.className = "match-column";
+      // Statements are numbered and labels are lettered, so the task reads as
+      // "put a letter under each number" instead of four equally weighted blocks
+      // with no stated order to work through them.
+      index.className = "statement-index";
+      index.setAttribute("aria-hidden", "true");
+      index.textContent = String(choiceIndex + 1);
+      text.className = "match-statement";
+      text.textContent = statement;
+      slot.type = "button";
+      slot.className = "match-slot";
+      slot.dataset.choiceIndex = String(choiceIndex);
+      slot.disabled = !!session.answered;
+      slot.addEventListener("click", function () { dropOnSlot(choiceIndex); });
+      slot.addEventListener("dragover", function (event) { if (liftedLabel !== null) event.preventDefault(); });
+      slot.addEventListener("drop", function (event) { event.preventDefault(); dropOnSlot(choiceIndex); });
+      column.appendChild(index);
+      column.appendChild(text);
+      column.appendChild(slot);
+      columns.appendChild(column);
+    });
+
+    board.appendChild(columns);
+    board.appendChild(tray);
+    holder.appendChild(board);
+    matchLabels = labels;
+    matchAnswerRows = question.choices.map(function (_, choiceIndex) {
+      var correctRow = null;
+      question.rows.forEach(function (row, rowIndex) { if (row.answer === choiceIndex) correctRow = rowIndex; });
+      return correctRow;
+    });
+    syncMatchBoard();
+  }
+
+  function labelTablet(rowIndex, inSlot) {
+    var tablet = document.createElement(inSlot ? "span" : "button");
+    var key = document.createElement("span");
+    var text = document.createElement("span");
+    tablet.className = "label-tablet" + (liftedLabel === rowIndex ? " lifted" : "");
+    key.className = "option-key";
+    key.textContent = String.fromCharCode(65 + rowIndex);
+    text.textContent = matchLabels[rowIndex];
+    tablet.appendChild(key);
+    tablet.appendChild(text);
+    if (inSlot) return tablet;
+    tablet.type = "button";
+    tablet.dataset.rowIndex = String(rowIndex);
+    tablet.disabled = !!session.answered;
+    tablet.setAttribute("aria-pressed", String(liftedLabel === rowIndex));
+    tablet.setAttribute("aria-label", matchLabels[rowIndex] + ". Choose this label, then choose the statement it belongs to.");
+    if (!session.answered) tablet.draggable = true;
+    tablet.addEventListener("click", function () {
+      liftedLabel = liftedLabel === rowIndex ? null : rowIndex;
+      syncMatchBoard();
+    });
+    tablet.addEventListener("dragstart", function (event) {
+      liftedLabel = rowIndex;
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+      syncMatchBoard();
+    });
+    tablet.addEventListener("dragend", function () { syncMatchBoard(); });
+    return tablet;
+  }
+
+  function dropOnSlot(choiceIndex) {
+    if (session.answered) return;
+    var occupant = selected.indexOf(choiceIndex);
+    if (liftedLabel === null) {
+      // An empty slot with nothing in hand does nothing; a full one returns its label to the tray.
+      if (occupant >= 0) { selected[occupant] = null; commitMatchSelection(); }
+      return;
+    }
+    if (occupant >= 0 && occupant !== liftedLabel) selected[occupant] = null;
+    selected[liftedLabel] = choiceIndex;
+    liftedLabel = null;
+    commitMatchSelection();
+  }
+
+  function commitMatchSelection() {
+    session.selected = selected.slice();
+    syncMatchBoard();
+    updateCommitState();
+  }
+
+  function syncMatchBoard() {
+    var trayItems = document.querySelector(".match-tray .tray-items");
+    var trayLabel = document.querySelector(".match-tray .tray-label");
+    if (!trayItems) return;
+    var resolved = session.answered && session.mode !== "simulation";
+    $all(".match-slot").forEach(function (slot) {
+      var choiceIndex = Number(slot.dataset.choiceIndex);
+      var holderRow = selected.indexOf(choiceIndex);
+      var correctRow = matchAnswerRows[choiceIndex];
+      slot.innerHTML = "";
+      slot.className = "match-slot" + (holderRow >= 0 ? " filled" : "") + (liftedLabel !== null && !session.answered ? " ready" : "");
+      if (holderRow >= 0) {
+        slot.appendChild(labelTablet(holderRow, true));
+        slot.setAttribute("aria-label", "Holds " + matchLabels[holderRow] + ". Choose again to take it back.");
+      } else {
+        var empty = document.createElement("span");
+        empty.className = "slot-empty";
+        empty.textContent = liftedLabel !== null && !session.answered ? "Place " + String.fromCharCode(65 + liftedLabel) + " here" : "No label yet";
+        slot.appendChild(empty);
+        slot.setAttribute("aria-label", liftedLabel !== null ? "Empty. Place " + matchLabels[liftedLabel] + " here." : "Empty slot. Choose a label first.");
+      }
+      if (resolved) {
+        slot.classList.add(holderRow === correctRow ? "correct" : "wrong");
+        if (holderRow !== correctRow) {
+          var truth = document.createElement("small");
+          truth.className = "slot-truth";
+          truth.textContent = "Belongs to " + matchLabels[correctRow];
+          slot.appendChild(truth);
+        }
+      }
+    });
+    // Rebuilding the tray destroys the button a keyboard user just activated, so put focus back on
+    // the same label if it is still there.
+    var focusedRow = document.activeElement && document.activeElement.parentNode === trayItems
+      ? document.activeElement.dataset.rowIndex : null;
+    trayItems.innerHTML = "";
+    var unused = matchLabels.map(function (_, rowIndex) { return rowIndex; })
+      .filter(function (rowIndex) { return selected[rowIndex] === null || selected[rowIndex] === undefined; });
+    unused.forEach(function (rowIndex) { trayItems.appendChild(labelTablet(rowIndex, false)); });
+    if (focusedRow !== null) {
+      var restored = trayItems.querySelector("[data-row-index='" + focusedRow + "']");
+      if (restored) restored.focus();
+    }
+    trayLabel.textContent = session.answered ? (unused.length ? "Never placed" : "Every label was placed")
+      : unused.length ? "Labels to place · " + unused.length + " left"
+      : "Every label is placed";
+  }
+
+  function renderChoiceField(holder, label, options, partIndex, correctAnswer) {
+    var field = document.createElement("div");
+    var legend = document.createElement("p");
+    field.className = "choice-field";
+    legend.className = "choice-legend";
+    legend.textContent = label;
+    field.appendChild(legend);
+    renderChoiceGroup(field, options, partIndex, label, correctAnswer);
+    holder.appendChild(field);
+    return field;
+  }
+
+  function renderSelectOptions(select, options, value) {
+    var placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Choose…";
+    placeholder.disabled = true;
+    placeholder.selected = typeof value !== "number";
+    select.appendChild(placeholder);
+    options.forEach(function (copy, index) {
+      var option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = copy;
+      option.selected = value === index;
+      select.appendChild(option);
+    });
+  }
+
+  function selectResponsePart(partIndex, value) {
+    if (!Array.isArray(selected)) selected = [];
+    selected[partIndex] = Number(value);
+    session.selected = selected.slice();
+    updateCommitState();
+  }
+
+  function renderShortAnswer(question) {
+    var holder = prepareResponseHolder("short-answer-options");
+    var label = document.createElement("label");
+    label.className = "short-answer-label";
+    label.innerHTML = "<span>Your response</span><small>Write before opening the rubric. Your wording is not graded by an opaque model.</small>";
+    var textarea = document.createElement("textarea");
+    textarea.setAttribute("aria-label", "Your constructed response");
+    textarea.placeholder = "State the governing idea, the decision, and the causal reason…";
+    textarea.value = typeof selected === "string" ? selected : "";
+    textarea.disabled = !!session.answered || session.subjectiveStage === "rubric";
+    textarea.addEventListener("input", function () {
+      selected = textarea.value;
+      session.selected = selected;
+      updateCommitState();
+    });
+    label.appendChild(textarea);
+    holder.appendChild(label);
+    if (session.mode !== "simulation" && (session.subjectiveStage === "rubric" || session.answered)) {
+      var rubric = document.createElement("fieldset");
+      rubric.className = "rubric-check";
+      rubric.id = "subjective-rubric";
+      rubric.innerHTML = "<legend>Check your response against the rubric</legend><p>Select only what your answer already contained. The exemplar appears after this step.</p>";
+      (question.rubric || []).forEach(function (criterion, index) {
+        var criterionLabel = document.createElement("label");
+        var input = document.createElement("input");
+        input.type = "checkbox";
+        input.checked = (session.rubricSelection || []).indexOf(index) >= 0;
+        input.disabled = !!session.answered;
+        input.addEventListener("change", function () {
+          var values = session.rubricSelection || [];
+          if (input.checked && values.indexOf(index) < 0) values.push(index);
+          if (!input.checked) values = values.filter(function (value) { return value !== index; });
+          session.rubricSelection = values;
+        });
+        var copy = document.createElement("span");
+        copy.innerHTML = "<b>" + escapeHtml(criterion.label) + "</b><small>" + escapeHtml(criterion.description) + "</small>";
+        criterionLabel.appendChild(input);
+        criterionLabel.appendChild(copy);
+        rubric.appendChild(criterionLabel);
+      });
+      holder.appendChild(rubric);
+    }
+    $("question-help").textContent = session.mode === "simulation" ? "Write at least a short recommendation. The rubric and exemplar appear at the end" : session.subjectiveStage === "rubric" ? "Self-check against the visible criteria, then compare with the exemplar" : "Write at least a short recommendation before reviewing the rubric";
+  }
+
+  function renderCloze(question) {
+    var holder = prepareResponseHolder("cloze-options");
+    var blanks = question.blanks || [];
+    var longForm = blanks.some(function (blank) { return hasLongOptions(blank.options); });
+    var sentence = document.createElement("div");
+    sentence.className = "cloze-sentence";
+    (question.template || []).forEach(function (copy, index) {
+      sentence.appendChild(document.createTextNode(copy));
+      var blank = blanks[index];
+      if (!blank) return;
+
+      if (longForm) {
+        // The sentence keeps its shape; the choosing happens in readable cards below it.
+        var slot = document.createElement("span");
+        slot.className = "blank-slot";
+        slot.textContent = blank.label;
+        if (Array.isArray(selected) && typeof selected[index] === "number") slot.classList.add("filled");
+        sentence.appendChild(slot);
+        return;
+      }
+
+      var label = document.createElement("label");
+      label.className = "inline-blank";
+      var hidden = document.createElement("span");
+      hidden.className = "sr-only";
+      hidden.textContent = blank.label + ": ";
+      var select = document.createElement("select");
+      select.disabled = !!session.answered;
+      select.setAttribute("aria-label", blank.label);
+      renderSelectOptions(select, blank.options, Array.isArray(selected) ? selected[index] : null);
+      if (session.answered && session.mode !== "simulation") select.classList.add(Array.isArray(selected) && selected[index] === blank.answer ? "correct" : "wrong");
+      select.addEventListener("change", function () { selectResponsePart(index, select.value); });
+      label.appendChild(hidden);
+      label.appendChild(select);
+      sentence.appendChild(label);
+    });
+    holder.appendChild(sentence);
+
+    if (longForm) {
+      blanks.forEach(function (blank, index) {
+        renderChoiceField(holder, blank.label, blank.options, index, blank.answer);
+      });
+    }
+    $("question-help").textContent = blanks.length > 1
+      ? "Choose every blank before checking"
+      : "Choose an answer before checking";
+  }
+
+  function renderMatch(question) {
+    var labels = question.rows.map(function (row) { return row.label; });
+    var longChoices = hasLongOptions(question.choices);
+    var longLabels = hasLongOptions(labels);
+    // When the answer cards carry the substance, listing all of them under every row makes the
+    // learner reread the same paragraphs once per row. Show each statement once instead and let
+    // them name the short label it belongs to.
+    var inverted = longChoices && !longLabels;
+    var holder = prepareResponseHolder("match-options" + (inverted ? " match-invert" : ""));
+    var intro = document.createElement("p");
+    intro.className = "format-note";
+    intro.textContent = inverted
+      ? "Each label is used once. Name the one that each statement belongs to."
+      : longChoices
+        ? "Each answer is used once. Choose one card per row."
+        : "Each answer is used once. Keyboard users can complete every row with the select controls.";
+    holder.appendChild(intro);
+    if (inverted) {
+      if (!Array.isArray(selected) || selected.length !== question.rows.length) {
+        selected = question.rows.map(function () { return null; });
+        session.selected = selected.slice();
+      }
+      intro.textContent = "Place one label under each statement. Choose a label then a statement, or drag it across.";
+      renderMatchBoard(question, labels, holder);
+      $("question-help").textContent = "Every statement needs a label before checking";
+      return;
+    }
+    if (longChoices) {
+      question.rows.forEach(function (row, index) {
+        renderChoiceField(holder, row.label, question.choices, index, row.answer);
+      });
+      $("question-help").textContent = "Complete all matching rows before checking";
+      return;
+    }
+    question.rows.forEach(function (row, index) {
+      var label = document.createElement("label");
+      label.className = "match-row";
+      var prompt = document.createElement("span");
+      prompt.textContent = row.label;
+      var select = document.createElement("select");
+      select.disabled = !!session.answered;
+      select.setAttribute("aria-label", "Match for " + row.label);
+      renderSelectOptions(select, question.choices, Array.isArray(selected) ? selected[index] : null);
+      if (session.answered && session.mode !== "simulation") select.classList.add(Array.isArray(selected) && selected[index] === row.answer ? "correct" : "wrong");
+      select.addEventListener("change", function () { selectResponsePart(index, select.value); });
+      label.appendChild(prompt);
+      label.appendChild(select);
+      holder.appendChild(label);
+    });
+    $("question-help").textContent = "Complete all matching rows before checking";
+  }
+
+  function renderBoss(question) {
+    var holder = prepareResponseHolder("boss-options");
+    question.steps.forEach(function (step, index) {
+      if (hasLongOptions(step.options)) {
+        var field = document.createElement("div");
+        field.className = "boss-step";
+        var stepHeading = document.createElement("b");
+        stepHeading.textContent = step.label;
+        var stepPrompt = document.createElement("span");
+        stepPrompt.textContent = step.prompt;
+        field.appendChild(stepHeading);
+        field.appendChild(stepPrompt);
+        renderChoiceGroup(field, step.options, index, step.label + ". " + step.prompt, step.answer);
+        holder.appendChild(field);
+        return;
+      }
+      var label = document.createElement("label");
+      label.className = "boss-step";
+      var heading = document.createElement("b");
+      heading.textContent = step.label;
+      var prompt = document.createElement("span");
+      prompt.textContent = step.prompt;
+      var select = document.createElement("select");
+      select.disabled = !!session.answered;
+      select.setAttribute("aria-label", step.label + ". " + step.prompt);
+      renderSelectOptions(select, step.options, Array.isArray(selected) ? selected[index] : null);
+      if (session.answered && session.mode !== "simulation") select.classList.add(Array.isArray(selected) && selected[index] === step.answer ? "correct" : "wrong");
+      select.addEventListener("change", function () { selectResponsePart(index, select.value); });
+      label.appendChild(heading);
+      label.appendChild(prompt);
+      label.appendChild(select);
+      holder.appendChild(label);
+    });
+    $("question-help").textContent = "Complete all three reasoning steps before checking";
+  }
+
+  function renderConfidenceControl() {
+    var show = shouldAskConfidence(currentQuestion(), currentItem()) && (session.answered || hasCompleteResponse(currentQuestion())) && session.subjectiveStage !== "rubric";
+    $("confidence-check").hidden = !show;
+    $all("input[name='confidence']").forEach(function (input) {
+      input.checked = confidence === input.value;
+      input.disabled = !!session.answered;
+    });
+    $("skip-confidence").disabled = !!session.answered;
+    $("skip-confidence").setAttribute("aria-pressed", String(confidence === "skipped"));
+    $("confidence-check").classList.toggle("resolved", !!session.answered);
+    if (show && !session.answered && $("question-help").textContent.indexOf("confidence description") < 0) $("question-help").textContent += ". Then choose the confidence description or skip it";
+  }
+
+  function setConfidence(value) {
+    if (!session || session.answered) return;
+    confidence = value;
+    session.confidence = value;
+    updateCommitState();
+  }
+
+  // The diagnosis for a wrong response lives on the option the learner actually
+  // chose, so it must be looked up by selected option index within the failing
+  // part — not by the part index, which for a single-blank cloze is always 0 and
+  // would report the same diagnosis whichever wrong option was picked.
+  function partDiagnoses(question, partIndex) {
+    if (question.type === "boss") return (question.steps[partIndex] || {}).diagnoses;
+    if (question.type === "match") return (question.rows[partIndex] || {}).diagnoses;
+    if (question.type === "cloze" || question.type === "case-cloze") return (question.blanks[partIndex] || {}).diagnoses;
+    return question.diagnoses;
+  }
+
+  function diagnosisFor(question, response) {
+    if (!question || !response || response.correct) return null;
+    if (question.type === "mcq" || question.type === "primer" || !question.type) {
+      return (question.diagnoses || [])[response.selected] || null;
+    }
+    var failedIndex = (response.partResults || []).indexOf(false);
+    if (failedIndex < 0) return null;
+    var chosen = (response.selected || [])[failedIndex];
+    return (partDiagnoses(question, failedIndex) || [])[chosen] || null;
+  }
+
+  function evaluateResponse(question) {
+    if (question.type === "mcq" || question.type === "primer" || !question.type) {
+      var mcqCorrect = selected === question.answer;
+      var mcqDiagnosis = mcqCorrect ? null : (question.diagnoses || [])[selected];
+      return {correct: mcqCorrect, partial: mcqCorrect ? 1 : 0, partResults: [mcqCorrect], conceptResults: {}, misconception: mcqCorrect ? null : (mcqDiagnosis ? mcqDiagnosis.tag : (question.misconceptions || [])[selected] || "wrong-option")};
+    }
+    var parts = question.type === "boss" ? question.steps : question.type === "match" ? question.rows : question.blanks;
+    var partResults = parts.map(function (part, index) { return selected[index] === part.answer; });
+    var correctCount = partResults.filter(Boolean).length;
+    var conceptResults = {};
+    unique([question.conceptId].concat(question.supportingConceptIds || [])).forEach(function (conceptId) {
+      var relevant = [];
+      if (question.type === "boss") question.steps.forEach(function (step, index) { if ((step.conceptIds || []).indexOf(conceptId) >= 0) relevant.push(partResults[index]); });
+      else if (question.type === "match") question.rows.forEach(function (row, index) { if (row.conceptId === conceptId) relevant.push(partResults[index]); });
+      else relevant = partResults.slice();
+      conceptResults[conceptId] = relevant.length ? relevant.every(Boolean) : partResults.every(Boolean);
+    });
+    var failedPart = partResults.indexOf(false);
+    var partDiagnosis = failedPart < 0 ? null : (partDiagnoses(question, failedPart) || [])[selected[failedPart]];
+    return {
+      correct: partResults.every(Boolean),
+      partial: correctCount / Math.max(1, partResults.length),
+      partResults: partResults,
+      conceptResults: conceptResults,
+      misconception: partResults.every(Boolean) ? null : (partDiagnosis ? partDiagnosis.tag : (question.misconceptions || [])[failedPart] || "broken-reasoning-step")
+    };
+  }
+
+  function ensureReattempt(question, reason) {
+    var responsesForConcept = session.responses.filter(function (response) { return response.conceptId === question.conceptId; }).length;
+    if (responsesForConcept >= 4) return false;
+    var laterIndex = -1;
+    for (var index = session.index + 1; index < session.queue.length; index += 1) {
+      // A lesson carries the concept id of the question it precedes, so without
+      // this guard the re-attempt scheduler treats teaching as a re-attemptable
+      // surface and drags it out of position — which is how a sample-size case
+      // ended up scheduled ahead of the sample-size lesson.
+      if (session.queue[index].lesson) continue;
+      var laterQuestion = getQuestion(session.courseId, session.queue[index].id);
+      if (laterQuestion.conceptId === question.conceptId && laterQuestion.id !== question.id && (laterQuestion.variantFamily || laterQuestion.id) !== (question.variantFamily || question.id)) { laterIndex = index; break; }
+    }
+    var item;
+    if (laterIndex >= 0) {
+      item = session.queue.splice(laterIndex, 1)[0];
+    } else {
+      var queuedIds = session.queue.slice(session.index + 1).map(function (entry) { return entry.id; });
+      var alternative = questionSurfaces(session.courseId, question.conceptId).filter(function (candidate) {
+        return candidate.id !== question.id && queuedIds.indexOf(candidate.id) < 0 && (candidate.variantFamily || candidate.id) !== (question.variantFamily || question.id);
+      }).sort(function (a, b) {
+        var aFit = reason === "confident-error" ? (["diagnose", "apply"].indexOf(a.perspective) >= 0 ? 0 : 1) : reason === "uncertain-error" ? (a.difficulty <= 3 ? 0 : 1) : reason === "low-confidence-correct" ? (a.type === "case-cloze" || a.boss ? 0 : 1) : 0;
+        var bFit = reason === "confident-error" ? (["diagnose", "apply"].indexOf(b.perspective) >= 0 ? 0 : 1) : reason === "uncertain-error" ? (b.difficulty <= 3 ? 0 : 1) : reason === "low-confidence-correct" ? (b.type === "case-cloze" || b.boss ? 0 : 1) : 0;
+        return aFit - bFit || questionLastAttemptAt(session.courseId, a.id) - questionLastAttemptAt(session.courseId, b.id);
+      })[0];
+      if (!alternative) return false;
+      item = {id: alternative.id, initial: false, isReattempt: true, origin: question.id};
+    }
+    item.isReattempt = true;
+    item.origin = question.id;
+    item.reason = reason;
+    var insertAt = Math.min(session.queue.length, session.index + 3);
+
+    /* Bringing a question forward must not overtake its own teaching. Any lesson
+     * the re-attempt depends on is placed immediately ahead of it, and removed
+     * from wherever it was queued later so it is not delivered twice. */
+    var reattemptQuestion = getQuestion(session.courseId, item.id);
+    pendingLessonsFor(reattemptQuestion).forEach(function (lectureId) {
+      for (var scan = session.queue.length - 1; scan > session.index; scan -= 1) {
+        if (session.queue[scan].lesson && session.queue[scan].lectureId === lectureId) {
+          session.queue.splice(scan, 1);
+          if (scan < insertAt) insertAt -= 1;
+        }
+      }
+      session.queue.splice(insertAt, 0, {
+        id: lessonItemId(lectureId, reattemptQuestion.conceptId),
+        initial: false,
+        isReattempt: false,
+        origin: null,
+        lesson: true,
+        lectureId: lectureId,
+        previousConceptId: question.conceptId
+      });
+      insertAt += 1;
+    });
+
+    session.queue.splice(insertAt, 0, item);
+    return true;
+  }
+
+  function beginSubjectiveReview() {
+    if (!session || session.answered || currentQuestion().type !== "short-answer" || !hasCompleteResponse(currentQuestion()) || !confidenceReady()) return;
+    session.subjectiveStage = "rubric";
+    session.selected = selected;
+    session.confidence = confidence;
+    session.rubricSelection = session.rubricSelection || [];
+    profile.active = clone(session);
+    saveProfile();
+    renderQuestion();
+    var rubric = $("subjective-rubric");
+    if (rubric) rubric.focus({preventScroll:true});
+  }
+
+  function finalizeSubjectiveAnswer(options) {
+    options = options || {};
+    var item = currentItem();
+    var question = currentQuestion();
+    var before = conceptStatus(session.courseId, question.conceptId);
+    var selectedCriteria = options.deferRubric ? [] : (session.rubricSelection || []).slice();
+    var evaluation = {scored:false, correct:null, partial:0, conceptResults:{}, constructedScore:selectedCriteria.length, constructedTotal:(question.rubric || []).length};
+    if (session.mode !== "simulation") recordAttempt(session.courseId, question, evaluation, confidence, item, session.blockId);
+    var after = conceptStatus(session.courseId, question.conceptId);
+    var response = {
+      id: question.id,
+      conceptId: question.conceptId,
+      conceptIds: unique([question.conceptId].concat(question.supportingConceptIds || [])),
+      node: question.node,
+      source: unique(question.sourceIds || [question.source]).join(" + "),
+      selected: selected,
+      confidence: confidence,
+      confidencePrompted: !!item.askConfidence,
+      correct: null,
+      scored: false,
+      subjective: true,
+      rubricSelection: selectedCriteria,
+      rubricScore: selectedCriteria.length,
+      rubricTotal: (question.rubric || []).length,
+      rubricDeferred: !!options.deferRubric,
+      evaluation: evaluation,
+      isReattempt: !!item.isReattempt,
+      initial: !!item.initial,
+      perspective: question.perspective || "generate",
+      statusBefore: before,
+      statusAfter: after,
+      explanation: question.explanation,
+      link: question.link
+    };
+    session.answered = true;
+    session.selected = selected;
+    session.confidence = confidence;
+    session.responses.push(response);
+    profile.active = clone(session);
+    saveProfile();
+    renderResolved(question, response);
+    renderTopicList();
+    updatePracticeProgress();
+    $("next-question").focus({preventScroll:true});
+  }
+
+  function commitAnswer() {
+    if (!session || session.answered || !hasCompleteResponse(currentQuestion()) || !confidenceReady()) return;
+    if (currentQuestion().type === "short-answer" && session.mode === "simulation") return finalizeSubjectiveAnswer({deferRubric:true});
+    if (currentQuestion().type === "short-answer" && session.subjectiveStage !== "rubric") return beginSubjectiveReview();
+    if (currentQuestion().type === "short-answer") return finalizeSubjectiveAnswer();
+    var item = currentItem();
+    var question = currentQuestion();
+    var evaluation = evaluateResponse(question);
+    var correct = evaluation.correct;
+    var before = conceptStatus(session.courseId, question.conceptId);
+    if (question.type === "primer") recordPrimerAttempt(session.courseId, question, correct);
+    else if (session.mode !== "simulation") recordAttempt(session.courseId, question, evaluation, confidence, item, session.blockId);
+    var after = conceptStatus(session.courseId, question.conceptId);
+    var afterEvidence = conceptEvidence(session.courseId, question.conceptId);
+    var scheduled = false;
+    if (question.type !== "primer" && session.mode !== "simulation" && !correct) scheduled = ensureReattempt(question, confidence === "high" ? "confident-error" : confidence === "low" ? "uncertain-error" : "missed");
+    else if (question.type !== "primer" && session.mode !== "simulation" && after !== "strong" && (confidence === "low" || afterEvidence.correct < 3)) scheduled = ensureReattempt(question, confidence === "low" ? "low-confidence-correct" : "developing");
+
+    var response = {
+      id: question.id,
+      conceptId: question.conceptId,
+      conceptIds: unique([question.conceptId].concat(question.supportingConceptIds || [])),
+      node: question.node,
+      source: unique(question.sourceIds || [question.source]).join(" + "),
+      selected: selected,
+      confidence: confidence,
+      confidencePrompted: !!item.askConfidence,
+      correct: correct,
+      scored: question.type !== "primer",
+      primer: question.type === "primer",
+      primerLevel: item.primerLevel || null,
+      partial: evaluation.partial,
+      partResults: evaluation.partResults,
+      conceptResults: evaluation.conceptResults,
+      misconception: evaluation.misconception,
+      isReattempt: !!item.isReattempt,
+      initial: !!item.initial,
+      perspective: question.perspective || "explain",
+      statusBefore: before,
+      statusAfter: after,
+      scheduled: scheduled,
+      explanation: question.explanation,
+      link: question.link
+    };
+    session.answered = true;
+    session.selected = Array.isArray(selected) ? selected.slice() : selected;
+    session.confidence = confidence;
+    session.responses.push(response);
+    profile.active = clone(session);
+    saveProfile();
+    renderResolved(question, response);
+    renderTopicList();
+    updatePracticeProgress();
+    $("next-question").focus({preventScroll: true});
+  }
+
+  function correctAnswerKey(question) {
+    if (question.type === "mcq" || question.type === "primer" || !question.type) return [question.options[question.answer]];
+    if (question.type === "match") return question.rows.map(function (row) { return row.label + " → " + question.choices[row.answer]; });
+    if (question.type === "boss") return question.steps.map(function (step) { return step.label + ": " + step.options[step.answer]; });
+    if (question.type === "short-answer") return [question.exemplar];
+    return question.blanks.map(function (blank) { return blank.label + ": " + blank.options[blank.answer]; });
+  }
+
+  // Superseded by the per-option diagnosis in `diagnosisFor`, which names the
+  // specific belief a chosen option encodes rather than quoting the option back.
+
+  function bossStepFeedback(question, response) {
+    if (!question.boss || response.correct || !Array.isArray(response.partResults)) return "";
+    var passed = response.partResults.map(function (result, index) { return result ? question.steps[index].label.replace(/ ·.*/, "") : null; }).filter(Boolean);
+    var failedIndex = response.partResults.indexOf(false);
+    var failed = question.steps[failedIndex];
+    return (passed.length ? passed.join(" and ") + " still count as evidence. " : "") + "The chain first breaks at " + failed.label.replace(/ ·.*/, "") + ": " + failed.prompt;
+  }
+
+  function renderDeferred(question, response) {
+    var feedback = $("feedback");
+    feedback.className = "feedback visible deferred";
+    feedback.innerHTML = "<span class='feedback-label'>Answer saved</span><p>Correctness and explanations are held until the end of this generic practice check.</p>";
+    $("commit-answer").hidden = true;
+    $("next-question").hidden = false;
+    $("next-question").innerHTML = session.index + 1 >= session.queue.length ? "Finish and review <span aria-hidden='true'>→</span>" : "Next question <span aria-hidden='true'>→</span>";
+  }
+
+  function renderSubjectiveResolved(question, response) {
+    var selectedCriteria = response.rubricSelection || [];
+    var criteria = (question.rubric || []).map(function (criterion, index) {
+      return "<li><b>" + (selectedCriteria.indexOf(index) >= 0 ? "Included: " : "Still missing: ") + escapeHtml(criterion.label) + "</b> — " + escapeHtml(criterion.description) + "</li>";
+    }).join("");
+    var feedback = $("feedback");
+    feedback.className = "feedback visible reviewed";
+    feedback.innerHTML = "<span class='feedback-label'>Self-review recorded: " + response.rubricScore + " of " + response.rubricTotal + " criteria</span><p>This is a transparent self-check, not an automatic grade.</p><ul>" + criteria + "</ul><p class='bridge'><b>Grounded exemplar:</b> " + escapeHtml(question.exemplar) + "</p><p class='return-note'>This constructed response is recorded as practice, but it cannot create Strong evidence without independent checking.</p>";
+    $("commit-answer").hidden = true;
+    $("next-question").hidden = false;
+    $("next-question").innerHTML = session.index + 1 >= session.queue.length ? "Finish this set <span aria-hidden='true'>→</span>" : "Continue <span aria-hidden='true'>→</span>";
+  }
+
+  function renderResolved(question, response) {
+    selected = Array.isArray(response.selected) ? response.selected.slice() : response.selected;
+    confidence = response.confidence || null;
+    renderResponseControl(question);
+    renderConfidenceControl();
+    $("question-status").className = "status-pill " + response.statusAfter;
+    $("question-status").textContent = STATUS_LABEL[response.statusAfter];
+    if (response.primer) return renderPrimerResolved(question, response);
+    if (session.mode === "simulation") return renderDeferred(question, response);
+    if (response.subjective) return renderSubjectiveResolved(question, response);
+    var feedback = $("feedback");
+    feedback.className = "feedback visible" + (response.correct ? "" : " wrong");
+    var partCount = response.partResults ? response.partResults.length : 1;
+    var partCorrect = response.partResults ? response.partResults.filter(Boolean).length : (response.correct ? 1 : 0);
+    var label = response.correct ? "Correct" : (partCorrect ? partCorrect + " of " + partCount + " reasoning parts correct" : "Not yet — this idea will return");
+    var returnCopy;
+    var evidence = conceptEvidence(session.courseId, question.conceptId);
+    if (response.statusAfter === "strong") returnCopy = evidence.delayedCorrect ? "Strong evidence: varied formats, more than one block, applied work, and a later retest are present." : "Strong current evidence: varied formats, more than one block, and applied work are present. A later retest will check retention.";
+    else if (!response.correct && response.confidence === "high") returnCopy = "This ‘could explain’ error will return in a different family. It closes only after two independent repairs; difficulty is not increased as punishment.";
+    else if (response.correct && response.confidence === "low") returnCopy = "The answer was right. One new-family check will test the distinction again before relying on it.";
+    else if (response.scheduled && response.correct) returnCopy = "Good progress. Another question of a different type is placed later in this set.";
+    else if (response.scheduled) returnCopy = "A different question on the same idea is placed later in this set—not immediately after this one.";
+    else returnCopy = evidence.reasons.filter(function (reason) { return /needed|required|retest|block|type/i.test(reason); })[0] || "This remains in the next practice block for this subject.";
+    var answerKey = correctAnswerKey(question);
+    var diagnosis = diagnosisFor(question, response);
+    var bossCopy = bossStepFeedback(question, response);
+
+    // A wrong answer is explained in the order a learner needs it: what this
+    // choice assumed, then what actually governs the case, then the full answer,
+    // then the wider connection. The complete answer is no longer collapsed —
+    // hiding it behind a disclosure was the gap that made this panel feel like a
+    // verdict without a reason.
+    var body;
+    if (response.correct) {
+      body = "<p>" + escapeHtml(question.explanation) + "</p>";
+    } else if (diagnosis) {
+      // For a repair cloze the correct option is the governing principle itself, so
+      // the answer key already states it. Printing both says the same sentence twice.
+      var governingIsInAnswer = answerKey.join(" ").indexOf(String(question.explanation).trim()) >= 0;
+      body =
+        "<div class='diagnosis'>" +
+          "<p class='diagnosis-head'>" + escapeHtml(diagnosis.label) + "</p>" +
+          "<p>" + escapeHtml(diagnosis.why) + "</p>" +
+          (diagnosis.cue ? "<p class='diagnosis-cue'><b>Catch it earlier:</b> " + escapeHtml(diagnosis.cue) + "</p>" : "") +
+        "</div>" +
+        (governingIsInAnswer ? "" : "<p class='governing'><b>What governs this question:</b> " + escapeHtml(question.explanation) + "</p>");
+    } else {
+      body = "<p>" + escapeHtml(question.explanation) + "</p>";
+    }
+
+    feedback.innerHTML = "<span class='feedback-label'>" + escapeHtml(label) + "</span>" + body +
+      (bossCopy ? "<p class='still-valid'><b>What remains valid:</b> " + escapeHtml(bossCopy) + "</p>" : "") +
+      (!response.correct ? "<div class='answer-key'><p class='answer-key-head'>The complete answer</p><ul>" + answerKey.map(function (answer) { return "<li>" + escapeHtml(answer) + "</li>"; }).join("") + "</ul></div>" : "") +
+      "<p class='bridge'><b>Why it connects:</b> " + escapeHtml(question.link) + "</p>" +
+      "<p class='return-note'>" + escapeHtml(returnCopy) + "</p>";
+    $("commit-answer").hidden = true;
+    $("next-question").hidden = false;
+    $("next-question").innerHTML = session.index + 1 >= session.queue.length ? "Finish this set <span aria-hidden='true'>→</span>" : "Continue <span aria-hidden='true'>→</span>";
+  }
+
+  function renderPrimerResolved(question, response) {
+    var feedback = $("feedback");
+    feedback.className = "feedback visible" + (response.correct ? " primer-pass" : " wrong");
+    feedback.innerHTML = response.correct
+      ? "<span class='feedback-label'>Primer ready to use</span><p>Good. The next question will ask you to use this idea, not repeat the definition.</p>"
+      : "<span class='feedback-label'>Primer strengthened</span><p>Keep the precise principle active: " + escapeHtml(question.primerFact) + "</p><p class='bridge'><b>Connection:</b> " + escapeHtml(question.primerConnection) + "</p>";
+    $("commit-answer").hidden = true;
+    $("next-question").hidden = false;
+    $("next-question").innerHTML = "Use it in the next challenge <span aria-hidden='true'>→</span>";
+  }
+
+  function nextQuestion() {
+    if (!session || !session.answered) return;
+    session.index += 1;
+    session.answered = false;
+    session.selected = null;
+    session.confidence = null;
+    session.subjectiveStage = null;
+    session.rubricSelection = [];
+    selected = null;
+    confidence = null;
+    if (session.index >= session.queue.length) return finishSession();
+    profile.active = clone(session);
+    saveProfile();
+    renderQuestion();
+    // renderLesson moves focus to its own heading, so do not pull it back to a
+    // question title the lesson surface has hidden.
+    var next = currentQuestion();
+    if (next && next.type !== "lesson") (next.caselet ? $("case-block") : $("question-title")).focus({preventScroll: true});
+  }
+
+  function updatePracticeProgress() {
+    if (!session) return;
+    // Lessons never produce a response, so they are counted as steps completed
+    // once passed; otherwise the progress bar could never reach the end.
+    var passedLessons = session.queue.slice(0, session.index).filter(function (item) { return item.lesson; }).length;
+    var answered = session.responses.length + passedLessons;
+    var total = session.queue.length;
+    var question = session.index < total ? currentQuestion() : null;
+    $("practice-progress-text").textContent = Math.min(answered, total) + " of " + total + " steps";
+    $("question-count").textContent = question && question.type === "lesson" ? "Lesson before the first question on it"
+      : question && question.type === "primer" ? "Primer before the next challenge"
+      : "Question " + Math.min(challengePosition(), session.baseCount) + " of " + session.baseCount;
+    $("practice-progress-fill").style.width = (total ? answered / total * 100 : 0) + "%";
+    $("due-count").textContent = String(session.queue.slice(session.index + 1).filter(function (item) { return item.isReattempt; }).length);
+  }
+
+  function finishSession() {
+    if (!session) return;
+    if (session.mode === "simulation") session.responses.forEach(function (response, responseIndex) {
+      if (response.evidenceRecorded) return;
+      var question = getQuestion(session.courseId, response.id);
+      var item = session.queue.filter(function (entry) { return entry.id === response.id; })[0] || {id:response.id, initial:response.initial, isReattempt:response.isReattempt};
+      var evaluation = response.evaluation || {scored:response.scored !== false, correct:response.correct, partial:response.partial || 0, partResults:response.partResults || [], conceptResults:response.conceptResults || {}, misconception:response.misconception || null, constructedScore:response.rubricScore, constructedTotal:response.rubricTotal};
+      recordAttempt(session.courseId, question, evaluation, response.confidence, item, session.blockId);
+      response.evidenceRecorded = true;
+      response.statusAfter = conceptStatus(session.courseId, response.conceptId);
+    });
+    var completedSession = clone(session);
+    var initialResponses = completedSession.responses.filter(function (response) { return response.initial; });
+    var scoredInitial = initialResponses.filter(function (response) { return response.scored !== false; });
+    var initialCorrect = scoredInitial.filter(function (response) { return response.correct; }).length;
+    var percent = Math.round(initialCorrect / Math.max(1, scoredInitial.length) * 100);
+    if (completedSession.setId) {
+      profile.completed[completedSession.courseId] = profile.completed[completedSession.courseId] || {};
+      var record = profile.completed[completedSession.courseId][String(completedSession.setId)] || {attempts: 0, best: 0};
+      record.attempts += 1;
+      record.last = percent;
+      record.best = Math.max(record.best, percent);
+      profile.completed[completedSession.courseId][String(completedSession.setId)] = record;
+    }
+    if (completedSession.kind === "practice-check") profile.lastMock[completedSession.courseId] = {percent: percent, shape:completedSession.shape, generic:true, at:new Date().toISOString()};
+    profile.active = null;
+    saveProfile();
+    lastFinished = completedSession;
+    renderDashboard();
+    renderResults(completedSession, percent);
+    showScreen("results-screen");
+  }
+
+  function renderResults(completedSession, percent) {
+    var initialResponses = completedSession.responses.filter(function (response) { return response.initial; });
+    var scoredInitial = initialResponses.filter(function (response) { return response.scored !== false; });
+    var constructed = initialResponses.filter(function (response) { return response.subjective; });
+    var initialCorrect = scoredInitial.filter(function (response) { return response.correct; }).length;
+    var initialMissed = scoredInitial.filter(function (response) { return !response.correct; }).length;
+    var reattempts = completedSession.responses.filter(function (response) { return response.isReattempt && response.correct; }).length;
+    var evidenceResponses = completedSession.responses.filter(function (response) { return !response.primer; });
+    var touched = unique(evidenceResponses.reduce(function (values, response) { return values.concat(response.conceptIds || [response.conceptId]); }, []));
+    var improved = touched.filter(function (conceptId) {
+      return STATUS_ORDER[conceptStatus(completedSession.courseId, conceptId)] > STATUS_ORDER[completedSession.initialStatuses[conceptId]];
+    }).length;
+
+    $("results-kicker").textContent = completedSession.kind === "practice-check" ? "Generic practice check complete" : completedSession.kind === "practice-shape" ? "Learning practice complete" : "Study set complete";
+    $("results-title").textContent = percent >= 75 ? "Good work. Your next step is clear." : percent >= 50 ? "Useful progress. Keep building it." : "This showed exactly what to practise next.";
+    $("results-copy").textContent = constructed.length ? "Scored questions updated your evidence. Constructed responses were stored as transparent self-review only, not automatic correctness." : "The dashboard has updated. Missed and developing concepts now appear ahead of new material when you continue this subject.";
+    $("result-score").textContent = percent + "%";
+    $("score-caption").textContent = scoredInitial.length + " scored question" + (scoredInitial.length === 1 ? "" : "s");
+    $("result-correct").textContent = String(initialCorrect);
+    $("result-missed").textContent = String(initialMissed);
+    $("result-third-label").textContent = constructed.length ? (completedSession.mode === "simulation" ? "Written responses" : "Responses self-reviewed") : "Re-attempts passed";
+    $("result-reattempts").textContent = String(constructed.length || reattempts);
+    $("result-improved").textContent = String(improved);
+    $("score-ring").style.borderColor = percent >= 75 ? "#5da77e" : percent >= 50 ? "#d6953d" : "#c65e54";
+
+    var review = $("result-review");
+    review.innerHTML = "";
+    touched.forEach(function (conceptId) {
+      var concept = getConcept(completedSession.courseId, conceptId);
+      var response = evidenceResponses.filter(function (item) { return (item.conceptIds || [item.conceptId]).indexOf(conceptId) >= 0; }).slice(-1)[0];
+      var status = conceptStatus(completedSession.courseId, conceptId);
+      var evidence = conceptEvidence(completedSession.courseId, conceptId);
+      var confidenceCopy = evidence.openConfidentError ? evidence.confidenceLabel : evidence.confidenceCount ? evidence.confidenceCount + " diagnostic confidence check" + (evidence.confidenceCount === 1 ? "" : "s") + " recorded" : "No confidence inference from this concept";
+      var article = document.createElement("article");
+      article.className = "review-item " + status;
+      article.innerHTML = "<small>" + STATUS_LABEL[status] + " · " + escapeHtml(response.source) + "</small><b>" + escapeHtml(concept ? concept.name : response.node) + "</b><p>" + escapeHtml(evidence.reasons[evidence.reasons.length - 1] || response.link) + "</p><span>" + escapeHtml(confidenceCopy) + "</span>";
+      review.appendChild(article);
+    });
+    if (!touched.length) review.innerHTML = "<p>No concept response was recorded.</p>";
+    renderAnswerReview(completedSession);
+    $("result-primary").innerHTML = recommendationActionLabel(recommendation(completedSession.courseId)) + " <span aria-hidden='true'>→</span>";
+    $("result-primary").onclick = function () { executeRecommendation(); };
+    $("repeat-set").textContent = completedSession.kind === "practice-check" || completedSession.kind === "practice-shape" ? "Repeat this practice" : "Repeat this set";
+    $("repeat-set").onclick = repeatFinished;
+  }
+
+  function selectedAnswerList(question, response) {
+    if (response.subjective) return [response.selected];
+    if (question.type === "mcq" || question.type === "primer" || !question.type) return [question.options[response.selected] || "No answer recorded"];
+    if (question.type === "match") return question.rows.map(function (row, index) { return row.label + " → " + question.choices[response.selected[index]]; });
+    if (question.type === "boss") return question.steps.map(function (step, index) { return step.label + ": " + step.options[response.selected[index]]; });
+    return question.blanks.map(function (blank, index) { return blank.label + ": " + blank.options[response.selected[index]]; });
+  }
+
+  function renderAnswerReview(completedSession) {
+    var section = $("answer-review-section");
+    var holder = $("answer-review");
+    if (completedSession.mode !== "simulation") {
+      section.hidden = true;
+      holder.innerHTML = "";
+      return;
+    }
+    section.hidden = false;
+    holder.innerHTML = "";
+    completedSession.responses.filter(function (response) { return response.initial; }).forEach(function (response, index) {
+      var question = getQuestion(completedSession.courseId, response.id);
+      var article = document.createElement("article");
+      article.className = response.subjective ? "reviewed" : response.correct ? "correct" : "wrong";
+      var chosen = selectedAnswerList(question, response);
+      var correct = correctAnswerKey(question);
+      var rubric = response.subjective ? "<p><b>Rubric</b></p><ul>" + (question.rubric || []).map(function (criterion) { return "<li><b>" + escapeHtml(criterion.label) + ":</b> " + escapeHtml(criterion.description) + "</li>"; }).join("") + "</ul>" : "";
+      article.innerHTML = "<h3>" + (index + 1) + ". " + escapeHtml(question.stem) + "</h3>" +
+        (response.subjective ? "<p><b>Your response:</b> " + escapeHtml(response.selected) + "</p><p>" + (response.rubricDeferred ? "This response was held for comparison at the end and was not automatically graded." : "<b>Self-review:</b> " + response.rubricScore + " of " + response.rubricTotal + " criteria selected. This is not an automatic grade.") + "</p>" : "<p><b>Result:</b> " + (response.correct ? "Correct" : "Needs repair") + "</p>") +
+        "<details" + (response.subjective ? " open" : "") + "><summary>Compare the response and explanation</summary><p><b>Your answer</b></p><ul>" + chosen.map(function (copy) { return "<li>" + escapeHtml(copy) + "</li>"; }).join("") + "</ul><p><b>Grounded answer</b></p><ul>" + correct.map(function (copy) { return "<li>" + escapeHtml(copy) + "</li>"; }).join("") + "</ul>" + rubric + "<p>" + escapeHtml(question.explanation) + "</p></details>";
+      holder.appendChild(article);
+    });
+  }
+
+  function repeatFinished() {
+    if (!lastFinished) return goDashboard();
+    if (lastFinished.setId) return startStudySet(lastFinished.courseId, lastFinished.setId);
+    if (lastFinished.kind === "concept") return startConceptPractice(lastFinished.courseId, lastFinished.conceptId);
+    if (lastFinished.kind === "practice-check" || lastFinished.kind === "practice-shape") {
+      profile.selectedCourse = lastFinished.courseId;
+      return startBuiltPractice({
+        shape: lastFinished.shape || "mixed",
+        focus: lastFinished.focus || "all",
+        length: lastFinished.length || "standard",
+        mode: lastFinished.mode || "learning"
+      });
+    }
+    startPriorityPractice(lastFinished.courseId);
+  }
+
+  function goDashboard() {
+    session = null;
+    selected = null;
+    confidence = null;
+    dashboardView = "overview";
+    renderDashboard();
+    showScreen("dashboard-screen");
+  }
+
+  function leavePractice() {
+    if (session) {
+      profile.active = clone(session);
+      saveProfile();
+    }
+    goDashboard();
+  }
+
+  function confirmReset() {
+    try { localStorage.removeItem(profileStorageKey()); } catch (error) {}
+    profile = defaultProfile();
+    session = null;
+    lastFinished = null;
+    dashboardView = "overview";
+    saveProfile();
+    $("reset-dialog").close();
+    renderDashboard();
+    showScreen("dashboard-screen");
+    toast("Your Term 6 progress was reset.");
+  }
+
+  async function signOut() {
+    if (!BACKEND_ACTIVE) return;
+    setSyncStatus("Signing out…");
+    try { await saveChain; } catch (error) {}
+    try {
+      await fetch(SESSION_ENDPOINT, {
+        method:"DELETE",
+        credentials:"same-origin",
+        cache:"no-store"
+      });
+    } catch (error) {}
+    window.location.replace("./");
+  }
+
+  async function markCommunityOpened() {
+    if (!BACKEND_ACTIVE || communityState.joined) return;
+    $("community-joined").disabled = true;
+    $("community-joined").textContent = "Recording invite click…";
+    try {
+      var response = await fetch(COMMUNITY_ENDPOINT, {
+        method:"PATCH",
+        credentials:"same-origin",
+        cache:"no-store",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({action:"opened"})
+      });
+      var payload = await response.json();
+      if (!response.ok) throw new Error(payload.message || "The invite click could not be recorded.");
+      communityState = payload.community;
+      renderCommunityReminder();
+    } catch (error) {
+      $("community-joined").textContent = "Open the invite again";
+      toast(error.message || "The invite click could not be recorded.");
+    }
+  }
+
+  async function acknowledgeCommunity() {
+    if (!BACKEND_ACTIVE || communityState.joined || !communityState.inviteOpenedAt) return;
+    $("community-joined").disabled = true;
+    $("community-joined").textContent = "Saving…";
+    try {
+      var response = await fetch(COMMUNITY_ENDPOINT, {
+        method:"PATCH",
+        credentials:"same-origin",
+        cache:"no-store",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({action:"acknowledge"})
+      });
+      var payload = await response.json();
+      if (!response.ok) throw new Error(payload.message || "The acknowledgement could not be saved.");
+      communityState = payload.community;
+      renderCommunityReminder();
+      toast("WhatsApp group acknowledgement saved.");
+    } catch (error) {
+      renderCommunityReminder();
+      toast(error.message || "The acknowledgement could not be saved.");
+    }
+  }
+
+  function toast(copy) {
+    var node = $("toast");
+    node.textContent = copy;
+    node.classList.add("show");
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(function () { node.classList.remove("show"); }, 2200);
+  }
+
+  function seedScenarioProgress() {
+    var now = Date.now();
+    COURSE_IDS.forEach(function (courseId, courseIndex) {
+      getCourse(courseId).concepts.forEach(function (concept, index) {
+        var surfaces = questionSurfaces(courseId, concept.id);
+        if (!surfaces.length) return;
+        var mode = (index + courseIndex) % 4;
+        var byType = function (type) { return surfaces.filter(function (question) { return question.type === type; })[0]; };
+        var picks = unique([byType("mcq"), byType("cloze"), byType("case-cloze"), byType("match"), byType("boss")].filter(Boolean));
+        if (mode === 0 && picks.length >= 5) {
+          picks.slice(0, 3).forEach(function (question, pickIndex) { recordAttempt(courseId, question, true, pickIndex ? "medium" : "low", {at:now - (28 - pickIndex) * 60 * 60 * 1000}, "scenario-early-" + courseId); });
+          recordAttempt(courseId, picks[3], false, "low", {at:now - 3 * 60 * 60 * 1000}, "scenario-late-" + courseId);
+          recordAttempt(courseId, picks[4], true, "high", {at:now - 60 * 60 * 1000}, "scenario-late-" + courseId);
+        } else if (mode === 1) {
+          recordAttempt(courseId, picks[0], true, "low", {at:now - 2 * 60 * 60 * 1000}, "scenario-building-" + courseId);
+          recordAttempt(courseId, picks[Math.min(1, picks.length - 1)], true, "medium", {at:now - 60 * 60 * 1000}, "scenario-building-" + courseId);
+        } else if (mode === 2) {
+          recordAttempt(courseId, picks[0], true, "medium", {at:now - 3 * 60 * 60 * 1000}, "scenario-needs-" + courseId);
+          recordAttempt(courseId, picks[Math.min(1, picks.length - 1)], false, "high", {at:now - 2 * 60 * 60 * 1000}, "scenario-needs-" + courseId);
+          recordAttempt(courseId, picks[Math.min(2, picks.length - 1)], false, "medium", {at:now - 60 * 60 * 1000}, "scenario-needs-" + courseId);
+        }
+      });
+    });
+  }
+
+  function demoSelection(question, shouldBeCorrect) {
+    if (question.type === "short-answer") return "I would name the governing idea, make a recommendation from the case evidence, and explain the causal reason behind that decision.";
+    if (question.type === "mcq" || question.type === "primer" || !question.type) return shouldBeCorrect ? question.answer : (question.answer + 1) % question.options.length;
+    var parts = question.type === "boss" ? question.steps : question.type === "match" ? question.rows : question.blanks;
+    return parts.map(function (part, index) {
+      if (shouldBeCorrect || index > 0) return part.answer;
+      var options = question.type === "match" ? question.choices : part.options;
+      return (part.answer + 1) % options.length;
+    });
+  }
+
+  function openQuestionScenario(courseId, question, resolved) {
+    session = createSession(courseId, {kind:"concept",conceptId:question.conceptId,title:question.node,kicker:question.pattern}, [question.id]);
+    profile.selectedCourse = courseId;
+    profile.active = clone(session);
+    beginPractice();
+    if (resolved) {
+      selected = demoSelection(question, false);
+      session.selected = Array.isArray(selected) ? selected.slice() : selected;
+      setConfidence("high");
+      commitAnswer();
+      if (question.type === "short-answer" && session.subjectiveStage === "rubric") {
+        session.rubricSelection = [0, 1];
+        commitAnswer();
+      }
+    }
+  }
+
+  function openRoutineQuestionScenario() {
+    var question = Object.keys(getCourse("BRGSA").questions).map(function (id) { return getQuestion("BRGSA", id); }).filter(function (item) { return item.type === "mcq"; })[0];
+    session = createSession("BRGSA", {kind:"concept",conceptId:question.conceptId,title:question.node,kicker:"Routine retrieval"}, [question.id]);
+    session.queue[0].askConfidence = false;
+    profile.selectedCourse = "BRGSA";
+    profile.active = clone(session);
+    beginPractice();
+  }
+
+  function renderSimulationResultsScenario() {
+    var courseId = "IBM";
+    var ids = practiceShapeQuestionIds(courseId, "mixed");
+    session = createSession(courseId, {kind:"practice-check",mode:"simulation",shape:"mixed",title:"Mixed-format practice",kicker:"Generic practice check · feedback at the end"}, ids);
+    profile.selectedCourse = courseId;
+    session.queue.forEach(function (item, index) {
+      var question = getQuestion(courseId, item.id);
+      var before = conceptStatus(courseId, question.conceptId);
+      var confidenceValue = index % 3 === 0 ? (index % 2 ? "high" : "low") : null;
+      item.askConfidence = !!confidenceValue;
+      if (question.type === "short-answer") {
+        var subjectiveEvaluation = {scored:false,correct:null,partial:0,conceptResults:{},constructedScore:2,constructedTotal:question.rubric.length};
+        session.responses.push({id:question.id,conceptId:question.conceptId,conceptIds:[question.conceptId],node:question.node,source:question.source,selected:"A concise recommendation that names the framework, applies it to the case, and gives the causal reason.",confidence:confidenceValue,confidencePrompted:!!confidenceValue,correct:null,scored:false,subjective:true,rubricSelection:[0,2],rubricScore:2,rubricTotal:question.rubric.length,evaluation:subjectiveEvaluation,isReattempt:false,initial:true,perspective:question.perspective,statusBefore:before,statusAfter:before,explanation:question.explanation,link:question.link});
+        return;
+      }
+      selected = demoSelection(question, index % 3 !== 1);
+      var evaluation = evaluateResponse(question);
+      session.responses.push({id:question.id,conceptId:question.conceptId,conceptIds:unique([question.conceptId].concat(question.supportingConceptIds || [])),node:question.node,source:unique(question.sourceIds || [question.source]).join(" + "),selected:Array.isArray(selected) ? selected.slice() : selected,confidence:confidenceValue,confidencePrompted:!!confidenceValue,correct:evaluation.correct,scored:true,partial:evaluation.partial,partResults:evaluation.partResults,conceptResults:evaluation.conceptResults,misconception:evaluation.misconception,isReattempt:false,initial:true,perspective:question.perspective,statusBefore:before,statusAfter:before,explanation:question.explanation,link:question.link});
+    });
+    session.index = session.queue.length;
+    finishSession();
+  }
+
+  function applyScenario(name) {
+    scenarioMode = true;
+    profile = defaultProfile();
+    document.body.setAttribute("data-scenario", name);
+    if (name === "dashboard-progress") {
+      seedScenarioProgress();
+      renderDashboard();
+      return showScreen("dashboard-screen");
+    }
+    if (name === "dashboard-concepts" || name === "dashboard-plan") {
+      seedScenarioProgress();
+      dashboardView = name === "dashboard-concepts" ? "concepts" : "plan";
+      renderDashboard();
+      return showScreen("dashboard-screen");
+    }
+    if (name === "practice-setup") {
+      seedScenarioProgress();
+      renderDashboard();
+      showScreen("dashboard-screen");
+      return openPracticeSetup("BRGSA");
+    }
+    if (name === "simulation-results") return renderSimulationResultsScenario();
+    if (name === "question") return startStudySet("SPMS", 1);
+    if (name === "question-primer" || name === "question-primer-recovery") {
+      var primerTarget = getQuestion("SPMS", getStudySet("SPMS", 1).questionIds[0]);
+      var primerConcept = getConcept("SPMS", primerTarget.conceptId);
+      profile.primerState.SPMS = {};
+      profile.primerState.SPMS[primerConcept.id] = {support:3,easyStreak:0,shown:1,correct:0,wrong:1,lastAt:Date.now() - 1000};
+      startStudySet("SPMS", 1);
+      if (currentQuestion().type === "primer") {
+        session.queue[0].primerLevel = 3;
+        renderQuestion();
+      }
+      if (name === "question-primer-recovery") {
+        var primerQuestion = currentQuestion();
+        selected = (primerQuestion.answer + 1) % primerQuestion.options.length;
+        session.selected = selected;
+        commitAnswer();
+      }
+      return;
+    }
+    if (name === "question-routine") return openRoutineQuestionScenario();
+    if (name === "question-mcq") return openQuestionScenario("BRGSA", Object.keys(getCourse("BRGSA").questions).map(function (id) { return getQuestion("BRGSA", id); }).filter(function (question) { return question.type === "mcq"; })[0], false);
+    if (name === "question-cloze") return openQuestionScenario("IBM", Object.keys(getCourse("IBM").questions).map(function (id) { return getQuestion("IBM", id); }).filter(function (question) { return question.type === "case-cloze"; })[0], false);
+    if (name === "question-match") return openQuestionScenario("SCLM", Object.keys(getCourse("SCLM").questions).map(function (id) { return getQuestion("SCLM", id); }).filter(function (question) { return question.type === "match"; })[0], false);
+    if (name === "question-boss") return openQuestionScenario("SPMS", Object.keys(getCourse("SPMS").questions).map(function (id) { return getQuestion("SPMS", id); }).filter(function (question) { return question.type === "boss"; })[0], false);
+    if (name === "question-boss-review") return openQuestionScenario("SPMS", Object.keys(getCourse("SPMS").questions).map(function (id) { return getQuestion("SPMS", id); }).filter(function (question) { return question.type === "boss"; })[0], true);
+    if (name === "question-short-answer") return openQuestionScenario("BRGSA", Object.keys(getCourse("BRGSA").questions).map(function (id) { return getQuestion("BRGSA", id); }).filter(function (question) { return question.type === "short-answer"; })[0], false);
+    if (name === "question-short-answer-review") return openQuestionScenario("BRGSA", Object.keys(getCourse("BRGSA").questions).map(function (id) { return getQuestion("BRGSA", id); }).filter(function (question) { return question.type === "short-answer"; })[0], true);
+    if (name === "feedback") {
+      startStudySet("SCLM", 3);
+      var question = currentQuestion();
+      selected = demoSelection(question, false);
+      session.selected = Array.isArray(selected) ? selected.slice() : selected;
+      setConfidence("high");
+      return commitAnswer();
+    }
+    if (name === "priority") {
+      var course = getCourse("IBM");
+      recordAttempt("IBM", questionSurfaces("IBM", course.concepts[0].id)[0], false, "high", {at:Date.now() - 1000}, "priority-seed");
+      recordAttempt("IBM", questionSurfaces("IBM", course.concepts[1].id)[0], true, "low", {at:Date.now()}, "priority-seed");
+      return startPriorityPractice("IBM");
+    }
+    if (name === "results") {
+      profile.selectedCourse = "IBM";
+      session = createSession("IBM", {kind:"set",setId:1,title:getStudySet("IBM",1).title,kicker:"Study set 1 of 10"}, getStudySet("IBM",1).questionIds);
+      session.queue.forEach(function (item, index) {
+        var question = getQuestion("IBM", item.id);
+        var correct = index !== 1;
+        var before = conceptStatus("IBM", question.conceptId);
+        recordAttempt("IBM", question, correct, correct ? "medium" : "high", {at:Date.now() + index}, session.blockId);
+        session.responses.push({id:question.id,conceptId:question.conceptId,node:question.node,source:question.source,correct:correct,confidence:correct ? "medium" : "high",isReattempt:false,initial:true,perspective:question.perspective,statusBefore:before,statusAfter:conceptStatus("IBM",question.conceptId),link:question.link});
+      });
+      session.index = session.queue.length;
+      return finishSession();
+    }
+    renderDashboard();
+    showScreen("dashboard-screen");
+  }
+
+  function bindEvents() {
+    bindStageTabs();
+    $("brand-home").addEventListener("click", goDashboard);
+    $("start-recommended").addEventListener("click", executeRecommendation);
+    $("start-selected-mock").addEventListener("click", function () { openPracticeSetup(profile.selectedCourse); });
+    $("practice-priority").addEventListener("click", function () { startPriorityPractice(profile.selectedCourse); });
+    $("start-course").addEventListener("click", function () { startStudySet(profile.selectedCourse, 1); });
+    $("previous-module").addEventListener("click", function () { selectedModule -= 1; inspectedConceptId = null; renderConceptMap(profile.selectedCourse); });
+    $("next-module").addEventListener("click", function () { selectedModule += 1; inspectedConceptId = null; renderConceptMap(profile.selectedCourse); });
+    $("practice-inspected").addEventListener("click", function () { if (inspectedConceptId) startConceptPractice(profile.selectedCourse, inspectedConceptId); });
+    $("leave-practice").addEventListener("click", leavePractice);
+    $("commit-answer").addEventListener("click", commitAnswer);
+    $("next-question").addEventListener("click", nextQuestion);
+    $("results-home").addEventListener("click", goDashboard);
+    $("reset-progress").addEventListener("click", function () { $("reset-dialog").showModal(); });
+    $("cancel-reset").addEventListener("click", function () { $("reset-dialog").close(); });
+    $("confirm-reset").addEventListener("click", confirmReset);
+    $("sign-out").addEventListener("click", signOut);
+    $("community-link").addEventListener("click", markCommunityOpened);
+    $("community-joined").addEventListener("click", acknowledgeCommunity);
+    $("skip-confidence").addEventListener("click", function () { setConfidence("skipped"); renderConfidenceControl(); });
+    $all(".horizon-choice").forEach(function (button) {
+      button.addEventListener("click", function () {
+        profile.horizon = button.dataset.horizon;
+        saveProfile();
+        renderHorizonPlan(profile.horizon);
+      });
+    });
+    $("builder-start").addEventListener("click", function () { startBuiltPractice(); });
+    $all("input[name='confidence']").forEach(function (input) {
+      input.addEventListener("change", function () { if (input.checked) { setConfidence(input.value); renderConfidenceControl(); } });
+    });
+    document.addEventListener("keydown", function (event) {
+      if (!session || !$("practice-screen").classList.contains("active")) return;
+      if (event.target && /^(SELECT|INPUT|TEXTAREA)$/.test(event.target.tagName)) return;
+      if (event.target && event.target.tagName === "BUTTON" && (!event.target.classList.contains("option") || event.key === "Enter")) return;
+      var question = currentQuestion();
+      var isMcq = !question.type || question.type === "mcq" || question.type === "primer";
+      if (!session.answered && isMcq && /^(ArrowRight|ArrowDown|ArrowLeft|ArrowUp)$/.test(event.key)) {
+        event.preventDefault();
+        var direction = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1;
+        var optionCount = question.options.length;
+        var currentIndex = selected === null ? (direction > 0 ? -1 : 0) : selected;
+        var arrowIndex = (currentIndex + direction + optionCount) % optionCount;
+        selectOption(arrowIndex);
+        $all(".option")[arrowIndex].focus();
+      } else if (!session.answered && isMcq && /^[1-4]$/.test(event.key)) {
+        var index = Number(event.key) - 1;
+        if (index < question.options.length) selectOption(index);
+      } else if (event.key === "Enter" && !session.answered && hasCompleteResponse(question) && confidenceReady()) {
+        event.preventDefault();
+        commitAnswer();
+      } else if (event.key === "Enter" && session.answered) {
+        event.preventDefault();
+        nextQuestion();
+      }
+    });
+    window.addEventListener("resize", function () {
+      if ($("dashboard-screen").classList.contains("active")) renderMasteryRadar();
+    });
+  }
+
+  function unique(values) { return values.filter(function (value, index) { return values.indexOf(value) === index; }); }
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>'"]/g, function (character) {
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[character];
+    });
+  }
+
+  async function init() {
+    if (COURSE_IDS.some(function (courseId) { return !COURSES[courseId] || !COURSES[courseId].questions || !COURSES[courseId].concepts; })) {
+      document.body.innerHTML = "<main><h1>Term 6 content failed to load.</h1><p>Please restart the local server and refresh.</p></main>";
+      return;
+    }
+    var scenario = new URLSearchParams(window.location.search).get("scenario");
+    document.body.setAttribute("aria-busy", "true");
+    profile = BACKEND_ACTIVE && !scenario ? await loadBackendProfile() : loadProfile();
+    bindEvents();
+    if (scenario) applyScenario(scenario);
+    else if (profile.active) {
+      resumeActive();
+    } else {
+      renderDashboard();
+      showScreen("dashboard-screen");
+    }
+    document.body.removeAttribute("aria-busy");
+  }
+
+  init().catch(function () {
+    document.body.removeAttribute("aria-busy");
+    profile = loadProfile();
+    bindEvents();
+    renderDashboard();
+    showScreen("dashboard-screen");
+    setSyncStatus("Saved on this device");
+  });
+})();

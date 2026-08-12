@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { inspectReadiness, validateEvent } from "../scripts/validate-agent-readiness.mjs";
+import { inspectReadiness, validateEvent } from "../tools/validate-agent-readiness.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 
