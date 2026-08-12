@@ -28,7 +28,7 @@
 #           [SHOW PROFILE]) and Section 7.7 Transfer Training Layer (Transfer Probes;
 #           Structural Bridge boss variant). +stats.json student_profile/transfer_stats
 #           and 3 node_memory fields. From TEACHING_AND_TRANSFER.md, executed 2026-06-03.
-#   v1.4:   Persona System SPECIFIED (personalities.md) but not integrated at the time —
+#   v1.4:   Persona System SPECIFIED (docs/design/personalities.md) but not integrated at the time —
 #           reserved/pending. IMPLEMENTED later in v1.6 (see below); the 1.4 spec landed as
 #           Section 7.8 because Section 17 had been taken by the Rank System in v1.5.
 #   v1.5:   added Section 17 Proficiency Rank System (4 ranks NOVICE→DEVELOPING→
@@ -204,7 +204,7 @@ run **NEW GAME SETUP** (Section 14).
 
 ```
 exam-prep/
-├── PROMPT.md                        ← this file (game engine + Opus review brief)
+├── docs/engine/PROMPT.md                        ← this file (game engine + Opus review brief)
 ├── README.md                        ← student-facing setup guide
 │
 ├── source/
@@ -226,7 +226,7 @@ exam-prep/
 │       ├── {SUBJECT}_stats.json    ← per-subject stats (written at session end)
 │       └── meta_stats.json         ← cross-subject stats (written at session end)
 │
-└── REVIEW_LOG.md               ← Opus 4.8 engineering review notes (create this)
+└── docs/engine/REVIEW_LOG.md               ← Opus 4.8 engineering review notes (create this)
 ```
 
 ---
@@ -1702,7 +1702,7 @@ the real DATE value before writing):
    saved state automatically.
 
 ## What's included
-- Full game engine (PROMPT.md, CLAUDE.md)
+- Full game engine (docs/engine/PROMPT.md, CLAUDE.md)
 - All subject graphs (graphs/)
 - Your live session state (state/)
 - Your question history and flagged questions (history/)
@@ -1799,7 +1799,7 @@ Then write `$EXPORT_DIR/SETUP_NEW_GAME.md`:
 3. Type `ready` to start. Claude will ask which subject to begin with.
 
 ## What's included
-- Full game engine (PROMPT.md, CLAUDE.md)
+- Full game engine (docs/engine/PROMPT.md, CLAUDE.md)
 - All 5 subject knowledge graphs, pre-built and ready to play
 - Blank state — you start at Level 1 with no history
 
@@ -1892,7 +1892,7 @@ and print the full stats card in-chat.
 Version reviewed: 1.0 → bumped to 1.1
 Reviewed by: Claude Opus 4.8 — 2026-06-02
 Conversation reference: https://claude.ai/chat/7d8f31db-7d6a-4da1-bd9d-4fa1a9e121e3
-(Full change record + reasoning lives in REVIEW_LOG.md; summary below.)
+(Full change record + reasoning lives in docs/engine/REVIEW_LOG.md; summary below.)
 
 ## Changes Made
 1. **Startup sequence (Sec 2):** removed per-session CLA-docx load (bloated
@@ -1928,7 +1928,7 @@ Conversation reference: https://claude.ai/chat/7d8f31db-7d6a-4da1-bd9d-4fa1a9e12
 ## Issues Found and Resolved
 - **Subject/source mismatch (caught at build):** a `DDT (Digital Design Tools)`
   folder was mistakenly uploaded in place of NPD. Confirmed with the student;
-  the correct `NPD_Compressed` content was supplied and folded in. The PROMPT.md
+  the correct `NPD_Compressed` content was supplied and folded in. The docs/engine/PROMPT.md
   NPD profile (PIC → funnel → stage gates, ATAR/QFD) is correct and matches the
   real source. The stray DDT folder was moved to `_unused_uploads/`.
 - File layout on disk did not match Sec 3. Reorganised into

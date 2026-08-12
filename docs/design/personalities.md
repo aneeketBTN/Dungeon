@@ -6,7 +6,7 @@ https://claude.ai/chat/7d8f31db-7d6a-4da1-bd9d-4fa1a9e121e3
 **Original Architect:** Claude Sonnet 4.6
 **Reviewing Engineer:** Claude Opus 4.8
 **Review date:** 2026-06-02
-**PROMPT.md version:** 1.0 → **1.1**
+**docs/engine/PROMPT.md version:** 1.0 → **1.1**
 
 ---
 
@@ -19,7 +19,7 @@ graph (BEHECON) ready to extract.
 
 ## Addendum — v1.1.1 (2026-06-02, requested by student mid-session)
 
-**Change:** Added an **Anki-style weak-node prioritisation rule** to PROMPT.md
+**Change:** Added an **Anki-style weak-node prioritisation rule** to docs/engine/PROMPT.md
 §7 *Question Generation — Universal Rules* (new rule 2; subsequent rules
 renumbered 3–7).
 
@@ -35,14 +35,14 @@ gotten wrong (the highest-yield review target before an exam), rather than
 spreading evenly across new material. Selection priority is now:
 (a) due weak/failed → (b) unvisited neighbour → (c) mastered (boss combination only).
 
-**Files touched:** `PROMPT.md` (header → v1.1.1; §7 rules). No schema change —
+**Files touched:** `docs/engine/PROMPT.md` (header → v1.1.1; §7 rules). No schema change —
 `weak_nodes` and `failed_nodes` already existed in stats.json / game_state.json.
 
 ---
 
 ## Addendum — v1.2 "Reinforcement Layer" (2026-06-02, requested by student)
 
-A full FSRS-lite weakness-targeting subsystem. New **Section 7.5** in PROMPT.md;
+A full FSRS-lite weakness-targeting subsystem. New **Section 7.5** in docs/engine/PROMPT.md;
 schema extensions to game_state.json and stats.json; honest-difficulty hard limits
 in Section 18. The v1.1.1 simple rule is now subsumed by (and defers to) §7.5.
 
@@ -85,7 +85,7 @@ resurfaced weak node (always current difficulty); never builds a boss on a box-0
 node. The layer changes WHAT/WHEN, never HOW HARD. *(Basis: desirable difficulties —
 the reinforcement scheduling must not be compounded with hidden hardness changes.)*
 
-**Files touched:** `PROMPT.md` (header → v1.2; new §7.5; §7 rule 2 now defers to
+**Files touched:** `docs/engine/PROMPT.md` (header → v1.2; new §7.5; §7 rule 2 now defers to
 §7.5; §13 game_state + stats schemas; §18 hard limits). Live state migrated to
 node_memory (see game_state.json / stats.json).
 
@@ -97,12 +97,12 @@ On-disk reality did not match the spec, and one subject was mislabelled:
 
 - The files were scattered at the project root, not in the
   `source/{mega,modules,cla}` + `graphs` + `history` + `state` layout that
-  Section 3 of PROMPT.md assumes.
+  Section 3 of docs/engine/PROMPT.md assumes.
 - Four of five source folders mapped cleanly to subjects:
   `BE Merge`→BEHECON, `POME_Compressed`→MACRO, `NABM_Compressed`→NABM,
   `GER_Compressed`→GER (all verified by content + matching CLA docx).
 - The fifth folder, **`DDT Merge` (Digital Design Tools — a qualitative design
-  course)**, did NOT match PROMPT.md's "NPD / New Product Development" profile
+  course)**, did NOT match docs/engine/PROMPT.md's "NPD / New Product Development" profile
   (PIC → funnel → stage gates, ATAR/QFD). Raised with the student → it was a
   **wrong upload**. The student supplied the correct `NPD_Compressed` folder,
   whose contents (Product Innovation Charter, Product Funnel, Stage Gates,
@@ -204,8 +204,8 @@ what makes session-1 usable instead of rough.
 - [x] Save/load edge cases — reviewed & amended
 - [x] Flag system feedback loop — reviewed & amended
 - [x] Cross-subject shared nodes — reviewed (Sec 15 sound; no change)
-- [x] README.md consistency with PROMPT.md — confirmed (README sign-off updated)
-- [x] Version number updated in PROMPT.md — confirmed (1.0 → 1.1)
+- [x] README.md consistency with docs/engine/PROMPT.md — confirmed (README sign-off updated)
+- [x] Version number updated in docs/engine/PROMPT.md — confirmed (1.0 → 1.1)
 
 **Engine status:** APPROVED FOR USE
 
@@ -242,9 +242,9 @@ persistence (M2 tail, M3 core, M3 tail, M4) — use that same safe pattern.
 
 *This file is the engineering record for this project.
 Keep it updated if you make further changes in later sessions.*
-](TASK: Implement the Persona System as Section 17 in PROMPT.md.
+](TASK: Implement the Persona System as Section 17 in docs/engine/PROMPT.md.
 Extend stats.json. Update [SHOW PROFILE] command output.
-Version bump to 1.4. Document in REVIEW_LOG.md.
+Version bump to 1.4. Document in docs/engine/REVIEW_LOG.md.
 
 ═══ EIGHT PERSONAS — DETECTION TRIGGERS ═══
 
@@ -346,7 +346,7 @@ line is mandatory — always appears at the bottom.
 
 ═══ DOCUMENTATION ═══
 
-REVIEW_LOG.md entry:
+docs/engine/REVIEW_LOG.md entry:
 - All 8 personas: name, trigger conditions, engine adaptation
 - Minimum data threshold before assignment
 - Precedence rules for multi-persona triggers

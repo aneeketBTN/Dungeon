@@ -68,7 +68,7 @@ code on the learner path:
 
 ## Closed tester agreement
 
-`DUNGEON_CLOSED_TESTER_AGREEMENT.md` is the source text;
+`docs/community/DUNGEON_CLOSED_TESTER_AGREEMENT.md` is the source text;
 `outputs/Dungeon_Closed_Tester_Agreement.docx` and `.pdf` are the deliverables built by
 `work/build_tester_agreement.py`. Owner direction: this is a gentlemen's agreement, so acceptance is
 two acknowledgement ticks at first login, not a signature. The document carries no name, email, or

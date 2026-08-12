@@ -1,6 +1,6 @@
 # Dungeon — Product Art System
 
-Status: proposed production extension to `ART_DIRECTION.md`
+Status: proposed production extension to `docs/design/ART_DIRECTION.md`
 
 This file does not replace the existing creative thesis. It translates that thesis into a
 repeatable visual language for every product surface from preload to post-run dashboard.
@@ -140,7 +140,7 @@ Motion rules:
 
 ### Homepage
 
-- Use “The Door Above” composition from `ART_DIRECTION.md`.
+- Use “The Door Above” composition from `docs/design/ART_DIRECTION.md`.
 - The first useful action owns the highest contrast.
 - Returning players see `Continue`; new players see `Enter the Dungeon`.
 - Market, Archive, and Settings remain discoverable but subordinate.

@@ -123,7 +123,7 @@ locked, and later work should narrow when sufficient evidence already exists.
 ## Mastery and repetition contract
 
 The initial streak-based Strong rule in this brief is superseded by
-`briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. The dashboard still uses **Not started**,
+`docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. The dashboard still uses **Not started**,
 **Needs practice**, **Developing**, and **Strong**, but Strong now requires repeated correct
 evidence across question types and practice blocks, an applied case or valid reasoning step, and
 no unresolved misconception, confident error, uncertain-correct confirmation, or relevant failed

@@ -68,4 +68,4 @@ Rules for the announcement:
 - Say plainly when a change asks something of the tester — signing in again, re-accepting the
   agreement, or losing a saved position.
 - Name a real limitation when the change has one. Do not describe practice as exam prediction.
-- Keep it to the two answers plus the feedback line. Longer notes belong in `CHANGELOG.md`.
+- Keep it to the two answers plus the feedback line. Longer notes belong in `docs/governance/CHANGELOG.md`.

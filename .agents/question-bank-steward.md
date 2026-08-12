@@ -12,7 +12,7 @@ quarantined proposals, never silent live-bank edits.
 
 ## Required preflight
 
-1. Read `AGENTS.md`, `DESIGN_SOURCE_INDEX.md`, the three active T6 briefs, `.agents/README.md` and
+1. Read `AGENTS.md`, `docs/governance/DESIGN_SOURCE_INDEX.md`, the three active T6 briefs, `.agents/README.md` and
    this charter.
 2. Run `npm run agents:activation-check`.
 3. Require a schema-valid Signal Auditor packet with `reproduced` or `threshold-met` evidence, or

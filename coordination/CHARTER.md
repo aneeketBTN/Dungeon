@@ -11,7 +11,7 @@
 - **Computer Use:** primary evidence source for Windows desktop and cross-app interaction.
 - **Image generation:** proposes or revises bitmap assets after state/acceptance criteria are
   stable; never promotes its own output to approved production art.
-- **Learning engine:** `PROMPT.md` and active graphs are the correctness source until the owner
+- **Learning engine:** `docs/engine/PROMPT.md` and active graphs are the correctness source until the owner
   explicitly changes the learning design.
 
 ## Delivery Protocol

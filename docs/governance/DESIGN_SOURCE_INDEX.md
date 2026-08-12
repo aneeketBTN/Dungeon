@@ -11,16 +11,16 @@ not make it authoritative.
 1. **Current explicit user direction**
    - The current task and any newly supplied brief.
    - Wins over every project file when the user intentionally changes a decision.
-   - Exam-season fallback (2026-08-10): `briefs/T6_REVISION_FALLBACK.md`, grounded in the
+   - Exam-season fallback (2026-08-10): `docs/briefs/T6_REVISION_FALLBACK.md`, grounded in the
      owner-supplied `C:\Users\knigh\OneDrive\Desktop\exam\Term 6 AI-Ready Pack`. This direction
      strips non-learning layers and proprietary vocabulary from the critical path and makes the
      plain ten-step T6 revision dashboard the active product priority.
    - Learning-evidence correction (2026-08-11):
-     `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` replaces quick streak-based Strong labels
+     `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` replaces quick streak-based Strong labels
      with inspectable multi-format, multi-block, boss, time, and confidence evidence. It also owns
      the mixed-format and boss-question authoring contract.
    - Research-review implementation (2026-08-11):
-     `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` owns sampled optional confidence, ethical
+     `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` owns sampled optional confidence, ethical
      confident-error repair, boss-step credit, constructed self-review, generic practice shapes,
      and the first-cohort assessment-envelope boundary.
    - Controlled tester launch (2026-08-11): expose only the active T6 learning assets, keep
@@ -28,7 +28,7 @@ not make it authoritative.
      GitHub source repository, and operate tester discussion, feedback, and announcements through
      an owner-administered WhatsApp community.
 - Protected domain and owner operations (2026-08-11):
-     `briefs/TESTER_ACCESS_AND_ADMIN.md` owns the exact `aneeketdas.com/dungeon` route, per-email
+     `docs/briefs/TESTER_ACCESS_AND_ADMIN.md` owns the exact `aneeketdas.com/dungeon` route, per-email
      access, anti-harvesting claim boundary, self-contained protected edge, and owner control room.
    - Prepared tester-agent operations (2026-08-11): `.agents/README.md`, the three charters and
      `.agents/deployment.json` own data contracts, evidence thresholds, review authority and the
@@ -44,39 +44,39 @@ not make it authoritative.
 
 2. **Project operating system**
    - `AGENTS.md`
-   - `briefs/PROJECT_OPERATING_SYSTEM.md`
+   - `docs/briefs/PROJECT_OPERATING_SYSTEM.md`
    - Governs source loading, evidence claims, status gates, session rituals, ledgers, and
      coordination. It does not decide product taste or learning mechanics.
 
 3. **Product experience contracts**
-   - `GAME_UX_LOOP.md`
-   - `ART_DIRECTION_SYSTEM.md`
+   - `docs/design/GAME_UX_LOOP.md`
+   - `docs/design/ART_DIRECTION_SYSTEM.md`
    - These define the proposed full-product flow, UI states, test loop, screen grammar, motion,
      asset gates, and release criteria.
 
 4. **Creative thesis**
-   - `ART_DIRECTION.md`
+   - `docs/design/ART_DIRECTION.md`
    - Canonical source for the Door, Ari, saffron/cyan identity, solemn emotional register,
      environmental materials, composition, threats, and painterly target.
 
 5. **Learning and progression engine**
-   - `PROMPT.md`
+   - `docs/engine/PROMPT.md`
    - Canonical source for question grounding, graph traversal, subject rules, HP/reset behavior,
      difficulty, weak-node scheduling, breakdowns, transfer probes, learner profiles, personas,
      proficiency ranks, stats, saves, and admin commands.
 
 6. **Engine history and rationale**
-   - `REVIEW_LOG.md`
+   - `docs/engine/REVIEW_LOG.md`
    - Use to understand why engine decisions were made. It does not override the current
-     `PROMPT.md`.
-   - `personalities.md`
+     `docs/engine/PROMPT.md`.
+   - `docs/design/personalities.md`
    - Contains historical reinforcement/persona briefs and implementation instructions. Use for
-     rationale and omitted context; the implemented current form in `PROMPT.md` wins when they
+     rationale and omitted context; the implemented current form in `docs/engine/PROMPT.md` wins when they
      differ.
 
 7. **Student-facing operational contract**
    - `README.md`
-   - Canonical for documented setup and commands only when consistent with `PROMPT.md`.
+   - Canonical for documented setup and commands only when consistent with `docs/engine/PROMPT.md`.
 
 8. **Current implementation evidence**
    - `mock/index.html`, `mock/rogue.html`, `mock/rogue.css`, `mock/rogue.js`, and other mock pages.
@@ -96,21 +96,21 @@ not make it authoritative.
 
 | Domain | Primary source | Product surfaces affected |
 |---|---|---|
-| Project administration | `AGENTS.md`; `briefs/PROJECT_OPERATING_SYSTEM.md` | status, evidence, ledgers, rituals, coordination |
-| Creative/art direction | `ART_DIRECTION.md` | homepage, world, Ari, Door, threats, color, material |
-| Product art/UI/motion | `ART_DIRECTION_SYSTEM.md` | all screens, controls, animation, market, dashboard |
-| Flow, flags, and testing | `GAME_UX_LOOP.md` | route state machine, edge cases, iteration and release |
-| Learning rules | `PROMPT.md` | questions, feedback, difficulty, failure, scheduling |
-| Reinforcement | `PROMPT.md` §7.5+ | weak signals, resurfacing, confirmation, graduation |
-| Teaching/breakdowns | `PROMPT.md` §7.6+ | explanations, primers, recovery experience |
-| Transfer probes | `PROMPT.md` §7.7+ | varied question surfaces and boss behavior |
-| Learner personas | `PROMPT.md` §7.8; `personalities.md` history | profile and adaptive routing |
-| Proficiency rank | `PROMPT.md` §17 | profile, dashboard, reassurance language |
-| Subject-specific exams | `PROMPT.md` §4 and graphs | setup, question formats, scoring, dashboard |
-| Persistence/stats | `PROMPT.md`, `state/` | resume, results, recommendations, player history |
+| Project administration | `AGENTS.md`; `docs/briefs/PROJECT_OPERATING_SYSTEM.md` | status, evidence, ledgers, rituals, coordination |
+| Creative/art direction | `docs/design/ART_DIRECTION.md` | homepage, world, Ari, Door, threats, color, material |
+| Product art/UI/motion | `docs/design/ART_DIRECTION_SYSTEM.md` | all screens, controls, animation, market, dashboard |
+| Flow, flags, and testing | `docs/design/GAME_UX_LOOP.md` | route state machine, edge cases, iteration and release |
+| Learning rules | `docs/engine/PROMPT.md` | questions, feedback, difficulty, failure, scheduling |
+| Reinforcement | `docs/engine/PROMPT.md` §7.5+ | weak signals, resurfacing, confirmation, graduation |
+| Teaching/breakdowns | `docs/engine/PROMPT.md` §7.6+ | explanations, primers, recovery experience |
+| Transfer probes | `docs/engine/PROMPT.md` §7.7+ | varied question surfaces and boss behavior |
+| Learner personas | `docs/engine/PROMPT.md` §7.8; `docs/design/personalities.md` history | profile and adaptive routing |
+| Proficiency rank | `docs/engine/PROMPT.md` §17 | profile, dashboard, reassurance language |
+| Subject-specific exams | `docs/engine/PROMPT.md` §4 and graphs | setup, question formats, scoring, dashboard |
+| Persistence/stats | `docs/engine/PROMPT.md`, `state/` | resume, results, recommendations, player history |
 | Prototype interaction | `mock/rogue.*` | current Hall/run/results behavior |
-| T6 exam fallback | `briefs/T6_REVISION_FALLBACK.md`; `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`; `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md`; owner-supplied T6 AI-ready pack | four-subject dashboard, evidence-based progress, adaptive repetition, mixed formats, confidence, constructed response, first-cohort boundary |
-| Controlled tester release | current owner direction; `briefs/TESTER_ACCESS_AND_ADMIN.md`; `TESTER_GUIDE.md`; `PRIVACY.md`; `SECURITY.md`; `COMMUNITY_PLAYBOOK.md` | hosting boundary, identity access, source publication, feedback, moderation, announcements, incident intake |
+| T6 exam fallback | `docs/briefs/T6_REVISION_FALLBACK.md`; `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`; `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md`; owner-supplied T6 AI-ready pack | four-subject dashboard, evidence-based progress, adaptive repetition, mixed formats, confidence, constructed response, first-cohort boundary |
+| Controlled tester release | current owner direction; `docs/briefs/TESTER_ACCESS_AND_ADMIN.md`; `docs/community/TESTER_GUIDE.md`; `docs/community/PRIVACY.md`; `SECURITY.md`; `docs/community/COMMUNITY_PLAYBOOK.md` | hosting boundary, identity access, source publication, feedback, moderation, announcements, incident intake |
 | Legacy practice portal | `mock/index.html` and other mock pages | content inventory and old navigation |
 
 ## Conflict register
@@ -218,7 +218,7 @@ one side.
 - Current owner direction requires longer-term development, confidence calibration, and a visible
   explanation of why a concept is judged Strong, Developing, or Needs practice.
 - Resolution (2026-08-11): follow
-  `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. Strong requires repeated correct evidence
+  `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. Strong requires repeated correct evidence
   across formats and practice blocks, applied evidence from a new case or valid reasoning step,
   and no open misconception, confident error, uncertain-correct confirmation, or relevant failed
   reasoning step. Whole-chain completion remains separate. Time evidence is reported separately
@@ -301,7 +301,7 @@ one side.
   minimal on purpose — no analytics, no academic records, no raw responses
   beyond the learner's own saved revision state, no precise location. The browser copy remains an
   offline fallback, revocation deletes a tester's sessions and progress, and the collection notice
-  is stated in `PRIVACY.md` and the tester agreement. Telemetry and the paused cohort agents remain
+  is stated in `docs/community/PRIVACY.md` and the tester agreement. Telemetry and the paused cohort agents remain
   separate, still-unmade decisions.
 
 ### C20 — Anti-harvesting intent versus the limits of a client-side bank
@@ -439,15 +439,15 @@ silently merge contradictory requirements.
 ## External brief status
 
 The owner-supplied Project Operating System brief has been adapted and stored at
-`briefs/PROJECT_OPERATING_SYSTEM.md`. On 2026-07-16, the owner confirmed that the “other design
-briefs” previously referenced are the existing `ART_DIRECTION.md` and
+`docs/briefs/PROJECT_OPERATING_SYSTEM.md`. On 2026-07-16, the owner confirmed that the “other design
+briefs” previously referenced are the existing `docs/design/ART_DIRECTION.md` and
 `work/art-direction-research/` set. The active brief inventory is therefore complete and
 `WAITING_OWNER_BRIEFS` is cleared. Any newly supplied brief must still be indexed before it affects
 implementation.
 
 On 2026-08-10 the owner supplied the external `Term 6 AI-Ready Pack` as the active T6 course
 evidence layer and explicitly reprioritised the product around last-minute exam readiness. The
-durable product and source mapping is recorded in `briefs/T6_REVISION_FALLBACK.md`. BRGSA, IBM,
+durable product and source mapping is recorded in `docs/briefs/T6_REVISION_FALLBACK.md`. BRGSA, IBM,
 SCLM, and SPMS now have source-traceable ten-set banks and a shared verified dashboard. Exact
 paper structure is `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`; that boundary does not block generic
 practice. Transcript-derived question quality still requires owner/faculty acceptance before
@@ -456,7 +456,7 @@ practice. Transcript-derived question quality still requires owner/faculty accep
 On 2026-08-11 the owner rejected quick Strong classifications and requested confidence-aware,
 explainable progress plus harder boss and mixed-format questions. The uncertainty audit, primary
 research frame, prior-term pattern audit, evidence gates, item schema, and seven-day scheduling
-contract are recorded in `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`; implementation and
+contract are recorded in `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`; implementation and
 real-Browser evidence are at `evidence/2026-08-11/t6-evidence-challenges/verification.md`.
 
 On 2026-08-11 the owner directed a controlled potential-user launch with backend infrastructure,

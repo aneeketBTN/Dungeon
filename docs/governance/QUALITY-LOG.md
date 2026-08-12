@@ -46,30 +46,30 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 - **I1 (2026-07-16)** — Issue: product art direction was coherent for the homepage but incomplete
   across market, questions, feedback, motion, completion, and results. Cause: the creative thesis
-  had not been translated into product-wide state rules. Fix: added `ART_DIRECTION_SYSTEM.md`.
-  Evidence: `ART_DIRECTION_SYSTEM.md`; implementation is `IMPLEMENTED` and visual acceptance is
+  had not been translated into product-wide state rules. Fix: added `docs/design/ART_DIRECTION_SYSTEM.md`.
+  Evidence: `docs/design/ART_DIRECTION_SYSTEM.md`; implementation is `IMPLEMENTED` and visual acceptance is
   `WAITING_REAL_BROWSER`.
 - **I2 (2026-07-16)** — Issue: full experience lacked a canonical route/state/test contract.
   Cause: prototype behavior and learning-engine behavior evolved separately. Fix: added
-  `GAME_UX_LOOP.md` with state flags, invariants, scenarios, goals, and release gate. Evidence:
-  `GAME_UX_LOOP.md`; real-browser acceptance is `WAITING_REAL_BROWSER`.
+  `docs/design/GAME_UX_LOOP.md` with state flags, invariants, scenarios, goals, and release gate. Evidence:
+  `docs/design/GAME_UX_LOOP.md`; real-browser acceptance is `WAITING_REAL_BROWSER`.
 - **I3 (2026-07-16)** — Issue: overlapping creative, UX, prototype, engine, persona, and historical
   documents had no explicit authority order. Cause: briefs arrived across phases and tools. Fix:
-  added `DESIGN_SOURCE_INDEX.md` and its conflict register. Evidence:
-  `DESIGN_SOURCE_INDEX.md`.
+  added `docs/governance/DESIGN_SOURCE_INDEX.md` and its conflict register. Evidence:
+  `docs/governance/DESIGN_SOURCE_INDEX.md`.
 - **I4 (2026-07-16)** — Issue: project memory depended on a short Claude-specific file and
   conversation context. Cause: no Codex-native living index, evidence vocabulary, or close-out
   ritual. Fix: installed `AGENTS.md`, ledgers, changelog, evidence rules, and coordination charter.
   Evidence: `evidence/2026-07-16/admin-system-verification.md`.
 - **I5 (2026-07-16)** — Issue: moving only the project folder to macOS could leave launch steps,
   browser-local prototype state, and optional art dependencies ambiguous. Cause: the old transfer
-  note predates the web vertical slice and current operating system. Fix: added `MAC_TRANSFER.md`,
+  note predates the web vertical slice and current operating system. Fix: added `docs/ops/MAC_TRANSFER.md`,
   a portable `mock/start-mac.sh`, Mac-targeted launch configuration, and integrity checks.
   Evidence: `evidence/2026-07-16/mac-transfer-prep.md`.
 - **I6 (2026-08-10)** — Issue: the broad product slice put cinematic identity, character,
   currency, market, setup, and quests before a learner could reach exam practice. Cause: product
   breadth was treated as the active goal before the revision loop proved it could carry a course.
-  Fix: installed `briefs/T6_REVISION_FALLBACK.md` and the verified BRGSA ten-run route with direct
+  Fix: installed `docs/briefs/T6_REVISION_FALLBACK.md` and the verified BRGSA ten-run route with direct
   cold-mock access, source IDs, immediate feedback, cross-surface repairs, chain-break synthesis,
   local isolation, and guarded readiness. Evidence:
   `evidence/2026-08-10/t6-brgsa-fallback/verification.md`.
@@ -77,7 +77,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   a completed-run count that lagged on results. Cause: destination summaries were derived from a
   historical response or only refreshed when another screen rendered. Fix: derive repair labels
   from the current queue and update all destination summaries immediately after the state mutation.
-  Evidence: `evidence/2026-08-10/t6-brgsa-fallback/verification.md`; prevention: `BUG-LAWS.md`
+  Evidence: `evidence/2026-08-10/t6-brgsa-fallback/verification.md`; prevention: `docs/governance/BUG-LAWS.md`
   LAW-11.
 - **I8 (2026-08-10)** — Issue: the first fallback still asked students to interpret runs, Resolve,
   chain breaks, and an unavailable three-subject roadmap before they could understand the size of
@@ -88,7 +88,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   later different-perspective re-attempts, clickable concept practice, ten study sets and direct
   full mocks for every subject, consistent result states, narrow layouts, and automatic resume.
   Evidence: `evidence/2026-08-10/t6-dashboard-all-subjects/verification.md`; prevention:
-  `DESIGN_SOURCE_INDEX.md` C12 and `BUG-LAWS.md` LAW-11 through LAW-13.
+  `docs/governance/DESIGN_SOURCE_INDEX.md` C12 and `docs/governance/BUG-LAWS.md` LAW-11 through LAW-13.
 - **I9 (2026-08-11; revised 2026-08-11)** — Issue: two quick correct answers could produce Strong,
   confidence was unknown, and conventional MCQs exposed answer-shape cues while offering little
   framework construction. Cause: the first dashboard optimised visible movement before defining a
@@ -98,7 +98,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   option-shape risk. Applied evidence can now come from a new case or a valid unassisted reasoning
   step; whole-chain completion remains separately visible instead of being a permanent universal
   gate. Evidence: `evidence/2026-08-11/t6-research-integration/verification.md`; prevention:
-  `BUG-LAWS.md` LAW-14, LAW-16, and LAW-22.
+  `docs/governance/BUG-LAWS.md` LAW-14, LAW-16, and LAW-22.
 - **I10 (2026-08-11)** — Issue: the dashboard showed too many surfaces at once, the concept list
   felt like inventory, and question cards duplicated internal metadata and decorative accents;
   one hierarchy pass also made the case larger than the actual task. Cause: information and visual
@@ -107,7 +107,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   two-concept module, made the task the only question headline, kept genuine cases as quiet body
   text, removed fake match cases and ornamental borders, and hid audit-only metadata. Evidence:
   `evidence/2026-08-11/t6-evidence-challenges/verification.md`; prevention:
-  `DESIGN_SOURCE_INDEX.md` C14–C15 and `BUG-LAWS.md` LAW-15.
+  `docs/governance/DESIGN_SOURCE_INDEX.md` C14–C15 and `docs/governance/BUG-LAWS.md` LAW-15.
 - **I11 (2026-08-11)** — Issue: the first cleanup made case text quiet inside its own box while the
   bold dependent instruction sat outside, visually classifying the case as an optional note. Cause:
   size hierarchy was corrected without preserving the semantic dependency or recognising that the
@@ -115,14 +115,14 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   and a compact bold instruction; case-free questions receive no redundant box and keep their
   large heading. Evidence:
   `evidence/2026-08-11/t6-unified-prompt-hierarchy/verification.md`; prevention:
-  `DESIGN_SOURCE_INDEX.md` C15 and `BUG-LAWS.md` LAW-17.
+  `docs/governance/DESIGN_SOURCE_INDEX.md` C15 and `docs/governance/BUG-LAWS.md` LAW-17.
 - **I12 (2026-08-11)** — Issue: every selected subject displayed “Recommended now,” and unanswered
   boss/prompt surfaces used cyan without a state meaning. Cause: a subject-local next action was
   worded like a single global recommendation and guidance color became category decoration. Fix:
   remove the global claim, use action-specific labels, neutralise unanswered practice surfaces,
   and retain color only for selection, primary action, progress, focus, and feedback. Evidence:
   `evidence/2026-08-11/t6-unified-prompt-hierarchy/verification.md`; prevention:
-  `DESIGN_SOURCE_INDEX.md` C16 and `BUG-LAWS.md` LAW-18.
+  `docs/governance/DESIGN_SOURCE_INDEX.md` C16 and `docs/governance/BUG-LAWS.md` LAW-18.
 - **I13 (2026-08-11)** — Issue: even after the case/task hierarchy was corrected, a tinted prompt
   panel, a redundant “Reasoning chain” strip, and separate bordered cards for every response step
   created distance without changing meaning or interaction. Cause: semantic grouping was expressed
@@ -131,28 +131,28 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   match, and cloze wrappers; retain only bounded inputs, post-answer feedback, and subtle dividers
   between dependent steps. Evidence:
   `evidence/2026-08-11/t6-unified-prompt-hierarchy/verification.md`; prevention:
-  `DESIGN_SOURCE_INDEX.md` C15 and `BUG-LAWS.md` LAW-19.
+  `docs/governance/DESIGN_SOURCE_INDEX.md` C15 and `docs/governance/BUG-LAWS.md` LAW-19.
 - **I14 (2026-08-11)** — Issue: a first-cohort student needed practice that could span recognition,
   cases, explanation, and connected reasoning, but an “exam simulation” would invent unsupported
   T6 timing, scoring, and section rules. Cause: generic practice and exact-paper fidelity were
   treated as one decision. Fix: added learner-selected recognition, application, generation, and
   mixed practice with immediate-teaching or end-held feedback, while repeatedly naming it generic
   practice rather than a paper replica or score prediction. Evidence:
-  `evidence/2026-08-11/tester-launch/verification.md`; prevention: `DESIGN_SOURCE_INDEX.md` C17.
+  `evidence/2026-08-11/tester-launch/verification.md`; prevention: `docs/governance/DESIGN_SOURCE_INDEX.md` C17.
 - **I15 (2026-08-11)** — Issue: written practice was absent, while automatic browser grading would
   make a false precision claim and held-feedback mode initially exposed the rubric before results.
   Cause: generation and scoring were coupled, and the feedback boundary covered selected answers
   but not answer-shaped self-review material. Fix: added 64 source-grounded short-answer surfaces
   with write-first rubrics and exemplars, recorded them as unscored self-review, denied independent
   Strong credit, and deferred the rubric/exemplar in held-feedback mode. Evidence:
-  `evidence/2026-08-11/tester-launch/verification.md`; prevention: `BUG-LAWS.md` LAW-20.
+  `evidence/2026-08-11/tester-launch/verification.md`; prevention: `docs/governance/BUG-LAWS.md` LAW-20.
 - **I16 (2026-08-11)** — Issue: potential-user access needed stable delivery and a usable feedback
   loop without accidentally publishing live learner state, owner sources, CLA analysis, or adding
   silent telemetry. Cause: the local prototype had no explicit public-asset boundary or cohort
   operating policy. Fix: added an allowlisted build, production worker, health and security
   headers, release tests, privacy/security/tester policies, and a moderated WhatsApp community
   playbook while keeping progress browser-local. Evidence:
-  `evidence/2026-08-11/tester-launch/verification.md`; prevention: `DESIGN_SOURCE_INDEX.md` C19.
+  `evidence/2026-08-11/tester-launch/verification.md`; prevention: `docs/governance/DESIGN_SOURCE_INDEX.md` C19.
 - **I17 (2026-08-11)** — Issue: confidence appeared after every scored question and an early
   direction considered deliberately reducing confidence after a confident error. Cause:
   metacognitive diagnosis, motivational feedback, and punishment were treated as one mechanism.
@@ -160,26 +160,26 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   response exists, allow a penalty-free skip, and route confident errors to contrastive correction
   plus independent repairs. Confidence changes neither correctness, score, rewards, secret
   difficulty, nor identity. Evidence: `evidence/2026-08-11/t6-research-integration/verification.md`;
-  prevention: `BUG-LAWS.md` LAW-22.
+  prevention: `docs/governance/BUG-LAWS.md` LAW-22.
 - **I18 (2026-08-11)** — Issue: boss grading either promoted a broken chain or risked erasing valid
   steps. Cause: one boolean represented both concept-level reasoning and whole-chain completion.
   Fix: persist passed and failed steps separately, allow a valid unassisted applied step to count
   for the concept it tests, keep failed steps open, and display whole-chain completion separately.
   Evidence: `evidence/2026-08-11/t6-research-integration/verification.md`; prevention:
-  `BUG-LAWS.md` LAW-14.
+  `docs/governance/BUG-LAWS.md` LAW-14.
 - **I19 (2026-08-11)** — Issue: short-answer practice could imply an automatic grade and leak its
   rubric during held-feedback practice. Cause: generation, scoring, and feedback timing were
   coupled. Fix: require writing before criteria, expose criteria before the exemplar only in
   learning mode, store self-review as unscored, exclude it from Strong and percentages, and defer
   all answer-shaped material to final review in a held-feedback check. Evidence:
-  `evidence/2026-08-11/t6-research-integration/verification.md`; prevention: `BUG-LAWS.md` LAW-20
+  `evidence/2026-08-11/t6-research-integration/verification.md`; prevention: `docs/governance/BUG-LAWS.md` LAW-20
   and LAW-23.
 - **I20 (2026-08-11)** — Issue: a first-cohort practice check could leak correctness through the
   dashboard before the final review even when explanations were hidden. Cause: attempts were
   written to the learner profile as each response was saved. Fix: stage every held-feedback
   response in the active session, show neutral save confirmation, and commit evidence only when
   the final review opens. Evidence: `evidence/2026-08-11/t6-research-integration/verification.md`;
-  prevention: `BUG-LAWS.md` LAW-24.
+  prevention: `docs/governance/BUG-LAWS.md` LAW-24.
 - **I21 (2026-08-11)** — Issue: opening the app to testers could expose the complete client bank to
   anonymous students, shared caches, and search indexing, while a shared password would be hard to
   revoke safely. Cause: the local prototype had no cohort identity boundary and the current
@@ -189,7 +189,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   allowlist contains only the owner bootstrap address; tester access still waits for owner-supplied
   emails. Evidence: `evidence/2026-08-11/tester-access-admin/verification.md` and
   `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention:
-  `DESIGN_SOURCE_INDEX.md` C20–C21 and `BUG-LAWS.md` LAW-25.
+  `docs/governance/DESIGN_SOURCE_INDEX.md` C20–C21 and `docs/governance/BUG-LAWS.md` LAW-25.
 - **I22 (2026-08-11)** — Issue: tester access, release health, feedback instructions, and
   announcements were scattered across provider dashboards and documents. Cause: the release had
   no truthful owner operations surface. Fix: added the Dungeon Control Room with live
@@ -201,7 +201,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   load its release manifest. Cause: the build wrote owner-visible metadata to the package root
   while the static service exposed only the client root. Fix: emit the same secret-free manifest
   into both locations and verify it through the deployed dashboard. Evidence:
-  `evidence/2026-08-11/tester-access-admin/verification.md`; prevention: `BUG-LAWS.md` LAW-27.
+  `evidence/2026-08-11/tester-access-admin/verification.md`; prevention: `docs/governance/BUG-LAWS.md` LAW-27.
 - **I24 (2026-08-11)** — Issue: cohort scale suggests useful automated review, but activating
   agents before consented data, retention/deletion, owner review, and access adapters would create
   unsafe invisible authority. Cause: agent roles were easier to name than their data and action
@@ -211,7 +211,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   registered but paused; the initial create operation persisted them as ACTIVE despite a paused
   request, so they were explicitly corrected and re-read before any interval elapsed. No run or
   external action occurred. Evidence: `evidence/2026-08-11/tester-agent-readiness/verification.md`;
-  prevention: `BUG-LAWS.md` LAW-28–29.
+  prevention: `docs/governance/BUG-LAWS.md` LAW-28–29.
 - **I25 (2026-08-11)** — Issue: the owner dashboard explained tester access but still sent the
   owner to Cloudflare for every grant and revocation. Cause: no server-side authority boundary
   connected an owner-only control to the dedicated Access group. Fix: added direct email
@@ -221,7 +221,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   exact-domain owner interaction remains waiting on the owner's Access sign-in and a real owner-
   approved tester address. Evidence:
   `evidence/2026-08-11/tester-dashboard-access-management/verification.md` and
-  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `docs/governance/BUG-LAWS.md`
   LAW-30.
 - **I26 (2026-08-11)** — Issue: the prepared Cloudflare proxy still depended on a private hosting
   origin and bypass credential, while tester and owner paths needed different identity boundaries.
@@ -233,7 +233,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   are verified at the edge; the exact-domain owner Control Room is Browser-verified Healthy,
   Connected, Allowlisted, and empty. The learner route reaches its emailed-code screen; post-code
   learner acceptance remains explicit. Evidence:
-  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `docs/governance/BUG-LAWS.md`
   LAW-25, LAW-30, and LAW-31.
 - **I27 (2026-08-11)** — Issue: the live owner dashboard showed health and release metadata as
   unavailable even while tester management was connected. Cause: relative requests escaped the
@@ -241,7 +241,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   owner-path health and manifest routes, selected them only on `/dungeon/admin`, preserved local
   fallbacks, and redeployed the embedded allowlist. The second Browser pass reported Healthy,
   Connected, Allowlisted, and zero testers. Evidence:
-  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `docs/governance/BUG-LAWS.md`
   LAW-34.
 - **I28 (2026-08-11)** — Issue: the owner could reach the learner login but not enter the site.
   Cause: the learner group contained only the protected Cloudflare bootstrap address; the separate
@@ -249,7 +249,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   the same exact-email group managed by the Control Room and configured a concise ask-for-access
   denial for verified but unapproved emails. The dashboard now reports one intended approved
   learner address, and allowlist status remains hidden until inbox verification. Evidence:
-  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `BUG-LAWS.md`
+  `evidence/2026-08-11/cloudflare-protected-domain/verification.md`; prevention: `docs/governance/BUG-LAWS.md`
   LAW-35.
 
 - **I29 (2026-08-11)** — Issue: on the live first-login agreement step the email form was set
@@ -260,7 +260,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   page that the stale form collapses to zero height at desktop and at 390 pixels. Truthful
   interaction axis: a gate that renders as partly dismissed invites the learner to bypass it.
   Evidence: `evidence/2026-08-11/learner-backend-and-agreement/verification.md`; prevention:
-  `BUG-LAWS.md` LAW-36.
+  `docs/governance/BUG-LAWS.md` LAW-36.
 - **I30 (2026-08-11)** — Change: learner progress moved from browser-only storage to per-email
   Cloudflare D1 records, with the local copy retained as an offline fallback and a dirty-flag
   reconciliation so an unsynced local run is never overwritten by a staler server copy. Persistence
@@ -292,7 +292,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   two harder successes or Strong evidence suppress support. Primer responses never create mastery
   evidence or enter held-feedback checks. Learning-integrity axis: assistance is explicit and
   intentionally fickle. Evidence: `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`;
-  prevention: `BUG-LAWS.md` LAW-37.
+  prevention: `docs/governance/BUG-LAWS.md` LAW-37.
 - **I34 (2026-08-11)** — Issue: the most important evidence was split between the hero, subject
   cards, and a trend hidden under Concepts. Cause: the staged dashboard treated the trend as
   inspection detail rather than orientation. Fix: placed a five-axis Term 6 mastery matrix and the
@@ -309,7 +309,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   tester rows were also changed to stack actions after Browser review exposed character-by-
   character email wrapping. Truthful interaction/privacy axis: no click is called verification and
   no copied reminder is called sent. Evidence:
-  `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`; prevention: `BUG-LAWS.md`
+  `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`; prevention: `docs/governance/BUG-LAWS.md`
   LAW-38 and LAW-39.
 - **I36 (2026-08-11)** — Issue: the homepage opened on a static `0 of 64` counter, put subject
   choice below the fold, and hid the most configurable part of the product inside a dialog. Cause:
@@ -332,7 +332,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   and a docked tray of label tablets placed by click, drag, or keyboard; resolved-state rules now
   restate the checked case. Readability and accessibility axes: reading load drops from four
   repetitions to one, and correctness is never the weaker visual signal. Evidence: same file;
-  prevention: `BUG-LAWS.md` LAW-41.
+  prevention: `docs/governance/BUG-LAWS.md` LAW-41.
 - **I39 (2026-08-11)** — Issue: six active testers read as `Signed in`, `Has progress`, and
   `Not agreed yet` at once. Cause: the agreement version was compared only in the login handler, so
   sessions issued under superseded terms kept working until the cookie expired, and the Control Room
@@ -340,7 +340,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   on the session lookup, reject stale sessions with `AGREEMENT_REQUIRED`, and split the chip into
   `Agreed`, `Older terms`, and `Never agreed`. Truthful-interaction and consent axes: a terms change
   now actually reaches the cohort, and the owner view stops implying a breach that never happened.
-  Evidence: same file; prevention: `BUG-LAWS.md` LAW-40.
+  Evidence: same file; prevention: `docs/governance/BUG-LAWS.md` LAW-40.
 - **I40 (2026-08-12)** — Issue: a wrong answer gave a verdict and no reason. The panel showed
   `Not yet — this idea will return`, restated the concept explanation, and hid the correct answer
   behind a disclosure, never referring to what the learner had chosen; on `match` questions the
@@ -353,7 +353,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   governs this → the complete answer → why it connects. Learning-integrity axis: feedback now names
   the gap a specific choice reveals instead of reporting only correctness. 2,943 diagnoses on the
   active bank, zero generic fallbacks. Evidence:
-  `evidence/2026-08-12/t6-option-diagnoses/verification.md`; prevention: `BUG-LAWS.md` LAW-43 and
+  `evidence/2026-08-12/t6-option-diagnoses/verification.md`; prevention: `docs/governance/BUG-LAWS.md` LAW-43 and
   LAW-44, plus a build gate in `mock/validate_t6_bank.js`.
 - **I41 (2026-08-12)** — Issue: rebuilding the panel to explain more made it repeat itself — the
   governing principle appeared in the diagnosis, again as `What governs this question`, and again in
@@ -371,7 +371,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   `--statement-count` on `.match-board` with matched gaps, so every tablet is one width and sits
   directly under its slot; statements are numbered against lettered labels. Visual-coherence axis:
   an affordance that is visibly larger than its target contradicts the interaction it is teaching.
-  Evidence: `evidence/2026-08-12/t6-ui-alignment-pass/verification.md`; prevention: `BUG-LAWS.md`
+  Evidence: `evidence/2026-08-12/t6-ui-alignment-pass/verification.md`; prevention: `docs/governance/BUG-LAWS.md`
   LAW-45.
 - **I43 (2026-08-12)** — Issue: a UI audit run by impression would have "fixed" two things that
   were not broken. Cause: `align-items: baseline` gives items of different heights different `top`
@@ -406,7 +406,7 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 - Country locking can fire on legitimate travel, VPN, mobile-network, or routing changes. Keep it an
   owner review prompt with a human unlock path; never automate a permanent ban from it alone.
 - Every tester-visible change now needs a change announcement when it reaches production. See
-  `COMMUNITY_PLAYBOOK.md`; a silent release is a quality failure, not only a communication one.
+  `docs/community/COMMUNITY_PLAYBOOK.md`; a silent release is a quality failure, not only a communication one.
 - Builder practice stays inside one subject. A cross-subject run would need a course id on every
   queue item; do not imply mixed-subject practice in copy until that exists.
 - The momentum and distance-travelled copy is generated. Any new sentence added there must stay

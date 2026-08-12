@@ -12,7 +12,7 @@ agreed actions, not scores, speed, confidence, disability, device quality or inf
 
 ## Required preflight
 
-1. Read `AGENTS.md`, `PRIVACY.md`, `TESTER_GUIDE.md`, `COMMUNITY_PLAYBOOK.md`,
+1. Read `AGENTS.md`, `docs/community/PRIVACY.md`, `docs/community/TESTER_GUIDE.md`, `docs/community/COMMUNITY_PLAYBOOK.md`,
    `.agents/README.md` and this charter.
 2. Run `npm run agents:activation-check`.
 3. Require consented events, a separate restricted identity map, notification adapter, reviewer

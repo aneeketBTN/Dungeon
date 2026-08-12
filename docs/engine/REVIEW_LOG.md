@@ -9,7 +9,7 @@
 
 Graph files (`graphs/{subject}.json`) are never delegated to state-manager.
 
-**Rule added to `PROMPT.md` FILE OPERATION RULES section:**
+**Rule added to `docs/engine/PROMPT.md` FILE OPERATION RULES section:**
 `graphs/{subject}.json` is loaded once at session startup into main session context and stays there for the entire session. The main session retrieves nodes from its own context only. state-manager never receives any instruction containing a graph file path. If the main session needs a node, it looks it up from the graph already in its context window — it never asks state-manager to read a graph file.
 
 **Rule added to `state-manager.md` ERROR HANDLING table:**
@@ -117,10 +117,10 @@ current state in memory; it does not need the echo to reconcile.
 1. `.claude/agents/state-manager.md` — replaced with five-operation vocabulary (Step 1)
 2. `state/stats/BEHECON_stats.json` — flat `node_memory` migrated to `node_memory_hot` + `node_memory_cold` (Step 2)
 3. `state/stats/MACRO_stats.json` — empty `node_memory: {}` replaced with `node_memory_hot: {}` + `node_memory_cold: {}` (Step 2)
-4. `PROMPT.md` Section 2 — startup sequence updated to use OP_READ_STATE and reference node_memory_hot/cold layers (Step 2)
-5. `PROMPT.md` Section 7 — FILE OPERATION DELEGATION replaced with FILE OPERATION RULES (five ops) + ASYNC LEVEL FLUSH block (Steps 3 & 4)
-6. `PROMPT.md` Section 13 — `node_memory` schema replaced with `node_memory_hot` + `node_memory_cold` schemas; v1.9 annotation added (Step 2)
-7. `PROMPT.md` version header — bumped 1.8 → 1.9
+4. `docs/engine/PROMPT.md` Section 2 — startup sequence updated to use OP_READ_STATE and reference node_memory_hot/cold layers (Step 2)
+5. `docs/engine/PROMPT.md` Section 7 — FILE OPERATION DELEGATION replaced with FILE OPERATION RULES (five ops) + ASYNC LEVEL FLUSH block (Steps 3 & 4)
+6. `docs/engine/PROMPT.md` Section 13 — `node_memory` schema replaced with `node_memory_hot` + `node_memory_cold` schemas; v1.9 annotation added (Step 2)
+7. `docs/engine/PROMPT.md` version header — bumped 1.8 → 1.9
 
 ---
 
@@ -245,7 +245,7 @@ flat rather than growing linearly.
 ---
 
 ### Files Changed
-- `PROMPT.md`: version 1.7 → 1.8; Section 2 startup sequence; Section 3 file map;
+- `docs/engine/PROMPT.md`: version 1.7 → 1.8; Section 2 startup sequence; Section 3 file map;
   Section 7 delegation block; Section 13 schemas; Section 16 write schedule
 - `CLAUDE.md`: file locations + TOKEN OPTIMISATION block
 - `state/game_state.json`: removed `mastered_nodes`, `failed_nodes`
@@ -254,10 +254,10 @@ flat rather than growing linearly.
 - `state/stats/MACRO_stats.json`: created (migrated from stats.json)
 - `state/stats/meta_stats.json`: created (cross-subject data)
 - `state/session_cache.json`: created (empty template)
-- `REVIEW_LOG.md`: created (this file)
+- `docs/engine/REVIEW_LOG.md`: created (this file)
 - `state/stats.json`: retained on disk as backup; no longer loaded by engine
 
 ---
 
 ## v1.7 — Export System
-*(See PROMPT.md Section 0 review log for v1.1–v1.7 change history.)*
+*(See docs/engine/PROMPT.md Section 0 review log for v1.1–v1.7 change history.)*

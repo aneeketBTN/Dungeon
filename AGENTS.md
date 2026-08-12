@@ -7,7 +7,7 @@
 > verdict → what this choice assumed → catch it earlier → what governs this question → the complete
 > answer (no longer collapsed) → why it connects. `mock/validate_t6_bank.js` now fails the build when
 > a scheduled distractor lacks a diagnosis, so questions drafted later inherit the contract in
-> `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. Two defects were repaired: a raw
+> `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. Two defects were repaired: a raw
 > `selected-belief:` tag reaching learner copy in the concept inspector (LAW-43) and a per-option
 > value indexed by part rather than by option (LAW-44). The authored diagnoses are new content and
 > stay `WAITING_OWNER_CONTENT_ACCEPTANCE`. `GET /dungeon/admin/access-check` was added as an
@@ -79,7 +79,7 @@
 > each, and a docked tray of label tablets placed by click, drag, or keyboard. Production version
 > `98f1bb5b-e5f5-4f08-9340-e102dc79be50` still serves commit `475837f`, so the live site does not yet
 > show this revision. Every tester-visible change ships with a change announcement; the format is in
-> `COMMUNITY_PLAYBOOK.md`.
+> `docs/community/COMMUNITY_PLAYBOOK.md`.
 > Student-facing game/proprietary vocabulary and diagnostic question metadata are removed from the
 > learning view. Sixty-four constructed-response surfaces use transparent self-review without
 > automatic correctness or Strong credit. Exact final-paper structure is
@@ -136,15 +136,15 @@
 ## Start Here — Required Order
 
 1. Read this file top-to-bottom.
-2. Read `DESIGN_SOURCE_INDEX.md` before product, art, UX, learning, or gameplay decisions.
-3. Skim `BUG-LAWS.md` before implementing or changing anything.
+2. Read `docs/governance/DESIGN_SOURCE_INDEX.md` before product, art, UX, learning, or gameplay decisions.
+3. Skim `docs/governance/BUG-LAWS.md` before implementing or changing anything.
 4. If the task affects UI, art, motion, accessibility, learning integrity, persistence, or
-   performance, skim `QUALITY-LOG.md`.
+   performance, skim `docs/governance/QUALITY-LOG.md`.
 5. Check Known Gaps and active `WAITING_*` gates before beginning dependent work.
 
 ## Ledgers — Read Before Implementing
 
-`BUG-LAWS.md` is a living, tiered decision aid, not a veto list:
+`docs/governance/BUG-LAWS.md` is a living, tiered decision aid, not a veto list:
 
 - 🔴 **REDLINE**: a severe demonstrated failure. Follow its comply path.
 - 🟡 **WATCH**: a recurring or credible gotcha. Run its verification check.
@@ -152,7 +152,7 @@
 REDLINEs constrain HOW, never WHETHER. If a Law blocks a good idea, revise the Law and preserve
 the safety property.
 
-`QUALITY-LOG.md` owns the costly quality axes: truthful interaction, learning integrity,
+`docs/governance/QUALITY-LOG.md` owns the costly quality axes: truthful interaction, learning integrity,
 accessibility, visual/motion coherence, persistence safety, and user-visible performance.
 Standing owner rule: never improve polish, speed, or engagement by weakening answer correctness,
 question readability, state truthfulness, accessibility, or real player data.
@@ -180,7 +180,7 @@ Rules:
 - Visual/interaction acceptance requires the declared real Browser or Computer Use path.
 - A dependent task does not start while its required gate is waiting.
 - If new evidence contradicts an earlier claim, the evidence wins. Correct the status,
-  `CHANGELOG.md`, and relevant ledger in the same session.
+  `docs/governance/CHANGELOG.md`, and relevant ledger in the same session.
 - DONE means all named acceptance sources passed, not merely that code was written.
 
 ## Directory Map
@@ -188,8 +188,8 @@ Rules:
 - `/` — operating index, design contracts, learning engine, project documentation, and ledgers.
   Root Markdown files are hand-maintained unless explicitly marked generated; `README.md` now
   launches the active T6 fallback and preserves the older engine as a legacy path.
-- `briefs/` — owner-supplied briefs and durable implementation mappings. Add each new external
-  brief here or index its connected-source location in `DESIGN_SOURCE_INDEX.md`.
+- `docs/briefs/` — owner-supplied briefs and durable implementation mappings. Add each new external
+  brief here or index its connected-source location in `docs/governance/DESIGN_SOURCE_INDEX.md`.
 - `mock/` — active T6 revision route, legacy static prototypes, content sets, and local server.
 - `.openai/` — Sites project binding; contains no runtime secrets.
 - `.agents/` — paused tester-agent charters, consent-safe data contracts, synthetic fixtures, and
@@ -222,27 +222,27 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | --- | --- | --- |
 | `AGENTS.md` | Codex living index, status, gates, rituals, source rules, and project conventions. | 2026-08-11 |
 | `CLAUDE.md` | Claude compatibility entry; points to this operating index and preserves engine startup facts. | 2026-07-16 |
-| `DESIGN_SOURCE_INDEX.md` | Authority order, brief inventory, and unresolved product conflicts. | 2026-08-11 |
-| `briefs/PROJECT_OPERATING_SYSTEM.md` | Durable requirements and Codex adaptation of the owner-supplied admin-system brief. | 2026-07-16 |
-| `briefs/T6_REVISION_FALLBACK.md` | Active dashboard, adaptive-primer, source-boundary, mastery/repetition, and acceptance contract. | 2026-08-11 |
-| `briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Confidence, evidence-state, adaptive-primer, boss, mixed-format, rotation, and retest contract. | 2026-08-11 |
-| `briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
-| `briefs/TESTER_ACCESS_AND_ADMIN.md` | Admission, private group-invite disclosure, community acknowledgements/bumps, owner operations, and remaining boundaries. | 2026-08-11 |
-| `BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
-| `QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
-| `CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-11 |
-| `ART_DIRECTION.md` | Creative thesis and canonical world/art identity. | 2026-07-16 |
-| `ART_DIRECTION_SYSTEM.md` | Proposed product-wide art, UI, character, asset, and motion system. | 2026-07-16 |
-| `GAME_UX_LOOP.md` | Proposed broad-product player flow; retained as legacy direction while the T6 fallback owns the active exam-season path. | 2026-08-10 |
-| `MAC_TRANSFER.md` | Mac copy, active T6 launch, current challenge-bank files, browser-storage boundaries, state preservation, and verification handoff. | 2026-08-11 |
-| `PROMPT.md` | Current procedural learning engine, subject rules, scheduling, personas, ranks, and save contracts. | 2026-07-16 |
-| `REVIEW_LOG.md` | Historical engineering rationale for the learning engine. | 2026-07-16 |
-| `personalities.md` | Historical reinforcement/persona design brief; `PROMPT.md` wins when implemented behavior differs. | 2026-07-16 |
+| `docs/governance/DESIGN_SOURCE_INDEX.md` | Authority order, brief inventory, and unresolved product conflicts. | 2026-08-11 |
+| `docs/briefs/PROJECT_OPERATING_SYSTEM.md` | Durable requirements and Codex adaptation of the owner-supplied admin-system brief. | 2026-07-16 |
+| `docs/briefs/T6_REVISION_FALLBACK.md` | Active dashboard, adaptive-primer, source-boundary, mastery/repetition, and acceptance contract. | 2026-08-11 |
+| `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Confidence, evidence-state, adaptive-primer, boss, mixed-format, rotation, and retest contract. | 2026-08-11 |
+| `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
+| `docs/briefs/TESTER_ACCESS_AND_ADMIN.md` | Admission, private group-invite disclosure, community acknowledgements/bumps, owner operations, and remaining boundaries. | 2026-08-11 |
+| `docs/governance/BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
+| `docs/governance/QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
+| `docs/governance/CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-11 |
+| `docs/design/ART_DIRECTION.md` | Creative thesis and canonical world/art identity. | 2026-07-16 |
+| `docs/design/ART_DIRECTION_SYSTEM.md` | Proposed product-wide art, UI, character, asset, and motion system. | 2026-07-16 |
+| `docs/design/GAME_UX_LOOP.md` | Proposed broad-product player flow; retained as legacy direction while the T6 fallback owns the active exam-season path. | 2026-08-10 |
+| `docs/ops/MAC_TRANSFER.md` | Mac copy, active T6 launch, current challenge-bank files, browser-storage boundaries, state preservation, and verification handoff. | 2026-08-11 |
+| `docs/engine/PROMPT.md` | Current procedural learning engine, subject rules, scheduling, personas, ranks, and save contracts. | 2026-07-16 |
+| `docs/engine/REVIEW_LOG.md` | Historical engineering rationale for the learning engine. | 2026-07-16 |
+| `docs/design/personalities.md` | Historical reinforcement/persona design brief; `docs/engine/PROMPT.md` wins when implemented behavior differs. | 2026-07-16 |
 | `README.md` | Student-facing active T6 launch, loop, exam-pattern boundary, progress isolation, scenarios, and legacy paths. | 2026-08-11 |
-| `TESTER_GUIDE.md` | Controlled-cohort entry, primer expectations, group participation, structured feedback, and known limits. | 2026-08-11 |
-| `PRIVACY.md` | Tester-facing D1/browser data, community timestamps, location security, retention, and telemetry boundary. | 2026-08-11 |
+| `docs/community/TESTER_GUIDE.md` | Controlled-cohort entry, primer expectations, group participation, structured feedback, and known limits. | 2026-08-11 |
+| `docs/community/PRIVACY.md` | Tester-facing D1/browser data, community timestamps, location security, retention, and telemetry boundary. | 2026-08-11 |
 | `SECURITY.md` | Private vulnerability-reporting and release-safety policy. | 2026-08-11 |
-| `COMMUNITY_PLAYBOOK.md` | WhatsApp structure, join/bump protocol, human removal review, the required change-announcement format, and feedback triage. | 2026-08-11 |
+| `docs/community/COMMUNITY_PLAYBOOK.md` | WhatsApp structure, join/bump protocol, human removal review, the required change-announcement format, and feedback triage. | 2026-08-11 |
 | `.openai/hosting.json` | Opaque Sites project binding only; runtime credentials never belong here. | 2026-08-11 |
 | `.agents/README.md` | Paused tester-agent control plane, authority boundary, and activation order. | 2026-08-11 |
 | `.agents/deployment.json` | Fail-closed activation gates, paused automation IDs, models, cadence, and non-running declarations. | 2026-08-11 |
@@ -256,7 +256,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `mock/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. | 2026-08-11 |
 | `mock/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
 | `mock/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery. | 2026-08-11 |
-| `DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
+| `docs/community/DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
 | `work/build_tester_agreement.py` | Builds the verified two-page agreement DOCX for Word/PDF delivery. | 2026-08-11 |
 | `cloudflare/scripts/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
 | `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
@@ -287,7 +287,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 
 ## Design System and Domain Rules
 
-- Read and follow the authority order in `DESIGN_SOURCE_INDEX.md`; never reconcile conflicts
+- Read and follow the authority order in `docs/governance/DESIGN_SOURCE_INDEX.md`; never reconcile conflicts
   silently.
 - Current proposed production style is crisp, graphic, painterly 2D. Existing pixel-like assets
   are references until the owner confirms the conflict resolution.
@@ -307,25 +307,25 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 - Strong, Developing, Needs practice, and Not started states must remain distinguishable without
   color or motion.
 - Procedural-engine correctness, grading, spaced repetition, persona detection, and subject rules
-  remain governed by `PROMPT.md`. The active authored T6 bank instead follows the owner direction,
-  `briefs/T6_REVISION_FALLBACK.md`, and the indexed `graph_source/` lecture sources.
+  remain governed by `docs/engine/PROMPT.md`. The active authored T6 bank instead follows the owner direction,
+  `docs/briefs/T6_REVISION_FALLBACK.md`, and the indexed `graph_source/` lecture sources.
 - Cosmetics may not alter learning power. A power-up must declare its learning effect, result
   labeling, persistence, and dashboard treatment before implementation.
 - Persona and rank displays must obey the evidence thresholds and language restrictions in
-  `PROMPT.md`.
+  `docs/engine/PROMPT.md`.
 - Test profiles and scenario loaders must be separate from `state/` and `history/`.
 
 ## Conventions
 
 - Current explicit owner direction wins over project files. Record durable decisions in the
-  relevant brief and `DESIGN_SOURCE_INDEX.md`.
-- `PROMPT.md` is current procedural-engine authority; the T6 fallback's authored questions follow
-  its indexed pack and brief. `REVIEW_LOG.md` and `personalities.md` are rationale and history.
+  relevant brief and `docs/governance/DESIGN_SOURCE_INDEX.md`.
+- `docs/engine/PROMPT.md` is current procedural-engine authority; the T6 fallback's authored questions follow
+  its indexed pack and brief. `docs/engine/REVIEW_LOG.md` and `docs/design/personalities.md` are rationale and history.
 - `mock/` shows implemented behavior, not intended behavior.
 - Do not edit `graphs/`, `state/`, or `history/` during UI testing unless the task explicitly
   authorizes engine/data changes and a backup-safe plan exists.
 - Do not call an asset production-ready without the acceptance gate in
-  `ART_DIRECTION_SYSTEM.md`.
+  `docs/design/ART_DIRECTION_SYSTEM.md`.
 - Do not claim browser verification from HTML/CSS/JS inspection.
 - Preserve user changes and unrelated files. Avoid destructive source-control or filesystem
   operations unless explicitly requested.
@@ -338,15 +338,15 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
   - Python server syntax on macOS: `python3 -m py_compile mock/server.py`
   - Local server on macOS: `python3 mock/server.py 8099`
   - UI acceptance: declared scenarios in a real Browser; Computer Use for Windows-level flows.
-- A bug hit during build/debugging is logged in `BUG-LAWS.md` before close-out.
-- A change to a tracked quality axis is logged in `QUALITY-LOG.md` before close-out.
+- A bug hit during build/debugging is logged in `docs/governance/BUG-LAWS.md` before close-out.
+- A change to a tracked quality axis is logged in `docs/governance/QUALITY-LOG.md` before close-out.
 
 ## Session Hygiene
 
 ### Open
 
 1. Read `AGENTS.md`.
-2. Read `DESIGN_SOURCE_INDEX.md` for product/design work.
+2. Read `docs/governance/DESIGN_SOURCE_INDEX.md` for product/design work.
 3. Skim the relevant ledgers.
 4. Check Known Gaps and gates.
 5. State the evidence required to advance the task's status.
@@ -356,9 +356,9 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 1. Rewrite the Current Status paragraph.
 2. Update touched Key Files descriptions and Verified dates.
 3. Fix Directory Map and Known Gaps.
-4. Add a newest-first `CHANGELOG.md` entry with evidence paths.
-5. Grade and log bugs in `BUG-LAWS.md`.
-6. Log tracked quality changes in `QUALITY-LOG.md`.
+4. Add a newest-first `docs/governance/CHANGELOG.md` entry with evidence paths.
+5. Grade and log bugs in `docs/governance/BUG-LAWS.md`.
+6. Log tracked quality changes in `docs/governance/QUALITY-LOG.md`.
 7. Verify all changed references and record evidence.
 8. If the change is visible to testers, draft the change announcement (see below) and hand it to the
    owner ready to paste.
@@ -368,7 +368,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 
 Testers are running a live cohort. A change they can see ships with one announcement in the
 Announcements group when it reaches production; there are no silent releases. The template, rules,
-and paste format live in `COMMUNITY_PLAYBOOK.md`. Draft it from two questions:
+and paste format live in `docs/community/COMMUNITY_PLAYBOOK.md`. Draft it from two questions:
 
 1. **What changed?** One plain sentence in a learner's words.
 2. **What should testers do?** One specific action, not "have a look".
@@ -420,7 +420,7 @@ after the version is live, since a push to `main` deploys.
   not available in this task. Re-enable its server and skill in the Mac app when desktop-level
   interaction is needed; use built-in Browser first for this web prototype.
 - [ ] Legacy production breadth remains deferred in C3 and C7. Current fallback precedence is
-  recorded in C11 and `briefs/T6_REVISION_FALLBACK.md`.
+  recorded in C11 and `docs/briefs/T6_REVISION_FALLBACK.md`.
 - [ ] Deterministic T6 and legacy URL scenarios cover main fixtures, but no checked-in automated
   interaction suite validates all 40 study sets. Add one before broad student release.
 - [ ] Builder practice stays inside one subject. A single run mixing subjects needs a course id on
@@ -436,13 +436,13 @@ after the version is live, since a push to `main` deploys.
 - New architecturally significant file: add it to Key Files.
 - Deleted or renamed file: repair references immediately.
 - New directory: add it to Directory Map.
-- Resolved gap: remove it in the same session and preserve the story in `CHANGELOG.md`.
+- Resolved gap: remove it in the same session and preserve the story in `docs/governance/CHANGELOG.md`.
 - Never leave an entry known to be false.
 - After a changed session, update touched file biographies and Verified dates.
 - Repeatedly-read non-indexed files should be promoted to Key Files.
-- After debugging or a bug during build, update `BUG-LAWS.md`; merge near-duplicates and downgrade,
+- After debugging or a bug during build, update `docs/governance/BUG-LAWS.md`; merge near-duplicates and downgrade,
   supersede, or retire stale Laws when a permanent backstop exists.
-- After tracked quality work, update `QUALITY-LOG.md`.
+- After tracked quality work, update `docs/governance/QUALITY-LOG.md`.
 - Ledgers must not make the project timid: use comply paths, run WATCH checks, and preserve
   ambition.
 
@@ -463,4 +463,4 @@ after the version is live, since a push to `main` deploys.
   grounding, and observed Browser behavior; medium for transcript-derived content pending
   owner/faculty acceptance; low for exact exam-paper structure
 - Budget: keep this file below 32 KiB and preferably below ~4,000 tokens. Move history to
-  `CHANGELOG.md` and detail to linked ledgers/briefs.
+  `docs/governance/CHANGELOG.md` and detail to linked ledgers/briefs.

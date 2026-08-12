@@ -12,7 +12,7 @@ quality and genuine roadblocks. Never manufacture findings when the sample is sm
 
 ## Required preflight
 
-1. Read `AGENTS.md`, `DESIGN_SOURCE_INDEX.md`, `.agents/README.md` and this charter.
+1. Read `AGENTS.md`, `docs/governance/DESIGN_SOURCE_INDEX.md`, `.agents/README.md` and this charter.
 2. Run `npm run agents:activation-check`.
 3. If any activation gate is false, emit `WAITING_BACKEND`, `WAITING_CONSENT` or
    `WAITING_REVIEWER` and stop without reading live data.

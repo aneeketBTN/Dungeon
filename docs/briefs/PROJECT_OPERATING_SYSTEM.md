@@ -34,14 +34,14 @@ sources of truth.
 | --- | --- |
 | Living index | `AGENTS.md` |
 | Claude compatibility | `CLAUDE.md` |
-| Bug-law ledger | `BUG-LAWS.md` |
-| Quality ledger | `QUALITY-LOG.md` |
-| Session history | `CHANGELOG.md` |
+| Bug-law ledger | `docs/governance/BUG-LAWS.md` |
+| Quality ledger | `docs/governance/QUALITY-LOG.md` |
+| Session history | `docs/governance/CHANGELOG.md` |
 | Evidence gates | `AGENTS.md` and `evidence/README.md` |
 | Open/close ritual | `AGENTS.md` Session Hygiene |
 | Authority charter | `coordination/CHARTER.md` |
 | Immutable exchange protocol | `coordination/exchange/README.md` |
-| Design/brief authority | `DESIGN_SOURCE_INDEX.md` |
+| Design/brief authority | `docs/governance/DESIGN_SOURCE_INDEX.md` |
 
 ## Acceptance
 
@@ -52,6 +52,6 @@ The admin system is DONE only when:
 - `CLAUDE.md` routes to `AGENTS.md`;
 - the Current Status names active gates and prohibited claims;
 - Key Files and Directory Map include the new system;
-- the session is recorded in `CHANGELOG.md`;
+- the session is recorded in `docs/governance/CHANGELOG.md`;
 - named verification evidence exists;
 - future game implementation is explicitly subject to these rules.

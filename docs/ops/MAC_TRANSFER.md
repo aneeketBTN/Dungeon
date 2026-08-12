@@ -83,8 +83,8 @@ python3 - <<'PY'
 from pathlib import Path
 required = [
     "AGENTS.md",
-    "briefs/T6_REVISION_FALLBACK.md",
-    "briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md",
+    "docs/briefs/T6_REVISION_FALLBACK.md",
+    "docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md",
     "mock/t6.html",
     "mock/t6.css",
     "mock/t6.js",

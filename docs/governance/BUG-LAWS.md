@@ -57,10 +57,10 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 ### LAW-05 🟡 — Historical documents never silently override current authority
 
 - **Tier/Status:** 🟡 · ACTIVE
-- **Origin:** 2026-07-16 source audit: `personalities.md`, `REVIEW_LOG.md`, `PROMPT.md`, prototype
+- **Origin:** 2026-07-16 source audit: `docs/design/personalities.md`, `docs/engine/REVIEW_LOG.md`, `docs/engine/PROMPT.md`, prototype
   behavior, and newer product briefs overlap and sometimes differ.
 - **Why:** Reading order can accidentally change product decisions.
-- **Comply:** Follow `DESIGN_SOURCE_INDEX.md`; put unresolved contradictions in its conflict
+- **Comply:** Follow `docs/governance/DESIGN_SOURCE_INDEX.md`; put unresolved contradictions in its conflict
   register before implementation.
 - **Verify:** Every implementation plan names the source files and conflicts governing its slice.
 

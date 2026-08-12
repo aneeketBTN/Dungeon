@@ -227,7 +227,7 @@ Invariant: labels match the math. Partial credit is never described as “secure
 
 ### Inputs
 
-- `ART_DIRECTION.md` and `ART_DIRECTION_SYSTEM.md`;
+- `docs/design/ART_DIRECTION.md` and `docs/design/ART_DIRECTION_SYSTEM.md`;
 - this flow/state contract;
 - a route/state inventory;
 - deterministic test scenarios;
