@@ -823,31 +823,70 @@
       : direction === "first" ? "First block recorded" : direction;
   }
 
+  /* The route to the goal.
+   *
+   * This replaced a retrospective sparkline. At zero the sparkline drew an empty
+   * dashed line and said nothing was recorded — a chart whose only message to a
+   * learner starting out was that they had nothing. The same space now shows the
+   * whole distance: where the goal is, where they stand on the way to it, and
+   * what is left. The climb is visible before the first answer.
+   *
+   * The goal is deliberately evidence, not marks: every concept in the subject at
+   * Strong. It is reachable by practising, which a predicted score is not, and it
+   * keeps the standing rule intact — this moves with demonstrated evidence and
+   * never with time spent, and it forecasts nothing about the paper. */
+  function goalRouteMarkup(percent, width, height, pad) {
+    var t = Math.max(0, Math.min(100, Number(percent) || 0)) / 100;
+    var x0 = pad, y0 = height - pad, x1 = width - pad, y1 = pad + 4;
+    var cx = x0 + (x1 - x0) * t;
+    var cy = y0 + (y1 - y0) * t;
+    var parts = [];
+    // The whole route, always drawn, so the distance is legible at any progress.
+    parts.push("<path d='M" + x0 + " " + y0 + " L" + x1 + " " + y1 + "' class='route-full'/>");
+    // Ground covered, as a filled wedge rather than a line, so it reads as gain.
+    if (t > 0) {
+      parts.push("<path d='M" + x0 + " " + y0 + " L" + cx + " " + cy + " L" + cx + " " + y0 + " Z' class='route-gained'/>");
+      parts.push("<path d='M" + x0 + " " + y0 + " L" + cx + " " + cy + "' class='route-done'/>");
+    }
+    parts.push("<circle cx='" + x1 + "' cy='" + y1 + "' r='5' class='route-goal'/>");
+    parts.push("<circle cx='" + cx.toFixed(1) + "' cy='" + cy.toFixed(1) + "' r='4.5' class='route-here'/>");
+    // The host <svg> already carries the viewBox, so return shapes only — wrapping
+    // these in another <svg> would nest one inside the other.
+    return parts.join("");
+  }
+
+  function goalMessage(course, stats) {
+    var remaining = stats.total - stats.strong;
+    if (!remaining) return "Every concept in " + course.shortTitle + " is Strong. This subject is as far as the evidence goes.";
+    if (!stats.strong && !stats.developing) {
+      return remaining + " concepts stand between here and a complete " + course.shortTitle + ". One short block starts the climb.";
+    }
+    if (!stats.strong) {
+      return stats.developing + " concepts are already building. " + remaining + " still need enough evidence to reach Strong.";
+    }
+    return stats.strong + " of " + stats.total + " are Strong" +
+      (stats.developing ? ", " + stats.developing + " are close behind" : "") +
+      ". " + remaining + " to go.";
+  }
+
   function renderMomentum(courseId) {
     var course = getCourse(courseId);
     var stats = courseStats(courseId);
     var points = courseTrend(courseId);
     var delta = points.length > 1 ? points[points.length - 1].value - points[points.length - 2].value : null;
     $("momentum-scope").textContent = course.shortTitle;
-    $("momentum-value").textContent = stats.weighted + "%";
+    $("momentum-value").textContent = stats.strong + " / " + stats.total;
     var deltaNode = $("momentum-delta");
     deltaNode.className = "momentum-delta " + (delta === null ? "flat" : delta > 0 ? "up" : delta < 0 ? "down" : "flat");
-    deltaNode.textContent = delta === null ? (points.length ? "first block" : "no block yet")
-      : delta > 0 ? "+" + delta + " points" : delta < 0 ? delta + " points" : "level";
-    $("hero-trend").innerHTML = sparklineMarkup(points, 320, 88, 6);
-    $("momentum-message").textContent = momentumMessage(course, stats, points, delta);
+    /* The chip carries movement when there is movement to report, and the target
+     * when there is not — so the card is never reduced to announcing an absence. */
+    deltaNode.textContent = delta === null
+      ? (stats.strong === stats.total ? "complete" : (stats.total - stats.strong) + " to go")
+      : delta > 0 ? "+" + delta + " this block" : delta < 0 ? delta + " this block" : "held level";
+    $("hero-trend").innerHTML = goalRouteMarkup(stats.weighted, 320, 88, 6);
+    $("momentum-message").textContent = goalMessage(course, stats);
   }
 
-  function momentumMessage(course, stats, points, delta) {
-    var short = course.shortTitle;
-    if (!points.length) return "Nothing is recorded for " + short + " yet. One short block is enough to put the first point on this line.";
-    if (points.length === 1) return "First block recorded for " + short + ". A second block is what turns one point into a direction.";
-    if (stats.strong === stats.total) return "Every " + short + " concept has broad current evidence. A delayed retrieval check keeps that honest better than more of the same.";
-    if (delta > 0) return "Up " + delta + " points in " + short + ". " + stats.strong + " concept" + (stats.strong === 1 ? " is" : "s are") + " Strong and " + stats.developing + " " + (stats.developing === 1 ? "is" : "are") + " still building.";
-    if (delta < 0) return "The last block cost " + Math.abs(delta) + " points, which is the signal worth having. The concepts that slipped now come first.";
-    if (stats.needs) return "Level since your last block. " + stats.needs + " concept" + (stats.needs === 1 ? " has" : "s have") + " an open miss, and those come first when you practise.";
-    return "Level since your last block. A different question type on the same concept is what moves it next.";
-  }
 
   function progressStory() {
     var seen = {};
@@ -1093,6 +1132,10 @@
    * It does not re-render lesson prose — Lesson jumps to the existing lesson row
    * and opens it, so there is one copy of that content, not two that can drift. */
   function openLessonFor(lectureId) {
+    // The panels now live inside a disclosure, so open it before switching view —
+    // otherwise the scroll and focus below land inside a collapsed element.
+    var browse = $("browse-disclosure");
+    if (browse) browse.open = true;
     setDashboardView("lessons");
     var row = document.querySelector('.lesson-row[data-lecture="' + lectureId + '"]');
     if (!row) return;
@@ -1316,7 +1359,17 @@
     var sortControl = $("subject-sort");
     if (sortControl) {
       sortControl.value = mode;
-      $("subject-sort-hint").textContent = SORT_MODES[mode].hint;
+      /* The hint is an on-demand tooltip now, not body copy. Writing it as
+       * textContent replaced the icon glyph with a sentence, which then wrapped
+       * and spilled out of the rail. Set the description, keep the glyph. */
+      var hintNode = $("subject-sort-hint");
+      if (hintNode) {
+        var hint = SORT_MODES[mode].hint + " " + (mode === "exam"
+          ? "Both papers on a day run back to back, so the subject you sit first is the one you can least afford to leave until the end."
+          : "Subjects with the least evidence come first, using your own attempts.");
+        hintNode.setAttribute("title", hint);
+        hintNode.setAttribute("aria-label", hint);
+      }
     }
     var order = orderedCourseIds(mode);
     var previousDay = null;
@@ -1690,6 +1743,8 @@
     /* The builder now sits inside a disclosure so it is not part of the homepage's
      * first read. Anything that sends a learner to it has to open that disclosure
      * first, or the scroll and focus below land on a collapsed element. */
+    var browse = $("browse-disclosure");
+    if (browse) browse.open = true;
     var disclosure = $("builder-disclosure");
     if (disclosure) disclosure.open = true;
     if (courseId && courseId !== profile.selectedCourse) {

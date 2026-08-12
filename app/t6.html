@@ -47,14 +47,13 @@
             <div><p class="eyebrow">Your subjects</p><h2 id="subjects-title">Choose a subject</h2></div>
             <div class="rail-sort">
               <label for="subject-sort">Order by</label>
-              <select id="subject-sort">
+              <select id="subject-sort" aria-describedby="subject-sort-hint">
                 <option value="exam">Exam order</option>
                 <option value="hardest">Hardest for you</option>
               </select>
-              <p class="rail-sort-hint" id="subject-sort-hint">The order you sit them.</p>
+              <span class="info" id="subject-sort-hint" tabindex="0" role="note" aria-label="Exam order is the order you sit the papers.">i</span>
             </div>
           </div>
-          <p class="rail-note">Everything below follows your choice. Both papers on a day run back to back, so the subject you sit first is the one you can least afford to leave until the end.</p>
           <div class="course-grid" id="course-grid" role="group" aria-label="Term 6 subjects"></div>
         </section>
 
@@ -65,17 +64,16 @@
             <p id="next-step-copy">Start small. Every answer updates your concept progress and makes the next recommendation more useful.</p>
             <div class="next-meta" id="next-step-meta"><span>~7 minutes</span><span>4 questions</span></div>
             <div class="hero-actions">
-              <button class="button primary" id="start-recommended" type="button">Start this study set <span aria-hidden="true">→</span></button>
-              <button class="button quiet-light" id="start-selected-mock" type="button">Mix your own practice</button>
+              <button class="button primary hero-cta" id="start-recommended" type="button">Start this study set <span aria-hidden="true">→</span></button>
             </div>
           </div>
           <aside class="momentum-card" aria-labelledby="momentum-title">
             <p class="eyebrow" id="momentum-scope">Selected subject</p>
-            <h2 id="momentum-title">How your evidence is moving</h2>
-            <div class="momentum-figure"><b id="momentum-value">0%</b><span class="momentum-delta" id="momentum-delta"></span></div>
+            <h2 id="momentum-title">How close you are</h2>
+            <div class="momentum-figure"><b id="momentum-value">0 / 16</b><span class="momentum-delta" id="momentum-delta"></span><small class="momentum-unit">concepts Strong</small></div>
             <svg id="hero-trend" class="hero-trend" viewBox="0 0 320 88" preserveAspectRatio="none" role="img" aria-labelledby="momentum-title" aria-describedby="momentum-message"></svg>
-            <p id="momentum-message">Your first practice block starts the line.</p>
-            <small>The line moves with demonstrated evidence, never with time spent.</small>
+            <p class="route-legend"><span>Start</span><span>All Strong <span class="info" tabindex="0" role="note" title="Strong means repeated evidence across question types plus an applied check. The marker moves with demonstrated evidence, never with time spent, and says nothing about your exam score." aria-label="Strong means repeated evidence across question types plus an applied check. The marker moves with demonstrated evidence, never with time spent, and says nothing about your exam score.">i</span></span></p>
+            <p id="momentum-message">Every concept in this subject is still ahead of you.</p>
           </aside>
         </section>
 
@@ -139,10 +137,16 @@
         </section>
         </details>
 
+        <details class="disclosure" id="browse-disclosure">
+          <summary><b>Browse this subject</b><small>Every concept, its lesson, the study sets, and your plan</small></summary>
+
+        <div class="browse-actions">
+          <button class="button secondary" id="start-selected-mock" type="button">Mix your own practice</button>
+        </div>
+
         <section class="concept-shelf" aria-labelledby="concept-shelf-title">
           <div class="section-heading compact-heading">
             <div><p class="eyebrow" id="concept-shelf-label">Concepts</p><h2 id="concept-shelf-title">Everything in this subject</h2></div>
-            <p>Practise any concept on its own, or read its lesson without being scored.</p>
           </div>
           <div class="concept-shelf-list" id="concept-shelf-list"></div>
         </section>
@@ -231,6 +235,8 @@
             <div class="lesson-index" id="lesson-index"></div>
           </section>
         </div>
+
+        </details>
 
         <details class="dashboard-tools">
           <summary>Progress settings</summary>
