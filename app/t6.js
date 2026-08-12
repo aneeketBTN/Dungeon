@@ -2833,6 +2833,7 @@
       partial: evaluation.partial,
       partResults: evaluation.partResults,
       conceptResults: evaluation.conceptResults,
+      msqMarks: evaluation.msqMarks || null,
       misconception: evaluation.misconception,
       isReattempt: !!item.isReattempt,
       initial: !!item.initial,
@@ -2947,7 +2948,19 @@
       body = "<p>" + escapeHtml(question.explanation) + "</p>";
     }
 
-    feedback.innerHTML = "<span class='feedback-label'>" + escapeHtml(label) + "</span>" + body +
+    /* Multiple-select is the one format where "wrong" is not the whole story: the
+     * paper part-marks it, so a learner who took two of three and left the trap
+     * alone did better than one who selected everything. Showing the marks makes
+     * the negative marking concrete instead of abstract advice. */
+    var marks = response.msqMarks;
+    var marksCopy = marks
+      ? marks.awarded + " of " + marks.available + (marks.available === 1 ? " mark" : " marks") +
+        " — " + marks.hits + " right" + (marks.misses ? ", " + marks.misses + " wrong at −1 each" : ", nothing wrongly selected") +
+        (marks.misses && marks.hits - marks.misses < 0 ? ". The paper floors a question at zero, so this cannot go negative." : "")
+      : "";
+
+    feedback.innerHTML = "<span class='feedback-label'>" + escapeHtml(label) + "</span>" +
+      (marksCopy ? "<p class='msq-marks'>" + escapeHtml(marksCopy) + "</p>" : "") + body +
       (bossCopy ? "<p class='still-valid'><b>What remains valid:</b> " + escapeHtml(bossCopy) + "</p>" : "") +
       (!response.correct ? "<div class='answer-key'><p class='answer-key-head'>The complete answer</p><ul>" + answerKey.map(function (answer) { return "<li>" + escapeHtml(answer) + "</li>"; }).join("") + "</ul></div>" : "") +
       "<p class='bridge'><b>Why it connects:</b> " + escapeHtml(question.link) + "</p>" +

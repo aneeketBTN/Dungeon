@@ -399,6 +399,30 @@
       });
       return;
     }
+    /* Multiple-select has no single `question.answer`, so the generic path below
+     * would treat every option as a distractor — including the correct ones — and
+     * overwrite the authored diagnosis with a generated placeholder whose text is
+     * undefined. That shipped once: the wrong-answer panel rendered blank because
+     * `diagnoses[i].text` existed but held nothing.
+     *
+     * Correct options get null. Wrong options keep whatever the author wrote and
+     * only fall back to generation when the author left a gap. Authored text wins
+     * here in a way it does not elsewhere, because an MSQ distractor is wrong in a
+     * specific way the generator cannot infer from provenance. */
+    if (question.type === "msq") {
+      var answerSet = question.answers || [];
+      var existing = question.diagnoses || [];
+      var role = targetRoleFor(question.options, answerSet[0], provenance);
+      question.diagnoses = question.options.map(function (option, index) {
+        if (answerSet.indexOf(index) >= 0) return null;
+        if (existing[index] && (existing[index].why || existing[index].label)) return existing[index];
+        return diagnoseOption(option, self, provenance, hints, authored, question.id, index, role);
+      });
+      question.misconceptions = question.diagnoses.map(function (diagnosis) {
+        return diagnosis ? diagnosis.tag : null;
+      });
+      return;
+    }
     if (Array.isArray(question.options)) {
       question.diagnoses = diagnoseGroup(question.options, question.answer, self, provenance, hints, authored, question.id);
       question.misconceptions = question.diagnoses.map(function (diagnosis) {
@@ -429,7 +453,9 @@
        "A product that is desirable and feasible but not viable is unsustainable",
        "Viability is settled once a working prototype exists"
      ], answers: [0, 1, 2],
-     wrong: {3: ["A prototype answers feasibility, not viability.", "viability-as-prototype"]},
+     wrong: {3: {tag: "Read viability as buildability", label: "Answered the feasibility question and stopped",
+       why: "This choice assumed that proving the product can be made also proves it should be. A prototype demonstrates the technology exists, which is the feasibility check; viability asks the separate question of whether it can profit or fund the business.",
+       cue: "When a check passes, name which of the three it was. If the evidence is technical, it cannot be viability."}},
      explanation: "Each area needs a different skill — design for desirability, engineering for feasibility, business for viability. A prototype proves you can build it, which is the feasibility question; viability asks whether it can profit or fund the business."},
 
     {concept: "spms_jtbd", source: "SPMS-M01-L10", node: "Jobs to be done",
@@ -440,7 +466,9 @@
        "Social — new patients gain confidence they are seeing a qualified doctor",
        "Financial — the drill costs less than hiring someone to do it"
      ], answers: [0, 1, 2],
-     wrong: {3: ["Cost is not one of the three layers the lecture draws out.", "invented-layer"]},
+     wrong: {3: {tag: "Added a layer the lecture does not use", label: "Treated price as one of the layers of the job",
+       why: "This choice assumed cost is one of the needs stacked inside the purchase. The lecture names functional, emotional, and social. Cost enters somewhere else entirely — through customer value, which is benefit minus cost.",
+       cue: "List the three layers before answering. A candidate that is not one of them belongs to the value calculation instead."}},
      explanation: "The example stacks a functional, an emotional, and a social need in one purchase. Cost enters only through customer value, which is benefit minus cost — it is not one of the layers of the job."},
 
     {concept: "spms_tamsam", source: "SPMS-M02-L04", node: "TAM, SAM, and SOM",
@@ -451,7 +479,9 @@
        "SOM narrows further because incumbent brokerages already serve those investors",
        "SOM is the figure to quote as the market when raising funds"
      ], answers: [0, 1, 2],
-     wrong: {3: ["The lecture never treats any of the three as a number to quote.", "sizing-as-pitch"]},
+     wrong: {3: {tag: "Turned a sizing step into a pitch number", label: "Read the funnel as a headline figure",
+       why: "This choice assumed one of the three is the number you present. The lecture uses them as successive narrowing constraints — what could exist, what you may reach, what you can take against incumbents — not as a figure to quote.",
+       cue: "Ask what each step removes. A step that removes nothing is being used as a claim rather than an analysis."}},
      explanation: "TAM measures the prize, SAM what you are permitted and able to reach, SOM what you can take given who already holds it. They are narrowing constraints, not a headline figure."},
 
     {concept: "spms_chasm", source: "SPMS-M02-L10", node: "Crossing the chasm",
@@ -462,14 +492,18 @@
        "Build trust through uptime, security, support, compliance, and social proof",
        "Raise the price at launch so mainstream buyers read it as quality"
      ], answers: [0, 1, 2],
-     wrong: {3: ["Pricing is not one of the four crossing strategies.", "invented-strategy"]},
+     wrong: {3: {tag: "Substituted a signal for risk reduction", label: "Answered a risk problem with a pricing move",
+       why: "This choice assumed mainstream buyers read a high price as quality. The lecture's premise is that mainstream customers avoid risk, so all four strategies lower perceived risk — beachhead focus, simplification, trust, ecosystem fit. Pricing is not among them.",
+       cue: "Name which of the four a candidate belongs to. If it fits none of them, it is not part of the crossing."}},
      explanation: "The four are beachhead focus, simplification, trust and reliability, and ecosystem fit. Mainstream customers avoid risk, so the work is lowering perceived risk rather than signalling through price."},
 
     {concept: "spms_lean_canvas", source: "SPMS-M03-L06", node: "Lean Canvas",
      stem: "Select every box that appears on the Lean Canvas but not on the Business Model Canvas.",
      options: ["Problem", "Solution", "Unfair advantage", "Customer segments"],
      answers: [0, 1, 2],
-     wrong: {3: ["Customer segments is common to both canvases.", "shared-box"]},
+     wrong: {3: {tag: "Counted a shared box as an addition", label: "Read a carried-over box as new",
+       why: "This choice assumed customer segments is unique to the Lean Canvas. It carries across from the Business Model Canvas, along with channels, cost structure, and revenue structure. The additions are problem, solution, key metrics, and unfair advantage.",
+       cue: "Build two lists before answering — what carries over, and what replaces it. The question only asks about the second."}},
      explanation: "Problem, solution, key metrics, and unfair advantage are the Lean Canvas additions. Customer segments, channels, cost structure, and revenue structure carry across from the Business Model Canvas."},
 
     {concept: "spms_unit_economics", source: "SPMS-M04-L07", node: "Unit economics",
@@ -480,7 +514,9 @@
        "E-commerce — one order",
        "Marketplace — one customer lifetime"
      ], answers: [0, 1, 2],
-     wrong: {3: ["A marketplace relationship is transactional, so the unit is one transaction.", "wrong-unit"]},
+     wrong: {3: {tag: "Applied the SaaS unit to a transactional model", label: "Chose a unit the relationship does not support",
+       why: "This choice assumed the marketplace acquires a customer who then transacts repeatedly across a lifetime. The unit follows the customer relationship model, and a marketplace relationship is transactional — so the unit is one transaction.",
+       cue: "Ask whether the business acquires a relationship or completes a transaction. That answer names the unit."}},
      explanation: "The unit follows the customer relationship model. SaaS acquires a customer who transacts repeatedly, so the account is the unit; a marketplace relationship is transactional, so the transaction is."},
 
     {concept: "spms_alternatives", source: "SPMS-M05-L02", node: "Competition and alternatives",
@@ -491,7 +527,9 @@
        "The customer deciding to carry on doing nothing",
        "Only the firms the startup has publicly named as competitors"
      ], answers: [0, 1, 2],
-     wrong: {3: ["Customers decide the comparison set, not the startup.", "self-declared-competition"]},
+     wrong: {3: {tag: "Let the vendor define the comparison", label: "Set the competitive field from the inside",
+       why: "This choice assumed competition is whatever the startup declares it to be. The lecture is explicit that customers decide the comparison — and in enterprise the most frequent alternative is inertia, the buyer carrying on exactly as they are.",
+       cue: "Ask what the customer would do if you did not exist. Whatever that is, it is the competition, named or not."}},
      explanation: "Customers set the comparison, and in enterprise the most common alternative is inertia — doing nothing at all. Defining competition early and narrowly is named as the biggest mistake."},
 
     {concept: "spms_privacy", source: "SPMS-M08-L05", node: "Privacy by design",
@@ -502,7 +540,9 @@
        "US data protection leaves employee data outside its data protection regulations",
        "Data protection by design means the customer must request that their data be protected"
      ], answers: [0, 1, 2],
-     wrong: {3: ["By design means the obligation applies the moment you offer the service.", "opt-in-protection"]},
+     wrong: {3: {tag: "Read a standing obligation as opt-in", label: "Made protection something the user has to ask for",
+       why: "This choice assumed the duty begins when a customer requests it. By design means the obligation applies the moment you offer the service, which is why a customer never has to confirm that their data is protected.",
+       cue: "Ask when the duty starts. If the answer is 'once they ask', it is not protection by design."}},
      explanation: "GDPR covers all personal data regardless of sensitivity, while US protection is category-based and excludes employee data. Protection by design is never something a customer has to ask for."}
   ];
 
@@ -543,8 +583,7 @@
         options: item.options,
         answers: item.answers,
         diagnoses: item.options.map(function (_, optionIndex) {
-          var entry = item.wrong[optionIndex];
-          return entry ? {text: entry[0], tag: entry[1]} : null;
+          return item.wrong[optionIndex] || null;
         }),
         explanation: item.explanation,
         link: SPMS_MULTI_LINKS[item.concept] || concept.bridge || concept.summary
