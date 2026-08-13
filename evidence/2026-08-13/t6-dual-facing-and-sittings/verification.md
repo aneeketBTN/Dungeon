@@ -206,6 +206,20 @@ surfaces.
   it is still laid out, and a fading bar that can still take a tap is worse than one
   that pops.
 
+### Alignment, the header, and the examiner's floating offer
+
+- Both sides now measure identically: coin left edge 17px and wrapper width 1041px on the
+  dashboard *and* the examiner home at the same viewport. Before this the wrappers were
+  1120px and 1000px with different padding.
+- The header flips with the side. Learn: "Term 6 progress", `0%`, `0 blocks practised`.
+  Examiner with two seeded attempts at 40% and 80%: "Mocks completed", `2`,
+  `Average score 60%`; with none, `No score yet`. Verified crossing both ways.
+  `renderHeaderStats` is called from `showScreen` *after* `markMode`, because the
+  screen's own render runs first and would compute it from the side you just left —
+  which is exactly what it did on the first attempt.
+- The examiner's floating offer appears once its recommendation scrolls away, reading
+  `SPMS · Set 1` / `Start this paper`, and clicks the hero's own button.
+
 ### One more defect
 
 `has-resume-bar` stayed on `<body>` after leaving the dashboard, so anything

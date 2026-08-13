@@ -510,6 +510,16 @@
 
         <h2 class="exam-papers-title">Every paper</h2>
         <div class="exam-papers" id="exam-papers"></div>
+
+        <!-- The same floating offer the learning system makes, for the same reason:
+             the list of twelve sets runs well past the recommendation, and a candidate
+             reading the bottom of it should not have to scroll back to act. It clicks
+             the hero's button, so there is still only one thing deciding which paper
+             is next. -->
+        <div class="resume-bar" id="exam-resume-bar" hidden>
+          <p><span id="exam-resume-scope">SPMS</span><b id="exam-resume-title">Start this paper</b></p>
+          <button class="button primary compact" id="exam-resume-go" type="button">Go <span aria-hidden="true">→</span></button>
+        </div>
       </div>
     </section>
 

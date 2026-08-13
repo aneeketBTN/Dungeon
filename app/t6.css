@@ -288,7 +288,20 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .button > [aria-hidden="true"] { flex: none; }
 .button:hover:not(:disabled) { transform: translateY(-1px); }
 .button.primary { color: var(--on-green); background: var(--green); box-shadow: var(--shadow-primary); }
-.focus-copy .button.primary { color: var(--on-saffron); background: var(--saffron); box-shadow: none; }
+/* The primary action on a near-black panel.
+   -------------------------------------------------------------------------
+   It used to be saffron, chosen when saffron meant nothing in particular. It means
+   the examiner now — it is the examiner's half of the coin and its side of the
+   header switch — so a gold button on the learning system's own hero was pointing at
+   the wrong product. Green is not the answer either: `--green` is a deep forest in
+   the light theme and near-black-on-near-black against this panel.
+
+   Inverted is: the panel's text colour becomes the button's surface. It is the
+   sharpest thing that can sit on this background in either theme, it is the same
+   inversion the coin uses to say "this side", and it claims neither product's colour
+   for an action that belongs to whichever page it is on. */
+.focus-copy .button.primary, .resume-bar .button.primary { color: var(--deep); background: var(--on-deep); box-shadow: none; }
+.focus-copy .button.primary:hover:not(:disabled), .resume-bar .button.primary:hover:not(:disabled) { background: var(--on-deep-muted); }
 .button.secondary { border-color: var(--line); background: transparent; }
 .button.quiet-light { color: var(--on-deep); border-color: var(--deep-veil-strong); background: transparent; }
 .button.compact { min-height: 44px; padding: 9px 14px; font-size: var(--t-meta); }
@@ -927,7 +940,6 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .resume-bar p { min-width: 0; margin: 0; }
 .resume-bar span { display: block; color: var(--on-deep-faint); font-size: var(--t-micro); font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
 .resume-bar b { display: block; margin-top: 2px; overflow: hidden; font-size: var(--t-body); text-overflow: ellipsis; white-space: nowrap; }
-.resume-bar .button.primary { color: var(--on-saffron); background: var(--saffron); box-shadow: none; }
 
 /* It arrives and leaves, rather than appearing and vanishing.
    -------------------------------------------------------------------------
@@ -960,7 +972,7 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 }
 
 /* Clear the bar so it never covers the last row of the concept list. */
-body.has-resume-bar .dashboard-wrap { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
 .toast { position: fixed; left: 50%; bottom: 22px; z-index: 60; max-width: calc(100% - 30px); padding: 11px 16px; color: var(--on-deep); background: var(--deep); border: 1px solid var(--deep-edge); border-radius: var(--r-card); box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translate(-50%,16px); transition: .2s ease; }
 .toast.show { opacity: 1; transform: translate(-50%,0); }
@@ -989,7 +1001,7 @@ body.has-resume-bar .dashboard-wrap { padding-bottom: calc(96px + env(safe-area-
   .header-trend > span { min-width: 0; }
   .header-trend > span > small, .header-trend-note { display: none; }
   .account-controls span { display: none; }
-  .dashboard-wrap { width: min(100% - 20px,1120px); padding-top: 14px; }
+  .dashboard-wrap, .exam-home { width: min(100% - 20px,1120px); padding-top: 14px; }
   .community-reminder { grid-template-columns: 1fr; padding: 16px; }
   .community-actions { justify-content: stretch; }
   .community-actions .button { flex: 1; }
@@ -1519,7 +1531,12 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 /* The examiner's front door. Its own product, so its own room: papers as cards, sets
    as the only control on each, and the two honest warnings — the caveat and the
    shortfall — inside the card rather than a click away. */
-.exam-home { max-width: 1000px; margin: 0 auto; padding: 30px 20px 72px; }
+/* The same measure as the dashboard, to the pixel. The two sides were 1120 and 1000
+   wide with different side padding, so crossing between them slid every left edge on
+   the page — the coin, the headings, the cards — by a few pixels. Two products can
+   look different; they cannot sit on different margins, or the switch reads as a page
+   reload rather than a turn of the same page. */
+.exam-home { width: min(1120px, calc(100% - 34px)); margin: 0 auto; padding: 34px 0 72px; }
 .exam-home-head { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 18px; margin-bottom: 26px; }
 .exam-home-head h1 { margin: 4px 0 8px; font: 650 clamp(30px,4.2vw,42px)/1.1 Georgia, serif; }
 .exam-home-lede { max-width: 62ch; margin: 0; color: var(--muted); font-size: var(--t-body); line-height: 1.55; }
@@ -1543,7 +1560,9 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 .exam-set small { color: var(--muted); font-size: var(--t-small); }
 
 @media (max-width: 720px) {
-  .exam-home { padding: 20px 15px 60px; }
+  /* Padding only — the width stays the dashboard's, set alongside it above, so the
+     two sides keep the same left edge at every size. */
+  .exam-home { padding: 20px 0 60px; }
   .exam-home-head { flex-direction: column-reverse; align-items: stretch; }
 }
 

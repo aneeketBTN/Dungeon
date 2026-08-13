@@ -92,6 +92,22 @@ measured rather than assumed).
   `transition-behavior: allow-discrete` with `@starting-style`. Traced frame by frame: 13px→0 and
   opacity 0.02→1 over ~190ms in, reversed out, with `pointer-events` dropped at the *start* of the
   exit rather than the end.
+- **The two sides now sit on the same margins.** The dashboard was 1120px wide and the examiner
+  1000px with different side padding, so crossing slid every left edge on the page. Two products
+  may look different; if they sit on different margins the switch reads as a page reload rather
+  than a turn of the same page.
+- **The header reports the side you are on.** On the examiner it is "Mocks completed" and the
+  average score, because the learning system's numbers are the wrong ones there twice over: mocks
+  deliberately never touch your evidence, so that percentage would sit unmoved however many papers
+  you sat, and a practice-block count belongs to a product you are not currently in.
+- **The examiner has the floating offer too.** Its page is twelve set buttons long, so the
+  recommendation scrolls away exactly as the learning system's does. Same component, same rule —
+  it clicks the hero's own button, so one thing still decides what is next.
+- **The primary action on a near-black panel stopped being saffron.** Saffron was chosen when it
+  meant nothing in particular; it means the examiner now, so a gold button on the learning system's
+  hero pointed at the wrong product. It is the inverted pair instead — the panel's text colour as
+  the button's surface — which is the sharpest thing that can sit on that background in either
+  theme and claims neither product's colour.
 - **Three more defects, all found by verification.** Two tap targets under the project's 44px floor
   — the calculator's Normal/Scientific toggle at 30px and the bag's close button at 29px — which
   the first audit missed because it ran with the bag shut. And `has-resume-bar` outlived the

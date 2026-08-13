@@ -316,10 +316,16 @@
     $all(".screen").forEach(function (screen) { screen.classList.toggle("active", screen.id === id); });
     markMode(EXAM_SCREENS[id] ? "exam" : "learn");
     syncModeSwitchVisibility();
-    /* The resume bar lives inside the dashboard, so leaving that screen hides it — but
-       the body class outlived it, and anything positioned around the bar (the bag) went
-       on making room for a bar that was not there. */
-    if (id !== "dashboard-screen") document.body.classList.remove("has-resume-bar");
+    /* After markMode, not before: the header reports the side you are on, and the
+       screen's own render runs before this and would compute it from the side you
+       were on a moment ago. */
+    renderHeaderStats();
+    /* Each floating offer lives inside its own screen, so changing screens hides it —
+       but the body class outlived it, and anything positioned around the bar (the bag)
+       went on making room for a bar that was not there. Cleared on every change; the
+       observer on the newly shown screen puts it back if its own hero is out of view,
+       which after a scroll reset it never is. */
+    document.body.classList.remove("has-resume-bar");
     window.scrollTo(0, 0);
     if (id === "dashboard-screen") window.requestAnimationFrame(renderMasteryRadar);
   }
@@ -763,7 +769,7 @@
     $("overall-unseen").textContent = String(overall.unseen);
     $("calibration-summary").textContent = overallConfidenceSummary();
     renderCourseCards();
-    renderHeaderTrend(overall);
+    renderHeaderStats();
     renderMasteryRadar();
     renderSelectedSubject();
     renderRecommendation();
@@ -821,8 +827,31 @@
     return Object.keys(blocks).length;
   }
 
-  function renderHeaderTrend(overall) {
+  /* The header reports the side you are on.
+   *
+   * On the learning system it is progress and the work behind it. On the examiner
+   * those numbers are the wrong ones twice over: mocks deliberately never touch your
+   * evidence, so the percentage would sit there unmoved however many papers you sat,
+   * and a block count belongs to a product you are not currently in. The examiner's
+   * own two numbers are how many papers you have finished and what they averaged. */
+  function renderHeaderStats() {
+    var label = document.querySelector(".header-trend small");
+    if (currentMode() === "exam") {
+      var attempts = [];
+      Object.keys(profile.examAttempts || {}).forEach(function (courseId) {
+        attempts = attempts.concat(profile.examAttempts[courseId] || []);
+      });
+      var average = attempts.length
+        ? Math.round(attempts.reduce(function (sum, row) { return sum + examPercent(row); }, 0) / attempts.length)
+        : null;
+      if (label) label.textContent = "Mocks completed";
+      $("header-trend-value").textContent = String(attempts.length);
+      $("header-trend-note").textContent = average === null ? "No score yet" : "Average score " + average + "%";
+      return;
+    }
+    var overall = overallStats();
     var current = Math.round((overall.strong + overall.developing * .5) / Math.max(1, overall.total) * 100);
+    if (label) label.textContent = "Term 6 progress";
     $("header-trend-value").textContent = current + "%";
     var blocks = practiceBlockCount();
     $("header-trend-note").textContent = blocks + " block" + (blocks === 1 ? "" : "s") + " practised";
@@ -1610,26 +1639,39 @@
    * is deliberately not a second recommendation: the copy is read from the hero and
    * the click is delegated to it, so there is exactly one place that decides what the
    * next step is (LAW-04, LAW-18 — the scope is named). */
-  function bindResumeBar() {
-    var bar = $("resume-bar");
-    var hero = $("start-recommended");
+  function bindFloatingOffer(barId, heroId, goId, fill) {
+    var bar = $(barId);
+    var hero = $(heroId);
     if (!bar || !hero || !window.IntersectionObserver) return;
-    $("resume-bar-go").addEventListener("click", function () { hero.click(); });
+    $(goId).addEventListener("click", function () { hero.click(); });
     new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var away = !entry.isIntersecting;
         bar.hidden = !away;
         document.body.classList.toggle("has-resume-bar", away);
-        if (away) {
-          $("resume-bar-scope").textContent = $("selected-course-code").textContent;
-          /* The button's label, not the hero heading. The heading is a sentence
-           * ("Practise the concepts that need work first") and truncated to an
-           * ellipsis in this width; the button already says the same thing as an
-           * action in four words, and it is the thing this bar clicks. */
-          $("resume-bar-title").textContent = hero.textContent.replace(/\s*→\s*$/, "").trim();
-        }
+        if (away) fill(hero);
       });
     }, {threshold: 0}).observe(hero);
+  }
+
+  function bindResumeBar() {
+    bindFloatingOffer("resume-bar", "start-recommended", "resume-bar-go", function (hero) {
+      $("resume-bar-scope").textContent = $("selected-course-code").textContent;
+      /* The button's label, not the hero heading. The heading is a sentence
+       * ("Practise the concepts that need work first") and truncated to an
+       * ellipsis in this width; the button already says the same thing as an
+       * action in four words, and it is the thing this bar clicks. */
+      $("resume-bar-title").textContent = hero.textContent.replace(/\s*→\s*$/, "").trim();
+    });
+    /* The examiner's own. Its page is twelve set buttons long, so the recommendation
+       scrolls away just as surely. The scope is the paper and set rather than the
+       subject code alone, because on this side "SPMS" is not enough to know what you
+       are about to sit for two hours. */
+    bindFloatingOffer("exam-resume-bar", "exam-pick-start", "exam-resume-go", function (hero) {
+      var pick = recommendedMock();
+      $("exam-resume-scope").textContent = pick ? pick.paper.courseId + " · " + examSetLabel(pick.set.set) : "Mock";
+      $("exam-resume-title").textContent = hero.textContent.replace(/\s*→\s*$/, "").trim();
+    });
   }
 
   // A route's label and its one-line description are set together, so the two can
