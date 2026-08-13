@@ -111,9 +111,45 @@ discrimination 94%. Latency p50 28.3s, p90 47.8s on the local 35B — the hosted
 been measured.
 
 Against the original baseline on the identical 42 BRGSA cases the score moved 66/105 → 67/105. The
-chunking fix did not measurably help BRGSA. Five of the eight questions flagged earlier for
-concept-label/exemplar mismatch appear in today's failure list, which points at authoring rather than
-inference.
+chunking fix did not measurably help BRGSA.
+
+### Why BRGSA fails: one unauthored field, sixteen times
+
+Traced this session and confirmed by counting the source:
+
+```text
+BRGSA: 16 concepts, 0 with an authored application field
+IBM:   16 concepts, 16 with an authored application field
+```
+
+`conceptData` (`app/sets/t6_challenges.js:99`) falls back, when `concept.application` is absent, to
+`applicationSeed.options[applicationSeed.answer]` — the correct multiple-choice option from one of
+the concept's case questions. That is a scenario-specific answer choice, not a general decision rule.
+
+The written generators consume that field directly:
+
+- `addShortAnswer` sets `exemplar = ensureSentence(summary) + " " + ensureSentence(application)` and
+  states the judgement criterion as `"...consistently with this course move: " + application`.
+- `addCaseAnswer` uses `application` as the *entire* Decision criterion description and embeds it in
+  the exemplar.
+
+So all 32 BRGSA written prompts carry a model answer whose final sentence does not follow from the
+question, and a rubric that demands the learner match that sentence. Two examples:
+
+| Prompt | Asks about | Decision the rubric demands |
+| --- | --- | --- |
+| `brgsa_m4_customers_short_answer` | First customers | "Own the cross-functional activation/retention transition and define one shared constraint metric." |
+| `brgsa_m7_pipeline_short_answer` | Pipeline and payback | "Explicit handoff definitions, required context, owner, and response-time SLAs." |
+
+Both score the exemplar 0/2. The marker is right to refuse.
+
+This supersedes the earlier reading that eight BRGSA prompts had a concept-label/exemplar mismatch.
+That heuristic selected roughly the right prompts for the wrong reason; the defect is one missing
+field applied sixteen times, and it is why IBM — which has the field on every concept — reaches 88%
+on the same short-answer generator.
+
+The fix is sixteen authored sentences in the form IBM already uses, and it needs owner acceptance
+because it is course content. No model change substitutes for it.
 
 ## Not done
 

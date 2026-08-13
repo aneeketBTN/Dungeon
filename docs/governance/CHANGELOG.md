@@ -32,6 +32,15 @@ fail-closed).
 - Pointed `tools/evaluate-hosted-grader.mjs` at `gradeHostedAnswer` itself instead of a parallel
   two-pass implementation, so hosted calibration measures the shipped path — same frozen evidence,
   acceptance gates, token ceiling and retry — and needs only a Workers AI token.
+- Traced the BRGSA/IBM marking gap to its cause and corrected an earlier diagnosis. BRGSA has an
+  authored `application` on 0 of 16 concepts against IBM's 16 of 16, so `conceptData` falls back to a
+  case question's correct multiple-choice option — a scenario-specific answer choice used as though
+  it were a general decision rule. Both written generators consume that field directly, so all 32
+  BRGSA prompts carry an exemplar ending in a non-sequitur and a rubric demanding the learner match
+  it. The marker refusing them is correct behaviour. This supersedes the earlier
+  "concept-label/exemplar mismatch" reading, which named roughly the right prompts for the wrong
+  reason. No code change was made: the repair is sixteen authored sentences and needs owner content
+  acceptance.
 
 ## 2026-08-13 — Written transfer across Learn and post-submit Examiner forensics
 
