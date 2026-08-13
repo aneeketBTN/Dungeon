@@ -108,6 +108,32 @@ measured rather than assumed).
   hero pointed at the wrong product. It is the inverted pair instead — the panel's text colour as
   the button's surface — which is the sharpest thing that can sit on that background in either
   theme and claims neither product's colour.
+- **The top bar was rebuilt as two clusters and the product is called Dungeon in it.** Brand and
+  figures on the left separated by a rule, tools on the right pushed by one auto margin, and only
+  the gap between them resizes — `space-between` across three children had been putting the figures
+  wherever the window happened to leave room and sliding them the whole way at every width between.
+  The figures are one label, one value, one note, in that order and that shape whichever side they
+  report on.
+- **Subject switching moved into the top bar.** The rail on the dashboard is where you *compare*
+  subjects; the header control is where you *change* the one you are on, from anywhere — including
+  halfway down a page where the rail is long gone. Both read and write `profile.selectedCourse`, so
+  whichever you use the other follows. It hides on the examiner, where the unit is a paper.
+- **The bag left the header and became a floating launcher.** The header says what the page is; the
+  bag is a tool you pick up and put down, so it now sits next to where it opens and steps aside
+  while the panel is out. It also freed the width that let the header stop growing.
+- **The coin on a phone is a switch, not two panels.** Stacked with the other side floated to the
+  top it was 190px of the first screenful, and the thing under your thumb changed meaning every
+  time you used it — you could tap one spot repeatedly and be thrown back and forth between two
+  products. One row now, fixed order, names only, 52px. The subject cards lose the full course
+  title on a phone and the description paragraph goes with them, which is what makes room for the
+  hero rather than moving it: the picker belongs above the thing it changes.
+- **The two sides start at the same place, vertically as well as horizontally.** Three separate
+  causes, all found by measuring rather than looking: the examiner's wrapper was 1000px against the
+  dashboard's 1120 (now one shared rule, since keeping them apart is what let them drift twice);
+  `.home-block:first-of-type` stopped matching once the coin — also a `<section>` — was put above
+  it, so one side collapsed a 56px margin under the coin and the other used 26; and between 760 and
+  900 the header grew from 70px to 82 on the learning side only, which, being sticky, pushed that
+  side's whole page down 12px. Verified equal at 320, 375, 768, 900 and 1280.
 - **Three more defects, all found by verification.** Two tap targets under the project's 44px floor
   — the calculator's Normal/Scientific toggle at 30px and the bag's close button at 29px — which
   the first audit missed because it ran with the bag shut. And `has-resume-bar` outlived the

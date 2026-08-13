@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow, noarchive">
-  <title>Term 6 Revision — Learn, practise, improve</title>
+  <title>Dungeon — Learn, practise, improve</title>
   <meta name="description" content="A clear Term 6 revision dashboard with source-based practice, progress tracking, and targeted re-attempts.">
   <link rel="stylesheet" href="t6.css">
   <!-- Synchronous and above the fold on purpose: this sets the theme attribute before
@@ -15,20 +15,26 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
+  <!-- One left cluster, one right cluster, and nothing floating in the middle.
+       The bar used to be three children distributed by space-between, which put the
+       figures in the empty middle of a wide screen and slid them about at every width
+       in between. The name and the figures now travel together on the left, the tools
+       sit on the right, and the gap between the two is the only thing that changes
+       size. -->
   <header class="app-header">
-    <button class="brand" id="brand-home" type="button" aria-label="Open revision dashboard">
-      <span class="brand-mark" aria-hidden="true">T6</span>
-      <span><b>Term 6 Revision</b><small>One useful step at a time.</small></span>
+    <button class="brand" id="brand-home" type="button" aria-label="Open the Dungeon dashboard">
+      <span class="brand-mark" aria-hidden="true">D</span>
+      <span><b>Dungeon</b><small>One useful step at a time.</small></span>
     </button>
     <!-- A figure and a count, and no chart. The sparkline drew a line nobody read at a
          size nobody could read it at; the two numbers underneath it were the whole
-         message. -->
-    <div class="header-trend" aria-live="polite">
-      <span><small>Term 6 progress</small><b id="header-trend-value">0%</b></span>
-      <small class="header-trend-note" id="header-trend-note">0 blocks practised</small>
+         message. What the figures *are* depends on the side you are on, which is why
+         the label is set from script. -->
+    <div class="header-stat" aria-live="polite">
+      <small id="header-stat-label">Term 6 progress</small>
+      <p><b id="header-trend-value">0%</b><span id="header-trend-note">0 blocks practised</span></p>
     </div>
-    <!-- Tools sit together so the header keeps three children and its
-         space-between distribution: brand, evidence, tools. -->
+    <!-- Tools sit together as one right-hand cluster. -->
     <div class="header-tools">
       <!-- Three states, not two. A learner whose machine switches at sunset should be
            able to stay on "follow my device", which a plain light/dark toggle throws
@@ -64,23 +70,35 @@
         </button>
         <span class="mode-thumb" id="mode-thumb" aria-hidden="true"></span>
       </div>
-      <!-- The bag. Everything a learner might want mid-session but should not have to
-           leave the page for: a focus timer, and the handful of things about how this
-           app works that change how much you get out of it. -->
-      <button class="bag-button" id="bag-open" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="bag-panel">
-        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="bag-icon">
-          <path d="M3.5 6.5h13l-1 10.5h-11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-          <path d="M7 6.5V5a3 3 0 0 1 6 0v1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-        <span class="bag-label">Bag</span>
-        <span class="bag-timer" id="bag-timer-chip" hidden aria-hidden="true"></span>
-      </button>
+      <!-- Which subject, always reachable. The rail on the dashboard is where you
+           *compare* subjects — how far along each is, when each is sat. This is where
+           you *change* the one you are on, from anywhere, including halfway down a
+           page where the rail is long gone. It goes when the examiner is up: over
+           there the unit is a paper, not a subject. -->
+      <label class="header-subject" id="header-subject-wrap">
+        <span class="sr-only">Current subject</span>
+        <select id="header-subject"></select>
+      </label>
       <div class="account-controls" id="account-controls" hidden>
         <span id="sync-status" role="status" aria-live="polite">Saved online</span>
         <button id="sign-out" type="button">Sign out</button>
       </div>
     </div>
   </header>
+
+  <!-- The bag's own launcher, floating on the right rather than sitting in the
+       header. The header is for what the page is; this is a tool you pick up and put
+       down, and it belongs next to where it opens. It carries the timer's remaining
+       minutes while the timer runs, so the one thing in the bag that keeps working
+       when the bag is shut is still legible with it shut. -->
+  <button class="bag-launcher" id="bag-open" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="bag-panel">
+    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="bag-icon">
+      <path d="M3.5 6.5h13l-1 10.5h-11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M7 6.5V5a3 3 0 0 1 6 0v1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="bag-label">Bag</span>
+    <span class="bag-timer" id="bag-timer-chip" hidden aria-hidden="true"></span>
+  </button>
 
   <!-- The bag: the tools, and nothing else.
        It used to also carry eight notes on how the app works, which made it half

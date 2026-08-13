@@ -835,7 +835,7 @@
    * and a block count belongs to a product you are not currently in. The examiner's
    * own two numbers are how many papers you have finished and what they averaged. */
   function renderHeaderStats() {
-    var label = document.querySelector(".header-trend small");
+    var label = $("header-stat-label");
     if (currentMode() === "exam") {
       var attempts = [];
       Object.keys(profile.examAttempts || {}).forEach(function (courseId) {
@@ -1538,7 +1538,25 @@
     return host;
   }
 
+  /* The header's subject control, kept in step with the rail rather than competing
+     with it: both read and write the same `profile.selectedCourse`, and this one is
+     rebuilt from the same ordering, so whichever you use the other agrees. */
+  function renderHeaderSubject() {
+    var select = $("header-subject");
+    if (!select) return;
+    var order = orderedCourseIds(profile.subjectSort === "hardest" ? "hardest" : "exam");
+    /* The code alone. The strong-count belongs to the rail, which shows all four at
+       once and can be compared; repeating it here bought a number you cannot compare
+       against anything and cost the width that keeps this control on a 320px phone. */
+    select.innerHTML = order.map(function (courseId) {
+      return "<option value='" + escapeHtml(courseId) + "'" +
+        (profile.selectedCourse === courseId ? " selected" : "") + ">" +
+        escapeHtml(getCourse(courseId).shortTitle) + "</option>";
+    }).join("");
+  }
+
   function renderCourseCards() {
+    renderHeaderSubject();
     var grid = $("course-grid");
     grid.innerHTML = "";
     var mode = profile.subjectSort === "hardest" ? "hardest" : "exam";
@@ -5205,6 +5223,10 @@
      the thing behind them. */
   function setBagOpen(open, restoring) {
     $("bag-panel").hidden = !open;
+    /* The launcher stands where the panel opens, so it steps aside while the panel is
+       there — two bags in the same corner, one of them a button for opening the bag
+       that is already open, is not a choice anyone needs. */
+    $("bag-open").hidden = open;
     $("bag-open").setAttribute("aria-expanded", open ? "true" : "false");
     /* Where it was left is where it stays. A floating tool that shut itself every time
        you changed screens would have to be reopened once per lesson, which is most of
@@ -6260,6 +6282,16 @@
     }
     $("course-grid").addEventListener("scroll", updateRailScrollCue, {passive: true});
     window.addEventListener("resize", updateRailScrollCue);
+    /* Changing subject from the header does exactly what the rail's card does, and
+       then puts you on the dashboard: the control is visible from inside a lesson,
+       and silently repointing the app underneath a screen that does not show the
+       subject would be a change you could not see. */
+    $("header-subject").addEventListener("change", function (event) {
+      profile.selectedCourse = event.target.value;
+      saveProfile();
+      if (!$("dashboard-screen").classList.contains("active")) goDashboard();
+      else renderDashboard();
+    });
     $("subject-sort").addEventListener("change", function (event) {
       profile.subjectSort = event.target.value === "hardest" ? "hardest" : "exam";
       saveProfile();

@@ -194,23 +194,37 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .screen.active { display: block; }
 .eyebrow { margin: 0; color: var(--blue); font-size: var(--t-micro); font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
 
-.app-header { position: sticky; top: 0; z-index: 20; min-height: 70px; padding: 10px clamp(18px,4vw,54px); display: flex; align-items: center; justify-content: space-between; gap: 24px; background: var(--paper-veil); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
-.brand { display: flex; align-items: center; gap: 12px; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
-.brand-mark { width: 42px; height: 42px; display: grid; place-items: center; color: var(--on-deep); background: var(--deep); border-radius: var(--r-panel); font-weight: 900; letter-spacing: -.04em; }
+/* Two clusters, not three floating children.
+   -------------------------------------------------------------------------
+   `space-between` across brand / figures / tools put the figures wherever the
+   window happened to leave room — middle-left on a laptop, adrift on a wide
+   screen, and moving the whole way at every width in between. The name and the
+   figures are one left-hand group separated by a rule; the tools are pushed right
+   by a single auto margin. Only the gap between the two groups resizes. */
+.app-header { position: sticky; top: 0; z-index: 20; min-height: 70px; padding: 10px clamp(16px,3vw,40px); display: flex; align-items: center; gap: 20px; background: var(--paper-veil); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+.brand { display: flex; align-items: center; gap: 11px; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
+.brand-mark { width: 40px; height: 40px; display: grid; place-items: center; color: var(--on-deep); background: var(--deep); border-radius: var(--r-card); font: 900 19px/1 Georgia, serif; letter-spacing: -.02em; }
 .brand b, .brand small { display: block; }
-.brand b { font-size: 15px; }
+.brand b { font: 650 17px/1.15 Georgia, serif; }
 .brand small { color: var(--muted); font-size: var(--t-micro); }
-.header-trend { display: flex; align-items: center; gap: 12px; }
-.header-trend > span { min-width: 92px; }
-.header-trend small, .header-trend b { display: block; }
-.header-trend > span > small { color: var(--muted); font-size: var(--t-micro); text-transform: uppercase; letter-spacing: .08em; }
-.header-trend b { margin-top: 2px; font-size: 15px; }
-.header-trend-note { max-width: 150px; color: var(--muted); font-size: var(--t-micro); }
-.spark-area { fill: var(--green-fill); }
-.spark-line { fill: none; stroke: var(--green); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.spark-empty { fill: none; stroke: var(--line-strong); stroke-width: 2; stroke-dasharray: 5 6; vector-effect: non-scaling-stroke; }
-.spark-dot { fill: var(--card); stroke: var(--green); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
-.header-tools { display: flex; align-items: center; gap: 10px; }
+
+/* The figures. One label, one value, one note, always in that order and always on
+   the same two lines, so the block is the same shape whichever side of the product
+   it is reporting on. */
+.header-stat { padding-inline-start: 20px; border-inline-start: 1px solid var(--line); }
+.header-stat > small { display: block; color: var(--muted); font-size: var(--t-micro); font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+.header-stat > p { display: flex; align-items: baseline; gap: 9px; margin: 3px 0 0; }
+.header-stat b { font-size: 17px; font-variant-numeric: tabular-nums; }
+.header-stat span { color: var(--muted); font-size: var(--t-micro); }
+
+/* The subject control. Sized to the code it shows rather than to the longest name,
+   because the codes are what the rest of the app calls the subjects. */
+.header-subject { display: inline-flex; align-items: center; }
+.header-subject select { min-height: 44px; padding: 0 30px 0 12px; color: inherit; background: var(--card) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23808d85' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 11px center/10px 6px; border: 1px solid var(--line-strong); border-radius: var(--r-control); cursor: pointer; font: inherit; font-weight: 800; font-size: var(--t-meta); appearance: none; }
+.header-subject select:hover { border-color: var(--deep); }
+:root[data-mode="exam"] .header-subject { display: none; }
+
+.header-tools { display: flex; align-items: center; gap: 10px; margin-inline-start: auto; }
 /* Icon-only, so it carries a 44px target and states itself through the sr-only span
    that is its accessible name — the label updates on every press, which is what tells
    a screen-reader user the cycle advanced. */
@@ -230,7 +244,11 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .account-controls button:hover { background: var(--card-hover); }
 .account-controls button:focus-visible { outline: 3px solid var(--blue-glow); outline-offset: 2px; }
 
-.dashboard-wrap { width: min(1120px,calc(100% - 34px)); margin: 0 auto; padding: 34px 0 72px; }
+/* One rule for both sides, in one place. Keeping the examiner's measure in its own
+   section further down the file meant the two drifted twice — once on width, once on
+   the mobile override that the later rule quietly won. They are the same page turned
+   over; they get the same line. */
+.dashboard-wrap, .exam-home { width: min(1120px,calc(100% - 34px)); margin: 0 auto; padding: 34px 0 72px; }
 .community-reminder { margin-bottom: 18px; padding: 18px 20px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 22px; background: var(--amber-soft); border: 1px solid var(--amber-line); border-left: 5px solid var(--saffron); border-radius: var(--r-panel); }
 .community-reminder h2 { margin: 3px 0 4px; font: 650 23px/1.12 Georgia, serif; }
 .community-reminder p:not(.eyebrow) { margin: 0; color: var(--muted); }
@@ -244,6 +262,12 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
  * plus the serif question is the only signpost a block needs. */
 .home-block { margin-top: 56px; }
 .home-block:first-of-type { margin-top: 0; }
+/* The coin owns the space beneath itself, on both sides.
+   `:first-of-type` stopped matching the first block once the coin — also a
+   <section> — was put above it, so the learning system collapsed a 56px block
+   margin under the coin while the examiner used the coin's own 26px. The two
+   sides began 30px apart vertically: same left edge, different first line. */
+.coin + .home-block { margin-top: 0; }
 .block-heading { margin-bottom: 18px; }
 .block-heading h2 { margin: 6px 0 0; font: 650 clamp(28px,3.4vw,40px)/1.06 Georgia, serif; letter-spacing: -.02em; }
 .block-note { max-width: 620px; margin: 9px 0 0; color: var(--muted); font-size: var(--t-meta); }
@@ -997,10 +1021,26 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
      must keep a 44px height regardless of the art inside it. */
   .brand { min-height: 44px; }
   .brand-mark { width: 38px; height: 38px; }
-  .header-trend { gap: 9px; }
-  .header-trend > span { min-width: 0; }
-  .header-trend > span > small, .header-trend-note { display: none; }
+  /* Tighter, and the note goes: at this width the label and the figure are the
+     message and the sentence beside them is what pushes the bar out of shape. */
+  .header-stat { padding-inline-start: 14px; }
+  .header-stat span { display: none; }
   .account-controls span { display: none; }
+
+  /* Make room for the hero rather than moving it.
+     -------------------------------------------------------------------------
+     On a phone the recommendation sat roughly 700px down, behind a switch, a
+     heading, a subject picker and a paragraph about the subject — so the page
+     opened on four decisions and buried the one it had already made for you.
+     Reordering was the wrong fix: the picker belongs above the thing it changes.
+     So everything above the hero gets smaller instead. The cards keep the four
+     facts that identify a subject and lose the full course title, which the hero
+     names in full two inches below, and the description paragraph goes with it. */
+  .course-card { min-height: 0; padding: 9px 11px; }
+  .course-card .course-name { display: none; }
+  .subject-identity { display: none; }
+  .rail-heading { gap: 8px; }
+  .subject-rail { gap: 9px; }
   .dashboard-wrap, .exam-home { width: min(100% - 20px,1120px); padding-top: 14px; }
   .community-reminder { grid-template-columns: 1fr; padding: 16px; }
   .community-actions { justify-content: stretch; }
@@ -1115,7 +1155,13 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
   .results-actions .button { width: 100%; }
 }
 
+/* The narrowest phones. Four controls, 320px, and no horizontal scroll: the gaps
+   tighten and the switch gives up its side padding. Measured, not guessed. */
 @media (max-width: 430px) {
+  .app-header { gap: 8px; padding-inline: 12px; }
+  .header-tools { gap: 6px; }
+  .mode-option { padding: 0 8px; }
+  .header-subject select { padding: 0 26px 0 9px; background-position: right 8px center; }
   .brand b { font-size: var(--t-meta); }
   .account-controls { gap: 0; }
   .community-actions { display: grid; }
@@ -1400,12 +1446,24 @@ body.coin-in-view .mode-switch { max-width: 0; opacity: 0; border-width: 0; marg
 /* A phone shows one above the other, and the side you are on goes second: the
    useful half of a switch is the half you are not on, and it should not need a
    scroll to reach. */
+/* On a phone it is a switch, not two panels.
+   -------------------------------------------------------------------------
+   Stacked, with the side you were *not* on floated to the top, it was 190px of
+   the first screenful and — worse — the thing under your thumb changed meaning
+   every time you used it. You could tap the same spot repeatedly and be thrown
+   back and forth between two products, which is the opposite of knowing where
+   you are.
+
+   So: one row, both halves always in the same place, Learn on the left where the
+   switch in the header has it, and just the names. The "next" line goes — the
+   hero directly beneath already says what is next on this side, and the other
+   side says its own the moment you get there. 52px instead of 190. */
 @media (max-width: 700px) {
-  .coin { grid-template-columns: 1fr; }
-  .coin-side { padding: 13px 16px 14px; }
-  .coin-side + .coin-side { border-inline-start: 0; }
-  .coin-side.is-here { order: 2; }
-  .coin-side.is-there { order: 1; border-block-end: 1px solid var(--line); }
+  .coin { margin-bottom: 18px; }
+  .coin-side { padding: 0 14px; min-height: 52px; display: flex; flex-direction: column; justify-content: center; }
+  .coin-side.is-here, .coin-side.is-there { order: 0; }
+  .coin-name { margin: 0; font-size: 16px; }
+  .coin-next { display: none; }
 }
 
 /* The switch on a phone.
@@ -1422,8 +1480,16 @@ body.coin-in-view .mode-switch { max-width: 0; opacity: 0; border-width: 0; marg
    breakpoint is not the header's usual 700: with the switch in it, the full-size
    header measures wider than the window until about 738px, so the compact form is
    held until 760 rather than handing anyone a sideways-scrolling header. */
+/* The figures need more room than the header has once the subject control is in it.
+   Between about 760 and 900 the bar could still fit everything only by wrapping the
+   brand and the figures onto three lines each, which grew the header from 70px to
+   82 — and since it is sticky, that pushed the whole page down by 12px on one side
+   of the product and not the other. The figures go first: they are the one thing in
+   the bar that is a readout rather than a control. */
+@media (max-width: 900px) {
+  .header-stat { display: none; }
+}
 @media (max-width: 760px) {
-  .header-trend { display: none; }
   .brand > span:not(.brand-mark) { display: none; }
   /* Narrower only. The height is the one thing that must not shrink on the device
      where it is actually being tapped. */
@@ -1477,8 +1543,12 @@ body.coin-in-view .mode-switch { max-width: 0; opacity: 0; border-width: 0; marg
 
 /* The bag. A drawer rather than a modal, because its whole value is being readable
    while the thing it describes is still on screen. */
-.bag-button { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 8px 13px; color: inherit; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-control); cursor: pointer; font: inherit; font-weight: 800; }
-.bag-button:hover { border-color: var(--deep); }
+/* The launcher floats with the thing it opens, on the right, above the corner. It
+   is not header furniture: the header says what the page is, and this is a tool you
+   pick up and put down. */
+.bag-launcher { position: fixed; z-index: 40; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 8px 15px; color: inherit; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-pill); box-shadow: var(--shadow-deep); cursor: pointer; font: inherit; font-weight: 800; transition: transform .16s ease, border-color .16s ease; }
+.bag-launcher:hover { border-color: var(--deep); transform: translateY(-1px); }
+body.has-resume-bar .bag-launcher { inset-block-end: calc(90px + env(safe-area-inset-bottom, 0px)); }
 .bag-icon { width: 19px; height: 19px; }
 .bag-timer { padding: 2px 7px; background: var(--saffron); color: var(--on-saffron); border-radius: var(--r-pill); font-size: var(--t-small); font-variant-numeric: tabular-nums; }
 /* It floats, and it does not dock.
@@ -1521,9 +1591,13 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 .calc-mode[aria-pressed="true"] { color: var(--paper); background: var(--ink); }
 
 @media (max-width: 720px) {
+  /* Icon only, and a circle rather than a pill: on a phone this floats over content
+     the whole time, so it should occupy a thumb and no more. */
   .bag-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-  /* On a phone it spans the width and sits on the bottom edge — still floating over
-     the page, just with nowhere sensible to float to. */
+  .bag-launcher { inset-inline-end: 12px; inset-block-end: calc(12px + env(safe-area-inset-bottom, 0px)); min-width: 52px; min-height: 52px; padding: 0; justify-content: center; }
+  body.has-resume-bar .bag-launcher { inset-block-end: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  /* On a phone the panel spans the width and sits on the bottom edge — still floating
+     over the page, just with nowhere sensible to float to. */
   .bag-panel { inset-inline: 10px; width: auto; inset-block-end: calc(10px + env(safe-area-inset-bottom, 0px)); max-height: 74vh; }
   body.has-resume-bar .bag-panel { inset-block-end: calc(84px + env(safe-area-inset-bottom, 0px)); }
 }
@@ -1531,12 +1605,7 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 /* The examiner's front door. Its own product, so its own room: papers as cards, sets
    as the only control on each, and the two honest warnings — the caveat and the
    shortfall — inside the card rather than a click away. */
-/* The same measure as the dashboard, to the pixel. The two sides were 1120 and 1000
-   wide with different side padding, so crossing between them slid every left edge on
-   the page — the coin, the headings, the cards — by a few pixels. Two products can
-   look different; they cannot sit on different margins, or the switch reads as a page
-   reload rather than a turn of the same page. */
-.exam-home { width: min(1120px, calc(100% - 34px)); margin: 0 auto; padding: 34px 0 72px; }
+/* .exam-home's measure is set with .dashboard-wrap's, near the top of this file. */
 .exam-home-head { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 18px; margin-bottom: 26px; }
 .exam-home-head h1 { margin: 4px 0 8px; font: 650 clamp(30px,4.2vw,42px)/1.1 Georgia, serif; }
 .exam-home-lede { max-width: 62ch; margin: 0; color: var(--muted); font-size: var(--t-body); line-height: 1.55; }
@@ -1560,9 +1629,8 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 .exam-set small { color: var(--muted); font-size: var(--t-small); }
 
 @media (max-width: 720px) {
-  /* Padding only — the width stays the dashboard's, set alongside it above, so the
-     two sides keep the same left edge at every size. */
-  .exam-home { padding: 20px 0 60px; }
+  /* No width or padding here: both come from the shared rule, so the two sides keep
+     the same left edge and the same first line at every size. */
   .exam-home-head { flex-direction: column-reverse; align-items: stretch; }
 }
 
