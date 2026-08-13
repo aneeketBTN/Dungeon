@@ -140,6 +140,78 @@ The hero repeats the shortfall warning rather than staying quiet about it, and
   figure is the first thing on the dashboard directly beneath, so what is given up is a
   duplicate rather than a fact.
 
+## Second pass, same day — the coin, the header, and the bag
+
+The owner asked for the crossing to read as two sides of one thing rather than a
+control in the corner, and for the bag to become a tool rather than a manual.
+
+**Screenshots exist for this half.** Part-way through, the Browser pane was displayed
+and the tab began compositing — `document.timeline.currentTime` started advancing and
+`computer{action:"screenshot"}` returned. The coin was reviewed visually in all four
+states (learn side / examiner side × light / dark), as was the floating bag. The
+images were read in-session rather than written to this directory: the pane's
+screenshot returns an image to the agent and has no path to disk. **A saved-artefact
+pass is still owed**, but "nobody has looked at it" is no longer true of these
+surfaces.
+
+### The coin
+
+- Renders on both home pages from one function; the dashboard face marks Learn as
+  current and the examiner's marks the examiner, and the halves are exactly equal
+  (559px each at 1280).
+- Crossing works from either face and uses a view transition — the spy counted 1 per
+  crossing, 2 for a there-and-back.
+- The side you are on is `aria-current="true"` and inert; the other side is the whole
+  panel as a `<button>` with an `aria-label`, so colour is never the only signal.
+- **A dark-mode defect the screenshot caught.** The filled "you are here" side first
+  used `--deep`, which is near-black in *both* themes: on a dark page it was a black
+  panel on a near-black background and the signal was gone. It now uses `--ink`, which
+  flips with the theme. Confirmed by eye in both themes after the change.
+- On a phone the halves stack and the side you are *not* on comes first, so the useful
+  half never needs a scroll.
+
+### The header
+
+- "Term 6 evidence" is "Term 6 progress"; the sparkline is gone from the markup, and
+  `sparklineMarkup` and `trendDirectionCopy` went with it — their only caller was the
+  header. The note is now `N blocks practised`, counted directly rather than by
+  rebuilding the evidence model at every historical block to plot a line nobody read.
+- The switch folds away while a coin is on screen and unfolds as it scrolls off,
+  measured on both home pages: 0px wide at the top, 138px once past the coin, back to
+  0 on the way up. Width is what animates, not opacity — fading alone left a 158px
+  hole in the header, and removing it outright jumped everything beside it.
+
+### The bag
+
+- Two sections, Focus timer and Calculator. The eight guidance notes are gone.
+- The calculator is the examiner's, extracted to `buildCalculator(mount, kind)` and
+  mounted twice with separate buffers. Both keypads verified in the bag: `7 × 8 =`
+  → **56** on normal, `√9` → **3** on scientific. The choice persists to the profile.
+- It floats bottom-right with no scrim, lifts clear of the resume bar, and spans the
+  width on a phone (10→350 at 375). Where it was left is where it stays, across
+  screens and reloads.
+- **Two tap targets under the 44px floor, both found by the project's own probe and
+  both fixed:** the calculator's Normal/Scientific toggle at 30px, and the bag's close
+  button at 29px. The audit had first run with the bag shut, which found neither —
+  worth remembering: a panel that is closed is a panel that is not being audited.
+
+### The resume bar
+
+- It used to blink into existence, because it is toggled with `hidden` and
+  `display: none` cannot be transitioned. It now rises and fades using
+  `transition-behavior: allow-discrete` with `@starting-style`. Traced frame by frame:
+  entry runs opacity 0.02→1 with translateY 13px→0 over ~190ms; exit reverses and
+  `display` holds until the animation finishes.
+- `pointer-events` is dropped at the *start* of the exit, not the end: for those 280ms
+  it is still laid out, and a fading bar that can still take a tap is worse than one
+  that pops.
+
+### One more defect
+
+`has-resume-bar` stayed on `<body>` after leaving the dashboard, so anything
+positioning itself around the bar — now including the bag — made room for a bar that
+was not on screen. Cleared in `showScreen`.
+
 ## Gates
 
 - `node --check app/t6.js` clean.

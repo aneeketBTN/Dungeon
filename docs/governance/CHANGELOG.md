@@ -63,6 +63,40 @@ measured rather than assumed).
   technique that gives a real answer (drive `getAnimations()` to the end, measure layout in
   fixed-width same-origin iframes). The Chrome-extension path was tried at the owner's suggestion
   and reported "not connected" three times. **Pixel acceptance remains owed.**
+- **The crossing became a coin, and the header switch became its shorthand.** A slim two-panel
+  band is now the first thing on both home pages — Learn on the left, Examiner on the right, one
+  object split down the middle with a single border around both halves. The side you are on is
+  filled in its own colour (ink for the learning system, saffron for the examiner) and is inert and
+  `aria-current`; the other side is the whole panel as a button. It replaced the dark "Sit a full
+  mock" invite and the examiner's "← The learning system" button, both of which were a second door
+  to a place the coin already goes. The header switch now folds away while a coin is on screen and
+  unfolds as it scrolls off — width animates rather than opacity, because a fade left a 158px hole
+  in the header and a removal jumped everything beside it.
+- **A dark-mode defect the first screenshot of the session caught.** The filled "you are here" side
+  used `--deep`, which is near-black in *both* themes, so on a dark page it was a black panel on a
+  near-black background — the one signal the design asked colour to carry, invisible. It uses
+  `--ink` now, which flips with the theme.
+- **The header says progress and shows no chart.** "Term 6 evidence" is "Term 6 progress", the
+  sparkline is gone, and the note is `N blocks practised`. `sparklineMarkup` and
+  `trendDirectionCopy` went with it — the header was their only caller — and the count is taken
+  directly instead of rebuilding the evidence model at every historical block to plot a 96px line.
+- **The bag is tools only, and it floats.** The eight guidance notes are gone: it was half toolbox
+  and half manual, and the manual half is read once and in the way every time after. What is left
+  is what you reach for *during* work — the focus timer, and the examiner's calculator, extracted
+  to `buildCalculator(mount, kind)` and mounted twice with separate buffers so both keypads are
+  available while practising (which one you are allowed is a fact about the paper). It is a rounded
+  card floating above the corner with no scrim, since a dimmed page says "deal with this first" and
+  these are for using *while* reading what is behind them. Where you leave it is where it stays.
+- **The resume bar arrives and leaves instead of blinking.** It is toggled with `hidden`, and
+  `display: none` cannot be transitioned the ordinary way; it now rises and fades via
+  `transition-behavior: allow-discrete` with `@starting-style`. Traced frame by frame: 13px→0 and
+  opacity 0.02→1 over ~190ms in, reversed out, with `pointer-events` dropped at the *start* of the
+  exit rather than the end.
+- **Three more defects, all found by verification.** Two tap targets under the project's 44px floor
+  — the calculator's Normal/Scientific toggle at 30px and the bag's close button at 29px — which
+  the first audit missed because it ran with the bag shut. And `has-resume-bar` outlived the
+  dashboard, so anything positioned around that bar went on making room for a bar that was not
+  there.
 - **Deferred, by the owner's instruction ("everything except SCLM"):** the two SCLM Section B
   numericals still blocked behind authoring `SCLM-M03-L06`'s lesson, and the two SCLM prompt-variety
   warnings (Section A forces 14 questions to share one prompt, Section C forces 3).

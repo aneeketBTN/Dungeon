@@ -1,5 +1,22 @@
 # Dungeon
-> **One switch between two products (2026-08-13; newest):** the header carries a Learn / Exam
+> **Two sides of one coin (2026-08-13; newest):** the crossing between the learning system and the
+> examiner is a slim two-panel band at the top of both home pages — Learn left, Examiner right, one
+> object split down the middle. The side you are on is filled in its own colour (`--ink`, which
+> flips with the theme, and saffron) and is inert and `aria-current`; the other side is the whole
+> panel as a button. It replaced the dashboard's dark mock invite and the examiner's return button.
+> The header switch is now its shorthand: it folds away while a coin is on screen and unfolds as one
+> scrolls off, animating width rather than opacity, and it is withheld entirely while a paper is
+> running. The header itself lost its sparkline — "Term 6 progress", a percentage, and
+> `N blocks practised`. **The bag is tools only and floats:** the focus timer and the examiner's
+> calculator (both keypads, switchable, persisted), in a rounded card above the corner with no
+> scrim, left where you put it. The resume bar rises and fades instead of blinking, via
+> `allow-discrete` + `@starting-style`. Same evidence file as below, second half. **Screenshots
+> exist for these surfaces** — the pane began compositing mid-session and the coin was reviewed in
+> all four theme/side combinations, which immediately caught a dark-mode defect no DOM check would
+> have (`--deep` is near-black in both themes, so the filled side vanished on a dark page). Saved
+> artefacts are still owed.
+>
+> **One switch between two products (2026-08-13):** the header carries a Learn / Exam
 > segmented control, and moving between the two sides runs through `document.startViewTransition` —
 > the old page leaves the way you came from, the new one arrives from the side you pressed, and the
 > header is held still by its own `view-transition-name` because furniture on both sides should not

@@ -20,10 +20,12 @@
       <span class="brand-mark" aria-hidden="true">T6</span>
       <span><b>Term 6 Revision</b><small>One useful step at a time.</small></span>
     </button>
+    <!-- A figure and a count, and no chart. The sparkline drew a line nobody read at a
+         size nobody could read it at; the two numbers underneath it were the whole
+         message. -->
     <div class="header-trend" aria-live="polite">
-      <span><small>Term 6 evidence</small><b id="header-trend-value">0%</b></span>
-      <svg id="header-spark" class="header-spark" viewBox="0 0 96 30" preserveAspectRatio="none" aria-hidden="true"></svg>
-      <small class="header-trend-note" id="header-trend-note">No practice block yet</small>
+      <span><small>Term 6 progress</small><b id="header-trend-value">0%</b></span>
+      <small class="header-trend-note" id="header-trend-note">0 blocks practised</small>
     </div>
     <!-- Tools sit together so the header keeps three children and its
          space-between distribution: brand, evidence, tools. -->
@@ -80,22 +82,25 @@
     </div>
   </header>
 
-  <!-- The bag drawer. Not a modal over the question: a learner should be able to read
-       "how do I get more out of this" while the thing it describes is still on screen. -->
-  <div class="bag-scrim" id="bag-scrim" hidden></div>
+  <!-- The bag: the tools, and nothing else.
+       It used to also carry eight notes on how the app works, which made it half
+       toolbox and half manual — and the manual half is read once and then in the way
+       every time you open it for the timer. What is left is what you reach for
+       *during* work: a clock and a calculator.
+
+       It floats rather than docking to an edge, because both tools are used while
+       something else is on screen and being read. It can be put away, and the button
+       in the header brings it back. -->
   <aside class="bag-panel" id="bag-panel" role="dialog" aria-modal="false" aria-labelledby="bag-title" hidden>
     <div class="bag-head">
       <h2 id="bag-title">Bag</h2>
-      <button class="icon-button" id="bag-close" type="button" aria-label="Close the bag">✕</button>
+      <button class="icon-button" id="bag-close" type="button" aria-label="Put the bag away">✕</button>
     </div>
 
     <!-- Focus timer. Twenty-five and five, and it says why rather than assuming
          everyone already knows what a pomodoro is. -->
     <section class="bag-section" aria-labelledby="bag-timer-title">
       <h3 id="bag-timer-title">Focus timer</h3>
-      <p class="bag-note">Twenty-five minutes of work, five of rest. The point is not the
-        number — it is deciding in advance when you stop, so the break is a plan rather
-        than a drift.</p>
       <div class="pomodoro">
         <b class="pomodoro-clock" id="pomodoro-clock" role="timer" aria-live="off">25:00</b>
         <p class="pomodoro-phase" id="pomodoro-phase">Focus · not started</p>
@@ -108,35 +113,20 @@
       </div>
     </section>
 
-    <!-- What actually changes your result here. Written from what the app does, not
-         from general study advice. -->
-    <section class="bag-section" aria-labelledby="bag-guide-title">
-      <h3 id="bag-guide-title">Getting the most out of Dungeon</h3>
-      <ul class="bag-guide">
-        <li><b>Lessons are unscored on purpose.</b> Nothing you do in a lesson counts for
-          or against you, so read them slowly. A lecture's lesson always arrives before
-          the first question that tests it — if you are seeing one, the question is next.</li>
-        <li><b>Read the line that starts "This choice assumed".</b> Every wrong answer
-          names the specific belief that produced it, not just the right answer. That
-          sentence is the whole point of getting it wrong here rather than in August.</li>
-        <li><b>A question you miss comes back in a different form.</b> That is deliberate.
-          Recognising the same wording again proves nothing, so the re-attempt changes the
-          shape and asks for the same idea.</li>
-        <li><b>Mocks never score you.</b> The examiner writes nothing to your progress — a
-          timed, unhelped paper is not the condition your mastery is measured on. What a
-          mock does is reorder what you are taught next.</li>
-        <li><b>Take the repair in sittings.</b> After a mock, the four concepts that cost
-          you most come first and the rest wait. Finishing a short sitting beats
-          abandoning a long one.</li>
-        <li><b>Answer the confidence prompt honestly.</b> It is not graded. Saying you were
-          sure and being wrong is the most useful signal in the app, and skipping it costs
-          you nothing.</li>
-        <li><b>Practise across subjects, not one to exhaustion.</b> The papers are two days
-          apart and the subject rail is in exam order for that reason.</li>
-        <li><b>What this app will not tell you</b> is what you will score. It knows what you
-          have and have not shown you can do. Treat anything that sounds like a prediction
-          as a mistake on our part.</li>
-      </ul>
+    <!-- The same calculator the examiner hands you, available while you practise.
+         Both keypads, switchable, because which one you are allowed is a fact about
+         the paper: BRGSA gives you a normal calculator and SCLM a scientific one, so
+         practising on the wrong one is practising a habit you cannot use. -->
+    <section class="bag-section" aria-labelledby="bag-calc-title">
+      <div class="bag-section-head">
+        <h3 id="bag-calc-title">Calculator</h3>
+        <div class="calc-modes" id="bag-calc-modes" role="group" aria-label="Which calculator">
+          <button type="button" class="calc-mode" data-calc-mode="basic" aria-pressed="true">Normal</button>
+          <button type="button" class="calc-mode" data-calc-mode="scientific" aria-pressed="false">Scientific</button>
+        </div>
+      </div>
+      <div class="calc-pad" id="bag-calculator"></div>
+      <small class="bag-note" id="bag-calc-note">BRGSA allows a normal calculator, SCLM a scientific one. SPMS and IBM allow none.</small>
     </section>
   </aside>
 
@@ -154,6 +144,14 @@
             <button class="button primary" id="community-joined" type="button" disabled>Open the invite first</button>
           </div>
         </aside>
+
+        <!-- Two sides of one thing, and the first thing on the page. Learn on the left,
+             the examiner on the right, in one object split down the middle rather than
+             two cards that happen to sit together — the point is that these are two
+             faces of the same product, not a product and its add-on. The identical band
+             is the first thing on the examiner's home with the sides swapped, so it
+             reads as one coin turning over. Built by renderCoin(). -->
+        <section class="coin" id="coin-home" aria-label="The two sides of Dungeon"></section>
 
         <!-- The homepage answers four questions in order: what am I doing, where can I
              start, how am I doing, and what else is here. Each question is asked once
@@ -211,27 +209,10 @@
           </div>
         </section>
 
-        <!-- The second product, named as one.
-             Everything above and below this is the learning system, which sequences
-             to teach: a lecture before the question that cites it, weak concepts
-             first, feedback on every answer. The examiner does none of that. Giving
-             it its own surface is the honest way to say the two are not the same
-             activity, so a learner never mistakes a practice run for a rehearsal or
-             a mock score for evidence of what they know. -->
-        <section class="home-block exam-invite-block" id="home-exam" aria-labelledby="exam-invite-title">
-          <div class="exam-invite">
-            <div class="exam-invite-copy">
-              <p class="eyebrow">Dungeon, the examiner</p>
-              <h2 id="exam-invite-title">Sit a full mock under exam conditions</h2>
-              <p>Real length, real sections, real marking. Questions arrive in the paper's own order,
-                not a teaching order, and nothing is explained until you submit.</p>
-              <p class="exam-invite-meta" id="exam-invite-meta"></p>
-            </div>
-            <div class="exam-invite-actions">
-              <button class="button primary" id="open-exam" type="button">Open the examiner <span aria-hidden="true">→</span></button>
-            </div>
-          </div>
-        </section>
+        <!-- The examiner's invitation used to live here as a second, larger panel. The
+             coin at the top of the page now says the same thing in the same place as
+             the way across, and one page offering the same door twice is the duplicate
+             this homepage was reorganised to remove. -->
 
         <section class="home-block" id="home-start" aria-labelledby="start-title">
           <div class="block-heading">
@@ -493,6 +474,11 @@
          the paper is, what this build could not fill, and what happened last time. -->
     <section class="screen exam-home-screen" id="exam-home-screen" aria-labelledby="exam-home-title">
       <div class="exam-home">
+        <!-- The same coin as the dashboard's, turned over: the examiner is the side you
+             are on, and the learning system is one press to the left. This is also the
+             way back, which is why the head no longer carries its own return button. -->
+        <section class="coin" id="coin-exam" aria-label="The two sides of Dungeon"></section>
+
         <header class="exam-home-head">
           <div>
             <p class="eyebrow">Dungeon, the examiner</p>
@@ -501,7 +487,6 @@
               counts, the real marks, two hours, and no help until you submit. Each set is a
               different draw, so a second sitting is a second paper.</p>
           </div>
-          <button class="button secondary" id="exam-home-leave" type="button">← The learning system</button>
         </header>
 
         <!-- One recommended paper, above everything. A candidate opening this wants to

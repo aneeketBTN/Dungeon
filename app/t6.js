@@ -127,6 +127,12 @@
       totalAnswers: 0,
       blockSequence: 0,
       horizon: "today",
+      /* Which keypad the bag opens on, and whether it is out. Both read defensively
+         everywhere they are used, so a profile saved before they existed needs no
+         migration. It starts put away: a first-time learner should meet the page, not
+         a panel sitting on top of it. */
+      bagCalculator: "basic",
+      bagOpen: false,
       builder: clone(DEFAULT_BUILDER),
       primerState: {},
       lessonsRead: {}
@@ -309,6 +315,11 @@
   function showScreen(id) {
     $all(".screen").forEach(function (screen) { screen.classList.toggle("active", screen.id === id); });
     markMode(EXAM_SCREENS[id] ? "exam" : "learn");
+    syncModeSwitchVisibility();
+    /* The resume bar lives inside the dashboard, so leaving that screen hides it — but
+       the body class outlived it, and anything positioned around the bar (the bag) went
+       on making room for a bar that was not there. */
+    if (id !== "dashboard-screen") document.body.classList.remove("has-resume-bar");
     window.scrollTo(0, 0);
     if (id === "dashboard-screen") window.requestAnimationFrame(renderMasteryRadar);
   }
@@ -756,6 +767,8 @@
     renderMasteryRadar();
     renderSelectedSubject();
     renderRecommendation();
+    /* After renderRecommendation, which decides the "next" line the learn face shows. */
+    renderCoin("coin-home", "learn");
     renderPracticeBuilder();
     renderProgressStory();
     renderCommunityReminder();
@@ -795,49 +808,24 @@
     });
   }
 
-  // A fixed 0-100 scale: an autoscaled sparkline would make three points of evidence look like a
-  // steep climb.
-  function sparklineMarkup(points, width, height, pad) {
-    pad = pad || 4;
-    var innerWidth = width - pad * 2;
-    var innerHeight = height - pad * 2;
-    var baseline = height - pad;
-    if (!points.length) return "<path class='spark-empty' d='M" + pad + " " + baseline + " H" + (width - pad) + "'/>";
-    var plotted = points.map(function (point, index) {
-      var x = points.length === 1 ? width - pad : pad + index / (points.length - 1) * innerWidth;
-      return {x: x, y: baseline - Math.max(0, Math.min(100, point.value)) / 100 * innerHeight};
+  /* How many distinct practice blocks are on record. Counted directly rather than
+     taken from trendFromCourses, which rebuilds the evidence model at every block in
+     history to plot a line — real work for a number that is just "how many". */
+  function practiceBlockCount() {
+    var blocks = {};
+    COURSE_IDS.forEach(function (courseId) {
+      getCourse(courseId).concepts.forEach(function (concept) {
+        attemptsFor(courseId, concept.id).forEach(function (attempt) { blocks[attemptBlock(attempt)] = true; });
+      });
     });
-    var last = plotted[plotted.length - 1];
-    if (plotted.length === 1) {
-      return "<path class='spark-empty' d='M" + pad + " " + last.y.toFixed(1) + " H" + (width - pad) + "'/>" +
-        "<circle class='spark-dot' cx='" + last.x.toFixed(1) + "' cy='" + last.y.toFixed(1) + "' r='4'/>";
-    }
-    var line = plotted.map(function (point, index) {
-      return (index ? "L" : "M") + point.x.toFixed(1) + " " + point.y.toFixed(1);
-    }).join(" ");
-    var area = line + " L" + last.x.toFixed(1) + " " + baseline + " L" + plotted[0].x.toFixed(1) + " " + baseline + " Z";
-    return "<path class='spark-area' d='" + area + "'/><path class='spark-line' d='" + line + "'/>" +
-      "<circle class='spark-dot' cx='" + last.x.toFixed(1) + "' cy='" + last.y.toFixed(1) + "' r='4'/>";
-  }
-
-  function trendDirectionCopy(points, upper, lower, level) {
-    if (!points.length) return null;
-    if (points.length === 1) return "first";
-    var change = points[points.length - 1].value - points[points.length - 2].value;
-    if (change > 0) return upper.replace("{n}", String(change));
-    if (change < 0) return lower.replace("{n}", String(Math.abs(change)));
-    return level;
+    return Object.keys(blocks).length;
   }
 
   function renderHeaderTrend(overall) {
-    var points = trendFromCourses(COURSE_IDS);
     var current = Math.round((overall.strong + overall.developing * .5) / Math.max(1, overall.total) * 100);
     $("header-trend-value").textContent = current + "%";
-    $("header-spark").innerHTML = sparklineMarkup(points, 96, 30, 3);
-    drawOnce($("header-spark"));
-    var direction = trendDirectionCopy(points, "Up {n} since the last block", "Down {n} since the last block", "Level since the last block");
-    $("header-trend-note").textContent = !direction ? "No practice block yet"
-      : direction === "first" ? "First block recorded" : direction;
+    var blocks = practiceBlockCount();
+    $("header-trend-note").textContent = blocks + " block" + (blocks === 1 ? "" : "s") + " practised";
   }
 
   /* The route to the goal.
@@ -3704,6 +3692,7 @@
   }
 
   function goDashboard() {
+    if (leavingLivePaperRefused()) return;
     session = null;
     selected = null;
     confidence = null;
@@ -4261,6 +4250,7 @@
 
   function beginExam() {
     exam.started = true;
+    syncModeSwitchVisibility();
     $("exam-brief").hidden = true;
     $("exam-runner").hidden = false;
     exam.items[0].visited = true;
@@ -4523,6 +4513,7 @@
     }
     exam.submitted = true;
     window.clearInterval(examTicker);
+    syncModeSwitchVisibility();
     renderExamResult(automatic);
   }
 
@@ -4879,15 +4870,22 @@
     });
   }
 
+  /* Every in-app way out of a running paper goes through here. Two hours is too much
+     to lose to a mis-aimed press, and the browser's own beforeunload guard only covers
+     leaving the page — not the brand button, which is in the header the whole time a
+     paper is running. Returns true when the caller should stop. */
+  function leavingLivePaperRefused() {
+    if (!exam || exam.submitted) return false;
+    if (!window.confirm("Leaving the examiner ends this attempt. Leave anyway?")) return true;
+    window.clearInterval(examTicker);
+    exam = null;
+    syncModeSwitchVisibility();
+    return false;
+  }
+
   function switchMode(mode) {
     if ((pendingMode || currentMode()) === mode) return;
-    /* Leaving a paper mid-attempt would lose it, so the clock is stopped and the
-       attempt dropped deliberately rather than left running behind another screen. */
-    if (mode === "learn" && exam && !exam.submitted) {
-      if (!window.confirm("Leaving the examiner ends this attempt. Leave anyway?")) return;
-      window.clearInterval(examTicker);
-      exam = null;
-    }
+    if (mode === "learn" && leavingLivePaperRefused()) return;
     if (mode === "exam") { openExamHome(); return; }
     crossProducts("learn", function () { renderDashboard(); showScreen("dashboard-screen"); });
   }
@@ -4896,6 +4894,102 @@
     if (!$("mode-switch")) return;
     $all("#mode-switch .mode-option").forEach(function (button) {
       button.addEventListener("click", function () { switchMode(button.dataset.mode); });
+    });
+    watchCoinForSwitch();
+  }
+
+  /* When the header switch is allowed to exist at all.
+   *
+   * Two rules, and they are different kinds of thing. It is *forbidden* on a paper
+   * that is running: there it would be a one-press way to lose two hours, sitting in
+   * the furniture beside an unrelated theme button. It is merely *unnecessary* while
+   * the coin is on screen, because the coin is the same control at full size two
+   * inches below it — so the header stays quiet at the top of a home page and the
+   * switch takes over as the coin scrolls away.
+   *
+   * Each coin records its own visibility on itself, and only the one inside the
+   * screen currently showing is consulted — the other lives in an inactive screen,
+   * which is display:none and never intersects anything. A screen with no coin at all
+   * (a lesson, a paper) therefore keeps the switch, which is the point of having it. */
+  function activeCoin() {
+    var screen = document.querySelector(".screen.active");
+    return screen ? screen.querySelector(".coin") : null;
+  }
+
+  function syncModeSwitchVisibility() {
+    var control = $("mode-switch");
+    if (!control) return;
+    var live = Boolean(exam && exam.started && !exam.submitted);
+    control.hidden = live;
+    var coin = activeCoin();
+    /* Unset reads as visible: a home page renders its coin at the top, and assuming
+       otherwise for the one frame before the observer first fires would flash the
+       switch on and straight back off. */
+    var covered = Boolean(coin) && coin.dataset.onScreen !== "0";
+    document.body.classList.toggle("coin-in-view", !live && covered);
+  }
+
+  /* The handoff. The coin does not literally become the switch — nothing morphs a
+     band into a pill across a scroll — but the switch arrives slightly wide and
+     settles, which is what a collapse looks like, and it arrives exactly as the coin
+     leaves, which is what sells it. */
+  function watchCoinForSwitch() {
+    if (!window.IntersectionObserver) return;
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        entry.target.dataset.onScreen = entry.isIntersecting ? "1" : "0";
+      });
+      syncModeSwitchVisibility();
+    }, {threshold: 0});
+    $all(".coin").forEach(function (node) { observer.observe(node); });
+  }
+
+  /* ---- the coin -------------------------------------------------------------------
+   *
+   * The two sides shown as one object split down the middle, first on both home pages.
+   * Two lines each: the name, and the one thing waiting for you on that side.
+   *
+   * Where you are is carried by colour — the side you are on is filled in its own
+   * colour, ink for the learning system and saffron for the examiner — so it is
+   * answered at a glance rather than read. Colour is never the only signal though: the
+   * side you are on is inert and carries `aria-current`, and the side you are not on is
+   * the whole panel as a button with an arrow on it, which is what a screen reader and
+   * a keyboard get. A half-page target should not require aiming at a link inside it.
+   *
+   * Both faces are built by the same function, so what differs between the dashboard's
+   * render and the examiner's is only which half is standing.
+   */
+  var COIN = {learn: {name: "Learn"}, exam: {name: "Examiner"}};
+
+  function coinNextLearn() {
+    var rec = recommendation(profile.selectedCourse);
+    return recommendationActionLabel(rec) + " · " + rec.minutes;
+  }
+
+  function coinNextExam() {
+    var pick = recommendedMock();
+    if (!pick) return "Four papers, three sets each";
+    return pick.paper.courseId + " · " + examSetLabel(pick.set.set) + " · " + EXAM_MINUTES + " minutes";
+  }
+
+  function renderCoin(mountId, side) {
+    var mount = $(mountId);
+    if (!mount) return;
+    var next = {learn: coinNextLearn, exam: coinNextExam};
+    mount.innerHTML = ["learn", "exam"].map(function (which) {
+      var here = which === side;
+      var copy = COIN[which];
+      var body =
+        "<p class='coin-name'>" + escapeHtml(copy.name) +
+        (here ? "" : " <span class='coin-go' aria-hidden='true'>→</span>") + "</p>" +
+        "<p class='coin-next'><small>Next</small>" + escapeHtml(next[which]()) + "</p>";
+      return here
+        ? "<div class='coin-side coin-" + which + " is-here' aria-current='true'>" + body + "</div>"
+        : "<button type='button' class='coin-side coin-" + which + " is-there' data-coin='" + which +
+          "' aria-label='Go to " + escapeHtml(copy.name) + "'>" + body + "</button>";
+    }).join("");
+    $all("#" + mountId + " [data-coin]").forEach(function (button) {
+      button.addEventListener("click", function () { switchMode(button.dataset.coin); });
     });
   }
 
@@ -5064,12 +5158,41 @@
     renderPomodoro();
   }
 
-  function setBagOpen(open) {
+  /* No scrim any more. A dimmed page said "deal with this first", which is the wrong
+     thing to say about a timer and a calculator — both are for using *while* reading
+     the thing behind them. */
+  function setBagOpen(open, restoring) {
     $("bag-panel").hidden = !open;
-    $("bag-scrim").hidden = !open;
     $("bag-open").setAttribute("aria-expanded", open ? "true" : "false");
+    /* Where it was left is where it stays. A floating tool that shut itself every time
+       you changed screens would have to be reopened once per lesson, which is most of
+       the reason a floating tool is worth having. */
+    if (profile.bagOpen !== open) {
+      profile.bagOpen = open;
+      saveProfile();
+    }
+    /* Focus moves only when a person pressed something. Restoring the bag on load
+       must not steal focus from the page. */
+    if (restoring) return;
     if (open) $("bag-panel").focus({preventScroll: true});
     else $("bag-open").focus({preventScroll: true});
+  }
+
+  /* The bag's calculator. Which keypad you are allowed is a fact about the paper, so
+     both are here and the toggle is one press — and the choice sticks, because
+     someone practising SCLM numericals wants the scientific pad every time, not once.
+     Rebuilding the pad clears the buffer, which is why the toggle is a no-op when it
+     is already on that mode: pressing "Normal" twice should not wipe a number. */
+  function setBagCalculator(kind) {
+    if (!$("bag-calculator")) return;
+    if (profile.bagCalculator !== kind) {
+      profile.bagCalculator = kind;
+      saveProfile();
+    } else if ($("bag-calculator").children.length) return;
+    $all("#bag-calc-modes .calc-mode").forEach(function (button) {
+      button.setAttribute("aria-pressed", button.dataset.calcMode === kind ? "true" : "false");
+    });
+    buildCalculator("bag-calculator", kind);
   }
 
   function bindBag() {
@@ -5077,10 +5200,14 @@
     $("bag-panel").setAttribute("tabindex", "-1");
     $("bag-open").addEventListener("click", function () { setBagOpen($("bag-panel").hidden); });
     $("bag-close").addEventListener("click", function () { setBagOpen(false); });
-    $("bag-scrim").addEventListener("click", function () { setBagOpen(false); });
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape" && !$("bag-panel").hidden) setBagOpen(false);
     });
+    $all("#bag-calc-modes .calc-mode").forEach(function (button) {
+      button.addEventListener("click", function () { setBagCalculator(button.dataset.calcMode); });
+    });
+    setBagCalculator(profile.bagCalculator === "scientific" ? "scientific" : "basic");
+    if (profile.bagOpen) setBagOpen(true, true);
     $("pomodoro-toggle").addEventListener("click", function () { setPomodoroRunning(!pomodoro.running); });
     /* Clear `running` *before* setting the new duration. setPomodoroRunning(false)
        recomputes `remaining` from the live end-time, so leaving the timer marked as
@@ -5260,6 +5387,7 @@
   }
 
   function renderExamHome() {
+    renderCoin("coin-exam", "exam");
     renderExamPick();
     renderExamRecord();
     $("exam-papers").innerHTML = EXAM_ORDER.filter(function (courseId) { return EXAM_PAPERS[courseId]; })
@@ -5737,20 +5865,22 @@
     scientific: [["√","x²","1/x","%"],["7","8","9","÷"],["4","5","6","×"],["1","2","3","−"],["0",".","=","+"],["C","⌫"]]
   };
 
-  function renderCalculator() {
-    var kind = exam.paper.spec.calculator;
-    if (!kind) return;
-    var node = $("exam-calculator");
-    node.innerHTML = "<output id='exam-calc-display' aria-live='polite'>0</output>" +
+  /* One calculator, mounted twice: the examiner hands you the keypad its paper allows,
+     and the bag carries both so the same arithmetic is there while you practise. The
+     buffer is per mount, so the two never share a running total. */
+  function buildCalculator(mountId, kind) {
+    var node = $(mountId);
+    if (!node || !CALC_KEYS[kind]) return;
+    node.innerHTML = "<output class='calc-display' aria-live='polite'>0</output>" +
       CALC_KEYS[kind].map(function (row) {
         return "<div class='calc-row'>" + row.map(function (key) {
           return "<button type='button' class='calc-key' data-key='" + escapeHtml(key) + "'>" + escapeHtml(key) + "</button>";
         }).join("") + "</div>";
       }).join("");
-    var display = $("exam-calc-display");
+    var display = node.querySelector(".calc-display");
     var buffer = "";
     var show = function (value) { display.textContent = value === "" ? "0" : value; };
-    $all("#exam-calculator .calc-key").forEach(function (button) {
+    $all("#" + mountId + " .calc-key").forEach(function (button) {
       button.addEventListener("click", function () {
         var key = button.dataset.key;
         try {
@@ -5774,13 +5904,17 @@
     });
   }
 
+  function renderCalculator() {
+    var kind = exam.paper.spec.calculator;
+    if (kind) buildCalculator("exam-calculator", kind);
+  }
+
   function bindExaminer() {
     var open = $("open-exam");
     /* The examiner opens on its own home, not on one subject's brief. It is a
        separate product and the learner's current subject is the learning system's
        state, not the examiner's. */
     if (open) open.addEventListener("click", openExamHome);
-    $("exam-home-leave").addEventListener("click", leaveExaminer);
     /* Back from a brief returns to the papers, not out of the product entirely. */
     $("exam-leave-brief").addEventListener("click", function () {
       window.clearInterval(examTicker);
