@@ -18,7 +18,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Page A carries the more trustworthy demand signal because the traffic matches the intended market."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Turn the demand assumption into a cheap test with a decision threshold declared in advance, before committing build time or budget."
       }
     ],
     "writtenGaps": [
@@ -61,7 +61,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m1_demand",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "Two landing pages report the same 8% signup rate. Page A was shown to the stated ICP through targeted traffic. Page B was sent to friends, employees, and a prize-seeking giveaway list.",
+    "caselet": "A team leaves customer interviews delighted and books three months of engineering. One member proposes first running a landing page carrying the real price and a deposit button for a week, against the intended audience.",
     "sourceIds": [
       "BRGSA-M01-L01",
       "BRGSA-M01-L03"
@@ -75,7 +75,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Page A carries the more trustworthy demand signal because the traffic matches the intended market."
+        "description": "Turn the demand assumption into a cheap test with a decision threshold declared in advance, before committing build time or budget."
       },
       {
         "id": "case_evidence",
@@ -146,7 +146,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "brgsa_m1_evidence_short_answer",
     "courseId": "BRGSA",
     "conceptId": "brgsa_m1_evidence",
-    "stem": "In two to three sentences, how would you explain Strength of evidence in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Pre-sales commitment and evidence strength in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
       "BRGSA-M01-L04"
@@ -155,12 +155,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains Strength of evidence accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Pre-sales commitment and evidence strength accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: A refundable pre-order placed under clear terms."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Weight every demand signal by what it cost the prospect to give, and require a real commitment before treating demand as proven."
       }
     ],
     "writtenGaps": [
@@ -203,7 +203,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m1_evidence",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "Two hundred people say they like the idea, thirty join a wait-list, and only four accept a paid deposit. The founder wants to report the survey as the strongest demand signal.",
+    "caselet": "Two hundred people say they like the idea, thirty join a wait-list, and four accept a refundable deposit under stated terms. The founder wants to report the survey as the strongest demand signal.",
     "sourceIds": [
       "BRGSA-M01-L04"
     ],
@@ -211,12 +211,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies Strength of evidence accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Pre-sales commitment and evidence strength accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "A refundable pre-order placed under clear terms."
+        "description": "Weight every demand signal by what it cost the prospect to give, and require a real commitment before treating demand as proven."
       },
       {
         "id": "case_evidence",
@@ -287,7 +287,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "brgsa_m2_design_short_answer",
     "courseId": "BRGSA",
     "conceptId": "brgsa_m2_design",
-    "stem": "In two to three sentences, how would you explain Experiment design in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Null hypothesis and test design in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
       "BRGSA-M02-L01"
@@ -296,12 +296,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains Experiment design accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Null hypothesis and test design accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Run the test to completion at the pre-calculated sample size."
+        "description": "Explains when the idea should change a decision, consistently with this course move: State the null, the sample size and the decision threshold before the test runs, and hold them when the interim numbers look encouraging."
       }
     ],
     "writtenGaps": [
@@ -344,7 +344,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m2_design",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "Variant B leads after 18 visitors per arm. The pre-set sample target is 1,000 per arm.",
+    "caselet": "A team compares two onboarding flows, opens the dashboard on day three, sees the preferred variant ahead, and wants to declare a winner before the planned sample is reached.",
     "sourceIds": [
       "BRGSA-M02-L01",
       "BRGSA-M02-L02"
@@ -353,12 +353,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies Experiment design accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Null hypothesis and test design accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Run the test to completion at the pre-calculated sample size."
+        "description": "State the null, the sample size and the decision threshold before the test runs, and hold them when the interim numbers look encouraging."
       },
       {
         "id": "case_evidence",
@@ -443,7 +443,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: A Type II error, a false negative."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Decide which of the two errors is more costly for this particular decision, then set the sample size and threshold to protect against that one."
       }
     ],
     "writtenGaps": [
@@ -486,7 +486,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m2_error",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "A test fails to detect a real improvement, keeps the weaker flow, and the missed gain would have been valuable at scale.",
+    "caselet": "An underpowered test on a genuinely better pricing page reports no difference, the team keeps the old page, and the forgone gain would have compounded across every future cohort.",
     "sourceIds": [
       "BRGSA-M02-L03"
     ],
@@ -499,7 +499,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "A Type II error, a false negative."
+        "description": "Decide which of the two errors is more costly for this particular decision, then set the sample size and threshold to protect against that one."
       },
       {
         "id": "case_evidence",
@@ -584,7 +584,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Acquisition volume is masking deteriorating retention."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Read retention by signup cohort and time since entry before concluding from a rising total that growth is working."
       }
     ],
     "writtenGaps": [
@@ -627,7 +627,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m3_cohort",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "Monthly active users rose from 10,000 to 14,000 after a large campaign. Each new signup cohort, however, retains fewer users by week four than the cohort before it.",
+    "caselet": "Total active users climb every month while each newer signup cohort holds fewer users at week four than the cohort before it, and the team plans to increase spend.",
     "sourceIds": [
       "BRGSA-M03-L01"
     ],
@@ -640,7 +640,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Acquisition volume is masking deteriorating retention."
+        "description": "Read retention by signup cohort and time since entry before concluding from a rising total that growth is working."
       },
       {
         "id": "case_evidence",
@@ -725,7 +725,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Iterate around the retained segment before considering a full pivot."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Estimate LTV from the cohort behaviour already visible, compare it with CAC segment by segment, and let that ratio decide which segment to acquire more of."
       }
     ],
     "writtenGaps": [
@@ -768,7 +768,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m3_economics",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "A product has a small but stable retention plateau and acceptable unit economics among one narrow segment. Its broad campaign performs poorly.",
+    "caselet": "One segment returns close to five times its acquisition cost and another barely one, yet the team spends equally on both because the blended figure looks acceptable.",
     "sourceIds": [
       "BRGSA-M03-L04",
       "BRGSA-M03-L05"
@@ -782,7 +782,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Iterate around the retained segment before considering a full pivot."
+        "description": "Estimate LTV from the cohort behaviour already visible, compare it with CAC segment by segment, and let that ratio decide which segment to acquire more of."
       },
       {
         "id": "case_evidence",
@@ -856,7 +856,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "stem": "In two to three sentences, how would you explain Growth constraint in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
-      "BRGSA-M04-L02"
+      "BRGSA-M04-L04"
     ],
     "rubric": [
       {
@@ -867,7 +867,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Activation—the narrowest current constraint."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Locate the single narrowest stage with funnel and cohort math, and work only on it until it is no longer the constraint."
       }
     ],
     "writtenGaps": [
@@ -910,9 +910,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m4_constraint",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "Traffic is healthy, signup conversion is healthy, but only 12% of new accounts complete the first value event. The team proposes buying more ads.",
+    "caselet": "Traffic doubles after a campaign, activation stays flat, most new users abandon the same setup step, and the team asks for more acquisition budget.",
     "sourceIds": [
-      "BRGSA-M04-L02",
       "BRGSA-M04-L04"
     ],
     "rubric": [
@@ -924,7 +923,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Activation—the narrowest current constraint."
+        "description": "Locate the single narrowest stage with funnel and cohort math, and work only on it until it is no longer the constraint."
       },
       {
         "id": "case_evidence",
@@ -995,21 +994,21 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "brgsa_m4_customers_short_answer",
     "courseId": "BRGSA",
     "conceptId": "brgsa_m4_customers",
-    "stem": "In two to three sentences, how would you explain First customers in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Early-stage and scale-stage growth in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
-      "BRGSA-M04-L04"
+      "BRGSA-M04-L02"
     ],
     "rubric": [
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains First customers accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Early-stage and scale-stage growth accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Own the cross-functional activation/retention transition and define one shared constraint metric."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Place the company on the ladder of proof first, and run the playbook belonging to that rung rather than the one its funding suggests."
       }
     ],
     "writtenGaps": [
@@ -1052,21 +1051,21 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m4_customers",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "Paid traffic converts, but new users fail activation and churn. Marketing hits its lead target; product ships features; neither owns the transition.",
+    "caselet": "A company raises a round, hires a performance marketer and wires attribution across five tools, while nobody has yet asked the last ten customers why they bought.",
     "sourceIds": [
-      "BRGSA-M04-L04",
+      "BRGSA-M04-L02",
       "BRGSA-M04-L01"
     ],
     "rubric": [
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies First customers accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Early-stage and scale-stage growth accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Own the cross-functional activation/retention transition and define one shared constraint metric."
+        "description": "Place the company on the ladder of proof first, and run the playbook belonging to that rung rather than the one its funding suggests."
       },
       {
         "id": "case_evidence",
@@ -1151,7 +1150,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: The channel's targeting and output properties do not match the product's economics and ICP."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Score candidate channels against the product's economics and timing constraints before spending, and reject one that fails any single dimension."
       }
     ],
     "writtenGaps": [
@@ -1194,7 +1193,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m5_channel",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "A high-ACV B2B tool sells to heads of sales at 50–200 employee companies. A cheap, broad-interest video channel brings many views but almost no qualified meetings.",
+    "caselet": "A channel reaches the intended buyer precisely but takes fourteen months to produce revenue, and the company has three months of runway.",
     "sourceIds": [
       "BRGSA-M05-L01"
     ],
@@ -1207,7 +1206,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "The channel's targeting and output properties do not match the product's economics and ICP."
+        "description": "Score candidate channels against the product's economics and timing constraints before spending, and reject one that fails any single dimension."
       },
       {
         "id": "case_evidence",
@@ -1278,7 +1277,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "brgsa_m5_activation_short_answer",
     "courseId": "BRGSA",
     "conceptId": "brgsa_m5_activation",
-    "stem": "In two to three sentences, how would you explain Activation in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Activation and onboarding friction in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
       "BRGSA-M05-L05"
@@ -1287,12 +1286,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains Activation accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Activation and onboarding friction accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Identify the first value event, move/remove pre-value friction, and define activation around that event."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Audit the whole path to first value, classify the friction at each step, and remove or defer anything that does not help the user reach it."
       }
     ],
     "writtenGaps": [
@@ -1335,7 +1334,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m5_activation",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "Users who complete a 12-step profile are retained, so the team calls profile completion the aha moment. New-user recordings show most people leave before experiencing the product's core output.",
+    "caselet": "Registrations rise sharply after a campaign, but most users leave somewhere inside a twelve-step onboarding flow before the product has done anything for them.",
     "sourceIds": [
       "BRGSA-M05-L05",
       "BRGSA-M05-L06"
@@ -1344,12 +1343,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies Activation accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Activation and onboarding friction accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Identify the first value event, move/remove pre-value friction, and define activation around that event."
+        "description": "Audit the whole path to first value, classify the friction at each step, and remove or defer anything that does not help the user reach it."
       },
       {
         "id": "case_evidence",
@@ -1434,7 +1433,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Lifecycle engagement matched to the user's current state and next value action."
+        "description": "Explains when the idea should change a decision, consistently with this course move: When retention falls, name which phase of the loop broke and repair that phase, instead of adding email or discounts."
       }
     ],
     "writtenGaps": [
@@ -1477,7 +1476,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m6_habit",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "A team copies a daily streak mechanic into a product customers only need during an occasional high-stakes event.",
+    "caselet": "A team copies a daily streak mechanic into a product customers genuinely need only during an occasional high-stakes event, and engagement rises while retention does not.",
     "sourceIds": [
       "BRGSA-M06-L01",
       "BRGSA-M06-L02"
@@ -1491,7 +1490,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Lifecycle engagement matched to the user's current state and next value action."
+        "description": "When retention falls, name which phase of the loop broke and repair that phase, instead of adding email or discounts."
       },
       {
         "id": "case_evidence",
@@ -1562,7 +1561,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "brgsa_m6_churn_short_answer",
     "courseId": "BRGSA",
     "conceptId": "brgsa_m6_churn",
-    "stem": "In two to three sentences, how would you explain Churn and referral in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Referral and network effects in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
       "BRGSA-M06-L05"
@@ -1571,12 +1570,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains Churn and referral accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Referral and network effects accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: An incentivised referral campaign, not a network effect."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Apply the joining test — does one more user make the product more valuable to existing users — and run the referral playbook when the answer is no."
       }
     ],
     "writtenGaps": [
@@ -1619,7 +1618,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m6_churn",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "A fitness app gives ₹100 for each invite. Invites spike, but the product is no more useful to existing users when friends join, and the spike ends when the reward stops.",
+    "caselet": "A reward campaign produces a signup spike, the referred users churn before reaching value, and existing users report no change in what the product is worth to them.",
     "sourceIds": [
       "BRGSA-M06-L05"
     ],
@@ -1627,12 +1626,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies Churn and referral accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Referral and network effects accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "An incentivised referral campaign, not a network effect."
+        "description": "Apply the joining test — does one more user make the product more valuable to existing users — and run the referral playbook when the answer is no."
       },
       {
         "id": "case_evidence",
@@ -1703,7 +1702,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "brgsa_m7_pricing_short_answer",
     "courseId": "BRGSA",
     "conceptId": "brgsa_m7_pricing",
-    "stem": "In two to three sentences, how would you explain Pricing and NRR in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Pricing structure and NRR in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
       "BRGSA-M07-L01"
@@ -1712,12 +1711,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains Pricing and NRR accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Pricing structure and NRR accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: NRR is 80%; acquisition is masking a shrinking base."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Design the pricing structure around the expansion behaviour the business needs, and read NRR on the existing cohort before crediting growth to it."
       }
     ],
     "writtenGaps": [
@@ -1760,7 +1759,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m7_pricing",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "A SaaS company grows 35% through new sales, but the starting cohort falls from ₹20 lakh to ₹16 lakh MRR after expansion, churn, and downgrades.",
+    "caselet": "A subscription loses some accounts while retained customers expand enough that recurring revenue still rises; the team reports only logo churn and plans more acquisition.",
     "sourceIds": [
       "BRGSA-M07-L01",
       "BRGSA-M07-L02"
@@ -1769,12 +1768,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies Pricing and NRR accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Pricing structure and NRR accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "NRR is 80%; acquisition is masking a shrinking base."
+        "description": "Design the pricing structure around the expansion behaviour the business needs, and read NRR on the existing cohort before crediting growth to it."
       },
       {
         "id": "case_evidence",
@@ -1845,7 +1844,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "brgsa_m7_pipeline_short_answer",
     "courseId": "BRGSA",
     "conceptId": "brgsa_m7_pipeline",
-    "stem": "In two to three sentences, how would you explain Pipeline and payback in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Sales integration and payback in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
       "BRGSA-M07-L04"
@@ -1854,12 +1853,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains Pipeline and payback accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Sales integration and payback accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Explicit handoff definitions, required context, owner, and response-time SLAs."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Define each handoff's criteria, context, owner and response time, and choose channels by how fast they repay acquisition cost rather than by CAC alone."
       }
     ],
     "writtenGaps": [
@@ -1902,7 +1901,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m7_pipeline",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "Marketing marks a lead qualified, sales waits nine days, and customer success receives no record of the promised use case after purchase.",
+    "caselet": "Marketing reports a hundred qualified leads and sales counts seventy-five, the two definitions were never agreed, leads sit untouched for days, and the channel funding all of it takes eighteen months to repay.",
     "sourceIds": [
       "BRGSA-M07-L04"
     ],
@@ -1910,12 +1909,12 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies Pipeline and payback accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Sales integration and payback accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Explicit handoff definitions, required context, owner, and response-time SLAs."
+        "description": "Define each handoff's criteria, context, owner and response time, and choose channels by how fast they repay acquisition cost rather than by CAC alone."
       },
       {
         "id": "case_evidence",
@@ -2000,7 +1999,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Create a scored backlog tied to the constraint, assign owners/capacity, and pre-register decisions."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Score every candidate experiment against the current primary constraint, and cap confidence at five whenever the supporting evidence cannot be named in one sentence."
       }
     ],
     "writtenGaps": [
@@ -2043,7 +2042,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m8_priority",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "A Monday growth meeting reviews 40 ideas, celebrates total signups, and starts five tests. None has an owner, sample bound, decision date, or link to the activation bottleneck.",
+    "caselet": "A high-visibility feature scores well on team enthusiasm, has no evidence behind its confidence score, needs a quarter of engineering, and does not touch the activation step the funnel math identified.",
     "sourceIds": [
       "BRGSA-M08-L01",
       "BRGSA-M08-L07"
@@ -2057,7 +2056,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Create a scored backlog tied to the constraint, assign owners/capacity, and pre-register decisions."
+        "description": "Score every candidate experiment against the current primary constraint, and cap confidence at five whenever the supporting evidence cannot be named in one sentence."
       },
       {
         "id": "case_evidence",
@@ -2142,7 +2141,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: After the sample bound, scale at ≥45%, kill at <35%, otherwise iterate; use the named activation metric."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Pre-register the decision each metric will trigger before the result arrives, so a movement in the number changes an action rather than a narrative."
       }
     ],
     "writtenGaps": [
@@ -2185,7 +2184,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "BRGSA",
     "conceptId": "brgsa_m8_decision",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
-    "caselet": "A dashboard celebrates visits and downloads, but no metric has an owner, threshold, or pre-declared action when the number changes.",
+    "caselet": "A dashboard celebrates visits and downloads every week, but no number has an owner, a threshold, or a stated action for when it moves.",
     "sourceIds": [
       "BRGSA-M08-L03"
     ],
@@ -2198,7 +2197,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "After the sample bound, scale at ≥45%, kill at <35%, otherwise iterate; use the named activation metric."
+        "description": "Pre-register the decision each metric will trigger before the result arrives, so a movement in the number changes an action rather than a narrative."
       },
       {
         "id": "case_evidence",
@@ -2326,7 +2325,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_inclusive",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A clinic serves low-income districts, charges enough to cover operations, and reinvests to expand access.",
+    "caselet": "Sanjeevani Clinics runs eleven centres in low-income urban districts. A consultation costs ₹120 against ₹600 at the nearest private hospital, and 78% of its patients earn under ₹15,000 a month. Fees cover operating costs and fund two new centres a year, while a philanthropic grant covered only the original fit-out. A consultant now proposes adding a cosmetic dermatology line at ₹4,000 a visit, arguing the margin would let the group expand faster. The existing centres already run at 94% capacity with a three-day wait.",
     "sourceIds": [
       "IBM-M01-L03"
     ],
@@ -2467,7 +2466,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_bop",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A company wants rural adoption but its pack size, payment schedule, and service network assume high monthly income and urban access.",
+    "caselet": "A packaged foods company sells a 2 kg fortified flour pack at ₹340, payable in a single transaction, through 400 urban supermarkets. It targets rural districts holding 90 million people and has reached 0.3% of them in two years. Field visits find median household cash arrives weekly rather than monthly, the nearest stocking retailer is 14 km away, and 2 kg exceeds what most families can store safely through the humid season. The country manager proposes doubling the advertising budget, citing the size of the untapped population.",
     "sourceIds": [
       "IBM-M01-L07"
     ],
@@ -2608,7 +2607,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_vaatsalya",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A hospital chain sees rural patients travelling hours for routine and secondary care while city hospitals remain crowded.",
+    "caselet": "A hospital group runs six 200-bed tertiary facilities in three large cities, whose cardiac and oncology units sit at 61% occupancy. Its own records show 44% of admissions travel more than 90 km, most for deliveries, dialysis and routine surgery needing no tertiary equipment. A normal delivery costs the patient about ₹38,000. A proposal on the table is a network of 40-bed centres in semi-urban towns handling primary and secondary care only, at an estimated ₹11,000 per delivery and staffed by locally recruited clinicians.",
     "sourceIds": [
       "IBM-M02-L04"
     ],
@@ -2749,7 +2748,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_aravind",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A scarce surgeon spends much of the day on repeatable preparation and follow-up while patients wait for operations.",
+    "caselet": "An eye hospital has four ophthalmologists and a nine-week cataract waiting list. A time study finds each surgeon spends 71% of the working day on counselling, vision measurement, dilation checks and post-operative dressing, and 29% operating. Complication rates sit at the national benchmark and the trustees have said that must not move. The hospital already employs 22 trained paramedical staff, mostly assigned to reception. A consultant proposes recruiting two more surgeons, at a cost current surpluses cannot fund.",
     "sourceIds": [
       "IBM-M02-L08"
     ],
@@ -2890,7 +2889,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_grameen",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A lender cannot observe rural borrowers well and conventional collateral is unavailable, but neighbours know each other's reliability.",
+    "caselet": "A lender wants to reach 30 villages where 82% of households hold no bank-acceptable collateral and no formal credit record, and its two field officers cannot assess 4,000 households individually. A pilot in four villages lent to self-formed groups of five women, releasing funds to two members first and to the rest only after the first repayments arrived, with weekly meetings held in the village. Repayment reached 97% over eighteen months. Head office now proposes dropping the meetings and the staged release to cut cost per loan, keeping the group label.",
     "sourceIds": [
       "IBM-M03-L03"
     ],
@@ -3031,7 +3030,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_responsible_lending",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A household uses a new microloan to repay several older microloans, while agents are paid for each additional disbursement.",
+    "caselet": "A microfinance institution has grown disbursements 140% in two years. Field agents earn 60% of their variable pay per additional loan disbursed and nothing tied to repayment. A sample of 500 borrowers finds the median household now services four concurrent microloans, 38% used their most recent loan to repay an existing one, and total monthly debt service reaches 71% of reported household income. Portfolio-at-risk still reads 1.2%, because refinancing keeps accounts current. The growth committee wants two new districts next quarter.",
     "sourceIds": [
       "IBM-M03-L05"
     ],
@@ -3172,7 +3171,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_rural_bpo",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A rural centre has capable local youth and multilingual demand, but international voice work and urban shift norms are a poor fit.",
+    "caselet": "A BPO is considering a delivery centre in a district town where about 1,200 graduates enter the market each year and few migrate for work. Wage expectations run 40% below the metro rate, and attrition at comparable rural centres is 8% against 45% in cities. The available contracts are document processing and regional-language customer support, with a client quality bar of a 2% error ceiling audited monthly. Local candidates have strong regional-language ability and little exposure to accented international voice work, and the town loses power for about 90 minutes a day.",
     "sourceIds": [
       "IBM-M04-L04"
     ],
@@ -3313,7 +3312,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_replication",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A rural BPO wants to enter many small towns but lacks local knowledge and cannot fund every centre itself.",
+    "caselet": "A rural services company runs eight centres it owns and staffs directly, and holds requests from 60 towns. It has ₹4 crore of capital against ₹90 lakh needed per owned centre, and nobody who knows hiring conditions in those towns. Two pilots run by local entrepreneurs who funded their own fit-out reached break-even in seven months against eleven for owned centres. One of those pilots missed the group's training standard, and a client audit flagged inconsistent output quality across the network.",
     "sourceIds": [
       "IBM-M04-L05"
     ],
@@ -3454,7 +3453,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_shared_value",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A buyer raises farmer productivity and product quality, lowering supply risk while farmers earn more.",
+    "caselet": "A dairy processor buys from 12,000 smallholders. Rejections for bacterial count run at 19%, forcing spot purchases at a 23% premium whenever supply falls short. Farmers average 4.1 litres per animal per day against a 7-litre regional benchmark, and most sell through intermediaries who deduct 15%. A proposal would fund village chilling units, veterinary services and direct payment at ₹6 crore over three years, projected to lift yield to 6 litres, cut rejections to 6% and raise farmer realisation by 22%. The CFO asks why a processor should pay for farm productivity.",
     "sourceIds": [
       "IBM-M05-L07"
     ],
@@ -3595,7 +3594,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_selco",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A street vendor spends ₹15 a day on kerosene and could use a solar light financed at ₹10 a day, provided failures are repaired quickly.",
+    "caselet": "A street vendor trades until 9 pm and spends ₹15 a day on kerosene, about ₹450 a month, for light poor enough that customers leave early. A solar unit costs ₹9,000 outright, which she cannot pay, but a rural bank will finance it at ₹10 a day over three years once repayment capacity is shown. Brighter light is expected to raise daily takings by about ₹90. Two earlier solar programmes in the district failed when units broke and no technician was available within 40 km, and villagers now say they will not buy without a repair promise.",
     "sourceIds": [
       "IBM-M05-L10"
     ],
@@ -3736,7 +3735,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_labournet",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "Migrant workers spend time finding jobs, lack verifiable identity, and are treated as high risk by formal institutions.",
+    "caselet": "Migrant construction workers in a metro lose an average of nine days a month searching for work and are paid 18% below rate when hired through informal brokers. Almost none hold a document proving prior work, and 91% have no bank-recognised identity, so contractors treat them as unverifiable risk and insurers decline cover. A platform proposes registering workers with verified identity, independently assessed skill grades and a logged work history, then matching them to contractors. Contractors say they will pay a premium only where the skill grade is independently assessed rather than self-declared.",
     "sourceIds": [
       "IBM-M06-L02"
     ],
@@ -3877,7 +3876,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_waste",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A venture turns temple flower waste into incense and natural dyes using women from low-income communities.",
+    "caselet": "Temples in one city send about 8 tonnes of flower waste a week to landfill, where it decomposes into a local waterway. A venture collects it free, converts it into incense and natural dyes, and employs 60 women from nearby low-income settlements at ₹11,000 a month against the ₹6,500 they earned in informal work. Retail buyers pay a premium for the provenance and current output sells out. Scaling to 20 tonnes needs a second site and either mechanised sorting, which would halve the workforce, or 60 more women hired and trained.",
     "sourceIds": [
       "IBM-M06-L05"
     ],
@@ -4018,7 +4017,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_fpo",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "Small farmers produce a distinctive rice but individually lack volume, branding, advice, and negotiating power.",
+    "caselet": "Nine hundred farmers in one block grow a distinctive aromatic rice. Each markets 2 to 4 tonnes through village traders at ₹22 a kg, while the same rice retails in city stores at ₹95. No individual farmer can meet a retailer's 200-tonne minimum consignment or fund the certification a premium buyer requires. A producer company has been registered with the farmers as shareholders and grant funding covers three years of working capital, but it has nobody with buyer relationships, packaging experience, or the means to hold quality across 900 growers. A neighbouring FPO collapsed after two seasons for exactly that reason.",
     "sourceIds": [
       "IBM-M07-L04"
     ],
@@ -4159,7 +4158,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_social_business",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A company creates a business line for affordable nutrition whose goal is impact, while prices cover costs and profits are not the primary objective.",
+    "caselet": "A food company creates a fortified snack for children in low-income districts, priced at ₹5 so the target households can actually buy it. The line covers its own costs and repays the investors' original capital, after which surplus is reinvested in distribution rather than paid out. Nutrition surveys show a measurable fall in deficiency among regular consumers. The group board asks why the line should not instead be run as CSR funded from group profit, or priced at ₹12 where the same product would earn a normal margin from wealthier urban buyers.",
     "sourceIds": [
       "IBM-M07-L05"
     ],
@@ -4300,7 +4299,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_impact_investing",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "A fund invests in affordable housing, sets access targets, reports outcomes, and expects the capital to earn a return.",
+    "caselet": "A fund raises ₹500 crore for affordable housing. It sets a target that 70% of units go to households below a stated income line, requires quarterly reporting on who actually occupies them, and expects a 9% return so the capital can be recycled into further projects. One developer in the pipeline offers 16% but will commit to only 25% of units below the income line, and proposes reporting sales value rather than buyer income. The investment committee is split, noting the fund's headline return currently sits below its target.",
     "sourceIds": [
       "IBM-M08-L01"
     ],
@@ -4441,7 +4440,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "courseId": "IBM",
     "conceptId": "ibm_impact_measurement",
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-    "caselet": "Borrowers who choose a programme earn more later, but they were more enterprising than non-borrowers before it began.",
+    "caselet": "A skills programme reports that graduates earn 34% more two years on than a comparison group of non-participants from the same districts. Enrolment was voluntary and required attending an information session, submitting an application and paying a ₹500 deposit. Baseline data show applicants already had 1.9 more years of schooling and were three times likelier to have held formal employment before the programme began. A regional wage boom lifted earnings across all districts over the same period. The funder is being asked to scale the programme fivefold on the strength of the 34% figure.",
     "sourceIds": [
       "IBM-M08-L05"
     ],

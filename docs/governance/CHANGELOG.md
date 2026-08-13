@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-08-14 — BRGSA concept records, corrected anchors, and case exemplars that quote the case
+
+Evidence: `evidence/2026-08-14/t6-frozen-evidence-and-answer-retention/verification.md`
+(branch only; `WAITING_OWNER_CONTENT_ACCEPTANCE` — the owner has read none of this prose, and the
+concept renames are visible to testers, so it needs acceptance and a change announcement before it
+reaches the cohort).
+
+- Authored `summary`, `application`, `bridge`, `caselet` and `caseEvidence` for all 16 BRGSA
+  concepts, which previously carried only a name and a lecture id. Written practice for the subject
+  was entirely derived from stitched multiple-choice text as a result.
+- Corrected five concept names that described something other than their anchor lecture, which is
+  the only evidence the marker is shown. Module 4's two concepts had simply been exchanged and were
+  fixed by swapping their sources back; the other four were renamed to the topic their lecture
+  actually teaches.
+- Fixed the case exemplar, which read `name + application + bridge + summary` and never quoted the
+  caselet — so it could not satisfy its own "uses a specific fact from the case" criterion. That
+  criterion failed on 12 of 27 case exemplars, 6/13 BRGSA and 6/14 IBM: the only criterion where
+  IBM's authoring advantage bought it nothing. Concepts now carry an authored `caseEvidence`
+  sentence that names the deciding fact and says why it carries the decision.
+- Expanded IBM's caselets from roughly 120 to roughly 550 characters, giving each a named setting,
+  concrete figures and a decision tension. The paper this practises is ten written answers on one
+  elaborate case released two days beforehand, and a one-sentence caselet contained almost nothing
+  specific enough to cite.
+- Rebuilt the frozen evidence pack against the corrected anchors: 380 chunks, 64 questions, 514 KiB,
+  zero out-of-lecture chunks. New digest `frozen-918efdc8b6a1ccf9`, which keeps hosted marking off
+  until the pack is approved by name.
+
 ## 2026-08-14 — Frozen course evidence, hosted distress interception, and answer retention
 
 Evidence: `evidence/2026-08-14/t6-frozen-evidence-and-answer-retention/verification.md`

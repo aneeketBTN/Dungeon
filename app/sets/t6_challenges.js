@@ -96,6 +96,7 @@
       summary: concept.summary || seed.explanation || seed.link,
       confusions: concept.confusions || wrong,
       caselet: concept.caselet || applicationSeed.caselet || brgsaCaseOverrides[concept.id] || applicationSeed.stem,
+      caseEvidence: concept.caseEvidence || "",
       application: concept.application || (Array.isArray(applicationSeed.options) ? applicationSeed.options[applicationSeed.answer] : seed.explanation),
       applicationWrong: concept.applicationWrong || applicationWrong,
       bridge: concept.bridge || seed.link || seed.explanation,
@@ -1233,7 +1234,18 @@
         writtenGap("case-fact-misread", "case_evidence", "misunderstood", "concept", "Case evidence is misread", "Re-read what the case fact actually shows before using it as support."),
         writtenGap("causal-link-missing", "case_evidence", "missing", "writing", "Fact-to-decision link is missing", "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier.")
       ],
-      exemplar: "The governing course idea is " + data.name + ". " + ensureSentence(data.application) + " " + ensureSentence(data.caseLink || data.bridge) + " " + ensureSentence(data.caseExplanation || data.summary),
+      /* The exemplar has to satisfy the criteria it is shown beside.
+       *
+       * It previously read name + application + bridge + summary and never
+       * touched the caselet, so it could not meet "uses a specific fact from the
+       * case" - and the marker refused that criterion on 12 of 27 case exemplars,
+       * evenly across both subjects, while every other criterion tracked the
+       * subject's authoring quality. `caseEvidence` is the authored sentence that
+       * names the deciding fact and says why it carries the decision, which is
+       * exactly what the criterion asks a learner to produce. */
+      exemplar: "The governing course idea is " + data.name + ". " + ensureSentence(data.application) + " " +
+        (data.caseEvidence ? ensureSentence(data.caseEvidence) + " " : "") +
+        ensureSentence(data.caseLink || data.bridge) + " " + ensureSentence(data.caseExplanation || data.summary),
       explanation: data.caseExplanation || data.summary,
       link: data.caseLink || data.bridge,
       misconceptions: [],

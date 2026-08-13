@@ -795,30 +795,30 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
-- [ ] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — every BRGSA written prompt is built on a field that was
-  never authored. Sixteen missing sentences, not a model problem.** IBM exemplars earn full marks
-  22/32 (short-form 14/16, 79% of available marks); BRGSA earns 13/32 (56%), abstains eight times,
-  and scores three exemplars at zero. The cause is exact: **BRGSA has an authored `application` on
-  0 of its 16 concepts; IBM has one on 16 of 16.**
+- [~] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — BRGSA concept records and the case exemplar were
+  authored on 2026-08-14; the owner has not yet read the prose.** BRGSA previously had an authored
+  `application` on 0 of its 16 concepts against IBM's 16 of 16, so `conceptData` fell back to a case
+  question's correct multiple-choice option — a scenario-specific answer choice used as a general
+  decision rule. Every BRGSA prompt therefore shipped an exemplar ending in a non-sequitur beside a
+  rubric demanding the learner match it. All 16 now carry an authored `summary`, `application`,
+  `bridge`, `caselet` and `caseEvidence`.
 
-  `conceptData` in `app/sets/t6_challenges.js:99` falls back, when `concept.application` is absent,
-  to `applicationSeed.options[applicationSeed.answer]` — the correct multiple-choice option from a
-  case question. That string is a scenario-specific answer choice, not a generalisable decision rule.
-  `addShortAnswer` then builds `exemplar = summary + " " + application` and states the judgement
-  criterion as "consistently with this course move: <that option>"; `addCaseAnswer` uses the same
-  field as the *entire* Decision criterion. So all 32 BRGSA written prompts carry a model answer
-  ending in a non-sequitur and a rubric demanding the learner match it.
+  Five concept names also described something other than their anchor lecture, which is the only
+  evidence the marker sees. Module 4's two were exchanged and were fixed by swapping sources back;
+  four were renamed to the topic their lecture teaches (`Experiment design` → `Null hypothesis and
+  test design`, `Strength of evidence` → `Pre-sales commitment and evidence strength`, `Churn and
+  referral` → `Referral and network effects`, `Pipeline and payback` → `Sales integration and
+  payback`, and `First customers` → `Early-stage and scale-stage growth`).
 
-  Two worked examples: `brgsa_m4_customers` asks the learner to explain **First customers** and
-  demands the move "Own the cross-functional activation/retention transition and define one shared
-  constraint metric"; `brgsa_m7_pipeline` asks about **Pipeline and payback** and demands "Explicit
-  handoff definitions, required context, owner, and response-time SLAs". The marker refuses both,
-  correctly. This supersedes the earlier "concept-label/exemplar mismatch" reading, which pointed at
-  the right prompts for the wrong reason.
+  Separately, the case exemplar was `name + application + bridge + summary` and never quoted the
+  caselet, so it could not satisfy its own third criterion — `case_evidence` failed on 12 of 27 case
+  exemplars, 6/13 BRGSA and 6/14 IBM, the one criterion where IBM did no better. Concepts now carry
+  an authored `caseEvidence` sentence naming the deciding fact, and IBM's caselets were expanded
+  from about 120 to about 550 characters so there is a specific fact to cite.
 
-  **Fix:** author 16 `application` sentences for the BRGSA concepts, in the form IBM already uses —
-  a decision the idea should change, stated generally. It is content work and needs owner acceptance;
-  a stronger model cannot substitute for it. Re-run the 128-case sweep afterwards.
+  **Open:** the owner has read none of this prose. It is course content presented to testers as
+  model answers, and the concept renames are visible in the dashboard, so this needs owner
+  acceptance and a change announcement before it reaches the cohort.
 - [ ] **`WAITING_OWNER_CALIBRATION` — the hosted checkpoint has never been run.** Every marking
   figure on record comes from the local 35B through the Windows→Mac loopback. Local calibration does
   not transfer. `tools/evaluate-hosted-grader.mjs` now calls `gradeHostedAnswer` itself so it

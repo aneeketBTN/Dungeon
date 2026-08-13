@@ -78,7 +78,7 @@ the query is the stem, caselet and rubric, all fixed at authoring time — so a 
 a constant and a per-request vector search only recomputes it. Freezing it removes the embedding call
 and the index from the request path, keeps the course transcripts out of any hosted store entirely,
 and makes the evidence something a person can read and correct per question instead of whatever
-similarity returned that day. The pack is 380 chunks over 64 questions, 511 KiB of course text,
+similarity returned that day. The pack is 380 chunks over 64 questions, 514 KiB of course text,
 about 117 KiB gzipped in the bundle.
 
 The committed configuration is intentionally inert:
@@ -108,7 +108,7 @@ $env:DUNGEON_TRANSCRIPTS = "C:\path\to\Term 6 Clean Transcripts"
 npm run build:written-authority
 ```
 
-It prints the digest to set. The current pack is `frozen-185aa5b47352529a`. The script prints only
+It prints the digest to set. The current pack is `frozen-918efdc8b6a1ccf9`. The script prints only
 counts, paths and the digest, never transcript text.
 
 ## Calibrate before activation
