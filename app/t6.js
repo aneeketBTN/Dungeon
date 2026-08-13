@@ -2899,6 +2899,10 @@
     renderCourseEvidence(lectureIdsFor(question), session.courseId);
     $("case-block").hidden = isPrimer || !question.caselet;
     $("caselet").textContent = question.caselet || "";
+    /* A one-line caselet is a prompt and reads well set large; a full case is a
+     * document. At 20px/650 a 537-character IBM case filled two thirds of a
+     * 375px screen before the question, so long cases drop to body type. */
+    $("caselet").classList.toggle("is-long", String(question.caselet || "").length > 240);
     $("prompt-flow").classList.toggle("has-case", !isPrimer && !!question.caselet);
     renderPrimerPanel(question, item);
     $("task-kicker").textContent = question.caselet ? "Then decide" : "Your task";
