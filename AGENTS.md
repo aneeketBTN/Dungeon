@@ -669,6 +669,22 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
+- [ ] **`WAITING_OWNER_DECISION` — this repository is not ready to be made public, and the work to
+  make it so has not been done.** Whenever the question comes up, it is a deliberate audit, not a
+  visibility switch. Everything tracked here was written for an internal audience and some of it
+  would be actively harmful in public: `docs/briefs/DUNGEON_TECHNICAL_OVERVIEW.md` names the
+  product's bottlenecks and unvalidated claims in the plainest available language; the
+  `docs/governance/` ledgers are a catalogue of defects with reproduction steps; `evidence/`
+  records what was and was not verified; `.agents/` and `docs/briefs/TESTER_ACCESS_AND_ADMIN.md`
+  describe the admission boundary; and `docs/community/` holds the tester agreement, the privacy
+  statement, and the playbook naming a live cohort. None of this is secret from the people it is
+  about, and all of it is written to be read by whoever is doing the work — but published beside a
+  live product it becomes a map of where the product is weak, and cohort material becomes public
+  information about identifiable students. **Before any public push:** decide file by file what
+  goes, split the private set into a separate repository or history rather than deleting it (the
+  ledgers are the institutional memory and deleting them costs more than keeping them private),
+  and re-read the git history as well as the working tree, since removing a file today does not
+  remove it from the commits behind it.
 - [x] `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` — **closed 2026-08-12.** The owner supplied the Batch 1
   pattern; it is recorded in `docs/briefs/T6_EXAM_PATTERN.md`, which is now authority for paper
   structure. Sections, counts, marks, duration, negative marking, and calculator rules may be stated

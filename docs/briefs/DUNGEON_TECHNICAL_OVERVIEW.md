@@ -4,6 +4,11 @@
 to how the product teaches, tests, or claims anything. It describes what is actually built, not
 what is planned. Where something is unfinished or unproven, it says so in the same sentence.
 
+> **Internal — not for publication.** §8 is a candid list of where this product is weak, written
+> for people who are going to fix it. It does not go out with a public repository, a pitch, or a
+> tester-facing page. See the public-release gap in `AGENTS.md` for the rest of what is in the
+> same category.
+
 Authoritative sources, in order: `AGENTS.md` (living index and status), then
 `docs/briefs/T6_EXAM_PATTERN.md` (paper structure),
 `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` (evidence and item contracts),
