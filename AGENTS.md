@@ -1,4 +1,93 @@
 # Dungeon
+> **Written transfer throughout Learn; forensic review after Examiner (2026-08-13; newest):** prose
+> practice now follows the published paper rather than appearing in every subject. BRGSA and IBM
+> each carry **32 authored prompts** — one short framework explanation and one full case response
+> for every concept — while SPMS and SCLM keep their applied work in the objective, MSQ, numerical,
+> and matching formats their papers actually use. Each written rubric owns a bounded taxonomy of
+> missing versus misunderstood gaps. Qwen must select those server-owned codes; only accepted codes
+> enter `writtenPractice.gaps`. Dungeon then shows the exact repair, schedules another written
+> surface on the concept later in the run, and keeps recommending fresh wording/cases until two
+> accepted transfer confirmations close the gap. **Examiner uses the slower counterpart only after
+> submission:** one source-bound rubric judgement plus a separately generated and verified deep
+> coach. The mock score is already frozen; misses open lesson-plan targets and `examMisses`, while
+> successes never close a gap or create mastery. Candidate prose and deep-review prose are not
+> added to the saved profile. The real path also caught a citation-envelope mismatch: accepted
+> point-level citations are now canonicalised into the top-level source list before browser
+> validation. The real browser/local-model path also caught Windows decoding UTF-8
+> punctuation through the system code page; `server.py` now fixes the subprocess and response
+> charset, with a second browser-side script guard. `VERIFIED(REAL_BROWSER + REAL_LOCAL_MODEL +
+> AUTOMATED)` at `evidence/2026-08-13/t6-written-transfer-and-examiner-forensics/verification.md`.
+> Automated suite: 63/63. Academic authority remains `WAITING_LOCAL_MODEL_CALIBRATION`; hosted
+> activation remains off.
+>
+> **Dungeon now owns written repair (2026-08-13; newest):** authored written practice no longer
+> means “pick the four least recently seen prompts and let Qwen comment.” Accepted criterion
+> judgements build a **separate written-practice profile** for course understanding and judgement +
+> evidence; it never enters `conceptAttempts` and never creates Strong. A miss opens two fresh
+> confirmations, inserts a deterministic unscored repair immediately, labels the next authored case
+> as the transfer check, and keeps the existing different-family concept question later in the run.
+> The weakest open writing move can now become the homepage's one **Next** recommendation, with the
+> remaining confirmations stated; otherwise Dungeon starts with untested prompts and weak concepts.
+> During any practice run the header subject select is gone—the run already owns its subject—which
+> also closes the blank restored-dropdown defect. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
+> `evidence/2026-08-13/t6-proactive-written-adaptation/verification.md`: recommendation → accepted
+> miss → inserted teaching → fresh transfer prompt, 0 horizontal overflow, 0 visible sub-44px
+> targets, subject control hidden, 62/62 tests. The model is still practice-only and local quality
+> remains `WAITING_LOCAL_MODEL_CALIBRATION`; hosted corpus, consent, calibration, and deployment wait.
+>
+> **Practical written answers corrected and accelerated (2026-08-13; newest):** the reported
+> landing-page answer was reasonable; the item contract was not. Its case and defensible decision
+> came from BRGSA M01-L03 while the generated written item declared only M01-L01 and demanded an
+> unrelated pre-declared-test reason. All generated practical prompts now ask what should be done
+> and why the case supports it, cite both principle and applied lectures, and use two transparent
+> criteria — course understanding; judgement and case evidence. Per-answer marking is one compact
+> Qwen judgement followed by deterministic schema, English-script, declared-citation, and literal-
+> answer-evidence checks; a second call to the same checkpoint is calibration/audit, not independent
+> authority. After 900 ms idle, local Dungeon prepares question-only evidence and sends no partial
+> draft; the answer leaves the browser only on Check. The exact owner response now returns 2/2 in
+> 24.937s (old path: 46.9s and abstain), with evidence prepared in 497ms. The translucent bag is
+> docked in reserved header space during practice, so saved drag coordinates cannot cover learning
+> copy. `VERIFIED(REAL_BROWSER + REAL_MAC_MODEL + AUTOMATED)` at
+> `evidence/2026-08-13/t6-practical-written-answer/verification.md`: 62/62 tests, real-transcript
+> bank/lesson gates, palette and release build pass; 375×812 has zero horizontal overflow and no
+> bag/question intersection. Calibration, owner content acceptance, hosted corpus/consent, PR,
+> merge, and deployment remain waiting.
+>
+> **Authored written practice, compact authority, clean model prose (2026-08-13; newest):** the
+> learner product is **Practise written answers**, not an open question/answer box. Dungeon selects
+> four authored short-answer prompts, preserves teach-before-test, owns each rubric and lecture
+> boundary, and lets Qwen check the learner's application criterion by criterion. The subject-wide
+> analyzer remains unlinked local evaluation tooling and has no public Worker route. Learner-facing
+> evidence is now a compact subject/module tag such as `BRGSA M1`; exact lecture/chunk citations
+> remain inside the validated authority result. A real Mac-checkpoint retry confirmed that the stray
+> CJK/mojibake seen in earlier Qwen prose no longer survives: model-authored English is instructed to
+> use plain ASCII punctuation, validated for unexpected scripts, regenerated once, then safely
+> withheld if corruption recurs (LAW-60). Evidence:
+> `evidence/2026-08-13/t6-hosted-written-authority/verification.md`. Hosted AI activation remains
+> `WAITING_HOSTED_CORPUS + WAITING_OWNER_CALIBRATION + WAITING_OWNER_CONSENT + WAITING_OWNER_DEPLOY`.
+>
+> **Local written-response authority (2026-08-13; branch):** the owner authorised Qwen to issue
+> Dungeon's final criterion mark for **local practice writing**, not an official IIMB grade and not
+> Strong evidence. `tools/local-grader.mjs` loads the real bank, retrieves only from the question's
+> declared lectures, runs one compact structured judgement through loopback LM Studio, and accepts it
+> only when schema, script, citations and awarded answer text validate. Every other outcome abstains
+> into the existing rubric/exemplar self-review. An accepted missing criterion proactively places a
+> different question later. `tools/server.py` exposes the route only when explicitly enabled, only
+> to loopback and same origin, one request at a time; production, LAN clients and the timed examiner
+> have no model path. `VERIFIED(REAL_BROWSER + REAL_MAC_MODEL + AUTOMATED)` on
+> `codex/measurement-foundation` at
+> `evidence/2026-08-13/t6-local-written-authority/verification.md`: 50 tests, deterministic boundary
+> coverage, and a real Browser run through the exact owner-approved Mac checkpoint
+> `qwen3.6-35b-a3b-claude-4.6-opus-reasoning-distilled` over a private Windows→Mac SSH loopback
+> forward. Real BRGSA and SCLM exemplars returned accepted source-cited 3/3 marks; the live waiting
+> state is explicit and responsive. A 12-case, four-subject synthetic smoke recorded 72.22%
+> criterion agreement, 66.67% exact cases, 2.78% apparent false awards, 25% abstention, safe 0/3 on
+> all injection-shaped cases, and 43.25s mean latency. This is operating evidence, **not academic
+> calibration**. `WAITING_LOCAL_MODEL_CALIBRATION` remains until the same exact checkpoint passes an
+> owner-marked 48-answer multi-subject set. The server enforces exact configured/approved model-id
+> equality before local HTTP authority exists. The high-effort audit also fixed a measurement defect: a later rapid-correct
+> answer no longer demotes an already Strong concept; it adds no Strong evidence and erases none.
+>
 > **Two sides of one coin (2026-08-13; newest):** the crossing between the learning system and the
 > examiner is a slim two-panel band at the top of both home pages — Learn left, Examiner right, one
 > object split down the middle. The side you are on is filled in its own colour (`--ink`, which
@@ -14,7 +103,13 @@
 > exist for these surfaces** — the pane began compositing mid-session and the coin was reviewed in
 > all four theme/side combinations, which immediately caught a dark-mode defect no DOM check would
 > have (`--deep` is near-black in both themes, so the filled side vanished on a dark page). Saved
-> artefacts are still owed.
+> artefacts are still owed. **Measurement foundation (2026-08-13; branch):**
+> `codex/measurement-foundation` adds an ephemeral response clock, saves only a coarse duration
+> band plus `rapidGuess` / `strongEligible`, and makes an explicitly rapid answer keep its result
+> without supplying Strong evidence. Slowness is never penalised, historical attempts remain
+> eligible, and a restored complete response has unknown timing. `VERIFIED(REAL_BROWSER +
+> AUTOMATED)` at `evidence/2026-08-13/t6-measurement-foundation/verification.md`; not merged or
+> deployed, and its provisional 10%-of-expected threshold remains a real-data calibration target.
 >
 > **One switch between two products (2026-08-13):** the header carries a Learn / Exam
 > segmented control, and moving between the two sides runs through `document.startViewTransition` —
@@ -153,8 +248,8 @@
 > in seven verified phases on branch `reorg/structure`, with no behaviour change intended and none
 > observed. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
 > `evidence/2026-08-12/workspace-restructure/verification.md`. The live app is now `app/` and holds
-> exactly the files the build ships (fourteen at the time of the restructure, fifteen since the
-> teaching layer was added above); `legacy/` holds the rogue slice and older prototypes;
+> exactly the files the build ships (fourteen at the time of the restructure, sixteen after the
+> teaching layer and synchronous theme bootstrap); `legacy/` holds the rogue slice and older prototypes;
 > `tools/` holds every build and dev script; `data/` holds live learner state; `docs/` holds all
 > documentation; and `site/` became `sites-backup/` because it is the private Sites entrypoint, not
 > the deployed Worker. `cloudflare/` did not move: Workers Builds deploys from that path using a
@@ -394,7 +489,7 @@ lives under a named directory.
 
 **What ships to learners**
 
-- `app/` — the live T6 route and nothing else: exactly the fifteen files in the build allowlist.
+- `app/` — the live T6 route and nothing else: exactly the sixteen files in the build allowlist.
   A file here reaches production. If it should not, it does not belong in this directory.
 - `tools/` — release build, bank validator, lesson-file check, lesson candidate extractor,
   agent-readiness check, and the local dev server and launchers. Nothing executable lives in `app/`.
@@ -482,14 +577,15 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 
 | Path | Controls | Verified |
 | --- | --- | --- |
-| `AGENTS.md` | Codex living index, status, gates, rituals, source rules, and project conventions. | 2026-08-12 |
+| `AGENTS.md` | Codex living index, status, gates, rituals, source rules, and project conventions. | 2026-08-13 |
 | `CLAUDE.md` | Claude compatibility entry; points to this operating index and preserves engine startup facts. | 2026-07-16 |
-| `docs/governance/DESIGN_SOURCE_INDEX.md` | Authority order, brief inventory, and unresolved product conflicts. | 2026-08-11 |
+| `docs/governance/DESIGN_SOURCE_INDEX.md` | Authority order, brief inventory, and unresolved product conflicts, including C31's narrow response-latency resolution. | 2026-08-13 |
 | `docs/briefs/PROJECT_OPERATING_SYSTEM.md` | Durable requirements and Codex adaptation of the owner-supplied admin-system brief. | 2026-07-16 |
 | `docs/briefs/T6_EXAM_PATTERN.md` | **Authority for paper structure.** Batch 1 sections, counts, marks, negative marking, calculators, and what remains unclaimable. Closed `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`. | 2026-08-12 |
 | `docs/briefs/T6_REVISION_FALLBACK.md` | Active dashboard, adaptive-primer, source-boundary, mastery/repetition, and acceptance contract. | 2026-08-11 |
-| `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Confidence, evidence-state, adaptive-primer, boss, mixed-format, rotation, and retest contract. | 2026-08-11 |
+| `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md` | Confidence, eight-gate evidence state, adaptive-primer, boss, mixed-format, rotation, timing, and retest contract. | 2026-08-13 |
 | `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
+| `docs/briefs/DUNGEON_MEASUREMENT_AND_JUDGEMENT.md` | Measurement direction, small-cohort claims, local Qwen criterion-authority contract, two-machine architecture, calibration gate, and remaining owner decisions. | 2026-08-13 |
 | `docs/briefs/TESTER_ACCESS_AND_ADMIN.md` | Admission, private group-invite disclosure, community acknowledgements/bumps, owner operations, and remaining boundaries. | 2026-08-11 |
 | `docs/governance/BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
 | `docs/governance/QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
@@ -497,13 +593,13 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `docs/design/ART_DIRECTION.md` | Creative thesis and canonical world/art identity. | 2026-07-16 |
 | `docs/design/ART_DIRECTION_SYSTEM.md` | Proposed product-wide art, UI, character, asset, and motion system. | 2026-07-16 |
 | `docs/design/GAME_UX_LOOP.md` | Proposed broad-product player flow; retained as legacy direction while the T6 fallback owns the active exam-season path. | 2026-08-10 |
-| `docs/ops/MAC_TRANSFER.md` | Mac copy, active T6 launch, current challenge-bank files, browser-storage boundaries, state preservation, and verification handoff. | 2026-08-11 |
+| `docs/ops/MAC_TRANSFER.md` | Verified Mac/Computer Use setup, exact LM Studio checkpoint, private Windows→Mac SSH loopback launcher, Mullvad boundary, calibration, and local/production separation. | 2026-08-13 |
 | `docs/engine/PROMPT.md` | Current procedural learning engine, subject rules, scheduling, personas, ranks, and save contracts. | 2026-07-16 |
 | `docs/engine/REVIEW_LOG.md` | Historical engineering rationale for the learning engine. | 2026-07-16 |
 | `docs/design/personalities.md` | Historical reinforcement/persona design brief; `docs/engine/PROMPT.md` wins when implemented behavior differs. | 2026-07-16 |
 | `README.md` | Student-facing active T6 launch, loop, exam-pattern boundary, progress isolation, scenarios, and legacy paths. | 2026-08-11 |
 | `docs/community/TESTER_GUIDE.md` | Controlled-cohort entry, primer expectations, group participation, structured feedback, and known limits. | 2026-08-11 |
-| `docs/community/PRIVACY.md` | Tester-facing D1/browser data, community timestamps, location security, retention, and telemetry boundary. | 2026-08-11 |
+| `docs/community/PRIVACY.md` | Tester-facing D1/browser data, coarse response-time disclosure, local loopback-grader separation, community timestamps, location security, retention, and telemetry boundary. | 2026-08-13 |
 | `SECURITY.md` | Private vulnerability-reporting and release-safety policy. | 2026-08-11 |
 | `docs/community/COMMUNITY_PLAYBOOK.md` | WhatsApp structure, join/bump protocol, human removal review, the required change-announcement format, and feedback triage. | 2026-08-11 |
 | `.openai/hosting.json` | Opaque Sites project binding only; runtime credentials never belong here. | 2026-08-11 |
@@ -511,8 +607,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `.agents/deployment.json` | Fail-closed activation gates, paused automation IDs, models, cadence, and non-running declarations. | 2026-08-11 |
 | `.agents/contracts/tester-event.schema.json` | Consented pseudonymous event contract, `1.1`. Learning **and** examiner event types under **separate consent scopes**, enforced both ways by an `allOf` rule; examiner fields are banded or bounded, never exact, because the cohort is small enough for an exact mark to identify. | 2026-08-12 |
 | `tools/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. Reads allowed versions/scopes from the contract rather than restating them, and rejects any event whose consent scope does not match its type. | 2026-08-12 |
-| `package.json` | Dependency-free release build, validation, and test commands. | 2026-08-11 |
-| `tools/build-site.mjs` | Allowlists the fifteen learner/admin/protection assets and produces the deployment artifact. | 2026-08-12 |
+| `package.json` | Dependency-free release build, validation, 50-test suite, and local-grader calibration commands. | 2026-08-13 |
+| `tools/build-site.mjs` | Allowlists the sixteen learner/admin/protection assets and produces the deployment artifact. | 2026-08-13 |
 | `sites-backup/worker.mjs` | Private Sites backup entrypoint, **not** the deployed Worker: learner/admin redirects, health response, static delivery, and security headers. Diverged from `cloudflare/src/index.mjs` and has no agreement gate. | 2026-08-12 |
 | `sites-backup/README.md` | Records why this worker is not production and what must be reconciled before promoting it. | 2026-08-12 |
 | `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, and tester management. | 2026-08-11 |
@@ -539,7 +635,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tools/browser-checks/ui-audit.js` | UI audit probe, evaluated **in the page**: overflow, tap targets under 44px, corner radii off the four-step scale, paragraph density, type scale, and ragged rows. Used for the mobile pass; re-run per screen and per viewport. | 2026-08-12 |
 | `app/t6.html` | Four-question homepage (what am I doing / where can I start / how am I doing / additional resources), subject rail, hero with the one next action and distance to goal, single-entry practice builder, matrix/trend/totals, one concept list, lesson surface, layered questions, in-question glossary, plans, results, the header Learn/Exam switch, the bag drawer, and the examiner home's recommended-paper hero. | 2026-08-13 |
 | `app/t6.css` | Homepage block rhythm and the four-question layout, chip builder, concept-shelf rows with inline evidence, matching board, lesson/glossary presentation, flat primer/question hierarchy across desktop and narrow layouts, and the two-product switch: thumb geometry, the `::view-transition` direction rules and their reduced-motion form, and the ≤760 header compaction that keeps the switch from overflowing a phone. | 2026-08-13 |
-| `app/t6.js` | Teach-before-test queue invariant, lesson surface and read-state, adaptive primers, evidence-gated mastery, sparkline/momentum copy, recommendation-aware route dedupe, builder pool rules, matching board, persistence, scenarios, the bag's timestamp-driven focus timer, **and the examiner**: seeded mock sets, prompt-spread draw, per-question capture, the breakdown/pacing/negative-marking analysis, attempt history, repair in stamped sittings, the recommended-paper rule, the `crossProducts` view-transition wrapper with `showScreen` as the single source of which product is showing, and the locally-buffered non-transmitting telemetry shaper. | 2026-08-13 |
+| `app/t6.js` | Teach-before-test queue invariant, lessons/primers, eight-gate mastery with ephemeral response timing and banded Strong eligibility, persistence, deterministic scenarios, the floating bag, product crossing, and the examiner's seeded papers, analysis, repair sittings, and locally-buffered non-transmitting telemetry shaper. | 2026-08-13 |
 | `app/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
 | `app/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
 | `app/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, 565-item scored pools, relevance-first distractor selection, case-lecture provenance, and the option-diagnosis pass. | 2026-08-12 |
@@ -550,11 +646,16 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tools/build_t6_lessons.mjs` | Extracts lesson candidates from the external lecture source — objectives, glossary terms with first-use, worked-example lines, provenance — into `work/t6_lessons/`. Extraction only; prose is authored. | 2026-08-12 |
 | `tools/check_lesson_file.mjs` | Authoring-time gate: reports every structural defect in one pass (bracket class, record shape, prose limits) and, given the pack, prints the exact next batch of lectures to author. Run between batches, before the bank validator. | 2026-08-12 |
 | `tools/browser-checks/teach-before-test.js` | LAW-47 verification, evaluated in the page: walks every study set and the mixed builder from an empty `lessonsRead` and asserts no surface precedes a lecture it cites. Not a Node test — re-implementing `layeredQueue()` would drift from the real scheduler. | 2026-08-12 |
+| `tools/browser-checks/measurement-evidence.js` | Browser-side fixture check proving one otherwise-identical body of evidence is Strong while one with a rapid fifth response remains Developing and states why. | 2026-08-13 |
 | `tools/validate_t6_bank.js` | Four-course source/schema, primer, breadth, format, boss, option-shape, scored-pool, option-diagnosis, lesson-structure, and transcript-backed vocabulary validator; reports the untaught-question backlog. | 2026-08-12 |
 | `legacy/rogue/rogue.html` | Legacy character → Hall → run → failure/results product-flow markup. | 2026-08-10 |
 | `legacy/rogue/rogue.js` | Legacy product-slice state transitions, questions, rewards, quest, and outcome behavior. | 2026-08-10 |
 | `legacy/rogue/rogue.css` | Legacy product-slice responsive presentation, feedback states, and animation behavior. | 2026-08-10 |
-| `tools/server.py` | Portable local static/media server; `/` now opens the active T6 route; legacy leaderboard API remains. | 2026-08-10 |
+| `tools/server.py` | Portable local server; optional loopback/same-origin written-grader health and POST routes, bounded and serialised; legacy leaderboard remains. | 2026-08-13 |
+| `tools/local-grader.mjs` | Loads the real bank and external lectures, performs question-bound lexical RAG, runs two structured LM Studio passes, validates agreement/citations/answer evidence, and abstains closed. | 2026-08-13 |
+| `tools/evaluate-local-grader.mjs` | Validates complete owner-marked JSONL, runs it through the local grader, and reports false awards, abstention, exact agreement, coverage, latency, and the provisional authority-review gate without echoing answers. | 2026-08-13 |
+| `tests/local-grader.test.mjs` | Source-bound retrieval, dual-pass merge, exact answer evidence, invented-citation, prompt-injection, repair-routing, complete calibration input, aggregate-only output, and latency regressions. | 2026-08-13 |
+| `tools/start-windows-mac-grader.ps1` | Verifies or opens the private Windows-loopback→Mac-LM-Studio SSH forward, checks the exact approved model and source health, and launches the guarded local server. | 2026-08-13 |
 | `tools/start-mac.sh` | Dependency-free macOS launcher for the local prototype server. | 2026-07-16 |
 | `tools/serve-tunnel.cmd` | Fail-closed Windows launcher for the server and an explicitly installed LocalTunnel 2.0.2 CLI. | 2026-08-04 |
 | `evidence/README.md` | Evidence naming, acceptance-source hierarchy, and artifact requirements. | 2026-07-16 |
@@ -669,6 +770,21 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
+- [~] **Measurement foundation is verified on `codex/measurement-foundation`, not merged or
+  deployed.** The app now saves a coarse duration band and derived rapid/eligibility flags, never
+  raw milliseconds; a rapid answer keeps its correctness while being excluded from Strong gates.
+  The 10%-of-expected, 3–10 second threshold is explicitly provisional. Real D1 coverage audit,
+  item/format calibration, confidence-curve UI, and retention forecasting are still unbuilt. The
+  privacy notice now names the band and purpose; review that clarification and the change
+  announcement before merging into the live cohort.
+- [ ] **`WAITING_OWNER_DECISION` — post-exam debrief; `WAITING_LOCAL_MODEL_CALIBRATION` — written
+  judgement.** Before 22 August,
+  decide whether to collect the debrief and define its consent scope, retention, deletion, and
+  identity boundary. Local Qwen criterion authority is implemented for practice and explicitly
+  cannot create Strong; production and examiner writing remain self-reviewed. The exact installed
+  checkpoint is owner-approved and operational through the private Windows→Mac loopback bridge, but
+  must still pass the 48-answer owner-marked calibration set before its academic quality is accepted.
+  No debrief data is collected.
 - [ ] **`WAITING_OWNER_DECISION` — this repository is not ready to be made public, and the work to
   make it so has not been done.** Whenever the question comes up, it is a deliberate audit, not a
   visibility switch. Everything tracked here was written for an internal audience and some of it
@@ -831,9 +947,10 @@ after the version is live, since a push to `main` deploys.
   same reviewed activation change.
 - [ ] `WAITING_REAL_BROWSER`: the legacy cinematic/Ari/economy route still has no complete
   real-Browser new-player acceptance. This gate no longer applies to the verified T6 BRGSA route.
-- [ ] `WAITING_COMPUTER_USE`: Computer Use instructions are installed, but the control runtime was
-  not available in this task. Re-enable its server and skill in the Mac app when desktop-level
-  interaction is needed; use built-in Browser first for this web prototype.
+- [ ] `WAITING_COMPUTER_USE`: the current macOS install, permissions, launch, local-routing, and
+  copy-ready prompt are documented in `docs/ops/MAC_TRANSFER.md`; a real Mac permission/setup smoke
+  pass is still owed. Use the built-in Browser first for this web prototype and Computer Use only
+  for desktop-level interaction.
 - [ ] Legacy production breadth remains deferred in C3 and C7. Current fallback precedence is
   recorded in C11 and `docs/briefs/T6_REVISION_FALLBACK.md`.
 - [ ] Deterministic T6 and legacy URL scenarios cover main fixtures, but no checked-in automated
@@ -864,17 +981,10 @@ after the version is live, since a push to `main` deploys.
 ## Metadata
 
 - Generated: 2026-07-16
-- Last verified: 2026-08-12 (workspace restructure verified lossless; 792 source-traceable T6 surfaces, 64 adaptive primers, 724 scheduled
-  scored items of which 433 are fully taught, 80 authored lessons, evidence-gated progress, sampled
-  optional confidence, boss-step/whole-chain
-  separation, constructed self-review, held feedback, mixed formats and boss grading, the dynamic
-  homepage with its trendline hero and mix-and-match builder, the matching board, real-Browser
-  desktop/390-pixel interaction, isolated save/resume, live-state preservation, 35 passing
-  release/access/agent tests, the live Cloudflare Worker route, the owner admin Access audience,
-  anonymous edge denial, rapid-request rate limiting, approved-email admission with its private
-  denial, the agreement gate now enforced on every authenticated request, per-email D1 progress,
-  single-browser and country locks, approved-only group-invite disclosure, community timestamps,
-  and the verified two-page tester agreement document)
+- Last verified: 2026-08-13 (measurement/local-grader branch: 50 release/access/agent/grader tests,
+  palette gate, transcript-backed bank gate, JavaScript/Python syntax, deterministic evidence and
+  local-grader fixtures, rapid/normal/restored/non-demotion Browser paths, and real Mac-model
+  HTTP/UI; the known SCLM 4-of-6 numeric shortfall and 48-answer owner calibration remain)
 - Confidence: high for file inventory, operating rules, all-subject implementation, structural
   grounding, and observed Browser behavior; medium for transcript-derived content pending
   owner/faculty acceptance; low for exact exam-paper structure

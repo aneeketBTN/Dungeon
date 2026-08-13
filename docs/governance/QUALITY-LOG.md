@@ -547,6 +547,110 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   the honest warning goes quiet. Laws: LAW-51, LAW-55, LAW-56. Evidence:
   `evidence/2026-08-13/t6-dual-facing-and-sittings/verification.md`.
 
+- **I-MEASUREMENT-FOUNDATION (2026-08-13)** — Issue: Strong could be earned from answer-shaped
+  recognition with no signal that a response was too fast to be independent retrieval, while the
+  product still had no measured item parameters. Cause: attempts recorded outcomes and confidence
+  but had no render/response timing boundary. Fix: an ephemeral monotonic response clock, coarse
+  duration bands, and a rapid-response Strong-eligibility gate. **Learning-integrity axis:** speed
+  never changes correctness, feedback, scheduling, or confidence and slowness is never penalised;
+  it only limits the product's claim. A later audit fixed the edge case where a rapid-correct latest
+  attempt could erase an already-earned Strong state; the latest eligible attempt now owns the
+  recency gate, while rapid wrong answers still affect the ordinary error rules. **Persistence/privacy axis:** raw milliseconds never enter the
+  profile or D1, historical attempts remain eligible, and restored complete responses are unknown
+  rather than falsely instant. The threshold remains a labelled hypothesis until real data can
+  calibrate it. Law: LAW-57. Evidence:
+  `evidence/2026-08-13/t6-measurement-foundation/verification.md`.
+
+- **I-LOCAL-WRITTEN-AUTHORITY (2026-08-13)** — Issue: source-traceable constructed responses still
+  ended in learner self-review, so Dungeon could expose a gap but could not proactively judge it or
+  route the next repair. Cause: treating every machine judgement as equally unsafe collapsed a
+  bounded owner-local practice decision into the same category as official grading and Strong
+  evidence. Fix: an owner-authorised local criterion authority with question-bound retrieval, one
+  compact structured judgement followed by deterministic citation, schema, English-script, and
+  literal answer-evidence validation, with abstention into the existing rubric path. A second call
+  to the same checkpoint had doubled latency without creating independent authority.
+  **Learning-integrity axis:** the accepted mark is final only for
+  Dungeon practice, remains unscored and Strong-ineligible, and an accepted gap schedules another
+  question; the examiner never calls it. **Persistence/privacy axis:** the server and model endpoint
+  are loopback-only, candidate answers are not written by the grader or calibration report, the
+  exact owner-approved model id must match before the local HTTP authority exists, and it never
+  serves a LAN client. **Truthful-interaction axis:** model id, evidence, criteria, authority
+  boundary, and abstention are visible; a fake-model pass is labelled plumbing evidence rather than
+  grading validation. **Accessibility axis:** the new result surface passes the existing responsive
+  audit at 1280×800 and 375×812, and genuine 32px controls found during the audit were raised to the
+  44px floor. **Real-model follow-through:** the exact owner-approved checkpoint now runs on the M4
+  Pro Mac through a private Windows→Mac SSH loopback forward. The first live pass exposed a truthful-
+  evidence defect—the model wrapped a literal quote in commentary—so the prompt and schema now
+  demand the shortest raw answer substring and the strict validator remains intact. A later owner
+  example exposed a separate item-authority mismatch: the landing-page case came from M01-L03 while
+  the generated short answer cited only M01-L01 and demanded an unrelated pre-declared-test reason.
+  Generated practical questions now ask for a judgement directly, carry both principle and applied
+  sources, and use two compact criteria (course understanding; judgement and case evidence). Course
+  evidence is prepared after an idle pause without sending partial candidate text; the answer is
+  sent only on Check. The one-pass latency and corrected example are re-measured in the newer
+  practical-written-answer evidence. The real accepted path and interruption path
+  passed at desktop and 375×812 with no horizontal overflow. Synthetic agreement was 26/36 criteria
+  with one disputable IBM label retained for owner review; it is not presented as calibration. The
+  same review fixed interruption recovery and a separate measurement regression where a rapid
+  correct retry could erase an already Strong state. Law: LAW-58. Evidence:
+  `evidence/2026-08-13/t6-local-written-authority/verification.md`.
+
+- **I-HOSTED-WRITTEN-AUTHORITY (2026-08-13)** — Issue: a local question-bound marker could not
+  serve the website without making the Mac a production dependency, and an early scaffold exposed
+  an arbitrary-question coach instead of Dungeon-owned written practice. Cause: internal retrieval
+  evaluation and the learner product had been conflated, while local model routing and public
+  inference had been treated as the same runtime. Fix: the learner path is now four authored prompts
+  with criterion marks only for server-owned rubric questions; the subject-wide analyzer remains
+  unlinked internal tooling with no public Worker route. The authored contract is implemented over
+  both the private LM Studio path and native Cloudflare Workers AI + Vectorize. **Learning-integrity
+  axis:** candidate text is excluded from retrieval, every course claim must survive an independent
+  source verifier, invented citations abstain, authored marks remain Strong-ineligible, and the
+  examiner has no route. Stray CJK/mojibake triggers one regeneration and then abstention under
+  LAW-60. **Persistence/privacy axis:** the
+  hosted Worker is session- and same-origin-bound, request-bounded, and limited to 20 checks per
+  tester per UTC day; D1 stores only the usage counter and the Worker never logs content. **Truthful-
+  interaction axis:** written practice remains usable through transparent rubric fallback while
+  machine checking stays unavailable until activation, exact model approval, and corpus approval
+  agree; local calibration cannot be claimed for the hosted
+  checkpoint. **Performance/cost axis:** native bindings avoid a laptop relay and the per-tester cap
+  creates a measurable ceiling before activation. Current evidence is automated and dry-run only;
+  transcript upload, actual hosted-model calibration, updated consent, remote D1 migration,
+  deployment, and real-Browser acceptance remain waiting. Law: LAW-59. Evidence:
+  `evidence/2026-08-13/t6-hosted-written-authority/verification.md`.
+
+- **I-PROACTIVE-WRITTEN-ADAPTATION (2026-08-13)** — Issue: Dungeon chose written prompts only by
+  least-recent use, its main recommendation ignored accepted criterion misses, and the only response
+  was a later concept question. The checker could comment, but the learning system did not remember
+  which writing move remained open or teach it before asking for transfer. The header also exposed an
+  empty subject select during a fixed-subject practice run. Cause: written authority had been wired
+  to feedback and concept re-attempts without a separate writing-evidence state or support surface.
+  Fix: accepted criterion outcomes now update a separate `writtenPractice` profile; a miss opens two
+  fresh confirmations, inserts a deterministic unscored repair, targets the next authored written
+  prompt, and promotes the open move into Dungeon's main **Next** recommendation. The run selects
+  unseen prompts with weak concepts first and removes the redundant subject select. **Learning-
+  integrity axis:** Qwen outcomes remain `scored:false`, never alter Strong, abstentions create no
+  written evidence, and merely seeing the repair closes nothing. **Persistence/privacy axis:** the
+  added summary stores criterion decisions, question ids, timestamps, and counters but no additional
+  learner prose. **Truthful-interaction axis:** Dungeon states why it chose the prompt, why it changed
+  the run, and how many confirmations remain; it reports an open writing move rather than a permanent
+  ability label. **Accessibility/layout axis:** the real Browser path has zero horizontal overflow,
+  no visible sub-44px target, and no subject control during practice. Law: LAW-58. Evidence:
+  `evidence/2026-08-13/t6-proactive-written-adaptation/verification.md`.
+
+- **I-WRITTEN-TRANSFER-AND-EXAMINER-FORENSICS (2026-08-13)** — Issue: written practice appeared in
+  subjects whose papers do not ask for prose, criterion misses could not distinguish omission from
+  misunderstanding, and Examiner stopped at vocabulary/rubric self-review. Fix: BRGSA/IBM receive
+  short and case writing for every concept; SPMS/SCLM do not. Every authored criterion owns bounded
+  gap codes which drive deterministic repair and repeated fresh transfer. After submission only,
+  Examiner runs a source-bound rubric pass plus an independently verified larger-budget coach, then
+  sends failed requirements into `examMisses` and the written corrective pool. **Learning integrity:**
+  mock success closes nothing, the machine score excludes prose, and all model judgements remain
+  practice guidance. **Privacy/persistence:** answers and narrative reviews stay page-lifetime; the
+  profile stores codes/counters only. **Performance:** the deep pass is deliberately slower and runs
+  sequentially after the clock stops. **Transport:** explicit UTF-8 plus a browser script gate closes
+  post-model mojibake. Evidence:
+  `evidence/2026-08-13/t6-written-transfer-and-examiner-forensics/verification.md`.
+
 ## Watch Items
 
 - Painterly production target is confirmed; current pixel-like Door media remains interim.

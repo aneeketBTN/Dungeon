@@ -1,7 +1,208 @@
 # Changelog
 
+## 2026-08-13 — Written transfer across Learn and post-submit Examiner forensics
+
+Evidence: `evidence/2026-08-13/t6-written-transfer-and-examiner-forensics/verification.md`
+
+- Aligned authored prose with the final papers: BRGSA and IBM now each have short-form and case-based
+  written practice on all sixteen concepts; SPMS and SCLM have no invented prose route.
+- Added server-owned missing/misunderstood gap codes per rubric criterion. Accepted Qwen judgements
+  update a separate corrective pool, insert exact deterministic teaching, and schedule fresh written
+  transfer until two later confirmations close each gap. They remain `scored:false` and never Strong.
+- Added automatic post-submit Examiner review for attempted written answers. It runs the bounded
+  rubric authority, then a larger-budget two-pass coach against the authored question's declared
+  lectures and rubric. Failed criteria prioritise Dungeon lessons/re-tests; passed mock criteria do
+  not close gaps or award mastery. Written work remains excluded from the machine score.
+- Fixed UTF-8 decoding at the Windows Python-to-Node boundary after a real run transformed an em dash
+  into CJK-looking mojibake. Browser validation now also rejects unexpected script after transport.
+- Canonicalised every accepted point-level coaching citation into the response's top-level citation
+  list. A real Browser rerun caught the former mismatch when server validation accepted a supplied
+  nested citation but the browser correctly withheld the inconsistent response.
+- Hosted code has the same authored post-submit route but remains fail-closed and undeployed pending
+  exact-model/corpus approval, consent, calibration, and owner merge.
+
 Newest first. Add one entry for every session that changes the workspace. Each entry records what
 changed, decisions, verification/evidence, and deferrals.
+
+## 2026-08-13 — Dungeon-owned written diagnosis and teaching repair
+
+Evidence: `evidence/2026-08-13/t6-proactive-written-adaptation/verification.md`
+(`VERIFIED(REAL_BROWSER + AUTOMATED)`, branch only; `WAITING_LOCAL_MODEL_CALIBRATION +
+WAITING_HOSTED_CORPUS + WAITING_OWNER_CALIBRATION + WAITING_OWNER_DEPLOY`; nothing committed,
+pushed, merged, or deployed).
+
+- Replaced least-recent-only written scheduling with a separate criterion-level practice profile.
+  Accepted misses open two fresh confirmations; later accepted successes close them one at a time.
+  This state changes written selection and recommendations but remains separate from concept mastery.
+- Promoted an open writing move into Dungeon's main **Next** recommendation. It names the dimension,
+  explains the intervention, states the remaining confirmation count, and withdraws the duplicate
+  written route.
+- Inserted a deterministic, unscored repair immediately after a missing criterion. It teaches a
+  three-move answer structure, then labels the next fresh authored prompt as the transfer check. The
+  existing different-family concept repair is retained later in the run.
+- Removed the header subject select during active practice. The run has already fixed its subject;
+  the empty dropdown was both a resume defect and a control that could not honestly change the run.
+- Corrected a stale brief that still described two sequential generations after the one-pass latency
+  correction. Added a real-page scenario/check for recommendation, repair, transfer, zero overflow,
+  target size, and hidden fixed-subject control. Automated suite remains 62/62.
+
+## 2026-08-13 — Practical written judgements: correct authority, half the model path
+
+Evidence: `evidence/2026-08-13/t6-practical-written-answer/verification.md`
+(`VERIFIED(REAL_BROWSER + REAL_MAC_MODEL + AUTOMATED)`, branch only;
+`WAITING_LOCAL_MODEL_CALIBRATION + WAITING_HOSTED_CORPUS + WAITING_OWNER_CALIBRATION +
+WAITING_OWNER_DEPLOY`; nothing committed, pushed, merged, or deployed).
+
+- Reproduced the owner's landing-page answer and found that the generated item cited the general
+  M01-L01 validation lecture while its case and correct decision came from M01-L03. It also demanded
+  an unrelated pre-declared-test reason. Generated written items now carry principle plus applied
+  sources and ask a direct, practical decision question.
+- Reduced the transparent rubric to the two things the prompt is actually trying to observe:
+  course understanding, and judgement supported by case evidence. The exact course term is optional
+  when the response applies the idea accurately.
+- Replaced two sequential generations from the same checkpoint with one compact Qwen judgement plus
+  deterministic schema, English-script, declared-citation, and literal-answer-evidence validation.
+  The exact previously rejected answer now receives 2/2 in 24.937 seconds rather than abstaining in
+  46.9 seconds.
+- Added question-only evidence preparation after a 900 ms writing pause. Partial drafts never leave
+  the browser; the candidate answer is sent only on Check. Preparation measured 497 ms.
+- Made the bag launcher translucent and docked it into reserved header space during practice, so a
+  stored drag position cannot cover learning copy. Real Browser verification passed at desktop and
+  375×812 with zero horizontal overflow and no bag/question intersection.
+- Automated gates: 62/62 tests, real-transcript bank and lesson gates, palette gate, and release
+  build pass. Local and hosted 48-answer owner calibration, corpus setup, consent, PR merge, and
+  deployment remain waiting.
+
+## 2026-08-13 — Authored written practice and fail-closed website authority
+
+Evidence: `evidence/2026-08-13/t6-hosted-written-authority/verification.md`
+(`IMPLEMENTED + VERIFIED(AUTOMATED + WORKER_DRY_RUN)`, branch only;
+`WAITING_HOSTED_CORPUS + WAITING_OWNER_CALIBRATION + WAITING_OWNER_DEPLOY`; no Cloudflare resource
+was created or changed, no transcript was uploaded, and nothing was committed, pushed, merged, or
+deployed).
+
+- Narrowed the learner product to Dungeon-authored short-answer practice behind one validation
+  contract. **Practise written answers** selects four owned prompts, preserves teach-before-test,
+  and may issue a source-cited criterion mark. The subject-wide analyzer remains unlinked
+  internal evaluation tooling and has no public Worker route.
+- Added hybrid subject retrieval locally using the loaded
+  `text-embedding-nomic-embed-text-v1.5` model, with a lexical fallback. Candidate answers are
+  deliberately excluded from retrieval queries so untrusted claims cannot choose their own
+  authority material. The Windows launcher now verifies both exact local model IDs.
+- Added an authenticated same-origin Cloudflare Worker implementation using
+  `@cf/qwen/qwen3-30b-a3b-fp8`, `@cf/qwen/qwen3-embedding-0.6b`, and a filtered 1,024-dimensional
+  Vectorize binding. Server-owned rubric/source boundaries, deterministic structured validation,
+  citation validation, abstention, 16 KiB requests, and the examiner exclusion remain intact.
+- Added content-free D1 metering with a default 20-check per learner daily limit. The Worker stores
+  no candidate answer, retrieved course text, or model output and does not log them.
+- Added an authored **Practise written answers** dashboard route. Machine checking remains
+  fail-closed until feature, exact model approval, exact corpus approval, bindings, and a non-empty
+  corpus all agree; the learner route remains usable through the transparent rubric fallback.
+- Collapsed learner-facing evidence into subject/module tags such as `BRGSA M1`, while retaining
+  exact lecture/chunk citations inside the validated authority result. Added LAW-60: model-authored
+  English is checked for stray CJK/mojibake, regenerated once, and safely abstains on recurrence.
+- Added deterministic generation of the 64-question server manifest, a private transcript-to-
+  Vectorize NDJSON builder, and a hosted calibration runner that talks to the exact Workers AI model
+  and actual Vectorize corpus. The current 283-lecture pack produces 3,470 bounded chunks without
+  being copied into the repository.
+- Added LAW-59, privacy disclosure, runbook, and 61 passing automated checks, including encoding
+  retry/abstention coverage, plus a
+  successful Worker dry-run showing AI and Vectorize bindings while activation vars remain off,
+  unapproved, and unindexed.
+- Deferred: creating the Vectorize resource and metadata indexes, uploading the external corpus,
+  48-case hosted rubric calibration, updated tester agreement, remote
+  D1 migration, real-Browser/pixel acceptance, owner PR merge, and deployment.
+
+## 2026-08-13 — Local written-response authority and high-effort audit
+
+Evidence: `evidence/2026-08-13/t6-local-written-authority/verification.md`
+(`VERIFIED(REAL_BROWSER + REAL_MAC_MODEL + AUTOMATED)`, branch only;
+`WAITING_LOCAL_MODEL_CALIBRATION`; not committed, pushed, merged, or deployed).
+
+- Implemented the owner's decision that local Qwen may issue Dungeon's final **practice**
+  criterion mark for a written response. It remains an internal Dungeon judgement: not an IIMB
+  grade, not an exam prediction, and never Strong evidence. The timed examiner has no model path.
+- Added a dependency-free local grader that loads the real bank, confines retrieval to the
+  question's declared lectures, and runs two blinded structured passes through loopback LM Studio.
+  A mark is accepted only on exact per-criterion agreement with validated source citations and
+  literal answer evidence; malformed output, disagreement, unsupported evidence, timeout, and
+  interruption abstain into the existing rubric/exemplar self-review.
+- Added a deliberately narrow local HTTP boundary: explicitly enabled, loopback client and model
+  endpoint, exact same browser origin, no CORS, 32 KiB request cap, and one grading request at a
+  time. Production and LAN clients receive no grader route. The model sees no client-supplied bank,
+  rubric, or lecture ids; it sees only the server's authoritative question and retrieved evidence.
+- Added the proactive product loop: accepted missing criteria place a different question later in
+  practice. Accepted machine marks remain `scored: false` and `strongEligible: false`. Abstention
+  leaves a visible, usable manual self-review route.
+- The requested higher-effort review found and fixed two real defects. A rapid-but-correct latest
+  attempt could erase an already Strong state; recency now uses the latest Strong-eligible attempt.
+  And leaving while the local grader was running could persist a stuck grading state; interruption
+  now restores ready-to-grade and ignores the late result.
+- The final audit found a third boundary defect: exact checkpoint approval was documented as
+  mandatory but the launcher did not enforce it. The local HTTP authority now remains disabled
+  until an owner-set approved model id exactly matches the configured model id; the offline
+  evaluator needs no such approval, so a candidate can be measured before its ID is authorised.
+- Added grader tests, a deterministic OpenAI-compatible fixture, aggregate-only calibration
+  tooling, responsive Browser verification, and LAW-58. Current gates: 50/50 tests, build pass,
+  palette pass, source-backed bank validation pass, and expected unchanged SCLM examiner shortfall.
+- Updated the Mac handoff with ChatGPT Computer Use permissions, LM Studio configuration, health
+  checks, launch commands, the private owner-marked calibration workflow, and Windows→Mac SSH
+  workspace setup without VNC or a public tunnel. A real Windows Connections screenshot corrected
+  the earlier direction error: **Control this PC** authorises controllers of Windows and does not
+  accept a code generated by the Mac; desktop-to-desktop access belongs in the adjacent **SSH** tab.
+  The local access point was then proven to isolate peers despite common-subnet ARP, so the handoff
+  now carries a least-privilege Tailscale fallback. Windows and Mac are verified connected with no
+  exit node, advertised routes, Tailscale SSH, or posture reporting.
+  Native SSH was then proven over the Tailscale peer after isolating Mullvad's terminal PF kill-
+  switch rule as the dropped-SYN cause; no ACL weakening, public tunnel, exit node, route advert, or
+  Tailscale SSH was introduced.
+- The owner selected the already installed exact LM Studio identifier
+  `qwen3.6-35b-a3b-claude-4.6-opus-reasoning-distilled`. Added
+  `tools/start-windows-mac-grader.ps1`: it keeps Windows as the authoritative checkout, opens a
+  loopback-only SSH forward to Mac LM Studio, checks the exact ID and 283-lecture source pack, and
+  launches the guarded site. Real BRGSA and SCLM exemplars returned accepted source-cited 3/3 marks.
+  The first live output exposed commentary-wrapped answer evidence; the prompt/schema now require
+  the shortest raw literal substring and a regression preserves the strict validator.
+- Added an honest two-pass waiting surface based on measured real-model performance. A 12-case
+  four-subject synthetic smoke issued 9/12, safely marked all four injection-shaped answers 0/3,
+  and recorded 72.22% criterion agreement, 66.67% exact cases, 2.78% apparent false awards, 25%
+  abstention, 43.25s mean latency, and 48.45s p95. The in-app Browser completed the real model path
+  and the interruption path at desktop and 375×812 without overflow.
+- Deferred: the 48-answer owner-marked calibration set, empirical academic acceptance, and any
+  hosted or production inference path. The exact checkpoint is operational and owner-approved;
+  deterministic and synthetic evidence prove the bounded system contract, not marking validity.
+
+## 2026-08-13 — Measurement foundation and Mac workstation handoff
+
+Evidence: `evidence/2026-08-13/t6-measurement-foundation/verification.md`
+(`VERIFIED(REAL_BROWSER + AUTOMATED)`, branch only; not merged or deployed).
+
+- Added an ephemeral monotonic response clock. Explicit answer commit fixes the elapsed time;
+  the profile receives only the existing contract's coarse duration band plus `rapidGuess` and
+  `strongEligible`. Raw milliseconds never enter a saved session, local profile, or D1 payload.
+- Added the eighth Strong gate. A rapid response keeps its correctness, diagnosis, feedback, and
+  scheduling effect but cannot supply or erase Strong evidence. A high-effort audit caught and
+  fixed the edge case where a later rapid-correct attempt could demote an already Strong concept;
+  recency now reads the newest eligible attempt while rapid wrong answers still reach ordinary
+  error handling. Slowness is never penalised, historical
+  untimed attempts stay eligible, and a complete response restored after reload is recorded with
+  unknown timing instead of being falsely classified from the few seconds after reload.
+- Added isolated Browser fixtures for the Strong/Developing comparison, established-Strong
+  non-demotion, live rapid response, normal response, and restored-response path. The deterministic pair differs only in the fifth
+  response's eligibility and renders one Strong, one Developing, with the reason named.
+- Indexed the owner-supplied measurement research as
+  `docs/briefs/DUNGEON_MEASUREMENT_AND_JUDGEMENT.md`, resolved its speed-language conflict as C31,
+  updated the eight-gate evidence and technical briefs, and documented LAW-57. The privacy notice
+  now states the coarse band, purpose, and raw-time prohibition; the existing collection purpose
+  and attempt category are unchanged.
+- Rebuilt the Mac handoff around a private Git checkout, local server, ChatGPT Computer Use macOS
+  permissions and copy-ready prompt, LAN-only development access, `@Chrome` for an existing signed-
+  in session, and a hard boundary between an offline loopback local-model lab and Cloudflare
+  production. No package or model download was initiated.
+- Deferred: live D1 coverage audit, empirical threshold calibration, confidence-curve UI,
+  retention forecasting, post-exam debrief collection, machine-created Strong evidence, and any
+  production model path. The latter two remain owner decisions; no telemetry transmission path was
+  added.
 
 ## 2026-08-13 — One switch between two products; repair arrives in sittings; the bag
 

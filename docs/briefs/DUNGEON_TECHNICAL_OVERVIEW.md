@@ -84,7 +84,7 @@ practice**, **Developing**, **Strong**. The computation is `evidenceFromAttempts
 - a recurring misconception (the same diagnosis tag twice);
 - an unresolved failed boss step.
 
-**Strong** requires *all seven* gates:
+**Strong** requires *all eight* gates:
 1. ≥ 5 scored attempts;
 2. ≥ 4 correct;
 3. ≥ 3 distinct question types or cognitive perspectives answered correctly;
@@ -92,7 +92,9 @@ practice**, **Developing**, **Strong**. The computation is `evidenceFromAttempts
 5. applied/integrative evidence — a new case, a transfer item, or a valid unassisted boss step;
 6. the most recent attempt is correct;
 7. no open flag: no unresolved confident error, recurring misconception, uncertain-correct
-   awaiting confirmation, or failed reasoning step.
+   awaiting confirmation, or failed reasoning step;
+8. attempts used for the claim are Strong-eligible. A response classified as provisionally too
+   rapid keeps its correctness and feedback but does not supply Strong evidence.
 
 **Developing** is everything in between, and the dashboard names which gate is still open rather
 than showing a bare percentage.
@@ -103,6 +105,11 @@ history. A second recent miss drops it to Needs practice.
 **Strong means strong *current* evidence.** Two time qualifiers ride alongside it: evidence is
 *same-day* until a correct retrieval happens ≥ 20 hours after the first successful block, and
 *refresh due* when the last correct retrieval is more than 4 days old.
+
+Response timing uses an ephemeral monotonic clock. Only a coarse band and the derived
+`rapidGuess` / `strongEligible` flags enter the saved attempt; raw milliseconds never enter the
+profile or D1. The threshold is provisional (10% of expected response time, clamped to 3–10
+seconds) and can only withhold Strong eligibility. Slowness is never penalised or interpreted.
 
 The gates are rule-based on purpose. The bank has no calibrated item parameters and no cohort
 data, so presenting an item-response or Bayesian score would be false precision. This is a stated
@@ -140,6 +147,63 @@ families and blocks; an uncertain correct schedules a new-family confirmation.
 Calibration language requires ≥ 20 diagnostic judgments across ≥ 3 blocks and ≥ 2 formats. Below
 that the dashboard shows the count and says it is not enough. It never converts verbal categories
 into probabilities.
+
+### 3.5 Written-response judgement and coaching
+
+On an explicitly enabled loopback development server, a practice short answer can be checked by
+the owner-selected exact LM Studio checkpoint
+`qwen3.6-35b-a3b-claude-4.6-opus-reasoning-distilled`. The authoritative Windows checkout reaches
+Mac LM Studio through a private loopback-only SSH forward; neither model nor grader is exposed to
+the LAN. The HTTP authority exists only when an
+owner-approved model ID exactly matches the configured model ID, so changing checkpoints withdraws
+authority until the replacement ID is explicitly approved; its quality status stays waiting until
+the replacement is calibrated. `tools/local-grader.mjs` loads the real bank,
+looks up the question server-side, and retrieves chunks only from the lecture IDs the question
+already cites. It sends no browser-supplied rubric or source boundary to the model.
+
+The grader asks for one compact `met` / `not_met` / `uncertain` decision per rubric criterion.
+Dungeon accepts a mark only when the schema is complete, model-authored prose passes its English-
+script guard, every citation is one of the retrieved chunks, and awarded answer evidence is a raw
+literal substring actually present in the candidate answer. Anything else abstains to the existing
+visible self-review path. A second call to the same checkpoint was removed from the per-answer path:
+it doubled latency without creating independent authority and remains available to calibration/audit
+rather than everyday practice. An accepted missing criterion now inserts an unscored deterministic
+writing repair immediately, tags the next fresh authored written prompt as a transfer confirmation,
+and uses `ensureReattempt()` to place a different question on the affected course concept later.
+
+The output is authoritative for **Dungeon's local practice rubric mark only**. It is labelled with
+the model, is not an official IIMB grade, never runs while a timed examiner paper is in progress, and is recorded
+`scored:false`, so it cannot supply Strong evidence. Deterministic fixture verification, a real
+Browser 3/3 path, and a 12-case synthetic smoke prove the bounded operating path. They do not prove
+academic validity; quality remains `WAITING_LOCAL_MODEL_CALIBRATION` against the 48-answer owner-
+marked set.
+
+The learner path is Dungeon-owned rather than a four-question picker. Written format follows the
+paper: BRGSA and IBM each receive short framework fluency plus full case transfer on all sixteen
+concepts; SPMS and SCLM retain only their real applied formats. After an accepted miss, the main
+**Next** recommendation becomes the exact authored gap and states the fresh confirmations still
+needed. Dungeon chooses four prompts weak-first, alternates short and case work, preserves
+teach-before-test, and checks each response against its server-owned rubric. Every `not_met`
+criterion must select one or two server-owned codes — missing or misunderstood — before it can enter
+the corrective pool. After a 900 ms pause the local server can prepare that question-only
+evidence; no partial draft leaves the browser, and the answer is sent only on Check. Learner-facing evidence is compressed to a subject/module tag such as
+`BRGSA M1`; exact lecture and chunk IDs remain in the validated authority result for auditability.
+The profile stores criterion decisions, bounded gap codes, authored question ids, timestamps, and a two-confirmation
+repair counter in `writtenPractice`, separate from `conceptAttempts`; no answer is copied into that
+summary, and Qwen practice marks still cannot create Strong. During a run the redundant header
+subject select is removed because the run has already fixed its subject.
+After Examiner submission, written answers receive the slower counterpart: the ordinary bounded
+rubric judgement followed by a larger-budget analyst and independent verifier. The authored path is
+question-ID, rubric, and lecture-bound; narrative review stays on the result page. Failed bounded
+criteria enter `examMisses` and the corrective pool. Passed mock criteria do not close gaps, score
+mastery, or change the already-frozen paper score. Free-form analysis remains unlinked.
+
+A production implementation now exists behind the authenticated Cloudflare Worker. It uses
+`@cf/qwen/qwen3-30b-a3b-fp8`, `@cf/qwen/qwen3-embedding-0.6b`, a 1,024-dimensional filtered
+Vectorize index, the same validation contract, and a 20-check daily D1 counter containing no
+candidate content. It is fail-closed in committed configuration and remains
+`WAITING_HOSTED_CORPUS + WAITING_OWNER_CALIBRATION + WAITING_OWNER_DEPLOY`; no transcript was
+uploaded and no live route was activated by this implementation session.
 
 ---
 
@@ -229,8 +293,9 @@ and again on the recommended-paper hero.
 - **MSQ (SPMS Section B only):** +1 per right option, −1 per wrong, floored at zero *per question*
   and capped at the question's marks. This is the only negatively marked section in the term.
 - Match: all-or-nothing, because the paper states no partial credit.
-- Written answers: excluded from the machine total and returned for structured self-review against
-  the rubric. Self-review never becomes opaque correctness credit.
+- Written answers: excluded from the machine total. After submission they can receive a bounded
+  practice-rubric judgement plus independently verified coaching; neither is an official mark or
+  mastery evidence.
 
 ### 5.3 The result: a diagnosis, not a score
 
@@ -245,8 +310,9 @@ distinguished:
   This is the one a score sheet never surfaces.
 
 Alongside it: pacing against the paper's own per-question budget, the cost of speculative ticking
-under negative marking, second thoughts and what they were worth, and for written work,
-course-vocabulary use against rubric points.
+under negative marking, second thoughts and what they were worth, and for written work, a frozen-
+score post-submit review of rubric evidence, exact bounded gaps, strengths, improvements, and a
+course-grounded stronger answer.
 
 Every breakdown row has a button into a taught single-concept run — `LESSON → primer → questions`,
 so `LAW-47` still holds on the way back in.
@@ -285,6 +351,20 @@ bank in `app/sets/` (`t6_catalog.js`, `t6_challenges.js`, `t6_lessons.js`, `t6_d
 
 Served by a Cloudflare Worker (`cloudflare/`) behind an approved-email login, with progress in D1.
 
+The local development server (`tools/server.py`) has opt-in written-authority routes. It shells to a
+dependency-free Node process, permits only loopback same-origin requests, caps the request body,
+serialises grading calls, bounds question-only preparation separately, and calls LM Studio only
+through loopback. A normal local launch has no model
+path. A LAN browser may view the development site but cannot invoke the local authority; Windows
+reaches Mac LM Studio only through the private SSH loopback forward.
+
+The Cloudflare Worker exposes health and authored-grade contracts to authenticated same-origin
+learners. The browser never receives model credentials, transcript chunks beyond the returned
+citation labels, or a direct AI binding. Server-owned authored questions define the rubric/source
+boundary; arbitrary coaching is not a public capability. Hosted processing is disabled
+unless feature, exact model approval, exact corpus approval, AI binding, Vectorize binding, and a
+non-empty corpus all agree.
+
 ### 6.2 State
 
 One profile object, saved to `localStorage` under `term6.revision.v2` (namespaced per learner
@@ -310,11 +390,11 @@ defaults off, and with it off nothing is computed or stored.
 `AGENTS.md` is the living index. Work is governed by evidence gates with a fixed status vocabulary
 (`UNSTARTED → DIAGNOSED → IMPLEMENTED → VERIFIED(<evidence>) → DONE`, plus `WAITING_<GATE>`), and
 "fixed", "verified" and "done" require a pointer into `evidence/`. Three ledgers carry the
-institutional memory: `BUG-LAWS.md` (56 laws, each with origin, cause, comply path and
+institutional memory: `BUG-LAWS.md` (58 laws, each with origin, cause, comply path and
 verification), `QUALITY-LOG.md` (truthful interaction, learning integrity, accessibility, motion
 coherence, persistence safety), and `CHANGELOG.md`.
 
-Automated gates: `npm test` (39 tests), `tools/validate_t6_bank.js`, `npm run check:exam`,
+Automated gates: `npm test` (63 tests), `tools/validate_t6_bank.js`, `npm run check:exam`,
 `npm run check:palette` (140 contrast pairings, grayscale separation and three colour-vision
 simulations in both themes, plus an assertion that the four evidence states are shape-distinct,
 not merely colour-distinct), and `tools/browser-checks/ui-audit.js` (overflow, sub-44px tap
@@ -327,7 +407,7 @@ targets, off-scale corner radii, paragraph density, type scale, ragged rows).
 Being specific, because "it's thorough" is not useful to a collaborator deciding where to spend
 effort.
 
-1. **The evidence model.** Seven gates, open-flag tracking, family- and block-aware repair, and
+1. **The evidence model.** Eight gates, open-flag tracking, family- and block-aware repair, and
    time qualifiers that distinguish same-day fluency from retention. Most study apps ship a
    percentage.
 2. **Option-level diagnosis at bank scale.** 816 questions where every scheduled distractor can
@@ -353,16 +433,21 @@ Ordered by what would hurt the cohort soonest.
 2. **Prompt variety in SCLM.** `check:exam` warns that 14 of the 50 Section A questions on every
    paper are forced to share one visible prompt, and 3 of 3 in Section C. It trains recognition of
    a stem rather than of an idea. Fixing it means varying caselets, not options.
-3. **No item calibration and no cohort data.** All difficulty is authored, not measured. Nothing in
-   the product knows which items actually discriminate. Everything downstream — the Strong gates,
-   the ordering, the difficulty tags — is a defensible rule set, not a validated model.
+3. **No item calibration and only a tiny cohort.** All difficulty is authored, not measured.
+   Banded response timing can now detect an implausibly fast Strong proof, but it cannot establish
+   item discrimination. Everything downstream — the Strong gates, the ordering, the difficulty
+   tags — is a defensible rule set, not a validated model.
 4. **Bank breadth against paper size.** SCLM Section A needs 50 questions from a pool of 52. There
    is almost no room to draw three genuinely different sets.
 5. **IBM cannot be mocked.** Its paper is ten written answers on a caselet released two days before.
    What the examiner offers is timed writing practice against the frameworks, and it says so.
-6. **Self-marked written work.** Sections graded by the learner against a rubric produce a number
-   that is not comparable with machine-marked sections. The recommendation logic now excludes
-   caveat papers from "weakest" for exactly this reason, but the underlying incomparability stands.
+6. **Written-work calibration.** Local practice can now receive a source-cited Qwen criterion mark
+   from the exact owner-approved checkpoint over the private Windows→Mac bridge. Its real-model path
+   is operational, but it has not passed the 48-answer owner-marked quality set and timed examiner
+   writing remains self-reviewed. Neither number is comparable with machine-marked objective
+   sections. The hosted exact checkpoint requires its own owner-reviewed set; local model results
+   do not validate Workers AI. The internal subject-wide analyzer is not a learner surface. The recommendation logic
+   excludes caveat papers from "weakest" for this reason.
 7. **Visual acceptance.** Automated checks cover contrast, tap targets, overflow and radii. Pixel
    acceptance — someone looking at rendered screens — has been owed since 2026-08-12, because the
    verifying environment mostly does not composite frames. Note the failure mode this creates: an

@@ -289,7 +289,9 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 - **Comply:** Require a substantive written response before showing criteria. Show the rubric
   before the exemplar in learning mode, record selected criteria as self-review, keep the response
   unscored, and exclude it from correctness percentages and independent Strong evidence. In
-  held-feedback mode, reveal neither rubric nor exemplar until the final review.
+  held-feedback mode, reveal neither rubric nor exemplar until the final review. The only machine-
+  marked exception is the explicitly enabled, source-bound local practice path governed by LAW-58;
+  production and every abstention retain this self-review contract.
 - **Verify:** Try empty and short responses, complete rubric self-review, inspect results and the
   concept dashboard, and confirm no automatic correct/incorrect label or Strong promotion exists.
 
@@ -817,6 +819,136 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   media queries resolve against the frame rather than the dead viewport.
 - **Verify:** The measured end state matches the geometry it should land on — for the switch, the
   thumb's centre within a pixel of the pressed label's centre, at every tested width.
+
+### LAW-57 🔴 — Response speed may gate a claim, never the answer or the learner
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-13 measurement foundation. A new research direction proposed response latency
+  as implicit evidence while the earlier evidence brief correctly prohibited inferring learner
+  states from speed.
+- **Why:** Raw latency is identified behavioural data once the profile syncs to D1, accessibility
+  and interruption can make slow responses meaningless, and a fast expert response can be valid.
+  Treating speed as correctness, confidence, effort, or ability would turn a weak signal into a
+  learner judgement. Reloading a pre-selected response creates a second trap: the page sees only the
+  time since reload and can falsely call an old answer instant.
+- **Comply:** Time with a monotonic page-lifetime clock from render to explicit answer commit; save
+  only the contract's coarse band and derived flags. A rapid response keeps its answer, feedback,
+  misconception, and scheduling effects but cannot supply Strong evidence or erase Strong evidence
+  already established by eligible attempts. Evaluate the latest-answer Strong gate against the
+  newest eligible attempt; an incorrect rapid answer still reaches the ordinary error gates because
+  speed never invalidates correctness. Never penalise
+  slowness. Historical untimed attempts stay eligible. A restored complete response is `unknown`,
+  not rapid. Keep the threshold provisional until real item/format evidence exists.
+- **Verify:** In an isolated Browser fixture, an otherwise Strong body with a rapid fifth response
+  stays Developing and names the reason; the same evidence without the flag becomes Strong. A
+  correct response inside the threshold records the rapid reason, one outside it does not, and an
+  immediately committed restored response also does not. Add a later rapid-correct response to an
+  already Strong body and confirm it remains Strong; change that response to incorrect and confirm
+  ordinary error rules still apply. Search the profile-writing path for raw millisecond fields and
+  find none.
+
+### LAW-58 🔴 — A local model earns criterion authority only through bounded evidence and abstention
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-13 local judgement slice. The owner authorised Qwen to check candidate written
+  answers, which would otherwise let fluent output become an unexplained grade and make a laptop a
+  covert production dependency. The first real-checkpoint pass also returned academically usable
+  content but wrapped an exact candidate quote in `The candidate states ...`; accepting that wrapper
+  would have made the purported evidence something the learner never wrote.
+- **Why:** The model can hallucinate course claims, obey prompt injection inside an answer, invent a
+  citation, produce malformed output, or repeat the same mistake in a second pass. A loopback server
+  that binds to the LAN can also accidentally expose candidate answers or model access. Even a
+  correct practice mark is not calibrated mastery or an official IIMB grade.
+- **Comply:** Enable the grader only by explicit local launch after the owner approves the exact
+  configured model ID and that ID is repeated in the approved-model setting; an ID mismatch keeps
+  the HTTP authority absent. Keep exact-ID approval distinct from quality calibration: a provisional
+  owner-local path may run while plainly `WAITING_LOCAL_MODEL_CALIBRATION`, but it cannot be called
+  academically verified until the owner-marked gate passes. Accept grading calls only from a
+  loopback client and same origin, one at a time; keep LM Studio itself on loopback. Retrieve only
+  the question's declared lecture IDs, including the applied lecture that authored the case and
+  decision rather than only the concept's opening lecture. Exclude candidate wording from retrieval
+  so evidence can be prepared before submission. Treat the answer and retrieved text as untrusted
+  data. Run one compact criterion judgement, then validate its complete schema, English-only output,
+  citations against the actual retrieval, and awarded answer evidence as a raw literal substring of
+  the submitted answer; abstain on uncertainty or any failed check. A second generation from the same
+  checkpoint is an audit/calibration option, not a per-answer authority requirement. Label the model
+  and authority boundary. Keep the attempt `scored:false`, prohibit Strong
+  evidence and all feedback while an examiner paper is running. Post-submit examiner review may use
+  the same authority only after the score and paper state are frozen; its misses may prioritise
+  repair, while its successes never close gaps or award mastery. Schedule repair only from an
+  accepted missing criterion. Keep criterion outcomes in a separate written-practice profile, not
+  concept mastery. Require every `not_met` result to select one or two server-owned gap codes for
+  that rubric criterion, distinguishing a missing move from a misunderstood one; free-form model
+  prose never enters the corrective pool. A miss may open a bounded confirmation counter, insert an unscored deterministic repair, and target the next fresh
+  authored written prompt; it may not infer a permanent ability trait or close from merely showing
+  the lesson. Require two later accepted criterion successes to close a newly opened gap.
+  Treat an in-flight model call as page-lifetime state: leaving or reloading cancels its authority,
+  ignores any late result, and restores the saved answer as ready to check rather than a permanent
+  spinner. For an awarded criterion, require the shortest raw literal substring from the submitted
+  answer—no prefix, commentary, or added quotation marks. Keep `answerEvidence` empty for
+  `not_met` and `uncertain`; do not loosen the validator to rescue persuasive model prose.
+- **Verify:** Unit-test answer-independent source-bound retrieval, prompt-injection placement and uncertainty,
+  invented citations, schema validation and repair routing. Through the real local HTTP and Browser
+  path, confirm health is opt-in, missing or mismatched model approval returns no grader route, the result names the model and citations, a missing criterion
+  queues a re-attempt plus an unscored repair and fresh-prompt confirmation, abstention creates no
+  criterion evidence and reveals the self-review fallback, cross-origin POST is denied, and
+  the public/normal local server exposes no grader route. Calibrate the real checkpoint separately;
+  leaving during a delayed call must resume as ready to grade and ignore the late result. A fake
+  OpenAI-compatible endpoint verifies plumbing only. Regression-test commentary-wrapped answer
+  evidence as invalid. Record real-model latency and synthetic/adversarial smoke separately from the
+  owner-marked 48-case gate, and never use a generated smoke set as its substitute.
+
+### LAW-59 🔴 — Hosted answer checking must bind model, corpus, consent, and claim together
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-13 hosted written-authority slice. Moving the local Qwen contract onto the
+  website creates four new failure classes at once: a different checkpoint can inherit local
+  calibration it never earned; a stale or unfiltered vector index can become the source of truth;
+  a public arbitrary-question endpoint can escape Dungeon's authored rubric boundary; and
+  candidate answers can enter logs, storage, or unbounded paid inference.
+- **Why:** “Qwen” is a family name, not evidence that two deployments behave alike. RAG only grounds
+  an answer if retrieval is filtered to an approved corpus and its returned metadata is validated.
+  A learner-facing judgement needs a Dungeon-owned prompt and rubric. Public inference also has a
+  cost and privacy surface that the loopback path does not.
+- **Comply:** The public route remains unavailable unless an explicit feature flag, exact configured
+  and approved model IDs, exact corpus version, AI binding, and Vectorize binding all agree. Create
+  metadata indexes before inserting transcript chunks; filter every query by course and corpus,
+  and authored grading additionally by the server-owned lecture IDs. Exclude candidate text from
+  retrieval queries. Validate returned metadata before putting it in a prompt. Use the same
+  compact-judgement plus deterministic citation/schema/literal-answer-evidence contract as local marking, but calibrate the hosted
+  checkpoint separately. Do not expose arbitrary-question coaching through the learner UI or public
+  Worker API; internal evaluation tooling must never claim a numeric mark. Require an authenticated learner,
+  same-origin POST, bounded JSON, daily per-email quota, updated tester consent, and a non-AI
+  fallback. Store only the usage counter; never log or store candidate answer, retrieved text, or
+  model output. Timed examiner papers never call the route before submission. An authored
+  post-submit examiner review may call both the server-owned rubric route and the non-numeric coach,
+  with question ID, lecture filters, quota, and the same no-storage boundary; arbitrary public
+  questions remain unavailable. The browser never calls the
+  Mac, Vectorize, or Workers AI directly.
+- **Verify:** Unit-test disabled/mismatched activation, server-owned authored questions, course /
+  corpus / lecture filters, 1,024-dimensional embeddings, invented citations, absent public coach
+  output, same-origin and session boundaries, request size, quota exhaustion, and content-free
+  metering. A Worker dry-run must show AI and Vectorize bindings while the committed vars stay off /
+  unapproved / unindexed. Run the 48-case rubric set against the exact hosted checkpoint and actual
+  Vectorize corpus before activation.
+  Real-Browser acceptance must prove enabled, abstention, quota, mobile layout, and the manual
+  fallback. Local calibration, mock bindings, or a non-empty index alone cannot close this gate.
+
+### LAW-60 🔴 — Corrupted model script never reaches learner feedback
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-13 real-model Browser check. Qwen inserted stray CJK glyphs between otherwise
+  English words in a suggested answer, making course guidance visibly corrupted.
+- **Why:** Fluent surrounding prose can make an encoding/tokenisation defect look like a course term.
+  Silently displaying it damages readability and trust; blindly stripping characters can join words
+  or alter quoted candidate evidence.
+- **Comply:** Tell every marking pass to write model-authored prose in English with plain ASCII
+  punctuation. Validate generated feedback, reasons, summaries, strengths, gaps, and suggested
+  answers for unexpected CJK scripts, while excluding exact candidate quotes from that check. Retry
+  once with an explicit encoding-repair instruction; if corruption recurs, abstain and show the
+  deterministic fallback. Apply the same contract locally and in Workers AI.
+- **Verify:** Inject a CJK artifact into the first structured response and prove the second attempt is
+  clean; inject it twice and prove the result abstains without returning corrupted learner copy.
 
 ### LAW-50 🟡 — A lesson array closed with the wrong bracket is invisible until the file is parsed
 
