@@ -134,6 +134,22 @@ measured rather than assumed).
   it, so one side collapsed a 56px margin under the coin and the other used 26; and between 760 and
   900 the header grew from 70px to 82 on the learning side only, which, being sticky, pushed that
   side's whole page down 12px. Verified equal at 320, 375, 768, 900 and 1280.
+- **The bag can be carried, thrown away, and fetched back.** It drags anywhere with pointer
+  events, remembers where it was put, re-clamps into view when the window changes size, and opens
+  its panel from whichever corner it is nearest. Dragging it over the bin that appears during a
+  drag throws it away entirely; a bag button appears in the header — the one place always on
+  screen — to fetch it back to where it was left. Nothing counts as a drag until the pointer has
+  travelled 6px, so a tap still opens it.
+- **Three ordering bugs in that, all found by driving it:** the panel measured the launcher *after*
+  hiding it and so opened in the opposite corner from a zero-sized box; throwing the bag away
+  immediately un-hid it, because the close it triggered re-decided the launcher's visibility; and
+  restoring put it back where the bin was rather than where it had been left.
+- **The learning side keeps the examiner's spacing.** It had been running 18 / 13 / 8 / 29 / 54
+  between its parts against the examiner's flat 26, which is why it read as airier and less
+  deliberate. One rhythm now: 26 inside a block, 40 between blocks.
+- **The audit is clean for the first time.** `button#brand-home` had been reported under the 44px
+  floor since before this pass and is now 44 at every width. Zero overflow, zero tap-target, zero
+  radius and zero ragged findings at 375 and 1280 with the bag open.
 - **Three more defects, all found by verification.** Two tap targets under the project's 44px floor
   — the calculator's Normal/Scientific toggle at 30px and the bag's close button at 29px — which
   the first audit missed because it ran with the bag shut. And `has-resume-bar` outlived the

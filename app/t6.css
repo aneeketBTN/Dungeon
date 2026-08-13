@@ -202,7 +202,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    figures are one left-hand group separated by a rule; the tools are pushed right
    by a single auto margin. Only the gap between the two groups resizes. */
 .app-header { position: sticky; top: 0; z-index: 20; min-height: 70px; padding: 10px clamp(16px,3vw,40px); display: flex; align-items: center; gap: 20px; background: var(--paper-veil); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
-.brand { display: flex; align-items: center; gap: 11px; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
+/* 44px at every width, not just on phones: it is the way home from every screen and
+   the audit has been reporting it as under the floor since long before this pass. */
+.brand { display: flex; align-items: center; gap: 11px; min-height: 44px; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
 .brand-mark { width: 40px; height: 40px; display: grid; place-items: center; color: var(--on-deep); background: var(--deep); border-radius: var(--r-card); font: 900 19px/1 Georgia, serif; letter-spacing: -.02em; }
 .brand b, .brand small { display: block; }
 .brand b { font: 650 17px/1.15 Georgia, serif; }
@@ -260,7 +262,10 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
  * boxes: 56px between blocks against 14px inside one, so the break between two
  * questions is unmistakable without drawing a single line. The numbered eyebrow
  * plus the serif question is the only signpost a block needs. */
-.home-block { margin-top: 56px; }
+/* One rhythm for the whole page: 26px inside a block, 40 between blocks. The
+   learning side had been running 18 / 13 / 8 / 29 / 54 between its parts, which is
+   why it read as airier and less deliberate than the examiner beside it. */
+.home-block { margin-top: 40px; }
 .home-block:first-of-type { margin-top: 0; }
 /* The coin owns the space beneath itself, on both sides.
    `:first-of-type` stopped matching the first block once the coin — also a
@@ -268,7 +273,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    margin under the coin while the examiner used the coin's own 26px. The two
    sides began 30px apart vertically: same left edge, different first line. */
 .coin + .home-block { margin-top: 0; }
-.block-heading { margin-bottom: 18px; }
+.block-heading { margin-bottom: 26px; }
 .block-heading h2 { margin: 6px 0 0; font: 650 clamp(28px,3.4vw,40px)/1.06 Georgia, serif; letter-spacing: -.02em; }
 .block-note { max-width: 620px; margin: 9px 0 0; color: var(--muted); font-size: var(--t-meta); }
 .block-heading .block-note { margin-top: 11px; }
@@ -291,8 +296,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 /* A caption on the cards, not a paragraph of its own. Tight to the row above it and
    generously clear of the hero below, so the space says which one it belongs to
    instead of leaving it floating between the two. */
-.subject-identity { max-width: 62ch; margin: -5px 0 14px; color: var(--muted); font-size: var(--t-meta); }
-.focus-panel { position: relative; overflow: hidden; margin-top: 14px; display: grid; grid-template-columns: minmax(0,1.42fr) minmax(300px,.62fr); color: var(--on-deep); background: var(--deep); border: 1px solid var(--deep-edge); border-radius: var(--r-panel); box-shadow: var(--shadow); }
+.subject-identity { max-width: 62ch; margin: -5px 0 0; color: var(--muted); font-size: var(--t-meta); }
+.focus-panel { position: relative; overflow: hidden; margin-top: 26px; display: grid; grid-template-columns: minmax(0,1.42fr) minmax(300px,.62fr); color: var(--on-deep); background: var(--deep); border: 1px solid var(--deep-edge); border-radius: var(--r-panel); box-shadow: var(--shadow); }
 .focus-panel::before { content: ""; position: absolute; width: 360px; height: 360px; right: -130px; top: -180px; border: 1px solid var(--deep-ring); border-radius: 50%; box-shadow: 0 0 0 48px var(--deep-ring-faint), 0 0 0 96px var(--deep-ring-fainter); pointer-events: none; }
 .focus-copy { position: relative; z-index: 1; padding: clamp(30px,5vw,58px); }
 .focus-copy .eyebrow { color: var(--on-deep-muted); }
@@ -1546,9 +1551,25 @@ body.coin-in-view .mode-switch { max-width: 0; opacity: 0; border-width: 0; marg
 /* The launcher floats with the thing it opens, on the right, above the corner. It
    is not header furniture: the header says what the page is, and this is a tool you
    pick up and put down. */
-.bag-launcher { position: fixed; z-index: 40; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 8px 15px; color: inherit; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-pill); box-shadow: var(--shadow-deep); cursor: pointer; font: inherit; font-weight: 800; transition: transform .16s ease, border-color .16s ease; }
+.bag-launcher { position: fixed; z-index: 40; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 8px 15px; color: inherit; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-pill); box-shadow: var(--shadow-deep); cursor: grab; font: inherit; font-weight: 800; touch-action: none; transition: transform .16s ease, border-color .16s ease; }
 .bag-launcher:hover { border-color: var(--deep); transform: translateY(-1px); }
 body.has-resume-bar .bag-launcher { inset-block-end: calc(90px + env(safe-area-inset-bottom, 0px)); }
+/* Once it has been dragged, script owns both axes and the resting corner rules must
+   stop applying — otherwise the launcher is pinned to two edges at once. */
+.bag-launcher.is-placed { inset-inline-end: auto; inset-block-end: auto; }
+body.has-resume-bar .bag-launcher.is-placed { inset-block-end: auto; }
+.bag-launcher.is-dragging { cursor: grabbing; transform: none; box-shadow: var(--shadow); transition: none; }
+
+/* The bin. Bottom centre, out only while something is being dragged, and it grows a
+   little when the thing is over it so the drop is confirmed before you let go. */
+.bag-trash { position: fixed; z-index: 42; inset-inline: 0; inset-block-end: calc(26px + env(safe-area-inset-bottom, 0px)); width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 9px; padding: 12px 18px; color: var(--muted); background: var(--card); border: 1px dashed var(--line-strong); border-radius: var(--r-pill); box-shadow: var(--shadow-deep); font-size: var(--t-small); font-weight: 800; transition: transform .16s ease, color .16s ease, border-color .16s ease, background .16s ease; }
+.bag-trash svg { width: 19px; height: 19px; }
+.bag-trash.is-over { color: var(--on-red); background: var(--red); border-color: var(--red); border-style: solid; transform: scale(1.06); }
+
+/* Shown and hidden through its `hidden` attribute in script, so there is one owner of
+   the answer rather than a class and an attribute disagreeing about it. */
+.bag-restore { align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
+.bag-restore:not([hidden]) { display: inline-flex; }
 .bag-icon { width: 19px; height: 19px; }
 .bag-timer { padding: 2px 7px; background: var(--saffron); color: var(--on-saffron); border-radius: var(--r-pill); font-size: var(--t-small); font-variant-numeric: tabular-nums; }
 /* It floats, and it does not dock.

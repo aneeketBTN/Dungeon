@@ -79,6 +79,14 @@
         <span class="sr-only">Current subject</span>
         <select id="header-subject"></select>
       </label>
+      <!-- Only ever visible after the bag has been thrown away, which is the one
+           moment there is nothing on screen to bring it back with. -->
+      <button class="icon-button bag-restore" id="bag-restore" type="button" aria-label="Bring the bag back" hidden>
+        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="bag-icon">
+          <path d="M3.5 6.5h13l-1 10.5h-11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M7 6.5V5a3 3 0 0 1 6 0v1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
       <div class="account-controls" id="account-controls" hidden>
         <span id="sync-status" role="status" aria-live="polite">Saved online</span>
         <button id="sign-out" type="button">Sign out</button>
@@ -86,11 +94,20 @@
     </div>
   </header>
 
-  <!-- The bag's own launcher, floating on the right rather than sitting in the
-       header. The header is for what the page is; this is a tool you pick up and put
-       down, and it belongs next to where it opens. It carries the timer's remaining
-       minutes while the timer runs, so the one thing in the bag that keeps working
-       when the bag is shut is still legible with it shut. -->
+  <!-- Where the bag goes when you are throwing it away. It only exists during a drag,
+       which is the only time it means anything. -->
+  <div class="bag-trash" id="bag-trash" hidden aria-hidden="true">
+    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <path d="M4 6h12M8 6V4.5a1.5 1.5 0 0 1 3 0V6M6.5 6l.8 10h5.4l.8-10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Drop to put the bag away</span>
+  </div>
+
+  <!-- The bag's own launcher, floating rather than sitting in the header. The header
+       is for what the page is; this is a tool you pick up and put down, so it can be
+       dragged anywhere, thrown away, and fetched back from the header. It carries the
+       timer's remaining minutes while the timer runs, so the one thing in the bag that
+       keeps working when the bag is shut is still legible with it shut. -->
   <button class="bag-launcher" id="bag-open" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="bag-panel">
     <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="bag-icon">
       <path d="M3.5 6.5h13l-1 10.5h-11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>

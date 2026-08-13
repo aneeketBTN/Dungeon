@@ -5222,12 +5222,15 @@
      thing to say about a timer and a calculator — both are for using *while* reading
      the thing behind them. */
   function setBagOpen(open, restoring) {
+    /* Measured while it is still on screen, for placeBagPanel below. */
+    var anchor = $("bag-open").hidden ? null : $("bag-open").getBoundingClientRect();
     $("bag-panel").hidden = !open;
     /* The launcher stands where the panel opens, so it steps aside while the panel is
        there — two bags in the same corner, one of them a button for opening the bag
        that is already open, is not a choice anyone needs. */
-    $("bag-open").hidden = open;
+    $("bag-open").hidden = open || Boolean(bagPrefs().thrown);
     $("bag-open").setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) placeBagPanel(anchor);
     /* Where it was left is where it stays. A floating tool that shut itself every time
        you changed screens would have to be reopened once per lesson, which is most of
        the reason a floating tool is worth having. */
@@ -5259,11 +5262,157 @@
     buildCalculator("bag-calculator", kind);
   }
 
+  /* ---- carrying the bag around --------------------------------------------------
+   *
+   * It is a bag. You should be able to put it where it is not in the way, throw it
+   * away when you do not want it, and fetch it back from the header — which is the
+   * one place that is always on screen and therefore the only honest place to keep
+   * the way back.
+   *
+   * Three details that matter more than the dragging itself:
+   *
+   *   - A drag must not eat the click. Nothing counts as a drag until the pointer has
+   *     travelled 6px, so a tap still opens the bag and a nudge is not a move.
+   *   - The position is stored, and re-clamped on every resize. A bag left at the
+   *     bottom of a tall window is otherwise off-screen in a short one, with no way
+   *     to reach it.
+   *   - Pointer events, not mouse events, so it works under a thumb.
+   */
+  var BAG_EDGE = 12;
+  var bagDrag = null;
+
+  function bagPrefs() {
+    if (!profile.bag || typeof profile.bag !== "object") profile.bag = {};
+    return profile.bag;
+  }
+
+  function placeBag() {
+    var launcher = $("bag-open");
+    if (!launcher) return;
+    var prefs = bagPrefs();
+    if (typeof prefs.x !== "number" || typeof prefs.y !== "number") {
+      launcher.classList.remove("is-placed");
+      return;
+    }
+    launcher.classList.add("is-placed");
+    var width = launcher.offsetWidth, height = launcher.offsetHeight;
+    var x = Math.max(BAG_EDGE, Math.min(prefs.x, window.innerWidth - width - BAG_EDGE));
+    var y = Math.max(BAG_EDGE, Math.min(prefs.y, window.innerHeight - height - BAG_EDGE));
+    launcher.style.insetInlineStart = x + "px";
+    launcher.style.insetBlockStart = y + "px";
+  }
+
+  /* The panel opens from whichever corner the bag is nearest, so it never has to
+     travel across the screen to appear, and never opens off the edge. */
+  function placeBagPanel(anchor) {
+    var panel = $("bag-panel"), launcher = $("bag-open");
+    if (!panel || panel.hidden || !launcher) return;
+    if (!launcher.classList.contains("is-placed")) {
+      panel.style.insetInlineStart = "";
+      panel.style.insetBlockStart = "";
+      panel.style.insetInlineEnd = "";
+      panel.style.insetBlockEnd = "";
+      return;
+    }
+    /* Measured before the launcher was hidden and passed in: a hidden element has no
+       box, and reading one gives 0,0 — which put the panel in the opposite corner
+       from the bag it was supposed to be opening out of. */
+    anchor = anchor || launcher.getBoundingClientRect();
+    var width = panel.offsetWidth, height = panel.offsetHeight;
+    var right = anchor.left + anchor.width / 2 > window.innerWidth / 2;
+    var below = anchor.top + anchor.height / 2 > window.innerHeight / 2;
+    var x = right ? anchor.right - width : anchor.left;
+    var y = below ? anchor.top - height - 10 : anchor.bottom + 10;
+    panel.style.insetInlineStart = Math.max(BAG_EDGE, Math.min(x, window.innerWidth - width - BAG_EDGE)) + "px";
+    panel.style.insetBlockStart = Math.max(BAG_EDGE, Math.min(y, window.innerHeight - height - BAG_EDGE)) + "px";
+    panel.style.insetInlineEnd = "auto";
+    panel.style.insetBlockEnd = "auto";
+  }
+
+  /* Order matters here: close first, because setBagOpen decides the launcher's own
+     visibility, then record the state, then let both buttons follow it. */
+  function setBagThrownAway(thrown) {
+    bagPrefs().thrown = thrown;
+    saveProfile();
+    if (thrown) setBagOpen(false, true);
+    document.body.classList.toggle("bag-thrown-away", thrown);
+    $("bag-open").hidden = thrown;
+    $("bag-restore").hidden = !thrown;
+    /* Coming back, it comes back where you left it — not where the bin was. The drag
+       that ended in the bin left its own inline position behind. */
+    if (!thrown) placeBag();
+  }
+
+  function bindBagDrag() {
+    var launcher = $("bag-open"), trash = $("bag-trash");
+    if (!launcher || !trash || !window.PointerEvent) return;
+    launcher.addEventListener("pointerdown", function (event) {
+      if (event.button) return;
+      var rect = launcher.getBoundingClientRect();
+      bagDrag = {id: event.pointerId, moved: false, dx: event.clientX - rect.left, dy: event.clientY - rect.top};
+      launcher.setPointerCapture(event.pointerId);
+    });
+    launcher.addEventListener("pointermove", function (event) {
+      if (!bagDrag || event.pointerId !== bagDrag.id) return;
+      var x = event.clientX - bagDrag.dx, y = event.clientY - bagDrag.dy;
+      if (!bagDrag.moved) {
+        var rect = launcher.getBoundingClientRect();
+        if (Math.abs(x - rect.left) < 6 && Math.abs(y - rect.top) < 6) return;
+        bagDrag.moved = true;
+        launcher.classList.add("is-dragging", "is-placed");
+        trash.hidden = false;
+        setBagOpen(false, true);
+      }
+      launcher.style.insetInlineStart = Math.max(BAG_EDGE, Math.min(x, window.innerWidth - launcher.offsetWidth - BAG_EDGE)) + "px";
+      launcher.style.insetBlockStart = Math.max(BAG_EDGE, Math.min(y, window.innerHeight - launcher.offsetHeight - BAG_EDGE)) + "px";
+      trash.classList.toggle("is-over", overTrash(event));
+    });
+    var finish = function (event) {
+      if (!bagDrag || event.pointerId !== bagDrag.id) return;
+      var dropped = bagDrag.moved;
+      var binned = dropped && overTrash(event);
+      bagDrag = null;
+      launcher.classList.remove("is-dragging");
+      trash.hidden = true;
+      trash.classList.remove("is-over");
+      if (!dropped) { setBagOpen($("bag-panel").hidden); return; }
+      if (binned) { setBagThrownAway(true); return; }
+      var rect = launcher.getBoundingClientRect();
+      var prefs = bagPrefs();
+      prefs.x = Math.round(rect.left);
+      prefs.y = Math.round(rect.top);
+      saveProfile();
+    };
+    launcher.addEventListener("pointerup", finish);
+    launcher.addEventListener("pointercancel", finish);
+    /* A window that changes size can put a placed bag out of reach, so it is clamped
+       back in — and the panel with it, if it happens to be open. */
+    window.addEventListener("resize", function () { placeBag(); placeBagPanel(); });
+  }
+
+  function overTrash(event) {
+    var trash = $("bag-trash");
+    if (!trash || trash.hidden) return false;
+    var rect = trash.getBoundingClientRect();
+    return event.clientX >= rect.left && event.clientX <= rect.right &&
+      event.clientY >= rect.top && event.clientY <= rect.bottom;
+  }
+
   function bindBag() {
     if (!$("bag-open")) return;
     $("bag-panel").setAttribute("tabindex", "-1");
-    $("bag-open").addEventListener("click", function () { setBagOpen($("bag-panel").hidden); });
+    /* Opening is handled by the drag binding's pointerup, which knows whether the
+       press was a tap or a move. The click listener stays for keyboard activation,
+       which never sets a drag. */
+    $("bag-open").addEventListener("click", function (event) {
+      if (event.detail) return;
+      setBagOpen($("bag-panel").hidden);
+    });
     $("bag-close").addEventListener("click", function () { setBagOpen(false); });
+    $("bag-restore").addEventListener("click", function () {
+      setBagThrownAway(false);
+      setBagOpen(true);
+    });
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape" && !$("bag-panel").hidden) setBagOpen(false);
     });
@@ -5271,7 +5420,10 @@
       button.addEventListener("click", function () { setBagCalculator(button.dataset.calcMode); });
     });
     setBagCalculator(profile.bagCalculator === "scientific" ? "scientific" : "basic");
-    if (profile.bagOpen) setBagOpen(true, true);
+    bindBagDrag();
+    setBagThrownAway(Boolean(bagPrefs().thrown));
+    placeBag();
+    if (profile.bagOpen && !bagPrefs().thrown) setBagOpen(true, true);
     $("pomodoro-toggle").addEventListener("click", function () { setPomodoroRunning(!pomodoro.running); });
     /* Clear `running` *before* setting the new duration. setPomodoroRunning(false)
        recomputes `remaining` from the live end-time, so leaving the timer marked as
