@@ -34,7 +34,9 @@
   };
   var visible = function (el) {
     var s = getComputedStyle(el);
-    if (s.display === "none" || s.visibility === "hidden") return false;
+    /* Custom radios keep the native input accessible but visually and pointer-
+       hidden inside a full-size label. Measure the label, not its 13px control. */
+    if (s.display === "none" || s.visibility === "hidden" || (s.opacity === "0" && s.pointerEvents === "none")) return false;
     var r = el.getBoundingClientRect();
     return r.width > 0 && r.height > 0;
   };
@@ -71,8 +73,8 @@
     /* A hit area widened by a pseudo-element counts; measure what a finger can
        actually reach, not just the painted box. */
     var before = getComputedStyle(el, "::before");
-    var padW = before.content !== "none" && before.position === "absolute" ? parseFloat(before.width) || 0 : 0;
-    var padH = before.content !== "none" && before.position === "absolute" ? parseFloat(before.height) || 0 : 0;
+    var padW = before.content !== "none" && before.position === "absolute" ? Number.parseFloat(before.width) || 0 : 0;
+    var padH = before.content !== "none" && before.position === "absolute" ? Number.parseFloat(before.height) || 0 : 0;
     return {el: name(el), w: Math.round(Math.max(r.width, padW)), h: Math.round(Math.max(r.height, padH))};
   }).filter(function (t) { return t.h < TAP_FLOOR || t.w < 24; });
 
@@ -81,7 +83,7 @@
   all.forEach(function (el) {
     var s = getComputedStyle(el);
     ["borderTopLeftRadius", "borderTopRightRadius", "borderBottomLeftRadius", "borderBottomRightRadius"].forEach(function (prop) {
-      var v = parseFloat(s[prop]);
+      var v = Number.parseFloat(s[prop]);
       if (!v) return;
       var key = s[prop].indexOf("%") >= 0 ? s[prop] : Math.round(v);
       radiusUse[key] = radiusUse[key] || {count: 0, examples: []};
@@ -92,7 +94,7 @@
     });
   });
   var offScale = Object.keys(radiusUse).filter(function (k) {
-    var n = parseFloat(k);
+    var n = Number.parseFloat(k);
     return String(k).indexOf("%") < 0 && SCALE.indexOf(n) < 0;
   }).map(function (k) { return {radius: k, count: radiusUse[k].count, examples: radiusUse[k].examples}; })
     .sort(function (a, b) { return b.count - a.count; });
@@ -106,7 +108,7 @@
     var r = el.getBoundingClientRect();
     var s = getComputedStyle(el);
     return {el: name(el), chars: el.textContent.trim().length, fontSize: s.fontSize,
-      lines: Math.round(r.height / (parseFloat(s.lineHeight) || 20)),
+      lines: Math.round(r.height / (Number.parseFloat(s.lineHeight) || 20)),
       text: el.textContent.trim().slice(0, 60) + "…"};
   }).sort(function (a, b) { return b.chars - a.chars; });
 
@@ -120,7 +122,7 @@
     });
     if (!hasText) return;
     var s = getComputedStyle(el);
-    var px = Math.round(parseFloat(s.fontSize) * 10) / 10;
+    var px = Math.round(Number.parseFloat(s.fontSize) * 10) / 10;
     sizes[px] = (sizes[px] || 0) + 1;
     if (px < TYPE_FLOOR) tooSmall.push({el: name(el), size: px, text: el.textContent.trim().slice(0, 30)});
   });

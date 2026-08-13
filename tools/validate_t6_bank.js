@@ -282,8 +282,21 @@ courseIds.forEach(function (courseId) {
         }
       });
     } else if (question.type === "short-answer") {
-      if (!question.selfReviewOnly || !Array.isArray(question.rubric) || question.rubric.length < 3 || !question.exemplar) errors.push(question.id + " lacks a transparent self-review rubric or exemplar");
+      if (!question.selfReviewOnly || !Array.isArray(question.rubric) || question.rubric.length < 2 || !question.exemplar) errors.push(question.id + " lacks a transparent self-review rubric or exemplar");
       if ((question.options || question.answer) !== undefined) errors.push(question.id + " must not imply opaque automatic grading");
+      if (["BRGSA", "IBM"].indexOf(courseId) < 0) errors.push(question.id + " invents a written-response format outside the published paper pattern");
+      if (["short", "case"].indexOf(question.writtenMode) < 0) errors.push(question.id + " does not declare whether it is short-form or case-based writing");
+      var rubricIds = (question.rubric || []).map(function (criterion) { return criterion.id; });
+      var gapIds = {};
+      (question.writtenGaps || []).forEach(function (gap) {
+        if (!gap.id || gapIds[gap.id]) errors.push(question.id + " has a missing or duplicate written gap code");
+        gapIds[gap.id] = true;
+        if (rubricIds.indexOf(gap.criterionId) < 0) errors.push(question.id + " maps written gap " + gap.id + " to an unknown criterion");
+        if (["missing", "misunderstood"].indexOf(gap.kind) < 0 || ["writing", "concept"].indexOf(gap.scope) < 0 || !gap.label || !gap.repair) errors.push(question.id + " has an incomplete written gap " + gap.id);
+      });
+      rubricIds.forEach(function (criterionId) {
+        if (!(question.writtenGaps || []).some(function (gap) { return gap.criterionId === criterionId; })) errors.push(question.id + " cannot diagnose gap codes for criterion " + criterionId);
+      });
     } else {
       errors.push(question.id + " has unsupported type " + question.type);
     }
@@ -304,6 +317,11 @@ courseIds.forEach(function (courseId) {
     if (activeTypes.size < 4) errors.push(courseId + "/" + concept.id + " has only " + activeTypes.size + " actively scheduled question types");
     if (activeFamilies.size < 6) errors.push(courseId + "/" + concept.id + " has only " + activeFamilies.size + " actively scheduled variant families");
     if (!surfaces.some(function (question) { return question.boss; })) errors.push(courseId + "/" + concept.id + " has no boss coverage");
+    if (["BRGSA", "IBM"].indexOf(courseId) >= 0) {
+      ["short", "case"].forEach(function (mode) {
+        if (!surfaces.some(function (question) { return question.type === "short-answer" && question.writtenMode === mode; })) errors.push(courseId + "/" + concept.id + " has no exam-aligned " + mode + " written practice");
+      });
+    }
   });
 
   for (var module = 1; module <= 8; module += 1) {

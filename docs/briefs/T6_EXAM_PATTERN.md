@@ -63,29 +63,30 @@ working**.
 
 ### Two required formats do not exist in the app
 
-The app supports MCQ, cloze, case-cloze, match, short-answer, and three-step boss. It has **no
-multiple-select and no numeric-entry** surface.
+The app supports MCQ, MSQ, numeric entry, cloze, case-cloze, match, short-answer, and three-step
+boss. SPMS's full MSQ section is now fillable. SCLM still has only four of the six numericals the
+paper requires.
 
 | Missing format | Paper | Marks | Share of that paper |
 | --- | --- | ---: | ---: |
-| MSQ, negatively marked | SPMS Sec B | 40 | **53%** |
-| Numerical, tolerance-graded | SCLM Sec B | 24 | **30%** |
-| | | **64** | |
+| Numerical, tolerance-graded | SCLM Sec B | 8 unavailable | **10%** |
 
-Building these two formats is worth more than any amount of additional MCQ authoring.
+The remaining format gap is two SCLM numericals; `npm run check:exam` keeps this as a failing worklist.
 
 ### Objective-question coverage is not uniformly valuable
 
 | Paper | Objective marks | Written marks | Bank alignment |
 | --- | ---: | ---: | --- |
-| SPMS | 75 (all) | 0 | MCQ half covered; MSQ half absent |
-| SCLM | 56 (A + C) | 24 (numerical) | MCQ and match covered; numerical absent |
-| BRGSA | 40 | 40 | MCQ covered; written practice is self-review only |
-| **IBM** | **0** | **100** | **196 MCQ-derived surfaces contribute nothing** |
+| SPMS | 75 (all) | 0 | MCQ and all 20 MSQs covered |
+| SCLM | 56 (A + C) | 24 (numerical) | MCQ and match covered; 4 of 6 numericals available |
+| BRGSA | 40 | 40 | MCQ/cases covered; 32 authored short and case written prompts |
+| **IBM** | **0** | **100** | **32 framework/case written prompts; released caselet remains unknowable** |
 
 **IBM is the reversal.** Its paper is ten written answers on a caselet released two days prior.
-Authoring MCQs for its 62 uncited lectures would add zero marks. What helps is framework fluency and
-structured written answers against an unseen case.
+Authoring MCQs for its uncited lectures would add zero marks. What helps is framework fluency and
+structured written answers against an unseen case, so every reachable concept now has both a short
+framework explanation and a full case response. The mock still states that it cannot reproduce the
+caselet released two days before the real paper.
 
 ### Two alignment defects to check in the existing bank
 
