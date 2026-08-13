@@ -1,4 +1,9 @@
 import { createRemoteJWKSet, jwtVerify } from "jose";
+import {
+  WrittenAuthorityError,
+  gradeHostedAnswer,
+  hostedAuthorityHealth
+} from "./written-authority.mjs";
 
 const ACCESS_API = "https://api.cloudflare.com/client/v4";
 const SESSION_COOKIE = "dungeon_session";
@@ -593,6 +598,49 @@ export function createD1Store() {
         db.prepare("UPDATE testers SET last_seen_at = ?, updated_at = ? WHERE email = ?").bind(now, now, email)
       ]);
       return {revision, updatedAt: now};
+    },
+
+    async reserveWrittenCheck(env, email, limit) {
+      const db = requireDatabase(env);
+      const now = new Date().toISOString();
+      const day = now.slice(0, 10);
+      const row = await db.prepare(`INSERT INTO written_authority_usage (email, usage_day, checks, updated_at)
+        VALUES (?, ?, 1, ?)
+        ON CONFLICT(email, usage_day) DO UPDATE SET checks = written_authority_usage.checks + 1,
+          updated_at = excluded.updated_at
+        WHERE written_authority_usage.checks < ?
+        RETURNING checks`)
+        .bind(email, day, now, limit).first();
+      if (!row) throw new RequestError(429, "WRITTEN_DAILY_LIMIT", "Today's written-check allowance has been used. Try again tomorrow.");
+      const checks = Number(row.checks || 0);
+      const resetsAt = new Date(Date.parse(`${day}T00:00:00Z`) + 86400000).toISOString();
+      return {checks, limit, remaining: Math.max(0, limit - checks), resetsAt};
+    },
+
+    /* The cohort-wide ceiling, reserved after the per-tester one.
+     *
+     * Order matters and neither order is perfect without a cross-statement
+     * transaction. Reserving the cohort slot first would let a tester who is already
+     * at their personal limit burn budget on a request that never reaches a model.
+     * Reserving it second means a request rejected here has consumed one of that
+     * tester's own slots. That is the rarer case and it errs toward spending less,
+     * which is the safe direction for a fixed budget. */
+    async reserveWrittenBudget(env, limit) {
+      const db = requireDatabase(env);
+      const now = new Date().toISOString();
+      const day = now.slice(0, 10);
+      const row = await db.prepare(`INSERT INTO written_authority_budget (usage_day, checks, updated_at)
+        VALUES (?, 1, ?)
+        ON CONFLICT(usage_day) DO UPDATE SET checks = written_authority_budget.checks + 1,
+          updated_at = excluded.updated_at
+        WHERE written_authority_budget.checks < ?
+        RETURNING checks`)
+        .bind(day, now, limit).first();
+      if (!row) {
+        throw new RequestError(429, "WRITTEN_BUDGET_LIMIT",
+          "Dungeon's shared written-checking budget for today is used up. The rubric and exemplar are still available, and checking resumes tomorrow.");
+      }
+      return {cohortChecks: Number(row.checks || 0), cohortLimit: limit};
     }
   };
 }
@@ -729,6 +777,52 @@ async function manageProgress(request, env, store) {
   if (stateJson.length > 700000) throw new RequestError(413, "REQUEST_TOO_LARGE", "Progress data is too large.");
   const saved = await store.saveProgress(env, email, stateJson);
   return json({status: "saved", ...saved});
+}
+
+function writtenDailyLimit(env) {
+  const configured = Number.parseInt(String(env?.DUNGEON_HOSTED_WRITTEN_DAILY_LIMIT || "8"), 10);
+  return Number.isFinite(configured) ? Math.min(50, Math.max(1, configured)) : 8;
+}
+
+/* The cohort ceiling for one UTC day. Unlike the per-tester limit this does not scale
+ * with how many people are admitted, so it is the number that actually bounds spend.
+ *
+ * 140 is derived, not guessed. Workers Free allows 10,000 Neurons per day with no
+ * paid overage - past that, requests simply fail. One rubric check costs about 34
+ * Neurons on @cf/qwen/qwen3-30b-a3b-fp8 (1,400 input tokens at 4,625/M, 900 output
+ * at 30,475/M), or about 68 if its retry also fires. 140 x 68 = 9,520, so the cap
+ * holds even in the worst case where every check that day is retried. */
+function writtenCohortDailyLimit(env) {
+  const configured = Number.parseInt(String(env?.DUNGEON_HOSTED_WRITTEN_COHORT_DAILY_LIMIT || "140"), 10);
+  return Number.isFinite(configured) ? Math.min(5000, Math.max(1, configured)) : 140;
+}
+
+async function manageWrittenAuthority(request, env, store, writtenAuthority, operation) {
+  const email = await authenticateLearner(request, env, store);
+  if (!email) throw new RequestError(401, "LOGIN_REQUIRED", "Enter your approved email to continue.");
+  if (operation === "health") {
+    if (request.method.toUpperCase() !== "GET") return json({code: "METHOD_NOT_ALLOWED", message: "Use GET."}, 405);
+    return json(await writtenAuthority.health(env));
+  }
+  if (request.method.toUpperCase() !== "POST") return json({code: "METHOD_NOT_ALLOWED", message: "Use POST."}, 405);
+  requireSameOrigin(request);
+  const status = await writtenAuthority.health(env);
+  if (!status.available) throw new RequestError(503, "WRITTEN_AUTHORITY_UNAVAILABLE", status.reason || "Written checking is not available.");
+  if (typeof store.reserveWrittenCheck !== "function") {
+    throw new RequestError(503, "BACKEND_UNAVAILABLE", "Written-check metering is temporarily unavailable.");
+  }
+  const body = await readBoundedJson(request, 16 * 1024);
+  const usage = await store.reserveWrittenCheck(env, email, writtenDailyLimit(env));
+  /* Both ceilings are reserved before any model call, so a rejected request costs
+   * nothing but a database write. An older store without the cohort counter still
+   * works and is simply bounded by the per-tester limit alone. */
+  const budget = typeof store.reserveWrittenBudget === "function"
+    ? await store.reserveWrittenBudget(env, writtenCohortDailyLimit(env))
+    : {};
+  const result = operation === "grade"
+    ? await writtenAuthority.grade(env, body)
+    : await writtenAuthority.coach(env, body);
+  return json({...result, usage: {...usage, ...budget}});
 }
 
 const LOW_SAMPLE_ATTEMPTS = 10;
@@ -1000,7 +1094,11 @@ export function createWorker({
   fetchImpl = fetch,
   verifyAdmin = verifyOwner,
   embeddedAssets = null,
-  store = createD1Store()
+  store = createD1Store(),
+  writtenAuthority = {
+    health: hostedAuthorityHealth,
+    grade: gradeHostedAnswer
+  }
 } = {}) {
   return {
     async fetch(request, env) {
@@ -1014,6 +1112,12 @@ export function createWorker({
         if (url.pathname === `${prefix}/api/session`) return await manageSession(request, env, fetchImpl, store);
         if (url.pathname === `${prefix}/api/community`) return await manageCommunity(request, env, store);
         if (url.pathname === `${prefix}/api/progress`) return await manageProgress(request, env, store);
+        if (url.pathname === `${prefix}/api/written-authority/health`) {
+          return await manageWrittenAuthority(request, env, store, writtenAuthority, "health");
+        }
+        if (url.pathname === `${prefix}/api/written-authority/grade`) {
+          return await manageWrittenAuthority(request, env, store, writtenAuthority, "grade");
+        }
         if (url.pathname === `${prefix}/health`) {
           requireDatabase(env);
           return json({status: "ok", storage: "cloudflare-d1", access: "dashboard-allowlist"});
@@ -1060,7 +1164,9 @@ export function createWorker({
         }
         return json({code: "NOT_FOUND", message: "Not found."}, 404);
       } catch (error) {
-        if (error instanceof RequestError) return json({code: error.code, message: error.message}, error.status);
+        if (error instanceof RequestError || error instanceof WrittenAuthorityError) {
+          return json({code: error.code, message: error.message}, error.status);
+        }
         console.error(JSON.stringify({event: "worker_error", error: error instanceof Error ? error.message : "Unknown error"}));
         return json({code: "INTERNAL_ERROR", message: "The request could not be completed."}, 500);
       }

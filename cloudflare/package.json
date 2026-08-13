@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build:standalone": "node scripts/build-standalone.mjs",
-    "check": "wrangler deploy --dry-run --outdir dist",
+    "check": "node ../tools/build_written_authority_assets.mjs && wrangler deploy --dry-run --outdir dist",
     "types": "wrangler types"
   },
   "dependencies": {

@@ -70,11 +70,11 @@
         </button>
         <span class="mode-thumb" id="mode-thumb" aria-hidden="true"></span>
       </div>
-      <!-- Which subject, always reachable. The rail on the dashboard is where you
+      <!-- Which subject, reachable on the learning home. The rail on the dashboard is where you
            *compare* subjects — how far along each is, when each is sat. This is where
-           you *change* the one you are on, from anywhere, including halfway down a
-           page where the rail is long gone. It goes when the examiner is up: over
-           there the unit is a paper, not a subject. -->
+           you *change* the one you are on when the rail is long gone. It goes inside
+           a practice run because Dungeon has already fixed that run's subject, and it
+           goes when the examiner is up because there the unit is a paper. -->
       <label class="header-subject" id="header-subject-wrap">
         <span class="sr-only">Current subject</span>
         <select id="header-subject"></select>
@@ -276,6 +276,10 @@
             <button class="route" id="builder-toggle" type="button" data-route="mock" aria-expanded="false" aria-controls="practice-builder">
               <b>Build your own practice</b>
               <small>Choose the shape, focus, length, and when explanations appear.</small>
+            </button>
+            <button class="route" id="written-practice-route" type="button" data-route="written-practice">
+              <b>Practise written answers</b>
+              <small>Dungeon chooses four source-grounded prompts. Apply the concepts in your own words, then check each criterion.</small>
             </button>
           </div>
 
@@ -671,13 +675,18 @@
               <div id="exam-behaviour-body"></div>
             </div>
 
-            <!-- Written work: the two things that can be checked without marking it. -->
+            <!-- Written work is held until submission. The fast rubric authority and
+                 the slower independent coach run only here, never during the paper. -->
             <div class="insight-block" id="exam-written-block" hidden>
               <h4>Your written answers</h4>
-              <p class="insight-note">These are not marked here. Two things can still be measured:
-                whether you used the course's own vocabulary, and whether you covered each rubric
-                point. Both are what a marker looks for first.</p>
+              <p class="insight-note">Nothing was checked while the paper was running. After
+                submission, Dungeon can now run a slower review: a source-bound rubric judgement,
+                then an independent course-grounded coach. It is practice guidance, not an official mark.</p>
               <div id="exam-written-body"></div>
+              <div class="exam-deep-review" id="exam-deep-review" hidden>
+                <p class="exam-deep-status" id="exam-deep-status" role="status" aria-live="polite"></p>
+                <div id="exam-deep-body"></div>
+              </div>
             </div>
           </section>
           <!-- The link back. A mock's most useful output is not its score, it is the

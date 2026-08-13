@@ -368,10 +368,11 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    still doing work on this page (better-layout: controls must look interactive). */
 .route-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 12px; }
 .route { min-height: 84px; padding: 15px 17px; display: grid; align-content: center; gap: 5px; text-align: start; color: inherit; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-card); cursor: pointer; transition: border-color .15s ease, transform .15s ease; }
-.route:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+.route:hover:not(:disabled) { border-color: var(--line-strong); transform: translateY(-1px); }
 .route b { font-size: var(--t-body); }
 .route small { color: var(--muted); font-size: var(--t-small); line-height: 1.4; }
 .route[aria-expanded="true"] { border-color: var(--blue); background: var(--blue-tint); box-shadow: inset 0 0 0 1px var(--blue); }
+.route:disabled { cursor: not-allowed; opacity: .62; }
 
 .practice-builder { margin-top: 12px; padding: 24px 26px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
 .practice-builder:focus { outline: none; }
@@ -599,7 +600,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
  * explanation, worked example, and vocabulary rather than nested cards. */
 .status-pill.lesson { color: var(--blue); background: var(--blue-soft); }
 .lesson-panel { margin: 0; max-width: 720px; }
-.lesson-kicker { margin: 0 0 10px; color: var(--blue); font-size: var(--t-micro); font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.lesson-kicker { margin: 0 0 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 7px; color: var(--blue); font-size: var(--t-micro); font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.lesson-kicker .course-evidence-tag { letter-spacing: .04em; }
 .lesson-heading { margin: 0 0 6px; font-size: clamp(26px,3vw,38px); line-height: 1.18; }
 .lesson-heading:focus-visible { outline: 3px solid var(--focus); outline-offset: 6px; }
 .lesson-objective { margin: 0 0 22px; padding-bottom: 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: var(--t-body); }
@@ -619,7 +621,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 /* On a scored question the vocabulary stays one disclosure away, closed by
  * default so it never competes with the learner's question. */
 .glossary-block { margin: 14px 0 0; }
-.glossary-block > summary { color: var(--blue); cursor: pointer; font-size: var(--t-small); font-weight: 800; }
+.glossary-block > summary { min-height: 44px; display: flex; align-items: center; color: var(--blue); cursor: pointer; font-size: var(--t-small); font-weight: 800; }
 .glossary-block > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .glossary-block[open] > summary { margin-bottom: 12px; }
 
@@ -631,7 +633,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .case-block:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
 .case-label { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .caselet { margin: 0; color: inherit; font: 650 clamp(20px,2.2vw,24px)/1.48 Georgia, "Times New Roman", serif; }
-.source-ref { display: none; }
+.source-ref { margin: 0 0 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.course-evidence-tag { min-height: 26px; padding: 4px 9px; display: inline-flex; align-items: center; color: var(--blue); background: var(--blue-tint); border: 1px solid var(--blue-line); border-radius: var(--r-control); font-size: var(--t-micro); font-weight: 850; letter-spacing: .04em; line-height: 1; white-space: nowrap; }
 .task-prompt { margin-top: 0; }
 .prompt-flow.has-case .task-prompt { margin-top: 18px; }
 .case-block[hidden] ~ .task-prompt { margin-top: 0; }
@@ -865,10 +868,17 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .boss-step > b { color: var(--muted); font-size: var(--t-micro); letter-spacing: .06em; text-transform: uppercase; }
 .boss-step > span { margin-bottom: 5px; font-weight: 750; }
 .short-answer-options { gap: 16px; }
+.written-plan { display: grid; gap: 3px; padding: 2px 0 2px 12px; border-left: 2px solid var(--blue); color: var(--muted); font-size: var(--t-small); line-height: 1.45; }
+.written-plan b { color: var(--ink); font-size: var(--t-meta); }
+.written-plan span { display: block; }
 .short-answer-label { display: grid; gap: 8px; font-weight: 800; }
 .short-answer-label small { color: var(--muted); font-weight: 500; }
 .short-answer-label textarea { width: 100%; min-height: 150px; padding: 13px 14px; resize: vertical; color: var(--ink); background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-card); line-height: 1.55; }
 .short-answer-label textarea:disabled { color: var(--ink); background: var(--card-soft); opacity: 1; }
+.local-grade-wait { padding: 14px 16px; display: grid; gap: 5px; background: var(--blue-soft); border-inline-start: 4px solid var(--blue); border-radius: 0 var(--r-mark) var(--r-mark) 0; }
+.local-grade-wait b { font-size: var(--t-meta); }
+.local-grade-wait span { line-height: 1.45; }
+.local-grade-wait small { color: var(--muted); font-size: var(--t-small); line-height: 1.45; }
 .rubric-check { margin: 4px 0 0; padding: 18px 0 0; border: 0; border-top: 1px solid var(--line); }
 .rubric-check legend { padding: 0; font-weight: 850; }
 .rubric-check > p { margin: 4px 0 12px; color: var(--muted); font-size: var(--t-small); }
@@ -877,17 +887,27 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .rubric-check input { margin-top: 3px; }
 .rubric-check b, .rubric-check small { display: block; }
 .rubric-check small { margin-top: 2px; color: var(--muted); }
+.local-grade-fallback { margin: 2px 0 0; padding: 12px 14px; background: var(--amber-soft); border-inline-start: 4px solid var(--amber); border-radius: 0 var(--r-mark) var(--r-mark) 0; font-size: var(--t-meta); }
+.local-grade-criteria { display: grid; gap: 9px; margin: 14px 0; padding: 0; list-style: none; }
+.local-grade-criterion { display: grid; gap: 4px; padding: 11px 13px; background: var(--card); border: 1px solid var(--line); border-inline-start: 4px solid var(--line-strong); border-radius: var(--r-card); }
+.local-grade-criterion.met { border-inline-start-color: var(--green); }
+.local-grade-criterion.missing { border-inline-start-color: var(--amber); }
+.local-grade-criterion span { font-size: var(--t-meta); }
+.local-grade-criterion small { color: var(--muted); font-size: var(--t-small); }
+.local-grade-criterion .criterion-evidence { margin-top: 3px; display: flex; flex-wrap: wrap; gap: 6px; }
+.written-gap-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 3px; }
+.written-gap-list span { width: fit-content; padding: 3px 7px; border: 1px solid var(--amber-line); border-radius: var(--r-pill); background: var(--amber-soft); color: var(--ink); font-size: var(--t-small); }
 .confidence-check { margin: 20px 0 0; padding: 0; border: 0; }
 .confidence-check legend { margin-bottom: 8px; color: var(--muted); font-size: var(--t-small); font-weight: 800; }
 .confidence-check > div { display: flex; flex-wrap: wrap; gap: 8px; }
 .confidence-check label { position: relative; cursor: pointer; }
 .confidence-check input { position: absolute; opacity: 0; pointer-events: none; }
-.confidence-check label span { min-height: 40px; padding: 9px 13px; display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--card); border-radius: var(--r-pill); font-size: var(--t-small); font-weight: 800; }
+.confidence-check label span { min-height: 44px; padding: 9px 13px; display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--card); border-radius: var(--r-pill); font-size: var(--t-small); font-weight: 800; }
 .confidence-check input:checked + span { color: var(--on-blue); background: var(--blue); border-color: var(--blue); }
 .confidence-check input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 3px; }
 .confidence-check.resolved label { cursor: default; }
 .confidence-check > small { display: block; margin-top: 8px; color: var(--muted); font-size: var(--t-micro); }
-.confidence-skip { min-height: 34px; margin-top: 5px; padding: 3px 0; font-size: var(--t-small); }
+.confidence-skip { min-height: 44px; margin-top: 5px; padding: 7px 0; font-size: var(--t-small); }
 .confidence-skip[aria-pressed="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 .feedback { display: none; margin-top: 18px; padding: 16px 18px; border-radius: var(--r-panel); }
 .feedback.visible { display: block; color: var(--green); background: var(--green-soft); border: 1px solid var(--green-line); }
@@ -942,6 +962,7 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .review-item.needs { border-left-color: var(--red); }
 .review-item small, .review-item b { display: block; }
 .review-item small { color: var(--muted); }
+.review-evidence { margin-top: 7px; display: flex; flex-wrap: wrap; gap: 6px; }
 .review-item b { margin: 4px 0; }
 .review-item p { margin: 0; color: var(--muted); }
 .review-item > span { display: block; margin-top: 9px; color: var(--blue); font-size: var(--t-micro); font-weight: 800; }
@@ -1099,7 +1120,7 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
    * tap away, and the option's key column is tightened to give the text more width
    * per line. */
   body:has(.practice-screen.active) .app-header { display: none; }
-  .practice-header { min-height: 74px; grid-template-columns: 1fr auto; padding: 9px 13px; }
+  .practice-header { min-height: 74px; grid-template-columns: 1fr auto; padding: 9px 76px 9px 13px; }
   .practice-header .text-button { font-size: 0; }
   .practice-header .text-button::after { content: "← Dashboard"; font-size: var(--t-small); }
   .practice-identity { text-align: right; }
@@ -1197,6 +1218,7 @@ details.lesson-row[open] > .lesson-row-head { border-bottom: 1px solid var(--lin
 .lesson-row-title { flex: 1 1 auto; min-width: 180px; font-size: 15px; font-weight: 800; }
 .lesson-row.missing .lesson-row-title { color: var(--muted); font-weight: 700; }
 .lesson-row-source { color: var(--muted); font-size: var(--t-micro); font-variant-numeric: tabular-nums; }
+.lesson-row-source.course-evidence-tag { color: var(--blue); font-weight: 850; }
 .lesson-row-pill { padding: 4px 10px; border-radius: var(--r-pill); font-size: var(--t-micro); font-weight: 900; letter-spacing: .04em; }
 .lesson-row-pill.live { color: var(--green); background: var(--green-soft); }
 .lesson-row-pill.readonly { color: var(--blue); background: var(--blue-soft); }
@@ -1551,8 +1573,8 @@ body.coin-in-view .mode-switch { max-width: 0; opacity: 0; border-width: 0; marg
 /* The launcher floats with the thing it opens, on the right, above the corner. It
    is not header furniture: the header says what the page is, and this is a tool you
    pick up and put down. */
-.bag-launcher { position: fixed; z-index: 40; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 8px 15px; color: inherit; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-pill); box-shadow: var(--shadow-deep); cursor: grab; font: inherit; font-weight: 800; touch-action: none; transition: transform .16s ease, border-color .16s ease; }
-.bag-launcher:hover { border-color: var(--deep); transform: translateY(-1px); }
+.bag-launcher { position: fixed; z-index: 40; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 8px 15px; color: inherit; background: color-mix(in srgb, var(--card) 72%, transparent); border: 1px solid color-mix(in srgb, var(--line-strong) 70%, transparent); border-radius: var(--r-pill); box-shadow: none; opacity: .64; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: grab; font: inherit; font-weight: 800; touch-action: none; transition: transform .16s ease, border-color .16s ease, opacity .16s ease, background .16s ease; }
+.bag-launcher:hover, .bag-launcher:focus-visible { border-color: var(--line-strong); background: color-mix(in srgb, var(--card) 92%, transparent); opacity: 1; transform: translateY(-1px); }
 body.has-resume-bar .bag-launcher { inset-block-end: calc(90px + env(safe-area-inset-bottom, 0px)); }
 /* Once it has been dragged, script owns both axes and the resting corner rules must
    stop applying — otherwise the launcher is pinned to two edges at once. */
@@ -1581,7 +1603,26 @@ body.has-resume-bar .bag-launcher.is-placed { inset-block-end: auto; }
    page, with a shadow to say it is above rather than in, and no scrim at all.
 
    It lifts clear of the resume bar when that is out, so the two never stack. */
-.bag-panel { position: fixed; z-index: 41; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); width: min(330px, calc(100vw - 24px)); max-height: min(76vh, 720px); overflow-y: auto; padding: 16px 18px 20px; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-panel); box-shadow: var(--shadow-deep); }
+.bag-panel { position: fixed; z-index: 41; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); width: min(330px, calc(100vw - 24px)); max-height: min(76vh, 720px); overflow-y: auto; padding: 16px 18px 20px; background: color-mix(in srgb, var(--card) 94%, transparent); border: 1px solid var(--line-strong); border-radius: var(--r-panel); box-shadow: var(--shadow); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+/* During practice the closed bag has a reserved home in the practice header. A
+   saved drag position must never put it over the case or question copy. The open
+   tool panel still floats only after the learner deliberately opens it. */
+body:has(.practice-screen.active) .bag-launcher,
+body:has(.practice-screen.active) .bag-launcher.is-placed {
+  inset-inline-start: auto !important;
+  inset-inline-end: 18px !important;
+  inset-block-start: 12px !important;
+  inset-block-end: auto !important;
+  min-width: 46px;
+  width: 46px;
+  padding: 0;
+  justify-content: center;
+  cursor: pointer;
+}
+body:has(.practice-screen.active) .bag-launcher .bag-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+body:has(.practice-screen.active) .app-header { padding-inline-end: 82px; }
+body:has(.practice-screen.active) .header-subject { display: none; }
 body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inset-bottom, 0px)); }
 .bag-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
 .bag-head h2 { margin: 0; font: 650 20px Georgia, serif; }
@@ -1616,6 +1657,8 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
      the whole time, so it should occupy a thumb and no more. */
   .bag-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .bag-launcher { inset-inline-end: 12px; inset-block-end: calc(12px + env(safe-area-inset-bottom, 0px)); min-width: 52px; min-height: 52px; padding: 0; justify-content: center; }
+  body:has(.practice-screen.active) .bag-launcher,
+  body:has(.practice-screen.active) .bag-launcher.is-placed { inset-inline-end: 11px !important; inset-block-start: 11px !important; width: 52px; }
   body.has-resume-bar .bag-launcher { inset-block-end: calc(84px + env(safe-area-inset-bottom, 0px)); }
   /* On a phone the panel spans the width and sits on the bottom edge — still floating
      over the page, just with nowhere sensible to float to. */
@@ -1690,6 +1733,16 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 .depth-route { margin-top: 10px; }
 .written-review { margin-top: 12px; padding: 15px 16px; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-card); }
 .written-review > b { display: block; margin-bottom: 10px; font-size: var(--t-body); }
+.exam-deep-review { display: grid; gap: 12px; margin-top: 18px; }
+.exam-deep-status { margin: 0; padding: 11px 13px; border-inline-start: 3px solid var(--blue); background: var(--blue-veil); color: var(--muted); font-size: var(--t-meta); }
+.exam-forensic-review { display: grid; gap: 11px; }
+.exam-forensic-review h5 { margin: 0; font: 650 19px/1.2 Georgia, serif; }
+.exam-forensic-review > p { margin: 0; }
+.exam-answer-summary { color: var(--muted); }
+.exam-review-column { display: grid; gap: 5px; }
+.exam-review-column ul { margin: 0; padding-inline-start: 21px; }
+.exam-review-column li + li { margin-top: 5px; }
+.exam-review-column q { color: var(--muted); }
 .rubric-points { display: grid; gap: 7px; margin: 12px 0 0; padding: 0; list-style: none; }
 .rubric-points li { display: grid; gap: 2px; padding: 9px 11px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-mark); }
 .rubric-points b { font-size: var(--t-meta); }

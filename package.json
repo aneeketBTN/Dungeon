@@ -7,10 +7,14 @@
   },
   "scripts": {
     "build": "node tools/build-site.mjs",
-    "test": "node --test tests/site-release.test.mjs tests/agent-readiness.test.mjs tests/cloudflare-access.test.mjs",
+    "test": "node --test tests/site-release.test.mjs tests/agent-readiness.test.mjs tests/cloudflare-access.test.mjs tests/local-grader.test.mjs tests/written-authority-hosted.test.mjs",
     "validate:bank": "node tools/validate_t6_bank.js",
     "check:exam": "node tools/check_exam_readiness.mjs",
     "check:palette": "node tools/check-palette.mjs",
+    "build:written-authority": "node tools/build_written_authority_assets.mjs",
+    "build:course-rag": "node tools/build_course_rag.mjs",
+    "evaluate:grader": "node tools/evaluate-local-grader.mjs",
+    "evaluate:hosted-grader": "node tools/evaluate-hosted-grader.mjs",
     "agents:check": "node tools/validate-agent-readiness.mjs",
     "agents:activation-check": "node tools/validate-agent-readiness.mjs --activation"
   }

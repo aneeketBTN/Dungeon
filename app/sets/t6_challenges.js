@@ -1150,6 +1150,10 @@
     });
   }
 
+  function writtenGap(id, criterionId, kind, scope, label, repair) {
+    return {id: id, criterionId: criterionId, kind: kind, scope: scope, label: label, repair: repair};
+  }
+
   function addShortAnswer(course, concept, data) {
     addQuestion(course, {
       id: concept.id + "_short_answer",
@@ -1158,27 +1162,80 @@
       supportingConceptIds: [],
       module: concept.module,
       source: data.source,
-      sourceIds: [data.source],
+      sourceIds: unique([data.source]),
       node: data.name,
-      pattern: "Construct a response",
+      pattern: "Short-form explanation",
       perspective: "generate",
       type: "short-answer",
       skills: ["explain", "apply", "generate"],
-      difficulty: 4,
-      variantFamily: concept.id + "_constructed-response",
+      difficulty: 3,
+      variantFamily: concept.id + "_short-form-response",
       boss: false,
-      estimatedMinutes: 4,
+      estimatedMinutes: 3,
       selfReviewOnly: true,
-      caselet: data.caselet,
-      stem: "Write a two-to-four sentence recommendation. Name the governing idea, state the decision, and explain why the case evidence supports it.",
+      writtenMode: "short",
+      caselet: null,
+      stem: "In two to three sentences, how would you explain " + data.name + " in your own words, and what kind of decision should it change?",
       rubric: [
-        {id: "principle", label: "Governing idea", description: "Uses " + data.name + " accurately rather than only naming a nearby concept."},
-        {id: "decision", label: "Decision", description: data.application},
-        {id: "reason", label: "Causal reason", description: data.bridge}
+        {id: "understanding", label: "Course understanding", description: "Explains " + data.name + " accurately in the learner's own words; the exact term is optional when the idea is clear."},
+        {id: "judgement", label: "Decision use", description: "Explains when the idea should change a decision, consistently with this course move: " + ensureSentence(data.application)}
       ],
-      exemplar: "Use " + data.name + " to frame the response. " + ensureSentence(data.application) + " " + ensureSentence(data.bridge),
+      writtenGaps: [
+        writtenGap("concept-missing", "understanding", "missing", "concept", "Course idea not explained", "State the idea in plain language before naming what it changes."),
+        writtenGap("concept-inaccurate", "understanding", "misunderstood", "concept", "Course idea used inaccurately", "Return to the course anchor and correct what the idea permits you to conclude."),
+        writtenGap("decision-use-missing", "judgement", "missing", "writing", "Decision use is missing", "Name the decision this idea should change, not only its definition."),
+        writtenGap("decision-use-inaccurate", "judgement", "misunderstood", "concept", "Decision use is inaccurate", "Check that the proposed decision follows from the course idea rather than merely sounding related.")
+      ],
+      exemplar: ensureSentence(data.summary) + " " + ensureSentence(data.application),
       explanation: data.summary,
       link: data.bridge,
+      misconceptions: [],
+      repairId: concept.id + "_bridge_cloze"
+    });
+  }
+
+  function addCaseAnswer(course, concept, data) {
+    addQuestion(course, {
+      id: concept.id + "_case_answer",
+      courseId: course.id,
+      conceptId: concept.id,
+      supportingConceptIds: [],
+      module: concept.module,
+      /* The principle can come from the concept's opening lecture while the case,
+       * defensible decision, and causal link come from a later applied lecture.
+       * A case answer needs both authorities. */
+      source: data.caseSource || data.source,
+      sourceIds: unique([data.source, data.caseSource || data.source]),
+      node: data.name,
+      pattern: "Case-based written response",
+      perspective: "generate",
+      type: "short-answer",
+      skills: ["explain", "apply", "evaluate", "generate"],
+      difficulty: 4,
+      variantFamily: concept.id + "_case-response",
+      boss: false,
+      estimatedMinutes: course.id === "IBM" ? 6 : 5,
+      selfReviewOnly: true,
+      writtenMode: "case",
+      caselet: data.caselet,
+      stem: "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in " + (course.id === "IBM" ? "five to eight" : "four to six") + " sentences.",
+      rubric: [
+        {id: "understanding", label: "Course understanding", description: "Applies " + data.name + " accurately to this case; the exact term need not be named if the idea is clearly used."},
+        {id: "judgement", label: "Decision", description: ensureSentence(data.application)},
+        {id: "case_evidence", label: "Case evidence and reasoning", description: "Uses a specific fact from the case and explains why it supports the decision: " + ensureSentence(data.caseLink || data.bridge)}
+      ],
+      writtenGaps: [
+        writtenGap("concept-missing", "understanding", "missing", "concept", "Course idea not applied", "State the governing idea and show what it changes in this case."),
+        writtenGap("concept-inaccurate", "understanding", "misunderstood", "concept", "Course idea applied inaccurately", "Return to the course anchor and correct what the framework permits you to conclude."),
+        writtenGap("decision-missing", "judgement", "missing", "writing", "Decision is missing", "Make the recommendation explicit before defending it."),
+        writtenGap("decision-unsupported", "judgement", "misunderstood", "concept", "Decision does not follow", "Check that the recommendation follows from the governing idea and not from an unrelated preference."),
+        writtenGap("case-fact-missing", "case_evidence", "missing", "writing", "Decisive case fact is missing", "Name the fact that carries the recommendation rather than referring to the case generally."),
+        writtenGap("case-fact-misread", "case_evidence", "misunderstood", "concept", "Case evidence is misread", "Re-read what the case fact actually shows before using it as support."),
+        writtenGap("causal-link-missing", "case_evidence", "missing", "writing", "Fact-to-decision link is missing", "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier.")
+      ],
+      exemplar: "The governing course idea is " + data.name + ". " + ensureSentence(data.application) + " " + ensureSentence(data.caseLink || data.bridge) + " " + ensureSentence(data.caseExplanation || data.summary),
+      explanation: data.caseExplanation || data.summary,
+      link: data.caseLink || data.bridge,
       misconceptions: [],
       repairId: concept.id + "_case_cloze"
     });
@@ -1356,7 +1413,14 @@
       addBridgeCloze(course, concept, dataById[concept.id], allData);
       addMisconceptionRepair(course, concept, dataById[concept.id], allData);
       addCaseCloze(course, concept, dataById[concept.id], allData);
-      addShortAnswer(course, concept, dataById[concept.id]);
+      /* The final-paper contract has prose responses only in BRGSA and IBM.
+       * Those subjects receive both fast framework fluency and full case transfer.
+       * SPMS and SCLM still carry case-based objective/numeric work, but inventing
+       * prose practice for them would train a format their papers do not ask for. */
+      if (course.id === "BRGSA" || course.id === "IBM") {
+        addShortAnswer(course, concept, dataById[concept.id]);
+        addCaseAnswer(course, concept, dataById[concept.id]);
+      }
     });
     for (var module = 1; module <= 8; module += 1) {
       var pair = course.concepts.filter(function (concept) { return concept.module === module; });

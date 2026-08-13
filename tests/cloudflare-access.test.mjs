@@ -33,6 +33,8 @@ function createMemoryStore({agreementAccepted = true} = {}) {
   const communityOpened = new Map();
   const communityJoined = new Map();
   const communityReminders = new Map();
+  const writtenUsage = new Map();
+  let cohortUsage = 0;
   return {
     sessions,
     active,
@@ -42,6 +44,7 @@ function createMemoryStore({agreementAccepted = true} = {}) {
     communityOpened,
     communityJoined,
     communityReminders,
+    writtenUsage,
     async checkLogin(env, email, country, releaseOtherDevice) {
       if (locked.has(email)) throw new RequestError(403, "ACCOUNT_LOCKED", "This tester account is locked. Ask Aneeket for help.");
       if (countries.has(email) && country && countries.get(email) !== country) {
@@ -171,6 +174,20 @@ function createMemoryStore({agreementAccepted = true} = {}) {
       const updated_at = new Date().toISOString();
       progress.set(email, {state_json: stateJson, revision, updated_at});
       return {revision, updatedAt: updated_at};
+    },
+    async reserveWrittenCheck(env, email, limit) {
+      const checks = Number(writtenUsage.get(email) || 0) + 1;
+      if (checks > limit) throw new RequestError(429, "WRITTEN_DAILY_LIMIT", "Today's written-check allowance has been used. Try again tomorrow.");
+      writtenUsage.set(email, checks);
+      return {checks, limit, remaining: limit - checks, resetsAt: "tomorrow"};
+    },
+    async reserveWrittenBudget(env, limit) {
+      const cohortChecks = cohortUsage + 1;
+      if (cohortChecks > limit) {
+        throw new RequestError(429, "WRITTEN_BUDGET_LIMIT", "Dungeon's shared written-checking budget for today is used up. The rubric and exemplar are still available, and checking resumes tomorrow.");
+      }
+      cohortUsage = cohortChecks;
+      return {cohortChecks, cohortLimit: limit};
     }
   };
 }
@@ -198,7 +215,8 @@ function workerWithGroup(testers = ["alpha@example.com"], options = {}) {
     store: options.store || createMemoryStore(),
     verifyAdmin: options.verifyAdmin || (async () => owner),
     fetchImpl: options.fetchImpl || (async () => Response.json(groupResult(testers))),
-    embeddedAssets: options.embeddedAssets || null
+    embeddedAssets: options.embeddedAssets || null,
+    writtenAuthority: options.writtenAuthority
   });
 }
 
@@ -215,6 +233,73 @@ async function login(worker, email, env = baseEnv, country = null, releaseOtherD
 function cookieFrom(response) {
   return response.headers.get("set-cookie").split(";", 1)[0];
 }
+
+function writtenAuthorityStub(captured = []) {
+  return {
+    health: async () => ({available: true, provider: "test-workers-ai", model: "test-qwen", capabilities: ["rubric-mark"]}),
+    grade: async (env, body) => {
+      captured.push({operation: "grade", body});
+      return {kind: "rubric-mark", authority: "test-hosted", score: 2, maxScore: 3, abstain: false, criteria: []};
+    }
+  };
+}
+
+test("hosted written authority requires a learner session and same-origin POST", async () => {
+  const captured = [];
+  const worker = workerWithGroup(["alpha@example.com"], {writtenAuthority: writtenAuthorityStub(captured)});
+  const anonymous = await worker.fetch(request("/dungeon/api/written-authority/health"), baseEnv);
+  assert.equal(anonymous.status, 401);
+
+  const signedIn = await login(worker, "alpha@example.com");
+  const cookie = cookieFrom(signedIn);
+  const healthResponse = await worker.fetch(request("/dungeon/api/written-authority/health", {headers: {Cookie: cookie}}), baseEnv);
+  assert.equal(healthResponse.status, 200);
+  assert.equal((await healthResponse.json()).available, true);
+
+  const crossOrigin = await worker.fetch(request("/dungeon/api/written-authority/grade", {
+    method: "POST",
+    headers: {Cookie: cookie, Origin: "https://attacker.example", "Content-Type": "application/json"},
+    body: JSON.stringify({courseId: "BRGSA", questionId: "BRGSA-written-01", answer: "A substantive answer long enough to inspect."})
+  }), baseEnv);
+  assert.equal(crossOrigin.status, 403);
+  assert.equal(captured.length, 0);
+
+  const unownedCoach = await worker.fetch(request("/dungeon/api/written-authority/coach", {
+    method: "POST",
+    headers: {Cookie: cookie, Origin: "https://aneeketdas.com", "Content-Type": "application/json"},
+    body: JSON.stringify({courseId: "BRGSA", prompt: "An arbitrary question", answer: "An arbitrary answer"})
+  }), baseEnv);
+  assert.equal(unownedCoach.status, 404);
+});
+
+test("hosted written requests are metered without storing candidate text", async () => {
+  const captured = [];
+  const store = createMemoryStore();
+  const worker = workerWithGroup(["alpha@example.com"], {store, writtenAuthority: writtenAuthorityStub(captured)});
+  const signedIn = await login(worker, "alpha@example.com");
+  const cookie = cookieFrom(signedIn);
+  const env = {...baseEnv, DUNGEON_HOSTED_WRITTEN_DAILY_LIMIT: "1"};
+  const body = {courseId: "BRGSA", questionId: "BRGSA-written-01", answer: "A substantive private candidate answer for a one-time check."};
+  const first = await worker.fetch(request("/dungeon/api/written-authority/grade", {
+    method: "POST",
+    headers: {Cookie: cookie, Origin: "https://aneeketdas.com", "Content-Type": "application/json"},
+    body: JSON.stringify(body)
+  }), env);
+  assert.equal(first.status, 200);
+  assert.equal((await first.json()).usage.remaining, 0);
+  assert.deepEqual(captured, [{operation: "grade", body}]);
+  assert.deepEqual([...store.writtenUsage.entries()], [["alpha@example.com", 1]]);
+  assert.doesNotMatch(JSON.stringify([...store.writtenUsage.entries()]), /private candidate/i);
+
+  const second = await worker.fetch(request("/dungeon/api/written-authority/grade", {
+    method: "POST",
+    headers: {Cookie: cookie, Origin: "https://aneeketdas.com", "Content-Type": "application/json"},
+    body: JSON.stringify(body)
+  }), env);
+  assert.equal(second.status, 429);
+  assert.equal((await second.json()).code, "WRITTEN_DAILY_LIMIT");
+  assert.equal(captured.length, 1);
+});
 
 test("tester endpoint fails closed when protected bindings are absent", async () => {
   const worker = workerWithGroup();
@@ -851,4 +936,28 @@ test("standalone delivery serves embedded login and learner assets", async () =>
   const approved = await login(worker, "alpha@example.com", envWithoutAssets);
   const learner = await worker.fetch(request("/dungeon/", {headers: {Cookie: cookieFrom(approved)}}), envWithoutAssets);
   assert.equal(await learner.text(), "embedded learner");
+});
+
+test("the cohort ceiling bounds spend no matter how many testers are admitted", async () => {
+  const store = createMemoryStore();
+  const worker = workerWithGroup(["alpha@example.com", "beta@example.com"], {
+    store, writtenAuthority: writtenAuthorityStub([])
+  });
+  /* Generous per-tester allowance, tiny cohort budget: the point is that admitting
+     more people must not raise the total. */
+  const env = {...baseEnv, DUNGEON_HOSTED_WRITTEN_DAILY_LIMIT: "50", DUNGEON_HOSTED_WRITTEN_COHORT_DAILY_LIMIT: "2"};
+  const body = JSON.stringify({courseId: "BRGSA", questionId: "BRGSA-written-01", answer: "A substantive written answer for checking."});
+  /* One active session per email, so sign each tester in once and reuse the cookie. */
+  const alpha = cookieFrom(await login(worker, "alpha@example.com"));
+  const beta = cookieFrom(await login(worker, "beta@example.com"));
+  const post = async (cookie) => worker.fetch(request("/dungeon/api/written-authority/grade", {
+    method: "POST",
+    headers: {Cookie: cookie, Origin: "https://aneeketdas.com", "Content-Type": "application/json"},
+    body
+  }), env);
+  assert.equal((await post(alpha)).status, 200);
+  assert.equal((await post(beta)).status, 200);
+  const exhausted = await post(alpha);
+  assert.equal(exhausted.status, 429, "the third check exceeds the cohort budget even though nobody hit their own limit");
+  assert.equal((await exhausted.json()).code, "WRITTEN_BUDGET_LIMIT");
 });
