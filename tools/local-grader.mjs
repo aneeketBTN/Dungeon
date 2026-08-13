@@ -37,6 +37,8 @@ const BANK_FILES = [
   "app/sets/t6_diagnoses.js",
   "app/sets/t6_brgsa.js",
   "app/sets/t6_catalog.js",
+  /* Before t6_challenges.js, which reads T6_INTEGRATED while building the bank. */
+  "app/sets/t6_integrated.js",
   "app/sets/t6_challenges.js"
 ];
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
@@ -110,8 +112,15 @@ export function chunkLecture(lecture, target = 1500) {
   }));
 }
 
-export function retrieveEvidence(question, _answer, lectures, limit = 6) {
-  const allowedIds = new Set((question.sourceIds || [question.source]).filter(Boolean));
+/* Six chunks suits a question anchored on one or two lectures. An integrated
+ * scenario declares four or five, and a flat six would leave each lecture a
+ * single passage — enough to name the idea, not enough to judge whether the
+ * learner applied it. The budget scales with the lectures actually declared and
+ * stops at twelve, which is about 17k characters of course text. */
+export function retrieveEvidence(question, _answer, lectures, limit = 0) {
+  const declared = (question.sourceIds || [question.source]).filter(Boolean);
+  if (!limit) limit = Math.min(12, Math.max(6, declared.length * 2));
+  const allowedIds = new Set(declared);
   const allowedLectures = lectures.filter((lecture) => allowedIds.has(lecture.lecture_id));
   const missing = [...allowedIds].filter((id) => !allowedLectures.some((lecture) => lecture.lecture_id === id));
   if (missing.length) throw new Error(`Missing required lecture source: ${missing.join(", ")}`);

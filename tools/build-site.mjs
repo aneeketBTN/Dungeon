@@ -26,6 +26,7 @@ const publicFiles = [
   "app/sets/t6_diagnoses.js",
   "app/sets/t6_brgsa.js",
   "app/sets/t6_catalog.js",
+  "app/sets/t6_integrated.js",
   "app/sets/t6_challenges.js"
 ];
 

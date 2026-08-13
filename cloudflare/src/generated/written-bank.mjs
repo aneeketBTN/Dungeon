@@ -2264,6 +2264,429 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "brgsa_case_scale_decision": {
+    "id": "brgsa_case_scale_decision",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m3_cohort",
+    "stem": "The board meets in a week. Write the case the growth lead should make: what the numbers actually show, what should happen to the spending decision, and what has to change before scale is defensible.",
+    "caselet": "Clairo has grown total active accounts from 4,100 to 8,400 in nine months, and the board has approved doubling acquisition spend next quarter on that basis. The growth lead pulls the numbers apart before the money is committed. Blended CAC has risen from ₹1,900 to ₹3,400. Month-3 retention by signup cohort has fallen every month for six months, from 31% to 22%. Split by segment, accounts that reach the team plan return roughly five times their acquisition cost, while single-seat accounts return about 1.1 times. Activation — the share of signups completing their first recorded meeting — has sat between 33% and 35% throughout, against a 50% benchmark. The dashboard the board reviews shows total accounts, weekly signups and website visits. None of the three has an owner or a stated threshold.",
+    "sourceIds": [
+      "BRGSA-M03-L01",
+      "BRGSA-M03-L04",
+      "BRGSA-M04-L04",
+      "BRGSA-M08-L03"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Identifies the ideas this situation calls for without being told them: cohort retention read at equal age rather than in aggregate, segment-level CAC against LTV, a single binding constraint, and metrics that carry owners and thresholds."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures from the case — the cohort fall from 31% to 22%, CAC from ₹1,900 to ₹3,400, the roughly five-to-one against 1.1-to-one segment split, or activation held at 33–35% against the 50% benchmark — rather than describing the situation generally."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Explains the causal chain rather than listing findings: acquisition is refilling a leaking bucket, the leak is located at activation, and the economics only work in one segment, so more spend multiplies the loss."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States clearly that the spend increase should be held, names activation as the constraint to fix first, and identifies the team-plan segment as the one worth acquiring."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would make scaling defensible — activation moving toward the benchmark, cohort curves flattening, or the segment ratio holding — or states the cost and risk of holding the spend."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "brgsa_case_false_win": {
+    "id": "brgsa_case_false_win",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m1_evidence",
+    "stem": "Write the review of what went wrong and what the team should do next quarter. Be specific about which failure is which, and do not let the proposal to re-run the test pass unexamined.",
+    "caselet": "Zoko's team tested a new starter-kit call to action. Traffic is heavy enough that the pre-calculated sample of 9,000 sessions per variant would be reached in about seven days, covering a full week. On day three the dashboard showed the variant 9 percentage points ahead, and the team shipped it that afternoon. Two months on, the conversion rate sits where it was before the change. The team's confidence in the original idea had been scored 9 out of 10 in planning, on the strength of everyone in the room agreeing it would work; the supporting evidence recorded was a set of customer interviews in which 34 of 40 respondents said they would prefer the new wording. The team now has 40 further experiment ideas and capacity for 6 this quarter, and is proposing to re-run the same test with a larger creative budget.",
+    "sourceIds": [
+      "BRGSA-M01-L04",
+      "BRGSA-M02-L01",
+      "BRGSA-M02-L03",
+      "BRGSA-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Identifies stopping before the pre-set sample as peeking that inflates the false-positive rate, names the resulting Type I error, and recognises that stated interview preference is a weak evidence class and cannot support a confidence score of 9."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — the day-three stop against a 9,000-per-variant sample reached in seven days, the 9-point lead that did not survive, the confidence score of 9 on 34 of 40 stated preferences, or 40 ideas against capacity for 6."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects the failures rather than listing them: weak evidence inflated confidence, which made the team eager to believe an early reading, and stopping early converted that eagerness into a shipped false positive."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States what should happen next: run to the pre-declared sample, cap confidence where evidence is only stated preference, and score the 40 ideas against the current constraint before choosing 6."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what evidence would justify re-running the test, or acknowledges the cost of the discipline — a full week per test against capacity for six experiments."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "brgsa_case_hollow_growth": {
+    "id": "brgsa_case_hollow_growth",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m5_activation",
+    "stem": "Write the assessment the founder should have before repeating this. Address the claim made to investors directly, and say what the brand should do instead.",
+    "caselet": "A consumer skincare brand ran a referral offer giving both parties ₹300 off. Signups rose from about 900 a week to 3,600 during the four-week promotion, and the founder has told investors the product has a network effect. Since the promotion ended, weekly signups have settled at 1,050. Of the referred customers, 71% never placed a second order. Onboarding for a first-time buyer runs to nine steps before the first delivery is confirmed, including account creation, a skin questionnaire and a routine-builder quiz. Repeat customers who complete a second order within 21 days go on to retain at four times the rate of those who do not. Asked whether the product became more useful to them as more people joined, existing customers said it made no difference. The brand is now considering moving most of its budget into a paid channel whose customers historically retain poorly.",
+    "sourceIds": [
+      "BRGSA-M05-L05",
+      "BRGSA-M06-L01",
+      "BRGSA-M06-L05",
+      "BRGSA-M05-L01"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Applies the joining test to reject the network-effect claim and identify a referral incentive, locates the loss at activation before first value, and recognises the 21-day second order as the habit the lifecycle should be built around."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — 900 to 3,600 and back to 1,050, 71% never reordering, nine onboarding steps, the four-times retention for a second order inside 21 days, or existing customers reporting no change in value."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them rather than listing: the incentive bought arrivals, the onboarding path lost them before first value, and with no repeat behaviour established there was never a loop for a network effect to sit on."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the network-effect claim should be withdrawn, that onboarding friction ahead of first value should be cut, and that the second order inside 21 days should become the activation target before more spend is committed."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would justify the paid channel or a repeat promotion — activation and second-order rates holding first — or states what the correction costs in short-term signup volume."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "brgsa_case_revenue_engine": {
+    "id": "brgsa_case_revenue_engine",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m7_pricing",
+    "stem": "Write the recommendation on where this company should spend its next quarter. The hiring plan is already drafted, so say plainly whether it should proceed.",
+    "caselet": "A B2B company reports recurring revenue up 18% year on year and is preparing to hire a performance marketer, a demand-generation manager and an attribution stack. Its cohort numbers tell a different story: of ₹20 lakh of monthly recurring revenue held by customers twelve months ago, ₹16 lakh remains, with expansion of ₹2 lakh offset by ₹4 lakh of churn and ₹2 lakh of downgrades. The headline growth comes from new logos. Pricing is a single flat plan at ₹1,500 per seat with no upgrade path. Marketing recorded 100 qualified leads last quarter; sales accepted 75 and disputes the definition of the other 25, which was never agreed between them. Average time from a lead arriving to first contact is four days. The founder is still personally closing the largest accounts and has never handed that motion to anyone.",
+    "sourceIds": [
+      "BRGSA-M07-L01",
+      "BRGSA-M07-L04",
+      "BRGSA-M04-L02"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Computes or recognises net revenue retention on the existing base, identifies the flat plan as a structure with no expansion path, names the undefined marketing-to-sales handoff and response time as the leak, and places the company on the ladder of proof rather than at scale stage."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — ₹16 lakh remaining of ₹20 lakh, or 80% NRR, the flat ₹1,500 seat price with no upgrade path, 100 leads against 75 accepted, four days to first contact, or the founder still closing the largest accounts."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: new logos are masking a base that is shrinking, the pricing structure gives retained customers no way to expand, and the handoff loses qualified demand before the motion is repeatable enough to hire against."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the hiring plan should not proceed as drafted, and names what to do first — repair the handoff definition and SLA, and redesign pricing so expansion is possible."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would make the scale-stage hires right — a repeatable motion, NRR above 100%, an agreed handoff — or states what delaying the hires costs."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
   "ibm_inclusive_short_answer": {
     "id": "ibm_inclusive_short_answer",
     "courseId": "IBM",
@@ -4517,6 +4940,427 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "scope": "writing",
         "label": "Fact-to-decision link is missing",
         "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_case_hospital_growth": {
+    "id": "ibm_case_hospital_growth",
+    "courseId": "IBM",
+    "conceptId": "ibm_vaatsalya",
+    "stem": "Advise the board. Address the expansion proposal, the capacity problem inside the existing hospitals, and the evidence the report is resting on.",
+    "caselet": "A hospital group runs six 200-bed tertiary facilities in three large cities, with cardiac and oncology units at 61% occupancy. Its records show 44% of admissions travel more than 90 km, most for deliveries, dialysis and routine surgery requiring no tertiary equipment; a normal delivery costs such a patient about ₹38,000 including travel and lost wages. A proposal would open twelve 40-bed centres in semi-urban towns handling primary and secondary care only, at roughly ₹11,000 per delivery. Separately, the group's four surgeons each spend about 70% of their working day on counselling, measurement and post-operative dressing, with a nine-week waiting list; 22 trained paramedical staff are assigned mostly to reception. The group's impact report states that patients treated at its facilities earn more two years later than those who were not, and the board is citing this to justify expansion.",
+    "sourceIds": [
+      "IBM-M02-L04",
+      "IBM-M02-L08",
+      "IBM-M08-L05"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Identifies locating focused secondary capacity near the underserved population, separating standardisable work from the scarce specialist to raise throughput, and the absence of a counterfactual in the impact claim."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — 44% travelling over 90 km, ₹38,000 against ₹11,000 per delivery, 61% occupancy in tertiary units, 70% of surgeon time on non-surgical work, the nine-week list, or the 22 paramedical staff on reception."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: the access problem and the capacity problem are separate constraints with separate fixes, and neither is evidenced by the earnings claim as it stands."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "Supports the semi-urban secondary network for the routine load, recommends redistributing non-surgical tasks to the existing paramedical staff, and declines to rest expansion on the current impact claim."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what evidence would support the impact claim — a comparison group similar before treatment — or the conditions under which the cost discipline would start to threaten essential quality."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_case_lender_pressure": {
+    "id": "ibm_case_lender_pressure",
+    "courseId": "IBM",
+    "conceptId": "ibm_grameen",
+    "stem": "Write the assessment the impact fund's investment committee needs before it commits. State whether the institution should keep growing at its current rate.",
+    "caselet": "A microfinance institution has grown disbursements 140% in two years and reports portfolio-at-risk of 1.2%. Field agents earn 60% of variable pay per additional loan disbursed, with nothing tied to repayment. A sample of 500 borrowers finds the median household servicing four concurrent microloans, 38% having used their most recent loan to repay an existing one, and total debt service at 71% of reported household income. In the institution's original districts, lending ran through self-formed groups of five with staged disbursement and weekly village meetings, and repayment held at 97% over eighteen months; in the new districts the group label was kept but the meetings and staged release were dropped to lower cost per loan. An impact fund is preparing to invest, expects a 9% return, and has asked what the institution measures beyond disbursement volume.",
+    "sourceIds": [
+      "IBM-M03-L03",
+      "IBM-M03-L05",
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Identifies that repayment capacity, not disbursement volume, is the test of responsible lending; recognises staged release and group meetings as the screening mechanism rather than administrative overhead; and separates intent, measurement and return in the fund's decision."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — 1.2% portfolio-at-risk against 38% refinancing, debt service at 71% of income, four concurrent loans, 60% of agent pay per disbursement, or 97% repayment where the meetings and staged release were kept."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: the incentive drives volume, the dropped screening mechanism removed the check on capacity, and refinancing keeps accounts current so the headline risk figure conceals the problem it is supposed to reveal."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that growth should pause pending an assessment of total household obligations, that agent incentives must be re-tied to repayment, and that the screening mechanism should be restored in the new districts."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what the fund should require before investing — capacity-based measurement, restored screening, evidence the 9% return does not depend on continued refinancing — or what the pause costs."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_case_rural_scale": {
+    "id": "ibm_case_rural_scale",
+    "courseId": "IBM",
+    "conceptId": "ibm_rural_bpo",
+    "stem": "Write the growth plan. The board wants all 60 towns within two years, so be explicit about what is achievable and what has to be true for it to work.",
+    "caselet": "A rural services company runs eight centres it owns and staffs directly, employing 640 people in district towns where few graduates migrate for work. Attrition runs at 8% against 45% in comparable city centres, and wage costs are about 40% below metro rates. It holds requests from 60 towns, has ₹4 crore of capital, and needs roughly ₹90 lakh per owned centre. Two pilots run by local entrepreneurs who funded their own fit-out reached break-even in seven months against eleven for owned centres, but one missed the group's training standard and a client audit flagged inconsistent quality across the network; the client's contract specifies a 2% error ceiling. Separately, the company cannot place many capable applicants because they hold no document proving prior work, and client-side supervisors will pay above the local rate only where a skill grade has been independently assessed rather than self-declared.",
+    "sourceIds": [
+      "IBM-M04-L04",
+      "IBM-M04-L05",
+      "IBM-M06-L02"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Identifies that owned expansion is capital-bound while partner-led replication is not, that common standards are what stop distributed growth from destroying client trust, and that independently assessed skill grades are what convert local capability into higher-paid placement."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — ₹4 crore against ₹90 lakh per centre, seven months to break-even against eleven, 8% attrition against 45%, the 2% contractual error ceiling, or the audit triggered by one pilot."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: partnering solves the capital and local-knowledge constraint but transfers quality risk to people outside the group's training system, which is precisely what the client contract prices."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "Recommends partner-led growth bound by enforced common standards and certification, states that 60 towns in two years is not fundable through owned centres, and ties expansion to the training and assessment system rather than to site count."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what must hold for the plan to work — audited standards, error rates inside 2%, assessment capacity keeping pace — or what a further breach would cost in client trust."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_case_energy_offer": {
+    "id": "ibm_case_energy_offer",
+    "courseId": "IBM",
+    "conceptId": "ibm_selco",
+    "stem": "Advise the manufacturer. The CSR-funded price cut is already approved in principle, so say whether it should go ahead and what the alternative is.",
+    "caselet": "A manufacturer has a solar lighting unit that works well and costs ₹9,000 outright. It is being offered in districts where street vendors spend about ₹15 a day on kerosene, roughly ₹450 a month, and where brighter light is estimated to raise daily takings by about ₹90 by extending trading hours. Sales are close to zero. Almost no vendor holds ₹9,000, though a rural bank will finance the unit at ₹10 a day over three years where repayment capacity can be shown. Two earlier solar programmes in these districts collapsed when units failed and no technician was available within 40 km, and vendors now say openly that they will not buy without a repair commitment. The manufacturer's proposed response is a 15% price cut funded from its CSR budget, presented internally as a temporary subsidy until volumes rise.",
+    "sourceIds": [
+      "IBM-M05-L10",
+      "IBM-M01-L07",
+      "IBM-M07-L05",
+      "IBM-M05-L07"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Identifies that affordability here is a system of product, finance, livelihood benefit and service rather than a price, that the barrier is the payment structure and missing service rather than the headline cost, and that a CSR-funded subsidy is not a model that can sustain itself."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — ₹15 a day on kerosene against ₹10 a day financed, the ₹90 uplift in takings, ₹9,000 outright, the 40 km with no technician, or the 15% cut against the gap it needs to close."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: the vendor's existing kerosene spend already exceeds the financed repayment, so the offer is affordable once restructured, and the service link is what makes the finance repayable and the earlier programmes' failure relevant."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "Recommends rejecting the CSR-funded price cut in favour of bundling finance and a local service commitment, so the offer covers its own costs at a price the customer can pay."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what has to hold — service coverage within reach, the bank's willingness to lend, takings uplift materialising — or what the manufacturer gives up by declining the subsidy route."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
       }
     ]
   }

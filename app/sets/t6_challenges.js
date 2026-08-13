@@ -1253,6 +1253,66 @@
     });
   }
 
+  /* Integrated scenarios are authored whole, not generated from concept fields.
+   *
+   * Every other written family is assembled — stem from the concept name, rubric
+   * from its application, exemplar from summary plus application. That assembly
+   * is exactly what produced model answers whose closing sentence did not follow
+   * from the question, and it cannot produce a situation that spans four
+   * concepts without naming any of them. So these carry their own caselet, task,
+   * criteria and exemplar, and this function only resolves the evidence
+   * boundary: the union of the declared concepts' lectures. */
+  function addIntegratedScenarios(course) {
+    var scenarios = (window.T6_INTEGRATED || {})[course.id] || [];
+    scenarios.forEach(function (scenario) {
+      var concepts = scenario.conceptIds.map(function (id) {
+        return course.concepts.filter(function (concept) { return concept.id === id; })[0];
+      }).filter(Boolean);
+      if (concepts.length !== scenario.conceptIds.length) return;
+      var primary = concepts[0];
+      addQuestion(course, {
+        id: scenario.id,
+        courseId: course.id,
+        conceptId: primary.id,
+        supportingConceptIds: concepts.slice(1).map(function (concept) { return concept.id; }),
+        module: scenario.module,
+        source: primary.source,
+        sourceIds: unique(concepts.map(function (concept) { return concept.source; })),
+        node: scenario.title,
+        pattern: "Integrated case response",
+        perspective: "generate",
+        type: "short-answer",
+        skills: ["explain", "apply", "evaluate", "generate"],
+        difficulty: 5,
+        variantFamily: scenario.id,
+        boss: false,
+        estimatedMinutes: 12,
+        selfReviewOnly: true,
+        writtenMode: "integrated",
+        caselet: scenario.caselet,
+        stem: scenario.task,
+        rubric: scenario.rubric.map(function (criterion) {
+          return {id: criterion.id, label: criterion.label, description: criterion.description};
+        }),
+        writtenGaps: [
+          writtenGap("ideas-missing", "diagnosis", "missing", "concept", "Governing ideas not named", "Say which course ideas this situation calls for before recommending anything."),
+          writtenGap("ideas-wrong", "diagnosis", "misunderstood", "concept", "Wrong ideas applied", "Re-read the situation for the symptom each framework is meant to explain."),
+          writtenGap("evidence-missing", "evidence", "missing", "writing", "Case figures not used", "Quote the numbers that carry your argument rather than describing the case."),
+          writtenGap("evidence-misread", "evidence", "misunderstood", "concept", "Case figures misread", "Check what each figure actually shows before resting a conclusion on it."),
+          writtenGap("integration-missing", "integration", "missing", "writing", "Ideas listed, not connected", "Show how one finding causes or constrains the next instead of covering them in turn."),
+          writtenGap("decision-missing", "decision", "missing", "writing", "No decision stated", "Commit to what should be done; an analysis without a recommendation scores nothing here."),
+          writtenGap("decision-unsupported", "decision", "misunderstood", "concept", "Decision does not follow", "Check the recommendation follows from the diagnosis rather than from general good practice."),
+          writtenGap("limit-missing", "limit", "missing", "writing", "No condition or cost named", "Say what would change your recommendation, or what it costs to follow it.")
+        ],
+        exemplar: scenario.exemplar,
+        explanation: scenario.title,
+        link: primary.bridge || "",
+        misconceptions: [],
+        repairId: primary.id + "_bridge_cloze"
+      });
+    });
+  }
+
   function addModuleMatch(course, module, pair, dataById) {
     var first = dataById[pair[0].id];
     var second = dataById[pair[1].id];
@@ -1434,6 +1494,8 @@
         addCaseAnswer(course, concept, dataById[concept.id]);
       }
     });
+    /* After the per-concept families, because these span several of them. */
+    if (course.id === "BRGSA" || course.id === "IBM") addIntegratedScenarios(course);
     for (var module = 1; module <= 8; module += 1) {
       var pair = course.concepts.filter(function (concept) { return concept.module === module; });
       if (pair.length < 2) continue;
