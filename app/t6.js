@@ -3550,6 +3550,28 @@
     });
     label.appendChild(textarea);
     holder.appendChild(label);
+    /* A standing line wherever free text is collected, not only when something trips
+       a detector. Somebody who never types it into the box should still see it. */
+    var support = document.createElement("p");
+    support.className = "written-support-line";
+    support.innerHTML = "Revision is heavy going sometimes. If you are struggling with more than the syllabus, " +
+      "<b>Tele-MANAS</b> is free, confidential and open around the clock on " +
+      "<a href=\"tel:14416\">14416</a>.";
+    holder.appendChild(support);
+    if (session.subjectiveStage === "support") {
+      var offered = document.createElement("div");
+      offered.className = "written-support-response";
+      offered.setAttribute("role", "status");
+      offered.setAttribute("aria-live", "polite");
+      offered.setAttribute("tabindex", "-1");
+      offered.innerHTML = "<b>This one is not going to be marked.</b>" +
+        "<span>Nothing about it was recorded, and it was not sent anywhere to be checked. " +
+        "If you are having a hard time, please talk to someone you trust.</span>" +
+        "<span>Tele-MANAS — free, confidential, 24 hours — <a href=\"tel:14416\">14416</a> " +
+        "or <a href=\"tel:18008914416\">1800-891-4416</a>.</span>" +
+        "<small>Your writing is still in the box. Nothing here has been scored or scheduled.</small>";
+      holder.appendChild(offered);
+    }
     if (session.subjectiveStage === "grading") {
       var waiting = document.createElement("div");
       waiting.className = "local-grade-wait";
@@ -4087,6 +4109,10 @@
       try { payload = await response.json(); } catch (error) {}
       if (session !== gradingSession || !session || session.answered || currentQuestion().id !== question.id) return;
       if (!response.ok) throw new Error(payload.message || payload.error || "Dungeon could not check this response.");
+      /* Checked before the abstention branch on purpose. A support response also
+         carries abstain:true, and routing it there would answer someone in trouble
+         with a note about schema and answer-evidence checks. */
+      if (payload.kind === "written-support" && payload.supportOffered === true) return showWrittenSupport();
       if (payload.abstain) return fallBackFromWrittenGrade("Dungeon’s written authority abstained because the judgement did not pass every source, schema, and answer-evidence check. No machine mark was issued; use the visible rubric and exemplar instead.");
       var grade = validatedWrittenGrade(payload, question);
       if (!grade) return fallBackFromWrittenGrade("The result failed Dungeon’s citation or schema checks. No machine mark was recorded; use the visible rubric and exemplar instead.");
@@ -4094,6 +4120,23 @@
     } catch (error) {
       if (session !== gradingSession || !session || session.answered) return;
       return fallBackFromWrittenGrade("The written authority was unavailable, so no machine mark was recorded. Use the visible rubric and exemplar instead.");
+    }
+  }
+
+  /* No mark, no attempt, no repair routing, no advance. The response is left in the
+     box and the question stays open, because the one thing this moment must not do
+     is score somebody and move on. */
+  function showWrittenSupport() {
+    session.subjectiveStage = "support";
+    session.writtenSupport = true;
+    session.localGradeFallback = null;
+    profile.active = clone(session);
+    saveProfile();
+    renderQuestion();
+    var holder = $("response-holder");
+    if (holder) {
+      var note = holder.querySelector(".written-support-response");
+      if (note) note.focus();
     }
   }
 

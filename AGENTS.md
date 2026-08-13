@@ -1,5 +1,26 @@
 # Dungeon
-> **Written transfer throughout Learn; forensic review after Examiner (2026-08-13; newest):** prose
+> **Hosted written checking is deployable and unmeasured (2026-08-14; newest):** the hosted marker no
+> longer needs a vector index. Retrieval never reads the candidate answer, so each question's course
+> evidence is a constant; it is now frozen at build time — 380 chunks over all 64 questions, 511 KiB,
+> zero lecture-boundary violations, 155.92 KiB gzipped against a 3 MiB free ceiling. Vectorize and the
+> embedding model are gone from the request path, course transcripts stay out of any hosted store, and
+> creating the index and uploading 3,470 chunks is no longer an owner action. `COURSE_RAG` was a
+> binding to an index that never existed and would have failed every deploy; it is removed.
+> `DUNGEON_HOSTED_WRITTEN_CORPUS` is now the pack's own content digest, so approval cannot drift from
+> the text the marker quotes. Two gaps between promise and code were closed: the hosted runtime
+> imported the distress helpers and never called them, so the privacy notice's "not sent to any AI
+> provider, not marked, not stored" was unkept on the runtime testers use; and the written-answer
+> retention the agreement asks consent for did not exist. Answers now carry a per-row 92-day expiry
+> deleted by a daily cron, revocation deletes them explicitly, and the owner has a per-tester
+> "Delete answers" control. `VERIFIED(AUTOMATED)` at
+> `evidence/2026-08-14/t6-frozen-evidence-and-answer-retention/verification.md`. Automated suite:
+> 78/78. **Marking quality is the open question, not infrastructure:** IBM exemplars reach full marks
+> 22/32 (short-form 14/16) for 63/80 of available marks; BRGSA reaches 13/32 for 45/80, and five of
+> the eight questions flagged for concept-label/exemplar mismatch are in that failure list. Zero false
+> awards across 64 content-free answers in every run. The hosted checkpoint has never been run.
+> Activation remains off; `WAITING_OWNER_CALIBRATION + WAITING_OWNER_CONTENT_ACCEPTANCE`.
+>
+> **Written transfer throughout Learn; forensic review after Examiner (2026-08-13):** prose
 > practice now follows the published paper rather than appearing in every subject. BRGSA and IBM
 > each carry **32 authored prompts** — one short framework explanation and one full case response
 > for every concept — while SPMS and SCLM keep their applied work in the objective, MSQ, numerical,
@@ -611,8 +632,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tools/build-site.mjs` | Allowlists the sixteen learner/admin/protection assets and produces the deployment artifact. | 2026-08-13 |
 | `sites-backup/worker.mjs` | Private Sites backup entrypoint, **not** the deployed Worker: learner/admin redirects, health response, static delivery, and security headers. Diverged from `cloudflare/src/index.mjs` and has no agreement gate. | 2026-08-12 |
 | `sites-backup/README.md` | Records why this worker is not production and what must be reconciled before promoting it. | 2026-08-12 |
-| `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, and tester management. | 2026-08-11 |
-| `cloudflare/migrations/` | Applied D1 history for auth/progress, browser/country locks, agreement acceptance, and community timestamps. | 2026-08-11 |
+| `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, tester management, the per-tester and cohort written-check ceilings, the written-answer archive with its per-row expiry, and the daily `scheduled` purge that keeps retention running after the cohort goes quiet. | 2026-08-14 |
+| `cloudflare/migrations/` | Applied D1 history for auth/progress, browser/country locks, agreement acceptance, community timestamps, per-tester and cohort written-check metering, and `0007_written_answer_archive.sql` — the only table holding a learner's own prose, with the expiry and cascade that make the three-month promise and withdrawal real. | 2026-08-14 |
 | `db/schema.ts` | Readable mirror of tester, session, progress, agreement, and community-state table shapes. | 2026-08-11 |
 | `app/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. | 2026-08-11 |
 | `app/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
@@ -620,15 +641,19 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `docs/community/DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
 | `work/build_tester_agreement.py` | Builds the verified two-page agreement DOCX for Word/PDF delivery. | 2026-08-11 |
 | `cloudflare/tools/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
-| `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, and observability configuration; no secret values. | 2026-08-11 |
+| `cloudflare/wrangler.jsonc` | Deployed Worker asset binding, exact domain route, Access identifiers, the daily retention cron, the inert written-authority activation vars, and observability configuration; no secret values and deliberately no Vectorize binding. | 2026-08-14 |
+| `cloudflare/src/written-authority.mjs` | Hosted marking and coaching: activation gates keyed to the exact model and the evidence pack's own digest, distress interception ahead of every other check, frozen-evidence lookup, bounded structured completion with one retry, and abstention as the default. No Vectorize, no embedding call. | 2026-08-14 |
+| `cloudflare/src/generated/written-evidence.mjs` | Generated, do not hand-edit. Each question's frozen course evidence — 380 chunks over 64 questions, 511 KiB — plus the content digest that `DUNGEON_HOSTED_WRITTEN_CORPUS` must name before hosted marking runs. | 2026-08-14 |
+| `tools/build_written_authority_assets.mjs` | Builds the hosted question manifest and freezes each question's course evidence, stamping the pack with its own digest. Without `DUNGEON_TRANSCRIPTS` it keeps the committed pack, so a checkout without the private lecture material still runs the gates. | 2026-08-14 |
+| `tools/evaluate-hosted-grader.mjs` | Hosted calibration. Calls `gradeHostedAnswer` itself with only `env.AI.run` swapped for the REST endpoint, so it measures the shipped path rather than a parallel implementation. Needs a Workers AI token and nothing else. | 2026-08-14 |
 | `cloudflare/README.md` | Live route, runtime-secret, Access-policy, owner-bootstrap, and rate-limit contract. | 2026-08-11 |
 | `cloudflare/tools/build-standalone.mjs` | Builds the same protected allowlist as an embedded-asset fallback when an Assets upload path is unavailable. | 2026-08-11 |
 | `tests/site-release.test.mjs` | Release-boundary, anonymous-invite secrecy, privacy, routing, header, and setup checks. | 2026-08-11 |
-| `tests/cloudflare-access.test.mjs` | Owner auth, tester management, agreement/community state, bump, routing, health, and cache checks. | 2026-08-11 |
+| `tests/cloudflare-access.test.mjs` | Owner auth, tester management, agreement/community state, bump, routing, health, cache checks, the cohort spend ceiling, and one test per promise the privacy notice makes about stored answers: the stated expiry, distress never stored, deletion on request, deletion on withdrawal, and a mark that survives a storage failure. | 2026-08-14 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
 | `app/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
 | `app/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
-| `app/admin.js` | Cohort onboarding, revoke/unlock, per-tester and bulk **force sign-out** with live session counts, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-12 |
+| `app/admin.js` | Cohort onboarding, revoke/unlock, per-tester and bulk **force sign-out** with live session counts, per-tester **Delete answers** for a deletion request that is not a withdrawal, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-14 |
 | `app/theme.js` | Theme bootstrap loaded synchronously in `<head>`: reads the stored appearance before first paint, exposes `T6Theme` (get/set/next/resolved/onChange), and follows the system setting when unset. Separate from t6.js because the release serves `script-src self`, so the usual inline head script is blocked. | 2026-08-12 |
 | `tools/check_exam_readiness.mjs` | **Exam-pattern gate and authoring worklist.** `npm run check:exam [SUBJECT]`. Reads `EXAM_PAPERS` out of `app/t6.js` (one source of truth, not a copy) and multiplies it by the bank: which sections cannot be filled and what that costs in marks, whether a negatively marked section is free to a candidate who ticks everything (LAW-53), and how many questions are *forced* to share one visible prompt. Prints "N × type for SUBJECT Section X", soonest paper first. Run it before authoring and after. | 2026-08-12 |
 | `tools/check-palette.mjs` | Palette gate. Parses the `light-dark()` pairs out of `app/t6.css` itself and measures 140 contrast pairings, grayscale separation, and three colour-vision simulations in both themes, then asserts the four evidence states are shape-distinct. Run after touching any colour token. | 2026-08-12 |
@@ -770,6 +795,27 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
+- [ ] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — BRGSA written prompts are the ceiling on marking
+  quality, not the model.** IBM exemplars earn full marks 22/32 (short-form 14/16, 79% of available
+  marks); BRGSA earns 13/32 (56%), abstains eight times, and scores three exemplars at zero. Five of
+  the eight BRGSA prompts flagged for concept-label/exemplar mismatch appear in that failure list.
+  `brgsa_m2_design_short_answer` is confirmed: the stem asks for "Experiment design", the anchor
+  lecture is "Null Hypothesis", and the exemplar explains the null — the marker is right to mark it
+  down. A stronger model refuses these more confidently, not less, so this is authoring work and
+  needs owner review of the content. `brgsa_m4_customers_short_answer` and both
+  `brgsa_m7_pipeline_*` prompts score the model answer at zero.
+- [ ] **`WAITING_OWNER_CALIBRATION` — the hosted checkpoint has never been run.** Every marking
+  figure on record comes from the local 35B through the Windows→Mac loopback. Local calibration does
+  not transfer. `tools/evaluate-hosted-grader.mjs` now calls `gradeHostedAnswer` itself so it
+  measures the shipped path, and needs only a Workers AI token — no index, no upload. Until it runs,
+  hosted quality and hosted latency are both unknown, and p50 on the local model is 28.3s.
+- [ ] **The hosted `/coach` route is unreachable.** `coachHostedAnswer` is implemented and tested but
+  has no route in `cloudflare/src/index.mjs`. Decide whether post-submit coaching ships hosted: it
+  costs roughly 203 Neurons against about 34 for a rubric mark, so one IBM mock review is around
+  2,340 Neurons of a 10,000/day free ceiling.
+- [ ] **Stored written answers have no owner review path.** Rows accumulate under a 92-day expiry
+  and reading them is manual. The purpose stated in the privacy notice — comparing machine marking
+  against a human reading to correct the rubrics — is not yet a workflow anyone can perform.
 - [~] **Measurement foundation is verified on `codex/measurement-foundation`, not merged or
   deployed.** The app now saves a coarse duration band and derived rapid/eligibility flags, never
   raw milliseconds; a rapid answer keeps its correctness while being excluded from Strong gates.
@@ -786,7 +832,11 @@ after the version is live, since a push to `main` deploys.
   must still pass the 48-answer owner-marked calibration set before its academic quality is accepted.
   No debrief data is collected.
 - [ ] **`WAITING_OWNER_DECISION` — this repository is not ready to be made public, and the work to
-  make it so has not been done.** Whenever the question comes up, it is a deliberate audit, not a
+  make it so has not been done.** As of 2026-08-14 that now includes
+  `cloudflare/src/generated/written-evidence.mjs`: 511 KiB of verbatim lecture transcript passages,
+  committed because the feature's whole design is that evidence ships inside the application rather
+  than sitting in a hosted index. It is a deliberate escalation over `written-bank.mjs`, which holds
+  only authored stems and rubrics. The NDJSON corpus rule is unchanged and those files stay ignored. Whenever the question comes up, it is a deliberate audit, not a
   visibility switch. Everything tracked here was written for an internal audience and some of it
   would be actively harmful in public: `docs/briefs/DUNGEON_TECHNICAL_OVERVIEW.md` names the
   product's bottlenecks and unvalidated claims in the plainest available language; the

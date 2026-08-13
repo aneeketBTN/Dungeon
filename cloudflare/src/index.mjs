@@ -8,7 +8,7 @@ import {
 const ACCESS_API = "https://api.cloudflare.com/client/v4";
 const SESSION_COOKIE = "dungeon_session";
 const SESSION_DAYS = 1;
-const AGREEMENT_VERSION = "2026-08-11-community-v2";
+const AGREEMENT_VERSION = "2026-08-13-written-answers-v3";
 const COMMUNITY_INVITE_URL = "https://chat.whatsapp.com/E9RThdcAzqFDTiWPUYcE3I";
 const REQUIRED_ACCESS_BINDINGS = ["ACCESS_ACCOUNT_ID", "ACCESS_GROUP_ID", "OWNER_EMAIL", "CF_API_TOKEN"];
 const REQUIRED_ADMIN_BINDINGS = [
@@ -484,7 +484,13 @@ export function createD1Store() {
 
     async revokeTester(env, email) {
       const db = requireDatabase(env);
-      await db.prepare("DELETE FROM testers WHERE email = ?").bind(email).run();
+      /* The archive row cascades from testers, but withdrawal is the promise this
+       * project is least able to get wrong, so it is deleted explicitly first
+       * rather than left to depend on foreign keys being enforced. */
+      await db.batch([
+        db.prepare("DELETE FROM written_answer_archive WHERE email = ?").bind(email),
+        db.prepare("DELETE FROM testers WHERE email = ?").bind(email)
+      ]);
     },
 
     async unlockTester(env, email) {
@@ -641,6 +647,41 @@ export function createD1Store() {
           "Dungeon's shared written-checking budget for today is used up. The rubric and exemplar are still available, and checking resumes tomorrow.");
       }
       return {cohortChecks: Number(row.checks || 0), cohortLimit: limit};
+    },
+
+    /* Keep the answer so the marking can be corrected against a human reading.
+     *
+     * The expiry is written per row rather than enforced by a policy someone has to
+     * remember, and purgeExpiredWrittenAnswers deletes on it daily. A failure here
+     * must not cost the learner their result - they wrote the answer and the check
+     * ran, so the mark is returned either way and the archive miss is logged. */
+    async archiveWrittenAnswer(env, {email, questionId, courseId, answer, criteria, abstained, retentionDays}) {
+      const db = requireDatabase(env);
+      const now = new Date();
+      const decision = JSON.stringify((criteria || []).map((criterion) => ({
+        id: String(criterion?.id || ""),
+        decision: String(criterion?.decision || ""),
+        gapCodes: Array.isArray(criterion?.gapCodes) ? criterion.gapCodes.map(String).slice(0, 8) : []
+      })).slice(0, 12));
+      await db.prepare(`INSERT INTO written_answer_archive
+        (email, question_id, course_id, answer_text, decision_json, abstained, created_at, expires_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
+        .bind(email, questionId, courseId, answer, decision, abstained ? 1 : 0,
+          now.toISOString(), new Date(now.getTime() + retentionDays * 86400000).toISOString())
+        .run();
+    },
+
+    async purgeExpiredWrittenAnswers(env) {
+      const db = requireDatabase(env);
+      const result = await db.prepare("DELETE FROM written_answer_archive WHERE expires_at <= ?")
+        .bind(new Date().toISOString()).run();
+      return Number(result?.meta?.changes || 0);
+    },
+
+    async deleteWrittenAnswers(env, email) {
+      const db = requireDatabase(env);
+      const result = await db.prepare("DELETE FROM written_answer_archive WHERE email = ?").bind(email).run();
+      return Number(result?.meta?.changes || 0);
     }
   };
 }
@@ -822,7 +863,48 @@ async function manageWrittenAuthority(request, env, store, writtenAuthority, ope
   const result = operation === "grade"
     ? await writtenAuthority.grade(env, body)
     : await writtenAuthority.coach(env, body);
+  await archiveWrittenAnswer(env, store, email, body, result);
   return json({...result, usage: {...usage, ...budget}});
+}
+
+function writtenRetentionDays(env) {
+  const configured = Number.parseInt(String(env?.DUNGEON_WRITTEN_RETENTION_DAYS || "92"), 10);
+  return Number.isFinite(configured) ? Math.min(365, Math.max(1, configured)) : 92;
+}
+
+/* The answer is kept so the rubric can be corrected against a human reading; the
+ * privacy notice states that purpose and the three-month window plainly.
+ *
+ * Two responses are never written. A distress response is answered with support
+ * before any marking runs, and storing it would contradict the notice's promise
+ * that it is "not sent to any AI provider, not marked, not stored". And a check the
+ * learner never received a result for has nothing to compare a human reading
+ * against.
+ *
+ * The archive is best-effort on purpose: the learner did the work and the check
+ * ran, so a database problem must not turn into a lost mark. */
+async function archiveWrittenAnswer(env, store, email, body, result) {
+  if (typeof store.archiveWrittenAnswer !== "function") return;
+  if (result?.kind === "written-support" || result?.supportOffered) return;
+  const questionId = String(body?.questionId || "");
+  const answer = String(body?.answer || "");
+  if (!questionId || answer.length < 20 || answer.length > 6000) return;
+  try {
+    await store.archiveWrittenAnswer(env, {
+      email,
+      questionId,
+      courseId: String(body?.courseId || result?.courseId || ""),
+      answer,
+      criteria: result?.criteria,
+      abstained: Boolean(result?.abstain),
+      retentionDays: writtenRetentionDays(env)
+    });
+  } catch (error) {
+    console.error(JSON.stringify({
+      event: "written_archive_failed",
+      error: error instanceof Error ? error.message : "Unknown error"
+    }));
+  }
 }
 
 const LOW_SAMPLE_ATTEMPTS = 10;
@@ -984,6 +1066,16 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
       console.log(JSON.stringify({event: "tester_lock_change", action: "unlock"}));
       return json(await responseBody(emails, {unlocked: targetEmail}));
     }
+    /* A tester asking for their written answers back, without withdrawing from the
+     * test. The privacy notice promises this happens on request and without their
+     * having to explain why, so it is a control the owner can act on rather than a
+     * SQL statement someone has to remember how to write correctly. */
+    if (body?.action === "delete-answers") {
+      if (typeof store.deleteWrittenAnswers !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Answer storage is temporarily unavailable.");
+      const deleted = await store.deleteWrittenAnswers(env, targetEmail);
+      console.log(JSON.stringify({event: "written_archive_deleted", deleted}));
+      return json(await responseBody(emails, {answersDeleted: deleted}));
+    }
     if (body?.action === "sign-out") {
       if (typeof store.signOutTester !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Progress storage is temporarily unavailable.");
       const cleared = await store.signOutTester(env, targetEmail);
@@ -996,7 +1088,7 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
       console.log(JSON.stringify({event: "tester_community_reminder", reminded: 1}));
       return json(await responseBody(emails, {reminded: [targetEmail]}));
     }
-    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use sign-out, sign-out-all, unlock, bump, or bump-unjoined.");
+    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use sign-out, sign-out-all, unlock, bump, bump-unjoined, or delete-answers.");
   }
 
   if (method === "DELETE") {
@@ -1107,6 +1199,11 @@ export function createWorker({
         const prefix = env?.DUNGEON_PREFIX || "/dungeon";
 
         if (url.pathname === prefix) return redirect(`${prefix}/${url.search}`);
+        // Deliberately above the session gate: a privacy notice nobody can read
+        // until they have signed in is not a notice.
+        if (url.pathname === `${prefix}/privacy` || url.pathname === `${prefix}/privacy.html`) {
+          return await serveAsset(request, env, "/app/privacy.html", embeddedAssets);
+        }
         if (url.pathname === `${prefix}/login.css`) return await serveAsset(request, env, "/app/login.css", embeddedAssets);
         if (url.pathname === `${prefix}/login.js`) return await serveAsset(request, env, "/app/login.js", embeddedAssets);
         if (url.pathname === `${prefix}/api/session`) return await manageSession(request, env, fetchImpl, store);
@@ -1169,6 +1266,26 @@ export function createWorker({
         }
         console.error(JSON.stringify({event: "worker_error", error: error instanceof Error ? error.message : "Unknown error"}));
         return json({code: "INTERNAL_ERROR", message: "The request could not be completed."}, 500);
+      }
+    },
+
+    /* Retention has to survive the product going quiet.
+     *
+     * Purging only when someone submits an answer would mean the three-month
+     * window silently stops running the moment the exam season ends and nobody
+     * opens Dungeon again - which is exactly when the stored answers are oldest
+     * and least justified. A daily trigger deletes on the expiry each row already
+     * carries, whether or not anyone is using the app. */
+    async scheduled(event, env) {
+      if (typeof store.purgeExpiredWrittenAnswers !== "function") return;
+      try {
+        const deleted = await store.purgeExpiredWrittenAnswers(env);
+        console.log(JSON.stringify({event: "written_archive_purged", deleted}));
+      } catch (error) {
+        console.error(JSON.stringify({
+          event: "written_archive_purge_failed",
+          error: error instanceof Error ? error.message : "Unknown error"
+        }));
       }
     }
   };

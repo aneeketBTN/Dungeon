@@ -1,5 +1,38 @@
 # Changelog
 
+## 2026-08-14 — Frozen course evidence, hosted distress interception, and answer retention
+
+Evidence: `evidence/2026-08-14/t6-frozen-evidence-and-answer-retention/verification.md`
+(`VERIFIED(AUTOMATED)`, branch only; `WAITING_OWNER_CALIBRATION + WAITING_OWNER_CONTENT_ACCEPTANCE +
+WAITING_OWNER_DEPLOY`; nothing pushed, merged, or deployed, and hosted written checking stays
+fail-closed).
+
+- Froze each question's course evidence at build time and removed Vectorize and the embedding model
+  from the hosted path entirely. Retrieval never reads the candidate answer, so a question's evidence
+  was a constant that a per-request vector search recomputed. 380 chunks over all 64 questions,
+  511 KiB, zero lecture-boundary violations, 155.92 KiB gzipped in the bundle against a 3 MiB free
+  ceiling. Course transcripts now stay out of any hosted store, and creating the index and uploading
+  3,470 chunks is no longer an owner action.
+- Made `DUNGEON_HOSTED_WRITTEN_CORPUS` the pack's own content digest, so approval cannot drift from
+  the course text the marker quotes; re-freezing the evidence switches hosted marking off until the
+  new pack is approved by name.
+- Removed the `COURSE_RAG` binding, which referenced an index that was never created and would have
+  failed every `wrangler deploy`.
+- Fixed a gap where the hosted runtime imported the distress helpers and never called them. Only the
+  local grader intercepted, while the hosted worker is the runtime testers use — so the privacy
+  notice's "not sent to any AI provider, not marked, not stored" was not being kept where it counted.
+  Both hosted entry points now check ahead of the activation gate, the length bound, the evidence and
+  any model call. The local grader's ordering was corrected the same way, since distress previously
+  sat behind the 20-character minimum and the shortest messages got a validation error.
+- Implemented the written-answer retention the tester agreement now asks consent for. Each row
+  carries its own 92-day expiry, a daily cron deletes on it so the window keeps running after the
+  exam season, revoking a tester deletes their answers explicitly, and the owner has a per-tester
+  "Delete answers" control for a deletion request that is not a withdrawal. A support response is
+  never written, and a storage failure still returns the learner their mark.
+- Pointed `tools/evaluate-hosted-grader.mjs` at `gradeHostedAnswer` itself instead of a parallel
+  two-pass implementation, so hosted calibration measures the shipped path — same frozen evidence,
+  acceptance gates, token ceiling and retry — and needs only a Workers AI token.
+
 ## 2026-08-13 — Written transfer across Learn and post-submit Examiner forensics
 
 Evidence: `evidence/2026-08-13/t6-written-transfer-and-examiner-forensics/verification.md`

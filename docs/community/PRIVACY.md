@@ -32,7 +32,15 @@ data used to provide access, save progress, and detect obvious account sharing.
   triggered; and
 - when hosted written checking is activated, a per-day count of written checks for the approved
   email, used only to enforce the daily allowance. This counter contains no question, answer,
-  retrieved text, or model result.
+  retrieved text, or model result. A second counter records the whole cohort's daily total and
+  contains no email; and
+- **your written practice answers themselves, kept for up to three months.** This is a deliberate
+  change and it is the one item on this list that is not needed to run your own session. Dungeon
+  keeps the text you wrote so the owner can check whether the machine marking agreed with a fair
+  human reading, correct the rubrics where it did not, and build better prompts for the students
+  who take this course after you. Your own dashboard shows you your results; the stored text is for
+  improving the marking. It is not published, sold, or shown to other testers, and you can ask for
+  yours to be deleted at any time.
 
 Dungeon does not request precise GPS location. The application database does not store the raw IP
 address. Cloudflare may process ordinary network, request, and security metadata when delivering
@@ -55,20 +63,38 @@ check plus a slower independently verified coach. Clearing localhost site data r
 copy.
 
 The live written-checking feature, when separately activated and accepted under an updated tester
-agreement, uses Cloudflare Workers AI and a private Vectorize index of the Term 6 course material.
-For a Dungeon-authored practice question, the answer is already part of the revision progress
-described above and is also processed to produce the criterion check. The Worker does not log the
-answer, retrieved passages, or output, and the written-authority usage table stores only the daily
-count described above. There is no public arbitrary-question coaching route. An authored Examiner
-answer may be processed only after submission, when the paper score is already frozen. If the exact model, approved corpus, or activation flag does not
-match, machine checking is unavailable and the existing rubric/self-review path remains usable.
+agreement, sends your answer to an AI model to be checked against the course material. That model
+may be Cloudflare Workers AI, or a third-party AI provider reached through a routing service. The
+route can change if a provider is unavailable, so Dungeon cannot promise in advance which company
+processes a given answer, and those companies operate under their own terms and may be outside
+India. Dungeon sends the answer, the question, and the relevant course passages, and nothing that
+identifies you: no name, no email, and no account identifier travels with it.
+
+The course evidence used for checking is fixed for each question and ships with the application, so
+no request needs to search a hosted index of the course material.
+
+There is no public arbitrary-question coaching route. An authored Examiner answer may be processed
+only after submission, when the paper score is already frozen. If the exact model, approved corpus,
+or activation flag does not match, machine checking is unavailable and the existing rubric and
+self-review path remains usable.
+
+If something you write reads as personal distress rather than an exam answer, Dungeon stops before
+the check runs. That response is not sent to any AI provider, is not marked, is not stored, and
+does not affect your progress. You are shown support information instead.
 
 ## Why it is used
 
-The data is used only to grant or revoke closed-test access, restore revision progress across
-visits, operate the learning experience, support the tester, track the required community
+The data is used to grant or revoke closed-test access, restore revision progress across visits,
+operate the learning experience, support the tester, track the required community
 acknowledgement/reminder workflow, and detect obvious use of one account from multiple browsers or
 countries. It is not used for advertising or sold to another party.
+
+Written answers have one additional purpose, stated plainly because it is the only use here that
+serves someone other than you: **improving Dungeon's marking for future students.** The machine
+marking is not yet reliable enough to be treated as a grade, and the honest way to make it better is
+to compare what it decided against what a person reading the same answer would decide. That work
+needs the answers. It does not need your name attached to them, and the model that checks your work
+never receives it.
 
 ## Important security limits
 
@@ -85,6 +111,13 @@ Revoking a tester in the owner dashboard deletes that tester's active sessions a
 progress from the application database. The owner should remove closed-test accounts when they
 are no longer required for the exam-season test. A tester may ask the owner to correct their
 approved email, explain a lock, withdraw from the test, or delete their Dungeon account data.
+
+**Written practice answers are deleted three months after they are written.** That window exists so
+the owner can review marking quality after the exam season and improve the rubrics for the next
+cohort; it is not open-ended. You can ask for your answers to be deleted sooner, and withdrawing
+from the test deletes them along with the rest of your account data. Deletion is a request to the
+owner, who does it by hand — there is no self-service button for it today, and this notice will say
+so until there is.
 
 Local browser storage remains as a recovery copy for the learner experience. A tester can remove
 that copy with **Progress settings -> Reset progress** or by clearing the site's browser data.

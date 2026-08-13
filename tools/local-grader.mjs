@@ -330,15 +330,17 @@ export async function gradeAnswer(request, options = {}) {
   const courseId = request?.courseId ? String(request.courseId) : undefined;
   const answer = String(request?.answer || "").trim();
   if (!/^[a-z0-9_-]{3,120}$/i.test(questionId)) throw new Error("Invalid question ID.");
+  /* Before the length bound, before retrieval, before the model, before the text
+   * leaves this process. A response that reads as distress is answered with help,
+   * not a mark and not a character-count error, and is not transmitted to any
+   * inference provider. Sliced to the length a real answer may be so an oversized
+   * body cannot turn this into work. */
+  if (distressSignal(answer.slice(0, 6000))) return supportResponse(questionId);
+
   if (answer.length < 20 || answer.length > 6000) throw new Error("Written response must be 20–6000 characters.");
   const found = options.question ? {courseId: courseId || options.courseId || "TEST", question: options.question} : findQuestion(questionId, courseId);
   const question = found.question;
   if (question.type !== "short-answer" || !(question.rubric || []).length) throw new Error("Question is not a rubric-marked written response.");
-
-  /* Before retrieval, before the model, before the text leaves this process. A
-   * response that reads as distress is answered with help, not a mark, and is not
-   * transmitted to any inference provider. */
-  if (distressSignal(answer)) return supportResponse(question.id);
 
   const prepared = Array.isArray(request?._preparedEvidence) ? request._preparedEvidence : null;
   const allowedIds = new Set((question.sourceIds || [question.source]).filter(Boolean));

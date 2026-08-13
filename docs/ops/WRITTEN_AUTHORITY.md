@@ -68,63 +68,60 @@ because this reasoning-heavy checkpoint otherwise spends its smaller budget befo
 The website uses native Cloudflare bindings; it never calls the Mac:
 
 - Workers AI generation: `@cf/qwen/qwen3-30b-a3b-fp8`
-- Workers AI embeddings: `@cf/qwen/qwen3-embedding-0.6b`
-- Vectorize: `dungeon-t6-course-rag-v1`, 1,024 dimensions, cosine
+- course evidence: frozen at build time in `cloudflare/src/generated/written-evidence.mjs`
 - authenticated same-origin Worker routes under `/dungeon/api/written-authority/`
-- one D1 counter per tester per UTC day, with no question, answer, retrieved text, or result in that
-  table; default maximum 20 checks per learner per day
+- one D1 counter per tester per UTC day and one cohort-wide counter, with no question, answer,
+  retrieved text, or result in either table; default maximum 8 checks per learner per day
+
+There is **no Vectorize index and no embedding model.** Retrieval never reads the candidate answer —
+the query is the stem, caselet and rubric, all fixed at authoring time — so a question's evidence is
+a constant and a per-request vector search only recomputes it. Freezing it removes the embedding call
+and the index from the request path, keeps the course transcripts out of any hosted store entirely,
+and makes the evidence something a person can read and correct per question instead of whatever
+similarity returned that day. The pack is 380 chunks over 64 questions, 511 KiB of course text,
+about 117 KiB gzipped in the bundle.
 
 The committed configuration is intentionally inert:
 
 ```text
 DUNGEON_HOSTED_WRITTEN=off
 DUNGEON_HOSTED_WRITTEN_APPROVED_MODEL=not-approved
-DUNGEON_HOSTED_WRITTEN_CORPUS=not-indexed
+DUNGEON_HOSTED_WRITTEN_CORPUS=not-approved
 ```
 
-All three activation conditions, the bindings, and a non-empty index must agree. Until then authored
-written practice remains available through its transparent rubric/exemplar fallback while the
-machine check reports unavailable. Changing the model ID or corpus version withdraws authority
-again.
+All three activation conditions and the Workers AI binding must agree. Until then authored written
+practice remains available through its transparent rubric/exemplar fallback while the machine check
+reports unavailable. Changing the model ID withdraws authority again.
 
-## Prepare the private course index
+## Approve the frozen course evidence
 
-These commands create paid-account resources and upload the external transcript material. They are
-owner actions; do not run them as part of a build or test. Metadata indexes must exist **before**
-vectors are inserted.
+`DUNGEON_HOSTED_WRITTEN_CORPUS` must equal the pack's own content digest, so approval cannot drift
+from the course text the marker will actually quote. Re-freezing the evidence changes the digest and
+switches hosted marking off until the new pack is approved by name.
+
+Rebuilding the pack needs the private transcript source and is an owner action; without
+`DUNGEON_TRANSCRIPTS` the build keeps the committed pack and only regenerates the question manifest,
+so a checkout without the lecture material is not blocked from running gates.
 
 ```powershell
-cd cloudflare
-npx wrangler vectorize create dungeon-t6-course-rag-v1 --dimensions=1024 --metric=cosine
-npx wrangler vectorize create-metadata-index dungeon-t6-course-rag-v1 --propertyName=courseId --type=string
-npx wrangler vectorize create-metadata-index dungeon-t6-course-rag-v1 --propertyName=lectureId --type=string
-npx wrangler vectorize create-metadata-index dungeon-t6-course-rag-v1 --propertyName=corpusVersion --type=string
+$env:DUNGEON_TRANSCRIPTS = "C:\path\to\Term 6 Clean Transcripts"
+npm run build:written-authority
 ```
 
-Create a least-privilege token with Workers AI and Vectorize permissions, place it only in the
-terminal environment, and build the ignored NDJSON file:
+It prints the digest to set. The current pack is `frozen-185aa5b47352529a`. The script prints only
+counts, paths and the digest, never transcript text.
+
+## Calibrate before activation
+
+Local calibration does not transfer to the hosted checkpoint. Run the owner-marked cases against the
+actual Workers AI model. The evaluator calls `gradeHostedAnswer` itself, so it measures the shipped
+path — same frozen evidence, acceptance gates, token ceiling and retry — with only `env.AI.run`
+swapped for the REST endpoint. A least-privilege token needs Workers AI permission only.
 
 ```powershell
 $env:CLOUDFLARE_ACCOUNT_ID = "YOUR_ACCOUNT_ID"
 $env:CLOUDFLARE_API_TOKEN = "YOUR_TEMPORARY_TOKEN"
-cd ..
-npm run build:course-rag -- "C:\path\to\Term 6 Clean Transcripts" t6-clean-2026-08-13-v1
-cd cloudflare
-npx wrangler vectorize insert dungeon-t6-course-rag-v1 --file "..\work\course-rag.t6-clean-2026-08-13-v1.ndjson"
-npx wrangler vectorize info dungeon-t6-course-rag-v1
-```
-
-The current source pack deterministically produces 3,470 chunks from 283 lectures: BRGSA 989, IBM
-722, SCLM 798, and SPMS 961; the longest metadata text is 1,500 characters. The script prints only
-counts and paths, never transcript text. The NDJSON stays ignored and must not be committed.
-
-## Calibrate before activation
-
-Local calibration does not transfer to the hosted checkpoint. Run the same 48 owner-marked cases
-against the actual Workers AI model and actual Vectorize corpus:
-
-```powershell
-npm run evaluate:hosted-grader -- "C:\private\owner-marked-48.jsonl" t6-clean-2026-08-13-v1
+npm run evaluate:hosted-grader -- "C:\private\owner-marked-48.jsonl"
 ```
 
 The provisional gate requires 12 cases per subject, at most 5% false awards, at least 85% exact
@@ -137,17 +134,19 @@ Only after the authored-rubric review passes:
 
 1. update the tester agreement and increment `AGREEMENT_VERSION` so every tester explicitly accepts
    hosted AI processing;
-2. apply `0005_written_authority.sql` to D1;
-3. set the approved exact model, approved corpus version, and hosted flag in a branch;
+2. apply `0005_written_authority.sql` and `0006_written_authority_budget.sql` to D1;
+3. set the approved exact model, the evidence-pack digest, and the hosted flag in a branch;
 4. rerun tests, bank/palette gates, Worker dry-run, and real Browser acceptance;
 5. open a pull request and let the owner merge—never push or merge `main` directly.
 
 ## Cost boundary
 
-At current Cloudflare list pricing, generation is billed per actual input/output tokens and Qwen
-embeddings are inexpensive relative to the two generation passes. The 20-check daily per-tester cap
-bounds both abuse and spend. Measure real token/Neuron use during hosted calibration before setting
-a monthly budget; do not estimate from `max_tokens`, which is a ceiling rather than actual output.
+At current Cloudflare list pricing, generation is billed per actual input/output tokens; there is no
+embedding or Vectorize spend, because the course evidence ships frozen in the bundle. Two ceilings
+bound spend: 8 checks per tester per UTC day, and a cohort-wide daily total that holds no matter how
+many testers are admitted. The cohort ceiling is the one that matters — a per-tester cap alone scales
+with the invite list. Measure real token/Neuron use during hosted calibration before setting a
+monthly budget; do not estimate from `max_tokens`, which is a ceiling rather than actual output.
 
 ## Verification
 

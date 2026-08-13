@@ -13,6 +13,9 @@ const publicFiles = [
   // cannot be inline because the release serves `script-src 'self'`.
   "app/theme.js",
   "app/login.html",
+  // The privacy notice must be readable before anyone signs in or consents,
+  // so it ships as its own page and is routed outside the session gate.
+  "app/privacy.html",
   "app/login.css",
   "app/login.js",
   "app/admin.html",

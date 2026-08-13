@@ -13,9 +13,10 @@ import {
   supportResponse
 } from "../../tools/lib/written_authority.mjs";
 import {WRITTEN_QUESTION_BANK} from "./generated/written-bank.mjs";
+import {WRITTEN_EVIDENCE, WRITTEN_EVIDENCE_VERSION} from "./generated/written-evidence.mjs";
 
 export const HOSTED_QWEN_MODEL = "@cf/qwen/qwen3-30b-a3b-fp8";
-export const HOSTED_EMBEDDING_MODEL = "@cf/qwen/qwen3-embedding-0.6b";
+export {WRITTEN_EVIDENCE_VERSION};
 const COURSE_IDS = new Set(["BRGSA", "IBM", "SCLM", "SPMS"]);
 
 export class WrittenAuthorityError extends Error {
@@ -33,37 +34,32 @@ function enabled(value) {
 function configured(env) {
   const model = String(env?.DUNGEON_HOSTED_WRITTEN_MODEL || "");
   const approvedModel = String(env?.DUNGEON_HOSTED_WRITTEN_APPROVED_MODEL || "");
-  const embeddingModel = String(env?.DUNGEON_HOSTED_EMBEDDING_MODEL || "");
   const corpusVersion = String(env?.DUNGEON_HOSTED_WRITTEN_CORPUS || "");
   const reasons = [];
   if (!enabled(env?.DUNGEON_HOSTED_WRITTEN)) reasons.push("Hosted written checking is not activated.");
   if (model !== HOSTED_QWEN_MODEL || approvedModel !== model) reasons.push("The exact hosted model has not been approved.");
-  if (embeddingModel !== HOSTED_EMBEDDING_MODEL) reasons.push("The hosted retrieval model is not configured.");
-  if (!corpusVersion || corpusVersion === "not-indexed") reasons.push("The approved course corpus is not indexed.");
+  /* The activation flag names the evidence pack by its own digest, so approval
+   * cannot drift from the course text the marker will actually quote. Re-freezing
+   * the evidence changes the digest and switches hosted marking off until the
+   * owner approves the new pack by name. */
+  if (corpusVersion !== WRITTEN_EVIDENCE_VERSION) reasons.push("The approved course evidence is not activated.");
   if (!env?.AI || typeof env.AI.run !== "function") reasons.push("Workers AI is not bound.");
-  if (!env?.COURSE_RAG || typeof env.COURSE_RAG.query !== "function") reasons.push("Course retrieval is not bound.");
-  return {available: reasons.length === 0, reasons, model, embeddingModel, corpusVersion};
+  return {available: reasons.length === 0, reasons, model, corpusVersion};
 }
 
 export async function hostedAuthorityHealth(env) {
   const status = configured(env);
-  let vectorCount = null;
-  if (status.available && typeof env.COURSE_RAG.describe === "function") {
-    try {
-      const description = await env.COURSE_RAG.describe();
-      vectorCount = Number(description?.vectorCount || 0);
-      if (!vectorCount) status.reasons.push("The approved course corpus contains no vectors.");
-    } catch (error) {
-      status.reasons.push("The course index could not be inspected.");
-    }
-  }
+  const questionCount = Object.keys(WRITTEN_EVIDENCE).length;
+  const chunkCount = Object.values(WRITTEN_EVIDENCE).reduce((total, list) => total + list.length, 0);
+  if (!chunkCount) status.reasons.push("The frozen course evidence pack is empty.");
   return {
     available: status.reasons.length === 0,
     provider: "cloudflare-workers-ai",
     model: status.model || HOSTED_QWEN_MODEL,
-    embeddingModel: status.embeddingModel || HOSTED_EMBEDDING_MODEL,
     corpusVersion: status.corpusVersion || null,
-    vectorCount,
+    evidenceVersion: WRITTEN_EVIDENCE_VERSION,
+    evidenceQuestions: questionCount,
+    evidenceChunks: chunkCount,
     capabilities: ["rubric-mark", "subject-coach"],
     retention: "candidate answers are processed for this response and are not stored by Dungeon's authority endpoint",
     reason: status.reasons[0] || ""
@@ -86,36 +82,25 @@ function boundedText(value, label, minimum, maximum) {
   return text;
 }
 
-function vectorFrom(output) {
-  const vector = output?.data?.[0];
-  if (!Array.isArray(vector) || vector.length !== 1024 || vector.some((value) => !Number.isFinite(value))) {
-    throw new WrittenAuthorityError(502, "RETRIEVAL_FAILED", "Dungeon could not prepare a course-grounded check.");
-  }
-  return vector;
-}
-
-async function retrieve(env, status, {courseId, query, sourceIds = null}) {
-  const embedded = await env.AI.run(status.embeddingModel, {text: [query]});
-  const filter = {
-    courseId,
-    corpusVersion: status.corpusVersion
-  };
-  if (sourceIds?.length) filter.lectureId = {$in: sourceIds};
-  const matches = await env.COURSE_RAG.query(vectorFrom(embedded), {
-    topK: 6,
-    returnMetadata: "all",
-    filter
-  });
-  const evidence = (matches?.matches || []).flatMap((match) => {
-    const metadata = match?.metadata || {};
-    const citation = String(metadata.citation || "");
-    const lectureId = String(metadata.lectureId || "");
-    const title = String(metadata.title || lectureId);
-    const text = String(metadata.text || "");
-    if (!/^[A-Z0-9_-]{4,80}#[0-9]{2,4}$/.test(citation) ||
-        !/^[A-Z0-9_-]{4,80}$/.test(lectureId) || !text || text.length > 9000 || title.length > 240 ||
-        String(metadata.courseId || "") !== courseId || String(metadata.corpusVersion || "") !== status.corpusVersion ||
-        (sourceIds?.length && !sourceIds.includes(lectureId))) return [];
+/* Retrieval never reads the candidate answer: the query is built from the stem,
+ * caselet and rubric, all fixed at authoring time. So a question's evidence is a
+ * constant, and a per-request vector search only recomputes it. It is frozen at
+ * build time instead (tools/build_written_authority_assets.mjs), which keeps the
+ * course transcripts out of any hosted index and makes the evidence something a
+ * person can read and correct per question.
+ *
+ * Validate it anyway. This is the boundary that decides which citations
+ * acceptJudgement will honour, and a generated file is still a file. */
+function frozenEvidence(question) {
+  const allowed = new Set(question.sourceIds || []);
+  const evidence = (WRITTEN_EVIDENCE[question.id] || []).flatMap((chunk) => {
+    const citation = String(chunk?.citation || "");
+    const lectureId = String(chunk?.lectureId || "");
+    const title = String(chunk?.title || lectureId);
+    const text = String(chunk?.text || "");
+    if (!/^[A-Z0-9_-]{4,80}#[0-9]{2,4}$/.test(citation) || !/^[A-Z0-9_-]{4,80}$/.test(lectureId) ||
+        !citation.startsWith(`${lectureId}#`) || !allowed.has(lectureId) ||
+        !text || text.length > 9000 || title.length > 240) return [];
     return [{citation, lectureId, title, text}];
   });
   if (!evidence.length) {
@@ -148,15 +133,20 @@ async function complete(env, status, messages, schema, validate, maxTokens = 100
 }
 
 export async function gradeHostedAnswer(env, request) {
-  const status = requireAvailable(env);
   const questionId = String(request?.questionId || "");
-  const answer = boundedText(request?.answer, "Written response", 20, 6000);
   const question = WRITTEN_QUESTION_BANK[questionId];
   if (!question || (request?.courseId && String(request.courseId) !== question.courseId)) {
     throw new WrittenAuthorityError(400, "UNKNOWN_WRITTEN_QUESTION", "That rubric-marked question is not available.");
   }
-  const query = [question.stem, question.caselet, ...question.rubric.flatMap((criterion) => [criterion.label, criterion.description])].join("\n");
-  const evidence = await retrieve(env, status, {courseId: question.courseId, query, sourceIds: question.sourceIds});
+  /* Ahead of the length bound, the activation gate, the evidence and the model.
+   * Someone writing that they want to hurt themselves is answered with help, not
+   * a character-count error or a "service unavailable", and their words reach no
+   * inference provider. Sliced to the length a real answer may be, so an
+   * oversized body cannot turn this into work. */
+  if (distressSignal(String(request?.answer || "").slice(0, 6000))) return supportResponse(question.id);
+  const status = requireAvailable(env);
+  const answer = boundedText(request?.answer, "Written response", 20, 6000);
+  const evidence = frozenEvidence(question);
   const schema = judgementSchema(question);
   const messages = judgementMessages("marker", question, answer, evidence);
   try {
@@ -177,30 +167,24 @@ export async function gradeHostedAnswer(env, request) {
 }
 
 export async function coachHostedAnswer(env, request) {
-  const status = requireAvailable(env);
   const requestedCourseId = String(request?.courseId || "").toUpperCase();
   const questionId = String(request?.questionId || "");
   if (!questionId) throw new WrittenAuthorityError(400, "AUTHORED_QUESTION_REQUIRED", "Post-submit coaching requires a Dungeon-authored question.");
-  const authored = questionId ? WRITTEN_QUESTION_BANK[questionId] : null;
-  if (questionId && (!authored || (requestedCourseId && authored.courseId !== requestedCourseId))) {
+  const authored = WRITTEN_QUESTION_BANK[questionId];
+  if (!authored || (requestedCourseId && authored.courseId !== requestedCourseId)) {
     throw new WrittenAuthorityError(400, "UNKNOWN_WRITTEN_QUESTION", "That rubric-marked question is not available.");
   }
-  const courseId = authored ? authored.courseId : requestedCourseId;
+  if (distressSignal(String(request?.answer || "").slice(0, 6000))) return supportResponse(authored.id);
+  const status = requireAvailable(env);
+  const courseId = authored.courseId;
   if (!COURSE_IDS.has(courseId)) throw new WrittenAuthorityError(400, "INVALID_WRITTEN_REQUEST", "Choose a valid Term 6 subject.");
   const cleanRequest = {
     courseId,
-    prompt: authored
-      ? [authored.stem, "Review criteria:", ...(authored.rubric || []).map((criterion) => `${criterion.label}: ${criterion.description}`)].join("\n")
-      : boundedText(request?.prompt, "Question", 10, 2000),
-    caselet: authored ? String(authored.caselet || "") : String(request?.caselet || "").trim(),
+    prompt: [authored.stem, "Review criteria:", ...(authored.rubric || []).map((criterion) => `${criterion.label}: ${criterion.description}`)].join("\n"),
+    caselet: String(authored.caselet || ""),
     answer: boundedText(request?.answer, "Written response", 20, 6000)
   };
-  if (cleanRequest.caselet.length > 4000) throw new WrittenAuthorityError(400, "INVALID_WRITTEN_REQUEST", "The optional case context is too long.");
-  const evidence = await retrieve(env, status, {
-    courseId,
-    query: [cleanRequest.prompt, cleanRequest.caselet].filter(Boolean).join("\n"),
-    sourceIds: authored ? authored.sourceIds : undefined
-  });
+  const evidence = frozenEvidence(authored);
   try {
     const analyst = await complete(env, status, coachMessages("analyst", cleanRequest, evidence), coachSchema(), (output) => coachEnglishValid(output, "analyst"), 4096);
     const verifier = await complete(env, status, coachMessages("verifier", cleanRequest, evidence, analyst), coachVerifierSchema(), (output) => coachEnglishValid(output, "verifier"), 2048);
@@ -211,7 +195,7 @@ export async function coachHostedAnswer(env, request) {
       verifier,
       model: status.model,
       authority: "dungeon-hosted-practice-coach",
-      retrievalMode: authored ? "declared-lecture-vector" : "subject-vector"
+      retrievalMode: "frozen-lecture-evidence"
     });
   } catch (error) {
     return mergeCoachAnalysis({
@@ -221,7 +205,7 @@ export async function coachHostedAnswer(env, request) {
       verifier: null,
       model: status.model,
       authority: "dungeon-hosted-practice-coach",
-      retrievalMode: authored ? "declared-lecture-vector" : "subject-vector"
+      retrievalMode: "frozen-lecture-evidence"
     });
   }
 }

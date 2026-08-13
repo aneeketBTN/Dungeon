@@ -150,6 +150,16 @@
         unlock.addEventListener("click", function () { unlockTester(email); });
         actions.append(unlock);
       }
+      /* Always available, because a deletion request can arrive on any day from
+       * any tester and there is no state that makes it inapplicable. */
+      var eraseAnswers = document.createElement("button");
+      eraseAnswers.className = "button secondary";
+      eraseAnswers.type = "button";
+      eraseAnswers.textContent = "Delete answers";
+      eraseAnswers.setAttribute("aria-label", "Delete the written answers stored for " + email + ", keeping their access and progress");
+      eraseAnswers.addEventListener("click", function () { deleteAnswers(email); });
+      actions.append(eraseAnswers);
+
       revoke.className = "button danger";
       revoke.type = "button";
       revoke.textContent = "Revoke";
@@ -362,6 +372,39 @@
       showToast("Lock cleared for " + email + ". Their progress is intact.");
     } catch (error) {
       showToast(error.message || "The lock could not be cleared.");
+    } finally {
+      setTesterControls(testersConnected, false);
+    }
+  }
+
+  /* A tester asking for their written answers back.
+   *
+   * The privacy notice promises this on request, without their having to explain
+   * why. Keeping it a control rather than a database statement is what makes the
+   * promise something the owner can actually keep on the day it is asked for. It
+   * is deliberately separate from Remove: they stay in the test and keep their
+   * progress, and only the stored prose goes. */
+  async function deleteAnswers(email) {
+    if (!testersConnected) return;
+    if (!window.confirm("Delete every written answer stored for " + email + "?\n\nThis removes the text they wrote in written practice, which Dungeon keeps for up to three months to improve its marking.\n\nThey stay in the test and keep their approval and all other progress. This cannot be undone.")) return;
+    setTesterControls(true, true);
+    try {
+      var response = await fetch(testersEndpoint, {
+        method: "PATCH",
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({email: email, action: "delete-answers"})
+      });
+      var payload = await readJson(response);
+      if (!response.ok) throw new Error(payload.message || "Their answers could not be deleted.");
+      renderTesters(Array.isArray(payload.testers) ? payload.testers : [], payload.security);
+      var count = Number(payload.answersDeleted || 0);
+      showToast(count
+        ? "Deleted " + count + (count === 1 ? " stored answer" : " stored answers") + " for " + email + "."
+        : "No stored answers were held for " + email + ".");
+    } catch (error) {
+      showToast(error.message || "Their answers could not be deleted.");
     } finally {
       setTesterControls(testersConnected, false);
     }

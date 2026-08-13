@@ -30,12 +30,16 @@
   "ai": {
     "binding": "AI"
   },
-  "vectorize": [
-    {
-      "binding": "COURSE_RAG",
-      "index_name": "dungeon-t6-course-rag-v1"
-    }
-  ],
+  // Daily deletion of expired written answers. Retention has to keep running after
+  // the exam season, when nobody is opening Dungeon to trigger an opportunistic
+  // purge and the stored answers are at their oldest.
+  "triggers": {
+    "crons": ["17 3 * * *"]
+  },
+  // No Vectorize binding. A question's course evidence never depends on the
+  // candidate answer, so it is frozen at build time into
+  // src/generated/written-evidence.mjs. Nothing has to search a hosted copy of
+  // the course transcripts, and there is no index to create or keep in sync.
   "vars": {
     "DUNGEON_PREFIX": "/dungeon",
     "ACCESS_ACCOUNT_ID": "c9ad5ea00fe0040b372163daf10ea235",
@@ -46,10 +50,13 @@
     "DUNGEON_HOSTED_WRITTEN": "off",
     "DUNGEON_HOSTED_WRITTEN_MODEL": "@cf/qwen/qwen3-30b-a3b-fp8",
     "DUNGEON_HOSTED_WRITTEN_APPROVED_MODEL": "not-approved",
-    "DUNGEON_HOSTED_EMBEDDING_MODEL": "@cf/qwen/qwen3-embedding-0.6b",
-    "DUNGEON_HOSTED_WRITTEN_CORPUS": "not-indexed",
+    // Must equal WRITTEN_EVIDENCE_VERSION in src/generated/written-evidence.mjs
+    // before hosted marking runs; re-freezing the evidence turns it off again.
+    "DUNGEON_HOSTED_WRITTEN_CORPUS": "not-approved",
     "DUNGEON_HOSTED_WRITTEN_DAILY_LIMIT": "8",
-    "DUNGEON_HOSTED_WRITTEN_COHORT_DAILY_LIMIT": "140"
+    "DUNGEON_HOSTED_WRITTEN_COHORT_DAILY_LIMIT": "140",
+    // Three months, the window the privacy notice states.
+    "DUNGEON_WRITTEN_RETENTION_DAYS": "92"
   },
   "observability": {
     "enabled": true,

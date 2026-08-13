@@ -98,3 +98,16 @@ button:disabled { cursor: wait; opacity: .65; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
 }
+
+/* The privacy notice is a document, not a login card: wider, and its headings are
+   section markers rather than the serif display type h1/h2 carry elsewhere here. */
+.legal-panel { width: min(100%, 720px); }
+.legal-panel h2 { margin: 34px 0 0; font-family: inherit; font-size: 19px; line-height: 1.3; letter-spacing: -.01em; font-weight: 800; }
+.legal-panel h2 + p { margin-top: 10px; }
+.legal-panel p { margin: 14px 0 0; font-size: 15px; line-height: 1.62; color: var(--ink); }
+.legal-panel .lede { color: var(--muted); }
+.legal-panel ul { margin: 14px 0 0; padding: 0 0 0 20px; display: grid; gap: 9px; }
+.legal-panel li { font-size: 15px; line-height: 1.55; }
+.legal-panel b { font-weight: 750; }
+.legal-panel a { color: var(--green-dark); text-underline-offset: 3px; }
+.legal-return { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--line); font-weight: 700; }

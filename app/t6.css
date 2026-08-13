@@ -887,6 +887,23 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .rubric-check input { margin-top: 3px; }
 .rubric-check b, .rubric-check small { display: block; }
 .rubric-check small { margin-top: 2px; color: var(--muted); }
+/* Deliberately quiet: a standing line under every free-text box, not an alarm.
+   It has to be findable by someone who is not going to type the reason into a
+   revision app, which is most people. */
+.written-support-line { margin: 6px 0 0; font-size: var(--t-meta); color: var(--ink-soft); line-height: 1.5; }
+.written-support-line b { font-weight: 600; color: var(--ink); }
+.written-support-line a { color: inherit; text-underline-offset: 3px; }
+
+/* Shown instead of a mark. Same calm register as the standing line - this moment
+   should not look like an error state, because nothing went wrong. */
+.written-support-response { margin: 12px 0 0; padding: 16px 18px; display: grid; gap: 8px;
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-card); }
+.written-support-response b { font-size: var(--t-body); }
+.written-support-response span { font-size: var(--t-meta); color: var(--ink-soft); line-height: 1.55; }
+.written-support-response small { font-size: var(--t-meta); color: var(--ink-faint); }
+.written-support-response a { color: inherit; font-weight: 600; text-underline-offset: 3px; }
+.written-support-response:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
 .local-grade-fallback { margin: 2px 0 0; padding: 12px 14px; background: var(--amber-soft); border-inline-start: 4px solid var(--amber); border-radius: 0 var(--r-mark) var(--r-mark) 0; font-size: var(--t-meta); }
 .local-grade-criteria { display: grid; gap: 9px; margin: 14px 0; padding: 0; list-style: none; }
 .local-grade-criterion { display: grid; gap: 4px; padding: 11px 13px; background: var(--card); border: 1px solid var(--line); border-inline-start: 4px solid var(--line-strong); border-radius: var(--r-card); }
