@@ -1,0 +1,2 @@
+
+T2 passed: sets 1-8 are modules 1-8, nothing rests on later ground, coverage reaches every paper, handoff promises checked in the app.

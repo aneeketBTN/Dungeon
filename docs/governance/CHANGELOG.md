@@ -1,5 +1,207 @@
 # Changelog
 
+## 2026-08-15 — Content accepted, and the four things measuring the promises found
+
+Evidence: `evidence/2026-08-15/t6-persona-rerun/verification.md` and
+`evidence/2026-08-15/t6-promise-suite/verification.md`.
+`VERIFIED(REAL_BROWSER + AUTOMATED)`, same branch.
+
+**`WAITING_OWNER_CONTENT_ACCEPTANCE` is cleared.** The owner accepted the standing block in
+chat: the transcript-derived bank across all 792 surfaces, 64 primers, 64 rubrics and
+exemplars, 106 lessons, the 48 CLA-derived items, the 44 examiner-reserved items, the SPMS
+caselets and rewritten stems, the BRGSA concept records, and the ~76 restated answers.
+Acceptance clears the gate that blocked `DONE`; it is **not** faculty review and creates no
+subject-matter authority. The two R3 defects below were repaired *before* acceptance so the
+gate did not close over known-broken prose.
+
+**The persona suite was re-run and its learn half had been measured on a stale order.** The
+committed queue skeletons predated three bank commits, so every learn-side number in the last
+evidence file described a delivered order that no longer existed. Re-exported through the real
+app: SPMS, BRGSA and SCLM all moved; IBM did not. A control run (old order, current bank)
+isolates the cause — **every movement is the schedule, none is the bank**. BRGSA now delivers
+`case_validate`, the integrated slot working in a real queue for the first time.
+
+Four defects, none of which any existing gate could see:
+
+- **A mock miss did not re-teach a lesson the learner had already read.** `lessonNeedsReteach`
+  read `conceptAttempts`; `recordExamMisses` writes only `examMisses`, deliberately, because
+  misses "prioritise and never score". The two stores are disjoint, so a paper could not reach
+  the re-teach latch: `lessonAt: -1`, straight back to the question, under a kicker reading
+  "Taught first, then tested again". First contact worked, which is the same shape this latch
+  was fixed for once already — the earlier fix closed the Learn half and left this one open.
+  `examMissNeedsReteach` now counts a miss stamped after `readAt` (`missed` or `written`, not
+  `skipped` alone — running out of time is a timing signal), and applies the RECOVERED rule
+  symmetrically so one bad paper does not re-teach for ever. New probe
+  `tools/browser-checks/exam-repair.js`, **5 cases + the recovered case, all passing**; cause
+  established by control, not by reading the code.
+- **A concept that fell from Strong was indistinguishable from one never learned.** Same label,
+  same actions, character-for-character identical on the row; the difference existed only behind
+  the "Why" disclosure as evidence counts the reader had to interpret. `conceptPeakStatus`
+  replays the evidence rule over the attempt history — never a stored high-water mark — and the
+  row now says **"was Strong"** under the current state, in words rather than colour. New probe
+  `tools/browser-checks/regression-reporting.js`, **5 cases**, including a differential that
+  compares a declined learner against a never-strong one rather than hunting for a keyword.
+- **`ui-audit`'s type check had never been able to fail.** Its floor was hard-coded at 12 while
+  `--t-micro` declared 11, so it listed **111 compliant elements** on one screen, truncated at
+  ten, and buried the seven that actually broke the rule. The floor is now read from the token,
+  the full count travels with the truncated list, and the seven — SVG axis labels at 10px, the
+  only type in the product under the scale — are on the scale. **0 at 375 and 1280.**
+- **Two examiner-reserved items answered to their own heading.** `sclm_drivers_cla3` (the answer
+  was the only option containing "drivers") and `spms_requirements_cla1` (the only option naming
+  all of functional/quality/requirements), both contradicting the R3 rule stated in their own
+  header comment. Repaired in `connect`'s direction — name the concept in every option, in place,
+  never stripped from the answer. **25 → 23** option sets paying 100%.
+
+Also: `"Practise 1 concepts that need work"` and `"1 need practice"` are now singular-aware.
+
+Gates after the work: `npm test` **103/103**; bank validator **0 errors, 0 warnings**; LAW-47
+**12 routes × 4 subjects, 0 violations, 0 skipped** (re-run because the re-teach change adds
+lessons to queues that had none); layering **40 sets, 255 pairs, 0 descents**; LAW-63 16/16;
+name-matching, absolutes, self-containment, exam-readiness and exam-transfer gates all exit 0;
+T1 32/32; T3 every rule at or under limit; T5 no wrong decision without a cue; `ui-audit` clean
+at 375 and 1280 but for the deliberate `#course-grid` rail. Paper digests unchanged.
+
+Not merged, not deployed.
+
+## 2026-08-15 — An optical layer, and the shadows that had never once rendered
+
+Evidence: `evidence/2026-08-15/t6-dashboard-rhythm/verification.md` and
+`evidence/2026-08-15/t6-optical-layer/verification.md`.
+`VERIFIED(REAL_BROWSER + HEADLESS_CHROME)`, same branch, not merged.
+
+Five defects, all on screens `ui-audit.js` had just reported clean, and all of the same
+kind: **the boxes were right and the ink was wrong.** That is now its own probe.
+
+- **`tools/browser-checks/optical-audit.js`** — measures glyph runs through
+  `Range.getClientRects()` instead of boxes, clusters them into the gridlines the page's
+  ink actually forms, and reports what sits *near* a line without sitting *on* it.
+  Six checks: `gridlines`, `nearMiss`, `insetDrift`, `flatSurface`, `deadShadow`,
+  `baselineDrift`. `optical.overlay()` draws the grid on the page and
+  `node tools/screenshot.mjs --optical` writes a `_grid` shot of every scene through it.
+  New section F in `UI-CHECKLIST.md`.
+- **Every shadow in the app was dead, and had always been.** All four shadow tokens wrapped
+  a whole `box-shadow` in `light-dark()`, which is a *colour* function — so the declaration
+  never parsed and sixteen rules computed to `none`. Three elements on the dashboard painted
+  a shadow before this; **43** after. Nobody reported it, and no probe reading elements
+  could: an invalid value leaves nothing behind to distinguish "lost" from "never asked
+  for". **LAW-71.**
+- **The resume bar had no depth** — reported by the owner. `--deep` on a `--deep` hero at
+  **1.00:1**, a `--deep-edge` border whose light value *was* `--deep`, and the dead shadow
+  above: three separations, all three absent at once. Now on a `--deep-raised` surface with
+  a real edge. `check-palette.mjs`'s below-target list drops 17 → 16.
+- **`Learn` did not line up with `Your next step`** — also reported by the owner. Both boxes
+  on the column, 21px of ink apart. `insetDrift` found the page carrying **eight different
+  panel text insets** with the coin holding its own private 20px; the ≤768px block had said
+  14 all along. The coin's title now shares a gridline with the four subject cards beneath
+  it. The remaining drift (14/15/18/19/23) is reported and left for the owner.
+- **A day marker drawn as a `border-left`** gave two of four subject cards a 160px content
+  box against 162px — outer widths identical, so nothing fired. Now an inset shadow.
+  **LAW-70.**
+- **A section label 42.5px below its heading and 29.5px above its content**, because the
+  next box was a 44px control band with an 11px label centred in it. The margin was correct;
+  the gap the reader saw was not.
+- **`ui-audit.js` was reporting a control that cannot be painted** — a 6px overflow on the
+  header switch while it is collapsed to `max-width: 0` inside `overflow: hidden`. Now
+  suppressed by intersecting with clipping ancestors, verified against three fixtures
+  including two that must still fire.
+- **The new probe was wrong twice before it was right**, both recorded: `nearMiss` ranked by
+  nearest line and buried the 21px defect it was written for under a 4px one, and
+  `deadShadow` reported zero on a page where all sixteen were dead — because a
+  `CSSStyleRule` now carries an *empty* `cssRules` list, and an empty list is truthy.
+
+## 2026-08-15 — A reserved slice on every paper, and the exploit the defence created
+
+Evidence: `evidence/2026-08-15/t6-rehaul-completion/verification.md` §8–§13.
+`VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)`, same branch, not merged. Closes
+the four items the entry below left open.
+
+- **44 reserved items across all four subjects.** Every concept on every paper now has an
+  examiner surface a learner cannot have met while studying — **16/16 × 4**, from 0/16 on
+  three of them — and overlap fell from 100% to 60–80%. Additive throughout: nothing Learn
+  could reach before was withdrawn, asserted by re-checking each concept's surface floor
+  with the slice removed.
+- **SPMS Section B had zero slack** — 20 drawn from a pool of 20, so three "different"
+  seeded sets were identical across 40 of that paper's 75 marks, on the term's only
+  negatively marked section. Pool now 28.
+- **"Pick the second-longest" was the real shape exploit, on all four subjects.** The brief
+  recorded it as an IBM rank-3 warning; measured, SPMS 38.5%, IBM 35.9%, BRGSA and SCLM
+  32.9%. It exists *because* the defence against "pick the longest" created it —
+  `comparableWrong` selects distractors closest in length to the answer, which beat
+  `longest` and left the answer one rank below the top. A structural fix was tested and
+  rejected: three selection variants gave byte-identical numbers, because the mcq families
+  have exactly three authored distractors. 23 distractors made more specific instead →
+  26.9 / 22.4 / 27.0 / 28.2, `longest` unmoved, **the standing length warning cleared**.
+- **`fixedB` is now reported and not gated**, with the reason recorded: slots are dealt
+  flat by construction and the validator confirms 0.25 × 4, so gating a 50-of-100 draw
+  measures sampling noise rather than the bank.
+- **A reserved item's shape bias is never diluted**, because it appears on every paper. Two
+  new BRGSA mcqs moved `combinedWithLength` from 24% to 33.6% while the pool sat at 26%.
+  A new test caught nine such items, seven of them written in this session.
+- **LAW-53 returned during authoring** — four of eight new multi-selects were 3-of-4 and one
+  4-of-4, so ticking everything scored full marks. Caught by hand, now a test.
+- **LAW-67 recurred inside the tool written to catch it**: `--gate` was taken as the harness
+  directory, so T3 reported a pass over an empty report.
+- **14 of 20 SPMS multiple-select stems** asked what "the lecture" said rather than what is
+  true (the brief records fifteen). All rewritten. `spms_roadmap_msq` no longer carries a
+  WhatsApp release date as a *correct* option among framework claims.
+- **BRGSA self-containment audited for the first time**: 0 items require a brand figure the
+  page does not carry, 0 name a case they do not show. Three probe narrowings were needed
+  first — the first draft would have reported 25 non-defects.
+
+## 2026-08-15 — The five open items, and the four gates that judge them
+
+Evidence: `evidence/2026-08-15/t6-rehaul-completion/verification.md`.
+`VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)`, branch `feat/bank-rehaul-completion`,
+not merged. Picks up exactly what the entry below listed as not done.
+
+- **`check_exam_readiness` exits 0 for the first time.** SCLM Section B is **8 of 6**
+  numericals; the 8 marks it could not award are awardable. `SCLM-M03-L06` (Q model) authored
+  from the transcript with every glossary term grepped first and the lecture's own worked
+  example verified figure by figure.
+- **The second blocker had never been named.** `T6_EXAM_PATTERN.md` says the real SCLM paper
+  supplies standard normal tables; Dungeon supplied none. That is why *both* missing items were
+  z-based — without a table no z-based question is answerable, so none could be authored. Added
+  as a paper provision, computed via A&S 26.2.17 rather than stored as 310 literals, pinned by
+  `tests/normal-table.test.mjs`. Mounted twice: the examiner's paper hands it over, and a Learn
+  numeric declaring `reference: "standard-normal"` carries it inline.
+- **Four SCLM numericals**, each naming the `σ_d·L` instead of `σ_d√L` error as a near miss
+  with the figure it produces.
+- **The BRGSA integrated-scenario diagnosis is corrected.** They were not "never served":
+  `brgsa_case_false_win` reaches set 2, `ibm_case_hospital_growth` reaches IBM set 2. Three of
+  four never reach an offered set. The cause is composition — Section C is two **ten-mark**
+  slots drawing 2 from 36 written items of which 32 run three to five minutes. On the Learn
+  side they were unreachable by construction, because the rotation's fallback only fires for a
+  concept carrying neither a short nor a case prompt, and none exists. Fixed with a section
+  `prefer` order and an `integrated` slot whose concept-uniqueness rule is relaxed.
+- **`addIntegratedScenarios` no longer drops silently.** It throws, naming the unresolvable id.
+- **An examiner-only slice for BRGSA.** Six new reserved scenarios, hard-excluded from every
+  study pool and from written practice, and **additive** — nothing shared was withdrawn, which
+  is what makes the hard reservation defensible. Section C overlap **100% → 0%**. Four reserved
+  items put sets 1 and 2 on an identical pair, so six were authored.
+- **T1** (`measure-cold-learner.mjs`) — every course term in a correct answer must be
+  introduced earlier in the same run. Found `smoke_signal` resting on "prospects", defined in a
+  lecture the item does not cite: **LAW-47 gates on cited lectures and structurally cannot see
+  this.** 32/32 after the fix.
+- **T2** — `measure-learn-exam-coverage.js` now asserts the ladder instead of only measuring
+  it, and **refuses to score** the handoff half without the app's own `handoffs()` answer.
+  0 broken over 64 promises; reading `lesson.connects` would have reported 14 false ones.
+- **T4** (`measure-exam-transfer.mjs`) — overlap plus same-concept-different-surface. Could not
+  use "all ten sets": set 10's pool is the entire bank, so the first version reported 100%
+  whatever anybody authored. Split into ladder and anyRoute.
+- **T5** (`measure-persona-regression.mjs`) — what a learner is told when wrong. Failed
+  correctly: one sentence answered 55–100% of every wrong decision. `fallbackDiagnosis` was
+  discarding `targetRole`; four cues drawn from what the slot asks took top-cue share to
+  **27–36%**.
+- **Three defects came from building the probes, two of them mine.** An MCQ diagnosis read from
+  `perOption.answer` when the export writes `perOption.whole`; and a T5 gate whose floors
+  skipped every run and printed a pass over data it never judged.
+- **`ui-audit.js` caught the new table three times and was right twice.** `hiddenScroll` at 44%
+  on a phone was real: the eleven-column table is now two six-column halves that stack — 310
+  cells, no sideways scroll at any width. The one refinement (`cutRows` ignoring a child taller
+  than its container) was verified against a live fixture of the original palette defect.
+- `npm test` **87 → 100**. The runner gave up a finding of its own: two files listed in
+  `package.json` before they existed were silently skipped at exit 0.
+
 ## 2026-08-15 — Both craft exploits closed, and the bag leaves the Examiner
 
 Evidence: `evidence/2026-08-15/t6-bank-overhaul/verification.md`.

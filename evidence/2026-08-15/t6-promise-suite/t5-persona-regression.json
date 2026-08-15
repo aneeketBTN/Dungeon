@@ -1,0 +1,334 @@
+{
+  "floors": {
+    "minWrongToJudgeBreadth": 5,
+    "minDistinctCues": "max(3, ceil(wrongDecisions / 3))",
+    "maxTopCueShare": 0.6,
+    "noCueOffered": 0
+  },
+  "runs": [
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "persona": "cold",
+      "askedDecisions": 12,
+      "correct": 2,
+      "scorePct": 16.7,
+      "stalledAt": {
+        "step": 3,
+        "id": "brgsa_m1_demand_repair_cloze",
+        "concept": "Demand validation"
+      },
+      "worstConcept": {
+        "concept": "Demand validation",
+        "wrongDecisions": 3
+      },
+      "feedback": {
+        "wrongDecisions": 10,
+        "distinctCues": 5,
+        "topCue": {
+          "cue": "The slot is asking what the idea tells you to do. Check that this option is an action, and that it is the action this idea licenses rather than generally sensible practice.",
+          "covers": 4,
+          "share": 0.4
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "persona": "crammer",
+      "askedDecisions": 12,
+      "correct": 4,
+      "scorePct": 33.3,
+      "stalledAt": {
+        "step": 5,
+        "id": "brgsa_m1_demand_case_cloze",
+        "concept": "Demand validation"
+      },
+      "worstConcept": {
+        "concept": "Demand validation and Pre-sales commitment and evidence strength",
+        "wrongDecisions": 3
+      },
+      "feedback": {
+        "wrongDecisions": 8,
+        "distinctCues": 5,
+        "topCue": {
+          "cue": "The slot is asking what the idea tells you to do. Check that this option is an action, and that it is the action this idea licenses rather than generally sensible practice.",
+          "covers": 3,
+          "share": 0.375
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "persona": "careful",
+      "askedDecisions": 12,
+      "correct": 9,
+      "scorePct": 75,
+      "stalledAt": {
+        "step": 3,
+        "id": "brgsa_m1_demand_repair_cloze",
+        "concept": "Demand validation"
+      },
+      "worstConcept": {
+        "concept": "Demand validation",
+        "wrongDecisions": 2
+      },
+      "feedback": {
+        "wrongDecisions": 3,
+        "distinctCues": 2,
+        "topCue": {
+          "cue": "The slot is asking what the idea tells you to do. Check that this option is an action, and that it is the action this idea licenses rather than generally sensible practice.",
+          "covers": 2,
+          "share": 0.667
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "persona": "cold",
+      "askedDecisions": 13,
+      "correct": 4,
+      "scorePct": 30.8,
+      "stalledAt": {
+        "step": 3,
+        "id": "ibm_inclusive_case_cloze",
+        "concept": "Inclusive business"
+      },
+      "worstConcept": {
+        "concept": "Inclusive business and Bottom-of-the-pyramid design",
+        "wrongDecisions": 3
+      },
+      "feedback": {
+        "wrongDecisions": 9,
+        "distinctCues": 5,
+        "topCue": {
+          "cue": "The slot is asking what the idea tells you to do. Check that this option is an action, and that it is the action this idea licenses rather than generally sensible practice.",
+          "covers": 3,
+          "share": 0.333
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "persona": "crammer",
+      "askedDecisions": 13,
+      "correct": 2,
+      "scorePct": 15.4,
+      "stalledAt": {
+        "step": 3,
+        "id": "ibm_inclusive_case_cloze",
+        "concept": "Inclusive business"
+      },
+      "worstConcept": {
+        "concept": "Inclusive business",
+        "wrongDecisions": 3
+      },
+      "feedback": {
+        "wrongDecisions": 11,
+        "distinctCues": 7,
+        "topCue": {
+          "cue": "The slot is asking what the idea tells you to do. Check that this option is an action, and that it is the action this idea licenses rather than generally sensible practice.",
+          "covers": 4,
+          "share": 0.364
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "persona": "careful",
+      "askedDecisions": 13,
+      "correct": 9,
+      "scorePct": 69.2,
+      "stalledAt": {
+        "step": 3,
+        "id": "ibm_inclusive_case_cloze",
+        "concept": "Inclusive business"
+      },
+      "worstConcept": {
+        "concept": "Inclusive business",
+        "wrongDecisions": 2
+      },
+      "feedback": {
+        "wrongDecisions": 4,
+        "distinctCues": 2,
+        "topCue": {
+          "cue": "The slot is asking what the idea tells you to do. Check that this option is an action, and that it is the action this idea licenses rather than generally sensible practice.",
+          "covers": 3,
+          "share": 0.75
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "persona": "cold",
+      "askedDecisions": 14,
+      "correct": 4,
+      "scorePct": 28.6,
+      "stalledAt": {
+        "step": 3,
+        "id": "sclm_fit_repair_cloze",
+        "concept": "Strategic fit"
+      },
+      "worstConcept": {
+        "concept": "Strategic fit and Six supply-chain drivers",
+        "wrongDecisions": 3
+      },
+      "feedback": {
+        "wrongDecisions": 10,
+        "distinctCues": 6,
+        "topCue": {
+          "cue": "Return to the governing idea and check the option against it directly before selecting.",
+          "covers": 3,
+          "share": 0.3
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "persona": "crammer",
+      "askedDecisions": 14,
+      "correct": 3,
+      "scorePct": 21.4,
+      "stalledAt": {
+        "step": 3,
+        "id": "sclm_fit_repair_cloze",
+        "concept": "Strategic fit"
+      },
+      "worstConcept": {
+        "concept": "Six supply-chain drivers",
+        "wrongDecisions": 3
+      },
+      "feedback": {
+        "wrongDecisions": 11,
+        "distinctCues": 6,
+        "topCue": {
+          "cue": "The slot is asking what the idea tells you to do. Check that this option is an action, and that it is the action this idea licenses rather than generally sensible practice.",
+          "covers": 3,
+          "share": 0.273
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "persona": "careful",
+      "askedDecisions": 14,
+      "correct": 7,
+      "scorePct": 50,
+      "stalledAt": {
+        "step": 3,
+        "id": "sclm_fit_repair_cloze",
+        "concept": "Strategic fit"
+      },
+      "worstConcept": {
+        "concept": "Strategic fit → Six supply-chain drivers",
+        "wrongDecisions": 3
+      },
+      "feedback": {
+        "wrongDecisions": 7,
+        "distinctCues": 4,
+        "topCue": {
+          "cue": "Return to the governing idea and check the option against it directly before selecting.",
+          "covers": 3,
+          "share": 0.429
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "persona": "cold",
+      "askedDecisions": 13,
+      "correct": 1,
+      "scorePct": 7.7,
+      "stalledAt": {
+        "step": 3,
+        "id": "spms_dfv_explain",
+        "concept": "Desirability, feasibility, viability"
+      },
+      "worstConcept": {
+        "concept": "Desirability, feasibility, viability",
+        "wrongDecisions": 4
+      },
+      "feedback": {
+        "wrongDecisions": 12,
+        "distinctCues": 6,
+        "topCue": {
+          "cue": "Return to the governing idea and check the option against it directly before selecting.",
+          "covers": 4,
+          "share": 0.333
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "persona": "crammer",
+      "askedDecisions": 13,
+      "correct": 4,
+      "scorePct": 30.8,
+      "stalledAt": {
+        "step": 3,
+        "id": "spms_dfv_explain",
+        "concept": "Desirability, feasibility, viability"
+      },
+      "worstConcept": {
+        "concept": "Desirability, feasibility, viability and Jobs to be done",
+        "wrongDecisions": 3
+      },
+      "feedback": {
+        "wrongDecisions": 9,
+        "distinctCues": 6,
+        "topCue": {
+          "cue": "Return to the governing idea and check the option against it directly before selecting.",
+          "covers": 3,
+          "share": 0.333
+        },
+        "noCueOffered": 0
+      }
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "persona": "careful",
+      "askedDecisions": 13,
+      "correct": 7,
+      "scorePct": 53.8,
+      "stalledAt": {
+        "step": 3,
+        "id": "spms_dfv_explain",
+        "concept": "Desirability, feasibility, viability"
+      },
+      "worstConcept": {
+        "concept": "Desirability, feasibility, viability",
+        "wrongDecisions": 3
+      },
+      "feedback": {
+        "wrongDecisions": 6,
+        "distinctCues": 3,
+        "topCue": {
+          "cue": "Return to the governing idea and check the option against it directly before selecting.",
+          "covers": 3,
+          "share": 0.5
+        },
+        "noCueOffered": 0
+      }
+    }
+  ]
+}

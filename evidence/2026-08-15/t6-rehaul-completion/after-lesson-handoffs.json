@@ -1,0 +1,45 @@
+{
+  "SPMS": {
+    "citedLectures": 16,
+    "authoredLessons": 16,
+    "handoffSteps": 15,
+    "stepsThatSkip": 0,
+    "promisesTheNextLecture": 0,
+    "brokenPromises": 0,
+    "examples": []
+  },
+  "BRGSA": {
+    "citedLectures": 16,
+    "authoredLessons": 50,
+    "handoffSteps": 15,
+    "stepsThatSkip": 15,
+    "promisesTheNextLecture": 12,
+    "brokenPromises": 12,
+    "examples": [
+      "BRGSA-M01-L01 → BRGSA-M01-L04 (skips 2): \"Validation needs a test you can actually run. The next lecture is the cheapest one: the smoke test.…\"",
+      "BRGSA-M01-L04 → BRGSA-M02-L01 (skips 2): \"If behaviour is the strong evidence, what are surveys for? The next lecture answers that, and names how they b…\"",
+      "BRGSA-M02-L03 → BRGSA-M03-L01 (skips 3): \"Real startups rarely have the traffic for a full test. The next lecture is what to do about that.…\""
+    ]
+  },
+  "SCLM": {
+    "citedLectures": 16,
+    "authoredLessons": 17,
+    "handoffSteps": 15,
+    "stepsThatSkip": 1,
+    "promisesTheNextLecture": 3,
+    "brokenPromises": 0,
+    "examples": []
+  },
+  "IBM": {
+    "citedLectures": 16,
+    "authoredLessons": 24,
+    "handoffSteps": 15,
+    "stepsThatSkip": 2,
+    "promisesTheNextLecture": 6,
+    "brokenPromises": 2,
+    "examples": [
+      "IBM-M01-L03 → IBM-M01-L07 (skips 3): \"Several kinds of organisation claim this territory. The next lecture sorts them.…\"",
+      "IBM-M01-L07 → IBM-M02-L04 (skips 3): \"The next lecture takes a company that did all of this, and asks what it cost.…\""
+    ]
+  }
+}

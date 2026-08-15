@@ -2155,7 +2155,35 @@
       {term: "critical ratio", plain: "The ratio of underage to total mismatch cost, which sets how far up the demand distribution to order."},
       {term: "expected payoff", plain: "Each outcome's value weighted by its probability — the logic the derivation is built from."}
     ],
-    connects: "You now hold both inventory models. Choosing between them is a separate skill from operating either, and it is tested on its own."
+    connects: "You now hold both inventory models. The next segment carries the same uncertainty into a policy that repeats, where the question stops being how much to order once and becomes when to order again."
+  });
+
+  lesson({
+    lectureId: "SCLM-M03-L06",
+    courseId: "SCLM",
+    module: 3,
+    order: 6,
+    title: "Safety stock and the reorder point",
+    objective: "Set a reorder point from the demand distribution during lead time, and read the service level an existing reorder point is already buying.",
+    explainer: [
+      "EOQ answered how much to order and assumed demand was known. Newsvendor handled uncertain demand but only for a single period. The Q model is the repeating case with uncertainty in it: you watch inventory continuously, order the same fixed quantity Q every time, and place that order when stock falls to a reorder point. Q still comes from the EOQ machinery, using expected annual demand in place of a known D. What changes is when to order.",
+      "Two ideas do the work. The first is inventory position — what is on hand, plus what has been ordered and not yet arrived, minus what is owed to customers. The reorder point is compared against inventory position rather than on-hand stock, because a manager watching only the shelf keeps re-ordering against a delivery that is already in transit. The second is the protection period. Once an order is placed you cannot influence the next arrival until the lead time elapses, so the lead time is the only stretch you are exposed for. That is why the safety stock protects the lead time and not the whole cycle — and it is the sharp difference from newsvendor, which protects the entire season.",
+      "So the reorder point is the mean demand during lead time plus a buffer: ROP = μ_DLT + z·σ_DLT. The standard deviation is the one that catches people. It is not the weekly or daily figure the stem gives you. Weekly demands are independent, so variances add over the L weeks of lead time and σ_DLT = σ_d·√L — the square root, not L itself. The z comes from the desired cycle service level read off the standard normal table, and the same relation runs backwards: given a reorder point already in use, z = (ROP − μ_DLT) ÷ σ_DLT, and the table turns that z into the service level the current policy is actually achieving."
+    ],
+    worked: {
+      setup: "A discount appliance store uses a continuous review system. Weekly demand for one item is normally distributed with a mean of 10 and a standard deviation of 8. The ordering cost is $45 per order, holding cost is $12 per unit per year, the lead time is 3 weeks, there are 52 weeks in the year, and the desired cycle service level is 70%.",
+      move: "Expected annual demand is 10 × 52 = 520, so Q = √(2 × 520 × 45 ÷ 12) = √3,900 ≈ 62.5, rounded to 63 units. For the reorder point, μ_DLT = 10 × 3 = 30. The standard deviation over the lead time is 8 × √3 = 13.86, not 8 and not 24. A 70% service level gives z = 0.55, so the safety stock is 0.55 × 13.86 = 7.62 and ROP = 30 + 7.62 = 37.62, about 38 units. Order 63 units whenever inventory position reaches 38.",
+      because: "Setting the reorder point at 30 would cover only average demand during the lead time, which means stocking out roughly half the time — the buffer is the entire point. And the service level has to be supplied here rather than derived: in newsvendor the critical ratio was itself the service level, but a continuous review system has no equivalent, so somebody has to choose how much stockout risk to carry."
+    },
+    glossary: [
+      {term: "inventory position", plain: "On-hand stock plus what is on order and not yet arrived, minus backorders."},
+      {term: "reorder point", plain: "The inventory position at which a fresh order is placed."},
+      {term: "safety stock", plain: "Buffer stock carried above expected demand to absorb uncertainty during the protection period."},
+      {term: "protection period", plain: "The stretch you are exposed for and must buffer — the lead time under continuous review."},
+      {term: "cycle service level", plain: "The probability of not stocking out during the protection period."},
+      {term: "continuous review", plain: "Watching inventory all the time and ordering the moment it hits the reorder point."}
+    ],
+    connects: "Continuous review buys its low safety stock with constant monitoring. The next segment reviews on a fixed calendar instead, which widens the protection period and changes what the buffer has to cover."
   });
 
   lesson({

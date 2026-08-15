@@ -1,0 +1,72 @@
+{
+  "ok": false,
+  "probe": "T7 — regression reporting",
+  "course": "SCLM",
+  "concept": "sclm_fit",
+  "cases": [
+    {
+      "id": "R1-detected",
+      "why": "the concept's own state moves back down rather than latching at Strong",
+      "expected": "Strong → Needs practice",
+      "found": "Strong → Needs practice",
+      "pass": true
+    },
+    {
+      "id": "R2-reportedAtSubjectLevel",
+      "why": "the momentum chip carries a negative delta computed by replaying history",
+      "expected": "down",
+      "found": "down (-6 this block)",
+      "pass": true
+    },
+    {
+      "id": "R3a-distinguishedOnTheOpenRow",
+      "why": "without opening anything, can a learner who fell from Strong be told from one who never had it",
+      "expected": "the visible rows differ",
+      "found": "character-for-character identical",
+      "pass": false
+    },
+    {
+      "id": "R3b-distinguishedBehindWhy",
+      "why": "with the evidence disclosure open, the retained evidence tells the two apart",
+      "expected": "the full rows differ",
+      "found": "differ",
+      "pass": true
+    },
+    {
+      "id": "R4-actedOn",
+      "why": "the declined concept is routed forward rather than quietly forgotten",
+      "expected": "a needs-work route offered",
+      "found": "Practise 1 concepts that need work 1 need practice; these appear first when you practise this subject.",
+      "pass": true
+    }
+  ],
+  "observed": {
+    "strong": {
+      "status": "Strong",
+      "rowVisible": "Strategic fitStrongPractiseLesson",
+      "rowText": "Strategic fitWhyStrongPractiseLessonStrategic fit aligns the supply chain's efficiency and responsiveness with the customer promise and its implied uncertainty.4 of 5 scored attempts correct.3 distinct question types passed (3 required).2 of 2 required practice blocks passed.Applied evidence is present from a new case or reasoning step.Strong evidence is more than four days old; a short refresh is due.No diagnostic confidence check for this concept yet.",
+      "momentumValue": "1 / 16",
+      "momentumDelta": "+3 this block",
+      "momentumDirection": "up",
+      "routeCopy": "Start the next new concepts Choose any concept or start with the first short study set."
+    },
+    "declined": {
+      "status": "Needs practice",
+      "rowVisible": "Strategic fitNeeds practicePractiseLesson",
+      "rowText": "Strategic fitWhyNeeds practicePractiseLessonStrategic fit aligns the supply chain's efficiency and responsiveness with the customer promise and its implied uncertainty.4 of 7 scored attempts correct.3 distinct question types passed (3 required).2 of 2 required practice blocks passed.Applied evidence is present from a new case or reasoning step.The latest answer was wrong; one miss does not erase earlier evidence.No diagnostic confidence check for this concept yet.",
+      "momentumValue": "0 / 16",
+      "momentumDelta": "-6 this block",
+      "momentumDirection": "down",
+      "routeCopy": "Practise 1 concepts that need work 1 need practice; these appear first when you practise this subject."
+    },
+    "neverStrong": {
+      "status": "Needs practice",
+      "rowVisible": "Strategic fitNeeds practicePractiseLesson",
+      "rowText": "Strategic fitWhyNeeds practicePractiseLessonStrategic fit aligns the supply chain's efficiency and responsiveness with the customer promise and its implied uncertainty.0 of 2 scored attempts correct.0 distinct question types passed (3 required).0 of 2 required practice blocks passed.A new case or successful reasoning step is still needed.The latest answer was wrong; one miss does not erase earlier evidence.No diagnostic confidence check for this concept yet.",
+      "momentumValue": "0 / 16",
+      "momentumDelta": "16 to go",
+      "momentumDirection": "flat",
+      "routeCopy": "Practise 1 concepts that need work 1 need practice; these appear first when you practise this subject."
+    }
+  }
+}

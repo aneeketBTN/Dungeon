@@ -44,6 +44,197 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 ## Issue → Cause → Fix
 
+- **I-MOCK-NEVER-RETAUGHT (2026-08-15)** — Issue: learning correctness. A learner who read a
+  lesson, sat a mock and lost the marks was sent straight back to the question with **no
+  lesson**, under a kicker reading "Taught first, then tested again". Cause: `lessonNeedsReteach`
+  decided from `conceptAttempts`, and `recordExamMisses` writes only `examMisses` — deliberately,
+  because misses "prioritise and never score". The two stores are disjoint, so a paper could
+  never reach the latch. First contact worked, so the route looked correct in every test that
+  started from an empty profile. This is the **same shape** as the `lessonsRead` one-way latch
+  fixed earlier the same day: that fix closed the Learn half and left the mock half open, and the
+  probe written for it stages the store the mock does not write. Fix: `examMissNeedsReteach`
+  counts a miss stamped after `readAt` — `missed` or `written`, not `skipped` alone, since
+  running out of time is a timing signal — with the RECOVERED rule applied symmetrically so one
+  bad paper does not re-teach for ever. Standing check:
+  `tools/browser-checks/exam-repair.js`. The cause was established by a **control** (same miss,
+  plus one wrong Learn attempt, lesson returns) rather than by reading the code.
+- **I-DECLINE-NEVER-SAID (2026-08-15)** — Issue: state truthfulness. A concept that fell from
+  Strong rendered character-for-character identically to one that had never been learned: same
+  label, same actions. Cause: mastery is recomputed rather than latched, so the decline was
+  correctly *detected* and correctly *acted on* — it just was never *said*. The only trace was
+  behind the "Why" disclosure, as evidence counts the reader had to interpret, and the results
+  screen counts `improved` with a one-directional `>` and has no counterpart. Fix:
+  `conceptPeakStatus` replays the evidence rule over the attempt history — never a stored
+  high-water mark, for the same reason `trendFromCourses` replays — and the row carries **"was
+  Strong"** in words, not colour or an arrow. Standing check:
+  `tools/browser-checks/regression-reporting.js`, which measures it as a **differential** between
+  a declined learner and a never-strong one rather than by hunting for a keyword. Note for
+  anyone extending it: the first implementation nested the decline inside `.shelf-state`, whose
+  `textContent` `measurement-evidence.js` matches with exact equality — the status label must
+  stay alone in that element.
+- **I-TYPE-FLOOR-DRIFT (2026-08-15)** — Issue: measurement. `ui-audit.js`'s `typeTooSmall` had
+  never been able to report a regression. Cause: its floor was hard-coded at 12 while
+  `app/t6.css` declared `--t-micro: 11px` and documented it as the smallest readable size.
+  Nothing reconciled them, so the detector listed **111 compliant elements** on the dashboard
+  alone, `.slice(0, 10)` truncated that to ten, and both UI verification files written that day
+  enumerated the classes they found empty **without listing `typeScale`**. A genuine drop would
+  have landed in a list that was already full. Fix: the floor is read from the token, so the two
+  cannot disagree again, and `typeTooSmallCount` travels beside the truncated list. It
+  immediately found what it had been hiding: **seven** SVG axis labels at 10px, the only type in
+  the product under its own scale, now on it. **0 at 375 and 1280.** The general lesson is the
+  standing one in `UI-CHECKLIST.md`, one step further on: a detector that always fires is
+  indistinguishable from a detector that never runs.
+- **I-RESERVED-ITEMS-NAME-MATCHABLE (2026-08-15)** — Issue: question correctness. Two of the 44
+  examiner-reserved items paid **100%** to "keep the option naming the thing this section is
+  called": `sclm_drivers_cla3`, whose answer was the only option containing "drivers", and
+  `spms_requirements_cla1`, the only one naming all of functional/quality/requirements. Cause:
+  both contradicted the R3 rule stated in their own header comment — the tranche was authored on
+  the "none of them" branch and these two landed on the "only the answer" one. The family gate
+  could not see it: `other` is 144 sets, so two items at 100% moved the average *down* as the
+  other new items diluted it. Fix: `connect`'s direction — name the concept in **every** option,
+  in place and length-neutral, never stripped from the answer (CONTENT-RULES R3, and appending is
+  what pushed IBM's "pick the longest" to 66%). **25 → 23** sets at 100%. Both were repaired
+  before the owner's content acceptance closed over them.
+- **I-OPTICAL-LAYER (2026-08-15)** — Issue: visual quality, measurement. Five layout defects
+  shipped past a green `ui-audit.js`, and two of them were reported by the owner rather than
+  by any probe — the coin's `Learn` not lining up with the block heading below it, and the
+  resume bar reading as part of the hero instead of floating over it. Cause: every probe in
+  the project measured **boxes**, and in all five defects the boxes were correct. A margin
+  landing on a 44px control band puts 42.5px of visible gap above an 11px label; a 3px
+  `border-left` marker resizes only the cards that carry it; a panel's padding moves its
+  title 21px off the column its own edge sits on. None of that crosses a container, overlaps
+  a sibling, or leaves the viewport. Underneath the depth complaint sat a defect nobody had
+  reported: all four shadow tokens wrapped a whole `box-shadow` in `light-dark()`, a colour
+  function, so **every shadow in the product had computed to `none` for as long as the
+  tokens existed** — 16 rules, 3 elements actually painting a shadow. An invalid CSS value
+  leaves nothing on the element, so no element-reading probe could ever have found it. Fix:
+  `optical-audit.js` measures glyph runs via `Range.getClientRects()`, clusters them into
+  the page's real gridlines, and reports ink that sits *near* a line without sitting on it,
+  plus `insetDrift`, `flatSurface` and `deadShadow`; `optical.overlay()` and
+  `screenshot.mjs --optical` render the grid so the miss can be seen and not only counted.
+  Shadow tokens now keep only the colour inside `light-dark()` (3 → 43 elements painting
+  one); the resume bar moved to a new `--deep-raised` surface with a `--deep-edge` that is
+  no longer identical to `--deep` in light; the coin adopted the panel inset its own mobile
+  block had used all along, putting its title on the same gridline as the subject cards.
+  **Learning-integrity axis:** untouched — no question, scoring or scheduling behaviour is
+  involved. **Truthful-interaction axis:** a floating bar that cannot be told from the panel
+  behind it misrepresents what is interactive, and elevation that exists only in the
+  stylesheet is a claim the screen does not honour. **Accessibility axis:** the required
+  contrast pairings still pass in both themes and the below-target-not-required list fell
+  17 → 16; state remains distinguishable without colour. **Measurement axis:** the probe was
+  wrong twice before it was right — ranking near misses by nearest line buried the 21px
+  defect it existed to catch, and an empty-but-truthy `CSSRuleList` made it report zero dead
+  shadows on a page where all sixteen were dead — both recorded rather than quietly fixed.
+  Residual, reported and not decided: five components still disagree on text inset
+  (14/15/18/19/23), `nearMiss` returns 12 unreviewed findings at 1280, and only the
+  dashboard has been through the optical probe at all. Laws: LAW-70, LAW-71. Evidence:
+  `evidence/2026-08-15/t6-dashboard-rhythm/verification.md`,
+  `evidence/2026-08-15/t6-optical-layer/verification.md`.
+
+- **I-SECOND-LONGEST-PAYS (2026-08-15)** — Issue: learning integrity, measurement. "Pick the
+  second-longest option" paid **32.9–38.5% against 25% chance on all four subjects** and was
+  in no gate. Cause: the defence against "pick the longest" produced it. `comparableWrong`
+  selects distractors closest in length to the correct answer, which took `longest` to
+  20.7–29.5% and clustered the four lengths so the answer sits one rank below the top far
+  more often than chance. The bank validator's `lengthRankShares` also could not see it,
+  because it counts an exact sort position a candidate cannot execute where lengths tie —
+  resolving ties by guessing moves the figure up to ten points. Fix: a structural change was
+  tested and rejected on measurement (three `comparableWrong` variants gave byte-identical
+  numbers; the mcq families carry exactly three authored distractors, so selection has no
+  freedom), then 23 distractors were made more specific — each now states the faulty
+  reasoning it stands for instead of only naming the wrong action. SPMS 38.5 → **26.9**,
+  BRGSA 32.9 → **22.4**, SCLM 32.9 → **27.0**, IBM 35.9 → **28.2**, `longest` unmoved on
+  every subject, `lengthRankSpread` roughly halved, and the standing IBM length warning
+  cleared. Now gated as `secondLongest` and `combinedWithLength`. Recorded as **LAW-68**.
+
+- **I-RESERVED-ITEM-BIAS-UNDILUTED (2026-08-15)** — Issue: measurement. Two examiner-only
+  BRGSA mcqs took `combinedWithLength` on the drawn paper from 24% to 33.6% while the
+  78-item pool sat at 26%, with all three seeds reading ~33 — systematic, not sampling
+  noise. Cause: `examPrefer` ranks reserved items first, so they are on **every** paper,
+  and one item won outright by a mechanical rule moves the paper figure roughly four times
+  as far as a shared item carrying the same bias. Fix: one item's option lengths adjusted
+  (33.6 → 28.6), and `tests/examiner-slice.test.mjs` now checks every reserved objective
+  item individually — it caught nine, seven of them authored the same session. Recorded as
+  **LAW-69**.
+
+- **I-LAW-53-RETURNS-ON-AUTHORING (2026-08-15)** — Issue: exam fidelity. Writing eight new
+  examiner-only multi-selects re-introduced LAW-53 immediately: four came out 3-correct-of-4
+  and one 4-of-4, which on SPMS Section B's +1 per right, −1 per wrong, capped at the
+  question's 2 marks means **ticking every option scores full marks**. Cause: the law was a
+  thing to remember rather than a thing to check, and nothing failed — the shape was only
+  caught by printing the distribution by hand. Fix: five items reshaped to 3-of-5, and
+  `tests/examiner-slice.test.mjs` now asserts that ticking everything is strictly worse than
+  answering. A defect that returns the moment someone authors in good faith needs a test.
+
+- **I-GATE-CONSUMED-ITS-OWN-FLAG (2026-08-15)** — Issue: gate truthfulness; **LAW-67, a
+  second time, in a tool written to catch it**. `run-persona-strategies.mjs` took
+  `process.argv[2]` as the harness directory, so `--gate` became a directory name, every
+  export lookup missed, and the gate printed "T3 passed" over a report containing nothing at
+  all — while `secondLongest` was over its limit on three subjects. Fix: flags filtered out
+  of the path argument, and the tool now refuses outright when no exports are found.
+
+- **I-BRGSA-SELF-CONTAINMENT-UNAUDITED (2026-08-15)** — Issue: exam fidelity. The BRGSA paper
+  guarantees no question requires memorising a Clairo or Zoko figure, and the bank had never
+  been checked against it since the pattern was written. Result: **0 items require a brand
+  figure the page does not carry and 0 name a case they do not show**, on all four subjects.
+  The finding is in the probe rather than the bank: three narrowings were needed before the
+  answer was true, and the first draft would have reported 25 non-defects — computation is
+  not recall (`cac_scope` gives ₹3,00,000 and 120 and answers ₹2,500), a small number can be
+  a derivation input without being a carried figure (an alpha of 0.25 made 100 + 0.25 × 20 =
+  105 read as recall on eight surfaces), and a brand that is the concept's own name is a
+  label rather than a hidden case. Standing check: `tools/measure-self-containment.mjs`.
+
+- **I-ANSWER-VOCABULARY-OUTSIDE-CITED-LECTURES (2026-08-15)** — Issue: learning integrity. A
+  scored item's correct answer used a course term defined in a lecture the item does **not**
+  cite. `smoke_signal` cites `BRGSA-M01-L02` and its answer read "exposed **prospects** take a
+  behavioural step"; "prospect" is glossary vocabulary from `BRGSA-M01-L04`, delivered three
+  steps later. Cause: LAW-47 gates each surface on its own `sourceIds`, so it can guarantee the
+  *cited* lectures are taught and is structurally blind to vocabulary borrowed from an uncited
+  one. Fix: reworded to "people who see the page" — the distinction under test, a measured
+  action against a stated opinion, is unchanged. Found by the new **T1**
+  (`tools/measure-cold-learner.mjs`), which is now the standing check: 32/32 scored items in
+  four delivered runs, every course term introduced earlier in its own run.
+
+- **I-ONE-SENTENCE-ANSWERS-EVERY-MISTAKE (2026-08-15)** — Issue: learning integrity; the
+  standing "feedback breadth" finding, now measured per run and gated. A learner who makes four
+  different mistakes and is told the same thing four times has been taught once and charged four
+  times. Measured by the new **T5** (`tools/measure-persona-regression.mjs`): the single cue
+  *"Return to the governing idea and check the option against it directly before selecting."*
+  answered **55–100%** of every wrong decision in every subject's set-1 run. Cause:
+  `fallbackDiagnosis` fires for any option with no provenance and no authored diagnosis, and it
+  was **discarding `targetRole`** — the facet the slot is asking for, already computed at the
+  call site. `targetRoleFor` also misses on options `attributeTo` has rewritten, so a
+  `ROLE_BY_PERSPECTIVE` fallback was added over a field every question carries. Fix: four cues
+  drawn from what the slot asks (principle / decision / reason / which idea governs). Top-cue
+  share BRGSA 54.5 → **30.0**, IBM 66.7 → **33.3**, SCLM 55.6 → **33.3**, SPMS 63.6 → **36.4**.
+  No cue was invented; the information was already there and being thrown away.
+
+- **I-TEN-MARK-SLOT-THREE-MINUTE-ANSWER (2026-08-15)** — Issue: exam fidelity. BRGSA Section C
+  is two ten-mark structured responses and drew 2 from a pool of 36 written items of which
+  **32 are three-to-five-minute per-concept prompts**, so four times in five a ten-mark slot was
+  filled by a three-minute answer, and three of the four scenarios authored for that slot
+  reached no set the product offers. Cause: a section declared a *type* (`short-answer`) and
+  nothing about the *length* the slot is worth. Fix: sections carry a `prefer` order over
+  `writtenMode`. Correction to the standing record: the scenarios were **not** "never served" —
+  `brgsa_case_false_win` reaches set 2 and `ibm_case_hospital_growth` reaches IBM set 2.
+
+- **I-LEARN-CANNOT-TEACH-THE-EXAMINERS-SURFACE (2026-08-15)** — Issue: learning integrity, and
+  the owner's own test — *"if Examiner feels foreign, that's Learn's failure"*.
+  `startWrittenPractice` rotated `short/case/short/case`, and its fallback fires only when no
+  unchosen concept has a prompt in the requested mode. Every concept in these subjects carries
+  both, so the fallback never fired and an integrated scenario was **unreachable by
+  construction** — the one surface the examiner's Section C is made of was the one surface Learn
+  could not teach. Fix: the last slot asks for `integrated`, and relaxes the one-concept-per-
+  prompt rule before giving the slot up, because a scenario spans four concepts and is filed
+  under the first.
+
+- **I-SUITE-PASSES-OVER-TESTS-THAT-DO-NOT-EXIST (2026-08-15)** — Issue: gate truthfulness. Two
+  test files were listed in `package.json` before they were written, and `npm test` exited **0**
+  — `node --test` silently skipped the missing paths, although a lone missing file exits 1. A
+  suite that passes over tests that do not exist reads exactly like a suite that passes. The
+  files now exist; the behaviour is recorded here because the next person to stage a test name
+  ahead of the file will get a green run and no warning.
+
 - **I-CRAFT-CLOSED-BOTH-SURFACES (2026-08-15)** — Issue: learning integrity; closes both
   I-NAME-MATCHING-BANK-WIDE and I-CRAFT-INSIDE-A-SET below, and F-06. Cause of the remaining
   half: the absolutes gap was **house style, not meaning** — `bridge_cloze` needed nothing

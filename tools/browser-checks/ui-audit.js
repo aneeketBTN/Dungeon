@@ -39,8 +39,23 @@
 
   var SCALE = [3, 7, 9, 10, 50, 99, 999];      // --r-mark/control/card/panel + pills
   var TAP_FLOOR = 44;
-  var TYPE_FLOOR = 12;                          // below this is unreadable on a phone
   var DENSE_CHARS = 260;                        // one paragraph before it needs a break
+
+  /* The type floor is the design system's, read from the token rather than repeated
+     here.
+     This was hard-coded at 12 while `app/t6.css` declared `--t-micro: 11px` and
+     documented it as "the smallest thing we ask anyone to read". Nobody reconciled
+     them, so `typeTooSmall` reported 111 elements on the dashboard alone, was
+     truncated to ten by the slice below, and was quietly non-empty on every run of
+     every screen — which means a genuine drop to 10px would have landed in a list
+     that was already full. A detector that always fires cannot fail.
+     Reading the token means the two can never disagree again: move the scale and the
+     floor moves with it. The fallback is 11 rather than 12 so a page served without
+     the stylesheet does not silently re-introduce the same drift. */
+  var TYPE_FLOOR = (function () {
+    var declared = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--t-micro"));
+    return declared > 0 ? declared : 11;
+  })();
 
   var vw = window.innerWidth;
   var name = function (el) {
@@ -65,6 +80,31 @@
   var all = Array.prototype.slice.call(document.querySelectorAll("body *"))
     .filter(function (el) { return inActiveScreen(el) && visible(el); });
 
+  /* An element that an ancestor has already clipped away cannot be painted past the
+     viewport, whatever its own rect says.
+     -------------------------------------------------------------------------------
+     The header's Learn/Examiner switch collapses to `max-width: 0; opacity: 0` while
+     the coin at the top of the page is in view, because the coin is already offering
+     that choice. Its two 53px buttons keep their natural width inside a 0px box with
+     `overflow: hidden`, so at 375 `#mode-exam` measured right=381 and the detector
+     called it a 6px overflow — on the dashboard's default state, every time, while
+     `documentElement.scrollWidth` stayed at exactly 375. Scroll the coin out of view
+     and the same probe went quiet, which is the intermittency LAW-46 is about.
+     What can actually be painted is the intersection with every clipping ancestor;
+     if that does not cross the viewport, there is nothing to see and nothing to fix.
+     This subsumes the scroller allowlist below rather than replacing it — the
+     allowlist stays because it says which scrollers are deliberate. */
+  var clippedShortOfTheEdge = function (el) {
+    var r = el.getBoundingClientRect();
+    for (var p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+      var s = getComputedStyle(p);
+      if (s.overflowX === "visible" && s.overflowY === "visible") continue;
+      var pr = p.getBoundingClientRect();
+      if (Math.min(r.right, pr.right) <= vw + 1 && Math.max(r.left, pr.left) >= -1) return true;
+    }
+    return false;
+  };
+
   /* --- overflow ------------------------------------------------------------- */
   var overflow = all.filter(function (el) {
     var r = el.getBoundingClientRect();
@@ -73,6 +113,7 @@
        sit outside the viewport. */
     var scroller = el.closest("[data-scroll], .course-grid, .match-board, .rail-scroll");
     if (scroller && scroller !== el && scroller.scrollWidth > scroller.clientWidth) return false;
+    if (clippedShortOfTheEdge(el)) return false;
     return true;
   }).map(function (el) {
     var r = el.getBoundingClientRect();
@@ -382,6 +423,14 @@
     var edge = el.getBoundingClientRect().bottom;
     var straddling = Array.prototype.slice.call(el.children).filter(function (kid) {
       var r = kid.getBoundingClientRect();
+      /* A child taller than the container can never be shown whole at any scroll
+         position, so the edge crossing it is a document being scrolled rather than a
+         row being drawn in half. This detector exists for the palette — many equal
+         chip rows, the container height landing mid-chip — and a single long child is
+         not that. Without this it fires on any scrollable panel holding one block,
+         which would make the correct treatment of long content look like a defect.
+         Verified still to fire on the original 46vh palette shape. */
+      if (r.height > el.clientHeight + 1) return false;
       /* Straddling by more than a hairline, and by less than its whole height — a child
          entirely below the fold is scrolled-away, not cut. */
       return r.top < edge - 1 && r.bottom > edge + 1;
@@ -431,6 +480,11 @@
     distinctRadii: Object.keys(radiusUse).length,
     density: density.slice(0, 10),
     typeSizesInUse: Object.keys(sizes).map(Number).sort(function (a, b) { return a - b; }),
+    typeFloor: TYPE_FLOOR,
+    /* The full count travels with the truncated list. A reader seeing exactly ten
+       entries cannot tell ten from a hundred and ten, which is how this detector
+       stayed broken. */
+    typeTooSmallCount: tooSmall.length,
     typeTooSmall: tooSmall.slice(0, 10),
     ragged: ragged.slice(0, 10),
     hiddenScroll: hiddenScroll.slice(0, 10),

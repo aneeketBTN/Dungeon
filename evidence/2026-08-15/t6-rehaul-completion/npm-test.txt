@@ -1,0 +1,157 @@
+
+> dungeon-t6-tester-release@0.1.0 test
+> node --test tests/site-release.test.mjs tests/agent-readiness.test.mjs tests/cloudflare-access.test.mjs tests/local-grader.test.mjs tests/written-authority-hosted.test.mjs tests/name-matching-gate.test.mjs tests/normal-table.test.mjs tests/integrated-scenarios.test.mjs tests/examiner-slice.test.mjs
+
+✔ agent scaffold is healthy, paused, and blocked from activation (14.2103ms)
+✔ telemetry contract rejects undeclared personal or raw-response fields (4.0848ms)
+✔ every external action remains proposed and owner-approved (1.7916ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ hosted written authority requires a learner session and same-origin POST (53.028ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ hosted written requests are metered without storing candidate text (6.8703ms)
+✔ tester endpoint fails closed when protected bindings are absent (1.1907ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ first approved login requires and records the current tester agreement (2.9149ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ a session issued under older terms cannot keep using the learner backend (4.7276ms)
+✔ the control room separates older-terms testers from testers who never agreed (1.4766ms)
+✔ agreement acceptance fails closed until the WhatsApp invite was opened and membership acknowledged (0.8099ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"tester_access_change","action":"grant","granted":1,"testerCount":2}
+{"event":"tester_access_change","action":"grant","granted":2,"testerCount":3}
+✔ signed-in testers must open the invite before acknowledging the group (3.1621ms)
+✔ tester endpoint requires owner authentication (0.7492ms)
+✔ tester list omits the protected owner member (1.0769ms)
+✔ grant preserves the owner and existing testers (1.2681ms)
+✔ one request onboards a whole cohort and reports duplicates and rejects (1.0852ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"tester_session_change","action":"sign-out","sessionsCleared":1}
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ signing a tester out ends their session but keeps approval and progress (7.4137ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"tester_session_change","action":"sign-out-all","testers":2,"sessionsCleared":2}
+✔ signing everyone out clears tester sessions and leaves the owner alone (3.9368ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"tester_lock_change","action":"unlock"}
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ unlocking a country lock keeps the tester's saved progress (3.8314ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"learner_login","status":"approved","releasedOtherDevice":true}
+✔ a learner can move to a new device without losing progress or waiting for the owner (4.7749ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"tester_community_reminder","reminded":1}
+✔ a country-locked account cannot take over its way back in (1.9283ms)
+✔ cohort insights rank by unassisted first attempts and exclude the owner (1.0601ms)
+✔ unlock refuses an address that is not an approved tester (0.9475ms)
+✔ owner can bump every approved tester still missing the WhatsApp group (1.4518ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"tester_access_change","action":"revoke","testerCount":0}
+{"event":"learner_login_denied"}
+✔ revoke invalidates sessions and deletes saved progress (4.0352ms)
+✔ mixed-selector groups are rejected instead of silently widened (0.7048ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ approved email enters immediately while an unapproved email gets the private denial (3.2143ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ legacy /mock/ bookmarks still resolve to the renamed app assets (2.348ms)
+✔ anonymous learner sees only the login and cannot fetch the question bank (0.4975ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ progress is durable across learner sessions (4.0379ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ one email cannot open a second active browser and a new country locks the account (2.6131ms)
+✔ owner routes retain the separate Cloudflare Access boundary (0.8532ms)
+✔ the Access self-check explains a login loop without leaking configuration (3.2125ms)
+✔ health and release routes stay under the Dungeon prefix (0.524ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ standalone delivery serves embedded login and learner assets (2.3402ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ the cohort ceiling bounds spend no matter how many testers are admitted (3.5563ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ a checked answer is stored with the three-month expiry the notice states (1.4603ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+✔ a response answered with support is never stored (1.3364ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"written_archive_failed","error":"archive unavailable"}
+✔ a storage failure costs the learner nothing (1.6859ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"written_archive_purged","deleted":0}
+{"event":"written_archive_purged","deleted":1}
+✔ expired answers are deleted by the scheduled purge, not by someone remembering (2.5778ms)
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"learner_login","status":"approved","releasedOtherDevice":false}
+{"event":"written_archive_deleted","deleted":1}
+{"event":"tester_access_change","action":"revoke","testerCount":1}
+✔ withdrawal and a deletion request each remove the tester's stored answers (7.7129ms)
+✔ every subject has a reserved slice, and every reserved item is complete (1.7468ms)
+✔ BRGSA has enough reserved scenarios for three distinct Section C draws (0.2144ms)
+✔ no reserved objective item is won outright by a mechanical rule (1.4764ms)
+✔ ticking every option never reaches full marks on the negatively marked section (0.3043ms)
+✔ no reserved item reaches any study-set pool (1.3454ms)
+✔ written practice filters the slice out on its own, not only via the pools (4.9841ms)
+✔ the slice is additive: no shared item was hard-excluded from Learn (2.7391ms)
+✔ every reserved item still teaches something Learn also covers (0.9838ms)
+✔ reserved scenarios are different situations, not reworded copies (8.5035ms)
+✔ every authored integrated scenario resolves into the bank it was written for (282.2113ms)
+✔ an unresolvable conceptId stops the build and names the id (37.6526ms)
+✔ BRGSA Section C spends every ten-mark slot on a ten-mark item (208.0515ms)
+✔ the three seeded BRGSA Section C draws are genuinely different papers (192.9141ms)
+✔ IBM's ten-mark section leads with every integrated scenario it has (213.7114ms)
+✔ Learn can reach an integrated scenario at all (2.0572ms)
+✔ the persona harness's paper builder still matches the app's (2.9297ms)
+✔ local retrieval cannot leave the question's declared lecture boundary (278.2227ms)
+✔ one source-valid judgement creates a criterion mark (0.839ms)
+✔ uncertainty or an invented citation forces abstention (0.3304ms)
+✔ the grader runs one compact pass and derives repair routing deterministically (2.2512ms)
+✔ stray CJK artifacts trigger one clean retry before feedback can be shown (1.5346ms)
+✔ repeated script corruption fails closed instead of reaching the learner (1.1287ms)
+✔ candidate prompt injection remains inert data (0.9401ms)
+✔ commentary wrapped around awarded answer evidence is rejected (0.4399ms)
+✔ missing criteria cannot carry invented candidate evidence (0.4942ms)
+✔ question evidence can be prepared without a candidate answer (0.8599ms)
+✔ health fails closed when the transcript source is absent (0.9563ms)
+✔ subject-wide hybrid retrieval stays inside the selected course (1.3907ms)
+✔ hosted corpus chunks carry only filterable source metadata and stable IDs (1.2644ms)
+✔ internal freeform analysis is source-grounded and never invents a mark (1.4061ms)
+✔ accepted coaching canonicalises citations used inside individual points (0.2806ms)
+✔ internal freeform analysis abstains when the verifier invents a citation (0.4815ms)
+✔ calibration reporting separates false awards, abstention, and ambiguous issuance (0.7148ms)
+✔ calibration cases cannot omit rubric labels or reuse an id (0.8ms)
+✔ calibration report includes aggregate model latency without answer text (0.299ms)
+✔ a response signalling distress is answered with support, never a mark (0.2836ms)
+✔ course vocabulary about the microfinance suicides is not treated as distress (0.1194ms)
+✔ distress detection catches first-person intent across phrasings (0.1414ms)
+✔ a truncated or unparseable first attempt is retried before falling back (1.1266ms)
+✔ retrieved evidence is coherent passages, not sentence fragments (1.6858ms)
+✔ the gate loads every bank file the app loads (3.9829ms)
+✔ the gate loads t6_brgsa.js before t6_catalog.js (0.5454ms)
+✔ the gate measures all four subjects and reports every family (372.8974ms)
+✔ connect stays fixed — it is the proof the R3 approach works (318.0893ms)
+✔ --gate exits non-zero while a family is over its limit (659.8716ms)
+✔ normalCdf matches the published standard normal table to four decimals (2.562ms)
+✔ normalCdf is symmetric and monotonic across the printed range (2.2475ms)
+✔ the shipped z values reproduce the authored SCLM answers (0.8087ms)
+✔ the SCLM paper declares the table its real paper supplies (0.8272ms)
+✔ root redirects to the canonical active route (32.2716ms)
+✔ health endpoint reports the shared progress storage model (4.3999ms)
+✔ admin uses its canonical owner dashboard route (0.5352ms)
+✔ tester management fails closed until the Cloudflare edge is connected (0.5967ms)
+✔ static responses receive launch security and cache headers (1.0214ms)
+✔ release build includes only the allowlisted active app (8.4463ms)
+✔ anonymous login assets do not disclose the private WhatsApp invite (2.8925ms)
+✔ hosted authority is unavailable until model approval and corpus activation agree (1.5429ms)
+✔ hosted marking stays off unless the activation flag names the evidence pack that shipped (2.1765ms)
+✔ every rubric-marked question ships frozen evidence inside its declared lectures (2.0536ms)
+✔ hosted rubric marks read frozen evidence and never call a retrieval model (2.8039ms)
+✔ a response that reads as distress is answered with help and reaches no model (0.4547ms)
+✔ distress is caught before the length bound, so a short cry for help is not a validation error (0.2919ms)
+✔ authored post-submit coach gives grounded guidance without a fabricated grade (1.7412ms)
+ℹ tests 103
+ℹ suites 0
+ℹ pass 103
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1569.9879

@@ -1,0 +1,167 @@
+{
+  "brandsChecked": 18,
+  "subjects": {
+    "SPMS": {
+      "questions": 216,
+      "brandFigureRecall": [],
+      "namesACaseItDoesNotShow": [],
+      "unreachedByThisCheck": [
+        {
+          "id": "spms_privacy_msq",
+          "type": "msq",
+          "figures": [
+            "2018"
+          ],
+          "answer": "GDPR was enacted in May 2018 and became a model for Switzerland, Canada, and Australia"
+        },
+        {
+          "id": "spms_value_pricing_msq",
+          "type": "msq",
+          "figures": [
+            "50",
+            "200"
+          ],
+          "answer": "Billing by engineer hours at $50 or $200 an hour is the familiar software-services case"
+        }
+      ]
+    },
+    "BRGSA": {
+      "questions": 248,
+      "brandFigureRecall": [],
+      "namesACaseItDoesNotShow": [],
+      "unreachedByThisCheck": [
+        {
+          "id": "nrr_meaning",
+          "type": "mcq",
+          "figures": [
+            "105%"
+          ],
+          "answer": "105%"
+        },
+        {
+          "id": "decision_rule",
+          "type": "mcq",
+          "figures": [
+            "45%",
+            "35%"
+          ],
+          "answer": "After the sample bound, scale at ≥45%, kill at <35%, otherwise iterate; use the named activation metric"
+        }
+      ]
+    },
+    "SCLM": {
+      "questions": 236,
+      "brandFigureRecall": [],
+      "namesACaseItDoesNotShow": [],
+      "unreachedByThisCheck": [
+        {
+          "id": "sclm_smoothing_apply",
+          "type": "mcq",
+          "figures": [
+            "105"
+          ],
+          "answer": "Exponential smoothing: Move the next forecast upward by 25% of the 20-unit error, giving 105."
+        },
+        {
+          "id": "sclm_smoothing_case_cloze",
+          "type": "case-cloze",
+          "figures": [
+            "105"
+          ],
+          "answer": "Move the next forecast upward by 25% of the 20-unit error, giving 105. (Exponential smoothing)"
+        },
+        {
+          "id": "sclm_m2_match",
+          "type": "match",
+          "figures": [
+            "25%",
+            "20",
+            "105"
+          ],
+          "answer": "Move the next forecast upward by 25% of the 20-unit error, giving 105."
+        },
+        {
+          "id": "sclm_m2_boss_1",
+          "type": "boss",
+          "figures": [
+            "105"
+          ],
+          "answer": "Exponential smoothing: Move the next forecast upward by 25% of the 20-unit error, giving 105."
+        },
+        {
+          "id": "sclm_m2_boss_2",
+          "type": "boss",
+          "figures": [
+            "105"
+          ],
+          "answer": "Exponential smoothing: Move the next forecast upward by 25% of the 20-unit error, giving 105."
+        },
+        {
+          "id": "sclm_m2_boss_3",
+          "type": "boss",
+          "figures": [
+            "105"
+          ],
+          "answer": "Exponential smoothing: Move the next forecast upward by 25% of the 20-unit error, giving 105."
+        },
+        {
+          "id": "sclm_m2_boss_4",
+          "type": "boss",
+          "figures": [
+            "105"
+          ],
+          "answer": "Exponential smoothing: Move the next forecast upward by 25% of the 20-unit error, giving 105."
+        },
+        {
+          "id": "sclm_m2_boss_5",
+          "type": "boss",
+          "figures": [
+            "105"
+          ],
+          "answer": "Exponential smoothing: Move the next forecast upward by 25% of the 20-unit error, giving 105."
+        },
+        {
+          "id": "sclm_smoothing_cla2",
+          "type": "mcq",
+          "figures": [
+            "515"
+          ],
+          "answer": "515 units"
+        },
+        {
+          "id": "sclm_eoq_cla1",
+          "type": "mcq",
+          "figures": [
+            "632"
+          ],
+          "answer": "632 units"
+        },
+        {
+          "id": "sclm_ports_cla1",
+          "type": "mcq",
+          "figures": [
+            "95%",
+            "80%",
+            "65%",
+            "70%"
+          ],
+          "answer": "India ships over 95% of its trade by volume against a global 80%, but only 65% by value against a global 70%."
+        },
+        {
+          "id": "sclm_ports_cla2",
+          "type": "mcq",
+          "figures": [
+            "46%"
+          ],
+          "answer": "Non-major ports are state-driven and now handle roughly 46% of traffic, a share that has risen over the past decade."
+        }
+      ]
+    },
+    "IBM": {
+      "questions": 220,
+      "brandFigureRecall": [],
+      "namesACaseItDoesNotShow": [],
+      "unreachedByThisCheck": []
+    }
+  }
+}

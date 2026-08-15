@@ -1098,6 +1098,163 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   measurement, which is the reason `tools/screenshot.mjs` now exists and the reason it does not
   replace `ui-audit.js`.
 
+### LAW-68 🔴 — Closing one shape cue can open its neighbour, so measure the ranks you did not close
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15. "Pick the longest option" had been driven to 20.7–29.5%, at or
+  under chance on all four subjects — by `comparableWrong`, which selects distractors
+  *closest in length to the correct answer*. Nobody measured the next rank down. "Pick the
+  second-longest" was paying **32.9–38.5% on every subject**. Evidence:
+  `evidence/2026-08-15/t6-rehaul-completion/verification.md` §9.
+- **Why:** The defence *is* the cause. Clustering four option lengths tightly around the
+  answer removes the top-rank signal and concentrates the answer one rank below it. A fix
+  aimed at one exploitable property will move probability onto a neighbouring property,
+  and a gate list written against the exploits already known cannot see where it went.
+  The bank validator's `lengthRankShares` did not catch it either, for a second reason
+  worth separating: it counts the answer's exact position in a sort, which **a candidate
+  cannot execute where lengths tie**. Resolving ties by guessing — as every strategy in
+  the persona harness does — moves the figure by up to ten points, and only the second
+  number describes what anybody can actually do.
+- **Law:** When a shape-based exploit is closed, measure the adjacent shapes in the same
+  pass and record them, whether or not they moved. A metric that describes a position
+  nobody can occupy is not a measure of exploitability; state every rule as something a
+  candidate executes, with ties resolved by guessing.
+- **Verify:** `node tools/run-persona-strategies.mjs --gate` carries `longest`,
+  `secondLongest`, `combined` and `combinedWithLength` with stated limits.
+  **`fixedB` is deliberately reported and NOT gated:** answer slots are dealt flat by
+  construction and `validate_t6_bank.js` confirms 0.25/0.25/0.25/0.25 exactly, so gating
+  one 50-of-100 draw with a ±6-point standard error measures the draw rather than the
+  bank. Before authoring a fix, check whether selection can even reach it — three
+  `comparableWrong` variants gave byte-identical numbers here, because the mcq families
+  carry exactly three authored distractors.
+
+### LAW-69 🟡 — A reserved item is on every paper, so its bias is never diluted
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-15. Two examiner-only BRGSA mcqs were added; `combinedWithLength` on
+  the drawn paper went from 24% to **33.6%** while the 78-item pool sat at 26%, with all
+  three seeds reading ~33. Evidence: same file, §8.
+- **Why:** A shared item's shape bias is diluted by the draw — 20 of 78 means it appears on
+  about a quarter of papers. A reserved item is ranked first by `examPrefer` and therefore
+  appears on **all** of them, so one item won outright by a mechanical rule moves the whole
+  paper's figure roughly four times as far. Reserved items have to be *better* than average
+  on craft, not merely average, and the intuition that a couple of new items cannot move a
+  paper-level number is wrong for exactly this class.
+- **Law:** Every reserved item is checked individually against the mechanical rules before
+  it ships, not only in the aggregate the paper reports.
+- **Verify:** `tests/examiner-slice.test.mjs` — "no reserved objective item is won outright
+  by a mechanical rule". It caught nine on its first run, seven of them authored the same
+  session. Fix by removing a *filler* absolute so a distractor survives the elimination, or
+  by making a distractor more specific; never by trimming the correct answer (LAW-48) or by
+  weakening a load-bearing over-claim.
+
+### LAW-70 🟡 — A mark drawn with a box property is part of the box, and only some boxes carry it
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-15. `.course-card.day-start` marked where the exam day turns over with
+  `border-left: 3px solid var(--blue)`. Two of the four subject cards carry that class, so at
+  375 those two had a **160px** content box against the others' **162px**, their content
+  started 2px further in, and the steps between the four cards ran 192 / 196 / 192 instead of
+  194 / 194 / 194. Evidence: `evidence/2026-08-15/t6-dashboard-rhythm/verification.md` §2.
+- **Why:** `border`, `padding` and `margin` are geometry that happens to be visible; the
+  decoration is a side effect, not the meaning. Applying one to a *state* class therefore
+  resizes exactly the members of a set that hold that state, and a rail of "identical" cards
+  becomes two sizes. It is under the threshold anything shouts about — nothing overlaps,
+  nothing clips, no probe fires — and it still reads as *these are not the same component*,
+  because the eye compares neighbours before it measures anything. The same trap sits in
+  using `padding` for a focus inset or `margin` to nudge one badge in a row.
+- **Law:** A mark that means something about state is painted with a property that does not
+  participate in layout — `box-shadow: inset`, `outline`, a pseudo-element, a gradient — so
+  every member of the set keeps one box. Reserve `border`/`padding` changes for cases where
+  the box really is supposed to differ, and say so.
+- **Verify:** Measure the *content* box, not the outer width: for every element in a row that
+  should match, `width − paddingLeft − paddingRight − borderLeftWidth − borderRightWidth` and
+  the content's x are equal across the set, with the state class present on some of them.
+  Outer widths match in the defective case too, which is why the bounding box will not show
+  this. Note that `box-shadow` **replaces rather than merges**, so a card in two states has
+  to compose every layer in one declaration.
+
+### LAW-71 🔴 — A CSS value that does not parse computes to its initial value and tells nobody
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15. `--shadow: light-dark(0 22px 60px rgba(35,45,38,.09), …)` — and
+  three sibling tokens written the same way. `light-dark()` is a **`<color>` function**; it
+  cannot wrap a whole `box-shadow` shorthand. All four tokens were invalid, so all sixteen
+  `box-shadow: var(--shadow*)` rules computed to `none` and **every intended elevation in
+  the product was flat**: hero, primary button, question card, reset dialog, toast,
+  calculator, normal table, result card. Exactly three elements on the dashboard painted a
+  shadow, all three written literally. Evidence:
+  `evidence/2026-08-15/t6-optical-layer/verification.md` §2.
+- **Why:** An invalid declaration is dropped at computed-value time. There is no console
+  warning, no fallback, and — this is the part that makes it a redline — **nothing left on
+  the element to find**. `getComputedStyle(el).boxShadow` returns `none`, which is exactly
+  what an element with no shadow returns, so no probe reading elements can tell "never
+  asked for" from "asked for and lost". It survived every UI pass because a flat panel does
+  not look broken; it looks like a design choice. Custom properties make this systematic:
+  the token is written once, wrong, and every consumer inherits the failure silently.
+  `light-dark()` is the specific trap — it is valid in so many places that it reads as a
+  general theme switch, and it is not.
+- **Law:** `light-dark()` wraps a **colour and nothing else**. Anything with geometry keeps
+  the geometry outside it (`--x-tint: light-dark(a, b); --x: 0 2px 7px var(--x-tint);`). A
+  per-theme difference in a non-colour part cannot be expressed this way at all and needs a
+  media query or a different value — if the difference is dropped, say so, because it has
+  never rendered and nobody will notice it going.
+- **Verify:** `optical-audit.js` → `deadShadow`, which re-declares each stylesheet's
+  `box-shadow` value on a probe node and reports the ones that come back `none`. Must be
+  empty. Generalise the same trick to any token whose value is not a bare colour: set it on
+  a throwaway element and read it back. Do not check the element the rule targets — that is
+  the reading that cannot distinguish the two cases.
+- **Note:** the probe that catches this had the same class of silent failure inside it.
+  `if (rule.cssRules) { walk(rule.cssRules); continue; }` skipped every declaration, because
+  since CSS nesting shipped a plain `CSSStyleRule` carries an **empty** `cssRules` list, and
+  an empty list is an object and therefore truthy. It reported zero dead shadows on a page
+  where all sixteen were dead. Guard on `.length`.
+
+### LAW-66 🔴 — A correct answer may only use vocabulary the run has taught, and citation is not the test
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15, the first run of T1 (`tools/measure-cold-learner.mjs`). `smoke_signal`'s
+  correct answer read *"Whether exposed **prospects** take a behavioural step toward the offer"*.
+  "Prospect" is glossary vocabulary from `BRGSA-M01-L04`; the item cites `BRGSA-M01-L02` and is
+  delivered at step 5, three lessons before L04. Evidence:
+  `evidence/2026-08-15/t6-rehaul-completion/verification.md`.
+- **Why:** LAW-47 gates each surface on its own `sourceIds`, and it does that correctly — every
+  lecture the item **cites** is taught first. It cannot see a word borrowed from a lecture the item
+  does not cite, because nothing links the two. So an item can pass LAW-47, pass the bank validator,
+  pass the vocabulary gate, and still hand a learner an answer written in a word the run has not
+  said. The failure is silent in both directions: the learner cannot tell whether they misunderstood
+  the idea or just the word, and no gate reports anything.
+- **Law:** A scored item's correct answer may use a course term only if that term has been
+  introduced **earlier in the delivered run** — by a lesson's glossary or prose, a primer's revealed
+  rule, or an earlier caselet, stem or option. The item's own caselet counts, because it is on
+  screen. Its *citations* do not settle this and never did.
+- **Verify:** `node tools/measure-cold-learner.mjs --gate` over real delivered runs from
+  `tools/browser-checks/export-run.js` + `tools/export-learn-run.mjs`. Report per item, never as an
+  average. The unit is a glossary term or concept name — LAW-49's definition of course vocabulary —
+  and **not** every non-stopword: the first draft compared all content words and buried two real
+  findings under a few hundred reports of "sustainable" and "meaningful". Ordinary English is not
+  what a learner lacks on day one.
+
+### LAW-67 🔴 — A gate whose floor cannot be reached by its own sample size reports a pass over nothing
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15, building T5 (`tools/measure-persona-regression.mjs`). The gate required 8
+  distinct diagnosis cues and skipped any run with fewer than 10 wrong decisions. A set-1 run offers
+  about nine scored decisions, so **every run was skipped and the gate printed a pass** — over data
+  it had never judged, while the content underneath it was at its worst (one cue answering 55–100%
+  of every wrong decision). Evidence: `evidence/2026-08-15/t6-rehaul-completion/verification.md`.
+- **Why:** This is the repository's signature failure — a clean report from a probe blind to the
+  defect class reads exactly like a clean screen (LAW-64) — reproduced *inside the tool written to
+  catch it*. A skip and a pass are different facts and a gate that prints the second when it means
+  the first is worse than no gate, because it retires the question.
+- **Law:** A gate's thresholds must be reachable at the sample size it will actually see, and a
+  skipped subject must never be reported as a passing one. Scale a floor to what the run asked
+  (`max(3, wrongDecisions / 3)`) rather than fixing it, and make the checks that hold at any n —
+  "was a cue offered at all" — **unconditional**. When a check genuinely cannot run, say `not-run`
+  and **fail the gate**, as T2 does for the handoff half it cannot answer without the app.
+- **Verify:** After writing any gate, run it against the smallest input it will meet in practice and
+  confirm the pass line names a non-zero number of things judged. If it cannot, the floor is wrong.
+
 ### LAW-65 🔴 — A blind file is blind by assertion, and the hole in a diagnosis array is an answer key
 
 - **Tier/Status:** REDLINE · ACTIVE

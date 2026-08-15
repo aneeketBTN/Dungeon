@@ -1,0 +1,179 @@
+{
+  "optionSetsMeasured": 1090,
+  "chanceForFourOptions": 25,
+  "threshold": 30,
+  "overall": {
+    "correctCarriesAbsolute": "42.7%",
+    "wrongCarriesAbsolute": "39.9%",
+    "questions": 1090
+  },
+  "byFamily": [
+    {
+      "family": "boss",
+      "questions": 480,
+      "correctCarriesAbsolute": "33.3%",
+      "wrongCarriesAbsolute": "31.9%",
+      "gap": -1.4,
+      "eliminationPayoff": 23.7,
+      "over": false,
+      "survivorsPerQuestion": 2.71,
+      "examples": [
+        {
+          "id": "spms_m5_boss_1",
+          "correct": "Buyer journey communication: First make the problem and relevant value understandable, the"
+        },
+        {
+          "id": "spms_m5_boss_2",
+          "correct": "Buyer journey communication: First make the problem and relevant value understandable, the"
+        }
+      ]
+    },
+    {
+      "family": "authored",
+      "questions": 146,
+      "correctCarriesAbsolute": "32.2%",
+      "wrongCarriesAbsolute": "33.1%",
+      "gap": 0.9,
+      "eliminationPayoff": 25.7,
+      "over": false,
+      "survivorsPerQuestion": 2.68,
+      "examples": [
+        {
+          "id": "spms_positioning_cla1",
+          "correct": "One statement is doing two different jobs, and it is written for the team rather than the "
+        },
+        {
+          "id": "brgsa_m3_economics_cla1",
+          "correct": "Estimate it now from the inputs you already have, state the lifespan you assumed, and upda"
+        }
+      ]
+    },
+    {
+      "family": "case_cloze",
+      "questions": 128,
+      "correctCarriesAbsolute": "57%",
+      "wrongCarriesAbsolute": "50.3%",
+      "gap": -6.7,
+      "eliminationPayoff": 23.1,
+      "over": false,
+      "survivorsPerQuestion": 1.92,
+      "examples": [
+        {
+          "id": "spms_buyer_journey_case_cloze",
+          "correct": "First make the problem and relevant value understandable, then introduce alternatives and "
+        },
+        {
+          "id": "spms_priority_case_cloze",
+          "correct": "MoSCoW and RICE prioritisation: MoSCoW sorts necessity and RICE compares reach, impact, co"
+        }
+      ]
+    },
+    {
+      "family": "contrast",
+      "questions": 64,
+      "correctCarriesAbsolute": "64.1%",
+      "wrongCarriesAbsolute": "56.8%",
+      "gap": -7.3,
+      "eliminationPayoff": 24,
+      "over": false,
+      "survivorsPerQuestion": 1.66,
+      "examples": [
+        {
+          "id": "spms_priority_contrast",
+          "correct": "MoSCoW and RICE prioritisation: MoSCoW sorts necessity and RICE compares reach, impact, co"
+        },
+        {
+          "id": "spms_privacy_contrast",
+          "correct": "Privacy by design: Privacy by design makes lawful purpose, consent, minimisation, protecti"
+        }
+      ]
+    },
+    {
+      "family": "bridge_cloze",
+      "questions": 64,
+      "correctCarriesAbsolute": "40.6%",
+      "wrongCarriesAbsolute": "46.9%",
+      "gap": 6.3,
+      "eliminationPayoff": 27,
+      "over": false,
+      "survivorsPerQuestion": 2.19,
+      "examples": [
+        {
+          "id": "brgsa_m5_activation_bridge_cloze",
+          "correct": "Activation and onboarding friction: Each drop applies to whoever is left, so several indiv"
+        },
+        {
+          "id": "brgsa_m7_pricing_bridge_cloze",
+          "correct": "Pricing structure and NRR: Two companies charging the same average revenue per user grow a"
+        }
+      ]
+    },
+    {
+      "family": "repair_cloze",
+      "questions": 64,
+      "correctCarriesAbsolute": "64.1%",
+      "wrongCarriesAbsolute": "65.6%",
+      "gap": 1.5,
+      "eliminationPayoff": 26,
+      "over": false,
+      "survivorsPerQuestion": 1.39,
+      "examples": [
+        {
+          "id": "spms_priority_repair_cloze",
+          "correct": "MoSCoW and RICE prioritisation: MoSCoW sorts necessity and RICE compares reach, impact, co"
+        },
+        {
+          "id": "spms_privacy_repair_cloze",
+          "correct": "Privacy by design: Privacy by design makes lawful purpose, consent, minimisation, protecti"
+        }
+      ]
+    },
+    {
+      "family": "explain",
+      "questions": 48,
+      "correctCarriesAbsolute": "68.8%",
+      "wrongCarriesAbsolute": "54.9%",
+      "gap": -13.9,
+      "eliminationPayoff": 16.5,
+      "over": false,
+      "survivorsPerQuestion": 1.67,
+      "examples": [
+        {
+          "id": "sclm_portfolio_explain",
+          "correct": "Tailored sourcing portfolio: A sourcing portfolio matches responsive sources to volatile, "
+        }
+      ]
+    },
+    {
+      "family": "apply",
+      "questions": 48,
+      "correctCarriesAbsolute": "58.3%",
+      "wrongCarriesAbsolute": "51.4%",
+      "gap": -6.9,
+      "eliminationPayoff": 22,
+      "over": false,
+      "survivorsPerQuestion": 1.88,
+      "examples": [
+        {
+          "id": "spms_buyer_journey_apply",
+          "correct": "Buyer journey communication: First make the problem and relevant value understandable, the"
+        },
+        {
+          "id": "sclm_reengineering_apply",
+          "correct": "Supply-chain re-engineering: Map the full flow, expose waiting and indirect costs, segment"
+        }
+      ]
+    },
+    {
+      "family": "connect",
+      "questions": 48,
+      "correctCarriesAbsolute": "33.3%",
+      "wrongCarriesAbsolute": "20.8%",
+      "gap": -12.5,
+      "eliminationPayoff": 20.1,
+      "over": false,
+      "survivorsPerQuestion": 3.04,
+      "examples": []
+    }
+  ]
+}

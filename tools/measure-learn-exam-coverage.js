@@ -139,6 +139,129 @@ COURSE_IDS.forEach(function (courseId) {
         ": " + s.concepts.length + " concepts, " + s.count + " questions";
     })
   };
+
+  /* ------------------------------------------------------------------ T2
+   *
+   * "Does it layer?" — the ladder test. Until now this file MEASURED the ladder and
+   * asserted nothing about it, so a change that broke the sequence would have
+   * printed a different set of numbers and exited 0. The four assertions are the
+   * four claims the product makes on screen: the set list says a set is a step, the
+   * paper card says how much of this paper Learn has taught, and both are lies if
+   * the sequence has a hole in it.
+   *
+   * The fourth claim — that every lesson's "next lecture" promise is kept — cannot
+   * be answered here. `lesson.connects` is the raw promise and the product already
+   * qualifies it on screen when a route skips ahead, so reading the field would
+   * report a defect the learner never sees. That answer belongs to the app, through
+   * `window.__dungeonExport.handoffs()`, and this refuses to score it rather than
+   * pass it by default. */
+  var failures = [];
+
+  /* 1 — sets 1..8 are modules 1..8, in order. */
+  var steps = setConcepts.filter(function (s) { return s.module >= 1 && s.module <= 8; });
+  if (steps.length !== 8) {
+    failures.push("expected 8 laddered sets, found " + steps.length);
+  }
+  steps.forEach(function (s, index) {
+    if (s.module !== index + 1) failures.push("set " + s.set + " is module " + s.module + ", expected " + (index + 1));
+  });
+
+  /* 2 — nothing rests on ground a later set covers.
+   *
+   * A set's questions may test concepts from earlier modules — that is layering
+   * working. What must never happen is a set testing a concept first introduced
+   * AFTER it, because the learner meets the surface before the idea. */
+  var introducedAt = {};
+  steps.forEach(function (s) {
+    s.concepts.forEach(function (cid) {
+      if (introducedAt[cid] === undefined) introducedAt[cid] = s.set;
+    });
+  });
+  steps.forEach(function (s) {
+    (course.runs.filter(function (run) { return run.id === s.set; })[0] || {questionPoolIds: []})
+      .questionPoolIds.forEach(function (qid) {
+        conceptsOf(course.questions[qid]).forEach(function (cid) {
+          if (!conceptById[cid]) return;
+          if (introducedAt[cid] > s.set) {
+            failures.push("set " + s.set + " schedules " + qid + ", which rests on " + cid +
+              " — first introduced in set " + introducedAt[cid]);
+          }
+        });
+      });
+  });
+
+  /* 3 — cumulative coverage never descends and reaches the whole paper by set 8. */
+  var previous = -1;
+  ladder.forEach(function (row) {
+    if (row.marksReachable < previous) {
+      failures.push("coverage descends at set " + row.afterSet + ": " + row.marksReachable + " after " + previous);
+    }
+    previous = row.marksReachable;
+  });
+  var final = ladder[ladder.length - 1];
+  if (!final || final.marksReachable !== availableMarks) {
+    failures.push("set 8 reaches " + (final ? final.marksReachable : 0) + " of " + availableMarks +
+      " marks; the ladder must carry a learner to the whole paper");
+  }
+
+  report[courseId].t2 = {
+    laddered: steps.length,
+    reachesWholePaper: Boolean(final && final.marksReachable === availableMarks),
+    failures: failures
+  };
+});
+
+/* The handoff half, which only the app can answer. Supply the JSON that
+   `window.__dungeonExport.handoffs(lectureIds)` returned, per subject, and this
+   scores it; without it the row reads `not-run` and the gate refuses to pass. A
+   probe that cannot stage its evidence must not report a pass — three findings in
+   this repository came from one that did. */
+var handoffArg = process.argv.filter(function (a) { return a.indexOf("--handoffs=") === 0; })[0];
+var handoffs = null;
+if (handoffArg) {
+  var handoffPath = handoffArg.slice("--handoffs=".length);
+  handoffs = JSON.parse(fs.readFileSync(handoffPath, "utf8"));
+}
+
+report.handoffPromises = {};
+COURSE_IDS.forEach(function (courseId) {
+  if (!handoffs || !handoffs[courseId]) {
+    report.handoffPromises[courseId] = {state: "not-run", note: "re-run with --handoffs=<file> from window.__dungeonExport.handoffs()"};
+    return;
+  }
+  var rows = handoffs[courseId];
+  var broken = rows.filter(function (row) {
+    /* Field names are the app's own, read off `window.__dungeonExport.handoffs()`:
+       `promisesNextLecture`, `kept`, and `note` — the correction the learner is shown
+       when a run skips ahead. A promise is broken only when the lesson names the next
+       lecture, the run does not deliver it, AND nothing on screen says so. Reading
+       `lesson.connects` instead would report all fourteen of these as defects, which
+       is the mistake §6 warns against. */
+    return row.missing || (row.promisesNextLecture && !row.kept && !row.note);
+  });
+  report.handoffPromises[courseId] = {
+    state: broken.length ? "fail" : "pass",
+    checked: rows.length,
+    broken: broken.map(function (row) { return row.lectureId; })
+  };
 });
 
 console.log(JSON.stringify(report, null, 2));
+
+if (process.argv.indexOf("--gate") >= 0) {
+  var problems = [];
+  COURSE_IDS.forEach(function (courseId) {
+    (report[courseId].t2.failures || []).forEach(function (message) { problems.push(courseId + ": " + message); });
+    var promises = report.handoffPromises[courseId];
+    if (promises.state !== "pass") {
+      problems.push(courseId + ": handoff promises " + promises.state +
+        (promises.broken && promises.broken.length ? " (" + promises.broken.join(", ") + ")" : ""));
+    }
+  });
+  if (problems.length) {
+    console.error("\nT2 FAILED — the ladder does not hold:");
+    problems.forEach(function (message) { console.error("  × " + message); });
+    process.exit(1);
+  }
+  console.error("\nT2 passed: sets 1-8 are modules 1-8, nothing rests on later ground, coverage reaches every paper, handoff promises checked in the app.");
+}

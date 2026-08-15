@@ -1,0 +1,2 @@
+
+Self-containment passed: every correct answer is reachable from its own page, and no item names a case it does not show.

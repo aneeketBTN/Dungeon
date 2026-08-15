@@ -1,0 +1,328 @@
+{
+  "runsRead": [
+    {
+      "file": "BRGSA-set1.learn.json",
+      "subject": "BRGSA",
+      "set": 1,
+      "steps": 14,
+      "scored": 8
+    },
+    {
+      "file": "IBM-set1.learn.json",
+      "subject": "IBM",
+      "set": 1,
+      "steps": 12,
+      "scored": 8
+    },
+    {
+      "file": "SCLM-set1.learn.json",
+      "subject": "SCLM",
+      "set": 1,
+      "steps": 12,
+      "scored": 8
+    },
+    {
+      "file": "SPMS-set1.learn.json",
+      "subject": "SPMS",
+      "set": 1,
+      "steps": 12,
+      "scored": 8
+    }
+  ],
+  "perItem": [
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "step": 3,
+      "id": "brgsa_m1_demand_repair_cloze",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "step": 5,
+      "id": "brgsa_m1_demand_case_cloze",
+      "type": "case-cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "step": 8,
+      "id": "brgsa_m1_evidence_repair_cloze",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "step": 9,
+      "id": "brgsa_m1_match",
+      "type": "match",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "step": 11,
+      "id": "case_validate",
+      "type": "mcq",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "step": 12,
+      "id": "brgsa_m1_evidence_short_answer",
+      "type": "short-answer",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "step": 13,
+      "id": "brgsa_m1_demand_short_answer",
+      "type": "short-answer",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "BRGSA",
+      "set": 1,
+      "step": 14,
+      "id": "brgsa_m1_boss_1",
+      "type": "boss",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "step": 3,
+      "id": "ibm_inclusive_case_cloze",
+      "type": "case-cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "step": 4,
+      "id": "ibm_inclusive_repair_cloze",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "step": 7,
+      "id": "ibm_bop_repair_cloze",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "step": 8,
+      "id": "ibm_bop_explain",
+      "type": "mcq",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "step": 9,
+      "id": "ibm_m1_match",
+      "type": "match",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "step": 10,
+      "id": "ibm_bop_bridge_cloze",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "step": 11,
+      "id": "ibm_inclusive_short_answer",
+      "type": "short-answer",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "IBM",
+      "set": 1,
+      "step": 12,
+      "id": "ibm_m1_boss_1",
+      "type": "boss",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "step": 3,
+      "id": "sclm_fit_repair_cloze",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "step": 4,
+      "id": "sclm_fit_bridge_cloze",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "step": 5,
+      "id": "sclm_fit_contrast",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "step": 8,
+      "id": "sclm_drivers_connect",
+      "type": "mcq",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "step": 9,
+      "id": "sclm_drivers_case_cloze",
+      "type": "case-cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "step": 10,
+      "id": "sclm_m1_match",
+      "type": "match",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "step": 11,
+      "id": "sclm_drivers_repair_cloze",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SCLM",
+      "set": 1,
+      "step": 12,
+      "id": "sclm_m1_boss_1",
+      "type": "boss",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "step": 3,
+      "id": "spms_dfv_explain",
+      "type": "mcq",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "step": 4,
+      "id": "spms_dfv_case_cloze",
+      "type": "case-cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "step": 5,
+      "id": "spms_dfv_contrast",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "step": 8,
+      "id": "spms_jtbd_contrast",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "step": 9,
+      "id": "spms_m1_match",
+      "type": "match",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "step": 10,
+      "id": "spms_jtbd_msq",
+      "type": "msq",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "step": 11,
+      "id": "spms_jtbd_repair_cloze",
+      "type": "cloze",
+      "ok": true,
+      "undefinedTerms": []
+    },
+    {
+      "subject": "SPMS",
+      "set": 1,
+      "step": 12,
+      "id": "spms_m1_boss_1",
+      "type": "boss",
+      "ok": true,
+      "undefinedTerms": []
+    }
+  ],
+  "summary": {
+    "scoredItems": 32,
+    "itemsFullyTaught": 32,
+    "itemsRestingOnAnUndefinedTerm": 0,
+    "terms": []
+  }
+}

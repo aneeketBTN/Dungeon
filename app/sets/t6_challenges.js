@@ -369,12 +369,30 @@
     };
   }
 
-  function fallbackDiagnosis(self) {
+  /* The fallback fires when an option is not authored, not a known confusion, and has
+   * no provenance — so it cannot say WHY this particular option is wrong. It can still
+   * say what the slot was asking for, and until now it threw that away.
+   *
+   * Measured by T5 (tools/measure-persona-regression.mjs): this one sentence answered
+   * 55-100% of every wrong decision in a set-1 run on all four subjects. A learner who
+   * makes four different mistakes and is told the same thing four times has been
+   * taught once. `targetRole` is already computed at the call site for facetMix, so
+   * the four cues below are information the function had and discarded, not variety
+   * manufactured to move a number. */
+  var FALLBACK_CUE = {
+    summary: "The slot is asking what the idea claims is true. Check this option against the definition clause by clause — a statement that sounds right about the topic is not the same as the claim this idea makes.",
+    application: "The slot is asking what the idea tells you to do. Check that this option is an action, and that it is the action this idea licenses rather than generally sensible practice.",
+    bridge: "The slot is asking why the idea changes the outcome. Check that this option gives a reason, not a restatement of what the idea is.",
+    name: "The slot is asking which idea governs. Match the situation's symptom to the idea that explains it, rather than to the idea whose vocabulary the option borrows."
+  };
+
+  function fallbackDiagnosis(self, targetRole) {
     return {
       tag: "Departed from " + self.name,
       label: "Answered from a different rule",
       why: "This choice does not follow from " + self.name + ", which is the idea this question is testing.",
-      cue: "Return to the governing idea and check the option against it directly before selecting."
+      cue: FALLBACK_CUE[targetRole] ||
+        "Return to the governing idea and check the option against it directly before selecting."
     };
   }
 
@@ -389,7 +407,7 @@
     if (owner && targetRole && owner.role !== targetRole) return facetMixDiagnosis(owner, self, targetRole);
     if ((self.applicationWrong || []).indexOf(option) >= 0) return selfErrorDiagnosis(option, self, "application");
     if ((self.confusions || []).indexOf(option) >= 0) return selfErrorDiagnosis(option, self, "summary");
-    return fallbackDiagnosis(self);
+    return fallbackDiagnosis(self, targetRole);
   }
 
   // The correct option's own provenance tells us which facet the slot is asking
@@ -399,8 +417,35 @@
     return (provenance[String(options[answer]).trim()] || {}).role || null;
   }
 
-  function diagnoseGroup(options, answer, self, provenance, hints, authored, questionId) {
-    var targetRole = targetRoleFor(options, answer, provenance);
+  /* What the question asks for, when provenance cannot say.
+   *
+   * `targetRoleFor` looks the correct answer up by exact text, and misses on two
+   * whole classes: authored options that were never built from a concept field, and
+   * generated ones that `attributeTo` has since rewritten into "Concept: claim" for
+   * the name-matching fix. On those it returns null, which used to mean every
+   * unrecognised distractor got the same sentence — measured by T5 at 55-100% of all
+   * wrong decisions in a set-1 run.
+   *
+   * `perspective` is set on every question at build time and says what the item is
+   * for, so it answers the same question less precisely and never misses. It is a
+   * fallback, not a replacement: provenance is exact where it fires. */
+  var ROLE_BY_PERSPECTIVE = {
+    explain: "summary",
+    recognise: "summary",
+    apply: "application",
+    decide: "application",
+    diagnose: "application",
+    connect: "bridge",
+    distinguish: "name",
+    generate: "application"
+  };
+
+  function askedRole(question, fromProvenance) {
+    return fromProvenance || ROLE_BY_PERSPECTIVE[question.perspective] || null;
+  }
+
+  function diagnoseGroup(options, answer, self, provenance, hints, authored, questionId, defaultRole) {
+    var targetRole = targetRoleFor(options, answer, provenance) || defaultRole || null;
     return options.map(function (option, index) {
       if (index === answer) return null;
       return diagnoseOption(option, self, provenance, hints, authored, questionId, index, targetRole);
@@ -417,7 +462,7 @@
       // own diagnosis for every choice it could wrongly receive.
       question.rows.forEach(function (row) {
         var rowSelf = dataById[row.conceptId] || self;
-        var rowRole = targetRoleFor(question.choices, row.answer, provenance);
+        var rowRole = askedRole(question, targetRoleFor(question.choices, row.answer, provenance));
         row.diagnoses = question.choices.map(function (choice, index) {
           if (index === row.answer) return null;
           return diagnoseOption(choice, rowSelf, provenance, hints, authored, question.id, index, rowRole);
@@ -431,7 +476,7 @@
     if (question.type === "boss") {
       question.steps.forEach(function (step) {
         var stepSelf = dataById[(step.conceptIds || [])[0]] || self;
-        step.diagnoses = diagnoseGroup(step.options, step.answer, stepSelf, provenance, step.diagnosisHints || hints, authored, question.id);
+        step.diagnoses = diagnoseGroup(step.options, step.answer, stepSelf, provenance, step.diagnosisHints || hints, authored, question.id, askedRole(question, null));
       });
       question.misconceptions = question.steps.map(function (step) {
         return (step.diagnoses.filter(Boolean)[0] || {}).tag || "broken-reasoning-step";
@@ -440,7 +485,7 @@
     }
     if (question.type === "cloze" || question.type === "case-cloze") {
       question.blanks.forEach(function (blank) {
-        blank.diagnoses = diagnoseGroup(blank.options, blank.answer, self, provenance, hints, authored, question.id);
+        blank.diagnoses = diagnoseGroup(blank.options, blank.answer, self, provenance, hints, authored, question.id, askedRole(question, null));
       });
       question.misconceptions = question.blanks.map(function (blank) {
         return (blank.diagnoses.filter(Boolean)[0] || {}).tag || "wrong-blank";
@@ -460,7 +505,7 @@
     if (question.type === "msq") {
       var answerSet = question.answers || [];
       var existing = question.diagnoses || [];
-      var role = targetRoleFor(question.options, answerSet[0], provenance);
+      var role = askedRole(question, targetRoleFor(question.options, answerSet[0], provenance));
       question.diagnoses = question.options.map(function (option, index) {
         if (answerSet.indexOf(index) >= 0) return null;
         if (existing[index] && (existing[index].why || existing[index].label)) return existing[index];
@@ -477,7 +522,7 @@
        * provenance, so an authored diagnosis is kept and only a gap is filled.
        * Generated questions carry none, so for them this is a no-op. */
       var authoredHere = question.diagnoses || [];
-      var generated = diagnoseGroup(question.options, question.answer, self, provenance, hints, authored, question.id);
+      var generated = diagnoseGroup(question.options, question.answer, self, provenance, hints, authored, question.id, askedRole(question, null));
       question.diagnoses = generated.map(function (diagnosis, index) {
         if (index === question.answer) return null;
         var own = authoredHere[index];
@@ -666,9 +711,173 @@
    * correct options and at least one plausible wrong one, which is an authoring
    * job. Each item sits on a lecture that already has a lesson, so LAW-47 holds
    * without any extra scheduling work. */
+  /* ---------------------------------------------------------------------
+   * The examiner-only multi-selects.
+   *
+   * SPMS Section B needs twenty and the pool held exactly twenty, so the "three
+   * seeded sets" were one set printed three times across 40 of the paper's 75
+   * marks — a candidate re-sitting set 2 after set 1 met the identical Section B.
+   * That is the section with no slack at all, and it is also the only negatively
+   * marked one in the term, so it is the worst place in the product to be serving
+   * a paper the learner has already answered.
+   *
+   * These eight are `examOnly`: hard-reserved out of every study pool, and
+   * additive, so nothing Learn could reach yesterday has been taken away. They
+   * carry one concept per module so the reservation is spread across the paper
+   * rather than concentrated in one part of the course.
+   *
+   * Shapes are deliberately mixed (3-of-5, 2-of-4, 2-of-5). LAW-53 exists because
+   * all eight SPMS MSQs were once 3-correct-of-4, which made ticking every option
+   * score full marks on a negatively marked section; a new tranche that shared one
+   * shape would rebuild that by a different route.
+   * ------------------------------------------------------------------- */
+  var SPMS_MULTI_EXAM_ONLY = [
+    {concept: "spms_dfv", source: "SPMS-M01-L05", node: "Desirability, feasibility, viability", examOnly: true, variant: "exam",
+     caselet: "A logistics startup has built a route-planning tool. Drivers who trialled it completed their rounds sooner and asked to keep it. The engineering team ships updates weekly on existing map infrastructure. The company charges ₹400 per driver per month; the support and mapping licence cost per driver is ₹430, and neither falls with volume.",
+     stem: "Select every statement this case supports.",
+     options: [
+       "Desirability holds: the people who used it wanted to carry on using it",
+       "Feasibility holds: it is being built and shipped with technology that exists now",
+       "The idea fails on viability, because each additional driver deepens the loss",
+       "The idea is proven overall, since two of the three checks are clearly passed",
+       "Viability can be assumed from the drivers' enthusiasm, because demand sets price"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Averaged the three checks", label: "Treated two passes as an overall pass",
+       why: "This choice assumed the three checks trade off against each other. They do not: a product has to clear all three, and the one that fails here is the one that decides whether the business can continue at all. Two out of three is a description of where the problem is, not a verdict that there is none.",
+       cue: "Name the check that fails before judging the idea. There is no score across the three — a failure in one is a failure."},
+       4: {tag: "Read desirability as viability", label: "Used enthusiasm as evidence about economics",
+         why: "This choice assumed that wanting something establishes what it can be sold for. The drivers' enthusiasm is desirability evidence. Viability is a separate question answered by the ₹400 against ₹430, and the case says that gap does not close with volume.",
+         cue: "Enthusiasm is design evidence. Only a number about cost and price can answer viability."}},
+     explanation: "Desirability and feasibility both hold; viability fails, because ₹400 of revenue against ₹430 of cost means every additional driver loses money and the case states the cost does not fall with scale. All three checks have to clear."},
+
+    {concept: "spms_tamsam", source: "SPMS-M02-L04", node: "TAM, SAM, and SOM", examOnly: true, variant: "exam",
+     caselet: "A company sells compliance software to licensed pharmacies. There are 900,000 licensed pharmacies worldwide. Its product is certified only under Indian regulation, which covers 90,000 of them. Of those, 62,000 already run a competing system on multi-year contracts, and the firm's sales capacity can reach about 4,000 pharmacies in the coming year.",
+     stem: "Select every statement that sizes this market correctly.",
+     options: [
+       "The 900,000 figure is the total addressable market",
+       "Regulatory certification is what narrows the total to a serviceable 90,000",
+       "About 4,000 is the obtainable share, because reach and competition bound it",
+       "The 62,000 on competing contracts should be counted in the serviceable market as switchable demand",
+       "The obtainable figure should be the 90,000 serviceable pharmacies, since sales capacity can be hired"
+     ], answers: [0, 1, 2],
+     wrong: {4: {tag: "Sized ambition instead of reach", label: "Removed the constraint by assuming it away",
+       why: "This choice assumed a constraint stops counting once you plan to remove it. Capacity can indeed be hired, and until it is, the obtainable figure is what the firm can actually reach - a plan built on 90,000 rests on a hire that has not happened.",
+       cue: "Size what is true now. A constraint you intend to lift still binds the number you are committing to."},
+       3: {tag: "Counted locked demand as serviceable", label: "Sized what could not be served",
+       why: "This choice assumed a pharmacy under a multi-year contract with a competitor is available to serve. It may become available later, and a plan may target it, but the serviceable figure is what the firm can actually sell to now — counting it inflates the number the plan rests on.",
+       cue: "Ask what stops you serving each group. A live contract is a constraint like any other."}},
+     explanation: "Total is everyone the product could in principle serve, 900,000. Certification is a real constraint that narrows it to 90,000 serviceable. The obtainable figure is bounded by both competition and the firm's own reach, which is why 4,000 is the number a plan should be built on."},
+
+    {concept: "spms_lean_canvas", source: "SPMS-M03-L02", node: "Lean Canvas", examOnly: true, variant: "exam",
+     stem: "Select every statement that is true of what a Lean Canvas is for.",
+     options: [
+       "It records the assumptions a business rests on so they can be tested",
+       "It replaces the Business Model Canvas boxes that suit an established company with ones a startup needs",
+       "It is a document to be completed once and then held stable for the investor conversation",
+       "Its value is that a wrong box is cheap to discover and cheap to change",
+       "A box left empty is a failure of the exercise and should be filled before the canvas is used"
+     ], answers: [0, 1, 3],
+     wrong: {4: {tag: "Filled a box to look complete", label: "Treated a gap as untidiness rather than as information",
+       why: "This choice assumed a canvas is finished when every box has words in it. An empty box records that nothing is known there yet, which is the most useful thing it can tell you; filling it to look complete replaces a known gap with an invented answer.",
+       cue: "An empty box is a finding. Ask what would have to be true to fill it, rather than filling it."},
+       2: {tag: "Treated the canvas as a deliverable", label: "Made a working instrument into a document",
+       why: "This choice assumed the canvas is finished once written. It is a record of what is still uncertain, so a box that survives contact with evidence is worth keeping and one that does not is the finding — holding it stable removes the only thing it is for.",
+       cue: "Ask what happens when a box turns out to be wrong. If the answer is nothing, it is being used as a document."}},
+     explanation: "The canvas exists to make assumptions explicit and cheap to change. Holding it stable to look consistent is the one use that removes its value."},
+
+    {concept: "spms_unit_economics", source: "SPMS-M04-L07", node: "Unit economics", examOnly: true, variant: "exam",
+     caselet: "A subscription business earns ₹1,800 of gross profit per customer per year. It spends ₹5,400 to acquire one. Customers stay an average of four years. The finance lead reports that the business is profitable per customer and proposes raising acquisition spend.",
+     stem: "Select every statement this case supports.",
+     options: [
+       "Acquisition cost is recovered in the third year of the relationship",
+       "Lifetime gross profit of about ₹7,200 exceeds the ₹5,400 acquisition cost",
+       "A payback measured in years is a cash-flow risk the profitability statement does not show",
+       "Because lifetime value exceeds acquisition cost, raising spend carries no additional risk",
+       "Profitability per customer is established as soon as the first year's gross profit is earned"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Read a ratio as a licence to scale", label: "Ignored what payback costs in cash",
+       why: "This choice assumed a healthy lifetime-to-acquisition ratio settles the spending decision. It does not: three years of payback means the money is out of the business for three years per customer, and raising spend multiplies that exposure long before the returns arrive.",
+       cue: "A ratio says whether a customer is worth buying. Payback says whether you can afford to buy many at once."},
+       4: {tag: "Called back the acquisition cost too early", label: "Declared profit before it was recovered",
+         why: "This choice assumed the first year's ₹1,800 makes the customer profitable. The ₹5,400 was spent once and has to be recovered before anything is profit, which takes three years at this rate.",
+         cue: "Profit per customer starts after acquisition cost is recovered, not after the first payment."}},
+     explanation: "₹1,800 a year against ₹5,400 is a three-year payback, and four years of retention gives about ₹7,200 of lifetime gross profit. Both facts are true at once, and the second does not remove the cash risk the first creates."},
+
+    {concept: "spms_alternatives", source: "SPMS-M05-L02", node: "Competition and alternatives", examOnly: true, variant: "exam",
+     caselet: "A team building an expense-reporting tool lists two rival products in its competitive review. Interviews find that of forty finance teams, twenty-six use a spreadsheet template, nine ask an assistant to compile receipts by hand, and five have decided the problem is not worth solving and simply absorb the errors.",
+     stem: "The review already lists the two rival products. Select every further alternative this case shows the product is really competing against.",
+     options: [
+       "The spreadsheet template twenty-six teams currently rely on",
+       "The manual compilation nine teams pay an assistant to do",
+       "The decision by five teams to do nothing about the problem",
+       "The two rival products, which should be counted again as the primary competition",
+       "The other finance software these teams already pay for that does not touch expenses"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Re-counted what was already on the review", label: "Answered a question the team had already answered",
+       why: "This choice assumed the rival products are the answer. They are already on the review, and the stem asks what it missed - which is the finding, since forty teams were interviewed and thirty-five of them use neither rival.",
+       cue: "Read what the stem excludes. Naming what is already counted adds nothing to the competitive picture."},
+       4: {tag: "Counted adjacent software as an alternative", label: "Confused nearby with competing",
+         why: "This choice assumed anything the customer already pays for competes. An alternative is what they would otherwise do about THIS job; software that does not touch expenses is not another way of reporting expenses, however much of the budget it takes.",
+         cue: "Ask whether the option would do the same job. Sharing a buyer is not the same as serving the same need."}},
+     explanation: "Competition is whatever the customer would otherwise do about this job - here a spreadsheet, a person, and doing nothing at all, which between them cover thirty-five of the forty teams. Adjacent software serving a different need is not an alternative."},
+
+    {concept: "spms_traceability", source: "SPMS-M06-L08", node: "Requirements traceability", examOnly: true, variant: "exam",
+     caselet: "A hospital group tells a software vendor: \"Our nurses waste time at shift handover and patients are at risk when something is missed.\" The vendor's product team decides the product will carry a structured handover record. The delivery team breaks that into a template editor for one release and an audit trail for the next.",
+     stem: "Select every statement that classifies this chain correctly.",
+     options: [
+       "The hospital's statement is a customer requirement: a business need, not a specification",
+       "The structured handover record is the product requirement",
+       "The template editor and the audit trail are project requirements for particular releases",
+       "The hospital's statement is a project requirement, since it came from the party paying for the work",
+       "Standardising means building exactly what this hospital described, for this hospital"
+     ], answers: [0, 1, 2],
+     wrong: {3: {tag: "Classified by who spoke", label: "Used the source instead of the content",
+       why: "This choice assumed the level of a requirement is set by who stated it. It is set by what it describes: the hospital described a business problem and a risk, which is a customer requirement however senior the person saying it.",
+       cue: "Read what the sentence describes, not who said it. A need is a customer requirement even when the customer is paying."},
+       4: {tag: "Built for one customer and called it a product", label: "Skipped the generalising step",
+         why: "This choice assumed standardising means implementing the stated need literally. Standardising generalises one customer's need so that other customers of that kind are served by the same product, which is what makes it a product rather than a bespoke build.",
+         cue: "If the result serves exactly one customer, the generalising step has not happened."}},
+     explanation: "Customer requirements are business needs and aspirations; the product requirement is what the product will do about them; project requirements break that down for a release. Standardising is what turns one hospital's need into something many can buy."},
+
+    {concept: "spms_roadmap", source: "SPMS-M07-L04", node: "Product roadmap", examOnly: true, variant: "exam",
+     stem: "Select every statement that is true of a product roadmap.",
+     options: [
+       "It sequences development, release and evolution against a time axis",
+       "What has been deliberately left out is part of the decision it records",
+       "It is the inventory of every capability the product will eventually contain",
+       "It follows from a product strategy, which it turns into releases",
+       "Once published it should be held fixed, since changing it undermines the commitments made from it"
+     ], answers: [0, 1, 3],
+     wrong: {4: {tag: "Froze the sequence", label: "Confused a commitment with a plan",
+       why: "This choice assumed a roadmap's value is that it does not move. Its value is that it is the best ordering given what is known, and evidence arriving is the ordinary case rather than a failure - a sequence that cannot change is a promise, and the product has stopped learning from it.",
+       cue: "Ask what happens when evidence contradicts the order. If the answer is nothing, it is a commitment, not a roadmap."},
+       2: {tag: "Made the roadmap a feature list", label: "Recorded contents instead of order",
+       why: "This choice assumed a roadmap enumerates what the product will hold. It is an ordering decision, and an inventory has no order in it — which is exactly the information a roadmap exists to carry.",
+       cue: "If the list could be rearranged without changing its meaning, it is an inventory rather than a roadmap."}},
+     explanation: "A roadmap translates strategy into a sequence of releases on a time axis. Deferral is part of that decision, which is why an inventory of eventual contents is a different artefact."},
+
+    {concept: "spms_metrics", source: "SPMS-M08-L03", node: "Actionable product metrics", examOnly: true, variant: "exam",
+     caselet: "A six-month-old product reports to its board each month on registered accounts, page views, and press mentions. All three rise steadily. Weekly active use has been flat since month two, and no one has been asked to act on any of the three reported numbers.",
+     stem: "Select every criticism this reporting fairly attracts.",
+     options: [
+       "The reported measures rise whatever happens, so they cannot separate progress from activity",
+       "No number carries an owner or a threshold, so none of them can require a decision",
+       "The measure that would show whether the product is working is the one not being reported",
+       "The reporting is appropriate, since a board is entitled to see growth figures at this stage",
+       "Registered accounts is the right headline measure, because it is the figure that has grown most"
+     ], answers: [0, 1, 2],
+     wrong: {4: {tag: "Chose the measure that moved most", label: "Let the largest number decide what to report",
+       why: "This choice assumed the fastest-rising figure is the most informative. Registered accounts can only rise, so its growth carries no information about whether the product works - the size of a movement says nothing when the measure cannot move the other way.",
+       cue: "Ask whether the number could fall if the product got worse. If not, its rise means nothing."},
+       3: {tag: "Defended the metrics by the audience", label: "Confused who reads a number with whether it means anything",
+       why: "This choice assumed the board's entitlement settles which measures to use. It settles that there should be reporting, not that these are the right figures — and at six months the governing problem is uncertainty, which registered accounts and press mentions do not reduce.",
+       cue: "Ask what decision changes if the number moves. If none does, the audience is not the justification."}},
+     explanation: "Registrations, page views and press mentions accumulate and cannot fall, so they cannot tell progress from activity. Flat weekly active use is the figure that would answer whether the product works, and a number with no owner and no threshold cannot trigger anything."}
+  ];
+
   var SPMS_MULTI = [
     {concept: "spms_dfv", source: "SPMS-M01-L05", node: "Desirability, feasibility, viability",
-     stem: "Select every statement that matches how the lecture presents the three-way framework.",
+     stem: "Select every statement that is true of testing an idea for desirability, feasibility and viability.",
      options: [
        "Desirability is validated with design skills and empathy for the customer",
        "Feasibility asks whether the product can be built with the technology available today",
@@ -729,7 +938,7 @@
      explanation: "TAM measures the prize, SAM what you are permitted and able to reach, SOM what you can take given who already holds it. They are narrowing constraints, not a headline figure."},
 
     {concept: "spms_chasm", source: "SPMS-M02-L10", node: "Crossing the chasm",
-     stem: "Select every strategy the lecture gives for crossing the chasm.",
+     stem: "Select every strategy that helps a product cross from its early market to the mainstream.",
      options: [
        "Focus on a narrow beachhead market rather than spray and pray",
        "Simplify onboarding and the interface for mainstream users",
@@ -758,7 +967,7 @@
      explanation: "Problem, solution, key metrics, and unfair advantage are the Lean Canvas additions. Customer segments, channels, cost structure, and revenue structure carry across from the Business Model Canvas."},
 
     {concept: "spms_unit_economics", source: "SPMS-M04-L07", node: "Unit economics",
-     stem: "Select every business type paired with the unit the lecture assigns it.",
+     stem: "Select every business type correctly paired with the unit its economics should be measured on.",
      options: [
        "SaaS — one customer or account",
        "Ride-sharing — one ride",
@@ -775,7 +984,7 @@
      explanation: "The unit follows the customer relationship model. SaaS acquires a customer who transacts repeatedly, so the account is the unit; a marketplace relationship is transactional, so the transaction is."},
 
     {concept: "spms_alternatives", source: "SPMS-M05-L02", node: "Competition and alternatives",
-     stem: "Select everything that counts as competition on the lecture's definition.",
+     stem: "Select everything that genuinely competes for this customer's decision.",
      options: [
        "Rival products in the same category",
        "Manual alternatives such as spreadsheets, consultants, or internal tools",
@@ -792,7 +1001,7 @@
      explanation: "Customers set the comparison, and in enterprise the most common alternative is inertia — doing nothing at all. Defining competition early and narrowly is named as the biggest mistake."},
 
     {concept: "spms_privacy", source: "SPMS-M08-L05", node: "Privacy by design",
-     stem: "Select every statement that is correct about the privacy regimes as the lecture presents them.",
+     stem: "Select every statement that is correct about these data-protection regimes.",
      options: [
        "GDPR protects any personal data irrespective of its sensitivity",
        "GDPR was enacted in May 2018 and became a model for Switzerland, Canada, and Australia",
@@ -826,7 +1035,7 @@
      * paraphrase of it (LAW-49). */
 
     {concept: "spms_positioning", source: "SPMS-M03-L02", node: "Product definition and positioning",
-     stem: "Select every statement that matches how the lecture separates definition from positioning.",
+     stem: "Select every statement that correctly separates what a product definition is from what positioning is.",
      options: [
        "Product definition is what the product does, and is largely internal — the team and its partners build against it",
        "Product positioning is how the product impacts users, and why they should use it",
@@ -843,7 +1052,7 @@
      explanation: "Vision comes first, and the other two translate it. Definition is what the product does, written for the team and its partners; positioning is how it impacts users and why they should use it."},
 
     {concept: "spms_value_pricing", source: "SPMS-M04-L02", node: "Value-based pricing",
-     stem: "Select every statement that matches how the lecture treats cost-based pricing.",
+     stem: "Select every statement that is true of cost-based pricing.",
      options: [
        "It prices your own inputs rather than the customer's outcome",
        "It is the method to prefer once the product has a measurable economic value peg",
@@ -861,7 +1070,7 @@
      explanation: "Cost-based pricing prices your inputs — hourly billing worked back from salary — and is defensible only in ignorance of deployment and impact. A measurable peg is what lets you price the outcome instead."},
 
     {concept: "spms_buyer_journey", source: "SPMS-M05-L04", node: "Buyer journey communication",
-     stem: "Select every failure the lecture names when value is communicated badly.",
+     stem: "Select every failure that follows from communicating value badly.",
      options: [
        "Communicating too late, after the decision has already been taken",
        "Pricing the product below the nearest competitor",
@@ -895,7 +1104,7 @@
      explanation: "The split is action versus quality. Sending is the action and so functional; the 200-millisecond bound is a quality and so non-functional, constraining architecture rather than behaviour."},
 
     {concept: "spms_traceability", source: "SPMS-M06-L08", node: "Requirements traceability",
-     stem: "Select every statement that matches how the lecture traces a need into a requirement.",
+     stem: "Select every statement that correctly traces a customer need into a project requirement.",
      options: [
        "Customer requirements arrive already standardised, because customers state system requirements",
        "Standardising generalises one customer's stated need so more customers of that nature are served by one product",
@@ -913,7 +1122,7 @@
      explanation: "Customer requirements arrive as business needs and aspirations. Standardising generalises one customer's need so the product serves many; project requirements are the internal breakdown engineering owns for a release."},
 
     {concept: "spms_priority", source: "SPMS-M07-L01", node: "MoSCoW and RICE prioritisation",
-     stem: "Select every statement that matches how the lecture uses MoSCoW.",
+     stem: "Select every statement that is true of how MoSCoW is used.",
      options: [
        "Won't have is part of the method, and stating it is what makes scope control real",
        "It ranks every item against every other to produce one ordered list",
@@ -953,11 +1162,11 @@
      explanation: "Must have covers what the product cannot function without — booking, payments, GPS. Ratings are should have: valuable, and not load-bearing."},
 
     {concept: "spms_roadmap", source: "SPMS-M07-L04", node: "Product roadmap",
-     stem: "Select every statement that matches the lecture's account of a roadmap.",
+     stem: "Select every statement that is true of a product roadmap.",
      options: [
        "It fixes the next three to six months and deliberately goes no further",
        "It translates product strategy into a series of releases on a time axis",
-       "WhatsApp launched first on iPhone, with the Android version arriving around 2011",
+       "What has been deliberately deferred is as much a part of it as what has been scheduled",
        "It lists the features to build without ordering them, leaving sequence to the team"
      ], answers: [1, 2],
      wrong: {
@@ -997,7 +1206,7 @@
      explanation: "The evolution is deliberate ordering, not accident: the team launched on iPhone knowing many users were on Android. A roadmap is a smart sequence for developing, releasing, and evolving a solution."},
 
     {concept: "spms_requirements", variant: "definition", source: "SPMS-M06-L05", node: "Functional and quality requirements",
-     stem: "Select every statement that matches the lecture's definition of a requirement.",
+     stem: "Select every statement that correctly defines a requirement.",
      options: [
        "It is only a capability a customer has explicitly asked for",
        "It is any feature already present in the product",
@@ -1018,7 +1227,7 @@
      explanation: "A requirement is a wish or need for a future capability, or a condition set by standards, contracts, or regulations. It is classified as an action or a quality, not by who builds it."},
 
     {concept: "spms_metrics", source: "SPMS-M08-L03", node: "Actionable product metrics",
-     stem: "Select every statement that matches why the lecture says metrics matter more in a startup.",
+     stem: "Select every statement that explains why metrics carry more weight in a startup than in a mature company.",
      options: [
        "They exist to reduce uncertainty as far as it can be reduced",
        "Top line, bottom line, and net promoter score assume a steadier state than an early product has",
@@ -1036,7 +1245,7 @@
      explanation: "Metrics exist to reduce uncertainty and improve decisions with the information available. Standard performance measures assume a steadier state than an early-stage product has, which is why the startup case differs."},
 
     {concept: "spms_metrics", variant: "types", source: "SPMS-M08-L03", node: "Actionable product metrics",
-     stem: "Select every metric paired with what the lecture says it measures.",
+     stem: "Select every metric correctly paired with what it measures.",
      options: [
        "Average revenue per user — revenue divided across the user base",
        "Gross margin — profitability measured after all below-the-line costs",
@@ -1075,7 +1284,7 @@
 
   function addAuthoredMultiSelect(course) {
     if (course.id !== "SPMS") return;
-    SPMS_MULTI.forEach(function (item, index) {
+    SPMS_MULTI.concat(SPMS_MULTI_EXAM_ONLY).forEach(function (item, index) {
       var concept = (course.concepts || []).filter(function (entry) { return entry.id === item.concept; })[0];
       if (!concept) return;
       addQuestion(course, {
@@ -1098,6 +1307,8 @@
         difficulty: 3,
         variantFamily: item.concept + "_msq",
         boss: false,
+        /* Reserved to the examiner. Additive only — see t6_integrated.js. */
+        examOnly: !!item.examOnly,
         /* Four of these items are read off a case the lecture tells rather than a
          * framework it states, and they used to name that case without showing it
          * ("In the drilling-machine example…"). A caselet is the field the question
@@ -1190,7 +1401,96 @@
         cue: "The critical ratio is a probability. Anything outside 0 to 1 is the wrong construction."}
      ],
      explanation: "Underage is Cu = P − C = 900 − 500 = ₹400. Overage is C − salvage = 500 − 200 = ₹300. The critical ratio is Cu ÷ (Cu + Co) = 400 ÷ 700 = 0.571, so you order at roughly the 57th percentile of demand.",
-     link: "The ratio sets how far up the demand distribution to order, which is where the supplied normal table is used."}
+     link: "The ratio sets how far up the demand distribution to order, which is where the supplied normal table is used."},
+
+    /* Safety stock and the reorder point — SCLM-M03-L06, the lecture that unblocked
+     * the last two numericals on this paper.
+     *
+     * Section B sat at 4 of 6 for months and the missing two were both z-based, which
+     * was not a coincidence: the app supplied no standard normal table, so no question
+     * needing one could be answered. The table is now a paper provision (see
+     * `tables` on the SCLM spec), and these four follow.
+     *
+     * `sourceIds` carries two lectures each. The reorder-point items reuse the EOQ
+     * machinery for how much to order and add the when — which is the lecture's own
+     * framing — and the service-level items extend newsvendor's z. LAW-47 gates on
+     * `sourceIds`, so declaring both is what stops one being scheduled before the
+     * lecture teaching the half it actually tests.
+     *
+     * Figures are fresh, per the note above. The error that costs the most marks here
+     * is scaling the standard deviation by L instead of √L, so every item carries that
+     * specific wrong figure as a named near miss rather than a generic "wrong". */
+    {concept: "sclm_eoq", source: "SCLM-M03-L06", sourceIds: ["SCLM-M03-L03", "SCLM-M03-L06"],
+     node: "Reorder point with safety stock", reference: "standard-normal",
+     stem: "A spare-parts depot reviews inventory continuously. Weekly demand is normally distributed with a mean of 40 units and a standard deviation of 12 units. The replenishment lead time is a constant 4 weeks, and the depot wants a 95% cycle service level.",
+     prompt: "What reorder point achieves that service level?", unit: "units", answer: 199.6, tolerance: 1,
+     nearMisses: [
+       {value: 239.2, tolerance: 2, tag: "Scaled the deviation by the lead time", label: "Multiplied the standard deviation by L instead of √L",
+        why: "This choice assumed σ over four weeks is 12 × 4 = 48. Variances add over independent weeks, not standard deviations, so σ_DLT = 12 × √4 = 24. Using L instead of √L doubles the buffer here and overstocks the depot permanently.",
+        cue: "Add variances, then take the root. The lead-time deviation is always σ_d√L and is therefore smaller than σ_d·L."},
+       {value: 179.8, tolerance: 2, tag: "Used the weekly deviation", label: "Buffered one week instead of the lead time",
+        why: "This choice assumed the 12 in the stem is the deviation to buffer against. It is the weekly figure; the exposure is the whole 4-week lead time, so the deviation has to be converted first: 12 × √4 = 24.",
+        cue: "The deviation the stem gives you is almost never the one the formula wants. Convert to the protection period before multiplying by z."},
+       {value: 160, tolerance: 1, tag: "Left out the safety stock", label: "Covered average demand and nothing more",
+        why: "This choice assumed the reorder point is mean demand during lead time. That is exactly the level at which you stock out about half the time, because demand exceeds its own mean half the time. The buffer is the whole point of the model.",
+        cue: "A reorder point equal to μ_DLT is a 50% service level whatever the stem asked for."}
+     ],
+     explanation: "Mean demand during lead time is 40 × 4 = 160. The deviation over that period is σ_d√L = 12 × √4 = 24. A 95% cycle service level reads z = 1.65 off the table, so safety stock is 1.65 × 24 = 39.6 and ROP = 160 + 39.6 = 199.6 units.",
+     link: "The buffer protects the lead time only, because that is the stretch you cannot react during once the order is placed."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L06", sourceIds: ["SCLM-M03-L05", "SCLM-M03-L06"],
+     node: "Service level of a policy in force", reference: "standard-normal",
+     stem: "A distributor watches inventory continuously and places an order whenever inventory position falls to 495 units. Daily demand is normally distributed with a mean of 50 units and a standard deviation of 15 units. The replenishment lead time is a constant 9 days. Nobody can say what service level this policy was chosen to deliver.",
+     prompt: "What cycle service level does the current reorder point actually achieve?", unit: "%", answer: 84.1, tolerance: 0.5,
+     nearMisses: [
+       {value: 15.9, tolerance: 0.5, tag: "Reported the stockout probability", label: "Gave the risk instead of the service level",
+        why: "This choice read the area to the right of z. The cycle service level is the probability of NOT stocking out, which is the area to the left — the figure the table prints. 1 − 0.8413 = 0.1587 is the complement, so the policy stocks out about 16% of cycles.",
+        cue: "The table gives Φ(z), the left tail, and that is already the service level. Subtracting from 1 turns a good answer into its opposite."},
+       {value: 99.9, tolerance: 0.5, tag: "Used the daily deviation", label: "Compared against one day's variability",
+        why: "This choice assumed σ = 15. The reorder point covers nine days of exposure, so the comparison has to use σ_DLT = 15 × √9 = 45. With 15 the z comes out at 3.0 and the policy looks far safer than it is.",
+        cue: "A z above 3 from ordinary figures almost always means the deviation was never converted to the lead time."},
+       {value: 63.1, tolerance: 0.5, tag: "Scaled the deviation by the lead time", label: "Multiplied the deviation by L instead of √L",
+        why: "This choice used σ_DLT = 15 × 9 = 135. Variances add over independent days, so the deviation grows with √L: 15 × √9 = 45. Inflating it to 135 drags z down to about 0.33 and makes a reasonable policy look careless.",
+        cue: "√L, never L. It is the same slip whichever direction you are working in."}
+     ],
+     explanation: "Mean demand during lead time is 50 × 9 = 450 and σ_DLT = 15 × √9 = 45. The policy holds 495 − 450 = 45 units of safety stock, so z = 45 ÷ 45 = 1.00. The table gives Φ(1.00) = 0.8413, so the reorder point in force is buying a 84.1% cycle service level.",
+     link: "Reading a policy backwards is the same relation as setting one, and it is how you find out what a reorder point inherited from somebody else is really worth."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L06", sourceIds: ["SCLM-M03-L05", "SCLM-M03-L06"],
+     node: "Cost of a higher service level", reference: "standard-normal",
+     stem: "A distributor of transformer spares holds safety stock for a 90% cycle service level. Weekly demand is normally distributed with a mean of 60 units and a standard deviation of 20 units, and the replenishment lead time is a constant 4 weeks. A contract penalty has made the firm decide to run at 99% instead.",
+     prompt: "By how many units must the safety stock rise?", unit: "units", answer: 42, tolerance: 2,
+     nearMisses: [
+       {value: 93.2, tolerance: 2, tag: "Gave the new buffer, not the increase", label: "Answered a different question",
+        why: "This choice computed the safety stock at 99% — 2.33 × 40 = 93.2 — and stopped. The firm already holds 1.28 × 40 = 51.2, so the rise is the difference between the two, not the new level.",
+        cue: "When a stem asks by how much something changes, the answer is a difference. Compute both levels and subtract."},
+       {value: 84, tolerance: 2, tag: "Scaled the deviation by the lead time", label: "Multiplied the standard deviation by L instead of √L",
+        why: "This choice used σ_DLT = 20 × 4 = 80. Variances add over independent weeks, so σ_DLT = 20 × √4 = 40, and the increment is (2.33 − 1.28) × 40.",
+        cue: "The lead-time deviation is σ_d√L. With L = 4 the difference between 40 and 80 is the whole error."},
+       {value: 21, tolerance: 1, tag: "Never converted the deviation", label: "Buffered one week instead of four",
+        why: "This choice used the weekly deviation of 20 directly. The exposure is the four-week lead time, so the deviation to buffer is 20 × √4 = 40 and every figure built on it doubles.",
+        cue: "Convert σ to the protection period first. Every later step inherits that number."}
+     ],
+     explanation: "σ_DLT = 20 × √4 = 40. The table gives z = 1.28 at 90% and z = 2.33 at 99%, so the safety stock moves from 1.28 × 40 = 51.2 to 2.33 × 40 = 93.2 — a rise of 42 units. Nine points of service level cost 82% more buffer, which is why service level is a commercial decision and not a default.",
+     link: "The buffer rises faster than the service level does, so the last few points of protection are the expensive ones."},
+
+    {concept: "sclm_eoq", source: "SCLM-M03-L06", sourceIds: ["SCLM-M03-L03", "SCLM-M03-L06"],
+     node: "Inventory position",
+     stem: "A depot operates a continuous review policy with a reorder point of 700 units. The shelf holds 480 units. Two purchase orders of 125 units each were placed last week and are still in transit. Customers are owed 90 units, which they have agreed to receive late rather than cancel.",
+     prompt: "What figure should be compared against the reorder point?", unit: "units", answer: 640, tolerance: 1,
+     nearMisses: [
+       {value: 480, tolerance: 1, tag: "Used on-hand stock only", label: "Ignored the stock already on its way",
+        why: "This choice compared the shelf against the reorder point. On-hand keeps falling while an order is in transit, so a depot watching only the shelf reorders against a delivery it has already paid for — the double-ordering the inventory position exists to prevent.",
+        cue: "If the answer equals what is physically in the building, the pipeline has been left out."},
+       {value: 730, tolerance: 1, tag: "Ignored the backorders", label: "Counted stock that is already promised away",
+        why: "This choice took on-hand plus on-order and stopped. The 90 units owed to customers are committed: they will leave the moment they can, so they cannot also be available to meet new demand. Backorders are subtracted.",
+        cue: "Anything already promised to a customer is not yours to count."},
+       {value: 820, tolerance: 1, tag: "Added the backorders", label: "Treated demand owed as stock held",
+        why: "This choice added the 90 units instead of subtracting them. A backorder is unfilled demand — a claim against inventory, not a source of it — so it moves the position down, and getting the sign wrong here overstates cover by twice the backlog.",
+        cue: "Check the direction: backorders make you worse off, so they cannot raise the figure."}
+     ],
+     explanation: "Inventory position is on-hand, plus what is on order and not yet arrived, minus backorders: 480 + (2 × 125) − 90 = 640 units. That sits 60 below the reorder point of 700, so an order is due now. The comparison is always against inventory position, never against the shelf.",
+     link: "Comparing the shelf against a reorder point is the most common way a continuous review policy orders twice for the same shortfall."}
   ];
 
   function addAuthoredNumeric(course) {
@@ -1207,8 +1507,13 @@
         supportingConceptIds: [],
         module: concept.module,
         source: item.source,
-        sourceIds: [item.source],
+        /* Every lecture the question actually needs, not just its home one. LAW-47
+           gates each surface on its own `sourceIds`, so a safety-stock item that
+           reuses the EOQ machinery has to declare both — otherwise it can be
+           scheduled before the lecture that teaches the half it is really testing. */
+        sourceIds: unique(item.sourceIds || [item.source]),
         node: item.node,
+        reference: item.reference || null,
         pattern: "Enter the final figure",
         perspective: "apply",
         type: "numeric",
@@ -1291,6 +1596,630 @@
    *
    * All of this prose is new and is WAITING_OWNER_CONTENT_ACCEPTANCE.
    * ------------------------------------------------------------------- */
+
+  /* ---------------------------------------------------------------------
+   * SCLM's examiner-only slice.
+   *
+   * Section A draws 50 mcqs from a pool of 84 and every one of them was also
+   * reachable in Learn, so T4 reported 100% overlap and no concept with a distinct
+   * examiner surface. These sixteen are `examOnly` — one per concept, so every
+   * concept the paper can test has at least one item the candidate cannot have met
+   * while studying — and additive, so no teaching surface was withdrawn.
+   *
+   * Scenario-led, because that is the register the course's own assessments use and
+   * the one the owner asked for: a situation carrying real figures, then the
+   * decision, with the concept never named in the stem. Following the existing
+   * `_cla` tranche, no option names the concept either — R3 is satisfied on the
+   * "none of them" branch, which is what keeps the name-matching family inside its
+   * limit.
+   * ------------------------------------------------------------------- */
+  var SCLM_EXAM_ONLY = [
+    {concept: "sclm_fit", source: "SCLM-M01-L04", node: "Strategic fit", mode: "scenario", examOnly: true,
+     caselet: "A appliance maker promises next-day delivery on a range it has just widened from 40 to 260 variants, while keeping its existing quarterly production runs, single central warehouse and cheapest-quote carrier contracts.",
+     stem: "What is the most defensible reading?",
+     options: [
+       "The promise and the operating design now describe different businesses, so one of the two has to move",
+       "The wider range is the problem on its own, and cutting variants back to 40 restores the position without touching the production runs or the warehouse",
+       "The carrier contract is the weak link, and re-tendering it will deliver the promise, since the days are lost in transit rather than before it",
+       "Nothing needs to change, because demand variability has not risen and the forecast is unchanged, and the uncertainty a chain absorbs is a property of its customers"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Treated variety as the only lever", label: "Fixed one driver and left the promise standing",
+         why: "This choice assumed range is the cause. Range is one of several things that raised what the chain has to absorb; the quarterly runs, the single warehouse and the cheapest-carrier choice all point the other way from a next-day promise, so cutting variants alone leaves a design that still cannot deliver it.",
+         cue: "List every driver the promise touches. If only one is being changed, ask whether the rest still contradict it."},
+       2: {tag: "Blamed the last link in the chain", label: "Localised a system problem to one contract",
+         why: "This choice assumed transport is where the promise is lost. A carrier cannot recover time that batching and a single stocking point have already spent, so re-tendering buys a small improvement against a structural gap.",
+         cue: "Trace where the days actually go. The visible stage is rarely the one holding the total."},
+       3: {tag: "Read uncertainty as demand variation alone", label: "Ignored what the promise itself adds",
+         why: "This choice assumed the uncertainty a chain must absorb is a property of demand. Shorter promised lead times, wider variety, more channels and higher service levels all raise it, so a firm can multiply its own uncertainty with a stable forecast.",
+         cue: "Ask what the firm has promised, not only what customers have done."}},
+     explanation: "Responsiveness is not a preference but a design: a next-day promise on 260 variants requires the batching, stocking and transport decisions to be built for it. Either the operating design changes or the promise does.",
+     link: "A promise the chain is not built to keep fails at the customer, whatever the forecast says."},
+
+    {concept: "sclm_drivers", source: "SCLM-M01-L06", node: "Six supply-chain drivers", mode: "scenario", examOnly: true,
+     caselet: "A retailer wants to cut delivery time to stores. It is considering three options: adding two regional warehouses, moving a third of volume from rail to road, or raising the safety stock held at the existing single warehouse.",
+     stem: "Which reading of these three options is correct?",
+     options: [
+       /* Every option names the concept. R3's "none of them" branch was the stated
+          rule for this tranche and this item broke it: the answer was the only option
+          containing "drivers", so the set paid 100% to a candidate who read the
+          section heading and nothing else. Fixed in `connect`'s direction — name the
+          concept everywhere, never strip it from the answer (CONTENT-RULES R3) — and
+          in place, because appending is what pushed IBM's "pick the longest" to 66%. */
+       "They are three different drivers of the same outcome, and the choice is a cost trade rather than a ranking",
+       "These are three drivers of one outcome, but facilities is what counts, since delivery time is set by where stock sits",
+       "Whichever of the three drivers costs least should be chosen, since each reaches the same delivery time and the decision is purely a question of price",
+       "Transportation is always the best of these drivers, because moving faster is the only real lever on time"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Reduced the chain to one driver", label: "Kept facilities and discarded the rest",
+         why: "This choice assumed location settles delivery time. Facilities, inventory and transportation each move it, and they trade against each other — which is why an option set like this one exists at all.",
+         cue: "Name every driver the outcome depends on before choosing between options."},
+       2: {tag: "Chose on cost without comparing effect", label: "Assumed equal outcomes to make the decision easy",
+         why: "This choice assumed the three options deliver the same result. They do not: more stock nearer the customer, more locations and faster movement reach different delivery times at different costs, and the comparison is the decision.",
+         cue: "Compare what each option buys before comparing what it costs."},
+       3: {tag: "Made one driver a rule", label: "Treated speed as the only route to time",
+         why: "This choice assumed transport is the lever for delivery time. Holding stock closer removes distance entirely, which can beat moving faster over the same distance and often costs less.",
+         cue: "Time can be bought by moving faster or by starting closer. Compare both."}},
+     explanation: "Facilities, inventory and transportation are separate levers on the same outcome, and each carries a different cost and a different responsiveness. Choosing between them is the design decision.",
+     link: "The drivers trade against each other, so a chain is described by the balance struck rather than by any one setting."},
+
+    {concept: "sclm_smoothing", source: "SCLM-M02-L06", node: "Exponential smoothing", mode: "scenario", examOnly: true,
+     caselet: "A planner has used a smoothing constant of 0.1 for two years. A competitor's exit has permanently lifted weekly demand, and for six weeks the forecast has sat well below actual demand every week.",
+     stem: "What should the planner do?",
+     options: [
+       "Raise the constant so the forecast catches the level shift, accepting that it will also track noise more closely",
+       "Keep the constant, because a low value is what protects a forecast from over-reacting, and that protection is worth more than a faster response to any single run",
+       "Switch to using last week's actual demand as next week's forecast until the gap closes, since the most recent figure is the best available estimate of the new level",
+       "Leave the method alone, since six weeks of error is normal variation around a forecast and reacting to a short run is how planners end up chasing noise"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Defended the setting against the evidence", label: "Treated a parameter as a principle",
+         why: "This choice assumed a low constant is always the safer choice. It is the right choice when demand is stable and the wrong one after a level shift, because it corrects by only a tenth of each error and takes many periods to arrive.",
+         cue: "A smoothing constant is a decision about responsiveness. Re-ask it when the level moves."},
+       2: {tag: "Went to the other extreme", label: "Set the constant to one without saying so",
+         why: "This choice assumed the fastest correction is the best. Using last week's actual is smoothing with the constant at 1, which carries every piece of noise straight into the next forecast — the error the low value was protecting against.",
+         cue: "If your forecast equals last period's actual, you have chosen alpha = 1."},
+       3: {tag: "Read a one-sided run as noise", label: "Missed the direction of the errors",
+         why: "This choice assumed six weeks of error is ordinary. Random error falls on both sides; six consecutive weeks in the same direction is a level the forecast has not reached, which is a bias rather than variation.",
+         cue: "Check the sign of the errors. Consistently one-sided means the method is behind the level."}},
+     explanation: "Exponential smoothing corrects by a fraction of the last error, so a small constant is slow to reach a new level. Six one-sided errors indicate a shift, not noise, and the constant is the parameter that decides how fast the forecast follows.",
+     link: "Alpha is a choice about how much of each error to believe, and the right choice depends on whether the level is moving."},
+
+    {concept: "sclm_sop", source: "SCLM-M02-L12", node: "Sales and operations planning", mode: "scenario", examOnly: true,
+     caselet: "Sales forecasts 40,000 units for the quarter, operations has capacity for 28,000 and plans to that, and finance has budgeted revenue on 36,000. Each number is circulated separately and none is reconciled before the quarter starts.",
+     stem: "What is the most defensible reading?",
+     options: [
+       "Three functions are committing the firm to three different quarters, and the reconciliation is the missing step",
+       "Sales should reduce its forecast to 28,000, since capacity is the hard limit and the rest is aspiration",
+       "Operations should build to 40,000, because the plan must serve whatever sales can sell",
+       "The spread is acceptable because a forecast is uncertain and each function needs its own working figure"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Resolved the conflict by deferring to capacity", label: "Made the constraint the plan",
+         why: "This choice assumed the smallest number wins. Capacity is a constraint to be reconciled against demand, not a decision — and if demand really is 40,000, the right output may be to add capacity or to choose which demand to serve rather than to lower the forecast.",
+         cue: "Reconciling means deciding what the firm will do about the gap, not adopting the lowest figure."},
+       2: {tag: "Resolved it by deferring to demand", label: "Committed to capacity the firm does not have",
+         why: "This choice assumed operations should match whatever sales forecasts. Building to an unreconciled forecast is how inventory and overtime costs arrive without anyone deciding to spend them.",
+         cue: "A plan that ignores the constraint is a wish. The gap is the thing to decide about."},
+       3: {tag: "Accepted the divergence as uncertainty", label: "Confused forecast error with a planning failure",
+         why: "This choice assumed the spread reflects honest uncertainty. It reflects three functions planning independently: a single uncertain number is a forecast, three different committed numbers is an unreconciled plan, and the costs land in inventory, service and cash.",
+         cue: "Ask whether the numbers differ because the future is uncertain or because nobody agreed one."}},
+     explanation: "The point of the process is one agreed demand, supply and financial plan. Three separate numbers mean the firm has committed to three different quarters, and the cost appears as stockouts, idle capacity or a revenue miss.",
+     link: "One plan the functions have agreed is worth more than three accurate ones they have not."},
+
+    {concept: "sclm_eoq", source: "SCLM-M03-L03", node: "Economic order quantity", mode: "scenario", examOnly: true,
+     caselet: "A buyer is told the supplier has cut the fixed charge per order from ₹4,000 to ₹1,000. Annual demand and holding cost are unchanged.",
+     stem: "What should happen to the order quantity, and why?",
+     options: [
+       "It should fall to half, because the quantity moves with the square root of the ordering cost",
+       "It should fall to a quarter, because the ordering cost has fallen to a quarter",
+       "It should not change, because the order quantity is set by annual demand, which the supplier's charge does not affect in either direction",
+       "It should rise, because cheaper ordering makes larger orders more attractive and the saving is best captured by buying in bulk"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Scaled the quantity linearly", label: "Moved the answer with the input",
+         why: "This choice assumed the order quantity is proportional to the ordering cost. The cost sits under a square root, so a fall to a quarter reduces the quantity to a half — a factor of two, not four.",
+         cue: "The formula takes a root. A fourfold change in an input is a twofold change in the answer."},
+       2: {tag: "Fixed the quantity to demand", label: "Treated one input as the whole formula",
+         why: "This choice assumed demand alone sets the order size. Demand, the ordering cost and the holding cost all enter, which is why a change in any one of them moves the answer.",
+         cue: "Three inputs, not one. Ask which have moved before concluding nothing has."},
+       3: {tag: "Got the direction wrong", label: "Read cheaper ordering as a reason to order more",
+         why: "This choice assumed cheap orders justify big ones. It is the opposite: when ordering is cheap you can afford to order more often, so each order gets smaller and less stock is held between deliveries.",
+         cue: "Cheap ordering buys frequency. Expensive ordering is what forces large batches."}},
+     explanation: "The quantity varies with the square root of the ordering cost, so cutting that cost to a quarter cuts the order size to a half. Cheaper ordering means ordering more often in smaller amounts.",
+     link: "Every input enters under a root, so the answer moves far less than the input that caused it."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L05", node: "Newsvendor decision", mode: "scenario", examOnly: true,
+     caselet: "A bakery makes a celebration cake for one weekend only. Each sells for ₹1,200 and costs ₹400 to make. Anything unsold is given away at the end of the weekend and returns nothing.",
+     stem: "What does this cost structure imply about the quantity to bake?",
+     options: [
+       "Bake well above expected demand, because a missed sale costs twice what an unsold cake does",
+       "Bake exactly expected demand, since that is the quantity which minimises the total mismatch cost on either side",
+       "Bake below expected demand, because unsold stock returns nothing at all and a zero salvage value is the strongest argument for caution",
+       "The quantity cannot be decided without knowing how many were sold last year, since the costs alone cannot indicate a quantity"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Ordered at the mean", label: "Treated the average as the optimum",
+         why: "This choice assumed expected demand is the right quantity. It is only right when the two mistakes cost the same; here a missed sale costs ₹800 of margin and an unsold cake costs ₹400, so the cheaper mistake is to have one too many.",
+         cue: "Order at the mean only when overage and underage cost the same. Compare them first."},
+       2: {tag: "Followed the salvage value instead of the margin", label: "Weighted the visible loss over the invisible one",
+         why: "This choice assumed a zero salvage value means order cautiously. Zero salvage makes overage cost ₹400, which is still less than the ₹800 lost on a sale that could not be made — the loss you never see is the larger one.",
+         cue: "An unsold unit costs what you paid. A missed sale costs the margin you gave up."},
+       3: {tag: "Waited for data before reasoning", label: "Confused the distribution with the rule",
+         why: "This choice assumed history is needed to decide. History sets where expected demand is; the cost structure decides how far above or below it to order, and that part is answerable from the figures given.",
+         cue: "The costs give the position in the distribution. Data gives the distribution."}},
+     explanation: "Underage is ₹1,200 − ₹400 = ₹800 and overage is ₹400, so the critical ratio is 800 ÷ 1,200 = 0.67 and the right quantity sits at about the 67th percentile of demand — comfortably above the mean.",
+     link: "Which mistake hurts more decides which side of expected demand to sit on."},
+
+    {concept: "sclm_portfolio", source: "SCLM-M04-L04", node: "Tailored sourcing portfolio", mode: "scenario", examOnly: true,
+     caselet: "A firm sources two components from one low-cost offshore supplier: a stable, high-volume fastener, and a fast-changing electronic module whose design revises every few months and whose demand swings sharply.",
+     stem: "What is the most defensible sourcing change?",
+     options: [
+       "Keep the fastener offshore and move the module to a responsive supplier nearer the market",
+       "Move both to the responsive supplier, since a single relationship is simpler to manage and the coordination saved outweighs the premium paid on the stable part",
+       "Keep both offshore, because the cost advantage applies to everything the firm buys, whatever the design revision rate or the demand pattern of the part",
+       "Move both onshore, because offshore sourcing carries disruption risk in every category, and that exposure settles the question ahead of any cost comparison"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Optimised for simplicity", label: "Paid responsiveness prices for a stable part",
+         why: "This choice assumed one supplier type should serve both. The fastener is stable and predictable, which is exactly what a low-cost source is for; paying responsiveness rates for it spends money on flexibility the part never uses.",
+         cue: "Match the source to the part. One supplier for everything means one of the parts is wrong."},
+       2: {tag: "Applied cost logic to a volatile part", label: "Ignored what variety and change cost offshore",
+         why: "This choice assumed the cost advantage is universal. A design revising every few months over a long lead time means obsolete stock in transit, and demand swings mean the wrong quantity arriving weeks late.",
+         cue: "Low cost buys stability. Ask whether the part is stable before buying it."},
+       3: {tag: "Made disruption risk a blanket rule", label: "Treated a real risk as a decision",
+         why: "This choice assumed offshore exposure settles the question everywhere. It is one factor weighed against labour content and cost differential, and for a stable, high-volume fastener that trade usually still favours the low-cost source.",
+         cue: "Risk is an input to the trade, not a verdict on it."}},
+     explanation: "Different products need different supplier strengths. Stable, high-volume, low-variety parts suit a low-cost source; volatile, fast-changing, high-value ones suit a responsive one. Combining them deliberately is the portfolio.",
+     link: "The question is not which supplier is best but which mix fits which product."},
+
+    {concept: "sclm_bullwhip", source: "SCLM-M04-L05", node: "Bullwhip effect", mode: "scenario", examOnly: true,
+     caselet: "End-customer sales of a household product have varied by about 5% month to month for two years. Retailer orders to the distributor vary by 20%, distributor orders to the manufacturer by 45%, and the manufacturer's production schedule by 70%.",
+     stem: "What is the most defensible interpretation?",
+     options: [
+       "Each stage is adding distortion by ordering from the stage in front of it rather than from real demand",
+       "The manufacturer's planning is at fault, since its swing is the largest of the four and the biggest number in a chain marks where the problem is created",
+       "End demand must be more variable than the sales figures show, since orders reflect it and a 70% swing could not arise from demand varying by 5%",
+       "The pattern is expected, because orders further from the customer are naturally less accurate"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Blamed the stage with the biggest number", label: "Read the symptom as the cause",
+         why: "This choice assumed the largest swing is the source. The manufacturer sees the distributor's orders, which already carry the retailer's distortion — it is the last stage in the chain and therefore shows the accumulated amplification rather than creating it.",
+         cue: "Amplification grows along the chain. The largest swing is furthest downstream of the cause, not at it."},
+       2: {tag: "Doubted the demand data", label: "Explained the distortion away",
+         why: "This choice assumed orders are a reliable picture of demand. The whole finding is that they are not: batching, forecast updates and incentives make orders diverge from the sales that triggered them, which is why the two series differ.",
+         cue: "Orders are decisions. Sales are demand. Do not use one to correct the other."},
+       3: {tag: "Naturalised the amplification", label: "Accepted a systematic effect as inevitable",
+         why: "This choice assumed distance from the customer explains it. Distance is why the information is poor, not why it is amplified — the amplification comes from specific causes, and sharing the demand signal is what removes them.",
+         cue: "Ask what produces the swing. If the answer is a practice, it can be changed."}},
+     explanation: "Order batching, forecast updating, price promotions and rationing each add variance, and each stage passes an already-distorted signal to the next. Sharing the actual demand signal is what stops it.",
+     link: "The swing grows because every stage reacts to orders rather than to demand."},
+
+    {concept: "sclm_reengineering", source: "SCLM-M05-L06", node: "Supply-chain re-engineering", mode: "scenario", examOnly: true,
+     caselet: "A firm's order-to-delivery time is 19 days. Measured stage by stage, actual work accounts for about 3 days; the rest is orders waiting for the next batch run, for credit approval, and for a weekly despatch window.",
+     stem: "Where should the redesign start?",
+     options: [
+       "With the waiting between stages, since that is where sixteen of the nineteen days are",
+       "With the three days of actual work, because that is the part the firm directly controls",
+       "With the despatch window alone, since it is the last delay before the customer and therefore the one they actually experience",
+       "With adding capacity at each stage, so that work is completed faster everywhere"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Optimised the work rather than the flow", label: "Attacked the smallest share of the time",
+         why: "This choice assumed effort should go where the work is. Even halving three days of work saves a day and a half of nineteen; the waiting is not anybody's task, which is why it belongs to no function and survives every functional improvement.",
+         cue: "Compare the size of each share before choosing. Work you can see is not always the time you are spending."},
+       2: {tag: "Fixed one queue", label: "Removed a delay and left the chain of them",
+         why: "This choice assumed the last delay is the decisive one. Removing the despatch window leaves batching and credit approval intact, and the order still waits — a single queue removed from a chain of queues changes little.",
+         cue: "Map the whole flow before choosing a stage. Delays in series all have to go."},
+       3: {tag: "Bought capacity for a queueing problem", label: "Treated waiting as insufficient throughput",
+         why: "This choice assumed more capacity shortens the wait. These orders are not waiting for capacity, they are waiting for a batch, an approval and a scheduled window — none of which more capacity reaches, and all of which more capacity costs money to leave in place.",
+         cue: "Ask what each order is waiting FOR. Only some waits are queues for capacity."}},
+     explanation: "Sixteen of nineteen days are waiting rather than work, and waiting sits between functions where no single function owns it. Redesigning the connected process is what removes it; optimising each function separately cannot.",
+     link: "Time lost between stages belongs to no department, which is why it survives every departmental improvement."},
+
+    {concept: "sclm_stockyard", source: "SCLM-M05-L13", node: "Stockyard location trade-off", mode: "scenario", examOnly: true,
+     caselet: "A firm sited four stockyards when road freight cost ₹4 per tonne-km and each yard could serve a 90 km radius economically. Freight is now ₹9 per tonne-km, the economic radius has fallen to about 55 km, and demand has grown in two districts that sit at the edge of two existing yards.",
+     stem: "What is the most defensible response?",
+     options: [
+       "Re-run the siting decision on the new cost, radius and demand together, since all three inputs have changed",
+       "Keep the sites, because a stockyard is a long-lived asset and moving it destroys the investment already committed to building and equipping it",
+       "Add a yard in each of the two growing districts and leave the existing four unchanged",
+       "Close the two least-used yards, since higher freight cost makes fewer, larger sites cheaper to run and consolidation is the standard response to dearer transport"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Defended the asset instead of the decision", label: "Let sunk cost decide the network",
+         why: "This choice assumed the existing investment settles the question. What has been spent cannot be recovered by either answer, so it is not a reason to keep a network whose economics have changed underneath it.",
+         cue: "Ask what the network should be if nothing were built yet, then price the move against that."},
+       2: {tag: "Answered the demand change only", label: "Solved one of the three changes",
+         why: "This choice assumed growth is the only input that moved. The economic radius has fallen from 90 km to 55 km, which changes what every existing yard can serve — adding two sites onto an outdated network optimises around a shape that no longer holds.",
+         cue: "Count what has changed. A decision with three moved inputs is not answered by addressing one."},
+       3: {tag: "Got the direction of the cost effect wrong", label: "Consolidated when freight got dearer",
+         why: "This choice assumed higher freight favours fewer, larger sites. It is the reverse: when moving goods costs more, distance is what you want less of, which argues for more sites closer to demand, not fewer.",
+         cue: "Dearer freight buys proximity. Cheaper freight is what makes consolidation attractive."}},
+     explanation: "Cost structure, coverage limit and demand location all enter the siting decision, and all three have moved. A higher freight cost shrinks the economic radius, which argues for more sites nearer demand rather than fewer.",
+     link: "A network is right for a cost structure, so it should be re-decided when the cost structure changes."},
+
+    {concept: "sclm_coldstore", source: "SCLM-M06-L05", node: "Cold-storage expansion", mode: "scenario", examOnly: true,
+     caselet: "A cold-store owner runs at 95% occupancy for four months of the year and 30% for the other eight. A neighbouring plot is available. Adding a chamber would cost ₹1.4 crore, and the additional produce is available only in the same four-month window.",
+     stem: "What is the most defensible reading?",
+     options: [
+       "The new chamber would be idle for eight months, so its case rests on what the peak four months alone can cover",
+       "Occupancy averages about 52% across the year, so there is spare capacity and no case for building until the annual average approaches the physical limit of the site",
+       "The expansion is justified, because turning away produce in the peak is a lost sale",
+       "The plot should be bought regardless, since land beside an existing site rarely becomes available twice and the option is worth more than the analysis that would delay it"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Averaged a seasonal load", label: "Used a mean where the pattern is the point",
+         why: "This choice assumed the annual average describes the constraint. It does not: capacity has to be sized against the peak, and an average of 52% across a 95%/30% split describes a year that never happens.",
+         cue: "For seasonal capacity, read the peak and the trough. The mean is between two states rather than a state."},
+       2: {tag: "Counted the revenue and not the idle months", label: "Priced the peak and ignored the year",
+         why: "This choice assumed turned-away produce settles the case. The chamber is paid for over twelve months and earns in four, so the peak revenue has to cover the whole year's capital and running cost before the expansion is worth making.",
+         cue: "Match the earning window against the paying window before approving capacity."},
+       3: {tag: "Bought the option rather than the case", label: "Let availability substitute for a decision",
+         why: "This choice assumed scarcity of land is the argument. It may be a reason to move quickly once the case holds, and it is not a case: the question is whether four months of demand supports ₹1.4 crore of year-round cost.",
+         cue: "Scarcity affects timing. It does not answer whether the investment pays."}},
+     explanation: "Occupancy of 95% for four months and 30% for eight means the asset earns in a third of the year and is paid for across all of it. The expansion has to be justified by peak-season revenue alone, or by finding a use for the idle months.",
+     link: "Seasonal capacity is sized on the peak and paid for over the whole year, which is the whole difficulty."},
+
+    {concept: "sclm_turnaround", source: "SCLM-M06-L07", node: "Transport turnaround", mode: "scenario", examOnly: true,
+     caselet: "A fleet operator pays drivers a fixed sum per trip. Average round-trip time is 46 hours, of which 19 are spent waiting to load and unload. The operator is considering buying four more trucks to raise the number of trips completed each week.",
+     stem: "What should be examined before the purchase?",
+     options: [
+       "Whether removing part of the 19 waiting hours would raise trips per truck without buying anything",
+       "Whether the drivers can be paid more per trip, since faster driving would shorten the round trip",
+       "Whether four trucks is the right number, given that the fleet is the binding constraint",
+       "Whether fuel cost per trip can be reduced, since that is the largest variable cost of a round trip"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Went after driving time", label: "Sought speed where the hours are not being spent",
+         why: "This choice assumed the road time is where the trip is lost. Nineteen of forty-six hours are spent stationary at loading points, and paying for faster driving buys risk against the smaller share of the clock.",
+         cue: "Split the cycle into moving and waiting before deciding what to shorten."},
+       2: {tag: "Accepted the constraint as stated", label: "Sized the purchase instead of testing it",
+         why: "This choice assumed the fleet is what limits trips. Each truck is idle for 19 hours a cycle, so capacity is being lost inside the trucks the operator already owns — adding four more buys four more sets of waiting hours.",
+         cue: "Before adding an asset, ask how much of the existing asset is actually working."},
+       3: {tag: "Optimised a cost rather than the cycle", label: "Reduced the price of a trip instead of the number of hours in it",
+         why: "This choice assumed fuel is the lever. Cheaper fuel lowers the cost of the trips being made; it does not change how many trips a truck completes, which is what the purchase is meant to address.",
+         cue: "Match the lever to the objective. Cost per trip and trips per truck are different problems."}},
+     explanation: "Nineteen of forty-six hours are turnaround rather than travel, so a large share of fleet capacity is standing still. Cutting waiting raises trips per truck at no capital cost, and should be tested before the fleet is enlarged.",
+     link: "A truck earns while it moves, so the hours it spends stationary are the cheapest capacity in the business."},
+
+    {concept: "sclm_multimodal", source: "SCLM-M07-L06", node: "Multimodal cost trade-off", mode: "scenario", examOnly: true,
+     caselet: "Moving a consignment by road costs ₹210,000 and takes 4 days. By rail and coastal shipping combined it costs ₹96,000 and takes 13 days. The consignment is a spare part held as insurance stock against a breakdown that halts a ₹40 lakh-a-day production line.",
+     stem: "Which mode should be chosen, and on what basis?",
+     options: [
+       "Road, because the nine days saved are worth far more than the ₹114,000 difference given what a stoppage costs",
+       "Rail and coastal, because it is less than half the freight cost and the saving is certain while the breakdown it guards against may never happen at all",
+       "Rail and coastal, because slower modes are the correct default for heavy or bulky consignments",
+       "Either, since freight cost is the only figure that separates two modes carrying the same goods to the same destination in the same condition"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Compared freight bills only", label: "Optimised the cost that appears on an invoice",
+         why: "This choice assumed the cheaper freight is the cheaper decision. The saving is ₹114,000; the exposure is a line losing ₹40 lakh a day, so nine extra days of waiting for an insurance part risks far more than the freight saved.",
+         cue: "Add what the time costs to what the transport costs. The invoice is only one of the two."},
+       2: {tag: "Applied a mode rule", label: "Chose by category instead of by consequence",
+         why: "This choice assumed heavy goods default to slow modes. That default holds when time is cheap; here the item exists specifically to prevent a stoppage, which is what makes the time expensive.",
+         cue: "Ask what the cargo is for. The same goods can justify different modes in different roles."},
+       3: {tag: "Ignored time as a cost at all", label: "Treated the two options as equivalent apart from price",
+         why: "This choice assumed identical goods make identical decisions. Nine days is the whole difference, and for an insurance part its value is the risk it removes during those days.",
+         cue: "Two modes differ in cost and in time. A comparison using one of the two is incomplete."}},
+     explanation: "The freight saving is ₹114,000 and the risk carried is a line worth ₹40 lakh a day. Mode choice trades transport cost against transit time, and here the time is worth far more than the money.",
+     link: "The cheapest freight is not the cheapest decision once the cost of waiting is on the same page."},
+
+    {concept: "sclm_ports", source: "SCLM-M07-L07", node: "Ports and PPP", mode: "scenario", examOnly: true,
+     caselet: "A state wants to raise container throughput at a public port. Average vessel turnaround is 2.4 days against 0.9 at a nearby private terminal; the public port's cranes are older and its yard is congested, and the state has limited capital to invest.",
+     stem: "What is the most defensible route?",
+     options: [
+       "Bring in private capital and operating discipline for the terminal while the state keeps the port's public role",
+       "Fund new cranes from the state budget, because ownership must stay entirely public for a strategic asset whatever the capital constraint the state is working under",
+       "Sell the port outright, since the private terminal already performs better on turnaround and ownership is what produced that difference",
+       "Accept the difference, because turnaround is decided by vessel size and cargo mix rather than by operations, so equipment and yard management cannot close it"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Made ownership the objective", label: "Protected the structure instead of the performance",
+         why: "This choice assumed a strategic asset requires full public funding. The state's own constraint is capital, and partnership is the arrangement that brings investment and operating practice without giving up the port's public function.",
+         cue: "Separate what must stay public from what must be paid for. They are rarely the same list."},
+       2: {tag: "Went from partnership to disposal", label: "Solved the capital problem by removing the public role",
+         why: "This choice assumed better private performance argues for sale. Performance can be brought in under a concession; selling outright also transfers the public obligations the port exists to carry, which is a different decision from funding a terminal.",
+         cue: "Ask what is being bought — capital and operating practice, or the asset itself."},
+       3: {tag: "Explained the gap away", label: "Attributed an operating difference to cargo",
+         why: "This choice assumed turnaround is set by what arrives. The case names older cranes and a congested yard, which are operating and investment matters — and a 2.4 against 0.9 day gap at neighbouring ports is too large to be composition alone.",
+         cue: "Look for the stated cause before reaching for an external one."}},
+     explanation: "Turnaround responds to equipment, yard management and operating practice, all of which need capital the state says it does not have. Partnership brings both while the public role is retained under the concession.",
+     link: "The choice is not public or private but which functions each side is better placed to carry."},
+
+    {concept: "sclm_leads", source: "SCLM-M08-L01", node: "LEADS index", mode: "scenario", examOnly: true,
+     caselet: "A state has risen four places in the national logistics ranking. Its industry association reports that road quality and warehousing availability scores improved, while its members' own freight costs and delivery times are unchanged.",
+     stem: "What is the most defensible reading?",
+     options: [
+       "The index measures the environment a supply chain operates in, so a better score need not yet show in firms' own costs",
+       "The ranking must be wrong, because the outcome that matters to firms has not moved, and a measure that does not track members' freight costs is measuring nothing useful",
+       "The improvement proves logistics performance has risen, and firms will be reporting savings shortly, since better roads and warehousing pass through to costs automatically",
+       "The index measures firm-level outcomes directly, so the two findings cannot both be true and one of the two reports has to be withdrawn"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Rejected the measure on the wrong test", label: "Judged an environment index by a firm's costs",
+         why: "This choice assumed the ranking should track members' freight bills. It ranks the conditions a state provides — infrastructure, services, regulatory environment — which shape what is possible rather than what any firm has yet achieved.",
+         cue: "Read what an index measures before deciding it is wrong. A mismatch may be the wrong comparison."},
+       2: {tag: "Promised the outcome", label: "Treated a better environment as a result already earned",
+         why: "This choice assumed improvement flows through automatically. Better roads and warehousing make lower costs achievable, and realising them takes network and operating decisions firms have not necessarily made.",
+         cue: "An enabling condition is not an outcome. Ask what a firm still has to do."},
+       3: {tag: "Misread the unit of measurement", label: "Confused a state-level index with firm-level data",
+         why: "This choice assumed the two findings contradict. They are measurements of different things — the state's conditions and the members' operations — so both can be accurate at once.",
+         cue: "Check the unit. State-level and firm-level measures are not alternatives."}},
+     explanation: "The index scores the logistics environment a state offers — infrastructure, services and regulatory conditions — and exists to drive policy competition between states. Firm-level costs respond later and only where firms act on the change.",
+     link: "Measuring the environment is how a government improves it; it is not a measure of any one firm's performance."},
+
+    {concept: "sclm_akshaya", source: "SCLM-M08-L03", node: "Akshaya Patra meal logistics", mode: "scenario", examOnly: true,
+     caselet: "A meal programme cooks 90,000 portions from one kitchen each morning and must deliver to 480 schools before 12:30. Cooking finishes at 07:30. Its 42 vehicles average 11 schools each per run, and last month 26 schools received meals after 12:30 on at least four days.",
+     stem: "Where is the constraint on this operation?",
+     options: [
+       "In the distribution window between 07:30 and 12:30, since cooking is already complete before dispatch begins",
+       "In kitchen capacity, since 90,000 portions from one kitchen is the largest number in the case and scale of that order is what limits any operation",
+       "In the number of schools, since 480 destinations is more than 42 vehicles can reasonably serve",
+       "In the vehicles, since more of them would remove the late deliveries directly and additional capacity is the fastest route to serving the whole list on time"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Chose the largest number", label: "Read scale as the constraint",
+         why: "This choice assumed the biggest figure marks the bottleneck. Cooking finishes at 07:30, before distribution starts, so the kitchen is not what makes 26 schools late — a stage that has completed its work on time is not the constraint.",
+         cue: "A constraint is the stage that limits the outcome, not the stage with the biggest number."},
+       2: {tag: "Named the workload", label: "Described the task rather than the limit",
+         why: "This choice assumed the number of destinations is the problem. Most of the 480 are served on time, so the network is largely working; the question is what makes the tail late.",
+         cue: "If most of the load is served, the total load is not the constraint."},
+       3: {tag: "Bought capacity before finding the limit", label: "Solved it with vehicles without checking the clock",
+         why: "This choice assumed more vehicles is the fix. It may be part of one, and the binding factor is the five-hour window with routes averaging 11 schools each — sequencing, routing and staggered dispatch may recover the time at no capital cost.",
+         cue: "Establish what limits the outcome before choosing what to buy."}},
+     explanation: "Cooking completes at 07:30 and delivery must finish by 12:30, so the operation is bounded by a five-hour distribution window across 480 schools. The late tail is a routing and sequencing problem inside that window.",
+     link: "Perishable food and a fixed delivery deadline make the window, not the kitchen, the thing to design around."}
+  ];
+
+
+  /* SPMS's examiner-only Section A tranche.
+   *
+   * The eight concepts the examiner-only multi-selects do not reach, so that every
+   * SPMS concept the paper can test has at least one item a learner cannot have met
+   * while studying. Same rules as the SCLM tranche: scenario-led, concept never named
+   * in the stem, no option naming it either, and additive to what Learn already has.
+   *
+   * Option lengths are deliberately spread rather than left to fall out of the
+   * writing. Authoring a fully-reasoned correct answer against terser wrong ones puts
+   * the answer at the longest or second-longest almost every time — measured on the
+   * first draft of the SCLM tranche, 13 of 16 — which hands over a shape cue that has
+   * nothing to do with the idea being tested.
+   */
+  var SPMS_EXAM_ONLY = [
+    {concept: "spms_jtbd", source: "SPMS-M01-L10", node: "Jobs to be done", mode: "scenario", examOnly: true,
+     caselet: "A commuter buys a coffee from the same stall every weekday at 07:40. Asked why, he says the queue is short so he is not late, the cup gives him something to hold on a crowded platform, and arriving at his desk with it makes him feel the day has started properly.",
+     stem: "What is this purchase actually serving?",
+     options: [
+       "Getting to work on time, having something to do while waiting, and starting the day feeling ready",
+       "A caffeine requirement, which is what any coffee purchase fundamentally comes down to in the end",
+       "A habit formed by repetition, since the same purchase made at the same time each weekday has become automatic behaviour requiring no decision",
+       "Price sensitivity, because a stall is cheaper than the cafe and cost is what decides a daily purchase"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Reduced the purchase to the product category", label: "Answered with what is being sold",
+         why: "This choice assumed the drink explains the purchase. The commuter's own answers are about lateness, occupying his hands and feeling ready — none of which a description of the beverage reaches, and all of which a competitor could serve differently.",
+         cue: "Read what the customer says they get. If your answer is the product name, the job has not been found."},
+       2: {tag: "Named the pattern instead of the need", label: "Described the frequency and stopped",
+         why: "This choice assumed regularity is the explanation. Repetition is evidence that something is being served well enough to repeat; it does not say what that something is, which is the whole question.",
+         cue: "Habit describes how often. It never answers what for."},
+       3: {tag: "Substituted price for the job", label: "Explained the choice by cost alone",
+         why: "This choice assumed cost decides. Price enters through value, which is benefit against cost, and the benefits the commuter names are speed, something to hold, and readiness — a cheaper stall serving none of those would not win this purchase.",
+         cue: "Cost is one side of value. Name the benefit before letting price explain anything."}},
+     explanation: "One purchase can stack a functional need, an emotional one and a social one at once, and the commuter names all three without using the words. Naming the product, the frequency or the price answers a different question.",
+     link: "People hire a product to make progress, so the job is described by what changes for them."},
+
+    {concept: "spms_chasm", source: "SPMS-M02-L10", node: "Crossing the chasm", mode: "scenario", examOnly: true,
+     caselet: "A workflow tool has 300 enthusiastic customers, mostly small technical teams who tolerate rough edges and configure it themselves. Growth has stalled. Interviews with larger non-technical buyers find they want references from firms like their own, a guaranteed uptime figure, and someone to set it up for them.",
+     stem: "What should the team do?",
+     options: [
+       "Pick one narrow segment of those buyers and build the complete offer that segment needs, references included",
+       "Keep improving the product for the existing 300, since they are the customers who actually understand it",
+       "Market to the whole non-technical buyer population at once so the reference base builds as fast as possible",
+       "Raise the price so the product reads as enterprise-grade, which is what the larger buyers are looking for"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Stayed with the early market", label: "Served the customers who are already served",
+         why: "This choice assumed the existing customers are the route forward. They are why the product exists and they are not why it has stalled — the mainstream buyer wants something structurally different, and improving for the 300 does not produce it.",
+         cue: "Ask who is not buying and what they said they need. That is the gap, not the current base."},
+       2: {tag: "Sprayed across the whole market", label: "Attacked everywhere and dominated nowhere",
+         why: "This choice assumed breadth builds references faster. References work because they come from firms like the buyer, so a thin presence across many segments produces no credible reference anywhere — a narrow beachhead is what makes them possible.",
+         cue: "A reference is only persuasive to someone who recognises the referee. Concentrate to earn one."},
+       3: {tag: "Priced for the signal", label: "Sent a message instead of removing the risk",
+         why: "This choice assumed the barrier is perception. The buyers named uptime, references and setup — three concrete forms of risk — and raising the price without addressing them makes the same unproven product more expensive.",
+         cue: "Answer what the buyer actually said. Positioning cannot substitute for the whole product they asked for."}},
+     explanation: "The mainstream buyer needs a complete offer: the product plus references, reliability and support. Concentrating on one narrow segment is what makes that complete offer achievable and the references credible.",
+     link: "Early adopters buy potential; the mainstream buys proof, and proof has to be built for someone specific."},
+
+    {concept: "spms_positioning", source: "SPMS-M03-L02", node: "Product definition and positioning", mode: "scenario", examOnly: true,
+     caselet: "A team writes: \"A cloud-native, event-driven ingestion pipeline with pluggable transformation stages and horizontal autoscaling.\" It is used on the website homepage, in the sales deck, and in the engineering backlog.",
+     stem: "What is the most defensible criticism?",
+     options: [
+       "One statement is doing two different jobs, and it is written for the team rather than the buyer",
+       "The statement is too technical, and rewriting it in simpler words for all three uses would resolve it",
+       "There is nothing wrong: a single consistent description across all channels is what alignment means",
+       "It should be shortened, because a homepage cannot carry a sentence of that length effectively"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Fixed the register and kept the conflation", label: "Simplified one sentence instead of writing two",
+         why: "This choice assumed vocabulary is the problem. A simpler single sentence still asks one statement to specify the build and persuade the buyer, and the engineering team genuinely needs the precise version — the fault is that there is one sentence, not that it is hard.",
+         cue: "Count the audiences. Two audiences with different needs require two statements."},
+       2: {tag: "Read consistency as correctness", label: "Made sameness the goal",
+         why: "This choice assumed one description everywhere is alignment. Alignment is the two statements agreeing about the same product; using one text for both simply means one of the two audiences is being handed a document written for the other.",
+         cue: "Ask whether both audiences are served. Identical is not the same as aligned."},
+       3: {tag: "Made it a length problem", label: "Edited for the page rather than for the reader",
+         why: "This choice assumed the sentence is too long for a homepage. A short version of an internal specification is still an internal specification, and the buyer still learns nothing about what changes for them.",
+         cue: "Ask what the reader takes away. Length is a symptom when the content is aimed elsewhere."}},
+     explanation: "Definition is what the product does and is largely internal, for the team and its partners to build against. Positioning is how it changes things for the user and why they should care. One sentence cannot be both.",
+     link: "The internal specification and the buyer's reason to care are different statements about the same product."},
+
+    {concept: "spms_value_pricing", source: "SPMS-M04-L02", node: "Value-based pricing", mode: "scenario", examOnly: true,
+     caselet: "A tool cuts a mid-size insurer's claims-handling time by 12,000 staff-hours a year, worth about ₹2.4 crore. Building and running it costs the vendor ₹40 lakh a year. The vendor proposes a price of ₹52 lakh, reached by adding a 30% margin to cost.",
+     stem: "What is the most defensible criticism of the pricing?",
+     options: [
+       "The price is anchored to what the vendor spends rather than to the ₹2.4 crore the customer gains",
+       "The 30% margin is too thin for software, and a higher percentage on the same base would fix it",
+       "The price is too high, because ₹52 lakh is more than the ₹40 lakh the product actually costs to deliver",
+       "Nothing is wrong, since a price that covers cost and leaves a margin is a sustainable price"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Adjusted the multiplier", label: "Kept the wrong base and changed the number on it",
+         why: "This choice assumed the margin percentage is the decision. Any percentage applied to the vendor's own cost still prices the vendor's inputs; with ₹2.4 crore of value on the table, the gap is not closed by moving 30% to 50%.",
+         cue: "Ask what the price is a percentage OF. Changing the rate cannot fix the wrong base."},
+       2: {tag: "Read margin as overcharging", label: "Compared the price with the cost and stopped",
+         why: "This choice assumed cost sets the ceiling. Cost sets a floor below which the vendor loses money; what the price should reflect is the outcome the customer buys, which here is roughly forty-six times the proposed price.",
+         cue: "Cost is a floor. The customer's outcome is what sets the range above it."},
+       3: {tag: "Accepted sustainability as sufficiency", label: "Confirmed the price would not lose money",
+         why: "This choice assumed covering cost makes a price right. It makes it survivable. Pricing on cost when the value is known and large hands the customer the entire gain and leaves the vendor unable to fund the next version.",
+         cue: "Ask what the price leaves on the table, not only whether it stays above cost."}},
+     explanation: "Cost-based pricing is the fallback for when the deployment and the customer's economics are unknown. Here both are known and quantified, so the price should be set against the ₹2.4 crore of value created.",
+     link: "Price what the customer gets. Cost tells you only how low you can go."},
+
+    {concept: "spms_buyer_journey", source: "SPMS-M05-L02", node: "Buyer journey communication", mode: "scenario", examOnly: true,
+     caselet: "A first outbound email opens with a feature comparison table against three named competitors and a customer testimonial, and closes by asking the recipient to book a demo. Open rates are healthy; replies are close to zero.",
+     stem: "What is the most defensible diagnosis?",
+     options: [
+       "The message answers questions a buyer only asks later, and never establishes the problem it solves",
+       "The email is too long, and cutting it to three sentences would raise the reply rate",
+       "The competitor comparison is the error, because naming rivals gives them free attention",
+       "The channel is wrong, since outbound email no longer produces replies from any buyer segment"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Edited for length", label: "Shortened a message aimed at the wrong stage",
+         why: "This choice assumed brevity is the fix. A short comparison table is still a comparison table, and a reader who has not yet agreed they have a problem has no use for a shorter answer to a question they are not asking.",
+         cue: "Ask what question the message answers, then ask whether the reader is asking it yet."},
+       2: {tag: "Objected to the competitors by name", label: "Found a real risk that is not the cause",
+         why: "This choice assumed naming rivals is what silences the reply. Comparison belongs in the journey, once the buyer is choosing between options; the failure here is that it arrives before they have decided there is anything to choose.",
+         cue: "Sequence before content. The same material can be right later and wrong now."},
+       3: {tag: "Blamed the channel", label: "Discarded the medium instead of the message",
+         why: "This choice assumed email is the problem. Open rates are healthy, so the message is reaching people and being looked at — what fails is what it says, which no change of channel repairs.",
+         cue: "If it is being opened and not answered, the delivery is working and the content is not."}},
+     explanation: "Value has to be communicated in the order the buyer moves through: make the problem and the relevant value understandable first, then introduce alternatives and proof as the decision approaches. Arriving with proof first is arriving too early.",
+     link: "The right message at the wrong stage reads as noise, however accurate it is."},
+
+    {concept: "spms_requirements", source: "SPMS-M06-L05", node: "Functional and quality requirements", mode: "scenario", examOnly: true,
+     caselet: "A specification reads: \"The system shall export a payroll file. The export shall complete within 30 seconds for 5,000 employees. The export shall be available to users with the finance role only.\"",
+     stem: "How should these three statements be classified?",
+     options: [
+       /* Same R3 repair as `sclm_drivers_cla3`. The concept name is three words —
+          functional, quality, requirements — and only the answer carried all three,
+          so argmax picked it out without anybody reading the clauses. Each distractor
+          now names all three too, with its own claim unchanged: 1+1+design decision,
+          all-functional, all-quality. */
+       "One functional requirement and two quality requirements constraining how well it must be done",
+       "Three functional requirements, since each describes something the system must do rather than a quality it must have",
+       "One functional requirement, one quality requirement, and one design decision that is not among the requirements",
+       "Three quality requirements, because none of them is functional and all constrain the finished system"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Called every clause functional", label: "Counted sentences rather than kinds",
+         why: "This choice assumed anything written as \"shall\" is a function. The first names a capability; the other two constrain how well and under what conditions that capability must work, which is a different kind of requirement and is usually where a system is judged.",
+         cue: "Ask whether the clause adds a capability or constrains one. Only the first kind is functional."},
+       2: {tag: "Demoted a constraint to a design choice", label: "Confused a requirement with an implementation",
+         why: "This choice assumed access restriction is a design decision. Restricting the export to a role is a security constraint on the capability — a requirement the system must satisfy; how it is implemented is the design decision that follows.",
+         cue: "Separate what must hold from how it will be achieved. The first is a requirement whoever builds it."},
+       3: {tag: "Called every clause a quality", label: "Removed the capability from the specification",
+         why: "This choice assumed all three constrain. If none of them were functional, nothing here would say what the system does — the first statement is the capability the other two are about.",
+         cue: "A set of constraints needs something to constrain. Find the capability first."}},
+     explanation: "Functional requirements say what the system does; quality requirements — performance, security, availability — say how well and under what conditions. The 30-second bound and the role restriction constrain the export the first statement introduces.",
+     link: "Systems are usually accepted or rejected on the qualities, and specified mostly on the functions."},
+
+    {concept: "spms_priority", source: "SPMS-M07-L01", node: "MoSCoW and RICE prioritisation", mode: "scenario", examOnly: true,
+     caselet: "A release has capacity for six items. A regulator has mandated an audit log for the same date. Every one of the eleven candidate items has been marked Must have by the stakeholder who proposed it, and no item is marked Won't have.",
+     stem: "What is the most defensible criticism of this prioritisation?",
+     options: [
+       "Marking everything Must have removes the method's only output, and refusing to name any Won't have is what allows it",
+       "The regulator's audit log should be ranked alongside the others, since a scoring method treats all items alike",
+       "The problem is that eleven items is too many to score, and the list should be cut before prioritising",
+       "Nothing is wrong, since the stakeholders are closest to their own items and know their true importance"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Scored a non-negotiable", label: "Compared something that cannot lose",
+         why: "This choice assumed everything belongs in the same comparison. A mandated capability with a fixed date is not competing for a slot — it is a constraint on the release, and scoring it invites a result that says not to do it.",
+         cue: "Separate what is required from what is chosen. Only the second is ranked."},
+       2: {tag: "Made it a volume problem", label: "Shortened the list instead of sorting it",
+         why: "This choice assumed eleven is too many. Eleven against six capacity is an ordinary prioritisation problem, and cutting the list before applying a method is prioritising by whoever wields the pen.",
+         cue: "The method exists for exactly this. Cutting first replaces it with an unstated one."},
+       3: {tag: "Deferred to the proposer", label: "Treated ownership as evidence of priority",
+         why: "This choice assumed proximity settles importance. Everyone is closest to their own item, which is why every item is marked Must have — a method that returns whatever the proposer already believed has added nothing.",
+         cue: "Ask what the method changed. If the answer is nothing, it was not applied."}},
+     explanation: "The method sorts necessity, and it only works if the categories are used: naming what will not be done is what makes the ordering real. A regulatory mandate is a constraint on the release rather than a candidate within it.",
+     link: "A prioritisation that ranks nothing below the line has not prioritised."},
+
+    {concept: "spms_privacy", source: "SPMS-M08-L03", node: "Privacy by design", mode: "scenario", examOnly: true,
+     caselet: "A fitness product plans to collect location traces continuously so that a route-suggestion feature can be built later. There is no route feature yet. Users are asked to accept a privacy policy at signup that mentions location among fourteen other categories, and the data will be processed by a vendor outside the company.",
+     stem: "What is the most defensible criticism?",
+     options: [
+       "Data is being collected for a purpose that does not yet exist, under a consent that does not identify it, and passed to a vendor whose handling has not been established",
+       "The privacy policy needs to be shorter, so that users can reasonably read all fifteen categories before accepting, after which the collection described in it becomes properly consented",
+       "Location data should never be collected by a fitness product under any circumstances, since the category is sensitive enough that no purpose could justify holding it",
+       "The plan is acceptable, since the user has accepted a policy that does mention location collection, and consent given at signup covers whatever is later built from the data"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Made it a readability problem", label: "Improved the notice and kept the practice",
+         why: "This choice assumed the fault is comprehension. A shorter notice still asks consent for a purpose nobody has defined, and still leaves the vendor unchecked — the collection is what needs justifying, not the prose describing it.",
+         cue: "Ask whether the practice would be defensible if the notice were perfectly clear."},
+       2: {tag: "Banned the category", label: "Replaced a purpose test with a blanket rule",
+         why: "This choice assumed location is impermissible. A route feature is a legitimate purpose for location data; what is missing is that the purpose exists, is stated, and is limited to what it needs.",
+         cue: "Judge the purpose and the limits, not the data type."},
+       3: {tag: "Accepted consent as sufficient", label: "Treated acceptance as the whole obligation",
+         why: "This choice assumed a signed policy settles it. Consent is one requirement among several: collection has to be limited to a stated purpose, protection has to be built in rather than requested, and a processor's handling remains the controller's responsibility.",
+         cue: "Ask what else is owed beyond consent. Acceptance does not transfer the other duties."}},
+     explanation: "Collection should be limited to a stated purpose, protection built in by default rather than on request, and a third-party processor's compliance verified before data reaches it. Collecting now for a feature that may never exist fails the first of those.",
+     link: "Protection is a design decision taken before collection, not a setting offered afterwards."}
+  ];
+
+
+  /* BRGSA's two remaining concepts. Its Section C slice is reserved and its Section A
+     had none, so `brgsa_m3_cohort` and `brgsa_m6_churn` were the last two concepts on
+     any paper with no examiner surface a learner could not have met. */
+  var BRGSA_EXAM_ONLY = [
+    {concept: "brgsa_m3_cohort", source: "BRGSA-M03-L01", node: "Cohorts and retention", mode: "scenario", examOnly: true,
+     caselet: "A subscription product reports that overall month-3 retention has held at 38% for a year, and the team is treating the product as stable. Split by signup month, the January cohort retained 47% at month three, April 39%, July 33% and October 28%. Monthly signups have roughly tripled over the same year.",
+     stem: "What is the most defensible reading?",
+     options: [
+       "Each new cohort is retaining worse than the one before it, and rising signup volume is holding the blended figure flat",
+       "Retention is stable, since the aggregate figure has not moved across a full year of trading and that is the measure of the product",
+       "The October cohort is simply too young to judge, so the fall is an artefact of measuring groups at different ages",
+       "Signups tripling is the finding, and the retention split is a consequence of serving a larger and more varied market than before"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Read the blend as the truth", label: "Trusted an aggregate that volume is propping up",
+         why: "This choice assumed a flat overall number means nothing is changing. The aggregate mixes cohorts of different ages and different sizes, so tripling the newest and worst cohorts can hold the blend still while every individual group performs worse than the last.",
+         cue: "A stable blended figure over rising volume is the classic place a decline hides. Split it before believing it."},
+       2: {tag: "Dismissed the comparison as unfair", label: "Objected to a comparison that was already at equal age",
+         why: "This choice assumed the cohorts are being compared at different points in their life. They are not — every figure quoted is month-three retention, which is the whole point of reading cohorts at equal age.",
+         cue: "Check what age each figure is measured at. If they match, the comparison is valid."},
+       3: {tag: "Explained the decline away by mix", label: "Used growth to excuse the pattern it produced",
+         why: "This choice assumed a broader market accounts for the fall. It may be part of the cause, and it is not a reason to stop: six months of monotonic decline means each cohort is worth less than the last, which is a finding about acquisition quality rather than a reason to accept it.",
+         cue: "A cause is not a defence. Ask what the pattern means for the value of the next cohort."}},
+     explanation: "Read at equal age, retention has fallen from 47% to 28% across four consecutive cohorts. The aggregate is flat only because the newest and weakest cohorts are also the largest, which is exactly what a blended figure conceals.",
+     link: "Cohorts are read at equal age because an aggregate mixes groups of different ages and different sizes."},
+
+    {concept: "brgsa_m6_churn", source: "BRGSA-M06-L05", node: "Referral and network effects", mode: "scenario", examOnly: true,
+     caselet: "A B2B tool loses 4% of accounts a month. Exit interviews with 30 leavers find 19 never completed the initial data import, 7 left when their internal champion changed job, and 4 said a competitor was cheaper. The team is preparing a discount offer for accounts showing low usage.",
+     stem: "What should the team do instead?",
+     options: [
+       "Fix the import and build a second contact inside each account, since price explains four of thirty departures",
+       "Proceed with the discount, because price is the only cause a company can act on directly and quickly",
+       "Survey the remaining accounts before acting, since thirty interviews is too small a base for any decision",
+       "Accept 4% as the market rate for this category and concentrate the effort on winning replacement accounts"
+     ], answer: 0,
+     wrong: {
+       1: {tag: "Acted on the smallest cause", label: "Chose the lever that was easiest to pull",
+         why: "This choice assumed price is where a company can act. Four of thirty left over price and twenty-six left for reasons the team controls more directly than pricing — a discount pays every remaining account to fix a cause behind 13% of the departures.",
+         cue: "Rank the causes by size before choosing a response. Ease of action is not evidence."},
+       2: {tag: "Deferred on sample size", label: "Waited for precision the decision does not need",
+         why: "This choice assumed thirty is too few. Nineteen of thirty pointing at one specific step is not a marginal signal needing tighter confidence intervals, and the cost of the delay is another month at 4%.",
+         cue: "Ask whether more data would change the action. If the largest cause is unambiguous, it would not."},
+       3: {tag: "Naturalised the churn", label: "Treated a diagnosed cause as a market condition",
+         why: "This choice assumed the rate is structural. The interviews have already located most of it in an incomplete onboarding step, which is a product problem with a known fix, and replacing accounts that will churn for the same reason refills the same leak.",
+         cue: "A rate with a named cause is not a market rate. Ask what the leavers actually said."}},
+     explanation: "Nineteen of thirty never reached first value, and seven were lost with a single relationship. Both are addressable, and both are larger than price — a discount would spend money on the cause behind four departures.",
+     link: "Churn is diagnosed before it is priced; the reason people leave is rarely the reason it is cheapest to address."}
+  ];
+
   var COURSE_ASSESSMENT_ITEMS = {SCLM: [
     /* ---- Module 1 ---------------------------------------------------- */
     {concept: "sclm_fit", source: "SCLM-M01-L04", node: "Strategic fit", mode: "definition",
@@ -2438,8 +3367,11 @@
   ]};
 
   function addCourseAssessmentItems(course) {
-    var items = COURSE_ASSESSMENT_ITEMS[course.id];
-    if (!items) return;
+    var items = (COURSE_ASSESSMENT_ITEMS[course.id] || [])
+      .concat(course.id === "SCLM" ? SCLM_EXAM_ONLY : [])
+      .concat(course.id === "SPMS" ? SPMS_EXAM_ONLY : [])
+      .concat(course.id === "BRGSA" ? BRGSA_EXAM_ONLY : []);
+    if (!items.length) return;
     var seen = {};
     items.forEach(function (item) {
       var concept = (course.concepts || []).filter(function (entry) { return entry.id === item.concept; })[0];
@@ -2469,6 +3401,7 @@
         difficulty: item.mode === "definition" ? 2 : item.mode === "numeric" ? 4 : 3,
         variantFamily: item.concept + "_cla_" + item.mode,
         boss: false,
+        examOnly: !!item.examOnly,
         caselet: item.caselet || null,
         stem: item.stem,
         options: item.options,
@@ -2888,10 +3821,19 @@
   function addIntegratedScenarios(course) {
     var scenarios = (window.T6_INTEGRATED || {})[course.id] || [];
     scenarios.forEach(function (scenario) {
+      /* Was a silent `return` on any unresolvable conceptId, which is how authored
+       * content ships and is never served — the failure mode §5 of the overhaul brief
+       * names first. A scenario that cannot resolve its concepts is a defect in the
+       * bank, so it stops the build and says which id it could not find. */
+      var missing = scenario.conceptIds.filter(function (id) {
+        return !course.concepts.some(function (concept) { return concept.id === id; });
+      });
+      if (missing.length) {
+        throw new Error("Integrated scenario " + scenario.id + " (" + course.id + ") names concept id(s) that do not exist: " + missing.join(", "));
+      }
       var concepts = scenario.conceptIds.map(function (id) {
         return course.concepts.filter(function (concept) { return concept.id === id; })[0];
-      }).filter(Boolean);
-      if (concepts.length !== scenario.conceptIds.length) return;
+      });
       var primary = concepts[0];
       addQuestion(course, {
         id: scenario.id,
@@ -2912,6 +3854,11 @@
         estimatedMinutes: 12,
         selfReviewOnly: true,
         writtenMode: "integrated",
+        /* The examiner-only slice. `examReservedIds` is a late tiebreaker and depends
+           on Learn having slack; this is the hard reservation, and it is only safe
+           because these items are additional to a Learn surface set that is already
+           complete without them. Nothing shared is excluded — see §4.2 of the brief. */
+        examOnly: !!scenario.examOnly,
         caselet: scenario.caselet,
         stem: scenario.task,
         rubric: scenario.rubric.map(function (criterion) {
@@ -3076,7 +4023,10 @@
 
   function configureRuns(course) {
     var questions = Object.keys(course.questions).map(function (id) { return course.questions[id]; });
-    var activeQuestions = questions.filter(function (question) { return !question.optionShapeRisk && !question.primerOnly; });
+    /* `examOnly` leaves here and nowhere else: this is the one place study-set pools
+       are built, so excluding it once keeps every Learn route out of the reserved
+       slice without a second filter drifting from this one. */
+    var activeQuestions = questions.filter(function (question) { return !question.optionShapeRisk && !question.primerOnly && !question.examOnly; });
     var bossIds = activeQuestions.filter(function (question) { return question.boss; }).map(function (question) { return question.id; });
     course.runs.forEach(function (run) {
       if (run.module >= 1 && run.module <= 8) {

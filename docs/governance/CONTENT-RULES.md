@@ -169,6 +169,84 @@ this way; the last one carried ten marks.
 **Gate:** LAW-49 vocabulary gate — **only runs when the transcript root is passed.**
 A green run with an empty `"coverage": {}` verified nothing.
 
+**And the citation is not the test (2026-08-15, LAW-66).** LAW-47 guarantees every lecture
+an item *cites* has been taught before it. It cannot see a term borrowed from a lecture the
+item does **not** cite, because nothing links the two — so an item can pass LAW-47, the bank
+validator and the vocabulary gate and still hand a learner an answer written in a word the
+run has not said. `smoke_signal` cites `BRGSA-M01-L02` and its correct answer used
+"prospects", glossary vocabulary from `BRGSA-M01-L04`, three lessons later.
+
+**Gate:** `node tools/measure-cold-learner.mjs --gate` (T1), over real delivered runs.
+Per item, never averaged. Current: 32/32 across four subjects.
+
+---
+
+## R7 — A section's slot must be filled by an item worth its marks
+
+**Banned:** a section declaring only a question *type* and drawing anything of that type,
+regardless of the length the slot is worth. BRGSA Section C is two **ten-mark** structured
+responses and drew 2 from 36 written items of which **32 run three to five minutes** — so
+four times in five a ten-mark slot got a three-minute answer, and three of the four
+scenarios authored for that slot reached no set the product offers.
+
+**Why:** it looks like a content gap and is not. The content existed; the draw could not
+tell a ten-mark item from a three-minute one because nothing in the section said so.
+
+**Gate:** sections carry a `prefer` order over `writtenMode`, asserted by
+`tests/integrated-scenarios.test.mjs` — every BRGSA Section C slot must be `integrated`,
+and the three seeded sets must be three distinct draws.
+
+---
+
+## R8 — An examiner-only slice must be additive
+
+**Banned:** hard-reserving a shared item away from Learn. The examiner's draw would then
+take a module's best teaching surfaces, trading a small honesty problem for a real teaching
+one (overhaul brief §4.2).
+
+**Allowed:** hard-reserving items that are *additional*. The six `examOnly` BRGSA scenarios
+are excluded from every study pool and from written practice; the four original scenarios
+stay available, so Learn lost access only to content that did not exist before.
+
+**Gate:** `tests/examiner-slice.test.mjs` — no reserved item in any study pool, and every
+concept still clears the bank's surface floor **with the slice removed**. Overlap is
+reported per section by `tools/measure-exam-transfer.mjs` (T4).
+
+---
+
+## R9 — A reserved item must be better than average on craft
+
+**Why:** an examiner-only item is ranked first by `examPrefer`, so it is on **every**
+paper. A shared item's shape bias is diluted by the draw; a reserved one's is not, and
+one reserved item won outright by a mechanical rule moves the paper-level figure roughly
+four times as far. Measured: two new BRGSA mcqs took `combinedWithLength` from 24% to
+33.6% while the pool sat at 26%.
+
+**Banned:** a reserved objective item answerable by eliminating the absolutes and then
+taking the second-longest survivor.
+
+**Fix by** removing a *filler* absolute so a distractor survives the elimination, or by
+making a distractor more specific. Never by trimming the correct answer (LAW-48), and
+never by weakening a load-bearing over-claim.
+
+**Gate:** `tests/examiner-slice.test.mjs` — "no reserved objective item is won outright by
+a mechanical rule". Nine on its first run.
+
+---
+
+## R10 — Ticking every option must be strictly worse than answering
+
+**Banned:** on a negatively marked multi-select, any shape where `correct − wrong` reaches
+the question's marks. SPMS Section B scores +1 per right option and −1 per wrong, floored
+at zero and capped at 2, so **3-of-4 and 4-of-4 both pay full marks for ticking
+everything**. 3-of-5, 2-of-4 and 2-of-5 do not.
+
+**Why it is a rule and not a memory:** this is LAW-53, and it came back the moment eight
+new multi-selects were authored in good faith — four of them 3-of-4 and one 4-of-4, with
+nothing failing to say so.
+
+**Gate:** `tests/examiner-slice.test.mjs`. Current shapes: 3-of-5 ×20, 2-of-4 ×6, 2-of-5 ×2.
+
 ---
 
 ## R5 — One visible prompt, one question

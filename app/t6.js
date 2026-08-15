@@ -560,10 +560,40 @@
    * The last scored answer being wrong is the whole test. It is deliberately about
    * the concept rather than the question: getting the same item wrong twice and
    * getting two different items on one idea wrong are the same gap. */
+  /* A mock counts too, and until 2026-08-15 it did not.
+   *
+   * `recordExamMisses` writes `examMisses` and deliberately never writes an attempt —
+   * misses "prioritise and never score". This function read `attemptsFor` alone, so
+   * the two stores were disjoint and a paper could not reach the re-teach latch. The
+   * effect was precise and invisible: a learner who read the lesson, sat a mock and
+   * lost the marks was sent straight back to the question with no lesson, under a
+   * kicker reading "Taught first, then tested again". First contact worked, which is
+   * exactly the shape this latch was fixed for once already.
+   *
+   * `missed` and `written` count; `skipped` alone does not. Running out of time is a
+   * timing signal, not evidence the idea was lost, and `examMissList` already weights
+   * it lower for the same reason. */
+  function examMissNeedsReteach(courseId, conceptId, readAt) {
+    var entry = ((profile.examMisses || {})[courseId] || {})[conceptId];
+    if (!entry || !entry.at) return false;
+    var missedAt = Date.parse(entry.at);
+    if (!missedAt || missedAt <= readAt) return false;
+    if (!((Number(entry.missed) || 0) > 0 || (Number(entry.written) || 0) > 0)) return false;
+    /* The RECOVERED rule, applied to the mock as well. A learner who lost the marks
+       and has since answered the idea correctly is not sent back to the page — the
+       same judgement `reteach-on-failure.js` case 2 holds the Learn side to. Without
+       this the miss would re-teach on every sitting for ever, which is the "re-teach
+       everything on every slip" product that is worse than never re-teaching. */
+    return !attemptsFor(courseId, conceptId).some(function (attempt) {
+      return attempt.scored !== false && attempt.correct === true && attempt.at > missedAt;
+    });
+  }
+
   function lessonNeedsReteach(courseId, lectureId, conceptIds) {
     var readAt = lessonsReadMap()[lectureId];
     if (!readAt) return false;
     return (conceptIds || []).some(function (conceptId) {
+      if (examMissNeedsReteach(courseId, conceptId, readAt)) return true;
       var since = attemptsFor(courseId, conceptId).filter(function (attempt) {
         return attempt.scored !== false && attempt.correct !== null && attempt.at > readAt;
       });
@@ -1077,6 +1107,39 @@
 
   function conceptStatus(courseId, conceptId) {
     return conceptEvidence(courseId, conceptId).status;
+  }
+
+  /* The best state this concept ever held, replayed from its own attempt history.
+   *
+   * WHY IT IS REPLAYED AND NOT STORED
+   * The same reason `trendFromCourses` replays: a stored high-water mark is a second
+   * copy of the evidence rule that drifts from it, and a learner whose attempts are
+   * edited or reloaded would keep a peak the evidence no longer supports. Replaying
+   * costs one pass per concept and can only ever say what the current rule says.
+   *
+   * WHY IT EXISTS
+   * Until 2026-08-15 a concept that fell from Strong was character-for-character
+   * identical on the shelf to one that had never been learned — same label, same
+   * actions — and the difference was visible only behind the "Why" disclosure, as
+   * evidence counts the reader had to interpret. Detected, acted on, and never said.
+   */
+  function conceptPeakStatus(courseId, conceptId) {
+    var attempts = attemptsFor(courseId, conceptId);
+    var peak = "unseen";
+    for (var i = 1; i <= attempts.length; i += 1) {
+      var at = attempts[i - 1].at;
+      var status = evidenceFromAttempts(attempts.slice(0, i), at).status;
+      if (STATUS_ORDER[status] > STATUS_ORDER[peak]) peak = status;
+    }
+    return peak;
+  }
+
+  /* Present tense only: a concept currently below its own best. Returns null when
+     nothing was lost, so callers can treat it as "is there something to say". */
+  function conceptDecline(courseId, conceptId, currentStatus) {
+    var peak = conceptPeakStatus(courseId, conceptId);
+    if (STATUS_ORDER[peak] <= STATUS_ORDER[currentStatus]) return null;
+    return {from: peak, fromLabel: STATUS_LABEL[peak]};
   }
 
   function courseStats(courseId) {
@@ -1954,10 +2017,33 @@
           "<span class='shelf-why' aria-hidden='true'>Why</span>";
         row.appendChild(name);
 
+        /* The status cell is a wrapper so `.shelf-state` keeps EXACTLY the status
+           label and nothing else. Nesting the decline inside it made
+           `.shelf-state.textContent` read "Needs practicewas Strong", which quietly
+           broke `measurement-evidence.js`'s exact-equality match on "Strong" — a
+           probe failing because of a UI change it was not about is the worst kind of
+           false signal. The wrapper occupies the same grid column, so the row's
+           three-column layout is unchanged. */
+        var statusCell = document.createElement("span");
+        statusCell.className = "shelf-status-cell";
+
         var state = document.createElement("span");
         state.className = "shelf-state " + status;
         state.textContent = STATUS_LABEL[status] || status;
-        row.appendChild(state);
+        statusCell.appendChild(state);
+
+        /* Say the loss on the row rather than leaving it to be inferred from evidence
+           counts behind the disclosure. Words, not colour or an arrow: the four
+           mastery states must stay distinguishable without either, and a decline is
+           no different. */
+        var decline = conceptDecline(courseId, concept.id, status);
+        if (decline) {
+          var lost = document.createElement("small");
+          lost.className = "shelf-lost";
+          lost.textContent = "was " + decline.fromLabel;
+          statusCell.appendChild(lost);
+        }
+        row.appendChild(statusCell);
 
         var actions = document.createElement("span");
         actions.className = "shelf-actions";
@@ -2319,7 +2405,7 @@
     $("subject-description").textContent = course.description;
     $("sets-title").textContent = course.shortTitle + " · Ten available study sets";
     setRouteCopy("practice-priority",
-      stats.needs ? "Practise " + stats.needs + " concepts that need work"
+      stats.needs ? "Practise " + stats.needs + " concept" + (stats.needs === 1 ? "" : "s") + " that need" + (stats.needs === 1 ? "s" : "") + " work"
         : stats.developing ? "Build stronger evidence"
         : stats.unseen ? "Start the next new concepts" : "Refresh strong concepts",
       subjectProgressCopy(stats));
@@ -2331,8 +2417,12 @@
 
   function subjectProgressCopy(stats) {
     if (stats.strong === stats.total) return "Every core concept has broad current evidence. Use a generic practice check and later retrieval to keep it fresh.";
-    if (stats.needs) return stats.needs + " need practice; these appear first when you practise this subject.";
-    if (stats.developing) return stats.developing + " are developing; open one to see exactly which evidence is still missing.";
+    if (stats.needs) return stats.needs === 1
+      ? "1 needs practice; it appears first when you practise this subject."
+      : stats.needs + " need practice; these appear first when you practise this subject.";
+    if (stats.developing) return stats.developing === 1
+      ? "1 is developing; open it to see exactly which evidence is still missing."
+      : stats.developing + " are developing; open one to see exactly which evidence is still missing.";
     return "Choose any concept or start with the first short study set.";
   }
 
@@ -3309,7 +3399,7 @@
     var questions = Object.keys(getCourse(courseId).questions).map(function (id) {
       return getQuestion(courseId, id);
     }).filter(function (question) {
-      return question && question.type === "short-answer" && !question.optionShapeRisk && !question.primerOnly;
+      return question && question.type === "short-answer" && !question.optionShapeRisk && !question.primerOnly && !question.examOnly;
     }).sort(function (left, right) {
       var leftRecord = courseRecord.questions[left.id] || {attempts:0, lastAt:0};
       var rightRecord = courseRecord.questions[right.id] || {attempts:0, lastAt:0};
@@ -3324,15 +3414,40 @@
         (Number(leftRecord.lastAt) || questionLastAttemptAt(courseId, left.id)) - (Number(rightRecord.lastAt) || questionLastAttemptAt(courseId, right.id));
     });
     /* First pass: one prompt per concept, alternating fast explanation and case
-     * transfer where possible. A second pass fills any remaining slots. */
+     * transfer where possible. A second pass fills any remaining slots.
+     *
+     * The rotation used to be short/case/short/case, and the consequence was that the
+     * integrated scenarios could not be reached at all: the fallback only fires when
+     * no unchosen concept has a prompt in the requested mode, and every one of these
+     * subjects' concepts carries both a short and a case prompt, so it never fired.
+     * Four authored ten-mark scenarios sat in the bank unreachable by any Learn route
+     * while the examiner's Section C is exactly that surface — which is the shape of
+     * "if Examiner feels foreign, that is Learn's failure". The last slot is now the
+     * integrated one, placed last because it costs twelve minutes and rests on the
+     * concepts the three before it have just exercised. */
     var chosen = [];
     var chosenConcepts = {};
-    ["short", "case", "short", "case"].forEach(function (mode) {
+    ["short", "case", "short", "integrated"].forEach(function (mode) {
       var question = questions.filter(function (candidate) {
         return !chosenConcepts[candidate.conceptId] && candidate.writtenMode === mode && chosen.indexOf(candidate) < 0;
-      })[0] || questions.filter(function (candidate) {
-        return !chosenConcepts[candidate.conceptId] && chosen.indexOf(candidate) < 0;
       })[0];
+      /* One concept per prompt is the right rule for the per-concept modes and the
+         wrong one for this mode: an integrated scenario spans four concepts and is
+         filed under the first, so the uniqueness test can reject the only surface of
+         its kind because a three-minute prompt on one of its four concepts was taken
+         two slots earlier. Only four scenarios exist per subject, so that collision is
+         common rather than theoretical. This slot therefore relaxes uniqueness before
+         it gives the slot up. */
+      if (!question && mode === "integrated") {
+        question = questions.filter(function (candidate) {
+          return candidate.writtenMode === mode && chosen.indexOf(candidate) < 0;
+        })[0];
+      }
+      if (!question) {
+        question = questions.filter(function (candidate) {
+          return !chosenConcepts[candidate.conceptId] && chosen.indexOf(candidate) < 0;
+        })[0];
+      }
       if (question) { chosen.push(question); chosenConcepts[question.conceptId] = true; }
     });
     questions.forEach(function (question) { if (chosen.length < 4 && chosen.indexOf(question) < 0) chosen.push(question); });
@@ -4386,6 +4501,15 @@
     }
     label.appendChild(row);
     holder.appendChild(label);
+    /* A question that needs the table carries it, because the paper hands one over and
+       practising the method without the instrument teaches half of it. */
+    if (question.reference === "standard-normal") {
+      var details = document.createElement("details");
+      details.className = "numeric-reference";
+      details.innerHTML = "<summary>Standard normal table</summary><div id='learn-normal-table'></div>";
+      holder.appendChild(details);
+      buildNormalTable("learn-normal-table");
+    }
     $("question-help").textContent = question.tolerance
       ? "Marked on the final figure, within ±" + question.tolerance + (question.unit ? " " + question.unit : "") + ". A scientific calculator is allowed in this paper."
       : "Marked on the final figure only.";
@@ -6124,7 +6248,18 @@
          rule: "One correct option. Two marks each. No negative marking."},
         {id: "B", label: "Section B", type: "case-cloze", count: 4, marks: 5,
          rule: "A short scenario, then a task. Address every part of the task directly."},
+        /* `prefer` was the fix for a section drawing the wrong KIND of item.
+         *
+         * Section C is two ten-mark structured responses. Its pool is 36 written
+         * items, of which 32 are per-concept prompts running three to five minutes
+         * ("in two to three sentences, explain X in your own words") and four are the
+         * integrated scenarios built for exactly this slot. A flat draw took two of
+         * 36, so the odds were four in five that a ten-mark slot was filled by a
+         * three-minute prompt, and three of the four scenarios written for this
+         * section reached no set the product offers. That is a paper-composition
+         * defect, not a missing-content one — the content was there all along. */
         {id: "C", label: "Section C", type: "short-answer", count: 2, marks: 10,
+         prefer: ["integrated", "case", "short"],
          rule: "A complete structured response. No feedback during the paper; after submission Dungeon can issue a course-grounded practice review, never an official mark."}
       ]
     },
@@ -6133,6 +6268,9 @@
       sat: "23 August, 13:00–15:00",
       total: 80,
       calculator: "scientific",
+      /* The real paper supplies these. Withholding one makes every z-based question
+         unanswerable, which is a different exam, not a harder one. */
+      tables: ["standard-normal"],
       sections: [
         {id: "A", label: "Section A", type: "mcq", count: 50, marks: 1,
          rule: "One correct option. One mark each. No negative marking."},
@@ -6149,6 +6287,10 @@
       calculator: null,
       sections: [
         {id: "A", label: "Section A", type: "short-answer", count: 10, marks: 10,
+         /* Same reasoning as BRGSA Section C: ten-mark slots should lead with the
+            items written at ten-mark length. IBM has no examiner-only slice authored,
+            so these four are shared with Learn and rely on the late tiebreaker. */
+         prefer: ["integrated", "case", "short"],
          rule: "Ten written answers, every one of them on the caselet released two days before the exam."}
       ],
       /* IBM cannot be mocked honestly and it is important to say why rather than to
@@ -6228,6 +6370,42 @@
     return out;
   }
 
+  /* Rank a shuffled pool by the section's declared preference, keeping the shuffle
+   * inside each band.
+   *
+   * Two keys, in this order and not the other one. The section's declared mode comes
+   * first, because a ten-mark slot needs a ten-mark item and an examiner-only
+   * three-minute prompt would still be the wrong shape for it. Reservation breaks the
+   * tie inside a band: among items the section wants equally, the ones Learn cannot
+   * reach are the ones the paper should spend its slots on.
+   *
+   * Stable by construction — the sort only compares the two band indices, so items
+   * equal on both stay in the order the seed put them, which is what keeps three
+   * seeded sets genuinely different draws. A section with no `prefer` is untouched,
+   * and an unnamed mode lands after every named one rather than being dropped, so a
+   * section still fills when its preferred items run out. */
+  function examPrefer(questions, prefer) {
+    /* Reservation applies to every section, with or without a declared mode order: an
+       examiner-only item exists to be on the paper, whatever format the section takes.
+       Only the mode band is opt-in, because only some sections have a length their
+       slot is worth. */
+    var hasReserved = questions.some(function (question) { return question.examOnly; });
+    if ((!prefer || !prefer.length) && !hasReserved) return questions;
+    var band = function (question) {
+      if (!prefer || !prefer.length) return 0;
+      var index = prefer.indexOf(question.writtenMode);
+      return index < 0 ? prefer.length : index;
+    };
+    var reserved = function (question) { return question.examOnly ? 0 : 1; };
+    return questions.map(function (question, index) { return {question: question, index: index}; })
+      .sort(function (a, b) {
+        return band(a.question) - band(b.question) ||
+          reserved(a.question) - reserved(b.question) ||
+          a.index - b.index;
+      })
+      .map(function (entry) { return entry.question; });
+  }
+
   /* Builds the paper, and reports honestly on what it could not fill. */
   function buildExamPaper(courseId, seed) {
     var spec = EXAM_PAPERS[courseId];
@@ -6235,7 +6413,7 @@
     var questions = [];
     var shortfalls = [];
     spec.sections.forEach(function (section) {
-      var pool = examShuffle(examPool(courseId, section.type), seed + section.id.charCodeAt(0));
+      var pool = examPrefer(examShuffle(examPool(courseId, section.type), seed + section.id.charCodeAt(0)), section.prefer);
       var taken = pool.slice(0, section.count);
       if (taken.length < section.count) {
         shortfalls.push({section: section.id, want: section.count, have: taken.length, type: section.type});
@@ -6487,6 +6665,7 @@
     $("exam-next").textContent = exam.current === exam.items.length - 1 ? "Save" : "Save & next";
     var calculator = exam.paper.spec.calculator;
     $("exam-calc-toggle").hidden = !calculator;
+    $("exam-table-toggle").hidden = (exam.paper.spec.tables || []).indexOf("standard-normal") < 0;
   }
 
   function examQuestionMarkup(question, item) {
@@ -8637,6 +8816,67 @@
   function renderCalculator() {
     var kind = exam.paper.spec.calculator;
     if (kind) buildCalculator("exam-calculator", kind);
+    if ((exam.paper.spec.tables || []).indexOf("standard-normal") >= 0) buildNormalTable("exam-normal-table");
+  }
+
+  /* The standard normal table, because the paper supplies one.
+   *
+   * T6_EXAM_PATTERN.md is explicit that SCLM candidates are given standard normal
+   * distribution tables. Dungeon had no such provision, and the consequence was not
+   * cosmetic: every z-based question in the syllabus — safety stock, the reorder
+   * point, the service level a policy achieves — is unanswerable without it, which is
+   * why SCLM Section B sat at 4 of 6 numericals with the two missing ones both z-based.
+   * A mock that withholds a tool the real paper hands out is testing a different exam.
+   *
+   * Phi is computed rather than stored as 310 literals, so there is one place to be
+   * wrong and tests/normal-table.test.mjs checks it against the values every printed
+   * table agrees on (0.5000 at 0, 0.8413 at 1, 0.9500 at 1.645, 0.9750 at 1.96).
+   * Abramowitz & Stegun 26.2.17, whose error bound is 7.5e-8 — four orders below the
+   * fourth decimal place a table prints. */
+  function normalCdf(z) {
+    var sign = z < 0 ? -1 : 1;
+    var x = Math.abs(z) / Math.SQRT2;
+    var t = 1 / (1 + 0.3275911 * x);
+    var y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+    return 0.5 * (1 + sign * y);
+  }
+
+  /* One table, mounted twice — the examiner's paper hands it over, and a Learn
+     numeric that needs it carries it inline, so the method is practised with the same
+     instrument the exam supplies. */
+  /* Split into two five-column halves rather than one eleven-column table.
+   *
+   * The conventional printed layout is z plus 0.00-0.09 in one row of columns, and it
+   * is 584px wide at a readable type size. On a 375px phone that scrolls sideways
+   * showing 325 of 584 — `ui-audit.js` reported it as `hiddenScroll` at 44% hidden,
+   * and it was right: a candidate under a clock sees columns up to 0.05 with nothing
+   * telling them 0.06 to 0.09 exist. Shrinking the type to fit would have crossed the
+   * 12px readable floor. Two halves of six columns are ~190px each, so they sit side
+   * by side on a desktop and stack on a phone, and nothing needs scrolling sideways at
+   * either width. The lookup rule is unchanged. */
+  function normalTableHalf(from, to) {
+    var columns = [];
+    for (var c = from; c <= to; c += 1) columns.push(c);
+    var rows = "";
+    for (var whole = 0; whole <= 30; whole += 1) {
+      var base = whole / 10;
+      rows += "<tr><th scope='row'>" + base.toFixed(1) + "</th>" + columns.map(function (hundredth) {
+        return "<td>" + normalCdf(base + hundredth / 100).toFixed(4) + "</td>";
+      }).join("") + "</tr>";
+    }
+    return "<table class='normal-table'><caption class='sr-only'>Standard normal cumulative distribution, " +
+      "second decimal 0.0" + from + " to 0.0" + to + "</caption><thead><tr><th scope='col'>z</th>" +
+      columns.map(function (hundredth) { return "<th scope='col'>0.0" + hundredth + "</th>"; }).join("") +
+      "</tr></thead><tbody>" + rows + "</tbody></table>";
+  }
+
+  function buildNormalTable(mountId) {
+    var node = $(mountId);
+    if (!node || node.dataset.built === "1") return;
+    node.innerHTML = "<p class='normal-table-note'>Cumulative probability &Phi;(z) — the area to the left of z. " +
+      "Read the row for the first decimal and the column for the second.</p>" +
+      "<div class='normal-table-split'>" + normalTableHalf(0, 4) + normalTableHalf(5, 9) + "</div>";
+    node.dataset.built = "1";
   }
 
   function bindExaminer() {
@@ -8688,6 +8928,11 @@
       var panel = $("exam-calculator");
       panel.hidden = !panel.hidden;
       $("exam-calc-toggle").setAttribute("aria-expanded", String(!panel.hidden));
+    });
+    $("exam-table-toggle").addEventListener("click", function () {
+      var panel = $("exam-normal-table");
+      panel.hidden = !panel.hidden;
+      $("exam-table-toggle").setAttribute("aria-expanded", String(!panel.hidden));
     });
     /* Leaving mid-paper is a real risk of losing two hours, so it asks. */
     window.addEventListener("beforeunload", function (event) {

@@ -1,5 +1,139 @@
 # Dungeon
-> **Both craft exploits closed, measured by persona on both surfaces (2026-08-15; newest):**
+> **The content is accepted, and measuring the promises broke four of them (2026-08-15; newest):**
+> `WAITING_OWNER_CONTENT_ACCEPTANCE` is **cleared** — the owner accepted the whole standing block
+> in chat (792 surfaces, 64 primers, 64 rubrics/exemplars, 106 lessons, the 48 CLA items, the 44
+> reserved items, the SPMS caselets and rewritten stems, the BRGSA concept records, the ~76
+> restated answers). It clears the gate that blocked `DONE`; it is **not** faculty review and
+> creates no subject-matter authority. Two R3 defects were repaired *before* the gate closed
+> rather than accepted and then corrected. **The persona suite's learn half had been measured on
+> an order that no longer existed** — the committed queue skeletons predated three bank commits,
+> so re-exporting through the real app moved SPMS, BRGSA and SCLM (IBM unchanged), and a control
+> run proves **every movement is the schedule, none is the bank**. BRGSA now delivers
+> `case_validate`: the integrated slot in a real queue for the first time. **Four defects, none
+> reachable by an existing gate.** *A mock miss did not re-teach a lesson already read* —
+> `lessonNeedsReteach` read `conceptAttempts` and `recordExamMisses` writes only `examMisses`, by
+> design, so the paper could never reach the latch: `lessonAt: -1` under a kicker reading "Taught
+> first, then tested again", and first contact worked, which is the **same shape this latch was
+> fixed for once already**. Fixed, with the RECOVERED rule applied symmetrically so one bad paper
+> does not re-teach for ever, and the cause established by **control** rather than by reading the
+> code. *A concept that fell from Strong was character-for-character identical to one never
+> learned* — the difference lived behind the "Why" disclosure as counts the reader had to
+> interpret; `conceptPeakStatus` replays the rule (never a stored high-water mark) and the row now
+> says **"was Strong"** in words, not colour. *`ui-audit`'s type check had never been able to
+> fail*: floor hard-coded at 12 against a declared `--t-micro: 11`, so it listed **111 compliant
+> elements**, truncated at ten, and buried the **seven** that actually broke the rule — SVG axis
+> labels at 10px, the only type in the product under its own scale. Floor now read from the token;
+> **0 at 375 and 1280**. *Two reserved items answered to their own heading* — `sclm_drivers_cla3`
+> and `spms_requirements_cla1`, both contradicting the R3 rule in their own header comment,
+> repaired in `connect`'s direction; **25 → 23** sets paying 100%. Two new probes:
+> `tools/browser-checks/exam-repair.js` and `regression-reporting.js`. `npm test` **103/103**,
+> validator **0 errors 0 warnings**, LAW-47 **12 routes × 4 subjects, 0 violations** (re-run
+> because the re-teach change adds lessons to queues that had none), layering **40 sets / 255
+> pairs / 0 descents**, paper digests unchanged. Evidence:
+> `evidence/2026-08-15/t6-persona-rerun/verification.md` and
+> `evidence/2026-08-15/t6-promise-suite/verification.md`. Not merged, not deployed.
+>
+> **Every subject now has a reserved examiner slice, and "pick the second-longest" is closed
+> (2026-08-15; newest):** the four items the block below left open are done. **44 reserved
+> items across all four subjects**, and every concept on every paper has a distinct examiner
+> surface — **16/16 × 4**, from **0/16 on three of them** — with overlap 100% → **60–80%**.
+> **SPMS Section B had no slack whatever**: 20 drawn from a pool of 20, so its "three seeded
+> sets" were one set printed three times across 40 of that paper's 75 marks, on the only
+> negatively marked section in the term. Pool now 28. **The standing IBM option-length
+> warning was mis-scoped and much larger than recorded.** "Pick the second-longest" paid
+> **32.9–38.5% on all four subjects** and IBM was not the worst; it exists because the
+> defence against "pick the longest" created it — `comparableWrong` selects distractors
+> *closest in length to the answer*, which beat `longest` (20.7–29.5%, at or under chance)
+> and clustered the four lengths so the answer sits one rank down. **Defeating one shape cue
+> manufactured its neighbour and nothing was watching that rank.** The validator's
+> `lengthRankShares` could not see it either: it counts an exact sort position a candidate
+> cannot execute where lengths tie, and resolving ties by guessing moves the figure by up to
+> ten points. **A structural fix was tested and rejected on measurement** — three
+> `comparableWrong` variants produced *byte-identical* numbers, because the mcq families
+> carry exactly three authored distractors and selection has no freedom at all. 23
+> distractors were made more specific instead: **38.5 → 26.9, 32.9 → 22.4, 32.9 → 27.0,
+> 35.9 → 28.2**, `longest` unmoved, `lengthRankSpread` roughly halved, and **the length
+> warning cleared**. `secondLongest` and `combinedWithLength` are now gated; `fixedB` is
+> reported and deliberately **not** gated, because slots are dealt flat by construction
+> (0.25 × 4 on every subject) and a 50-of-100 draw carries ±6 points, so gating it measures
+> the draw. **A reserved item's bias is never diluted** — it is on *every* paper, so two new
+> BRGSA mcqs moved `combinedWithLength` from 24% to 33.6% while the pool sat at 26%, all
+> three seeds reading ~33; one item's fix took it to 28.6%, and a new test caught **nine**
+> such items including seven I had just written. **LAW-53 returned the moment I authored**:
+> four of eight new multi-selects came out 3-of-4 and one 4-of-4, which on this section's
+> +1/−1 scoring means ticking everything scores full marks — nothing failed, it was caught by
+> printing shapes by hand, and it is now a test. **LAW-67 recurred in the tool written to
+> catch it**: `--gate` was consumed as the harness directory, so T3 printed a pass over an
+> empty report. **14 of 20 SPMS multiple-select stems** asked what "the lecture" said (the
+> brief records fifteen); all rewritten, and `spms_roadmap_msq`'s WhatsApp release date is
+> no longer a *correct* option among framework claims. **BRGSA self-containment is audited
+> for the first time since the pattern promised it: 0 items need a brand figure the page
+> does not carry, 0 name a case they do not show** — after three probe narrowings, since the
+> first draft would have reported 25 non-defects (computation is not recall; a brand that is
+> the concept's own name is a label). `VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)`
+> at `evidence/2026-08-15/t6-rehaul-completion/verification.md`: twelve gates exit 0, LAW-47
+> **12 routes × 4 subjects, 0 violations**, 0 layering descents, `paperDigestMatch: true`,
+> screenshots **16/16 and read**, and ui-audit clean on all nine detectors at 375 and 1280
+> with the new multi-selects on screen. **Still open: no second reader on any of it** (44
+> reserved items, 14 rewritten stems, ~60 adjusted distractors), BRGSA Sections A and B still
+> at 98.3%/100% overlap, SCLM's match-prompt warning, and the 64 summary/application strings.
+> All new content `WAITING_OWNER_CONTENT_ACCEPTANCE`. Not merged, not deployed.
+>
+> **The five open items are closed, and the gates that judge them now exist (2026-08-15):**
+> the previous session ended "no new items, no examiner-only slice, no SCLM-M03-L06 lesson,
+> T1/T2/T4/T5". All five are done and every gate exits 0. **`check_exam_readiness` exits 0 for
+> the first time** — SCLM Section B is **8 of 6** numericals, so the 8 marks it could not award
+> are awardable. The lesson was one blocker; the other had never been named: **the real paper
+> supplies standard normal tables and Dungeon supplied none**, which is why both missing items
+> were z-based — with no table no z-based question is answerable, so none could be authored. The
+> table is now a paper provision (`tables: ["standard-normal"]`), computed rather than stored as
+> 310 literals so there is one place to be wrong, and pinned by `tests/normal-table.test.mjs`
+> against every value a printed table agrees on. **BRGSA's integrated scenarios: the recorded
+> diagnosis was wrong.** They were not "never served" — `brgsa_case_false_win` reaches set 2 and
+> `ibm_case_hospital_growth` reaches IBM set 2; **three of four** never reach any offered set. And
+> the cause was composition, not content: Section C is two **ten-mark** slots drawing from a pool
+> of 36 of which **32 are three-to-five-minute per-concept prompts**, so four times in five a
+> ten-mark slot got a three-minute answer. On the Learn side they were unreachable *by
+> construction* — the rotation asked short/case/short/case and its fallback only fires when a
+> concept has neither, which never happens. So the one surface the examiner's Section C is made of
+> was the one surface Learn could not teach, which is exactly *"if Examiner feels foreign, that is
+> Learn's failure"*. Fixed by a section `prefer` order and an `integrated` slot in the rotation.
+> **The examiner-only slice is real for BRGSA**: six new reserved scenarios, hard-excluded from
+> Learn and **additive**, so §4.2's warning about starving a module does not apply — nothing shared
+> was withdrawn. Section C overlap **100% → 0%**, the paper 100% → 74.2%. Four reserved items were
+> not enough and it was measured, not assumed: two slots drawn twice from four put sets 1 and 2 on
+> an **identical pair**. **T1/T2/T4/T5 are built, gated, and each found something.** T1 (cold
+> learner) found a new defect class — `smoke_signal`'s answer used "prospects", defined in a
+> lecture the item does not cite, so **LAW-47 structurally cannot see it**. T2 refuses to score the
+> handoff half without the app's own answer rather than pass by default (0 broken over 64 promises;
+> reading `lesson.connects` would have reported 14 false ones). T4 could not use "all ten sets" at
+> all — **set 10's pool is the entire bank**, so the first version reported 100% whatever anybody
+> authored; split into ladder and anyRoute. T5 asks what a learner is told when wrong, and **failed
+> correctly**: one sentence answered 55–100% of every wrong decision. `fallbackDiagnosis` was
+> discarding `targetRole`, which it already had; four cues drawn from what the slot asks took the
+> top-cue share to **27–36%**, roughly halved on every subject. **Three defects came from building
+> the probes, two of them mine**: an MCQ diagnosis read from `perOption.answer` when the export
+> writes `perOption.whole`, and a T5 gate whose floors skipped every run and **printed a pass over
+> data it never judged** — this repository's signature failure, reproduced inside the tool written
+> to catch it. `npm test` **87 → 100**, and the runner itself gave up a finding: two test files
+> listed in `package.json` before they existed were **silently skipped** at exit 0.
+> `VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)` at
+> `evidence/2026-08-15/t6-rehaul-completion/verification.md`: LAW-47 **12 routes × 4 subjects, 0
+> violations**, 0 layering descents, `answerableFromTheConceptName: []`, **`paperDigestMatch: true`
+> on all four** (which is what proves the harness mirror still matches after `examPrefer`),
+> screenshots **16/16 and read**, and 0 overflow / clipped / circleFit / overlaps / cutRows /
+> hiddenScroll / barInset / ragged / sub-44px at 375 and 1280 with the new table open. **`ui-audit`
+> caught the table three times and was right twice** — the third, `hiddenScroll` at 44% on a phone,
+> was real, so the eleven-column table is now two six-column halves that stack: 310 cells, no
+> sideways scroll at any width. The one probe refinement (`cutRows` ignoring a child taller than its
+> container) was **verified against a live fixture** of the original palette defect and still fires.
+> **Not done: no examiner-only slice for SPMS, SCLM or IBM** (T4 reports all three at 100% overlap
+> and 0/16 concepts with a distinct surface — now the largest open hole), the 64 summary/application
+> strings, the fifteen SPMS "the lecture said" stems, BRGSA self-containment on the *existing* bank,
+> and no second reader on any new prose. All new content is
+> `WAITING_OWNER_CONTENT_ACCEPTANCE`. Not merged, not deployed.
+>
+> **Both craft exploits closed, measured by persona on both surfaces (2026-08-15):**
 > name-matching and "eliminate the absolutes" now pay at or under chance in every family.
 > **Paper** (mean sets 1–3): SPMS combined 34.5 → **16.3**, BRGSA 37.8 → **15.3**, SCLM 24.5 →
 > **20.1**. **Delivered study run**: SPMS 50 → **19.2**, BRGSA 37.8 → **28.2**, SCLM 48.2 →
@@ -510,32 +644,19 @@
 > Drive `getAnimations()` to the end and measure layout in fixed-width same-origin iframes. Pixel
 > acceptance remains owed.
 >
-> **The examiner is a product, and its dashboard is the point (2026-08-12):** the examiner
-> now has its own front door at `app/t6.html#exam-home-screen` — four papers, three seeded sets each,
-> openable with no learning state at all. A set's seed is subject + set index, never the clock, so a
-> paper survives a refresh and set 2 is genuinely a different draw from set 1. The shortfalls and
-> IBM's caveat are stated **on the card, before the clock**, not after. The results screen is now a
-> diagnostic: pacing against the paper's own per-question budget, *where knowledge breaks down* per
-> concept, the cost of speculative ticking, second thoughts and what they were worth, and — for
-> written work — course-vocabulary use against rubric points. Each breakdown row routes into a taught
-> single-concept run (`LESSON → primer → questions`, so LAW-47 holds). Attempt summaries persist and
-> a re-sit of the *same* set is compared, since two draws differ in difficulty as well as in study.
-> `VERIFIED(REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-12/t6-examiner-product-and-insights/verification.md`: `conceptAttempts` and
-> `totalAnswers` both still **0** after three submitted mocks, legend and palette agree in every
-> section, 0 overflow / 0 sub-44px tap targets / 0 off-scale radii at 375×812, 39/39 tests, palette
-> gate clean. **Two defects the examiner exposed, both bank-content and neither fixed here:**
-> `REDLINE` **LAW-53** — all eight SPMS MSQs are 3-correct-of-4, so ticking every option scores full
-> marks (verified `16/16` with nothing answered in Section A) while the paper's stated rule says the
-> opposite; the dashboard now reports this as a defect instead of endorsing it. And **16 of 50** SCLM
-> Section A questions share a character-identical caselet *and* stem, with the pool at 52 for a
-> section needing 50, so only clustering could be fixed (longest identical run is now 1). `WATCH`
-> **LAW-54** covers the legend that counted the whole paper above a one-section grid. Telemetry:
-> `tester-event.schema.json` is `1.1` with six examiner event types, banded-only fields, and a
-> **separate consent scope**, enforced in both directions; the app shapes and locally buffers events
-> behind a flag defaulting **off** and **there is no transmission path**. `profile.examAttempts`
-> syncs to D1 with the rest of the profile, which `docs/community/PRIVACY.md` now discloses. No
-> screenshots — the Browser pane was not compositing — so pixel acceptance is still owed.
+> **The examiner is a product, and its dashboard is the point (2026-08-12) — collapsed to its
+> outcome.** The examiner gained its own front door at `app/t6.html#exam-home-screen`: four papers,
+> three seeded sets each (seed = subject + set index, never the clock), openable with no learning
+> state, with shortfalls and IBM's caveat stated on the card *before* the clock. Results became a
+> diagnostic — pacing against the paper's own budget, where knowledge breaks down per concept, the
+> cost of speculative ticking — each row routing into a taught single-concept run. `conceptAttempts`
+> and `totalAnswers` stay **0** after three submitted mocks. It exposed two bank-content defects it
+> did not fix: `REDLINE` **LAW-53** (all eight SPMS MSQs are 3-of-4, so ticking everything scores
+> full marks) and 16 of 50 SCLM Section A questions sharing a character-identical caselet and stem.
+> `WATCH` **LAW-54**: a legend counting the whole paper above a one-section grid. Telemetry ships
+> behind a flag defaulting **off** with no transmission path. Full narration:
+> `docs/governance/CHANGELOG.md`; evidence:
+> `evidence/2026-08-12/t6-examiner-product-and-insights/verification.md`.
 >
 > **Two products, one bank (2026-08-12):** Dungeon is now **the learning system**
 > (learn by failing: teach before test, weak-first, feedback on every answer) and **the examiner**
@@ -1122,11 +1243,12 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
-- [ ] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — 48 course-assessment items authored 2026-08-15.**
+- [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — 48 course-assessment items — ACCEPTED 2026-08-15.**
   SCLM 32 (two per concept: definition, scenario, numeric, judgement) and BRGSA 16 (one per
   concept, scenario-led), with 144 authored option diagnoses. Drawn from the owner's own CLAs for
   style, coverage and difficulty; none is one of their questions, every item sits on a lecture that
-  already has a lesson, and every claim is one its lesson states. Nobody has read the prose.
+  already has a lesson, and every claim is one its lesson states. Released with the rest of the
+  block above.
 - [ ] **F-06 is closed on SCLM and open on BRGSA and SPMS, and the residual is located.** Mean of
   sets 1–3, "eliminate the absolutes": SCLM 36.0 → **29.5** (below its own course paper's 32.6),
   all rules combined **24.5**. BRGSA **36.6**, SPMS **41.2**. The leak lives in two places and
@@ -1174,14 +1296,14 @@ after the version is live, since a push to `main` deploys.
   (`spms_requirements_msq`, which states its own case in the stem). Related and smaller:
   `spms_roadmap_msq` carries "WhatsApp launched first on iPhone, with the Android version arriving
   around 2011" as a **correct option** — a date recall sitting among framework claims.
-- [~] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — four SPMS multiple-select caselets and their revised
-  stems were authored on 2026-08-14; the owner has not read the prose.** They close LAW-61: the
+- [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — four SPMS multiple-select caselets — ACCEPTED
+  2026-08-15.** They close LAW-61: the
   drilling-machine, Zerodha, ride-hailing MoSCoW, and WhatsApp items named an example the learner
   never saw. Each case is drawn from its own lecture's clean transcript, but drawn from the
   transcript is not accepted. Tester-visible, so it also owes the change announcement drafted at
   `outputs/ANNOUNCEMENT-2026-08-14-example-questions.md`.
-- [~] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — BRGSA concept records and the case exemplar were
-  authored on 2026-08-14; the owner has not yet read the prose.** BRGSA previously had an authored
+- [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — BRGSA concept records and the case exemplar —
+  ACCEPTED 2026-08-15.** BRGSA previously had an authored
   `application` on 0 of its 16 concepts against IBM's 16 of 16, so `conceptData` fell back to a case
   question's correct multiple-choice option — a scenario-specific answer choice used as a general
   decision rule. Every BRGSA prompt therefore shipped an exemplar ending in a non-sequitur beside a
@@ -1315,10 +1437,17 @@ after the version is live, since a push to `main` deploys.
 - [ ] **SCLM is under-weighted on computation.** Section B is 24 marks of numericals with a
   scientific calculator and supplied normal-distribution tables, pointing at safety stock, service
   level, and newsvendor. Only 3 of its 16 cited lectures carry arithmetic today.
-- [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 792 surfaces are source-traceable and structurally
-  verified, but transcript-derived content, the 64 support-only primers, the 64 constructed-
-  response rubrics/exemplars, and the 106 authored lessons still need owner/faculty acceptance
-  before `DONE`. This is now the largest single block of unaccepted content in the product.
+- [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — ACCEPTED BY THE OWNER 2026-08-15.** The whole standing
+  block is released: the transcript-derived bank across all 792 surfaces, the 64 support-only
+  primers, the 64 constructed-response rubrics and exemplars, the 106 authored lessons, the 48
+  course-assessment items from the owner's CLAs, the 44 examiner-reserved items, the four SPMS
+  multiple-select caselets and their revised stems, the 14 rewritten SPMS stems, the BRGSA concept
+  records and case exemplar, and the ~76 restated correct answers. Acceptance was given in chat
+  and covers the prose as it stood after the two R3 repairs below — `sclm_drivers_cla3` and
+  `spms_requirements_cla1` were fixed **before** acceptance rather than accepted and then
+  corrected. **What acceptance does and does not mean:** it clears the gate that blocked `DONE`.
+  It is not faculty review, and it does not convert any of this into verified subject-matter
+  authority — the standing accuracy caveats below are unchanged and still apply.
 - [x] **The 0→80 path reaches every scheduled question — closed 2026-08-12.** 724 of 724 are
   taught, verified in a real browser at
   `evidence/2026-08-12/t6-teaching-layer-complete/verification.md`. What remains is *acceptance*,
