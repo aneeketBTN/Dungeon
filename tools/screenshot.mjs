@@ -50,6 +50,11 @@ function flag(name, fallback) {
 const port = flag("port", "8099");
 const outDir = path.resolve(flag("out", path.join(repo, "outputs", "shots")));
 const only = flag("only", null);
+/* `--optical` draws `optical-audit.js`'s gridlines over each scene before the shutter.
+   A separate run rather than a replacement, and the files are suffixed `_grid`, because
+   the plain shot is what a learner sees and the gridline shot is what the layout is
+   doing — reading one for the other is how a probe artifact becomes a design change. */
+const optical = args.includes("--optical");
 const base = `http://localhost:${port}`;
 
 const CHROME_CANDIDATES = [
@@ -127,10 +132,10 @@ try {
 const results = [];
 for (const shot of SHOTS) {
   if (only && shot.scene !== only) continue;
-  const name = [shot.scene, shot.subject, `${shot.size.w}x${shot.size.h}`, shot.theme].join("_") + ".png";
+  const name = [shot.scene, shot.subject, `${shot.size.w}x${shot.size.h}`, shot.theme].join("_") + (optical ? "_grid" : "") + ".png";
   const file = path.join(outDir, name);
   const url = `${base}/tools/shots/frame.html?scene=${shot.scene}&subject=${shot.subject}` +
-    `&w=${shot.size.w}&h=${shot.size.h}&theme=${shot.theme}`;
+    `&w=${shot.size.w}&h=${shot.size.h}&theme=${shot.theme}` + (optical ? "&optical=1" : "");
   try {
     execFileSync(chrome, [
       "--headless=new",
@@ -158,9 +163,9 @@ for (const shot of SHOTS) {
    here rather than discovered by a human opening sixteen files. */
 for (const shot of SHOTS) {
   if (only && shot.scene !== only) continue;
-  const name = [shot.scene, shot.subject, `${shot.size.w}x${shot.size.h}`, shot.theme].join("_") + ".png";
+  const name = [shot.scene, shot.subject, `${shot.size.w}x${shot.size.h}`, shot.theme].join("_") + (optical ? "_grid" : "") + ".png";
   const url = `${base}/tools/shots/frame.html?scene=${shot.scene}&subject=${shot.subject}` +
-    `&w=${shot.size.w}&h=${shot.size.h}&theme=${shot.theme}`;
+    `&w=${shot.size.w}&h=${shot.size.h}&theme=${shot.theme}` + (optical ? "&optical=1" : "");
   let dom = "";
   try {
     dom = execFileSync(chrome, [

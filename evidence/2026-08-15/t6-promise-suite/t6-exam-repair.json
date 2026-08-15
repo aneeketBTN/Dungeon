@@ -1,0 +1,38 @@
+{
+  "ok": false,
+  "probe": "T6 — mock→repair",
+  "course": "SCLM",
+  "cases": [
+    {"id": "sittingCap", "why": "eleven concepts missed; a sitting is 4 so the run stays finishable",
+     "expected": 4, "found": 4, "pass": true},
+    {"id": "worstFirst", "why": "missed counts double skipped, so the heaviest four are served",
+     "expected": ["sclm_drivers","sclm_fit","sclm_smoothing","sclm_sop"],
+     "found": ["sclm_drivers","sclm_fit","sclm_smoothing","sclm_sop"], "pass": true},
+    {"id": "taughtFirst",
+     "why": "'Taught first, then tested again' must hold for a learner who had already read the lesson, not only at first contact",
+     "expected": {"lessonReadAlready": 2, "firstContact": 2},
+     "found": {"lessonReadAlready": 0, "firstContact": 2},
+     "detail": {
+       "read": {"served": 2, "taught": 0, "detail": [
+         {"conceptId":"sclm_fit","lectureId":"SCLM-M01-L04","lessonAt":-1,"questionAt":1,"taught":false},
+         {"conceptId":"sclm_drivers","lectureId":"SCLM-M01-L06","lessonAt":-1,"questionAt":3,"taught":false}]},
+       "unread": {"served": 2, "taught": 2, "detail": [
+         {"conceptId":"sclm_smoothing","lectureId":"SCLM-M02-L06","lessonAt":4,"questionAt":6,"taught":true},
+         {"conceptId":"sclm_sop","lectureId":"SCLM-M02-L12","lessonAt":7,"questionAt":9,"taught":true}]}},
+     "pass": false},
+    {"id": "secondSittingMovesOn", "why": "repairedAt is stamped so the next sitting picks up rather than repeating",
+     "expected": 0, "found": 0,
+     "detail": {"first": ["sclm_fit","sclm_drivers","sclm_smoothing","sclm_sop"],
+                "second": ["sclm_eoq","sclm_newsvendor","sclm_portfolio","sclm_bullwhip"]},
+     "pass": true},
+    {"id": "missesNeverScore", "why": "a mock reorders what is offered and creates no mastery evidence",
+     "expected": "{}", "found": "{}", "pass": true}
+  ],
+  "control": {
+    "question": "is the missing re-teach caused by examMisses being invisible to lessonNeedsReteach?",
+    "method": "same concept, same lessonsRead, same examMiss, plus ONE wrong conceptAttempt after readAt",
+    "withoutConceptAttempt": ["sclm_fit_contrast"],
+    "withConceptAttempt": ["LESSON:SCLM-M01-L04 (reteach)", "primer:sclm_fit_primer", "sclm_fit_contrast"],
+    "conclusion": "confirmed — the lesson returns only when conceptAttempts carries the failure; a mock miss alone never triggers it"
+  }
+}

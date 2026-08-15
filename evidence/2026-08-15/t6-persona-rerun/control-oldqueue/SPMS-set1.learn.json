@@ -1,0 +1,726 @@
+{
+ "subject": "SPMS",
+ "subjectTitle": "Software Product Management and Strategy",
+ "set": 1,
+ "half": "learn",
+ "queueDigest": "b527c517",
+ "schedule": {
+  "setId": 1,
+  "title": "Product foundations",
+  "kicker": "Study set 1 of 10",
+  "steps": 12,
+  "scoredQuestions": 8,
+  "supportItems": 4,
+  "unresolvedSteps": 0,
+  "lessonsReadAfter": 1,
+  "readiness": {
+   "conceptsTaught": 1,
+   "conceptsTotal": 16,
+   "marks": {
+    "taught": 3,
+    "available": 75,
+    "percent": 4,
+    "alreadyMet": 0,
+    "alreadyMetMarks": 0,
+    "total": 55
+   },
+   "ladderSteps": 8,
+   "nextStep": {
+    "step": 1,
+    "set": 1,
+    "title": "Product foundations",
+    "adds": [
+     "Desirability, feasibility, viability",
+     "Jobs to be done"
+    ]
+   }
+  },
+  "ladder": [
+   {
+    "step": 1,
+    "set": 1,
+    "title": "Product foundations",
+    "adds": [
+     "Desirability, feasibility, viability",
+     "Jobs to be done"
+    ],
+    "state": "current"
+   },
+   {
+    "step": 2,
+    "set": 2,
+    "title": "Markets and adoption",
+    "adds": [
+     "TAM, SAM, and SOM",
+     "Crossing the chasm"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 3,
+    "set": 3,
+    "title": "Positioning and business models",
+    "adds": [
+     "Product definition and positioning",
+     "Lean Canvas"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 4,
+    "set": 4,
+    "title": "Pricing and unit economics",
+    "adds": [
+     "Value-based pricing",
+     "Unit economics"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 5,
+    "set": 5,
+    "title": "Competition and communication",
+    "adds": [
+     "Competition and alternatives",
+     "Buyer journey communication"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 6,
+    "set": 6,
+    "title": "Requirements and traceability",
+    "adds": [
+     "Functional and quality requirements",
+     "Requirements traceability"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 7,
+    "set": 7,
+    "title": "Priorities and roadmaps",
+    "adds": [
+     "MoSCoW and RICE prioritisation",
+     "Product roadmap"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 8,
+    "set": 8,
+    "title": "Metrics and privacy",
+    "adds": [
+     "Actionable product metrics",
+     "Privacy by design"
+    ],
+    "state": "later"
+   }
+  ]
+ },
+ "ladder": [
+  {
+   "step": 1,
+   "set": 1,
+   "title": "Product foundations",
+   "adds": [
+    "Desirability, feasibility, viability",
+    "Jobs to be done"
+   ],
+   "state": "current"
+  },
+  {
+   "step": 2,
+   "set": 2,
+   "title": "Markets and adoption",
+   "adds": [
+    "TAM, SAM, and SOM",
+    "Crossing the chasm"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 3,
+   "set": 3,
+   "title": "Positioning and business models",
+   "adds": [
+    "Product definition and positioning",
+    "Lean Canvas"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 4,
+   "set": 4,
+   "title": "Pricing and unit economics",
+   "adds": [
+    "Value-based pricing",
+    "Unit economics"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 5,
+   "set": 5,
+   "title": "Competition and communication",
+   "adds": [
+    "Competition and alternatives",
+    "Buyer journey communication"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 6,
+   "set": 6,
+   "title": "Requirements and traceability",
+   "adds": [
+    "Functional and quality requirements",
+    "Requirements traceability"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 7,
+   "set": 7,
+   "title": "Priorities and roadmaps",
+   "adds": [
+    "MoSCoW and RICE prioritisation",
+    "Product roadmap"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 8,
+   "set": 8,
+   "title": "Metrics and privacy",
+   "adds": [
+    "Actionable product metrics",
+    "Privacy by design"
+   ],
+   "state": "later"
+  }
+ ],
+ "run": [
+  {
+   "step": 1,
+   "kind": "lesson",
+   "lectureId": "SPMS-M01-L05",
+   "reteach": false,
+   "title": "Desirability, feasibility, viability",
+   "module": 1,
+   "lectureNumber": 5,
+   "objective": "Test an idea separately on all three of desirability, feasibility, and viability, and name what breaks when one is missing.",
+   "explainer": [
+    "Three areas drawn as a Venn diagram, derived by IDEO Consulting in design thinking and adapted here for product management. Desirability asks whether customers or potential customers actually need the thing. Feasibility asks whether it can be built with the technology available today. Viability asks whether it should be built at all — whether it can turn a profit, or make enough money to support the business. The point of separating them is that passing one check tells you nothing about the other two.",
+    "The running example is a digital water bottle: put an edge device on an ordinary bottle and it becomes a hydration device that measures the temperature you drink at, how many times you drink, how much, and at what intervals. Desirability is whether people look at that and say it is worth having, or shrug and say a regular bottle is fine. Feasibility is whether the edge devices, electronics, and firmware actually exist to measure those things. Viability is whether there is money in it once both of those hold.",
+    "Each area needs a different skill. Desirability needs design skills, because you are validating empathy with customers and reading their pulse. Feasibility needs engineering skills. Viability needs business skills. The intersections are where the framework earns its keep. Desirability plus feasibility without viability is an unsustainable product: people want it and you can build it, but every new iteration and every new customer costs you more money. Desirability plus viability without engineering capability is the space-travel case — a real want, genuinely profitable, that you cannot build."
+   ],
+   "worked": {
+    "setup": "A team has validated that customers want the product and has proved the technology can deliver it.",
+    "move": "Do not proceed on that basis. Run viability as its own check — can this make a profit, or sustain the business?",
+    "because": "Desirability intersecting feasibility without viability is a named failure in the framework, not an edge case. The product is unsustainable precisely because it works: every additional iteration and every additional customer consumes more money than it returns. Two of three is not two-thirds of a business."
+   },
+   "glossary": [
+    {
+     "term": "desirability",
+     "plain": "Whether customers or potential customers actually need the product."
+    },
+    {
+     "term": "feasibility",
+     "plain": "Whether it can be built with the technology available today."
+    },
+    {
+     "term": "viability",
+     "plain": "Whether it should be built — can it profit, or fund the business that makes it."
+    },
+    {
+     "term": "design thinking",
+     "plain": "The IDEO practice this three-way framework was originally derived from."
+    }
+   ],
+   "handoff": {
+    "connects": "Those three checks tell you whether an idea is a business. The next session looks at the kinds of organisation that take such ideas on.",
+    "promisesNextLecture": false,
+    "kept": true,
+    "note": null,
+    "nextInRun": "Jobs to Be Done",
+    "lectureId": "SPMS-M01-L05"
+   }
+  },
+  {
+   "step": 2,
+   "kind": "primer",
+   "id": "spms_dfv_primer",
+   "concept": "Desirability, feasibility, viability",
+   "level": 1,
+   "levelLabel": "First contact · predict before you are told",
+   "carryForward": null,
+   "whatHappens": "A team can build a device and sell it at a margin, but research shows no meaningful customer problem or willingness to use it.",
+   "knownTrap": null,
+   "stem": "Before anything names it: what rule do you think this case is showing, and why?",
+   "response": "free text — a prediction in the learner's own words. Nothing is marked or recorded.",
+   "termsAvailable": [
+    {
+     "term": "desirability",
+     "plain": "Whether customers or potential customers actually need the product."
+    },
+    {
+     "term": "feasibility",
+     "plain": "Whether it can be built with the technology available today."
+    },
+    {
+     "term": "viability",
+     "plain": "Whether it should be built — can it profit, or fund the business that makes it."
+    },
+    {
+     "term": "design thinking",
+     "plain": "The IDEO practice this three-way framework was originally derived from."
+    }
+   ]
+  },
+  {
+   "step": 3,
+   "kind": "question",
+   "id": "spms_dfv_case_cloze",
+   "type": "case-cloze",
+   "concept": "Desirability, feasibility, viability",
+   "caselet": "A team can build a device and sell it at a margin, but research shows no meaningful customer problem or willingness to use it.",
+   "stem": "Fill both parts of the recommendation so the action and framework agree.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the decision",
+     "options": [
+      "Launch immediately, because the team proved it can be built, and technical feasibility is itself the evidence that customers will want it. (Desirability, feasibility, viability)",
+      "Reduce the engineering scope even though feasibility has already been established for this particular build. (Desirability, feasibility, viability)",
+      "Treat desirability as the missing test, since a product survives only where all three checks overlap. (Desirability, feasibility, viability)",
+      "Call it viable and assume customers will learn to want it once they have seen it working. (Desirability, feasibility, viability)"
+     ]
+    },
+    {
+     "label": "Choose the framework",
+     "options": [
+      "Desirability, feasibility, viability: Crossing to mainstream customers always requires a focused beachhead, a complete experience, references and lower adoption risk.",
+      "Desirability, feasibility, viability: A product opportunity must be wanted by customers, technically achievable, and economically sustainable; strength in only two dimensions leaves a predictable failure.",
+      "Desirability, feasibility, viability: Jobs to be done always covers functional, emotional and social progress, never merely the product category or the stated feature.",
+      "Desirability, feasibility, viability: TAM, SAM and SOM always narrow in that order: theoretical demand, the servable portion, then the realistic near-term share."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "desirability",
+     "plain": "Whether customers or potential customers actually need the product."
+    },
+    {
+     "term": "feasibility",
+     "plain": "Whether it can be built with the technology available today."
+    },
+    {
+     "term": "viability",
+     "plain": "Whether it should be built — can it profit, or fund the business that makes it."
+    },
+    {
+     "term": "design thinking",
+     "plain": "The IDEO practice this three-way framework was originally derived from."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "kind": "question",
+   "id": "spms_dfv_contrast",
+   "type": "cloze",
+   "concept": "Desirability, feasibility, viability",
+   "caselet": null,
+   "stem": "Three of these attach a neighbouring idea's claim to Desirability, feasibility, viability. Which one is actually true of it?",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the claim that holds",
+     "options": [
+      "Desirability, feasibility, viability: Jobs to be done always covers functional, emotional and social progress, never merely the product category or the stated feature.",
+      "Desirability, feasibility, viability: A product opportunity must be wanted by customers, technically achievable, and economically sustainable; strength in only two dimensions leaves a predictable failure.",
+      "Desirability, feasibility, viability: Crossing to mainstream customers always requires a focused beachhead, a complete experience, references and lower adoption risk.",
+      "Desirability, feasibility, viability: TAM, SAM and SOM always narrow in that order: theoretical demand, the servable portion, then the realistic near-term share."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "desirability",
+     "plain": "Whether customers or potential customers actually need the product."
+    },
+    {
+     "term": "feasibility",
+     "plain": "Whether it can be built with the technology available today."
+    },
+    {
+     "term": "viability",
+     "plain": "Whether it should be built — can it profit, or fund the business that makes it."
+    },
+    {
+     "term": "design thinking",
+     "plain": "The IDEO practice this three-way framework was originally derived from."
+    }
+   ]
+  },
+  {
+   "step": 5,
+   "kind": "lesson",
+   "lectureId": "SPMS-M01-L10",
+   "reteach": false,
+   "title": "Jobs to Be Done",
+   "module": 1,
+   "lectureNumber": 10,
+   "objective": "Separate the job a customer is hiring a product for from the product itself, and read its functional, emotional, and social layers.",
+   "explainer": [
+    "The framework starts from a distinction that is easy to blur. A need is a perceived problem. Value is that problem solved well enough to motivate someone to pay for it and use it repeatedly. Many products fail not because they do not solve the need, but because they do not deliver enough value. Customer need is a problem, a pain, or a job that users want done — which is where Jobs to Be Done takes its name.",
+    "The example is a doctor buying a drilling machine and a drilling bit. Taken at face value that is a drill sale. Ask why and it becomes hanging a picture; ask again and it is displaying an MD certificate in her clinic; ask again and it is so that new patients feel comfortable and trust they are seeing a qualified doctor. Three layers stack in one purchase. The functional need is displaying the degree. Underneath sits pride in more than a decade of study. And the social need is the confidence a walk-in patient takes from seeing it on the wall.",
+    "Customer value is the perceived benefit relative to the cost of alternatives — benefits minus cost, where cost means money, time, effort, and risk together. In the drill case the cost is a frame and a hole in the wall; the benefit is all three layers at once. That is why need and value come apart so routinely: a product can satisfy the stated need and still lose to an alternative delivering more of the emotional and social job. Uber against pre-Uber taxis and auto rickshaws is the same comparison, where the stated need was only to get from one place to another."
+   ],
+   "worked": {
+    "setup": "A customer walks in and asks for a drilling bit and a drilling machine.",
+    "move": "Ask why until the job appears: photos, then a degree certificate, then new patients trusting a qualified doctor.",
+    "because": "Taking the request at face value scopes you to selling drills. The job actually being hired for is patient trust, and it is functional, emotional, and social at the same time. A competitor who delivers the certificate-on-the-wall outcome without a drill wins the job while never satisfying the stated need."
+   },
+   "glossary": [
+    {
+     "term": "Jobs to Be Done",
+     "plain": "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."
+    },
+    {
+     "term": "functional need",
+     "plain": "The practical task on the surface — here, getting the certificate onto the wall."
+    },
+    {
+     "term": "social need",
+     "plain": "How the outcome reads to others: the confidence new patients take from the displayed degree."
+    },
+    {
+     "term": "customer value",
+     "plain": "Perceived benefit minus cost, where cost includes money, time, effort, and risk."
+    }
+   ],
+   "handoff": {
+    "connects": "That is how to read what a customer is really buying. Module 2 turns to expressing it as value the product can promise.",
+    "promisesNextLecture": false,
+    "kept": true,
+    "note": null,
+    "nextInRun": "the questions this lecture answers",
+    "lectureId": "SPMS-M01-L10"
+   }
+  },
+  {
+   "step": 6,
+   "kind": "primer",
+   "id": "spms_jtbd_primer",
+   "concept": "Jobs to be done",
+   "level": 1,
+   "levelLabel": "First contact · predict before you are told",
+   "carryForward": "Carry forward: Desirability, feasibility, viability. Now add Jobs to be done.",
+   "whatHappens": "A patient asks for online consultation but mainly needs quick access to a trusted doctor and confidence that the advice is legitimate.",
+   "knownTrap": null,
+   "stem": "Before anything names it: what rule do you think this case is showing, and why?",
+   "response": "free text — a prediction in the learner's own words. Nothing is marked or recorded.",
+   "termsAvailable": [
+    {
+     "term": "Jobs to Be Done",
+     "plain": "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."
+    },
+    {
+     "term": "functional need",
+     "plain": "The practical task on the surface — here, getting the certificate onto the wall."
+    },
+    {
+     "term": "social need",
+     "plain": "How the outcome reads to others: the confidence new patients take from the displayed degree."
+    },
+    {
+     "term": "customer value",
+     "plain": "Perceived benefit minus cost, where cost includes money, time, effort, and risk."
+    }
+   ]
+  },
+  {
+   "step": 7,
+   "kind": "question",
+   "id": "spms_jtbd_contrast",
+   "type": "cloze",
+   "concept": "Jobs to be done",
+   "caselet": null,
+   "stem": "Three of these attach a neighbouring idea's claim to Jobs to be done. Which one is actually true of it?",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the claim that holds",
+     "options": [
+      "Jobs to be done: Crossing to mainstream customers always requires a focused beachhead, a complete experience, references and lower adoption risk.",
+      "Jobs to be done: A product opportunity must be wanted by customers, technically achievable, and economically sustainable; strength in only two dimensions leaves a predictable failure.",
+      "Jobs to be done: TAM, SAM and SOM always narrow in that order: theoretical demand, the servable portion, then the realistic near-term share.",
+      "Jobs to be done: Jobs to be done always covers functional, emotional and social progress, never merely the product category or the stated feature."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "Jobs to Be Done",
+     "plain": "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."
+    },
+    {
+     "term": "functional need",
+     "plain": "The practical task on the surface — here, getting the certificate onto the wall."
+    },
+    {
+     "term": "social need",
+     "plain": "How the outcome reads to others: the confidence new patients take from the displayed degree."
+    },
+    {
+     "term": "customer value",
+     "plain": "Perceived benefit minus cost, where cost includes money, time, effort, and risk."
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "kind": "question",
+   "id": "spms_m1_match",
+   "type": "match",
+   "concept": "Desirability, feasibility, viability and Jobs to be done",
+   "caselet": null,
+   "stem": "Match each prompt to the precise explanation or action.",
+   "prompt": null,
+   "rows": [
+    "Desirability, feasibility, viability — principle",
+    "Jobs to be done — principle",
+    "Desirability, feasibility, viability — decision",
+    "Jobs to be done — decision"
+   ],
+   "choices": [
+    "Design around access, trust and reassurance, because the named feature is never the whole job.",
+    "Treat desirability as the missing test, since a product survives only where all three checks overlap.",
+    "Jobs to be done always covers functional, emotional and social progress, never merely the product category or the stated feature.",
+    "A product opportunity must be wanted by customers, technically achievable, and economically sustainable; strength in only two dimensions leaves a predictable failure."
+   ],
+   "termsAvailable": [
+    {
+     "term": "desirability",
+     "plain": "Whether customers or potential customers actually need the product."
+    },
+    {
+     "term": "feasibility",
+     "plain": "Whether it can be built with the technology available today."
+    },
+    {
+     "term": "viability",
+     "plain": "Whether it should be built — can it profit, or fund the business that makes it."
+    },
+    {
+     "term": "design thinking",
+     "plain": "The IDEO practice this three-way framework was originally derived from."
+    },
+    {
+     "term": "Jobs to Be Done",
+     "plain": "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."
+    },
+    {
+     "term": "functional need",
+     "plain": "The practical task on the surface — here, getting the certificate onto the wall."
+    },
+    {
+     "term": "social need",
+     "plain": "How the outcome reads to others: the confidence new patients take from the displayed degree."
+    },
+    {
+     "term": "customer value",
+     "plain": "Perceived benefit minus cost, where cost includes money, time, effort, and risk."
+    }
+   ]
+  },
+  {
+   "step": 9,
+   "kind": "question",
+   "id": "spms_jtbd_explain",
+   "type": "mcq",
+   "concept": "Jobs to be done",
+   "caselet": null,
+   "stem": "Which statement best explains Jobs to be done?",
+   "prompt": null,
+   "options": [
+    "Jobs to be done: Jobs to be done always covers functional, emotional and social progress, never merely the product category or the stated feature.",
+    "Jobs to be done: A product category defines the same job for every single user, so one category description will cover everyone who sits in that whole market anyway.",
+    "Jobs to be done: Only the functional task matters, since confidence and social context are irrelevant to whether the customer's job gets done.",
+    "Jobs to be done: The job is the list of features that customers ask developers to copy from a competing product they happen to have already seen somewhere else."
+   ],
+   "termsAvailable": [
+    {
+     "term": "Jobs to Be Done",
+     "plain": "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."
+    },
+    {
+     "term": "functional need",
+     "plain": "The practical task on the surface — here, getting the certificate onto the wall."
+    },
+    {
+     "term": "social need",
+     "plain": "How the outcome reads to others: the confidence new patients take from the displayed degree."
+    },
+    {
+     "term": "customer value",
+     "plain": "Perceived benefit minus cost, where cost includes money, time, effort, and risk."
+    }
+   ]
+  },
+  {
+   "step": 10,
+   "kind": "question",
+   "id": "spms_jtbd_msq",
+   "type": "msq",
+   "concept": "Jobs to be done",
+   "caselet": "A doctor has just finished her residency. She walks into a hardware shop and asks for a drilling bit and a drilling machine.\n\nAsk her what she is hanging, and it turns out to be photos — one photo, really: her MD certificate. Ask why it has to go up on the wall, and the answer moves again. Her patients see it. New ones especially, she says, want to know they are with a qualified doctor. Ten years of her life went into earning it, and she is proud of it.\n\nWhat she is buying is a drill bit, a frame, and a hole in the wall.",
+   "stem": "Select every need this purchase actually serves.",
+   "prompt": null,
+   "options": [
+    "Habitual — the purchase repeats often enough that no decision is taken",
+    "Financial — the drill costs less than hiring someone to do it",
+    "Functional — the certificate has to go onto the wall",
+    "Emotional — pride in more than a decade of study",
+    "Social — new patients gain confidence they are seeing a qualified doctor"
+   ],
+   "marking": "+1 per right option, −1 per wrong, floored at zero.",
+   "termsAvailable": [
+    {
+     "term": "Jobs to Be Done",
+     "plain": "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."
+    },
+    {
+     "term": "functional need",
+     "plain": "The practical task on the surface — here, getting the certificate onto the wall."
+    },
+    {
+     "term": "social need",
+     "plain": "How the outcome reads to others: the confidence new patients take from the displayed degree."
+    },
+    {
+     "term": "customer value",
+     "plain": "Perceived benefit minus cost, where cost includes money, time, effort, and risk."
+    }
+   ]
+  },
+  {
+   "step": 11,
+   "kind": "question",
+   "id": "spms_jtbd_repair_cloze",
+   "type": "cloze",
+   "concept": "Jobs to be done",
+   "caselet": "A classmate writes: “The job is the list of features that customers ask developers to copy from a competing product they happen to have already seen somewhere else.”",
+   "stem": "Replace the flawed claim with the precise principle.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the corrected principle",
+     "options": [
+      "Jobs to be done: TAM, SAM and SOM always narrow in that order: theoretical demand, the servable portion, then the realistic near-term share.",
+      "Jobs to be done: Jobs to be done always covers functional, emotional and social progress, never merely the product category or the stated feature.",
+      "Jobs to be done: Definition clarifies what is built and why; positioning always states the differentiated value to one target customer against alternatives.",
+      "Jobs to be done: Functional requirements state what the product must do and quality requirements how well; a capability is never complete without both."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "Jobs to Be Done",
+     "plain": "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."
+    },
+    {
+     "term": "functional need",
+     "plain": "The practical task on the surface — here, getting the certificate onto the wall."
+    },
+    {
+     "term": "social need",
+     "plain": "How the outcome reads to others: the confidence new patients take from the displayed degree."
+    },
+    {
+     "term": "customer value",
+     "plain": "Perceived benefit minus cost, where cost includes money, time, effort, and risk."
+    }
+   ]
+  },
+  {
+   "step": 12,
+   "kind": "question",
+   "id": "spms_m1_boss_1",
+   "type": "boss",
+   "concept": "Desirability, feasibility, viability → Jobs to be done",
+   "caselet": "One recommendation must resolve two linked decisions. First: A team can build a device and sell it at a margin, but research shows no meaningful customer problem or willingness to use it. Then: A patient asks for online consultation but mainly needs quick access to a trusted doctor and confidence that the advice is legitimate.",
+   "stem": "Build the reasoning chain. All three steps must agree before the conclusion is secure.",
+   "prompt": null,
+   "steps": [
+    {
+     "label": "Step 1 · Diagnose the first decision",
+     "prompt": "What should happen first?",
+     "options": [
+      "Desirability, feasibility, viability: Design around access, trust and reassurance, because the named feature is never the whole job.",
+      "Desirability, feasibility, viability: Reduce the engineering scope even though feasibility has already been established for this particular build.",
+      "Desirability, feasibility, viability: Treat desirability as the missing test, since a product survives only where all three checks overlap.",
+      "Desirability, feasibility, viability: Call it viable and assume customers will learn to want it once they have seen it working."
+     ]
+    },
+    {
+     "label": "Step 2 · Apply the second framework",
+     "prompt": "What should happen next?",
+     "options": [
+      "Jobs to be done: Assume every telehealth user values exactly the same outcome from the consultation they have booked.",
+      "Jobs to be done: Optimise only the video resolution, because that is the feature the customer actually named.",
+      "Jobs to be done: Treat desirability as the missing test, since a product survives only where all three checks overlap.",
+      "Jobs to be done: Design around access, trust and reassurance, because the named feature is never the whole job."
+     ]
+    },
+    {
+     "label": "Step 3 · Join the reasoning",
+     "prompt": "Which final explanation keeps both decisions consistent?",
+     "options": [
+      "Use Jobs to be done for the first decision and Desirability, feasibility, viability for the second; the labels can be swapped without changing the logic.",
+      "Use Desirability, feasibility, viability for the first decision and Jobs to be done for the second; neither result replaces the other.",
+      "Use Jobs to be done for both decisions; the later issue should determine the earlier diagnosis as well.",
+      "Use Desirability, feasibility, viability for both decisions; once the first issue is solved, the second can be treated as the same problem."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "desirability",
+     "plain": "Whether customers or potential customers actually need the product."
+    },
+    {
+     "term": "feasibility",
+     "plain": "Whether it can be built with the technology available today."
+    },
+    {
+     "term": "viability",
+     "plain": "Whether it should be built — can it profit, or fund the business that makes it."
+    },
+    {
+     "term": "design thinking",
+     "plain": "The IDEO practice this three-way framework was originally derived from."
+    },
+    {
+     "term": "Jobs to Be Done",
+     "plain": "Reading a purchase as a job the customer hires the product to do, rather than as a product preference."
+    },
+    {
+     "term": "functional need",
+     "plain": "The practical task on the surface — here, getting the certificate onto the wall."
+    },
+    {
+     "term": "social need",
+     "plain": "How the outcome reads to others: the confidence new patients take from the displayed degree."
+    },
+    {
+     "term": "customer value",
+     "plain": "Perceived benefit minus cost, where cost includes money, time, effort, and risk."
+    }
+   ]
+  }
+ ]
+}

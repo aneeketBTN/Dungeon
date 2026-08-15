@@ -1148,6 +1148,68 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   by making a distractor more specific; never by trimming the correct answer (LAW-48) or by
   weakening a load-bearing over-claim.
 
+### LAW-70 🟡 — A mark drawn with a box property is part of the box, and only some boxes carry it
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-15. `.course-card.day-start` marked where the exam day turns over with
+  `border-left: 3px solid var(--blue)`. Two of the four subject cards carry that class, so at
+  375 those two had a **160px** content box against the others' **162px**, their content
+  started 2px further in, and the steps between the four cards ran 192 / 196 / 192 instead of
+  194 / 194 / 194. Evidence: `evidence/2026-08-15/t6-dashboard-rhythm/verification.md` §2.
+- **Why:** `border`, `padding` and `margin` are geometry that happens to be visible; the
+  decoration is a side effect, not the meaning. Applying one to a *state* class therefore
+  resizes exactly the members of a set that hold that state, and a rail of "identical" cards
+  becomes two sizes. It is under the threshold anything shouts about — nothing overlaps,
+  nothing clips, no probe fires — and it still reads as *these are not the same component*,
+  because the eye compares neighbours before it measures anything. The same trap sits in
+  using `padding` for a focus inset or `margin` to nudge one badge in a row.
+- **Law:** A mark that means something about state is painted with a property that does not
+  participate in layout — `box-shadow: inset`, `outline`, a pseudo-element, a gradient — so
+  every member of the set keeps one box. Reserve `border`/`padding` changes for cases where
+  the box really is supposed to differ, and say so.
+- **Verify:** Measure the *content* box, not the outer width: for every element in a row that
+  should match, `width − paddingLeft − paddingRight − borderLeftWidth − borderRightWidth` and
+  the content's x are equal across the set, with the state class present on some of them.
+  Outer widths match in the defective case too, which is why the bounding box will not show
+  this. Note that `box-shadow` **replaces rather than merges**, so a card in two states has
+  to compose every layer in one declaration.
+
+### LAW-71 🔴 — A CSS value that does not parse computes to its initial value and tells nobody
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15. `--shadow: light-dark(0 22px 60px rgba(35,45,38,.09), …)` — and
+  three sibling tokens written the same way. `light-dark()` is a **`<color>` function**; it
+  cannot wrap a whole `box-shadow` shorthand. All four tokens were invalid, so all sixteen
+  `box-shadow: var(--shadow*)` rules computed to `none` and **every intended elevation in
+  the product was flat**: hero, primary button, question card, reset dialog, toast,
+  calculator, normal table, result card. Exactly three elements on the dashboard painted a
+  shadow, all three written literally. Evidence:
+  `evidence/2026-08-15/t6-optical-layer/verification.md` §2.
+- **Why:** An invalid declaration is dropped at computed-value time. There is no console
+  warning, no fallback, and — this is the part that makes it a redline — **nothing left on
+  the element to find**. `getComputedStyle(el).boxShadow` returns `none`, which is exactly
+  what an element with no shadow returns, so no probe reading elements can tell "never
+  asked for" from "asked for and lost". It survived every UI pass because a flat panel does
+  not look broken; it looks like a design choice. Custom properties make this systematic:
+  the token is written once, wrong, and every consumer inherits the failure silently.
+  `light-dark()` is the specific trap — it is valid in so many places that it reads as a
+  general theme switch, and it is not.
+- **Law:** `light-dark()` wraps a **colour and nothing else**. Anything with geometry keeps
+  the geometry outside it (`--x-tint: light-dark(a, b); --x: 0 2px 7px var(--x-tint);`). A
+  per-theme difference in a non-colour part cannot be expressed this way at all and needs a
+  media query or a different value — if the difference is dropped, say so, because it has
+  never rendered and nobody will notice it going.
+- **Verify:** `optical-audit.js` → `deadShadow`, which re-declares each stylesheet's
+  `box-shadow` value on a probe node and reports the ones that come back `none`. Must be
+  empty. Generalise the same trick to any token whose value is not a bare colour: set it on
+  a throwaway element and read it back. Do not check the element the rule targets — that is
+  the reading that cannot distinguish the two cases.
+- **Note:** the probe that catches this had the same class of silent failure inside it.
+  `if (rule.cssRules) { walk(rule.cssRules); continue; }` skipped every declaration, because
+  since CSS nesting shipped a plain `CSSStyleRule` carries an **empty** `cssRules` list, and
+  an empty list is an object and therefore truthy. It reported zero dead shadows on a page
+  where all sixteen were dead. Guard on `.length`.
+
 ### LAW-66 🔴 — A correct answer may only use vocabulary the run has taught, and citation is not the test
 
 - **Tier/Status:** REDLINE · ACTIVE

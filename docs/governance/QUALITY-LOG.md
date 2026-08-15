@@ -44,6 +44,93 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 ## Issue → Cause → Fix
 
+- **I-MOCK-NEVER-RETAUGHT (2026-08-15)** — Issue: learning correctness. A learner who read a
+  lesson, sat a mock and lost the marks was sent straight back to the question with **no
+  lesson**, under a kicker reading "Taught first, then tested again". Cause: `lessonNeedsReteach`
+  decided from `conceptAttempts`, and `recordExamMisses` writes only `examMisses` — deliberately,
+  because misses "prioritise and never score". The two stores are disjoint, so a paper could
+  never reach the latch. First contact worked, so the route looked correct in every test that
+  started from an empty profile. This is the **same shape** as the `lessonsRead` one-way latch
+  fixed earlier the same day: that fix closed the Learn half and left the mock half open, and the
+  probe written for it stages the store the mock does not write. Fix: `examMissNeedsReteach`
+  counts a miss stamped after `readAt` — `missed` or `written`, not `skipped` alone, since
+  running out of time is a timing signal — with the RECOVERED rule applied symmetrically so one
+  bad paper does not re-teach for ever. Standing check:
+  `tools/browser-checks/exam-repair.js`. The cause was established by a **control** (same miss,
+  plus one wrong Learn attempt, lesson returns) rather than by reading the code.
+- **I-DECLINE-NEVER-SAID (2026-08-15)** — Issue: state truthfulness. A concept that fell from
+  Strong rendered character-for-character identically to one that had never been learned: same
+  label, same actions. Cause: mastery is recomputed rather than latched, so the decline was
+  correctly *detected* and correctly *acted on* — it just was never *said*. The only trace was
+  behind the "Why" disclosure, as evidence counts the reader had to interpret, and the results
+  screen counts `improved` with a one-directional `>` and has no counterpart. Fix:
+  `conceptPeakStatus` replays the evidence rule over the attempt history — never a stored
+  high-water mark, for the same reason `trendFromCourses` replays — and the row carries **"was
+  Strong"** in words, not colour or an arrow. Standing check:
+  `tools/browser-checks/regression-reporting.js`, which measures it as a **differential** between
+  a declined learner and a never-strong one rather than by hunting for a keyword. Note for
+  anyone extending it: the first implementation nested the decline inside `.shelf-state`, whose
+  `textContent` `measurement-evidence.js` matches with exact equality — the status label must
+  stay alone in that element.
+- **I-TYPE-FLOOR-DRIFT (2026-08-15)** — Issue: measurement. `ui-audit.js`'s `typeTooSmall` had
+  never been able to report a regression. Cause: its floor was hard-coded at 12 while
+  `app/t6.css` declared `--t-micro: 11px` and documented it as the smallest readable size.
+  Nothing reconciled them, so the detector listed **111 compliant elements** on the dashboard
+  alone, `.slice(0, 10)` truncated that to ten, and both UI verification files written that day
+  enumerated the classes they found empty **without listing `typeScale`**. A genuine drop would
+  have landed in a list that was already full. Fix: the floor is read from the token, so the two
+  cannot disagree again, and `typeTooSmallCount` travels beside the truncated list. It
+  immediately found what it had been hiding: **seven** SVG axis labels at 10px, the only type in
+  the product under its own scale, now on it. **0 at 375 and 1280.** The general lesson is the
+  standing one in `UI-CHECKLIST.md`, one step further on: a detector that always fires is
+  indistinguishable from a detector that never runs.
+- **I-RESERVED-ITEMS-NAME-MATCHABLE (2026-08-15)** — Issue: question correctness. Two of the 44
+  examiner-reserved items paid **100%** to "keep the option naming the thing this section is
+  called": `sclm_drivers_cla3`, whose answer was the only option containing "drivers", and
+  `spms_requirements_cla1`, the only one naming all of functional/quality/requirements. Cause:
+  both contradicted the R3 rule stated in their own header comment — the tranche was authored on
+  the "none of them" branch and these two landed on the "only the answer" one. The family gate
+  could not see it: `other` is 144 sets, so two items at 100% moved the average *down* as the
+  other new items diluted it. Fix: `connect`'s direction — name the concept in **every** option,
+  in place and length-neutral, never stripped from the answer (CONTENT-RULES R3, and appending is
+  what pushed IBM's "pick the longest" to 66%). **25 → 23** sets at 100%. Both were repaired
+  before the owner's content acceptance closed over them.
+- **I-OPTICAL-LAYER (2026-08-15)** — Issue: visual quality, measurement. Five layout defects
+  shipped past a green `ui-audit.js`, and two of them were reported by the owner rather than
+  by any probe — the coin's `Learn` not lining up with the block heading below it, and the
+  resume bar reading as part of the hero instead of floating over it. Cause: every probe in
+  the project measured **boxes**, and in all five defects the boxes were correct. A margin
+  landing on a 44px control band puts 42.5px of visible gap above an 11px label; a 3px
+  `border-left` marker resizes only the cards that carry it; a panel's padding moves its
+  title 21px off the column its own edge sits on. None of that crosses a container, overlaps
+  a sibling, or leaves the viewport. Underneath the depth complaint sat a defect nobody had
+  reported: all four shadow tokens wrapped a whole `box-shadow` in `light-dark()`, a colour
+  function, so **every shadow in the product had computed to `none` for as long as the
+  tokens existed** — 16 rules, 3 elements actually painting a shadow. An invalid CSS value
+  leaves nothing on the element, so no element-reading probe could ever have found it. Fix:
+  `optical-audit.js` measures glyph runs via `Range.getClientRects()`, clusters them into
+  the page's real gridlines, and reports ink that sits *near* a line without sitting on it,
+  plus `insetDrift`, `flatSurface` and `deadShadow`; `optical.overlay()` and
+  `screenshot.mjs --optical` render the grid so the miss can be seen and not only counted.
+  Shadow tokens now keep only the colour inside `light-dark()` (3 → 43 elements painting
+  one); the resume bar moved to a new `--deep-raised` surface with a `--deep-edge` that is
+  no longer identical to `--deep` in light; the coin adopted the panel inset its own mobile
+  block had used all along, putting its title on the same gridline as the subject cards.
+  **Learning-integrity axis:** untouched — no question, scoring or scheduling behaviour is
+  involved. **Truthful-interaction axis:** a floating bar that cannot be told from the panel
+  behind it misrepresents what is interactive, and elevation that exists only in the
+  stylesheet is a claim the screen does not honour. **Accessibility axis:** the required
+  contrast pairings still pass in both themes and the below-target-not-required list fell
+  17 → 16; state remains distinguishable without colour. **Measurement axis:** the probe was
+  wrong twice before it was right — ranking near misses by nearest line buried the 21px
+  defect it existed to catch, and an empty-but-truthy `CSSRuleList` made it report zero dead
+  shadows on a page where all sixteen were dead — both recorded rather than quietly fixed.
+  Residual, reported and not decided: five components still disagree on text inset
+  (14/15/18/19/23), `nearMiss` returns 12 unreviewed findings at 1280, and only the
+  dashboard has been through the optical probe at all. Laws: LAW-70, LAW-71. Evidence:
+  `evidence/2026-08-15/t6-dashboard-rhythm/verification.md`,
+  `evidence/2026-08-15/t6-optical-layer/verification.md`.
+
 - **I-SECOND-LONGEST-PAYS (2026-08-15)** — Issue: learning integrity, measurement. "Pick the
   second-longest option" paid **32.9–38.5% against 25% chance on all four subjects** and was
   in no gate. Cause: the defence against "pick the longest" produced it. `comparableWrong`

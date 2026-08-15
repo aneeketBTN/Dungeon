@@ -1,0 +1,925 @@
+{
+ "subject": "SCLM",
+ "subjectTitle": "Supply Chain and Logistics Management",
+ "set": 1,
+ "half": "learn",
+ "queueDigest": "41549910",
+ "schedule": {
+  "setId": 1,
+  "title": "Strategy and performance drivers",
+  "kicker": "Study set 1 of 10",
+  "steps": 12,
+  "scoredQuestions": 8,
+  "supportItems": 4,
+  "unresolvedSteps": 0,
+  "lessonsReadAfter": 1,
+  "readiness": {
+   "conceptsTaught": 1,
+   "conceptsTotal": 16,
+   "marks": {
+    "taught": 2,
+    "available": 72,
+    "percent": 3,
+    "alreadyMet": 0,
+    "alreadyMetMarks": 0,
+    "total": 57
+   },
+   "ladderSteps": 8,
+   "nextStep": {
+    "step": 1,
+    "set": 1,
+    "title": "Strategy and performance drivers",
+    "adds": [
+     "Strategic fit",
+     "Six supply-chain drivers"
+    ]
+   }
+  },
+  "ladder": [
+   {
+    "step": 1,
+    "set": 1,
+    "title": "Strategy and performance drivers",
+    "adds": [
+     "Strategic fit",
+     "Six supply-chain drivers"
+    ],
+    "state": "current"
+   },
+   {
+    "step": 2,
+    "set": 2,
+    "title": "Forecasting and planning",
+    "adds": [
+     "Exponential smoothing",
+     "Sales and operations planning"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 3,
+    "set": 3,
+    "title": "Inventory decisions",
+    "adds": [
+     "Economic order quantity",
+     "Newsvendor decision"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 4,
+    "set": 4,
+    "title": "Sourcing and coordination",
+    "adds": [
+     "Tailored sourcing portfolio",
+     "Bullwhip effect"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 5,
+    "set": 5,
+    "title": "Re-engineering the network",
+    "adds": [
+     "Supply-chain re-engineering",
+     "Stockyard location trade-off"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 6,
+    "set": 6,
+    "title": "Capacity and transport turnaround",
+    "adds": [
+     "Cold-storage expansion",
+     "Transport turnaround"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 7,
+    "set": 7,
+    "title": "Multimodal logistics and ports",
+    "adds": [
+     "Multimodal cost trade-off",
+     "Ports and PPP"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 8,
+    "set": 8,
+    "title": "Public logistics systems",
+    "adds": [
+     "LEADS index",
+     "Akshaya Patra meal logistics"
+    ],
+    "state": "later"
+   }
+  ]
+ },
+ "ladder": [
+  {
+   "step": 1,
+   "set": 1,
+   "title": "Strategy and performance drivers",
+   "adds": [
+    "Strategic fit",
+    "Six supply-chain drivers"
+   ],
+   "state": "current"
+  },
+  {
+   "step": 2,
+   "set": 2,
+   "title": "Forecasting and planning",
+   "adds": [
+    "Exponential smoothing",
+    "Sales and operations planning"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 3,
+   "set": 3,
+   "title": "Inventory decisions",
+   "adds": [
+    "Economic order quantity",
+    "Newsvendor decision"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 4,
+   "set": 4,
+   "title": "Sourcing and coordination",
+   "adds": [
+    "Tailored sourcing portfolio",
+    "Bullwhip effect"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 5,
+   "set": 5,
+   "title": "Re-engineering the network",
+   "adds": [
+    "Supply-chain re-engineering",
+    "Stockyard location trade-off"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 6,
+   "set": 6,
+   "title": "Capacity and transport turnaround",
+   "adds": [
+    "Cold-storage expansion",
+    "Transport turnaround"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 7,
+   "set": 7,
+   "title": "Multimodal logistics and ports",
+   "adds": [
+    "Multimodal cost trade-off",
+    "Ports and PPP"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 8,
+   "set": 8,
+   "title": "Public logistics systems",
+   "adds": [
+    "LEADS index",
+    "Akshaya Patra meal logistics"
+   ],
+   "state": "later"
+  }
+ ],
+ "run": [
+  {
+   "step": 1,
+   "kind": "lesson",
+   "lectureId": "SCLM-M01-L04",
+   "reteach": false,
+   "title": "Strategic fit",
+   "module": 1,
+   "lectureNumber": 4,
+   "objective": "Decide whether a supply chain should be responsive or efficient by reading the uncertainty its own customer promise creates.",
+   "explainer": [
+    "Performance improves when a company's supply chain strategy is aligned with its competitive strategy. Competitive strategy is the customer promise: which needs this firm will satisfy particularly well. A value-focused retailer like DMart promises low prices and dependable availability. A quick-commerce format promises convenience and speed, and its customers will pay a little more for immediate availability. Supply chain strategy is the answer to what the chain must therefore be good at — sourcing, where you manufacture, where inventory sits, how you transport and fulfil. When the two disagree, either customers are disappointed or costs rise sharply, or both.",
+    "The link between them is implied demand uncertainty, and it is the idea most worth slowing down on. It is not how variable demand is — it is the uncertainty the supply chain faces because of the promise it made. Shorter lead times, higher variety, more channels, higher service levels, and faster innovation all raise it. So a product with perfectly stable demand can still create high implied uncertainty if you promise it in two hours. Where implied uncertainty is high, forecast error is higher, stockouts and markdowns are likelier, and margins tend to be higher.",
+    "Matching them is the zone of strategic fit: high implied uncertainty is best served by responsiveness, low implied uncertainty by efficiency. Responsiveness costs more, because it is bought with buffer inventory, buffer capacity, faster transport, and stronger information systems. A firm not yet on the cost-responsiveness frontier can improve both at once; once on it, more responsiveness means more cost. Fit also has a scope — it strengthens as alignment widens from one function, to across functions, to across firms."
+   ],
+   "worked": {
+    "setup": "Marketing promises high variety with fast delivery. Distribution minimises its own cost by using slow transport and batching orders, and suppliers were chosen only on low price rather than reliability. Customers experience delays and poor availability.",
+    "move": "Read the promise first: short lead times and high variety both raise implied demand uncertainty, so this chain needs responsiveness. Then read what it is actually built for — slow transport, batching, and price-selected suppliers are efficiency choices, which suit low implied uncertainty. The fix is to rebuild distribution and supplier selection for the promised responsiveness, or to change the promise so it matches what the chain can do.",
+    "because": "Distribution is not being badly run here. Batching orders and buying on price are locally efficient and each function can defend its own numbers. The failure is that the chain is optimised for a different promise than the one marketing sold, which is exactly what a lack of fit looks like from the inside."
+   },
+   "glossary": [
+    {
+     "term": "strategic fit",
+     "plain": "The competitive strategy and the supply chain strategy targeting the same customer priorities."
+    },
+    {
+     "term": "implied demand uncertainty",
+     "plain": "The uncertainty the supply chain must absorb because of the promise it made, not just demand variation."
+    },
+    {
+     "term": "responsiveness",
+     "plain": "Being able to handle swings in quantity, short lead times, wide variety, and high service — at higher cost."
+    },
+    {
+     "term": "efficiency",
+     "plain": "Delivering at the lowest possible cost, usually through standardisation, high utilisation, and stable operations."
+    },
+    {
+     "term": "cost responsiveness frontier",
+     "plain": "The lowest cost achievable at each level of responsiveness; on it, more speed must be paid for."
+    },
+    {
+     "term": "zone of strategic fit",
+     "plain": "The band where the chain's responsiveness matches the implied uncertainty the promise creates."
+    },
+    {
+     "term": "tailored supply chain",
+     "plain": "Being efficient where uncertainty is low and responsive where it is high, instead of one design for everything."
+    }
+   ],
+   "handoff": {
+    "connects": "Fit tells you what the chain must be good at. It does not tell you which levers set that — and those levers are the next lecture.",
+    "promisesNextLecture": true,
+    "kept": true,
+    "note": null,
+    "nextInRun": "The six drivers of supply chain performance",
+    "lectureId": "SCLM-M01-L04"
+   }
+  },
+  {
+   "step": 2,
+   "kind": "primer",
+   "id": "sclm_fit_primer",
+   "concept": "Strategic fit",
+   "level": 1,
+   "levelLabel": "First contact · predict before you are told",
+   "carryForward": null,
+   "whatHappens": "Marketing promises high variety and same-day availability while operations uses slow transport, long batches, and suppliers chosen only for low price.",
+   "knownTrap": null,
+   "stem": "Before anything names it: what rule do you think this case is showing, and why?",
+   "response": "free text — a prediction in the learner's own words. Nothing is marked or recorded.",
+   "termsAvailable": [
+    {
+     "term": "strategic fit",
+     "plain": "The competitive strategy and the supply chain strategy targeting the same customer priorities."
+    },
+    {
+     "term": "implied demand uncertainty",
+     "plain": "The uncertainty the supply chain must absorb because of the promise it made, not just demand variation."
+    },
+    {
+     "term": "responsiveness",
+     "plain": "Being able to handle swings in quantity, short lead times, wide variety, and high service — at higher cost."
+    },
+    {
+     "term": "efficiency",
+     "plain": "Delivering at the lowest possible cost, usually through standardisation, high utilisation, and stable operations."
+    },
+    {
+     "term": "cost responsiveness frontier",
+     "plain": "The lowest cost achievable at each level of responsiveness; on it, more speed must be paid for."
+    },
+    {
+     "term": "zone of strategic fit",
+     "plain": "The band where the chain's responsiveness matches the implied uncertainty the promise creates."
+    },
+    {
+     "term": "tailored supply chain",
+     "plain": "Being efficient where uncertainty is low and responsive where it is high, instead of one design for everything."
+    }
+   ]
+  },
+  {
+   "step": 3,
+   "kind": "question",
+   "id": "sclm_fit_repair_cloze",
+   "type": "cloze",
+   "concept": "Strategic fit",
+   "caselet": "A classmate writes: “Every supply chain should maximise responsiveness regardless of cost, because faster service always wins more customers than price does.”",
+   "stem": "Replace the flawed claim with the precise principle.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the corrected principle",
+     "options": [
+      "Strategic fit: The bullwhip effect is the amplification of order variability upstream even when end-customer demand changes only modestly.",
+      "Strategic fit: Strategic fit aligns the supply chain's efficiency and responsiveness with the customer promise and its implied uncertainty.",
+      "Strategic fit: Cold-storage expansion must be judged through seasonal utilisation, commodity flows, operating cost, financing, and market relationships—not capacity alone.",
+      "Strategic fit: Re-engineering redesigns end-to-end flows to remove hidden time, inventory, hand-offs, and cost while meeting distinct customer service needs."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "strategic fit",
+     "plain": "The competitive strategy and the supply chain strategy targeting the same customer priorities."
+    },
+    {
+     "term": "implied demand uncertainty",
+     "plain": "The uncertainty the supply chain must absorb because of the promise it made, not just demand variation."
+    },
+    {
+     "term": "responsiveness",
+     "plain": "Being able to handle swings in quantity, short lead times, wide variety, and high service — at higher cost."
+    },
+    {
+     "term": "efficiency",
+     "plain": "Delivering at the lowest possible cost, usually through standardisation, high utilisation, and stable operations."
+    },
+    {
+     "term": "cost responsiveness frontier",
+     "plain": "The lowest cost achievable at each level of responsiveness; on it, more speed must be paid for."
+    },
+    {
+     "term": "zone of strategic fit",
+     "plain": "The band where the chain's responsiveness matches the implied uncertainty the promise creates."
+    },
+    {
+     "term": "tailored supply chain",
+     "plain": "Being efficient where uncertainty is low and responsive where it is high, instead of one design for everything."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "kind": "question",
+   "id": "sclm_fit_bridge_cloze",
+   "type": "cloze",
+   "concept": "Strategic fit",
+   "caselet": "Marketing promises high variety and same-day availability while operations uses slow transport, long batches, and suppliers chosen only for low price.",
+   "stem": "Complete the causal explanation, not just the label.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the causal explanation",
+     "options": [
+      "Strategic fit: The customer promise creates operating requirements; performance fails when the network is built for a different promise.",
+      "Strategic fit: Small local reactions compound across stages; coordination and shared demand signals stop defensive decisions from amplifying uncertainty.",
+      "Strategic fit: Lot size sets the ordering-versus-holding trade-off; reorder timing answers a different question about when replenishment must start.",
+      "Strategic fit: Managers deliver strategic fit by configuring several connected drivers, not by maximising one lever in isolation."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "strategic fit",
+     "plain": "The competitive strategy and the supply chain strategy targeting the same customer priorities."
+    },
+    {
+     "term": "implied demand uncertainty",
+     "plain": "The uncertainty the supply chain must absorb because of the promise it made, not just demand variation."
+    },
+    {
+     "term": "responsiveness",
+     "plain": "Being able to handle swings in quantity, short lead times, wide variety, and high service — at higher cost."
+    },
+    {
+     "term": "efficiency",
+     "plain": "Delivering at the lowest possible cost, usually through standardisation, high utilisation, and stable operations."
+    },
+    {
+     "term": "cost responsiveness frontier",
+     "plain": "The lowest cost achievable at each level of responsiveness; on it, more speed must be paid for."
+    },
+    {
+     "term": "zone of strategic fit",
+     "plain": "The band where the chain's responsiveness matches the implied uncertainty the promise creates."
+    },
+    {
+     "term": "tailored supply chain",
+     "plain": "Being efficient where uncertainty is low and responsive where it is high, instead of one design for everything."
+    }
+   ]
+  },
+  {
+   "step": 5,
+   "kind": "question",
+   "id": "sclm_fit_contrast",
+   "type": "cloze",
+   "concept": "Strategic fit",
+   "caselet": null,
+   "stem": "Three of these attach a neighbouring idea's claim to Strategic fit. Which one is actually true of it?",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the claim that holds",
+     "options": [
+      "Strategic fit: S&OP balances forecast demand with capacity, utilisation, inventory, backlog, and outsourcing over a medium-term horizon.",
+      "Strategic fit: Exponential smoothing updates the old forecast by a fraction alpha of the latest forecast error; a larger alpha reacts more strongly to recent demand.",
+      "Strategic fit: Strategic fit aligns the supply chain's efficiency and responsiveness with the customer promise and its implied uncertainty.",
+      "Strategic fit: Facilities, inventory, transportation, information, sourcing, and pricing jointly set the balance between responsiveness and efficiency."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "strategic fit",
+     "plain": "The competitive strategy and the supply chain strategy targeting the same customer priorities."
+    },
+    {
+     "term": "implied demand uncertainty",
+     "plain": "The uncertainty the supply chain must absorb because of the promise it made, not just demand variation."
+    },
+    {
+     "term": "responsiveness",
+     "plain": "Being able to handle swings in quantity, short lead times, wide variety, and high service — at higher cost."
+    },
+    {
+     "term": "efficiency",
+     "plain": "Delivering at the lowest possible cost, usually through standardisation, high utilisation, and stable operations."
+    },
+    {
+     "term": "cost responsiveness frontier",
+     "plain": "The lowest cost achievable at each level of responsiveness; on it, more speed must be paid for."
+    },
+    {
+     "term": "zone of strategic fit",
+     "plain": "The band where the chain's responsiveness matches the implied uncertainty the promise creates."
+    },
+    {
+     "term": "tailored supply chain",
+     "plain": "Being efficient where uncertainty is low and responsive where it is high, instead of one design for everything."
+    }
+   ]
+  },
+  {
+   "step": 6,
+   "kind": "lesson",
+   "lectureId": "SCLM-M01-L06",
+   "reteach": false,
+   "title": "The six drivers of supply chain performance",
+   "module": 1,
+   "lectureNumber": 6,
+   "objective": "Name which driver a decision actually changes, and the second driver it forces to move with it.",
+   "explainer": [
+    "Six drivers are the levers managers actually control: facilities, inventory, transportation, information, sourcing, and pricing. Together they set the balance between responsiveness and efficiency. They are not the only things that matter, but most other decisions — forecasting, scheduling, supplier contracts — sit under one of them. Facilities are the physical locations where product is produced, stored, or fulfilled. Inventory is everything in the chain: raw materials, work in progress, finished goods. Transportation is the movement between points.",
+    "The remaining three are the ones students under-weight. Information is data and analysis about demand, inventory, facilities, cost, and customers, and it is often the biggest driver because it improves every other one. Sourcing is the choice of who performs an activity — make or buy, in-house or outsourced, domestic or global. Pricing is a supply chain driver, not only a marketing decision, because it shapes when demand arrives: pricing express delivery higher sorts customers by what they value, and a promotion is a supply chain event that changes volumes and replenishment needs.",
+    "The point of the framework is that the drivers interact, so a decision on one usually forces a change in at least one other. Add facilities closer to customers and transportation may fall while facility cost and total inventory rise. Cut inventory hard and working capital improves, but lost sales rise unless transport and information can replenish faster. There is no best combination — the right one depends on the competitive strategy and the uncertainty being faced."
+   ],
+   "worked": {
+    "setup": "A quick-commerce firm promises very fast delivery. It does this by positioning inventory in small fulfilment points close to customers rather than serving the country from one or two centralised warehouses.",
+    "move": "Name the driver being changed: this is a facilities decision, and it drags inventory along with it. Responsiveness rises because stock is near the customer. Fixed facility cost rises. Total inventory in the system usually rises too, because the same demand is now covered from many small points instead of one pooled location.",
+    "because": "The tempting reading is that more facilities is simply better. More facilities usually do improve responsiveness, but they also increase fixed costs and often increase total inventory — so whether it is better depends on what these customers value and are willing to pay for."
+   },
+   "glossary": [
+    {
+     "term": "facilities",
+     "plain": "The physical places in the network where product is produced, stored, or fulfilled."
+    },
+    {
+     "term": "inventory",
+     "plain": "All stock in the chain — raw materials, work in progress, and finished goods."
+    },
+    {
+     "term": "transportation",
+     "plain": "Moving inventory between points; mode, network design, routing, and delivery frequency."
+    },
+    {
+     "term": "information",
+     "plain": "Data and analysis across the chain; the driver that improves all the others."
+    },
+    {
+     "term": "sourcing",
+     "plain": "Who performs an activity — make or buy, in-house or outsourced, local or global."
+    },
+    {
+     "term": "pricing",
+     "plain": "What the firm charges; it shapes when demand arrives, so it is a supply chain lever too."
+    },
+    {
+     "term": "supply chain surplus",
+     "plain": "The value the whole chain creates — the target the drivers are set to raise."
+    },
+    {
+     "term": "dual sourcing",
+     "plain": "Base volume from an efficient supplier and the flexible portion from a responsive one."
+    }
+   ],
+   "handoff": {
+    "connects": "The drivers are set from a demand signal. The next lecture asks how that signal is produced, and how much of it to believe.",
+    "promisesNextLecture": true,
+    "kept": false,
+    "note": "That is the course's order. This run does not follow it here — it delivers only the lectures your questions rest on, so Exponential smoothing is not part of it.",
+    "nextInRun": "the questions this lecture answers",
+    "lectureId": "SCLM-M01-L06"
+   }
+  },
+  {
+   "step": 7,
+   "kind": "primer",
+   "id": "sclm_drivers_primer",
+   "concept": "Six supply-chain drivers",
+   "level": 1,
+   "levelLabel": "First contact · predict before you are told",
+   "carryForward": "Carry forward: Strategic fit. Now add Six supply-chain drivers.",
+   "whatHappens": "A quick-commerce firm adds small local fulfilment points and more local stock to reduce delivery time.",
+   "knownTrap": null,
+   "stem": "Before anything names it: what rule do you think this case is showing, and why?",
+   "response": "free text — a prediction in the learner's own words. Nothing is marked or recorded.",
+   "termsAvailable": [
+    {
+     "term": "facilities",
+     "plain": "The physical places in the network where product is produced, stored, or fulfilled."
+    },
+    {
+     "term": "inventory",
+     "plain": "All stock in the chain — raw materials, work in progress, and finished goods."
+    },
+    {
+     "term": "transportation",
+     "plain": "Moving inventory between points; mode, network design, routing, and delivery frequency."
+    },
+    {
+     "term": "information",
+     "plain": "Data and analysis across the chain; the driver that improves all the others."
+    },
+    {
+     "term": "sourcing",
+     "plain": "Who performs an activity — make or buy, in-house or outsourced, local or global."
+    },
+    {
+     "term": "pricing",
+     "plain": "What the firm charges; it shapes when demand arrives, so it is a supply chain lever too."
+    },
+    {
+     "term": "supply chain surplus",
+     "plain": "The value the whole chain creates — the target the drivers are set to raise."
+    },
+    {
+     "term": "dual sourcing",
+     "plain": "Base volume from an efficient supplier and the flexible portion from a responsive one."
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "kind": "question",
+   "id": "sclm_drivers_case_cloze",
+   "type": "case-cloze",
+   "concept": "Six supply-chain drivers",
+   "caselet": "A quick-commerce firm adds small local fulfilment points and more local stock to reduce delivery time.",
+   "stem": "Fill both parts of the recommendation so the action and framework agree.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the decision",
+     "options": [
+      "Recognise a facilities-and-inventory choice that raises responsiveness while raising fixed cost, since one driver never delivers fit by itself. (Six supply-chain drivers)",
+      "Assume more local facilities reduce every cost line, so their fixed cost needs no separate check. (Six supply-chain drivers)",
+      "Treat delivery speed as a free result of branding, since perception rather than network design sets service. (Six supply-chain drivers)",
+      "Ignore information and sourcing because siting stock close to customers guarantees service on its own. (Six supply-chain drivers)"
+     ]
+    },
+    {
+     "label": "Choose the framework",
+     "options": [
+      "Six supply-chain drivers: Facilities, inventory, transportation, information, sourcing, and pricing jointly set the balance between responsiveness and efficiency.",
+      "Six supply-chain drivers: Exponential smoothing updates the old forecast by a fraction alpha of the latest forecast error; a larger alpha reacts more strongly to recent demand.",
+      "Six supply-chain drivers: Strategic fit aligns the supply chain's efficiency and responsiveness with the customer promise and its implied uncertainty.",
+      "Six supply-chain drivers: S&OP balances forecast demand with capacity, utilisation, inventory, backlog, and outsourcing over a medium-term horizon."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "facilities",
+     "plain": "The physical places in the network where product is produced, stored, or fulfilled."
+    },
+    {
+     "term": "inventory",
+     "plain": "All stock in the chain — raw materials, work in progress, and finished goods."
+    },
+    {
+     "term": "transportation",
+     "plain": "Moving inventory between points; mode, network design, routing, and delivery frequency."
+    },
+    {
+     "term": "information",
+     "plain": "Data and analysis across the chain; the driver that improves all the others."
+    },
+    {
+     "term": "sourcing",
+     "plain": "Who performs an activity — make or buy, in-house or outsourced, local or global."
+    },
+    {
+     "term": "pricing",
+     "plain": "What the firm charges; it shapes when demand arrives, so it is a supply chain lever too."
+    },
+    {
+     "term": "supply chain surplus",
+     "plain": "The value the whole chain creates — the target the drivers are set to raise."
+    },
+    {
+     "term": "dual sourcing",
+     "plain": "Base volume from an efficient supplier and the flexible portion from a responsive one."
+    }
+   ]
+  },
+  {
+   "step": 9,
+   "kind": "question",
+   "id": "sclm_drivers_cla2",
+   "type": "mcq",
+   "concept": "Six supply-chain drivers",
+   "caselet": "A grocery chain cuts inventory hard across its regional warehouses to release working capital. Six weeks later, working capital is down as planned and lost sales have risen sharply in the same regions.",
+   "stem": "Which reading of this outcome is most defensible?",
+   "prompt": null,
+   "options": [
+    "The inventory reduction was executed badly; the same cut done properly would have released capital without lost sales.",
+    "The lost sales are a forecasting failure, because the cut would have been safe against a more accurate forecast.",
+    "The inventory driver was moved without moving the transport and information that would let replenishment keep up.",
+    "Inventory should be raised back to its previous level, since the trial shows this chain cannot run on less stock."
+   ],
+   "termsAvailable": [
+    {
+     "term": "facilities",
+     "plain": "The physical places in the network where product is produced, stored, or fulfilled."
+    },
+    {
+     "term": "inventory",
+     "plain": "All stock in the chain — raw materials, work in progress, and finished goods."
+    },
+    {
+     "term": "transportation",
+     "plain": "Moving inventory between points; mode, network design, routing, and delivery frequency."
+    },
+    {
+     "term": "information",
+     "plain": "Data and analysis across the chain; the driver that improves all the others."
+    },
+    {
+     "term": "sourcing",
+     "plain": "Who performs an activity — make or buy, in-house or outsourced, local or global."
+    },
+    {
+     "term": "pricing",
+     "plain": "What the firm charges; it shapes when demand arrives, so it is a supply chain lever too."
+    },
+    {
+     "term": "supply chain surplus",
+     "plain": "The value the whole chain creates — the target the drivers are set to raise."
+    },
+    {
+     "term": "dual sourcing",
+     "plain": "Base volume from an efficient supplier and the flexible portion from a responsive one."
+    }
+   ]
+  },
+  {
+   "step": 10,
+   "kind": "question",
+   "id": "sclm_m1_match",
+   "type": "match",
+   "concept": "Strategic fit and Six supply-chain drivers",
+   "caselet": null,
+   "stem": "Match each prompt to the precise explanation or action.",
+   "prompt": null,
+   "rows": [
+    "Strategic fit — principle",
+    "Six supply-chain drivers — principle",
+    "Strategic fit — decision",
+    "Six supply-chain drivers — decision"
+   ],
+   "choices": [
+    "Facilities, inventory, transportation, information, sourcing, and pricing jointly set the balance between responsiveness and efficiency.",
+    "Redesign the chain for the promised responsiveness or change the promise, because performance always fails when the two diverge.",
+    "Recognise a facilities-and-inventory choice that raises responsiveness while raising fixed cost, since one driver never delivers fit by itself.",
+    "Strategic fit aligns the supply chain's efficiency and responsiveness with the customer promise and its implied uncertainty."
+   ],
+   "termsAvailable": [
+    {
+     "term": "strategic fit",
+     "plain": "The competitive strategy and the supply chain strategy targeting the same customer priorities."
+    },
+    {
+     "term": "implied demand uncertainty",
+     "plain": "The uncertainty the supply chain must absorb because of the promise it made, not just demand variation."
+    },
+    {
+     "term": "responsiveness",
+     "plain": "Being able to handle swings in quantity, short lead times, wide variety, and high service — at higher cost."
+    },
+    {
+     "term": "efficiency",
+     "plain": "Delivering at the lowest possible cost, usually through standardisation, high utilisation, and stable operations."
+    },
+    {
+     "term": "cost responsiveness frontier",
+     "plain": "The lowest cost achievable at each level of responsiveness; on it, more speed must be paid for."
+    },
+    {
+     "term": "zone of strategic fit",
+     "plain": "The band where the chain's responsiveness matches the implied uncertainty the promise creates."
+    },
+    {
+     "term": "tailored supply chain",
+     "plain": "Being efficient where uncertainty is low and responsive where it is high, instead of one design for everything."
+    },
+    {
+     "term": "facilities",
+     "plain": "The physical places in the network where product is produced, stored, or fulfilled."
+    },
+    {
+     "term": "inventory",
+     "plain": "All stock in the chain — raw materials, work in progress, and finished goods."
+    },
+    {
+     "term": "transportation",
+     "plain": "Moving inventory between points; mode, network design, routing, and delivery frequency."
+    },
+    {
+     "term": "information",
+     "plain": "Data and analysis across the chain; the driver that improves all the others."
+    },
+    {
+     "term": "sourcing",
+     "plain": "Who performs an activity — make or buy, in-house or outsourced, local or global."
+    },
+    {
+     "term": "pricing",
+     "plain": "What the firm charges; it shapes when demand arrives, so it is a supply chain lever too."
+    },
+    {
+     "term": "supply chain surplus",
+     "plain": "The value the whole chain creates — the target the drivers are set to raise."
+    },
+    {
+     "term": "dual sourcing",
+     "plain": "Base volume from an efficient supplier and the flexible portion from a responsive one."
+    }
+   ]
+  },
+  {
+   "step": 11,
+   "kind": "question",
+   "id": "sclm_drivers_repair_cloze",
+   "type": "cloze",
+   "concept": "Six supply-chain drivers",
+   "caselet": "A classmate writes: “Transportation speed alone determines supply-chain performance, because every other driver follows the delivery schedule.”",
+   "stem": "Replace the flawed claim with the precise principle.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the corrected principle",
+     "options": [
+      "Six supply-chain drivers: Strategic fit aligns the supply chain's efficiency and responsiveness with the customer promise and its implied uncertainty.",
+      "Six supply-chain drivers: Mode choice compares end-to-end transport, handling, port, inventory, lot-size, and service effects—not freight rate alone.",
+      "Six supply-chain drivers: S&OP balances forecast demand with capacity, utilisation, inventory, backlog, and outsourcing over a medium-term horizon.",
+      "Six supply-chain drivers: Facilities, inventory, transportation, information, sourcing, and pricing jointly set the balance between responsiveness and efficiency."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "facilities",
+     "plain": "The physical places in the network where product is produced, stored, or fulfilled."
+    },
+    {
+     "term": "inventory",
+     "plain": "All stock in the chain — raw materials, work in progress, and finished goods."
+    },
+    {
+     "term": "transportation",
+     "plain": "Moving inventory between points; mode, network design, routing, and delivery frequency."
+    },
+    {
+     "term": "information",
+     "plain": "Data and analysis across the chain; the driver that improves all the others."
+    },
+    {
+     "term": "sourcing",
+     "plain": "Who performs an activity — make or buy, in-house or outsourced, local or global."
+    },
+    {
+     "term": "pricing",
+     "plain": "What the firm charges; it shapes when demand arrives, so it is a supply chain lever too."
+    },
+    {
+     "term": "supply chain surplus",
+     "plain": "The value the whole chain creates — the target the drivers are set to raise."
+    },
+    {
+     "term": "dual sourcing",
+     "plain": "Base volume from an efficient supplier and the flexible portion from a responsive one."
+    }
+   ]
+  },
+  {
+   "step": 12,
+   "kind": "question",
+   "id": "sclm_m1_boss_1",
+   "type": "boss",
+   "concept": "Strategic fit → Six supply-chain drivers",
+   "caselet": "One recommendation must resolve two linked decisions. First: Marketing promises high variety and same-day availability while operations uses slow transport, long batches, and suppliers chosen only for low price. Then: A quick-commerce firm adds small local fulfilment points and more local stock to reduce delivery time.",
+   "stem": "Build the reasoning chain. All three steps must agree before the conclusion is secure.",
+   "prompt": null,
+   "steps": [
+    {
+     "label": "Step 1 · Diagnose the first decision",
+     "prompt": "What should happen first?",
+     "options": [
+      "Strategic fit: Recognise a facilities-and-inventory choice that raises responsiveness while raising fixed cost, since one driver never delivers fit by itself.",
+      "Strategic fit: Keep both strategies unchanged, because each function is already locally efficient on its own budget and targets.",
+      "Strategic fit: Measure suppliers only on unit purchase price and ignore availability, because the lowest landed cost defines a fit supply chain.",
+      "Strategic fit: Redesign the chain for the promised responsiveness or change the promise, because performance always fails when the two diverge."
+     ]
+    },
+    {
+     "label": "Step 2 · Apply the second framework",
+     "prompt": "What should happen next?",
+     "options": [
+      "Six supply-chain drivers: Treat delivery speed as a free result of branding, since perception rather than network design sets service.",
+      "Six supply-chain drivers: Redesign the chain for the promised responsiveness or change the promise, because performance always fails when the two diverge.",
+      "Six supply-chain drivers: Recognise a facilities-and-inventory choice that raises responsiveness while raising fixed cost, since one driver never delivers fit by itself.",
+      "Six supply-chain drivers: Assume more local facilities reduce every cost line, so their fixed cost needs no separate check."
+     ]
+    },
+    {
+     "label": "Step 3 · Join the reasoning",
+     "prompt": "Which final explanation keeps both decisions consistent?",
+     "options": [
+      "Use Six supply-chain drivers for both decisions; the later issue should determine the earlier diagnosis as well.",
+      "Use Six supply-chain drivers for the first decision and Strategic fit for the second; the labels can be swapped without changing the logic.",
+      "Use Strategic fit for the first decision and Six supply-chain drivers for the second; neither result replaces the other.",
+      "Use Strategic fit for both decisions; once the first issue is solved, the second can be treated as the same problem."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "strategic fit",
+     "plain": "The competitive strategy and the supply chain strategy targeting the same customer priorities."
+    },
+    {
+     "term": "implied demand uncertainty",
+     "plain": "The uncertainty the supply chain must absorb because of the promise it made, not just demand variation."
+    },
+    {
+     "term": "responsiveness",
+     "plain": "Being able to handle swings in quantity, short lead times, wide variety, and high service — at higher cost."
+    },
+    {
+     "term": "efficiency",
+     "plain": "Delivering at the lowest possible cost, usually through standardisation, high utilisation, and stable operations."
+    },
+    {
+     "term": "cost responsiveness frontier",
+     "plain": "The lowest cost achievable at each level of responsiveness; on it, more speed must be paid for."
+    },
+    {
+     "term": "zone of strategic fit",
+     "plain": "The band where the chain's responsiveness matches the implied uncertainty the promise creates."
+    },
+    {
+     "term": "tailored supply chain",
+     "plain": "Being efficient where uncertainty is low and responsive where it is high, instead of one design for everything."
+    },
+    {
+     "term": "facilities",
+     "plain": "The physical places in the network where product is produced, stored, or fulfilled."
+    },
+    {
+     "term": "inventory",
+     "plain": "All stock in the chain — raw materials, work in progress, and finished goods."
+    },
+    {
+     "term": "transportation",
+     "plain": "Moving inventory between points; mode, network design, routing, and delivery frequency."
+    },
+    {
+     "term": "information",
+     "plain": "Data and analysis across the chain; the driver that improves all the others."
+    },
+    {
+     "term": "sourcing",
+     "plain": "Who performs an activity — make or buy, in-house or outsourced, local or global."
+    },
+    {
+     "term": "pricing",
+     "plain": "What the firm charges; it shapes when demand arrives, so it is a supply chain lever too."
+    },
+    {
+     "term": "supply chain surplus",
+     "plain": "The value the whole chain creates — the target the drivers are set to raise."
+    },
+    {
+     "term": "dual sourcing",
+     "plain": "Base volume from an efficient supplier and the flexible portion from a responsive one."
+    }
+   ]
+  }
+ ]
+}

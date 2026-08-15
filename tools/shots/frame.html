@@ -244,6 +244,25 @@
         }
         return quiet(0);
       })
+      /* `&optical=1` draws the gridlines over the settled scene before the shutter, so
+         the shot is of the page *and* the lines its ink does or does not sit on. Runs
+         last, after `quiet()`, because the probe measures rendered ink and a scene that
+         is still animating has none of its final positions yet. A failure here is
+         reported rather than swallowed: a gridline shot that quietly came back without
+         gridlines would look exactly like a page with nothing to report. */
+      .then(function () {
+        if (params.get("optical") !== "1") return null;
+        return fetch("/tools/browser-checks/optical-audit.js")
+          .then(function (r) { return r.text(); })
+          .then(function (src) {
+            var w = win();
+            var result = w.eval(src);
+            if (!w.optical || typeof w.optical.overlay !== "function") throw new Error("optical.overlay was not installed");
+            var drew = w.optical.overlay();
+            if (!/\d+ gridlines/.test(String(drew))) throw new Error("overlay drew nothing: " + drew);
+            return new Promise(function (resolve) { setTimeout(function () { resolve(result); }, 120); });
+          });
+      })
       .then(function () { document.title = "shot ready: " + scene; })
       .catch(function (error) { fail(String((error && error.stack) || error)); });
   });

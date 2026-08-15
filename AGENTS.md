@@ -1,4 +1,38 @@
 # Dungeon
+> **The content is accepted, and measuring the promises broke four of them (2026-08-15; newest):**
+> `WAITING_OWNER_CONTENT_ACCEPTANCE` is **cleared** — the owner accepted the whole standing block
+> in chat (792 surfaces, 64 primers, 64 rubrics/exemplars, 106 lessons, the 48 CLA items, the 44
+> reserved items, the SPMS caselets and rewritten stems, the BRGSA concept records, the ~76
+> restated answers). It clears the gate that blocked `DONE`; it is **not** faculty review and
+> creates no subject-matter authority. Two R3 defects were repaired *before* the gate closed
+> rather than accepted and then corrected. **The persona suite's learn half had been measured on
+> an order that no longer existed** — the committed queue skeletons predated three bank commits,
+> so re-exporting through the real app moved SPMS, BRGSA and SCLM (IBM unchanged), and a control
+> run proves **every movement is the schedule, none is the bank**. BRGSA now delivers
+> `case_validate`: the integrated slot in a real queue for the first time. **Four defects, none
+> reachable by an existing gate.** *A mock miss did not re-teach a lesson already read* —
+> `lessonNeedsReteach` read `conceptAttempts` and `recordExamMisses` writes only `examMisses`, by
+> design, so the paper could never reach the latch: `lessonAt: -1` under a kicker reading "Taught
+> first, then tested again", and first contact worked, which is the **same shape this latch was
+> fixed for once already**. Fixed, with the RECOVERED rule applied symmetrically so one bad paper
+> does not re-teach for ever, and the cause established by **control** rather than by reading the
+> code. *A concept that fell from Strong was character-for-character identical to one never
+> learned* — the difference lived behind the "Why" disclosure as counts the reader had to
+> interpret; `conceptPeakStatus` replays the rule (never a stored high-water mark) and the row now
+> says **"was Strong"** in words, not colour. *`ui-audit`'s type check had never been able to
+> fail*: floor hard-coded at 12 against a declared `--t-micro: 11`, so it listed **111 compliant
+> elements**, truncated at ten, and buried the **seven** that actually broke the rule — SVG axis
+> labels at 10px, the only type in the product under its own scale. Floor now read from the token;
+> **0 at 375 and 1280**. *Two reserved items answered to their own heading* — `sclm_drivers_cla3`
+> and `spms_requirements_cla1`, both contradicting the R3 rule in their own header comment,
+> repaired in `connect`'s direction; **25 → 23** sets paying 100%. Two new probes:
+> `tools/browser-checks/exam-repair.js` and `regression-reporting.js`. `npm test` **103/103**,
+> validator **0 errors 0 warnings**, LAW-47 **12 routes × 4 subjects, 0 violations** (re-run
+> because the re-teach change adds lessons to queues that had none), layering **40 sets / 255
+> pairs / 0 descents**, paper digests unchanged. Evidence:
+> `evidence/2026-08-15/t6-persona-rerun/verification.md` and
+> `evidence/2026-08-15/t6-promise-suite/verification.md`. Not merged, not deployed.
+>
 > **Every subject now has a reserved examiner slice, and "pick the second-longest" is closed
 > (2026-08-15; newest):** the four items the block below left open are done. **44 reserved
 > items across all four subjects**, and every concept on every paper has a distinct examiner
@@ -1209,11 +1243,12 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
-- [ ] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — 48 course-assessment items authored 2026-08-15.**
+- [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — 48 course-assessment items — ACCEPTED 2026-08-15.**
   SCLM 32 (two per concept: definition, scenario, numeric, judgement) and BRGSA 16 (one per
   concept, scenario-led), with 144 authored option diagnoses. Drawn from the owner's own CLAs for
   style, coverage and difficulty; none is one of their questions, every item sits on a lecture that
-  already has a lesson, and every claim is one its lesson states. Nobody has read the prose.
+  already has a lesson, and every claim is one its lesson states. Released with the rest of the
+  block above.
 - [ ] **F-06 is closed on SCLM and open on BRGSA and SPMS, and the residual is located.** Mean of
   sets 1–3, "eliminate the absolutes": SCLM 36.0 → **29.5** (below its own course paper's 32.6),
   all rules combined **24.5**. BRGSA **36.6**, SPMS **41.2**. The leak lives in two places and
@@ -1261,14 +1296,14 @@ after the version is live, since a push to `main` deploys.
   (`spms_requirements_msq`, which states its own case in the stem). Related and smaller:
   `spms_roadmap_msq` carries "WhatsApp launched first on iPhone, with the Android version arriving
   around 2011" as a **correct option** — a date recall sitting among framework claims.
-- [~] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — four SPMS multiple-select caselets and their revised
-  stems were authored on 2026-08-14; the owner has not read the prose.** They close LAW-61: the
+- [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — four SPMS multiple-select caselets — ACCEPTED
+  2026-08-15.** They close LAW-61: the
   drilling-machine, Zerodha, ride-hailing MoSCoW, and WhatsApp items named an example the learner
   never saw. Each case is drawn from its own lecture's clean transcript, but drawn from the
   transcript is not accepted. Tester-visible, so it also owes the change announcement drafted at
   `outputs/ANNOUNCEMENT-2026-08-14-example-questions.md`.
-- [~] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — BRGSA concept records and the case exemplar were
-  authored on 2026-08-14; the owner has not yet read the prose.** BRGSA previously had an authored
+- [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — BRGSA concept records and the case exemplar —
+  ACCEPTED 2026-08-15.** BRGSA previously had an authored
   `application` on 0 of its 16 concepts against IBM's 16 of 16, so `conceptData` fell back to a case
   question's correct multiple-choice option — a scenario-specific answer choice used as a general
   decision rule. Every BRGSA prompt therefore shipped an exemplar ending in a non-sequitur beside a
@@ -1402,10 +1437,17 @@ after the version is live, since a push to `main` deploys.
 - [ ] **SCLM is under-weighted on computation.** Section B is 24 marks of numericals with a
   scientific calculator and supplied normal-distribution tables, pointing at safety stock, service
   level, and newsvendor. Only 3 of its 16 cited lectures carry arithmetic today.
-- [ ] `WAITING_OWNER_CONTENT_ACCEPTANCE`: all 792 surfaces are source-traceable and structurally
-  verified, but transcript-derived content, the 64 support-only primers, the 64 constructed-
-  response rubrics/exemplars, and the 106 authored lessons still need owner/faculty acceptance
-  before `DONE`. This is now the largest single block of unaccepted content in the product.
+- [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — ACCEPTED BY THE OWNER 2026-08-15.** The whole standing
+  block is released: the transcript-derived bank across all 792 surfaces, the 64 support-only
+  primers, the 64 constructed-response rubrics and exemplars, the 106 authored lessons, the 48
+  course-assessment items from the owner's CLAs, the 44 examiner-reserved items, the four SPMS
+  multiple-select caselets and their revised stems, the 14 rewritten SPMS stems, the BRGSA concept
+  records and case exemplar, and the ~76 restated correct answers. Acceptance was given in chat
+  and covers the prose as it stood after the two R3 repairs below — `sclm_drivers_cla3` and
+  `spms_requirements_cla1` were fixed **before** acceptance rather than accepted and then
+  corrected. **What acceptance does and does not mean:** it clears the gate that blocked `DONE`.
+  It is not faculty review, and it does not convert any of this into verified subject-matter
+  authority — the standing accuracy caveats below are unchanged and still apply.
 - [x] **The 0→80 path reaches every scheduled question — closed 2026-08-12.** 724 of 724 are
   taught, verified in a real browser at
   `evidence/2026-08-12/t6-teaching-layer-complete/verification.md`. What remains is *acceptance*,

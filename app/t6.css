@@ -47,7 +47,16 @@
      because at night the luminance step alone is too small to draw the shape. */
   --deep: light-dark(#17221c, #070b0d);
   --deep-2: light-dark(#121814, #05080a);
-  --deep-edge: light-dark(#17221c, #263239);
+  /* The light value used to be `--deep` itself — a 1.00:1 edge, which is no edge, and a
+     standing item on `check-palette.mjs` nobody had read as a defect. It only mattered
+     once something deep floated over something deep: the resume bar over the focus
+     panel had an identical background *and* an identical border, so in light theme
+     there was nothing separating them at all. */
+  --deep-edge: light-dark(#2e3c35, #263239);
+  /* One step up from `--deep`, for deep chrome that floats over deep content. A drop
+     shadow cannot do this job here — a black shadow on a near-black panel is invisible
+     — so the lift has to be in the surface itself. */
+  --deep-raised: light-dark(#22302a, #162126);
   --on-deep: light-dark(#ffffff, #f0ece2);
   --on-deep-muted: light-dark(#cad3cc, #b5c0b9);
   --on-deep-faint: light-dark(#9fb4ad, #8b9a93);
@@ -103,10 +112,26 @@
   --saffron: #f3bf63;
   --on-saffron: #17221c;
 
-  --shadow: light-dark(0 22px 60px rgba(35,45,38,.09), 0 22px 60px rgba(0,0,0,.5));
-  --shadow-lift: light-dark(0 2px 6px rgba(31,42,34,.1), 0 2px 8px rgba(0,0,0,.45));
-  --shadow-deep: light-dark(0 24px 80px rgba(0,0,0,.25), 0 24px 80px rgba(0,0,0,.62));
-  --shadow-primary: light-dark(0 8px 22px rgba(35,112,77,.18), 0 8px 22px rgba(0,0,0,.45));
+  /* `light-dark()` is a *colour* function. Wrapping a whole box-shadow in it — which
+     these four did — is not a value the property accepts, so each one computed to
+     `none` and **every shadow in the app was dead**: sixteen `box-shadow: var(--shadow*)`
+     rules, and exactly three elements on the dashboard painting a shadow, all three of
+     them written literally. Nothing reported it, because an invalid value leaves no
+     trace on the element — the stylesheet says elevated and the screen says flat.
+     Found by `optical-audit.js`'s `deadShadow`, which re-declares each value on a probe
+     node and checks whether it survives.
+     So the colour is the only part inside `light-dark()`, and the geometry sits outside
+     it where the property can see it. `--shadow-lift` had 6px of blur in light and 8px
+     in dark; that difference cannot be expressed this way and has never once rendered,
+     so it is one value now. */
+  --shadow-tint: light-dark(rgba(35,45,38,.09), rgba(0,0,0,.5));
+  --shadow-lift-tint: light-dark(rgba(31,42,34,.1), rgba(0,0,0,.45));
+  --shadow-deep-tint: light-dark(rgba(0,0,0,.25), rgba(0,0,0,.62));
+  --shadow-primary-tint: light-dark(rgba(35,112,77,.18), rgba(0,0,0,.45));
+  --shadow: 0 22px 60px var(--shadow-tint);
+  --shadow-lift: 0 2px 7px var(--shadow-lift-tint);
+  --shadow-deep: 0 24px 80px var(--shadow-deep-tint);
+  --shadow-primary: 0 8px 22px var(--shadow-primary-tint);
   --backdrop: light-dark(rgba(16,24,19,.72), rgba(0,0,0,.78));
 
   /* Rules and insets drawn *inside* a tinted veil — the feedback panel's divider and
@@ -279,6 +304,15 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .block-heading .block-note { margin-top: 11px; }
 
 .subject-rail { display: grid; gap: 13px; }
+/* 26px is the gap a heading owes a paragraph. What follows this one is not a
+   paragraph: `.rail-heading` is a 44px control band, because a native `<select>` is
+   44px and has to be, and the 11px label sits centred in it. So the label carried
+   16px of the band's own dead space on top of the 26px — 42px above it against 30px
+   below — and a section label floating nearer to nothing than to the cards it names
+   is what "the spacing is off" looks like. The band gets the rail's own gap on both
+   sides instead, which puts the label at 29/30 here and 26/26 on a phone and states
+   the rule without a magic number: the heading band sits in the rail's rhythm. */
+#home-now .block-heading { margin-bottom: 13px; }
 .rail-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
 .rail-heading h3 { margin: 0; color: var(--muted); font: 800 11px/1 Inter, sans-serif; letter-spacing: .13em; text-transform: uppercase; }
 /* The full name of what you just picked, answering the block's question directly.
@@ -472,8 +506,20 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 /* Negative marking is the one rule that changes how you answer, so it earns a
    permanent mark rather than a line of copy the learner has to remember. */
 .course-flag { margin-left: 5px; padding: 1px 4px; color: var(--red); background: var(--red-soft); border-radius: var(--r-mark); font-style: normal; font-size: var(--t-micro); font-weight: 900; }
-/* Where the exam day turns over. Only meaningful in exam order. */
-.course-card.day-start { border-left: 3px solid var(--blue); }
+/* Where the exam day turns over. Only meaningful in exam order.
+ *
+ * Drawn as an inset shadow, not a border, because a border is part of the box.
+ * `border-left: 3px` put the day marker on the two cards that open a day — SPMS and
+ * IBM in exam order — and left the other two on 1px, so in a rail of four identically
+ * sized cards the contents of two started at x+14 and the other two at x+12, with
+ * content boxes of 160px against 162px. Nothing was misaligned by much; it was
+ * misaligned by exactly the marker, on exactly the cards that carry it, which is the
+ * kind of 2px that reads as "these cards are not the same" without saying why.
+ * An inset shadow paints in the same place, follows the corner radius, and costs the
+ * content nothing. The selected card composes all three layers because box-shadow
+ * replaces rather than merges. */
+.course-card.day-start { box-shadow: inset 3px 0 0 var(--blue); }
+.course-card.selected.day-start { box-shadow: inset 3px 0 0 var(--blue), inset 0 0 0 1px var(--blue), 0 0 0 3px var(--blue-glow-soft); }
 .rail-sort { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .rail-sort label { color: var(--muted); font-size: var(--t-micro); }
 /* A real control, so it gets a real target: 32px failed the 44px floor the rest of
@@ -553,7 +599,11 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .trend-heading > b { color: var(--green); font: 700 30px Georgia, serif; }
 .progress-trend { width: 100%; height: 220px; margin-top: 9px; overflow: visible; }
 .trend-grid { stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.trend-label, .trend-axis-copy { fill: var(--muted); font: 10px Inter, sans-serif; }
+/* On the scale, not one pixel under it. These seven axis labels were the only type in
+   the product below `--t-micro`, and `ui-audit`'s type check could not report them:
+   its floor was hard-coded a pixel ABOVE the scale, so it listed 111 compliant
+   elements, truncated at ten, and buried the seven that actually broke the rule. */
+.trend-label, .trend-axis-copy { fill: var(--muted); font: var(--t-micro) Inter, sans-serif; }
 .trend-area { fill: var(--green-fill-soft); }
 .trend-line { fill: none; stroke: var(--green); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .progress-trend circle { fill: var(--card); stroke: var(--green); stroke-width: 3; vector-effect: non-scaling-stroke; }
@@ -875,7 +925,15 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .shelf-why { color: var(--blue); font-size: var(--t-micro); font-weight: 800; }
 .shelf-name[aria-expanded="true"] .shelf-why::after { content: " ▴"; }
 .shelf-name[aria-expanded="false"] .shelf-why::after { content: " ▾"; }
+/* The cell, so `.shelf-state` can stay exactly the status word for anything reading
+   it. `text-align: end` keeps both lines on the column's trailing edge as the single
+   state label used to sit. */
+.shelf-status-cell { display: grid; justify-items: end; gap: 1px; }
 .shelf-state { font-size: var(--t-micro); color: var(--muted); white-space: nowrap; }
+/* "was Strong" under the current state. Its own line so the pair reads as one fact
+   rather than a run-on, and `--muted` rather than a warning colour because the row
+   already carries the state; this only says where it came from. */
+.shelf-lost { font-size: var(--t-micro); font-weight: 600; color: var(--muted); white-space: nowrap; }
 .shelf-state.strong { color: var(--green); }
 .shelf-state.needs { color: var(--red); }
 .shelf-actions { display: flex; gap: 6px; }
@@ -1110,7 +1168,14 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 /* The recommended action, re-offered once the hero button scrolls away. Inside
    .dashboard-screen on purpose: when that screen is inactive it is display:none, so a
    fixed child cannot survive into the practice or results screens. */
-.resume-bar { position: fixed; left: 50%; bottom: 0; z-index: 55; width: min(560px, calc(100% - 20px)); margin-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); padding: 11px 12px 11px 16px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 14px; color: var(--on-deep); background: var(--deep); border: 1px solid var(--deep-edge); border-radius: var(--r-panel); box-shadow: var(--shadow); transform: translateX(-50%); }
+/* `--deep-raised`, not `--deep`: this bar is fixed over whatever is scrolling under it,
+   and on this screen that is usually `.focus-panel` — also `--deep`. Identical
+   background, and until the shadow tokens were repaired, no shadow either, so the bar
+   and the panel behind it were one flat region of colour and the bar read as part of
+   the hero rather than as something floating above it. The lift is in the surface
+   because a shadow cannot be seen against a near-black panel; the shadow is still here
+   for where the bar floats over paper. */
+.resume-bar { position: fixed; left: 50%; bottom: 0; z-index: 55; width: min(560px, calc(100% - 20px)); margin-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); padding: 11px 12px 11px 16px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 14px; color: var(--on-deep); background: var(--deep-raised); border: 1px solid var(--deep-edge); border-radius: var(--r-panel); box-shadow: var(--shadow); transform: translateX(-50%); }
 .resume-bar p { min-width: 0; margin: 0; }
 .resume-bar span { display: block; color: var(--on-deep-faint); font-size: var(--t-micro); font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
 .resume-bar b { display: block; margin-top: 2px; overflow: hidden; font-size: var(--t-body); text-overflow: ellipsis; white-space: nowrap; }
@@ -1148,7 +1213,9 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 /* Clear the bar so it never covers the last row of the concept list. */
 body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
-.toast { position: fixed; left: 50%; bottom: 22px; z-index: 60; max-width: calc(100% - 30px); padding: 11px 16px; color: var(--on-deep); background: var(--deep); border: 1px solid var(--deep-edge); border-radius: var(--r-card); box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translate(-50%,16px); transition: .2s ease; }
+/* Floats over arbitrary content, so it takes the raised surface for the same reason
+   `.resume-bar` does. */
+.toast { position: fixed; left: 50%; bottom: 22px; z-index: 60; max-width: calc(100% - 30px); padding: 11px 16px; color: var(--on-deep); background: var(--deep-raised); border: 1px solid var(--deep-edge); border-radius: var(--r-card); box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translate(-50%,16px); transition: .2s ease; }
 .toast.show { opacity: 1; transform: translate(-50%,0); }
 
 @media (max-width: 900px) {
@@ -1195,6 +1262,10 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
   .subject-identity { display: none; }
   .rail-heading { gap: 8px; }
   .subject-rail { gap: 9px; }
+  /* Same rule as the base sheet: the control band gets the rail's gap on both sides,
+     and the rail's gap here is 9px. 16px of that dead space is also 16px off the
+     height of everything above the hero, which this block exists to reduce. */
+  #home-now .block-heading { margin-bottom: 9px; }
   .dashboard-wrap, .exam-home { width: min(100% - 20px,1120px); padding-top: 14px; }
   .community-reminder { grid-template-columns: 1fr; padding: 16px; }
   .community-actions { justify-content: stretch; }
@@ -1216,8 +1287,17 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
   .practice-builder { padding: 17px 14px; }
   .home-block { margin-top: 40px; }
   .block-heading h2 { font-size: 27px; }
+  /* This note used to be styled for an arrangement this same media query destroys.
+     `.section-heading` goes to `flex-direction: column` 31 lines below, so the note
+     is no longer beside the title — but it kept the width and alignment of a thing
+     sitting in the right-hand column: 180px of a 325px column, right-aligned, at
+     11px. Measured at 375px it was 55% of the width, ragged-left under a
+     left-aligned serif title, in the size the token above reserves for labels and
+     eyebrows. It is a sentence of guidance, so it takes `--t-meta` like every other
+     note on this screen (`.block-note` is 13px here) and starts where its own title
+     starts. Full width makes it shorter, not longer: 68px → 60px. */
   .compact-heading { align-items: flex-start; }
-  .compact-heading > p { max-width: 180px; font-size: var(--t-micro); text-align: right; }
+  .compact-heading > p { max-width: none; font-size: var(--t-meta); text-align: start; }
   /* One swipeable row keeps the subject switch a thumb move away instead of a screen of cards.
      The scrollbar is hidden because the edge fade now carries that message and does it
      better — it says which direction has more, and disappears at each end. Nothing is
@@ -1723,7 +1803,20 @@ body.coin-in-view .mode-switch { max-width: 0; opacity: 0; border-width: 0; marg
    The half you are on is quiet and inert. The other half is the whole panel as
    a button, so the target is half a band rather than a link inside it. */
 .coin { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 26px; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-panel); overflow: hidden; }
-.coin-side { position: relative; padding: 15px 20px 16px; text-align: start; font: inherit; color: inherit; background: none; border: 0; }
+/* 14px, not 20px, because 20 was this panel's own private number. Every panel on this
+   screen insets its text from the column — that is the system, and a panel's title
+   cannot sit on the column without its own edge leaving it — but `optical-audit.js`
+   measured eight different insets on one page, and the coin held the largest. Its
+   title is Georgia and the block heading 60px below it is Georgia, so those two words
+   are the pair the eye actually compares, and 21px apart is close enough to look
+   intended and far enough to look failed. At 14 the coin sits on the same line as the
+   subject cards directly beneath it, which is a line the page already draws four
+   times. 13 and not 14: the `.coin` draws its own 1px border, so the padding sits
+   inside it and 13 + 1 is the card's 14. Setting 14 here put the title at 87.5 against
+   the cards' 86.5, which is the same defect one pixel wide. The second half reads one
+   more because it also draws the hairline between the two; that is the divider, not an
+   inset. */
+.coin-side { position: relative; padding: 15px 13px 16px; text-align: start; font: inherit; color: inherit; background: none; border: 0; }
 .coin-side + .coin-side { border-inline-start: 1px solid var(--line); }
 /* The side you are on, filled in that side's own colour, so "where am I" is
    answered before it is read.

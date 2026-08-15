@@ -1640,10 +1640,16 @@
      caselet: "A retailer wants to cut delivery time to stores. It is considering three options: adding two regional warehouses, moving a third of volume from rail to road, or raising the safety stock held at the existing single warehouse.",
      stem: "Which reading of these three options is correct?",
      options: [
+       /* Every option names the concept. R3's "none of them" branch was the stated
+          rule for this tranche and this item broke it: the answer was the only option
+          containing "drivers", so the set paid 100% to a candidate who read the
+          section heading and nothing else. Fixed in `connect`'s direction — name the
+          concept everywhere, never strip it from the answer (CONTENT-RULES R3) — and
+          in place, because appending is what pushed IBM's "pick the longest" to 66%. */
        "They are three different drivers of the same outcome, and the choice is a cost trade rather than a ranking",
-       "The warehouse option is the one that counts, because delivery time is decided by where stock sits rather than by speed",
-       "Whichever option costs least should be chosen, since each of them reaches the same delivery time and the decision is therefore purely a question of price",
-       "The transport change is always the best of the three, because moving faster is the only real lever on time"
+       "These are three drivers of one outcome, but facilities is what counts, since delivery time is set by where stock sits",
+       "Whichever of the three drivers costs least should be chosen, since each reaches the same delivery time and the decision is purely a question of price",
+       "Transportation is always the best of these drivers, because moving faster is the only real lever on time"
      ], answer: 0,
      wrong: {
        1: {tag: "Reduced the chain to one driver", label: "Kept facilities and discarded the rest",
@@ -2096,10 +2102,15 @@
      caselet: "A specification reads: \"The system shall export a payroll file. The export shall complete within 30 seconds for 5,000 employees. The export shall be available to users with the finance role only.\"",
      stem: "How should these three statements be classified?",
      options: [
+       /* Same R3 repair as `sclm_drivers_cla3`. The concept name is three words —
+          functional, quality, requirements — and only the answer carried all three,
+          so argmax picked it out without anybody reading the clauses. Each distractor
+          now names all three too, with its own claim unchanged: 1+1+design decision,
+          all-functional, all-quality. */
        "One functional requirement and two quality requirements constraining how well it must be done",
-       "Three functional requirements, since each one of them describes something the finished system will have to be able to do",
-       "One functional requirement, one quality requirement and one that is a design decision rather than a requirement",
-       "Three quality requirements, because all three are conditions the finished system has to satisfy"
+       "Three functional requirements, since each describes something the system must do rather than a quality it must have",
+       "One functional requirement, one quality requirement, and one design decision that is not among the requirements",
+       "Three quality requirements, because none of them is functional and all constrain the finished system"
      ], answer: 0,
      wrong: {
        1: {tag: "Called every clause functional", label: "Counted sentences rather than kinds",

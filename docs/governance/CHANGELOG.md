@@ -1,5 +1,114 @@
 # Changelog
 
+## 2026-08-15 — Content accepted, and the four things measuring the promises found
+
+Evidence: `evidence/2026-08-15/t6-persona-rerun/verification.md` and
+`evidence/2026-08-15/t6-promise-suite/verification.md`.
+`VERIFIED(REAL_BROWSER + AUTOMATED)`, same branch.
+
+**`WAITING_OWNER_CONTENT_ACCEPTANCE` is cleared.** The owner accepted the standing block in
+chat: the transcript-derived bank across all 792 surfaces, 64 primers, 64 rubrics and
+exemplars, 106 lessons, the 48 CLA-derived items, the 44 examiner-reserved items, the SPMS
+caselets and rewritten stems, the BRGSA concept records, and the ~76 restated answers.
+Acceptance clears the gate that blocked `DONE`; it is **not** faculty review and creates no
+subject-matter authority. The two R3 defects below were repaired *before* acceptance so the
+gate did not close over known-broken prose.
+
+**The persona suite was re-run and its learn half had been measured on a stale order.** The
+committed queue skeletons predated three bank commits, so every learn-side number in the last
+evidence file described a delivered order that no longer existed. Re-exported through the real
+app: SPMS, BRGSA and SCLM all moved; IBM did not. A control run (old order, current bank)
+isolates the cause — **every movement is the schedule, none is the bank**. BRGSA now delivers
+`case_validate`, the integrated slot working in a real queue for the first time.
+
+Four defects, none of which any existing gate could see:
+
+- **A mock miss did not re-teach a lesson the learner had already read.** `lessonNeedsReteach`
+  read `conceptAttempts`; `recordExamMisses` writes only `examMisses`, deliberately, because
+  misses "prioritise and never score". The two stores are disjoint, so a paper could not reach
+  the re-teach latch: `lessonAt: -1`, straight back to the question, under a kicker reading
+  "Taught first, then tested again". First contact worked, which is the same shape this latch
+  was fixed for once already — the earlier fix closed the Learn half and left this one open.
+  `examMissNeedsReteach` now counts a miss stamped after `readAt` (`missed` or `written`, not
+  `skipped` alone — running out of time is a timing signal), and applies the RECOVERED rule
+  symmetrically so one bad paper does not re-teach for ever. New probe
+  `tools/browser-checks/exam-repair.js`, **5 cases + the recovered case, all passing**; cause
+  established by control, not by reading the code.
+- **A concept that fell from Strong was indistinguishable from one never learned.** Same label,
+  same actions, character-for-character identical on the row; the difference existed only behind
+  the "Why" disclosure as evidence counts the reader had to interpret. `conceptPeakStatus`
+  replays the evidence rule over the attempt history — never a stored high-water mark — and the
+  row now says **"was Strong"** under the current state, in words rather than colour. New probe
+  `tools/browser-checks/regression-reporting.js`, **5 cases**, including a differential that
+  compares a declined learner against a never-strong one rather than hunting for a keyword.
+- **`ui-audit`'s type check had never been able to fail.** Its floor was hard-coded at 12 while
+  `--t-micro` declared 11, so it listed **111 compliant elements** on one screen, truncated at
+  ten, and buried the seven that actually broke the rule. The floor is now read from the token,
+  the full count travels with the truncated list, and the seven — SVG axis labels at 10px, the
+  only type in the product under the scale — are on the scale. **0 at 375 and 1280.**
+- **Two examiner-reserved items answered to their own heading.** `sclm_drivers_cla3` (the answer
+  was the only option containing "drivers") and `spms_requirements_cla1` (the only option naming
+  all of functional/quality/requirements), both contradicting the R3 rule stated in their own
+  header comment. Repaired in `connect`'s direction — name the concept in every option, in place,
+  never stripped from the answer. **25 → 23** option sets paying 100%.
+
+Also: `"Practise 1 concepts that need work"` and `"1 need practice"` are now singular-aware.
+
+Gates after the work: `npm test` **103/103**; bank validator **0 errors, 0 warnings**; LAW-47
+**12 routes × 4 subjects, 0 violations, 0 skipped** (re-run because the re-teach change adds
+lessons to queues that had none); layering **40 sets, 255 pairs, 0 descents**; LAW-63 16/16;
+name-matching, absolutes, self-containment, exam-readiness and exam-transfer gates all exit 0;
+T1 32/32; T3 every rule at or under limit; T5 no wrong decision without a cue; `ui-audit` clean
+at 375 and 1280 but for the deliberate `#course-grid` rail. Paper digests unchanged.
+
+Not merged, not deployed.
+
+## 2026-08-15 — An optical layer, and the shadows that had never once rendered
+
+Evidence: `evidence/2026-08-15/t6-dashboard-rhythm/verification.md` and
+`evidence/2026-08-15/t6-optical-layer/verification.md`.
+`VERIFIED(REAL_BROWSER + HEADLESS_CHROME)`, same branch, not merged.
+
+Five defects, all on screens `ui-audit.js` had just reported clean, and all of the same
+kind: **the boxes were right and the ink was wrong.** That is now its own probe.
+
+- **`tools/browser-checks/optical-audit.js`** — measures glyph runs through
+  `Range.getClientRects()` instead of boxes, clusters them into the gridlines the page's
+  ink actually forms, and reports what sits *near* a line without sitting *on* it.
+  Six checks: `gridlines`, `nearMiss`, `insetDrift`, `flatSurface`, `deadShadow`,
+  `baselineDrift`. `optical.overlay()` draws the grid on the page and
+  `node tools/screenshot.mjs --optical` writes a `_grid` shot of every scene through it.
+  New section F in `UI-CHECKLIST.md`.
+- **Every shadow in the app was dead, and had always been.** All four shadow tokens wrapped
+  a whole `box-shadow` in `light-dark()`, which is a *colour* function — so the declaration
+  never parsed and sixteen rules computed to `none`. Three elements on the dashboard painted
+  a shadow before this; **43** after. Nobody reported it, and no probe reading elements
+  could: an invalid value leaves nothing behind to distinguish "lost" from "never asked
+  for". **LAW-71.**
+- **The resume bar had no depth** — reported by the owner. `--deep` on a `--deep` hero at
+  **1.00:1**, a `--deep-edge` border whose light value *was* `--deep`, and the dead shadow
+  above: three separations, all three absent at once. Now on a `--deep-raised` surface with
+  a real edge. `check-palette.mjs`'s below-target list drops 17 → 16.
+- **`Learn` did not line up with `Your next step`** — also reported by the owner. Both boxes
+  on the column, 21px of ink apart. `insetDrift` found the page carrying **eight different
+  panel text insets** with the coin holding its own private 20px; the ≤768px block had said
+  14 all along. The coin's title now shares a gridline with the four subject cards beneath
+  it. The remaining drift (14/15/18/19/23) is reported and left for the owner.
+- **A day marker drawn as a `border-left`** gave two of four subject cards a 160px content
+  box against 162px — outer widths identical, so nothing fired. Now an inset shadow.
+  **LAW-70.**
+- **A section label 42.5px below its heading and 29.5px above its content**, because the
+  next box was a 44px control band with an 11px label centred in it. The margin was correct;
+  the gap the reader saw was not.
+- **`ui-audit.js` was reporting a control that cannot be painted** — a 6px overflow on the
+  header switch while it is collapsed to `max-width: 0` inside `overflow: hidden`. Now
+  suppressed by intersecting with clipping ancestors, verified against three fixtures
+  including two that must still fire.
+- **The new probe was wrong twice before it was right**, both recorded: `nearMiss` ranked by
+  nearest line and buried the 21px defect it was written for under a 4px one, and
+  `deadShadow` reported zero on a page where all sixteen were dead — because a
+  `CSSStyleRule` now carries an *empty* `cssRules` list, and an empty list is truthy.
+
 ## 2026-08-15 — A reserved slice on every paper, and the exploit the defence created
 
 Evidence: `evidence/2026-08-15/t6-rehaul-completion/verification.md` §8–§13.

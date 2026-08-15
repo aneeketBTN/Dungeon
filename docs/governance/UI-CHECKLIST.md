@@ -31,8 +31,15 @@ gets added or a row gets added here saying it cannot be detected and must be loo
       screen the change can reach** — dashboard, lesson, question, examiner home, and a
       **paper mid-question**. Zero `overflow`, `clipped`, `circleFit`, `overlaps`,
       `ragged`, `cutRows`, `hiddenScroll`, `barInset`.
+- [ ] `tools/browser-checks/optical-audit.js` in the page, at **375 and 1280**. Zero
+      `deadShadow`, zero `flatSurface`. Read `nearMiss` and `insetDrift` — those two
+      report, they do not pass or fail, and a finding in them can be a deliberate
+      decision. See section F.
 - [ ] `node tools/screenshot.mjs --port <p>` — 16/16, **and then open them.** Three
       defects in this file were found by looking at a picture after the numbers were green.
+- [ ] `node tools/screenshot.mjs --port <p> --optical` — the same scenes with the
+      gridlines drawn over them, written as `_grid` files. Open these too when the change
+      moved anything horizontally.
 - [ ] **When the probe reports your new component, read the detector before you touch it —
       and when you do touch it, re-introduce the original defect as a fixture and confirm it
       still fires.** The standard normal table (2026-08-15) tripped three detectors and only
@@ -69,6 +76,18 @@ gets added or a row gets added here saying it cannot be detected and must be loo
       for and skewed both bars.*
 - [ ] **How much chrome sits above the content?** *Shipped: 141px of a 812px phone screen
       before a word of the question.* Hide furniture that is unusable in that state.
+- [ ] **Is the gap you set the gap the eye sees?** A margin lands on the next element's
+      **box**; the reader measures to its **ink**. When the next thing is a control band, the
+      band's own dead space is added to your margin and only to that side. *Shipped: 26px
+      under `.block-heading` plus 16.5px of centring inside a 44px `.rail-heading` put
+      "Choose a subject" **42.5px** below the title and **29.5px** above the cards it
+      names — a section label floating nearer to nothing than to its own content.* Measure
+      heading-bottom → label-top and label-bottom → first-child-top and compare. No detector;
+      look at the two numbers.
+- [ ] **Does the spacing value name a rule, or a pixel?** The fix above is `13px` because
+      that is `.subject-rail`'s own `gap`, and `9px` in the ≤768px block for the same reason —
+      so the rule is *the control band sits in the rail's rhythm* and survives a gap change.
+      A number that only happens to look right is a number the next change breaks.
 
 ## D. Shape, size and type
 
@@ -79,8 +98,24 @@ gets added or a row gets added here saying it cannot be detected and must be loo
 - [ ] **Are asymmetric radii doing work that a regular shape could do?** An asymmetrically
       rounded box reads as a distorted square at every size. Prefer square vs circle, plus
       an orthogonal mark, over a warped outline.
+- [ ] **Is a state mark drawn with a property that changes the box?** LAW-70. A `border`
+      or `padding` used as decoration resizes exactly the members of a set that carry the
+      state. *Shipped: `.course-card.day-start` had `border-left: 3px` against the other
+      cards' 1px, so two of four subject cards had a 160px content box against 162px and
+      their text started 2px further in — outer widths identical, so no probe fired.* Paint
+      it with `box-shadow: inset`, `outline` or a pseudo-element, and remember `box-shadow`
+      **replaces rather than merges** when a card is in two states at once. Check by
+      comparing *content* boxes across the row, not outer widths.
 - [ ] **Does text fit its box?** Not `scrollWidth` — glyph runs via
       `Range.getClientRects()`. LAW-64. Detector: `clipped`.
+- [ ] **Does a rule inside a media query still describe what that media query renders?**
+      Read the whole block before adding to it: a later rule in the same block can destroy
+      the arrangement an earlier one was written for. *Shipped: `.compact-heading > p` kept
+      `max-width: 180px`, `--t-micro` and `text-align: right` — the shape of a right-hand
+      column — while `.section-heading` goes to `flex-direction: column` 31 lines below in
+      the same block. At 375 it was 55% of the width, ragged-left under a left-aligned serif
+      title, in the size reserved for labels. Full width made it shorter, not longer:
+      68 → 60px.* No detector; it renders "correctly" at every size.
 - [ ] **Round containers measured against the chord**, not the bounding box. Detector:
       `circleFit`.
 - [ ] **Tap targets ≥ 44px** for anything of ours. A 1×1 input inside a large label is
@@ -97,7 +132,38 @@ gets added or a row gets added here saying it cannot be detected and must be loo
       panel vanish on a dark page.
 - [ ] **Reduced motion** has a real path, not just a shortened one.
 
-## F. After
+## F. Optical — what the reader sees, not what the box says
+
+Boxes were right in every defect in this section. `ui-audit.js` cannot catch any of them;
+`optical-audit.js` measures glyph runs instead and is the probe for all of it.
+
+- [ ] **Does the ink line up, or only the boxes?** Two things share a gridline or they
+      clearly do not. What reads as broken is the near miss — 1–24px off, close enough to
+      look intended and far enough to look failed. *Shipped: the coin's `Learn` and the
+      block heading `Your next step`, both Georgia, both boxes on the column, 21px of ink
+      apart because one is inside a padded panel.* Detector: `nearMiss` — and note it
+      ranks by the **strength** of the line missed, because a 4px miss on a minor line
+      matters less than a 21px miss on the column everything else sits on.
+- [ ] **How many text insets does the page have?** One is a system. *Shipped: eight —
+      14, 15, 18, 19, 20, 21, 23, 33, 41 — with the coin holding its own private 20.*
+      Detector: `insetDrift`. A panel's text cannot sit on the column without its own
+      edge leaving it, so insetting is correct; **disagreeing** about the inset is not.
+- [ ] **When you change an inset, re-measure rather than compute it.** The panel's own
+      border counts. *Setting the coin to 14px to match the cards' 14px put it 1px off,
+      because the coin draws a 1px border the cards' 14 already includes.*
+- [ ] **Does every surface separate from what is behind it?** Background difference, a
+      border, a shadow, or a blur — at least one. *Shipped: the resume bar over the hero
+      had the same background, a border that was the same colour as both, and a dead
+      shadow.* Detector: `flatSurface`. Check it against a **floating** element over the
+      panel it overlaps, not just against its parent.
+- [ ] **Do the shadows exist?** LAW-71: all four shadow tokens were invalid and every
+      shadow in the app computed to `none`, silently, for as long as they had existed.
+      Detector: `deadShadow`. Must be zero.
+- [ ] **Does text in one row share a baseline?** Detector: `baselineDrift`.
+- [ ] **Look at a `_grid` shot.** `node tools/screenshot.mjs --optical`. A number says 21;
+      a gridline shows you the two words that do not sit on it.
+
+## G. After
 
 - [ ] **Look at the screenshots.** Again. Numbers do not show redundancy, crowding, or a
       shape that reads as broken.

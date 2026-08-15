@@ -1,0 +1,813 @@
+{
+ "subject": "BRGSA",
+ "subjectTitle": "Business Research, Growth Strategies and Analytics",
+ "set": 1,
+ "half": "learn",
+ "queueDigest": "ff3339d8",
+ "schedule": {
+  "setId": 1,
+  "title": "Prove demand before you build",
+  "kicker": "Study set 1 of 10",
+  "steps": 14,
+  "scoredQuestions": 8,
+  "supportItems": 6,
+  "unresolvedSteps": 0,
+  "lessonsReadAfter": 1,
+  "readiness": {
+   "conceptsTaught": 1,
+   "conceptsTotal": 16,
+   "marks": {
+    "taught": 4,
+    "available": 80,
+    "percent": 5,
+    "alreadyMet": 0,
+    "alreadyMetMarks": 0,
+    "total": 26
+   },
+   "ladderSteps": 8,
+   "nextStep": {
+    "step": 1,
+    "set": 1,
+    "title": "Prove demand before you build",
+    "adds": [
+     "Demand validation",
+     "Pre-sales commitment and evidence strength"
+    ]
+   }
+  },
+  "ladder": [
+   {
+    "step": 1,
+    "set": 1,
+    "title": "Prove demand before you build",
+    "adds": [
+     "Demand validation",
+     "Pre-sales commitment and evidence strength"
+    ],
+    "state": "current"
+   },
+   {
+    "step": 2,
+    "set": 2,
+    "title": "Run experiments that do not lie",
+    "adds": [
+     "Null hypothesis and test design",
+     "Decision errors"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 3,
+    "set": 3,
+    "title": "Read whether growth is real",
+    "adds": [
+     "Cohorts and retention",
+     "CAC and LTV"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 4,
+    "set": 4,
+    "title": "Find the constraint; win the first customers",
+    "adds": [
+     "Growth constraint",
+     "Early-stage and scale-stage growth"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 5,
+    "set": 5,
+    "title": "Turn acquisition into activation",
+    "adds": [
+     "Channel fit",
+     "Activation and onboarding friction"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 6,
+    "set": 6,
+    "title": "Make value recur",
+    "adds": [
+     "Habit and lifecycle",
+     "Referral and network effects"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 7,
+    "set": 7,
+    "title": "Monetize without leaking the base",
+    "adds": [
+     "Pricing structure and NRR",
+     "Sales integration and payback"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 8,
+    "set": 8,
+    "title": "Operate the growth system",
+    "adds": [
+     "Prioritisation",
+     "Decision rules"
+    ],
+    "state": "later"
+   }
+  ]
+ },
+ "ladder": [
+  {
+   "step": 1,
+   "set": 1,
+   "title": "Prove demand before you build",
+   "adds": [
+    "Demand validation",
+    "Pre-sales commitment and evidence strength"
+   ],
+   "state": "current"
+  },
+  {
+   "step": 2,
+   "set": 2,
+   "title": "Run experiments that do not lie",
+   "adds": [
+    "Null hypothesis and test design",
+    "Decision errors"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 3,
+   "set": 3,
+   "title": "Read whether growth is real",
+   "adds": [
+    "Cohorts and retention",
+    "CAC and LTV"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 4,
+   "set": 4,
+   "title": "Find the constraint; win the first customers",
+   "adds": [
+    "Growth constraint",
+    "Early-stage and scale-stage growth"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 5,
+   "set": 5,
+   "title": "Turn acquisition into activation",
+   "adds": [
+    "Channel fit",
+    "Activation and onboarding friction"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 6,
+   "set": 6,
+   "title": "Make value recur",
+   "adds": [
+    "Habit and lifecycle",
+    "Referral and network effects"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 7,
+   "set": 7,
+   "title": "Monetize without leaking the base",
+   "adds": [
+    "Pricing structure and NRR",
+    "Sales integration and payback"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 8,
+   "set": 8,
+   "title": "Operate the growth system",
+   "adds": [
+    "Prioritisation",
+    "Decision rules"
+   ],
+   "state": "later"
+  }
+ ],
+ "run": [
+  {
+   "step": 1,
+   "kind": "lesson",
+   "lectureId": "BRGSA-M01-L01",
+   "reteach": false,
+   "title": "Lean validation",
+   "module": 1,
+   "lectureNumber": 1,
+   "objective": "Decide whether an idea has been tested for demand, or only assumed to have it.",
+   "explainer": [
+    "Most products do not fail because the build was bad. They fail because nobody checked whether anyone wanted the thing before the building started. The assumption underneath the whole plan was never tested.",
+    "Lean validation is the discipline of answering one question first — is the demand actually there — as quickly and as cheaply as possible. The contrast is stark in cost. Building first and asking later takes six to eighteen months and lakhs of rupees before you learn anything. A validation test takes seven to fourteen days and can cost a few thousand rupees, sometimes nothing at all.",
+    "The trap is that building feels like progress and testing feels like delay. It is the other way round: the test is the cheap way to buy certainty, and the build is the expensive way to buy the same information later."
+   ],
+   "worked": {
+    "setup": "A founder plans a six-month build for an AI meeting recorder, then a marketing campaign to launch it.",
+    "move": "Before the build, run a landing page with a clear offer and see whether anyone acts.",
+    "because": "The campaign already assumes demand exists. Validation tests that assumption while it is still cheap to be wrong."
+   },
+   "glossary": [
+    {
+     "term": "lean validation",
+     "plain": "Answering “does anyone want this” quickly and cheaply, before building."
+    },
+    {
+     "term": "build trap",
+     "plain": "Spending months building on an assumption nobody tested."
+    },
+    {
+     "term": "demand",
+     "plain": "Evidence that real people will act — not that they say the idea sounds good."
+    },
+    {
+     "term": "landing page",
+     "plain": "A single page describing the offer, used to see whether people act on it."
+    }
+   ],
+   "handoff": {
+    "connects": "Validation needs a test you can actually run. The next lecture is the cheapest one: the smoke test.",
+    "promisesNextLecture": true,
+    "kept": true,
+    "note": null,
+    "nextInRun": "Smoke test",
+    "lectureId": "BRGSA-M01-L01"
+   }
+  },
+  {
+   "step": 2,
+   "kind": "primer",
+   "id": "brgsa_m1_demand_primer",
+   "concept": "Demand validation",
+   "level": 1,
+   "levelLabel": "First contact · predict before you are told",
+   "carryForward": null,
+   "whatHappens": "A team leaves customer interviews delighted and books three months of engineering. One member proposes first running a landing page carrying the real price and a deposit button for a week, against the intended audience.",
+   "knownTrap": null,
+   "stem": "Before anything names it: what rule do you think this case is showing, and why?",
+   "response": "free text — a prediction in the learner's own words. Nothing is marked or recorded.",
+   "termsAvailable": [
+    {
+     "term": "lean validation",
+     "plain": "Answering “does anyone want this” quickly and cheaply, before building."
+    },
+    {
+     "term": "build trap",
+     "plain": "Spending months building on an assumption nobody tested."
+    },
+    {
+     "term": "demand",
+     "plain": "Evidence that real people will act — not that they say the idea sounds good."
+    },
+    {
+     "term": "landing page",
+     "plain": "A single page describing the offer, used to see whether people act on it."
+    }
+   ]
+  },
+  {
+   "step": 3,
+   "kind": "question",
+   "id": "brgsa_m1_demand_repair_cloze",
+   "type": "cloze",
+   "concept": "Demand validation",
+   "caselet": "A classmate writes: “It estimates the total addressable market from desk research before speaking to any real buyers.”",
+   "stem": "Replace the flawed claim with the precise principle.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the corrected principle",
+     "options": [
+      "Demand validation: Demand signals sit on a commitment spectrum: social engagement is the easiest to produce and the least meaningful, while a payment or signed commitment is a different category of evidence altogether.",
+      "Demand validation: Lean validation asks whether real people will take a real action on a real offer, and answers it before the product is built at a fraction of the cost of building it.",
+      "Demand validation: A Type I error scales something that does not work; a Type II error abandons something that does. Every test outcome lands in one of the four cells of that matrix.",
+      "Demand validation: Pricing is a structure rather than a number: tiers, units, limits and packaging decide how customers enter, upgrade and expand, and NRR measures whether the existing base grows without counting new customers."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "lean validation",
+     "plain": "Answering “does anyone want this” quickly and cheaply, before building."
+    },
+    {
+     "term": "build trap",
+     "plain": "Spending months building on an assumption nobody tested."
+    },
+    {
+     "term": "demand",
+     "plain": "Evidence that real people will act — not that they say the idea sounds good."
+    },
+    {
+     "term": "landing page",
+     "plain": "A single page describing the offer, used to see whether people act on it."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "kind": "lesson",
+   "lectureId": "BRGSA-M01-L02",
+   "reteach": false,
+   "title": "Smoke test",
+   "module": 1,
+   "lectureNumber": 2,
+   "objective": "Run a test that measures behaviour toward a product that does not exist yet.",
+   "explainer": [
+    "A smoke test puts the offer in front of people before the product is built, and measures what they do. The door is real; the room behind it is not yet. That is why it is also called a fake door.",
+    "What makes it a test rather than an advertisement is that one specific behaviour is chosen in advance as the signal — a click, a signup, a pre-order. Weak signals cost the person nothing. Strong ones cost them something real. Entering payment details for a product that does not exist yet is the strongest smoke test there is, for obvious reasons.",
+    "The measurement only means something if the people seeing it are the people you intend to sell to. The same click rate from a warm network and from cold targeted traffic are not the same finding."
+   ],
+   "worked": {
+    "setup": "A team tests two headlines for a meeting tool. Version A: “AI meeting recorder.” Version B: “Your follow-up is written before your sales meeting ends.”",
+    "move": "Run both for two weeks against matched traffic and compare the chosen signal metric, not impressions.",
+    "because": "For about ₹3,000 they learn which promise people act on, before a single feature is built."
+   },
+   "glossary": [
+    {
+     "term": "smoke test",
+     "plain": "Showing a real offer for an unbuilt product and measuring what people do."
+    },
+    {
+     "term": "fake door",
+     "plain": "Another name for a smoke test — the entry is real, the product behind it is not built yet."
+    },
+    {
+     "term": "signal",
+     "plain": "The one behaviour chosen in advance to count as evidence."
+    },
+    {
+     "term": "pre-order",
+     "plain": "A purchase placed before the product exists — a strong signal because it costs the buyer something."
+    }
+   ],
+   "handoff": {
+    "connects": "A smoke test usually runs on a landing page. The next lecture is how to build one that produces a trustworthy number.",
+    "promisesNextLecture": true,
+    "kept": true,
+    "note": null,
+    "nextInRun": "Landing page validation",
+    "lectureId": "BRGSA-M01-L02"
+   }
+  },
+  {
+   "step": 5,
+   "kind": "question",
+   "id": "smoke_signal",
+   "type": "mcq",
+   "concept": "Smoke tests",
+   "caselet": null,
+   "stem": "A startup publishes a credible landing page with a real ‘Join waitlist’ action before the product exists. What is it primarily testing?",
+   "prompt": null,
+   "options": [
+    "Whether the engineering plan is technically feasible",
+    "Whether people who see the page take a real action toward the offer",
+    "Whether respondents say the idea sounds good to them",
+    "Whether the brand has assembled a complete marketing funnel behind the landing page"
+   ],
+   "termsAvailable": [
+    {
+     "term": "smoke test",
+     "plain": "Showing a real offer for an unbuilt product and measuring what people do."
+    },
+    {
+     "term": "fake door",
+     "plain": "Another name for a smoke test — the entry is real, the product behind it is not built yet."
+    },
+    {
+     "term": "signal",
+     "plain": "The one behaviour chosen in advance to count as evidence."
+    },
+    {
+     "term": "pre-order",
+     "plain": "A purchase placed before the product exists — a strong signal because it costs the buyer something."
+    }
+   ]
+  },
+  {
+   "step": 6,
+   "kind": "lesson",
+   "lectureId": "BRGSA-M01-L03",
+   "reteach": false,
+   "title": "Landing page validation",
+   "module": 1,
+   "lectureNumber": 3,
+   "objective": "Judge whether a conversion rate is trustworthy by looking at who produced it.",
+   "explainer": [
+    "A validation landing page is not a marketing landing page. A marketing page tries to maximise signups. A validation page tries to produce an honest reading, which sometimes means a lower number.",
+    "The trap is the warm network. Friends, followers, and colleagues are already inclined to support you, so a 40% signup rate from that audience is not a market signal — it is a politeness signal. The same page shown to cold, targeted traffic that matches your intended customer might convert at 8%, and that 8% is the more trustworthy of the two numbers.",
+    "So a conversion rate is never read alone. It is read together with the traffic that produced it. A rate without its audience is not evidence."
+   ],
+   "worked": {
+    "setup": "Two pages both report an 8% signup rate. Page A was shown to targeted traffic matching the intended customer. Page B went to friends, employees, and a giveaway list.",
+    "move": "Treat Page A as the usable signal and discard Page B's rate.",
+    "because": "Identical percentages can carry completely different evidence, because the people behind them had different reasons to click."
+   },
+   "glossary": [
+    {
+     "term": "validation landing page",
+     "plain": "A page built to produce an honest demand reading, not the highest possible signup count."
+    },
+    {
+     "term": "signup rate",
+     "plain": "The share of visitors who take the chosen action."
+    },
+    {
+     "term": "warm network",
+     "plain": "Friends, followers, and colleagues — an audience biased toward supporting you."
+    },
+    {
+     "term": "false positive",
+     "plain": "A result that looks like demand but was produced by the wrong audience or by chance."
+    },
+    {
+     "term": "bounce rate",
+     "plain": "The share of visitors who leave without engaging at all."
+    }
+   ],
+   "handoff": {
+    "connects": "Clicks and signups are cheap for the person giving them. The next lecture asks for something costlier.",
+    "promisesNextLecture": true,
+    "kept": true,
+    "note": null,
+    "nextInRun": "Pre-sales and commitment strength",
+    "lectureId": "BRGSA-M01-L03"
+   }
+  },
+  {
+   "step": 7,
+   "kind": "question",
+   "id": "brgsa_m1_demand_case_cloze",
+   "type": "case-cloze",
+   "concept": "Demand validation",
+   "caselet": "A team leaves customer interviews delighted and books three months of engineering. One member proposes first running a landing page carrying the real price and a deposit button for a week, against the intended audience.",
+   "stem": "Fill both parts of the recommendation so the action and framework agree.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the decision",
+     "options": [
+      "Both pages prove exactly equal demand because the measured conversion rate is identical. (Demand validation)",
+      "Neither page can ever be used for validation because landing pages are not real products. (Demand validation)",
+      "Apply the joining test — does one more user make the product more valuable to existing users — and run the referral playbook when the answer is no. (Demand validation)",
+      "Turn the demand assumption into a cheap test with a decision threshold declared in advance, before committing build time or budget. (Demand validation)"
+     ]
+    },
+    {
+     "label": "Choose the framework",
+     "options": [
+      "Demand validation: Demand signals sit on a commitment spectrum: social engagement is the easiest to produce and the least meaningful, while a payment or signed commitment is a different category of evidence altogether.",
+      "Demand validation: An experiment starts from the null position that nothing changed, and the variant earns the decision only when evidence collected to a pre-set sample is strong enough to reject it.",
+      "Demand validation: A Type I error scales something that does not work; a Type II error abandons something that does. Every test outcome lands in one of the four cells of that matrix.",
+      "Demand validation: Lean validation asks whether real people will take a real action on a real offer, and answers it before the product is built at a fraction of the cost of building it."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "validation landing page",
+     "plain": "A page built to produce an honest demand reading, not the highest possible signup count."
+    },
+    {
+     "term": "signup rate",
+     "plain": "The share of visitors who take the chosen action."
+    },
+    {
+     "term": "warm network",
+     "plain": "Friends, followers, and colleagues — an audience biased toward supporting you."
+    },
+    {
+     "term": "false positive",
+     "plain": "A result that looks like demand but was produced by the wrong audience or by chance."
+    },
+    {
+     "term": "bounce rate",
+     "plain": "The share of visitors who leave without engaging at all."
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "kind": "lesson",
+   "lectureId": "BRGSA-M01-L04",
+   "reteach": false,
+   "title": "Pre-sales and commitment strength",
+   "module": 1,
+   "lectureNumber": 4,
+   "objective": "Rank demand evidence by what it cost the person to give it.",
+   "explainer": [
+    "Pre-sales validation asks for a real commitment before anything is built. It exists because evidence is only as strong as the cost of producing it.",
+    "That produces a commitment spectrum. Praise in a survey costs nothing. A like costs nothing. Opening an email costs nothing. A signup costs a little attention. A letter of intent costs reputation. A payment — even a partial, refundable one — costs money, and money is the hardest commitment to fake.",
+    "This is why a person who clicks is curious, a person who signs up is interested, and a person who pays even a small deposit is behaving like an actual customer. When you need the highest confidence before committing to a build, you ask for the costliest signal you can reasonably request."
+   ],
+   "worked": {
+    "setup": "A team needs to decide whether to build. They have 200 survey positives, 30 wait-list signups, and 4 paid deposits.",
+    "move": "Treat the 4 deposits as the primary evidence and the 200 survey positives as background.",
+    "because": "The deposits are the only responses where someone gave up something real."
+   },
+   "glossary": [
+    {
+     "term": "pre-sales validation",
+     "plain": "Asking for a real commitment — usually payment — before building."
+    },
+    {
+     "term": "commitment spectrum",
+     "plain": "Ranking responses by what they cost the person: praise < click < signup < letter of intent < payment."
+    },
+    {
+     "term": "letter of intent",
+     "plain": "A written statement of intent to buy — costs reputation, not money."
+    },
+    {
+     "term": "prospect",
+     "plain": "Someone who might buy, being tested for how far they will actually go."
+    }
+   ],
+   "handoff": {
+    "connects": "If behaviour is the strong evidence, what are surveys for? The next lecture answers that, and names how they break.",
+    "promisesNextLecture": true,
+    "kept": false,
+    "note": "That is the course's order. This run does not follow it here — it delivers only the lectures your questions rest on, so Avoiding survey bias is not part of it.",
+    "nextInRun": "the questions this lecture answers",
+    "lectureId": "BRGSA-M01-L04"
+   }
+  },
+  {
+   "step": 9,
+   "kind": "primer",
+   "id": "brgsa_m1_evidence_primer",
+   "concept": "Pre-sales commitment and evidence strength",
+   "level": 1,
+   "levelLabel": "First contact · predict before you are told",
+   "carryForward": "Carry forward: Demand validation. Now add Pre-sales commitment and evidence strength.",
+   "whatHappens": "Two hundred people say they like the idea, thirty join a wait-list, and four accept a refundable deposit under stated terms. The founder wants to report the survey as the strongest demand signal.",
+   "knownTrap": null,
+   "stem": "Before anything names it: what rule do you think this case is showing, and why?",
+   "response": "free text — a prediction in the learner's own words. Nothing is marked or recorded.",
+   "termsAvailable": [
+    {
+     "term": "pre-sales validation",
+     "plain": "Asking for a real commitment — usually payment — before building."
+    },
+    {
+     "term": "commitment spectrum",
+     "plain": "Ranking responses by what they cost the person: praise < click < signup < letter of intent < payment."
+    },
+    {
+     "term": "letter of intent",
+     "plain": "A written statement of intent to buy — costs reputation, not money."
+    },
+    {
+     "term": "prospect",
+     "plain": "Someone who might buy, being tested for how far they will actually go."
+    }
+   ]
+  },
+  {
+   "step": 10,
+   "kind": "question",
+   "id": "brgsa_m1_evidence_repair_cloze",
+   "type": "cloze",
+   "concept": "Pre-sales commitment and evidence strength",
+   "caselet": "A classmate writes: “‘A great idea’ in a survey.”",
+   "stem": "Replace the flawed claim with the precise principle.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the corrected principle",
+     "options": [
+      "Pre-sales commitment and evidence strength: Demand signals sit on a commitment spectrum: social engagement is the easiest to produce and the least meaningful, while a payment or signed commitment is a different category of evidence altogether.",
+      "Pre-sales commitment and evidence strength: Lean validation asks whether real people will take a real action on a real offer, and answers it before the product is built at a fraction of the cost of building it.",
+      "Pre-sales commitment and evidence strength: Every channel has fixed properties — targeting, control, input cost, output quality, time to result and economics — and it fits only when those match the product's buyer and unit economics.",
+      "Pre-sales commitment and evidence strength: A Type I error scales something that does not work; a Type II error abandons something that does. Every test outcome lands in one of the four cells of that matrix."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "pre-sales validation",
+     "plain": "Asking for a real commitment — usually payment — before building."
+    },
+    {
+     "term": "commitment spectrum",
+     "plain": "Ranking responses by what they cost the person: praise < click < signup < letter of intent < payment."
+    },
+    {
+     "term": "letter of intent",
+     "plain": "A written statement of intent to buy — costs reputation, not money."
+    },
+    {
+     "term": "prospect",
+     "plain": "Someone who might buy, being tested for how far they will actually go."
+    }
+   ]
+  },
+  {
+   "step": 11,
+   "kind": "question",
+   "id": "brgsa_m1_match",
+   "type": "match",
+   "concept": "Demand validation and Pre-sales commitment and evidence strength",
+   "caselet": null,
+   "stem": "Match each prompt to the precise explanation or action.",
+   "prompt": null,
+   "rows": [
+    "Demand validation — principle",
+    "Pre-sales commitment and evidence strength — principle",
+    "Demand validation — decision",
+    "Pre-sales commitment and evidence strength — decision"
+   ],
+   "choices": [
+    "Demand signals sit on a commitment spectrum: social engagement is the easiest to produce and the least meaningful, while a payment or signed commitment is a different category of evidence altogether.",
+    "Weight every demand signal by what it cost the prospect to give, and require a real commitment before treating demand as proven.",
+    "Turn the demand assumption into a cheap test with a decision threshold declared in advance, before committing build time or budget.",
+    "Lean validation asks whether real people will take a real action on a real offer, and answers it before the product is built at a fraction of the cost of building it."
+   ],
+   "termsAvailable": [
+    {
+     "term": "lean validation",
+     "plain": "Answering “does anyone want this” quickly and cheaply, before building."
+    },
+    {
+     "term": "build trap",
+     "plain": "Spending months building on an assumption nobody tested."
+    },
+    {
+     "term": "demand",
+     "plain": "Evidence that real people will act — not that they say the idea sounds good."
+    },
+    {
+     "term": "landing page",
+     "plain": "A single page describing the offer, used to see whether people act on it."
+    },
+    {
+     "term": "pre-sales validation",
+     "plain": "Asking for a real commitment — usually payment — before building."
+    },
+    {
+     "term": "commitment spectrum",
+     "plain": "Ranking responses by what they cost the person: praise < click < signup < letter of intent < payment."
+    },
+    {
+     "term": "letter of intent",
+     "plain": "A written statement of intent to buy — costs reputation, not money."
+    },
+    {
+     "term": "prospect",
+     "plain": "Someone who might buy, being tested for how far they will actually go."
+    }
+   ]
+  },
+  {
+   "step": 12,
+   "kind": "question",
+   "id": "brgsa_m1_evidence_short_answer",
+   "type": "short-answer",
+   "concept": "Pre-sales commitment and evidence strength",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Pre-sales commitment and evidence strength in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "writtenMode": "short",
+   "rubricPointCount": 2,
+   "selfReviewOnly": true,
+   "termsAvailable": [
+    {
+     "term": "pre-sales validation",
+     "plain": "Asking for a real commitment — usually payment — before building."
+    },
+    {
+     "term": "commitment spectrum",
+     "plain": "Ranking responses by what they cost the person: praise < click < signup < letter of intent < payment."
+    },
+    {
+     "term": "letter of intent",
+     "plain": "A written statement of intent to buy — costs reputation, not money."
+    },
+    {
+     "term": "prospect",
+     "plain": "Someone who might buy, being tested for how far they will actually go."
+    }
+   ]
+  },
+  {
+   "step": 13,
+   "kind": "question",
+   "id": "brgsa_m1_demand_short_answer",
+   "type": "short-answer",
+   "concept": "Demand validation",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Demand validation in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "writtenMode": "short",
+   "rubricPointCount": 2,
+   "selfReviewOnly": true,
+   "termsAvailable": [
+    {
+     "term": "lean validation",
+     "plain": "Answering “does anyone want this” quickly and cheaply, before building."
+    },
+    {
+     "term": "build trap",
+     "plain": "Spending months building on an assumption nobody tested."
+    },
+    {
+     "term": "demand",
+     "plain": "Evidence that real people will act — not that they say the idea sounds good."
+    },
+    {
+     "term": "landing page",
+     "plain": "A single page describing the offer, used to see whether people act on it."
+    }
+   ]
+  },
+  {
+   "step": 14,
+   "kind": "question",
+   "id": "brgsa_m1_boss_1",
+   "type": "boss",
+   "concept": "Demand validation → Pre-sales commitment and evidence strength",
+   "caselet": "One recommendation must resolve two linked decisions. First: A team leaves customer interviews delighted and books three months of engineering. One member proposes first running a landing page carrying the real price and a deposit button for a week, against the intended audience. Then: Two hundred people say they like the idea, thirty join a wait-list, and four accept a refundable deposit under stated terms. The founder wants to report the survey as the strongest demand signal.",
+   "stem": "Build the reasoning chain. All three steps must agree before the conclusion is secure.",
+   "prompt": null,
+   "steps": [
+    {
+     "label": "Step 1 · Diagnose the first decision",
+     "prompt": "What should happen first?",
+     "options": [
+      "Demand validation: Weight every demand signal by what it cost the prospect to give, and require a real commitment before treating demand as proven.",
+      "Demand validation: Turn the demand assumption into a cheap test with a decision threshold declared in advance, before committing build time or budget.",
+      "Demand validation: Both pages prove exactly equal demand because the measured conversion rate is identical.",
+      "Demand validation: Neither page can ever be used for validation because landing pages are not real products."
+     ]
+    },
+    {
+     "label": "Step 2 · Apply the second framework",
+     "prompt": "What should happen next?",
+     "options": [
+      "Pre-sales commitment and evidence strength: ‘A great idea’ in a survey.",
+      "Pre-sales commitment and evidence strength: Weight every demand signal by what it cost the prospect to give, and require a real commitment before treating demand as proven.",
+      "Pre-sales commitment and evidence strength: A like on the announcement.",
+      "Pre-sales commitment and evidence strength: Turn the demand assumption into a cheap test with a decision threshold declared in advance, before committing build time or budget."
+     ]
+    },
+    {
+     "label": "Step 3 · Join the reasoning",
+     "prompt": "Which final explanation keeps both decisions consistent?",
+     "options": [
+      "Use Pre-sales commitment and evidence strength for the first decision and Demand validation for the second; the labels can be swapped without changing the logic.",
+      "Use Pre-sales commitment and evidence strength for both decisions; the later issue should determine the earlier diagnosis as well.",
+      "Use Demand validation for the first decision and Pre-sales commitment and evidence strength for the second; neither result replaces the other.",
+      "Use Demand validation for both decisions; once the first issue is solved, the second can be treated as the same problem."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "lean validation",
+     "plain": "Answering “does anyone want this” quickly and cheaply, before building."
+    },
+    {
+     "term": "build trap",
+     "plain": "Spending months building on an assumption nobody tested."
+    },
+    {
+     "term": "demand",
+     "plain": "Evidence that real people will act — not that they say the idea sounds good."
+    },
+    {
+     "term": "landing page",
+     "plain": "A single page describing the offer, used to see whether people act on it."
+    },
+    {
+     "term": "pre-sales validation",
+     "plain": "Asking for a real commitment — usually payment — before building."
+    },
+    {
+     "term": "commitment spectrum",
+     "plain": "Ranking responses by what they cost the person: praise < click < signup < letter of intent < payment."
+    },
+    {
+     "term": "letter of intent",
+     "plain": "A written statement of intent to buy — costs reputation, not money."
+    },
+    {
+     "term": "prospect",
+     "plain": "Someone who might buy, being tested for how far they will actually go."
+    }
+   ]
+  }
+ ]
+}

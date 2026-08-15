@@ -560,10 +560,40 @@
    * The last scored answer being wrong is the whole test. It is deliberately about
    * the concept rather than the question: getting the same item wrong twice and
    * getting two different items on one idea wrong are the same gap. */
+  /* A mock counts too, and until 2026-08-15 it did not.
+   *
+   * `recordExamMisses` writes `examMisses` and deliberately never writes an attempt —
+   * misses "prioritise and never score". This function read `attemptsFor` alone, so
+   * the two stores were disjoint and a paper could not reach the re-teach latch. The
+   * effect was precise and invisible: a learner who read the lesson, sat a mock and
+   * lost the marks was sent straight back to the question with no lesson, under a
+   * kicker reading "Taught first, then tested again". First contact worked, which is
+   * exactly the shape this latch was fixed for once already.
+   *
+   * `missed` and `written` count; `skipped` alone does not. Running out of time is a
+   * timing signal, not evidence the idea was lost, and `examMissList` already weights
+   * it lower for the same reason. */
+  function examMissNeedsReteach(courseId, conceptId, readAt) {
+    var entry = ((profile.examMisses || {})[courseId] || {})[conceptId];
+    if (!entry || !entry.at) return false;
+    var missedAt = Date.parse(entry.at);
+    if (!missedAt || missedAt <= readAt) return false;
+    if (!((Number(entry.missed) || 0) > 0 || (Number(entry.written) || 0) > 0)) return false;
+    /* The RECOVERED rule, applied to the mock as well. A learner who lost the marks
+       and has since answered the idea correctly is not sent back to the page — the
+       same judgement `reteach-on-failure.js` case 2 holds the Learn side to. Without
+       this the miss would re-teach on every sitting for ever, which is the "re-teach
+       everything on every slip" product that is worse than never re-teaching. */
+    return !attemptsFor(courseId, conceptId).some(function (attempt) {
+      return attempt.scored !== false && attempt.correct === true && attempt.at > missedAt;
+    });
+  }
+
   function lessonNeedsReteach(courseId, lectureId, conceptIds) {
     var readAt = lessonsReadMap()[lectureId];
     if (!readAt) return false;
     return (conceptIds || []).some(function (conceptId) {
+      if (examMissNeedsReteach(courseId, conceptId, readAt)) return true;
       var since = attemptsFor(courseId, conceptId).filter(function (attempt) {
         return attempt.scored !== false && attempt.correct !== null && attempt.at > readAt;
       });
@@ -1077,6 +1107,39 @@
 
   function conceptStatus(courseId, conceptId) {
     return conceptEvidence(courseId, conceptId).status;
+  }
+
+  /* The best state this concept ever held, replayed from its own attempt history.
+   *
+   * WHY IT IS REPLAYED AND NOT STORED
+   * The same reason `trendFromCourses` replays: a stored high-water mark is a second
+   * copy of the evidence rule that drifts from it, and a learner whose attempts are
+   * edited or reloaded would keep a peak the evidence no longer supports. Replaying
+   * costs one pass per concept and can only ever say what the current rule says.
+   *
+   * WHY IT EXISTS
+   * Until 2026-08-15 a concept that fell from Strong was character-for-character
+   * identical on the shelf to one that had never been learned — same label, same
+   * actions — and the difference was visible only behind the "Why" disclosure, as
+   * evidence counts the reader had to interpret. Detected, acted on, and never said.
+   */
+  function conceptPeakStatus(courseId, conceptId) {
+    var attempts = attemptsFor(courseId, conceptId);
+    var peak = "unseen";
+    for (var i = 1; i <= attempts.length; i += 1) {
+      var at = attempts[i - 1].at;
+      var status = evidenceFromAttempts(attempts.slice(0, i), at).status;
+      if (STATUS_ORDER[status] > STATUS_ORDER[peak]) peak = status;
+    }
+    return peak;
+  }
+
+  /* Present tense only: a concept currently below its own best. Returns null when
+     nothing was lost, so callers can treat it as "is there something to say". */
+  function conceptDecline(courseId, conceptId, currentStatus) {
+    var peak = conceptPeakStatus(courseId, conceptId);
+    if (STATUS_ORDER[peak] <= STATUS_ORDER[currentStatus]) return null;
+    return {from: peak, fromLabel: STATUS_LABEL[peak]};
   }
 
   function courseStats(courseId) {
@@ -1954,10 +2017,33 @@
           "<span class='shelf-why' aria-hidden='true'>Why</span>";
         row.appendChild(name);
 
+        /* The status cell is a wrapper so `.shelf-state` keeps EXACTLY the status
+           label and nothing else. Nesting the decline inside it made
+           `.shelf-state.textContent` read "Needs practicewas Strong", which quietly
+           broke `measurement-evidence.js`'s exact-equality match on "Strong" — a
+           probe failing because of a UI change it was not about is the worst kind of
+           false signal. The wrapper occupies the same grid column, so the row's
+           three-column layout is unchanged. */
+        var statusCell = document.createElement("span");
+        statusCell.className = "shelf-status-cell";
+
         var state = document.createElement("span");
         state.className = "shelf-state " + status;
         state.textContent = STATUS_LABEL[status] || status;
-        row.appendChild(state);
+        statusCell.appendChild(state);
+
+        /* Say the loss on the row rather than leaving it to be inferred from evidence
+           counts behind the disclosure. Words, not colour or an arrow: the four
+           mastery states must stay distinguishable without either, and a decline is
+           no different. */
+        var decline = conceptDecline(courseId, concept.id, status);
+        if (decline) {
+          var lost = document.createElement("small");
+          lost.className = "shelf-lost";
+          lost.textContent = "was " + decline.fromLabel;
+          statusCell.appendChild(lost);
+        }
+        row.appendChild(statusCell);
 
         var actions = document.createElement("span");
         actions.className = "shelf-actions";
@@ -2319,7 +2405,7 @@
     $("subject-description").textContent = course.description;
     $("sets-title").textContent = course.shortTitle + " · Ten available study sets";
     setRouteCopy("practice-priority",
-      stats.needs ? "Practise " + stats.needs + " concepts that need work"
+      stats.needs ? "Practise " + stats.needs + " concept" + (stats.needs === 1 ? "" : "s") + " that need" + (stats.needs === 1 ? "s" : "") + " work"
         : stats.developing ? "Build stronger evidence"
         : stats.unseen ? "Start the next new concepts" : "Refresh strong concepts",
       subjectProgressCopy(stats));
@@ -2331,8 +2417,12 @@
 
   function subjectProgressCopy(stats) {
     if (stats.strong === stats.total) return "Every core concept has broad current evidence. Use a generic practice check and later retrieval to keep it fresh.";
-    if (stats.needs) return stats.needs + " need practice; these appear first when you practise this subject.";
-    if (stats.developing) return stats.developing + " are developing; open one to see exactly which evidence is still missing.";
+    if (stats.needs) return stats.needs === 1
+      ? "1 needs practice; it appears first when you practise this subject."
+      : stats.needs + " need practice; these appear first when you practise this subject.";
+    if (stats.developing) return stats.developing === 1
+      ? "1 is developing; open it to see exactly which evidence is still missing."
+      : stats.developing + " are developing; open one to see exactly which evidence is still missing.";
     return "Choose any concept or start with the first short study set.";
   }
 

@@ -1,0 +1,267 @@
+{
+  "SPMS": {
+    "setsMeasured": [
+      1,
+      2,
+      3
+    ],
+    "meanPercentOfMcqMarks": {
+      "longest": 20.3,
+      "secondLongest": 21.2,
+      "fixedB": 27.6,
+      "onTopic": 18.1,
+      "noAbsolutes": 24.9,
+      "ethical": 26.7,
+      "combined": 18.1,
+      "combinedWithLength": 11,
+      "chance": 25
+    },
+    "bySet": [
+      {
+        "set": 1,
+        "mcqQuestions": 35,
+        "mcqMarks": 35,
+        "paperMarks": 75,
+        "craftCannotReach": 40,
+        "percentOfMcqMarks": {
+          "longest": 17.9,
+          "secondLongest": 16.4,
+          "fixedB": 31.4,
+          "onTopic": 18.6,
+          "noAbsolutes": 27.9,
+          "ethical": 26.9,
+          "combined": 21.2,
+          "combinedWithLength": 18.6,
+          "chance": 25
+        }
+      },
+      {
+        "set": 2,
+        "mcqQuestions": 35,
+        "mcqMarks": 35,
+        "paperMarks": 75,
+        "craftCannotReach": 40,
+        "percentOfMcqMarks": {
+          "longest": 15,
+          "secondLongest": 27.9,
+          "fixedB": 28.6,
+          "onTopic": 17.1,
+          "noAbsolutes": 25,
+          "ethical": 26.7,
+          "combined": 16.2,
+          "combinedWithLength": 8.6,
+          "chance": 25
+        }
+      },
+      {
+        "set": 3,
+        "mcqQuestions": 35,
+        "mcqMarks": 35,
+        "paperMarks": 75,
+        "craftCannotReach": 40,
+        "percentOfMcqMarks": {
+          "longest": 27.9,
+          "secondLongest": 19.3,
+          "fixedB": 22.9,
+          "onTopic": 18.6,
+          "noAbsolutes": 21.9,
+          "ethical": 26.4,
+          "combined": 16.9,
+          "combinedWithLength": 5.7,
+          "chance": 25
+        }
+      }
+    ]
+  },
+  "BRGSA": {
+    "setsMeasured": [
+      1,
+      2,
+      3
+    ],
+    "meanPercentOfMcqMarks": {
+      "longest": 23.6,
+      "secondLongest": 21.9,
+      "fixedB": 25,
+      "onTopic": 25,
+      "noAbsolutes": 23.6,
+      "ethical": 26,
+      "combined": 24.4,
+      "combinedWithLength": 28.6,
+      "chance": 25
+    },
+    "bySet": [
+      {
+        "set": 1,
+        "mcqQuestions": 20,
+        "mcqMarks": 40,
+        "paperMarks": 80,
+        "craftCannotReach": 40,
+        "percentOfMcqMarks": {
+          "longest": 30.4,
+          "secondLongest": 20.4,
+          "fixedB": 30,
+          "onTopic": 25,
+          "noAbsolutes": 23.3,
+          "ethical": 26.3,
+          "combined": 24.6,
+          "combinedWithLength": 27.9,
+          "chance": 25
+        }
+      },
+      {
+        "set": 2,
+        "mcqQuestions": 20,
+        "mcqMarks": 40,
+        "paperMarks": 80,
+        "craftCannotReach": 40,
+        "percentOfMcqMarks": {
+          "longest": 24.2,
+          "secondLongest": 32.5,
+          "fixedB": 25,
+          "onTopic": 25,
+          "noAbsolutes": 22.9,
+          "ethical": 25.4,
+          "combined": 22.9,
+          "combinedWithLength": 30,
+          "chance": 25
+        }
+      },
+      {
+        "set": 3,
+        "mcqQuestions": 20,
+        "mcqMarks": 40,
+        "paperMarks": 80,
+        "craftCannotReach": 40,
+        "percentOfMcqMarks": {
+          "longest": 16.3,
+          "secondLongest": 12.9,
+          "fixedB": 20,
+          "onTopic": 25,
+          "noAbsolutes": 24.6,
+          "ethical": 26.3,
+          "combined": 25.8,
+          "combinedWithLength": 27.9,
+          "chance": 25
+        }
+      }
+    ]
+  },
+  "SCLM": {
+    "setsMeasured": [
+      1,
+      2,
+      3
+    ],
+    "meanPercentOfMcqMarks": {
+      "longest": 13.5,
+      "secondLongest": 16.9,
+      "fixedB": 30.7,
+      "onTopic": 21.2,
+      "noAbsolutes": 25.3,
+      "ethical": 25.2,
+      "combined": 22.7,
+      "combinedWithLength": 21.2,
+      "chance": 25
+    },
+    "bySet": [
+      {
+        "set": 1,
+        "mcqQuestions": 50,
+        "mcqMarks": 50,
+        "paperMarks": 80,
+        "craftCannotReach": 30,
+        "percentOfMcqMarks": {
+          "longest": 15,
+          "secondLongest": 17.7,
+          "fixedB": 32,
+          "onTopic": 22.5,
+          "noAbsolutes": 26,
+          "ethical": 25,
+          "combined": 24.5,
+          "combinedWithLength": 24.7,
+          "chance": 25
+        }
+      },
+      {
+        "set": 2,
+        "mcqQuestions": 50,
+        "mcqMarks": 50,
+        "paperMarks": 80,
+        "craftCannotReach": 30,
+        "percentOfMcqMarks": {
+          "longest": 17.5,
+          "secondLongest": 11.2,
+          "fixedB": 28,
+          "onTopic": 19.5,
+          "noAbsolutes": 23.8,
+          "ethical": 25,
+          "combined": 19.8,
+          "combinedWithLength": 16.2,
+          "chance": 25
+        }
+      },
+      {
+        "set": 3,
+        "mcqQuestions": 50,
+        "mcqMarks": 50,
+        "paperMarks": 80,
+        "craftCannotReach": 30,
+        "percentOfMcqMarks": {
+          "longest": 8,
+          "secondLongest": 21.7,
+          "fixedB": 32,
+          "onTopic": 21.5,
+          "noAbsolutes": 26,
+          "ethical": 25.7,
+          "combined": 23.7,
+          "combinedWithLength": 22.7,
+          "chance": 25
+        }
+      }
+    ]
+  },
+  "IBM": {
+    "setsMeasured": [
+      1,
+      2,
+      3
+    ],
+    "meanPercentOfMcqMarks": null,
+    "bySet": [
+      {
+        "set": 1,
+        "mcqQuestions": 0,
+        "mcqMarks": 0,
+        "paperMarks": 100,
+        "craftCannotReach": 100,
+        "percentOfMcqMarks": null
+      },
+      {
+        "set": 2,
+        "mcqQuestions": 0,
+        "mcqMarks": 0,
+        "paperMarks": 100,
+        "craftCannotReach": 100,
+        "percentOfMcqMarks": null
+      },
+      {
+        "set": 3,
+        "mcqQuestions": 0,
+        "mcqMarks": 0,
+        "paperMarks": 100,
+        "craftCannotReach": 100,
+        "percentOfMcqMarks": null
+      }
+    ]
+  },
+  "limits": {
+    "longest": 30,
+    "secondLongest": 30,
+    "onTopic": 32,
+    "noAbsolutes": 30,
+    "ethical": 35,
+    "combined": 32,
+    "combinedWithLength": 32
+  }
+}
