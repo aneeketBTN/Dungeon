@@ -44,6 +44,31 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 ## Issue → Cause → Fix
 
+- **I-THEME-HALF-SWITCHED (2026-08-15)** — Issue: visual coherence, accessibility. Pressing the
+  theme toggle repainted most of the screen and left every button on the previous theme's fill —
+  34 of the 35 visible elements carrying a background transition. On the login page the same fault
+  put dark text on the light panel colour at **1.22:1**. Cause: a `light-dark()` token re-resolves
+  when `color-scheme` changes, but a property being *transitioned* does not follow; it holds the
+  old value until something else forces a style recalculation. A reload paints correctly, so only
+  a live switch shows it. Fix: `repaint()` in `app/theme.js` suppresses transitions across the
+  change and forces the recalculation while they are off, with a one-frame rule in both
+  stylesheets; released on a frame callback **and** a timer, since a non-compositing tab never gets
+  a frame and would be left with no transitions at all. Logged as LAW-68, whose verify note records
+  the measurement trap: injecting `transition: none` to get ground truth repairs the defect being
+  measured, and reported 0 over a screen with 34.
+- **I-LOGIN-IGNORED-THEME (2026-08-15)** — Issue: accessibility, visual coherence. `login.html`,
+  `privacy.html` and `admin.html` ignored both the learner's stored appearance and their system
+  setting. Login is the first screen, so a learner on a dark phone met a full white page before
+  reaching any control, and one who had chosen dark inside the app was thrown back to light on
+  sign-out. Cause: `login.css` pinned `color-scheme: light` and declared one hex per token, and
+  none of the three pages loaded `theme.js`. Fix: the palette is paired on the same contract as
+  `t6.css` — 16 one-theme literals tokenised, none left — with the dark branch lifted from
+  `t6.css` rather than invented, and every light value left byte-identical so the light theme did
+  not move. The literal that mattered was `.brand-mark { color: white }` over an `--ink` fill,
+  which a dark branch turns invisible; a fill and the text on it are now separate tokens.
+  **`admin.css` is deliberately still unpaired** — owner-scoped, internal tool. 51 text-bearing
+  elements measured in each theme, 0 below AA, worst 4.73:1 light and 5.97:1 dark. Evidence:
+  `evidence/2026-08-15/t6-theme-switch/verification.md`.
 - **I-MOCK-NEVER-RETAUGHT (2026-08-15)** — Issue: learning correctness. A learner who read a
   lesson, sat a mock and lost the marks was sent straight back to the question with **no
   lesson**, under a kicker reading "Taught first, then tested again". Cause: `lessonNeedsReteach`

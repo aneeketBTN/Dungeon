@@ -44,6 +44,35 @@ window.T6Theme = (function () {
     else root.setAttribute("data-theme", mode);
   }
 
+  /* Flipping `color-scheme` re-resolves every `light-dark()` token — but a property
+     that is being *transitioned* does not follow. It keeps the previous theme's value,
+     and not briefly: it stays wrong until something else forces a style recalculation.
+     Measured on the dashboard, 34 of the 35 visible elements carrying a background
+     transition — every button on the screen — kept the old fill after a switch, which
+     is what "the theme toggle only half works" looks like from the outside.
+
+     So the switch turns transitions off, changes the attribute, forces the
+     recalculation while they are still off, and turns them back on. Reading a layout
+     property is what makes that recalculation happen *now*; without it the attribute
+     goes on and comes off within one frame and nothing has changed in between.
+
+     It also drops the page-wide cross-fade, which was never wanted: every hover
+     transition on screen firing at once is not a theme change, it is a smear. */
+  function repaint(change) {
+    root.setAttribute("data-theme-switching", "");
+    change();
+    void root.offsetWidth;
+    /* Both, and deliberately. A frame callback is the right moment to release, but a
+       tab that is not compositing never gets one — and this attribute kills every
+       transition on the page while it is set, so a switch in a background tab would
+       leave the product with no animation at all once the learner came back to it.
+       The timer is the floor under that; whichever fires first wins and the second is
+       a no-op. */
+    var release = function () { root.removeAttribute("data-theme-switching"); };
+    if (window.requestAnimationFrame) requestAnimationFrame(release);
+    setTimeout(release, 100);
+  }
+
   var current = read();
   apply(current);
 
@@ -62,7 +91,14 @@ window.T6Theme = (function () {
      repaint as one who pressed the button — the canvas radar reads its colours
      once and would otherwise keep the old theme's ink. */
   if (query) {
-    var onQuery = function () { if (current === "system") announce(); };
+    /* The same freeze applies here and there is no attribute change to hang it on:
+       the tokens re-resolve because the *system* moved, so the repaint has to be
+       forced explicitly or a machine switching at sunset half-changes too. */
+    var onQuery = function () {
+      if (current !== "system") return;
+      repaint(function () {});
+      announce();
+    };
     if (query.addEventListener) query.addEventListener("change", onQuery);
     else if (query.addListener) query.addListener(onQuery);
   }
@@ -74,7 +110,7 @@ window.T6Theme = (function () {
     set: function (mode) {
       if (MODES.indexOf(mode) < 0) return;
       current = mode;
-      apply(mode);
+      repaint(function () { apply(mode); });
       try {
         if (mode === "system") localStorage.removeItem(KEY);
         else localStorage.setItem(KEY, mode);

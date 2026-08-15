@@ -1,5 +1,61 @@
 # Changelog
 
+## 2026-08-15 — The theme toggle, the route it never had, and the door to the product
+
+Evidence: `evidence/2026-08-15/t6-theme-switch/verification.md`.
+`VERIFIED(REAL_BROWSER + AUTOMATED)`, branch `fix/theme-switch-and-login-theming`.
+Not merged, not deployed.
+
+Started as a question — "is the light/dark mode not working?" — and found three defects at three
+depths, having been wrong about two of them at first.
+
+**`app/theme.js` had no route and had been deployed that way.** It is in the build allowlist and
+in `t6.html`'s `<head>`, so it shipped and every signed-in learner requested it; `learnerAssetPath()`
+in `cloudflare/src/index.mjs` never mapped a URL to it, so every request fell through to the
+router's closing 404. `window.T6Theme` was therefore undefined on the live domain and
+`t6.js`'s `if (!button || !window.T6Theme) return;` made the toggle **a button that does nothing**.
+It stayed invisible because `light-dark()` needs no JavaScript: the app kept following the
+operating system, so it only looked broken to someone who pressed the button. The route now sits
+above the session gate beside `login.css`, because the signed-out pages read the same stored
+choice and the file carries no learner data. The discriminator that proves it — **401 means a
+route exists and is gated, 404 means no URL reaches the file** — is now a test that resolves
+every shipped page's local `src`/`href` against the URL that page is served at; with the route
+removed it fails and names all three pages. The build allowlist proves a file is *deployed* and
+never proved a URL *reaches* it. `LAW-69`.
+
+**A transitioned property does not follow a `light-dark()` re-resolution.** Changing
+`color-scheme` re-resolves every token except on a property being transitioned, which keeps the
+previous theme's value until something else forces a recalculation — still wrong two seconds
+later. **34 of the 35** visible elements with a background transition on the dashboard kept the
+old fill across a switch: every button on screen, which is what "the toggle only half works"
+looks like. A five-probe control shows `all`, `background` and `background-color` all freeze and
+only *no* transition follows, so it is the animated property, not a shorthand quirk. Fixed by
+suppressing transitions across the switch (`repaint()` in `theme.js`, one-frame rule in both
+stylesheets), released on a frame callback **and** a timer because a non-compositing tab never
+gets a frame and would keep the suppression for ever — which happened during verification.
+**Two of this session's own measurements were wrong and are recorded as such:** a synchronous
+read after `set()` reports the old value because no frame has elapsed, and injecting
+`transition: none` to establish ground truth *forces the very recalculation that repairs the
+defect*, which is how the first sweep reported "0 of 513 stuck" on a screen with 34. `LAW-68`.
+
+**The login and privacy pages ignored the theme entirely.** `login.css` pinned
+`color-scheme: light` and none of `login.html`, `privacy.html` or `admin.html` loaded `theme.js`,
+so the **first screen anyone sees** met a dark-phone learner with a full white page, and threw
+anyone who had chosen dark back to light on sign-out. The palette is now paired on `t6.css`'s
+contract: **16 one-theme literals tokenised, none left**, dark branch lifted from `t6.css` rather
+than invented. The literal that mattered was `.brand-mark { color: white }` over an `--ink` fill —
+give `--ink` a dark branch and the fill goes pale under a white mark — so a fill and the text on
+it are separate tokens by rule. **Every light value is byte-identical**, so the light theme did
+not move. 51 text-bearing elements measured per theme with all hidden panels revealed: **0 below
+AA**, worst 4.73:1 light and 5.97:1 dark; the two dark failures found on the first pass (1.22:1
+and 2.21:1 on the agreement checkboxes) were the transition freeze, and cleared when it was fixed
+rather than by adjusting any colour. `ui-audit` clean on all detectors at 375 and 1280 in both
+themes.
+
+`npm test` **103 → 104**, palette gate clean, build unchanged at 18 assets.
+**Not done: `app/admin.css`**, still pinned to light with 38 one-theme literals — owner-scoped
+out, internal tool. No second reader.
+
 ## 2026-08-15 — Content accepted, and the four things measuring the promises found
 
 Evidence: `evidence/2026-08-15/t6-persona-rerun/verification.md` and

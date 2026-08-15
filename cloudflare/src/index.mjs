@@ -1206,6 +1206,19 @@ export function createWorker({
         }
         if (url.pathname === `${prefix}/login.css`) return await serveAsset(request, env, "/app/login.css", embeddedAssets);
         if (url.pathname === `${prefix}/login.js`) return await serveAsset(request, env, "/app/login.js", embeddedAssets);
+        /* Deliberately above the session gate, and the reason is not the login page.
+         *
+         * `theme.js` had no route here at all. It was in the build allowlist, so it
+         * shipped, and `t6.html` asked for it, so every signed-in learner requested it
+         * and got this router's 404 — which made `window.T6Theme` undefined and the
+         * theme toggle a button that does nothing. Nothing caught it because the build
+         * allowlist proves a file is *deployed*, never that a URL *reaches* it — the
+         * second claim is now asserted in tests/cloudflare-access.test.mjs.
+         *
+         * It sits pre-auth because the login and privacy pages read the same stored
+         * choice, and a theme is not learner data — the file is eight hundred bytes of
+         * static bootstrap with no profile in it. */
+        if (url.pathname === `${prefix}/theme.js`) return await serveAsset(request, env, "/app/theme.js", embeddedAssets);
         if (url.pathname === `${prefix}/api/session`) return await manageSession(request, env, fetchImpl, store);
         if (url.pathname === `${prefix}/api/community`) return await manageCommunity(request, env, store);
         if (url.pathname === `${prefix}/api/progress`) return await manageProgress(request, env, store);

@@ -1235,6 +1235,53 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   findings under a few hundred reports of "sustainable" and "meaningful". Ordinary English is not
   what a learner lacks on day one.
 
+### LAW-69 🔴 — A file in the build allowlist is not a file anything can fetch
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15. `app/theme.js` was added to the allowlist in `tools/build-site.mjs` and
+  to `t6.html`'s `<head>`, so it deployed and every signed-in learner asked for it. No route in
+  `cloudflare/src/index.mjs` ever mapped a URL to it — `learnerAssetPath()` lists six paths and a
+  `sets/` prefix — so every one of those requests fell through to the router's closing 404. The
+  effect was `window.T6Theme` undefined and a theme toggle that did nothing, on the live domain,
+  for the whole time it was shipped.
+- **Why:** The two facts look like one and are checked in different places. `site-release.test.mjs`
+  asserts what the build *contains*; the router decides what a URL *reaches*; and nothing compared
+  them. The failure is also near-silent: the app kept following the operating system, because
+  `light-dark()` needs no JavaScript, so it only looked broken to someone who pressed the button.
+- **Comply:** Adding a file to `app/` is two edits, never one — the allowlist **and** a route.
+  A router that answers by exact path cannot infer the second from the first.
+- **Verify:** `node --test tests/cloudflare-access.test.mjs` — "every local asset a shipped page
+  references has a route". It resolves each page's local `src`/`href` against the URL that page is
+  served at and fails on 404. Note the discriminator it relies on: a gated asset answers **401
+  `LOGIN_REQUIRED`** signed out, which proves a route exists; only **404 `NOT_FOUND`** means no URL
+  reaches the file. Asserting "200" instead would demand every asset be public.
+
+### LAW-68 🔴 — A transitioned property does not follow a `light-dark()` re-resolution
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15. Changing `color-scheme` re-resolves every `light-dark()` token, except on
+  a property that is being transitioned: that one keeps the previous theme's value and stays wrong
+  until something else forces a style recalculation — still wrong two seconds later, not a flicker.
+  On the dashboard, **34 of the 35** visible elements carrying a background transition kept the old
+  fill across a switch; on the login page it put dark text on the light panel colour at **1.22:1**.
+  A controlled run of five probes shows `all`, `background` and `background-color` all freeze and
+  only *no* transition follows the theme, so it is the property being animated, not a shorthand.
+- **Why:** Every colour in this product is a token and most interactive surfaces animate their
+  background, so the two features are guaranteed to meet. The token block looks correct in the
+  file and the defect exists only in the rendered result after a *live* switch — a reload paints
+  it correctly, which is why it survives any check that loads a page in a theme and reads it.
+- **Comply:** A theme switch suppresses transitions across the change: set `data-theme-switching`
+  on `:root`, change the attribute, force the recalculation while transitions are off, release it.
+  Release on `requestAnimationFrame` **and** a short timer — a tab that is not compositing never
+  gets a frame, and while that attribute is set the page has no transitions at all. Any new
+  stylesheet needs the matching one-frame rule; see `repaint()` in `app/theme.js`.
+- **Verify:** In the page, collect the visible elements whose `transitionProperty` covers
+  `background` with a non-zero duration, read their `backgroundColor` in one theme, switch, wait,
+  and read again. Any element whose value did not change is frozen. **Do not** establish ground
+  truth by injecting `transition: none !important` — that injection forces the very recalculation
+  that repairs the value, so before and after agree and the probe reports 0 over a broken screen.
+  That mistake was made in this session and reported "0 of 513 stuck" on a screen with 34.
+
 ### LAW-67 🔴 — A gate whose floor cannot be reached by its own sample size reports a pass over nothing
 
 - **Tier/Status:** REDLINE · ACTIVE

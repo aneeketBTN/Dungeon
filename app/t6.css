@@ -204,6 +204,13 @@
    never opened the control should be in. */
 :root[data-theme="light"] { color-scheme: only light; }
 :root[data-theme="dark"] { color-scheme: only dark; }
+/* Held for exactly one frame by theme.js while the switch happens. A transitioned
+   property does not follow a `light-dark()` re-resolution — it keeps the old theme's
+   value until something forces a recalculation — so every button on the dashboard used
+   to stay the previous theme's colour. See the comment on repaint() in theme.js. */
+:root[data-theme-switching] *,
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after { transition: none !important; }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }

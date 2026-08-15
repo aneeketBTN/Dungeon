@@ -1,15 +1,61 @@
+/* Colour, on the same contract as t6.css.
+ *
+ * This file used to pin `color-scheme: light` and declare one hex per token, which
+ * meant the door to the product ignored both the learner's stored choice *and* their
+ * system setting: someone on a dark phone met a full white page before they could
+ * reach any control, and someone who had chosen dark inside the app was thrown back
+ * to light on sign-out or on the privacy notice.
+ *
+ * Two rules, the same two t6.css states:
+ *
+ *   1. No literal colour outside this block — a literal only has one theme, and the
+ *      one that mattered here was `.brand-mark { color: white }` over a `--ink` fill.
+ *      Once `--ink` gains a dark branch that fill turns pale and the white mark on top
+ *      of it disappears, so a fill and the text on it are separate tokens.
+ *   2. Every light value below is exactly what it was before this file was paired,
+ *      so nothing changes by day. Only the dark branch is new, and it is lifted from
+ *      t6.css rather than invented, so the login page and the app are one product at
+ *      night instead of two that merely both go dark.
+ *
+ * `light-dark()` is a *colour* function, so a shadow cannot go inside it — the colour
+ * is a token and the geometry stays in the rule. t6.css says the same at --shadow-tint. */
 :root {
-  color-scheme: light;
-  --paper: #f4f1e8;
-  --surface: #fffdf7;
-  --ink: #10231d;
-  --muted: #60706a;
-  --line: #d6ddd6;
-  --green: #1f7554;
-  --green-dark: #15553d;
-  --error: #8b352d;
+  color-scheme: light dark;
+  --paper: light-dark(#f4f1e8, #0f1518);
+  --surface: light-dark(#fffdf7, #182126);
+  --ink: light-dark(#10231d, #eae7dc);
+  /* Text on an --ink fill. Inverts with it; see rule 2 above. */
+  --on-ink: light-dark(#ffffff, #0f1518);
+  --muted: light-dark(#60706a, #a3b0a9);
+  --line: light-dark(#d6ddd6, #2f3c44);
+  /* The heavier hairline the form controls carry, so a field edge stays findable. */
+  --line-strong: light-dark(#aebdb5, #566871);
+  --field: light-dark(#ffffff, #101a1e);
+  --green: light-dark(#1f7554, #6ecb95);
+  /* Hover. Darker than --green by day and lighter by night: both directions are "more
+     of it" against their own background, which a single hex cannot be. */
+  --green-dark: light-dark(#15553d, #9adcb6);
+  --on-green: light-dark(#ffffff, #06150d);
+  --green-tint: light-dark(rgba(31,117,84,.06), rgba(110,203,149,.10));
+  --green-edge: light-dark(rgba(31,117,84,.28), rgba(110,203,149,.30));
+  --ring: light-dark(rgba(31,117,84,.25), rgba(110,203,149,.38));
+  --ring-soft: light-dark(rgba(31,117,84,.16), rgba(110,203,149,.24));
+  --error: light-dark(#8b352d, #f0806a);
+  --inset: light-dark(#f3f5ef, #131d21);
+  --shadow-tint: light-dark(rgba(16,35,29,.08), rgba(0,0,0,.5));
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+
+/* The switch itself. theme.js pins the attribute; with none, :root's `light dark`
+   follows the system. Same three states as the app, read from the same stored key. */
+:root[data-theme="light"] { color-scheme: only light; }
+:root[data-theme="dark"] { color-scheme: only dark; }
+/* See t6.css and repaint() in theme.js. The agreement checkboxes are this page's
+   instance of it: they transition `background`, so they held the light panel colour
+   under dark text at 1.22:1 until the transition was suppressed across the switch. */
+:root[data-theme-switching] *,
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after { transition: none !important; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -17,19 +63,19 @@ body { margin: 0; min-width: 300px; color: var(--ink); background: var(--paper);
 button, input { font: inherit; }
 
 .login-shell { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
-.login-panel { width: min(100%, 470px); padding: clamp(30px, 7vw, 54px); background: var(--surface); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 18px 60px rgba(16,35,29,.08); }
-.brand-mark { width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 32px; color: white; background: var(--ink); border-radius: 14px; font-weight: 900; letter-spacing: -.04em; }
+.login-panel { width: min(100%, 470px); padding: clamp(30px, 7vw, 54px); background: var(--surface); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 18px 60px var(--shadow-tint); }
+.brand-mark { width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 32px; color: var(--on-ink); background: var(--ink); border-radius: 14px; font-weight: 900; letter-spacing: -.04em; }
 .eyebrow { margin: 0 0 10px; color: var(--green); font-size: 11px; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
 h1 { margin: 0; max-width: 390px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(34px, 8vw, 49px); line-height: .98; letter-spacing: -.035em; }
 h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(29px, 7vw, 40px); line-height: 1.02; letter-spacing: -.025em; }
 .lede { margin: 20px 0 30px; color: var(--muted); font-size: 16px; line-height: 1.55; }
 form { display: grid; gap: 10px; }
 label { font-size: 13px; font-weight: 800; }
-input { width: 100%; min-height: 52px; padding: 0 15px; color: var(--ink); background: white; border: 1px solid #aebdb5; border-radius: 10px; outline: none; }
-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(31,117,84,.16); }
-button { min-height: 52px; margin-top: 4px; padding: 0 18px; color: white; background: var(--green); border: 0; border-radius: 10px; font-weight: 850; cursor: pointer; }
+input { width: 100%; min-height: 52px; padding: 0 15px; color: var(--ink); background: var(--field); border: 1px solid var(--line-strong); border-radius: 10px; outline: none; }
+input:focus { border-color: var(--green); box-shadow: 0 0 0 3px var(--ring-soft); }
+button { min-height: 52px; margin-top: 4px; padding: 0 18px; color: var(--on-green); background: var(--green); border: 0; border-radius: 10px; font-weight: 850; cursor: pointer; }
 button:hover { background: var(--green-dark); }
-button:focus-visible { outline: 3px solid rgba(31,117,84,.25); outline-offset: 3px; }
+button:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
 button:disabled { cursor: wait; opacity: .65; }
 .form-message { min-height: 20px; margin: 0; color: var(--error); font-size: 13px; line-height: 1.45; }
 .form-message.waiting { color: var(--muted); }
@@ -46,12 +92,12 @@ button:disabled { cursor: wait; opacity: .65; }
   background: var(--green); border-radius: 3px;
 }
 
-.agreement details { margin: 18px 0 0; background: #f3f5ef; border: 1px solid var(--line); border-radius: 14px; }
+.agreement details { margin: 18px 0 0; background: var(--inset); border: 1px solid var(--line); border-radius: 14px; }
 .agreement summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; color: var(--green-dark); font-size: 14px; font-weight: 850; cursor: pointer; list-style: none; }
 .agreement summary::-webkit-details-marker { display: none; }
 .agreement summary::after { content: ""; flex: none; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translate(-2px, -2px); transition: transform .18s ease; }
 .agreement details[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
-.agreement summary:focus-visible { outline: 3px solid rgba(31,117,84,.25); outline-offset: -3px; border-radius: 14px; }
+.agreement summary:focus-visible { outline: 3px solid var(--ring); outline-offset: -3px; border-radius: 14px; }
 .agreement-terms { max-height: 40vh; overflow: auto; margin: 0; padding: 2px 16px 16px; color: var(--muted); font-size: 13px; line-height: 1.6; overscroll-behavior: contain; }
 .agreement-terms h3 { margin: 16px 0 5px; color: var(--ink); font-size: 12.5px; }
 .agreement-terms h3:first-child { margin-top: 0; }
@@ -62,24 +108,24 @@ button:disabled { cursor: wait; opacity: .65; }
    happen to their progress before they press anything. */
 .device-switch h2 { margin: 0; font-size: clamp(24px, 6vw, 31px); line-height: 1.1; }
 .device-switch > p { margin: 13px 0 0; font-size: 15px; line-height: 1.55; }
-.device-switch-note { margin-top: 12px !important; padding: 13px 15px; color: var(--muted); background: rgba(31,117,84,.06); border: 1px solid rgba(31,117,84,.28); border-radius: 14px; font-size: 13.5px !important; }
+.device-switch-note { margin-top: 12px !important; padding: 13px 15px; color: var(--muted); background: var(--green-tint); border: 1px solid var(--green-edge); border-radius: 14px; font-size: 13.5px !important; }
 .device-switch button:not(.back-button) { width: 100%; margin-top: 20px; }
 
-.group-step { margin: 20px 0 0; padding: 18px; background: rgba(31,117,84,.06); border: 1px solid rgba(31,117,84,.28); border-radius: 14px; }
+.group-step { margin: 20px 0 0; padding: 18px; background: var(--green-tint); border: 1px solid var(--green-edge); border-radius: 14px; }
 .group-step h3 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: 20px; letter-spacing: -.01em; }
 .group-step p { margin: 0 0 14px; color: var(--muted); font-size: 14px; line-height: 1.5; }
 .group-step .group-proof { margin: 11px 0 0; font-size: 12px; }
 .group-step .eyebrow { margin-bottom: 7px; }
-.button-link { display: flex; justify-content: center; align-items: center; min-height: 48px; padding: 0 16px; color: white; background: var(--green); border-radius: 10px; font-size: 15px; font-weight: 850; text-decoration: none; }
+.button-link { display: flex; justify-content: center; align-items: center; min-height: 48px; padding: 0 16px; color: var(--on-green); background: var(--green); border-radius: 10px; font-size: 15px; font-weight: 850; text-decoration: none; }
 .button-link:hover { background: var(--green-dark); }
-.button-link:focus-visible { outline: 3px solid rgba(31,117,84,.3); outline-offset: 3px; }
+.button-link:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
 
 #agreement-form { gap: 0; margin-top: 20px; }
 #agreement-form .agreement-check + .agreement-check { margin-top: 10px; }
-.agreement-check { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; padding: 16px; background: var(--surface); border: 1px solid #aebdb5; border-radius: 12px; font-size: 14px; font-weight: 750; line-height: 1.45; cursor: pointer; transition: border-color .15s ease, background .15s ease; }
+.agreement-check { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; padding: 16px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 12px; font-size: 14px; font-weight: 750; line-height: 1.45; cursor: pointer; transition: border-color .15s ease, background .15s ease; }
 .agreement-check:hover { border-color: var(--green); }
-.agreement-check:has(input:checked) { background: rgba(31,117,84,.06); border-color: var(--green); }
-.agreement-check:has(input:focus-visible) { border-color: var(--green); box-shadow: 0 0 0 3px rgba(31,117,84,.16); }
+.agreement-check:has(input:checked) { background: var(--green-tint); border-color: var(--green); }
+.agreement-check:has(input:focus-visible) { border-color: var(--green); box-shadow: 0 0 0 3px var(--ring-soft); }
 .agreement-check input { width: 20px; min-height: 20px; margin: 1px 0 0; accent-color: var(--green); cursor: pointer; }
 .agreement-check:has(input:disabled) { color: var(--muted); cursor: not-allowed; opacity: .72; }
 #agreement-message { margin-top: 10px; }
@@ -87,7 +133,7 @@ button:disabled { cursor: wait; opacity: .65; }
 
 .back-button { display: block; width: 100%; min-height: 44px; margin: 6px 0 0; padding: 0; color: var(--muted); background: transparent; font-size: 13px; font-weight: 750; }
 .back-button:hover { color: var(--ink); background: transparent; text-decoration: underline; }
-.back-button:focus-visible { outline: 3px solid rgba(31,117,84,.25); outline-offset: -3px; border-radius: 10px; }
+.back-button:focus-visible { outline: 3px solid var(--ring); outline-offset: -3px; border-radius: 10px; }
 
 @media (max-width: 520px) {
   .login-shell { align-items: start; padding: 0; }

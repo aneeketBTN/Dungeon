@@ -1,5 +1,43 @@
 # Dungeon
-> **The content is accepted, and measuring the promises broke four of them (2026-08-15; newest):**
+> **The theme toggle was a button that did nothing, and it took three measurements to say so
+> (2026-08-15; newest):** the session opened on a one-line question — is light/dark working? — and
+> the honest answer was three defects at three depths. **`app/theme.js` had no route.** It is in
+> the build allowlist and in `t6.html`'s `<head>`, so it shipped and every signed-in learner
+> requested it, and `learnerAssetPath()` never mapped a URL to it, so every request fell through to
+> the router's closing 404. `window.T6Theme` was undefined **on the live domain**, which makes
+> `t6.js`'s `if (!button || !window.T6Theme) return;` a no-op — and it stayed invisible because
+> `light-dark()` needs no JavaScript, so the app kept following the operating system and only
+> looked broken to someone who pressed the button. The discriminator is **401 against 404**: a
+> gated asset says `LOGIN_REQUIRED`, so only `NOT_FOUND` means nothing reaches the file. Now a
+> test that resolves every shipped page's local `src`/`href` against the URL that page is served
+> at; deleting the route fails it and names all three pages. **The build allowlist proves a file is
+> deployed and never proved a URL reaches it** (`LAW-69`). **A transitioned property does not
+> follow a `light-dark()` re-resolution** — it keeps the old theme's value until something forces a
+> recalculation, still wrong two seconds later — so **34 of the 35** visible elements with a
+> background transition kept the previous fill across a switch: every button on the dashboard.
+> A five-probe control shows `all`, `background` and `background-color` all freeze and only *no*
+> transition follows, so it is the animated property, not a shorthand quirk (`LAW-68`). **Two of
+> the session's own measurements were wrong and are logged as such**: a synchronous read after
+> `set()` returns the old value because no frame has elapsed, and injecting `transition: none` to
+> get ground truth **forces the very recalculation that repairs the defect**, which is how the
+> first sweep reported "0 of 513 stuck" on a screen with 34 — this repository's signature failure,
+> reproduced once more in the probe written to find the thing. **The door to the product ignored
+> the theme entirely**: `login.css` pinned `color-scheme: light` and none of `login.html`,
+> `privacy.html` or `admin.html` loaded `theme.js`, so the *first screen anyone sees* met a
+> dark-phone learner with a full white page and threw anyone who had chosen dark back to light on
+> sign-out. Palette now paired on t6.css's contract — **16 one-theme literals tokenised, none
+> left**, dark branch lifted from t6.css rather than invented, **every light value byte-identical**
+> so the light theme did not move. The literal that mattered was `.brand-mark { color: white }`
+> over an `--ink` fill, invisible the moment `--ink` gains a dark branch. **51 text-bearing
+> elements per theme with every hidden panel revealed: 0 below AA**, worst 4.73:1 light and 5.97:1
+> dark; the two dark failures found first (1.22:1, 2.21:1) *were* the freeze and cleared when it
+> was fixed, not by touching a colour. `ui-audit` clean on all detectors at 375 and 1280 in both
+> themes, `npm test` **103 → 104**, palette gate clean, build unchanged at 18 assets. Evidence:
+> `evidence/2026-08-15/t6-theme-switch/verification.md`. **Not done: `app/admin.css`**, still
+> pinned to light with 38 one-theme literals, owner-scoped out as an internal tool; no second
+> reader. Not merged, not deployed.
+>
+> **The content is accepted, and measuring the promises broke four of them (2026-08-15):**
 > `WAITING_OWNER_CONTENT_ACCEPTANCE` is **cleared** — the owner accepted the whole standing block
 > in chat (792 surfaces, 64 primers, 64 rubrics/exemplars, 106 lessons, the 48 CLA items, the 44
 > reserved items, the SPMS caselets and rewritten stems, the BRGSA concept records, the ~76
@@ -1063,11 +1101,11 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tools/build-site.mjs` | Allowlists the learner/admin/protection assets and produces the deployment artifact; prints the count it shipped (18 on 2026-08-14). | 2026-08-14 |
 | `sites-backup/worker.mjs` | Private Sites backup entrypoint, **not** the deployed Worker: learner/admin redirects, health response, static delivery, and security headers. Diverged from `cloudflare/src/index.mjs` and has no agreement gate. | 2026-08-12 |
 | `sites-backup/README.md` | Records why this worker is not production and what must be reconciled before promoting it. | 2026-08-12 |
-| `cloudflare/src/index.mjs` | Exact-path router, admission/sessions, agreement/community state, D1 progress, signed owner Access, tester management, the per-tester and cohort written-check ceilings, the written-answer archive with its per-row expiry, and the daily `scheduled` purge that keeps retention running after the cohort goes quiet. | 2026-08-14 |
+| `cloudflare/src/index.mjs` | Exact-path router (**a file in `app/` needs a route here as well as a place in the build allowlist — `theme.js` had the second and not the first and 404'd in production; LAW-69**), admission/sessions, agreement/community state, D1 progress, signed owner Access, tester management, the per-tester and cohort written-check ceilings, the written-answer archive with its per-row expiry, and the daily `scheduled` purge that keeps retention running after the cohort goes quiet. | 2026-08-15 |
 | `cloudflare/migrations/` | Applied D1 history for auth/progress, browser/country locks, agreement acceptance, community timestamps, per-tester and cohort written-check metering, and `0007_written_answer_archive.sql` — the only table holding a learner's own prose, with the expiry and cascade that make the three-month promise and withdrawal real. | 2026-08-14 |
 | `db/schema.ts` | Readable mirror of tester, session, progress, agreement, and community-state table shapes. | 2026-08-11 |
-| `app/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. | 2026-08-11 |
-| `app/login.css` | Login and agreement presentation, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. | 2026-08-11 |
+| `app/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. Loads `theme.js` before the stylesheet, because it is the first screen anyone sees and a stored dark choice must not flash white here. | 2026-08-15 |
+| `app/login.css` | Login and agreement presentation for `login.html` **and** `privacy.html`, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. Palette paired on t6.css's contract — every colour a `light-dark()` token, no literal outside the block, light values byte-identical to the unpaired version — plus the one-frame `data-theme-switching` rule (LAW-68). | 2026-08-15 |
 | `app/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery. | 2026-08-11 |
 | `docs/community/DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
 | `work/build_tester_agreement.py` | Builds the verified two-page agreement DOCX for Word/PDF delivery. | 2026-08-11 |
@@ -1080,17 +1118,17 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `cloudflare/README.md` | Live route, runtime-secret, Access-policy, owner-bootstrap, and rate-limit contract. | 2026-08-11 |
 | `cloudflare/tools/build-standalone.mjs` | Builds the same protected allowlist as an embedded-asset fallback when an Assets upload path is unavailable. | 2026-08-11 |
 | `tests/site-release.test.mjs` | Release-boundary, anonymous-invite secrecy, privacy, routing, header, and setup checks. | 2026-08-11 |
-| `tests/cloudflare-access.test.mjs` | Owner auth, tester management, agreement/community state, bump, routing, health, cache checks, the cohort spend ceiling, and one test per promise the privacy notice makes about stored answers: the stated expiry, distress never stored, deletion on request, deletion on withdrawal, and a mark that survives a storage failure. | 2026-08-14 |
+| `tests/cloudflare-access.test.mjs` | Owner auth, tester management, agreement/community state, bump, routing, health, cache checks, the assertion that every local asset a shipped page references actually resolves to a route (LAW-69), the cohort spend ceiling, and one test per promise the privacy notice makes about stored answers: the stated expiry, distress never stored, deletion on request, deletion on withdrawal, and a mark that survives a storage failure. | 2026-08-14 |
 | `tests/agent-readiness.test.mjs` | Proves the tester-agent scaffold is healthy, privacy-bounded, and not deployable. | 2026-08-11 |
 | `app/admin.html` | Owner control room for tester management, per-person/bulk group bumps, release health, and feedback triage. | 2026-08-11 |
 | `app/admin.css` | Responsive control-room status/actions, including narrow stacked tester rows. | 2026-08-11 |
 | `app/admin.js` | Cohort onboarding, revoke/unlock, per-tester and bulk **force sign-out** with live session counts, per-tester **Delete answers** for a deletion request that is not a withdrawal, community bumps, agreed/older-terms/never-agreed chips, learning signals, and manual copy helpers. | 2026-08-14 |
-| `app/theme.js` | Theme bootstrap loaded synchronously in `<head>`: reads the stored appearance before first paint, exposes `T6Theme` (get/set/next/resolved/onChange), and follows the system setting when unset. Separate from t6.js because the release serves `script-src self`, so the usual inline head script is blocked. | 2026-08-12 |
+| `app/theme.js` | Theme bootstrap loaded synchronously in `<head>`: reads the stored appearance before first paint, exposes `T6Theme` (get/set/next/resolved/onChange), and follows the system setting when unset. `repaint()` suppresses transitions across a switch and forces the recalculation while they are off, because a transitioned property otherwise keeps the previous theme's value indefinitely (LAW-68); it is released on a frame callback *and* a timer, since a non-compositing tab never gets a frame. Separate from t6.js because the release serves `script-src self`, so the usual inline head script is blocked. Loaded by `t6.html`, `login.html` and `privacy.html`. | 2026-08-15 |
 | `tools/check_exam_readiness.mjs` | **Exam-pattern gate and authoring worklist.** `npm run check:exam [SUBJECT]`. Reads `EXAM_PAPERS` out of `app/t6.js` (one source of truth, not a copy) and multiplies it by the bank: which sections cannot be filled and what that costs in marks, whether a negatively marked section is free to a candidate who ticks everything (LAW-53), and how many questions are *forced* to share one visible prompt. Prints "N × type for SUBJECT Section X", soonest paper first. Run it before authoring and after. | 2026-08-12 |
 | `tools/check-palette.mjs` | Palette gate. Parses the `light-dark()` pairs out of `app/t6.css` itself and measures 140 contrast pairings, grayscale separation, and three colour-vision simulations in both themes, then asserts the four evidence states are shape-distinct. Run after touching any colour token. | 2026-08-12 |
 | `tools/browser-checks/ui-audit.js` | UI audit probe, evaluated **in the page**: overflow, tap targets under 44px, corner radii off the four-step scale, paragraph density, type scale, and ragged rows. Used for the mobile pass; re-run per screen and per viewport. | 2026-08-12 |
 | `app/t6.html` | Four-question homepage (what am I doing / where can I start / how am I doing / additional resources), subject rail, hero with the one next action and distance to goal, single-entry practice builder, matrix/trend/totals, one concept list, lesson surface, layered questions, in-question glossary, plans, results, the header Learn/Exam switch, the bag drawer, and the examiner home's recommended-paper hero. | 2026-08-13 |
-| `app/t6.css` | Homepage block rhythm and the four-question layout, chip builder, concept-shelf rows with inline evidence, matching board, lesson/glossary presentation, flat primer/question hierarchy across desktop and narrow layouts, the case/task split (named case, named ask, one rule between material and instruction, 62ch measure), and the two-product switch: thumb geometry, the `::view-transition` direction rules and their reduced-motion form, and the ≤760 header compaction that keeps the switch from overflowing a phone. In the exam palette legend a chip is a swatch and no longer inherits the 44px tap floor, which was overflowing its own 26px grid track onto the label beside it at every desktop width (LAW-64). | 2026-08-15 |
+| `app/t6.css` | Homepage block rhythm and the four-question layout, chip builder, concept-shelf rows with inline evidence, matching board, lesson/glossary presentation, flat primer/question hierarchy across desktop and narrow layouts, the case/task split (named case, named ask, one rule between material and instruction, 62ch measure), and the two-product switch: thumb geometry, the `::view-transition` direction rules and their reduced-motion form, and the ≤760 header compaction that keeps the switch from overflowing a phone. In the exam palette legend a chip is a swatch and no longer inherits the 44px tap floor, which was overflowing its own 26px grid track onto the label beside it at every desktop width (LAW-64). Carries the one-frame `data-theme-switching` rule that suppresses transitions across a theme change, without which every button keeps the previous theme's fill (LAW-68). | 2026-08-15 |
 | `app/t6.js` | Teach-before-test queue invariant, **concept layering** (selection stays variety-driven; delivery is sorted by teaching rank and `layeredQueue` drains a pre-committed lesson list so lesson order is monotonic by construction), **weakness linking** (`conceptLinks` derives edges from co-tested surfaces only; `groupWeaknesses` pairs a weak concept with a weak partner and reports the rest as isolated), lessons/primers, eight-gate mastery with ephemeral response timing and banded Strong eligibility, persistence, deterministic scenarios, the floating bag, product crossing, and the examiner's seeded papers, analysis, repair sittings, and locally-buffered non-transmitting telemetry shaper. `lessonHandoff()` is separated from its markup and exposed through `window.__dungeonExport.handoffs()`, so the harness reads the app's own run-relative correction to a lesson's "the next lecture" promise instead of the raw `connects` string. | 2026-08-15 |
 | `app/sets/t6_brgsa.js` | Original BRGSA ten-set bank with 60 grounded questions. | 2026-08-10 |
 | `app/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
@@ -1243,6 +1281,7 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
+- [ ] **`app/admin.css` still ignores the theme, by owner decision.** It pins `color-scheme: light` and carries 38 one-theme literals, and `admin.html` does not load `theme.js`, so the owner dashboard stays light whatever the device is set to. Scoped out when the login/privacy fix was approved on the grounds that it is an internal tool with one user. The route gate added for LAW-69 does not fail on it — `admin.html` references nothing that lacks a route — so this will not resurface on its own. Pairing it is the same shape as the `login.css` work: tokens to `light-dark()` pairs, literals out, `theme.js` in the head, and the `data-theme-switching` rule.
 - [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — 48 course-assessment items — ACCEPTED 2026-08-15.**
   SCLM 32 (two per concept: definition, scenario, numeric, judgement) and BRGSA 16 (one per
   concept, scenario-led), with 144 authored option diagnoses. Drawn from the owner's own CLAs for

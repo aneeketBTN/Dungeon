@@ -1098,3 +1098,37 @@ test("withdrawal and a deletion request each remove the tester's stored answers"
   }), baseEnv);
   assert.equal(store.archive.length, 0, "withdrawing removes the answers with the rest of the account");
 });
+
+/* Shipping a file and being able to fetch it are two different claims.
+ *
+ * `theme.js` was in the build allowlist and in `t6.html`'s <head> for three days, and
+ * this router had no route for it — so every signed-in learner asked for it, got a
+ * 404 from the branch at the bottom of fetch(), and ran an app where `window.T6Theme`
+ * was undefined and the theme toggle did nothing. The allowlist test in
+ * site-release.test.mjs passed throughout, because it asserts a file is *deployed*.
+ *
+ * The discriminator is 404 vs 401: a gated asset answers LOGIN_REQUIRED to a signed-out
+ * request, which proves a route exists. Only NOT_FOUND means no URL reaches the file. */
+test("every local asset a shipped page references has a route", async () => {
+  const {readFile} = await import("node:fs/promises");
+  const worker = workerWithGroup();
+  /* The URL each page is actually served at, since a relative src resolves against it. */
+  const pages = [
+    ["app/t6.html", "/dungeon/t6.html"],
+    ["app/login.html", "/dungeon/"],
+    ["app/privacy.html", "/dungeon/privacy"],
+    ["app/admin.html", "/dungeon/admin/"]
+  ];
+  const missing = [];
+  for (const [file, servedAt] of pages) {
+    const html = await readFile(new URL(`../${file}`, import.meta.url), "utf8");
+    const refs = [...html.matchAll(/(?:src|href)="([^"]+)"/g)].map((m) => m[1]);
+    for (const ref of refs) {
+      if (/^(?:https?:|\/\/|#|mailto:|tel:|data:)/.test(ref)) continue;
+      const target = new URL(ref, `https://aneeketdas.com${servedAt}`).pathname;
+      const response = await worker.fetch(request(target), baseEnv);
+      if (response.status === 404) missing.push(`${file} asks for ${ref} -> ${target} (404)`);
+    }
+  }
+  assert.deepEqual(missing, [], `no route reaches these:\n${missing.join("\n")}`);
+});
