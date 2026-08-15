@@ -68,7 +68,7 @@
     "Supply-chain re-engineering: Map the full flow, expose waiting and indirect costs, segment service needs, and redesign the connected process rather than one function.",
     "Supply-chain re-engineering: Give every segment the most expensive service level, since a uniformly high standard cannot disappoint any customer group.",
     "Supply-chain re-engineering: Add buffer stock at every hand-off so no stage ever waits, and treat the resulting inventory as the cost of good service.",
-    "Supply-chain re-engineering: Optimise each warehouse separately against its own cost target and leave the upstream effects of those choices unexamined."
+    "Supply-chain re-engineering: Optimise each warehouse separately against its own cost target and leave the upstream effects of those choices unexamined, because every site meeting its number means the network has met its own."
    ],
    "termsAvailable": [
     "customer profile",
@@ -207,7 +207,7 @@
    "options": [
     "Stockyard location trade-off: Minimise primary line-haul distance while leaving secondary delivery cost out of the comparison entirely.",
     "Stockyard location trade-off: Re-evaluate site locations using the changed cost structure, coverage limit, demand, and minimum throughput together.",
-    "Stockyard location trade-off: Keep the existing sites, because demand locations alone determine where a stockyard belongs.",
+    "Stockyard location trade-off: Keep the existing sites, because demand locations alone determine where a stockyard belongs, whatever has since changed in transport cost or coverage limit.",
     "Stockyard location trade-off: Consolidate into one large site regardless of dealer distance, since fewer sites always mean lower total network cost."
    ],
    "termsAvailable": [
@@ -475,7 +475,7 @@
    "prompt": null,
    "options": [
     "Bullwhip effect: Assume consumer demand moved by the same amount, and read the manufacturer's order swings as a true demand signal.",
-    "Bullwhip effect: Add more safety stock at every stage without addressing the order distortion that created the swings.",
+    "Bullwhip effect: Add more safety stock at every stage without addressing the order distortion that created the swings, since buffering is what inventory is there to do.",
     "Bullwhip effect: Diagnose amplification across incentives, batching, forecast updates and lead times, since only a shared demand signal stops it.",
     "Bullwhip effect: Ask each stage to optimise its own profit without sharing demand data, since local accountability serves the chain best."
    ],

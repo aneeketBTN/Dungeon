@@ -344,7 +344,7 @@
    "stem": "Why is ‘Would you buy this?’ a weak primary validation question?",
    "prompt": null,
    "options": [
-    "People cannot understand a product before launch",
+    "People cannot form a view about a product before they have seen it working in front of them",
     "Stated intention under social pressure never reliably predicts actual purchase behaviour",
     "Surveys always require more than a thousand responses before they mean anything",
     "Only direct competitors are allowed to run such surveys"
@@ -369,7 +369,7 @@
     "Pure self-serve PLG with no human support",
     "Sales-led growth supported by product experience",
     "No deliberate acquisition motion of any kind",
-    "Consumer referral coupons only"
+    "Consumer referral coupons on their own, with no sales involvement at any deal size"
    ],
    "termsAvailable": [
     "product-led growth",
@@ -473,9 +473,9 @@
     {
      "label": "Choose the decision",
      "options": [
-      "The product clearly cannot have found product-market fit yet. (Channel fit)",
       "All B2B products require television advertising in order to reach the relevant decision-makers at scale. (Channel fit)",
       "The high view count is proof enough that the channel is working exactly as intended. (Channel fit)",
+      "The product clearly cannot have found product-market fit yet, because a working product would perform in any channel. (Channel fit)",
       "Score candidate channels against the product's economics and timing constraints before spending, and reject one that fails any single dimension. (Channel fit)"
      ]
     },

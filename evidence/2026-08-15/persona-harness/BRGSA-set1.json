@@ -173,7 +173,7 @@
    "stem": "Why is ‘Would you buy this?’ a weak primary validation question?",
    "prompt": null,
    "options": [
-    "People cannot understand a product before launch",
+    "People cannot form a view about a product before they have seen it working in front of them",
     "Stated intention under social pressure never reliably predicts actual purchase behaviour",
     "Surveys always require more than a thousand responses before they mean anything",
     "Only direct competitors are allowed to run such surveys"
@@ -302,7 +302,7 @@
    "stem": "What is the core diagnosis?",
    "prompt": null,
    "options": [
-    "The product clearly cannot have found product-market fit yet",
+    "The product clearly cannot have found product-market fit yet, because a working product would perform in any channel",
     "All B2B products require television advertising in order to reach the relevant decision-makers at scale",
     "The high view count is proof enough that the channel is working exactly as intended",
     "The channel's targeting and output never match the product's economics and ICP"

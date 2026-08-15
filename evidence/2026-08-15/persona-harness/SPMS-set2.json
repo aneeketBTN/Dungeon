@@ -106,7 +106,7 @@
    "prompt": null,
    "options": [
     "Buyer journey communication: Use the same decision-stage proof on audiences who are not yet aware that the problem exists at all.",
-    "Buyer journey communication: Add more technical detail into the very first message the buyer ever receives.",
+    "Buyer journey communication: Add every technical specification into the very first message the buyer receives, on the view that more information always moves a decision forward.",
     "Buyer journey communication: First make the problem and relevant value understandable, then introduce alternatives and proof as the buyer advances.",
     "Buyer journey communication: Wait until after the purchase is complete before explaining any of the value to the customer."
    ],
@@ -398,7 +398,7 @@
     "Desirability, feasibility, viability: Call it viable and assume customers will learn to want it once they have seen it working.",
     "Desirability, feasibility, viability: Reduce the engineering scope even though feasibility has already been established for this particular build.",
     "Desirability, feasibility, viability: Treat desirability as the missing test, since a product survives only where all three checks overlap.",
-    "Desirability, feasibility, viability: Launch immediately, because technical feasibility is itself proof that real demand exists."
+    "Desirability, feasibility, viability: Launch immediately, because the team proved it can be built, and technical feasibility is itself the evidence that customers will want it."
    ],
    "termsAvailable": [
     "desirability",
@@ -419,7 +419,7 @@
    "options": [
     "Actionable product metrics: Wait for a mature profit history to build up before measuring any product behaviour at all.",
     "Actionable product metrics: Track every possible number without assigning owners or attaching decisions to any single one of them.",
-    "Actionable product metrics: Increase the font size of the registration number shown on the dashboard.",
+    "Actionable product metrics: Increase the font size of the registration number shown on the dashboard, so the figure the team already reports becomes easier to see.",
     "Actionable product metrics: Choose stage-relevant measures tied to decisions, such as activation, retention, contribution, and acquisition payback."
    ],
    "termsAvailable": [
@@ -751,7 +751,7 @@
     "MoSCoW and RICE prioritisation: Put all three items into the Must have category so that no conflict arises between the stakeholders.",
     "MoSCoW and RICE prioritisation: Choose the idea with the highest claimed impact and ignore the confidence and effort scores entirely when ranking them.",
     "MoSCoW and RICE prioritisation: Mark the legal capability as Must and use a transparent RICE comparison for discretionary features, then review assumptions.",
-    "MoSCoW and RICE prioritisation: Let the loudest stakeholder in the room set the order of the whole backlog each time."
+    "MoSCoW and RICE prioritisation: Let the loudest stakeholder in the room set the order of the whole backlog each time, since their conviction is the clearest signal of what matters."
    ],
    "termsAvailable": [
     "must have",
@@ -813,7 +813,7 @@
    "id": "spms_dfv_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every statement that matches how the lecture presents the three-way framework.",
+   "stem": "Select every statement that is true of testing an idea for desirability, feasibility and viability.",
    "prompt": null,
    "options": [
     "Viability is settled once a working prototype exists",
@@ -836,7 +836,7 @@
    "id": "spms_traceability_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every statement that matches how the lecture traces a need into a requirement.",
+   "stem": "Select every statement that correctly traces a customer need into a project requirement.",
    "prompt": null,
    "options": [
     "Project requirements are written by the customer and passed to engineering unchanged",
@@ -859,7 +859,7 @@
    "id": "spms_value_pricing_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every statement that matches how the lecture treats cost-based pricing.",
+   "stem": "Select every statement that is true of cost-based pricing.",
    "prompt": null,
    "options": [
     "It is the fallback for when you do not know how the product will be deployed, or what it does to the customer's business",
@@ -883,7 +883,7 @@
    "id": "spms_unit_economics_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every business type paired with the unit the lecture assigns it.",
+   "stem": "Select every business type correctly paired with the unit its economics should be measured on.",
    "prompt": null,
    "options": [
     "The unit is whichever one makes the economics look strongest to investors",
@@ -906,7 +906,7 @@
    "id": "spms_alternatives_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select everything that counts as competition on the lecture's definition.",
+   "stem": "Select everything that genuinely competes for this customer's decision.",
    "prompt": null,
    "options": [
     "Manual alternatives such as spreadsheets, consultants, or internal tools",
@@ -930,7 +930,7 @@
    "id": "spms_chasm_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every strategy the lecture gives for crossing the chasm.",
+   "stem": "Select every strategy that helps a product cross from its early market to the mainstream.",
    "prompt": null,
    "options": [
     "Raise the price at launch so mainstream buyers read it as quality",
@@ -977,11 +977,11 @@
    "id": "spms_roadmap_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every statement that matches the lecture's account of a roadmap.",
+   "stem": "Select every statement that is true of a product roadmap.",
    "prompt": null,
    "options": [
     "It fixes the next three to six months and deliberately goes no further",
-    "WhatsApp launched first on iPhone, with the Android version arriving around 2011",
+    "What has been deliberately deferred is as much a part of it as what has been scheduled",
     "It translates product strategy into a series of releases on a time axis",
     "It lists the features to build without ordering them, leaving sequence to the team"
    ],
@@ -1022,7 +1022,7 @@
    "id": "spms_metrics_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every statement that matches why the lecture says metrics matter more in a startup.",
+   "stem": "Select every statement that explains why metrics carry more weight in a startup than in a mature company.",
    "prompt": null,
    "options": [
     "They exist to report performance to investors on a fixed reporting cycle",
@@ -1090,7 +1090,7 @@
    "id": "spms_positioning_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every statement that matches how the lecture separates definition from positioning.",
+   "stem": "Select every statement that correctly separates what a product definition is from what positioning is.",
    "prompt": null,
    "options": [
     "Positioning is written first, and the product vision is derived from it afterwards",
@@ -1135,7 +1135,7 @@
    "id": "spms_priority_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every statement that matches how the lecture uses MoSCoW.",
+   "stem": "Select every statement that is true of how MoSCoW is used.",
    "prompt": null,
    "options": [
     "Won't have is part of the method, and stating it is what makes scope control real",
@@ -1158,7 +1158,7 @@
    "id": "spms_requirements_msq_definition",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every statement that matches the lecture's definition of a requirement.",
+   "stem": "Select every statement that correctly defines a requirement.",
    "prompt": null,
    "options": [
     "It is any feature already present in the product",
@@ -1205,7 +1205,7 @@
    "id": "spms_metrics_msq_types",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every metric paired with what the lecture says it measures.",
+   "stem": "Select every metric correctly paired with what it measures.",
    "prompt": null,
    "options": [
     "Average revenue per user — revenue divided across the user base",
@@ -1227,7 +1227,7 @@
    "id": "spms_buyer_journey_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every failure the lecture names when value is communicated badly.",
+   "stem": "Select every failure that follows from communicating value badly.",
    "prompt": null,
    "options": [
     "Using the wrong channels to carry the message",
@@ -1249,7 +1249,7 @@
    "id": "spms_privacy_msq",
    "type": "msq",
    "caselet": null,
-   "stem": "Select every statement that is correct about the privacy regimes as the lecture presents them.",
+   "stem": "Select every statement that is correct about these data-protection regimes.",
    "prompt": null,
    "options": [
     "GDPR was enacted in May 2018 and became a model for Switzerland, Canada, and Australia",

@@ -64,7 +64,7 @@ window.T6_COURSE = {
     survey_bias: {
       id: "survey_bias", module: 1, source: "BRGSA-M01-L05", node: "Survey bias", pattern: "Application MCQ",
       stem: "Why is ‘Would you buy this?’ a weak primary validation question?",
-      options: ["People cannot understand a product before launch", "Stated intention under social pressure never reliably predicts actual purchase behaviour", "Surveys always require more than a thousand responses before they mean anything", "Only direct competitors are allowed to run such surveys"], answer: 1,
+      options: ["People cannot form a view about a product before they have seen it working in front of them", "Stated intention under social pressure never reliably predicts actual purchase behaviour", "Surveys always require more than a thousand responses before they mean anything", "Only direct competitors are allowed to run such surveys"], answer: 1,
       explanation: "Respondents may be sincere and still mispredict their future behaviour. Surveys are useful tools, but hypothetical willingness is weak purchase evidence.",
       link: "Use surveys to learn language and problems; use behaviour or commitment to validate demand.", repairId: "case_validate"
     },
@@ -80,7 +80,7 @@ window.T6_COURSE = {
       id: "sample_logic", module: 2, source: "BRGSA-M02-L02", node: "Sample-size logic", pattern: "Caselet",
       caselet: "Variant B leads after 18 visitors per arm. The pre-set sample target is 1,000 per arm.",
       stem: "What is the sound next action?",
-      options: ["Stop the test and ship Variant B before the current lead disappears", "Run the test to completion at the pre-calculated sample size", "Delete Variant A from the final written report", "Double-count repeat visitors to finish sooner"], answer: 1,
+      options: ["Stop the test and ship Variant B before the current lead disappears", "Run the test to completion at the pre-calculated sample size", "Delete Variant A from the final written report", "Double-count repeat visitors so the required sample is reached sooner than the traffic allows"], answer: 1,
       explanation: "A tiny early lead is noisy. Checking results before the required sample is reached is peeking, and stopping because a preferred result appeared inflates the false positive rate.",
       link: "The sample size is calculated before the test runs so excitement cannot rewrite it.", repairId: "case_experiment"
     },
@@ -131,7 +131,7 @@ window.T6_COURSE = {
     ltv_early: {
       id: "ltv_early", module: 3, source: "BRGSA-M03-L04", node: "Early LTV", pattern: "Decision MCQ",
       stem: "Why estimate LTV before 18 months of mature data exists?",
-      options: ["To claim a precise figure for future revenue in the plan", "Because CAC never carries decision meaning without an estimate of the value it buys", "To replace retention measurement altogether with a single summary number that is easier to report", "Because all customers turn out to have roughly the same lifetime value anyway in practice"], answer: 1,
+      options: ["To claim a precise figure for future revenue in the plan, which makes the forecast easier to defend", "Because CAC never carries decision meaning without an estimate of the value it buys", "To replace retention measurement altogether with a single summary number that is easier to report", "Because all customers turn out to have roughly the same lifetime value anyway in practice"], answer: 1,
       explanation: "Early LTV is an assumption-bearing estimate, not prophecy. It completes the unit-economics comparison and should be updated as cohorts mature.",
       link: "CAC tells what growth costs; LTV estimates what that cost purchases.", repairId: "case_cohort"
     },
@@ -139,7 +139,7 @@ window.T6_COURSE = {
       id: "scale_iterate_pivot", module: 3, source: "BRGSA-M03-L05", node: "Scale, iterate, or pivot", pattern: "Caselet",
       caselet: "A product has a small but stable retention plateau and acceptable unit economics among one narrow segment. Its broad campaign performs poorly.",
       stem: "Which decision is best supported?",
-      options: ["Scale the broad acquisition campaign immediately across every channel", "Always iterate around the retained segment before considering a full pivot", "Pivot away from the product entirely without doing any segment analysis first", "Ignore retention altogether and optimise for total impressions delivered instead"], answer: 1,
+      options: ["Scale the broad acquisition campaign immediately across every channel, since a retained segment proves the whole market will follow", "Always iterate around the retained segment before considering a full pivot", "Pivot away from the product entirely without doing any segment analysis first", "Ignore retention altogether and optimise for total impressions delivered instead"], answer: 1,
       explanation: "A retained core suggests real value exists somewhere. The next step is to refine segment, message, or experience—not confuse weak breadth with zero value.",
       link: "Scale follows repeatable retention and economics; iterate repairs a link; pivot changes a failed premise.", repairId: "case_cohort"
     },
@@ -185,7 +185,7 @@ window.T6_COURSE = {
       id: "channel_fit", module: 5, source: "BRGSA-M05-L01", node: "Channel-market fit", pattern: "Caselet",
       caselet: "A high-ACV B2B tool sells to heads of sales at 50–200 employee companies. A cheap, broad-interest video channel brings many views but almost no qualified meetings.",
       stem: "What is the core diagnosis?",
-      options: ["The product clearly cannot have found product-market fit yet", "The channel's targeting and output never match the product's economics and ICP", "The high view count is proof enough that the channel is working exactly as intended", "All B2B products require television advertising in order to reach the relevant decision-makers at scale"], answer: 1,
+      options: ["The product clearly cannot have found product-market fit yet, because a working product would perform in any channel", "The channel's targeting and output never match the product's economics and ICP", "The high view count is proof enough that the channel is working exactly as intended", "All B2B products require television advertising in order to reach the relevant decision-makers at scale"], answer: 1,
       explanation: "Channel-market fit asks whether a channel's targeting, control, input, output, time, and economics match the product and ICP.",
       link: "A good product in a mismatched channel can still lose money.", repairId: "mock_channel"
     },
@@ -221,7 +221,7 @@ window.T6_COURSE = {
     habit_loop: {
       id: "habit_loop", module: 6, source: "BRGSA-M06-L01", node: "Habit loops", pattern: "Concept MCQ",
       stem: "Why does the course place habit loops beneath retention, referral, and lifecycle work?",
-      options: ["Because a habit eliminates the need for the product to deliver any value at all", "Because a repeatable cue-action-reward cycle makes return behaviour recur without ever reacquiring the user", "Because every product should be sending daily notifications to its users", "Because habit formation is really just another kind of pricing model"], answer: 1,
+      options: ["Because a habit eliminates the need for the product to deliver any value at all", "Because a repeatable cue-action-reward cycle makes return behaviour recur without ever reacquiring the user", "Because every product should be sending daily notifications to its users, whatever rhythm the underlying need actually has", "Because habit formation is really just another kind of pricing model"], answer: 1,
       explanation: "A habit loop explains recurring behaviour. It must deliver value; repeated prompting without value is not a durable loop.",
       link: "Retention becomes durable when the product's value recurs through a repeatable behaviour cycle.", repairId: "case_network"
     },
@@ -286,7 +286,7 @@ window.T6_COURSE = {
     payback_period: {
       id: "payback_period", module: 7, source: "BRGSA-M07-L05", node: "Payback period", pattern: "Decision MCQ",
       stem: "Two channels have the same CAC. Channel A recovers it in 6 months; Channel B in 18 months, with similar retention risk. Why is A easier to scale?",
-      options: ["It guarantees a higher lifetime value per customer", "Capital returns sooner and can be reinvested with less cash exposure", "It carries no acquisition cost of its own to recover", "Payback period never affects how quickly a company is able to grow at all"], answer: 1,
+      options: ["It guarantees a higher lifetime value per customer, since money returned sooner must mean the customer is worth more", "Capital returns sooner and can be reinvested with less cash exposure", "It carries no acquisition cost of its own to recover", "Payback period never affects how quickly a company is able to grow at all"], answer: 1,
       explanation: "Payback measures how long acquisition cash remains tied up. Faster recovery increases the rate at which the same capital can fund the next cohort.",
       link: "CAC size is incomplete without knowing how quickly gross profit earns it back.", repairId: "mock_payback"
     },
@@ -455,7 +455,7 @@ window.T6_COURSE = {
       id: "mock_motion", module: 7, source: "BRGSA-M07-L06", node: "PLG vs SLG", pattern: "Mock caselet",
       caselet: "A complex enterprise product needs security review, multi-stakeholder approval, custom integration, and a high annual contract.",
       stem: "Which primary motion is better matched?",
-      options: ["Pure self-serve PLG with no human support", "Sales-led growth supported by product experience", "Consumer referral coupons only", "No deliberate acquisition motion of any kind"], answer: 1,
+      options: ["Pure self-serve PLG with no human support", "Sales-led growth supported by product experience", "Consumer referral coupons on their own, with no sales involvement at any deal size", "No deliberate acquisition motion of any kind"], answer: 1,
       explanation: "High complexity, risk, contract value, and stakeholder count favour a sales-led motion. Product can still assist evaluation and adoption.",
       link: "Choose PLG or SLG from buying complexity and economics, not fashion.", repairId: "pipeline_stage"
     },

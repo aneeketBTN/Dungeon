@@ -488,7 +488,7 @@
    "prompt": null,
    "options": [
     "Bullwhip effect: Assume consumer demand moved by the same amount, and read the manufacturer's order swings as a true demand signal.",
-    "Bullwhip effect: Add more safety stock at every stage without addressing the order distortion that created the swings.",
+    "Bullwhip effect: Add more safety stock at every stage without addressing the order distortion that created the swings, since buffering is what inventory is there to do.",
     "Bullwhip effect: Diagnose amplification across incentives, batching, forecast updates and lead times, since only a shared demand signal stops it.",
     "Bullwhip effect: Ask each stage to optimise its own profit without sharing demand data, since local accountability serves the chain best."
    ],
@@ -583,7 +583,7 @@
    "options": [
     "Stockyard location trade-off: Minimise primary line-haul distance while leaving secondary delivery cost out of the comparison entirely.",
     "Stockyard location trade-off: Re-evaluate site locations using the changed cost structure, coverage limit, demand, and minimum throughput together.",
-    "Stockyard location trade-off: Keep the existing sites, because demand locations alone determine where a stockyard belongs.",
+    "Stockyard location trade-off: Keep the existing sites, because demand locations alone determine where a stockyard belongs, whatever has since changed in transport cost or coverage limit.",
     "Stockyard location trade-off: Consolidate into one large site regardless of dealer distance, since fewer sites always mean lower total network cost."
    ],
    "termsAvailable": [

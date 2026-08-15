@@ -713,7 +713,7 @@
    * without any extra scheduling work. */
   var SPMS_MULTI = [
     {concept: "spms_dfv", source: "SPMS-M01-L05", node: "Desirability, feasibility, viability",
-     stem: "Select every statement that matches how the lecture presents the three-way framework.",
+     stem: "Select every statement that is true of testing an idea for desirability, feasibility and viability.",
      options: [
        "Desirability is validated with design skills and empathy for the customer",
        "Feasibility asks whether the product can be built with the technology available today",
@@ -774,7 +774,7 @@
      explanation: "TAM measures the prize, SAM what you are permitted and able to reach, SOM what you can take given who already holds it. They are narrowing constraints, not a headline figure."},
 
     {concept: "spms_chasm", source: "SPMS-M02-L10", node: "Crossing the chasm",
-     stem: "Select every strategy the lecture gives for crossing the chasm.",
+     stem: "Select every strategy that helps a product cross from its early market to the mainstream.",
      options: [
        "Focus on a narrow beachhead market rather than spray and pray",
        "Simplify onboarding and the interface for mainstream users",
@@ -803,7 +803,7 @@
      explanation: "Problem, solution, key metrics, and unfair advantage are the Lean Canvas additions. Customer segments, channels, cost structure, and revenue structure carry across from the Business Model Canvas."},
 
     {concept: "spms_unit_economics", source: "SPMS-M04-L07", node: "Unit economics",
-     stem: "Select every business type paired with the unit the lecture assigns it.",
+     stem: "Select every business type correctly paired with the unit its economics should be measured on.",
      options: [
        "SaaS — one customer or account",
        "Ride-sharing — one ride",
@@ -820,7 +820,7 @@
      explanation: "The unit follows the customer relationship model. SaaS acquires a customer who transacts repeatedly, so the account is the unit; a marketplace relationship is transactional, so the transaction is."},
 
     {concept: "spms_alternatives", source: "SPMS-M05-L02", node: "Competition and alternatives",
-     stem: "Select everything that counts as competition on the lecture's definition.",
+     stem: "Select everything that genuinely competes for this customer's decision.",
      options: [
        "Rival products in the same category",
        "Manual alternatives such as spreadsheets, consultants, or internal tools",
@@ -837,7 +837,7 @@
      explanation: "Customers set the comparison, and in enterprise the most common alternative is inertia — doing nothing at all. Defining competition early and narrowly is named as the biggest mistake."},
 
     {concept: "spms_privacy", source: "SPMS-M08-L05", node: "Privacy by design",
-     stem: "Select every statement that is correct about the privacy regimes as the lecture presents them.",
+     stem: "Select every statement that is correct about these data-protection regimes.",
      options: [
        "GDPR protects any personal data irrespective of its sensitivity",
        "GDPR was enacted in May 2018 and became a model for Switzerland, Canada, and Australia",
@@ -871,7 +871,7 @@
      * paraphrase of it (LAW-49). */
 
     {concept: "spms_positioning", source: "SPMS-M03-L02", node: "Product definition and positioning",
-     stem: "Select every statement that matches how the lecture separates definition from positioning.",
+     stem: "Select every statement that correctly separates what a product definition is from what positioning is.",
      options: [
        "Product definition is what the product does, and is largely internal — the team and its partners build against it",
        "Product positioning is how the product impacts users, and why they should use it",
@@ -888,7 +888,7 @@
      explanation: "Vision comes first, and the other two translate it. Definition is what the product does, written for the team and its partners; positioning is how it impacts users and why they should use it."},
 
     {concept: "spms_value_pricing", source: "SPMS-M04-L02", node: "Value-based pricing",
-     stem: "Select every statement that matches how the lecture treats cost-based pricing.",
+     stem: "Select every statement that is true of cost-based pricing.",
      options: [
        "It prices your own inputs rather than the customer's outcome",
        "It is the method to prefer once the product has a measurable economic value peg",
@@ -906,7 +906,7 @@
      explanation: "Cost-based pricing prices your inputs — hourly billing worked back from salary — and is defensible only in ignorance of deployment and impact. A measurable peg is what lets you price the outcome instead."},
 
     {concept: "spms_buyer_journey", source: "SPMS-M05-L04", node: "Buyer journey communication",
-     stem: "Select every failure the lecture names when value is communicated badly.",
+     stem: "Select every failure that follows from communicating value badly.",
      options: [
        "Communicating too late, after the decision has already been taken",
        "Pricing the product below the nearest competitor",
@@ -940,7 +940,7 @@
      explanation: "The split is action versus quality. Sending is the action and so functional; the 200-millisecond bound is a quality and so non-functional, constraining architecture rather than behaviour."},
 
     {concept: "spms_traceability", source: "SPMS-M06-L08", node: "Requirements traceability",
-     stem: "Select every statement that matches how the lecture traces a need into a requirement.",
+     stem: "Select every statement that correctly traces a customer need into a project requirement.",
      options: [
        "Customer requirements arrive already standardised, because customers state system requirements",
        "Standardising generalises one customer's stated need so more customers of that nature are served by one product",
@@ -958,7 +958,7 @@
      explanation: "Customer requirements arrive as business needs and aspirations. Standardising generalises one customer's need so the product serves many; project requirements are the internal breakdown engineering owns for a release."},
 
     {concept: "spms_priority", source: "SPMS-M07-L01", node: "MoSCoW and RICE prioritisation",
-     stem: "Select every statement that matches how the lecture uses MoSCoW.",
+     stem: "Select every statement that is true of how MoSCoW is used.",
      options: [
        "Won't have is part of the method, and stating it is what makes scope control real",
        "It ranks every item against every other to produce one ordered list",
@@ -998,11 +998,11 @@
      explanation: "Must have covers what the product cannot function without — booking, payments, GPS. Ratings are should have: valuable, and not load-bearing."},
 
     {concept: "spms_roadmap", source: "SPMS-M07-L04", node: "Product roadmap",
-     stem: "Select every statement that matches the lecture's account of a roadmap.",
+     stem: "Select every statement that is true of a product roadmap.",
      options: [
        "It fixes the next three to six months and deliberately goes no further",
        "It translates product strategy into a series of releases on a time axis",
-       "WhatsApp launched first on iPhone, with the Android version arriving around 2011",
+       "What has been deliberately deferred is as much a part of it as what has been scheduled",
        "It lists the features to build without ordering them, leaving sequence to the team"
      ], answers: [1, 2],
      wrong: {
@@ -1042,7 +1042,7 @@
      explanation: "The evolution is deliberate ordering, not accident: the team launched on iPhone knowing many users were on Android. A roadmap is a smart sequence for developing, releasing, and evolving a solution."},
 
     {concept: "spms_requirements", variant: "definition", source: "SPMS-M06-L05", node: "Functional and quality requirements",
-     stem: "Select every statement that matches the lecture's definition of a requirement.",
+     stem: "Select every statement that correctly defines a requirement.",
      options: [
        "It is only a capability a customer has explicitly asked for",
        "It is any feature already present in the product",
@@ -1063,7 +1063,7 @@
      explanation: "A requirement is a wish or need for a future capability, or a condition set by standards, contracts, or regulations. It is classified as an action or a quality, not by who builds it."},
 
     {concept: "spms_metrics", source: "SPMS-M08-L03", node: "Actionable product metrics",
-     stem: "Select every statement that matches why the lecture says metrics matter more in a startup.",
+     stem: "Select every statement that explains why metrics carry more weight in a startup than in a mature company.",
      options: [
        "They exist to reduce uncertainty as far as it can be reduced",
        "Top line, bottom line, and net promoter score assume a steadier state than an early product has",
@@ -1081,7 +1081,7 @@
      explanation: "Metrics exist to reduce uncertainty and improve decisions with the information available. Standard performance measures assume a steadier state than an early-stage product has, which is why the startup case differs."},
 
     {concept: "spms_metrics", variant: "types", source: "SPMS-M08-L03", node: "Actionable product metrics",
-     stem: "Select every metric paired with what the lecture says it measures.",
+     stem: "Select every metric correctly paired with what it measures.",
      options: [
        "Average revenue per user — revenue divided across the user base",
        "Gross margin — profitability measured after all below-the-line costs",

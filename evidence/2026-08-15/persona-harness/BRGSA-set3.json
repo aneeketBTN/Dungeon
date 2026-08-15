@@ -113,7 +113,7 @@
     "Stop the test and ship Variant B before the current lead disappears",
     "Run the test to completion at the pre-calculated sample size",
     "Delete Variant A from the final written report",
-    "Double-count repeat visitors to finish sooner"
+    "Double-count repeat visitors so the required sample is reached sooner than the traffic allows"
    ],
    "termsAvailable": [
     "sample size",
@@ -197,7 +197,7 @@
    "stem": "Which decision is best supported?",
    "prompt": null,
    "options": [
-    "Scale the broad acquisition campaign immediately across every channel",
+    "Scale the broad acquisition campaign immediately across every channel, since a retained segment proves the whole market will follow",
     "Pivot away from the product entirely without doing any segment analysis first",
     "Ignore retention altogether and optimise for total impressions delivered instead",
     "Always iterate around the retained segment before considering a full pivot"
@@ -284,7 +284,7 @@
    "stem": "Why estimate LTV before 18 months of mature data exists?",
    "prompt": null,
    "options": [
-    "To claim a precise figure for future revenue in the plan",
+    "To claim a precise figure for future revenue in the plan, which makes the forecast easier to defend",
     "To replace retention measurement altogether with a single summary number that is easier to report",
     "Because CAC never carries decision meaning without an estimate of the value it buys",
     "Because all customers turn out to have roughly the same lifetime value anyway in practice"
@@ -437,7 +437,7 @@
    "options": [
     "Because a habit eliminates the need for the product to deliver any value at all",
     "Because a repeatable cue-action-reward cycle makes return behaviour recur without ever reacquiring the user",
-    "Because every product should be sending daily notifications to its users",
+    "Because every product should be sending daily notifications to its users, whatever rhythm the underlying need actually has",
     "Because habit formation is really just another kind of pricing model"
    ],
    "termsAvailable": [
@@ -516,9 +516,9 @@
     {
      "label": "Choose the decision",
      "options": [
-      "The product clearly cannot have found product-market fit yet. (Channel fit)",
       "All B2B products require television advertising in order to reach the relevant decision-makers at scale. (Channel fit)",
       "The high view count is proof enough that the channel is working exactly as intended. (Channel fit)",
+      "The product clearly cannot have found product-market fit yet, because a working product would perform in any channel. (Channel fit)",
       "Score candidate channels against the product's economics and timing constraints before spending, and reject one that fails any single dimension. (Channel fit)"
      ]
     },
@@ -551,10 +551,10 @@
     {
      "label": "Choose the decision",
      "options": [
-      "Pivot away from the product entirely without doing any segment analysis first. (CAC and LTV)",
+      "Scale the broad acquisition campaign immediately across every channel, since a retained segment proves the whole market will follow. (CAC and LTV)",
       "Apply the joining test — does one more user make the product more valuable to existing users — and run the referral playbook when the answer is no. (CAC and LTV)",
       "Estimate LTV from the cohort behaviour already visible, compare it with CAC segment by segment, and let that ratio decide which segment to acquire more of. (CAC and LTV)",
-      "Ignore retention altogether and optimise for total impressions delivered instead. (CAC and LTV)"
+      "Pivot away from the product entirely without doing any segment analysis first. (CAC and LTV)"
      ]
     },
     {

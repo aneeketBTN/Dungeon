@@ -27,7 +27,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const dir = process.argv[2] || path.join(here, "..", "evidence", "2026-08-15", "persona-harness");
+/* Flags are not the harness directory. `process.argv[2]` used to be taken as the path,
+   so `--gate` became a directory name, every export lookup missed, and the gate
+   reported a pass over a report containing nothing at all — LAW-67, and the second
+   time this exact shape has appeared in a gate written to catch it. */
+const dir = process.argv.slice(2).filter((a) => !a.startsWith("--"))[0] ||
+  path.join(here, "..", "evidence", "2026-08-15", "persona-harness");
 
 const ABSOLUTES = /\b(only|all|every|always|never|entirely|automatically|simply|any|no other|nothing else)\b/i;
 const UNETHICAL = /\b(hide|hiding|delete|deleting|ignore|ignoring|double-count|conceal|omit|misreport)\b/i;
@@ -45,6 +50,28 @@ const STRATEGIES = {
     const lengths = q.options.map(words);
     const max = Math.max(...lengths);
     return q.options.map((_, i) => i).filter((i) => lengths[i] === max);
+  },
+  /* "Pick the second-longest."
+   *
+   * Added 2026-08-15, and it is the rule that pays best on this bank. It exists
+   * because the defence against `longest` created it: `comparableWrong` selects
+   * distractors closest in length to the correct answer, which was the right move
+   * against "pick the longest" — and it clusters the four lengths so tightly that the
+   * answer lands one rank below the top far more often than chance. Defeating one
+   * shape cue manufactured its neighbour, and nothing was watching that rank.
+   *
+   * `lengthRankShares` in the bank validator counts the answer's exact position in an
+   * ascending sort. That is not what a candidate can execute: where several options
+   * tie on length they cannot tell which is "second", so this resolves ties by
+   * guessing among them, exactly as every other rule here does. The two numbers differ
+   * by up to 10 points and this one is the honest one. */
+  secondLongest: (q) => {
+    const lengths = q.options.map(words);
+    const max = Math.max(...lengths);
+    const below = lengths.filter((l) => l < max);
+    if (!below.length) return q.options.map((_, i) => i);
+    const second = Math.max(...below);
+    return q.options.map((_, i) => i).filter((i) => lengths[i] === second);
   },
   fixedB: (q) => (q.options.length > 1 ? [1] : [0]),
   onTopic: (q) => {
@@ -79,8 +106,30 @@ const STRATEGIES = {
       const on = keep.filter((i) => q.options[i].toLowerCase().includes(name));
       if (on.length) keep = on;
     }
+    /* Length is the last thing a person applies, after the content rules have already
+       narrowed the field — so it breaks the tie here rather than deciding first. */
+    if (keep.length > 1) {
+      const lengths = keep.map((i) => words(q.options[i]));
+      const max = Math.max(...lengths);
+      const below = lengths.filter((l) => l < max);
+      if (below.length) {
+        const second = Math.max(...below);
+        const narrowed = keep.filter((i) => words(q.options[i]) === second);
+        if (narrowed.length) keep = narrowed;
+      }
+    }
     return keep;
   }
+};
+
+/* Thresholds, and the gate that holds them.
+ *
+ * §6 of the overhaul brief sets these; `secondLongest` is new and takes the same 30%
+ * the other shape rules take, because it is the same kind of rule and a candidate can
+ * execute it just as easily. `chance` is excluded — it is the baseline, not a rule. */
+const LIMITS = {
+  longest: 30, secondLongest: 30, fixedB: 30, onTopic: 32,
+  noAbsolutes: 30, ethical: 35, combined: 32
 };
 
 /* Every seeded set that has been exported, not just the first.
@@ -147,4 +196,31 @@ for (const subject of ["SPMS", "BRGSA", "SCLM", "IBM"]) {
   };
 }
 
+report.limits = LIMITS;
+
 console.log(JSON.stringify(report, null, 2));
+
+/* A report with no subjects in it is not a clean bank, it is a missing input. Refuse
+   rather than let anything downstream read silence as a pass (LAW-67). */
+const measured = Object.keys(report).filter((k) => k !== "limits");
+if (!measured.length) {
+  console.error(`\nNo persona exports found in ${dir}. Run: node tools/export-persona-run.mjs`);
+  process.exit(1);
+}
+
+if (process.argv.includes("--gate")) {
+  const over = [];
+  for (const [subject, row] of Object.entries(report)) {
+    if (subject === "limits" || !row.meanPercentOfMcqMarks) continue;
+    for (const [rule, limit] of Object.entries(LIMITS)) {
+      const value = row.meanPercentOfMcqMarks[rule];
+      if (typeof value === "number" && value > limit) over.push(`${subject} ${rule} ${value}% > ${limit}%`);
+    }
+  }
+  if (over.length) {
+    console.error("\nT3 FAILED — a mechanical rule pays above its limit on the mock paper:");
+    for (const line of over) console.error(`  × ${line}`);
+    process.exit(1);
+  }
+  console.error("\nT3 passed: every mechanical rule at or under its limit, mean of sets 1-3.");
+}

@@ -550,7 +550,7 @@
    "stem": "What is the best interpretation or next step?",
    "prompt": null,
    "options": [
-    "Strategic fit: Add more product variety and same-day options without changing transport, batch sizes, or supplier selection.",
+    "Strategic fit: Add more product variety and same-day options without changing transport, batch sizes, or supplier selection, because the promise made to the customer is a marketing decision.",
     "Strategic fit: Measure suppliers only on unit purchase price and ignore availability, because the lowest landed cost defines a fit supply chain.",
     "Strategic fit: Redesign the chain for the promised responsiveness or change the promise, because performance always fails when the two diverge.",
     "Strategic fit: Keep both strategies unchanged, because each function is already locally efficient on its own budget and targets."
@@ -716,7 +716,7 @@
    "options": [
     "Stockyard location trade-off: Minimise primary line-haul distance while leaving secondary delivery cost out of the comparison entirely.",
     "Stockyard location trade-off: Re-evaluate site locations using the changed cost structure, coverage limit, demand, and minimum throughput together.",
-    "Stockyard location trade-off: Keep the existing sites, because demand locations alone determine where a stockyard belongs.",
+    "Stockyard location trade-off: Keep the existing sites, because demand locations alone determine where a stockyard belongs, whatever has since changed in transport cost or coverage limit.",
     "Stockyard location trade-off: Consolidate into one large site regardless of dealer distance, since fewer sites always mean lower total network cost."
    ],
    "termsAvailable": [
@@ -968,7 +968,7 @@
    "stem": "What is the best interpretation or next step?",
    "prompt": null,
    "options": [
-    "Economic order quantity: Order a full year's demand in one lot, because a single ordering charge always beats twelve smaller ones.",
+    "Economic order quantity: Order a full year's demand in one lot, because a single ordering charge always beats twelve smaller ones whatever the holding cost turns out to be.",
     "Economic order quantity: Use a newsvendor critical ratio to set the recurring order size, since both models choose a quantity under cost pressure.",
     "Economic order quantity: Treat the EOQ quantity as the reorder point itself, so replenishment starts when stock falls to that number.",
     "Economic order quantity: Use EOQ for the lot size, and never let it answer the separate question of when replenishment must start."
@@ -992,7 +992,7 @@
    "prompt": null,
    "options": [
     "Bullwhip effect: Assume consumer demand moved by the same amount, and read the manufacturer's order swings as a true demand signal.",
-    "Bullwhip effect: Add more safety stock at every stage without addressing the order distortion that created the swings.",
+    "Bullwhip effect: Add more safety stock at every stage without addressing the order distortion that created the swings, since buffering is what inventory is there to do.",
     "Bullwhip effect: Diagnose amplification across incentives, batching, forecast updates and lead times, since only a shared demand signal stops it.",
     "Bullwhip effect: Ask each stage to optimise its own profit without sharing demand data, since local accountability serves the chain best."
    ],

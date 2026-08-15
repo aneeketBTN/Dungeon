@@ -291,7 +291,7 @@
     {
      "label": "Choose the decision",
      "options": [
-      "Launch immediately, because technical feasibility is itself proof that real demand exists. (Desirability, feasibility, viability)",
+      "Launch immediately, because the team proved it can be built, and technical feasibility is itself the evidence that customers will want it. (Desirability, feasibility, viability)",
       "Reduce the engineering scope even though feasibility has already been established for this particular build. (Desirability, feasibility, viability)",
       "Treat desirability as the missing test, since a product survives only where all three checks overlap. (Desirability, feasibility, viability)",
       "Call it viable and assume customers will learn to want it once they have seen it working. (Desirability, feasibility, viability)"
