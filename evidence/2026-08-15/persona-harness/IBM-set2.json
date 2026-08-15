@@ -2,7 +2,7 @@
  "subject": "IBM",
  "subjectTitle": "Inclusive Business Model",
  "set": 2,
- "digest": "2a641500",
+ "digest": "6fbb8998",
  "instructions": {
   "sat": "23 August, 09:00–11:00",
   "minutes": 120,
@@ -25,6 +25,130 @@
    "number": 1,
    "section": "A",
    "marks": 10,
+   "id": "ibm_exam_farm_collective",
+   "type": "short-answer",
+   "caselet": "A farmer producer organisation has registered 2,100 members across nine villages in three years, funded by a grant that is measured on membership numbers and ends in seven months. Members sell about 8% of their produce through it; the rest goes to the same village traders as before, at roughly 18% below the price the organisation has negotiated with a single institutional buyer. That buyer takes graded produce only, and the organisation has no grading shed, so 31% of what it does aggregate is rejected and sold back into the local market at a loss. Roughly 40 tonnes a month of crop residue is burned in the fields; a nearby enterprise buys residue for briquetting at ₹2,100 a tonne but requires baled, dry material collected at a single point. Sixty members have asked for training in grading and post-harvest handling, and there is no programme. The board is proposing to spend the remaining grant on a membership drive to reach 3,000 before the funding closes.",
+   "stem": "Write the recommendation on how the remaining grant should be spent. Address the membership proposal directly.",
+   "prompt": null,
+   "rubricPointCount": 5,
+   "termsAvailable": [
+    "FPO",
+    "aggregation",
+    "bargaining power",
+    "waste picker",
+    "informal sector",
+    "social security",
+    "kerosene",
+    "doorstep finance",
+    "doorstep servicing"
+   ]
+  },
+  {
+   "number": 2,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_exam_lender_growth",
+   "type": "short-answer",
+   "caselet": "A microfinance institution has grown its borrower base from 41,000 to 96,000 in two years. Loan officers each now manage 610 borrowers against a design figure of 320, and group meetings have moved from weekly to monthly. Of borrowers taking a third-cycle loan, 24% are recorded as holding a loan from at least one other lender, up from 6%. Portfolio-at-risk over 30 days stands at 1.1%, which the chief executive cites as evidence that lending quality is intact. Field officers report that repayments are increasingly made by the group rather than the individual, and three officers have resigned citing collection pressure. An impact investor has offered ₹40 crore at terms requiring 35% annual borrower growth for three years. A separate offer, at a lower return expectation, requires borrower-level outcome reporting and caps growth at 15%.",
+   "stem": "Write the recommendation on which offer to take and what to change. The chief executive's reading of portfolio quality should be addressed explicitly.",
+   "prompt": null,
+   "rubricPointCount": 5,
+   "termsAvailable": [
+    "collateral",
+    "credit history",
+    "adverse selection",
+    "moral hazard",
+    "MFI",
+    "default",
+    "non-performing asset",
+    "impact investing",
+    "risk-adjusted",
+    "social stock exchange",
+    "ESG",
+    "social business",
+    "supply chain"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_exam_care_replication",
+   "type": "short-answer",
+   "caselet": "A maternal-care provider runs a 60-bed hospital in a district town, delivering about 240 births a month at ₹9,400 against ₹31,000 at the nearest private alternative. Its two obstetricians spend roughly 20% of their time on deliveries and the rest on antenatal checks, counselling and discharge paperwork; 14 trained nurse-midwives are assigned mainly to ward duties. Waiting time for an antenatal appointment is three weeks. The provider opened three further units in nearby districts, each staffed by recruiting one obstetrician locally and replicating the building layout. Two are running at under a third of capacity and one has closed. A review finds that in the original town the provider had spent four years building referral relationships with 60 village health workers who account for 78% of its admissions; in the new districts no such network was built. A separate proposal would open a small rural back-office unit employing local graduates to handle scheduling, records and insurance claims for all four sites.",
+   "stem": "Write the assessment of why the replication failed and what should be done now, including a recommendation on the back-office proposal.",
+   "prompt": null,
+   "rubricPointCount": 5,
+   "termsAvailable": [
+    "semi-urban",
+    "cross-subsidy",
+    "cataract",
+    "ophthalmologist",
+    "cross-subsidize",
+    "business process outsourcing",
+    "franchisee",
+    "migration",
+    "diversification",
+    "center partner",
+    "smallholder"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_exam_clinic_network",
+   "type": "short-answer",
+   "caselet": "A diagnostics chain opened twelve collection centres in low-income urban wards, pricing a basic blood panel at ₹190 against the ₹650 charged in the city centre. Volumes reached 38% of the break-even level and have not moved in eleven months. A survey of 400 households in the catchment finds that 71% have heard of the centres, 62% say the price is affordable, and 9% have used one. Of those who have not, the most common reasons given are that results take four days and must be collected in person, and that the centres open 10:00 to 16:00, inside the hours most respondents are at work. The chain's impact report states that patients using its centres are diagnosed earlier than the district average, and the board is citing this to justify opening eight more. The chain's own laboratory runs at 34% of capacity, and a corporate client has offered a contract for employee health screening at full commercial rates that would use the idle capacity.",
+   "stem": "Write the assessment the board should have before approving the eight new centres. Deal with the impact claim directly, and say what should change.",
+   "prompt": null,
+   "rubricPointCount": 5,
+   "termsAvailable": [
+    "inclusive business",
+    "primary objective",
+    "financially sustainable",
+    "bottom of the pyramid",
+    "market forces",
+    "multinational",
+    "sachet",
+    "value sharing",
+    "financially viable",
+    "public goods",
+    "output",
+    "outcome",
+    "theory of change",
+    "control group",
+    "treatment group"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_case_lender_pressure",
+   "type": "short-answer",
+   "caselet": "A microfinance institution has grown disbursements 140% in two years and reports portfolio-at-risk of 1.2%. Field agents earn 60% of variable pay per additional loan disbursed, with nothing tied to repayment. A sample of 500 borrowers finds the median household servicing four concurrent microloans, 38% having used their most recent loan to repay an existing one, and total debt service at 71% of reported household income. In the institution's original districts, lending ran through self-formed groups of five with staged disbursement and weekly village meetings, and repayment held at 97% over eighteen months; in the new districts the group label was kept but the meetings and staged release were dropped to lower cost per loan. An impact fund is preparing to invest, expects a 9% return, and has asked what the institution measures beyond disbursement volume.",
+   "stem": "Write the assessment the impact fund's investment committee needs before it commits. State whether the institution should keep growing at its current rate.",
+   "prompt": null,
+   "rubricPointCount": 5,
+   "termsAvailable": [
+    "collateral",
+    "credit history",
+    "adverse selection",
+    "moral hazard",
+    "MFI",
+    "default",
+    "non-performing asset",
+    "impact investing",
+    "risk-adjusted",
+    "social stock exchange",
+    "ESG"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 10,
    "id": "ibm_case_hospital_growth",
    "type": "short-answer",
    "caselet": "A hospital group runs six 200-bed tertiary facilities in three large cities, with cardiac and oncology units at 61% occupancy. Its records show 44% of admissions travel more than 90 km, most for deliveries, dialysis and routine surgery requiring no tertiary equipment; a normal delivery costs such a patient about ₹38,000 including travel and lost wages. A proposal would open twelve 40-bed centres in semi-urban towns handling primary and secondary care only, at roughly ₹11,000 per delivery. Separately, the group's four surgeons each spend about 70% of their working day on counselling, measurement and post-operative dressing, with a nine-week waiting list; 22 trained paramedical staff are assigned mostly to reception. The group's impact report states that patients treated at its facilities earn more two years later than those who were not, and the board is citing this to justify expansion.",
@@ -45,7 +169,7 @@
    ]
   },
   {
-   "number": 2,
+   "number": 7,
    "section": "A",
    "marks": 10,
    "id": "ibm_case_energy_offer",
@@ -70,7 +194,7 @@
    ]
   },
   {
-   "number": 3,
+   "number": 8,
    "section": "A",
    "marks": 10,
    "id": "ibm_case_rural_scale",
@@ -92,110 +216,7 @@
    ]
   },
   {
-   "number": 4,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_case_lender_pressure",
-   "type": "short-answer",
-   "caselet": "A microfinance institution has grown disbursements 140% in two years and reports portfolio-at-risk of 1.2%. Field agents earn 60% of variable pay per additional loan disbursed, with nothing tied to repayment. A sample of 500 borrowers finds the median household servicing four concurrent microloans, 38% having used their most recent loan to repay an existing one, and total debt service at 71% of reported household income. In the institution's original districts, lending ran through self-formed groups of five with staged disbursement and weekly village meetings, and repayment held at 97% over eighteen months; in the new districts the group label was kept but the meetings and staged release were dropped to lower cost per loan. An impact fund is preparing to invest, expects a 9% return, and has asked what the institution measures beyond disbursement volume.",
-   "stem": "Write the assessment the impact fund's investment committee needs before it commits. State whether the institution should keep growing at its current rate.",
-   "prompt": null,
-   "rubricPointCount": 5,
-   "termsAvailable": [
-    "collateral",
-    "credit history",
-    "adverse selection",
-    "moral hazard",
-    "MFI",
-    "default",
-    "non-performing asset",
-    "impact investing",
-    "risk-adjusted",
-    "social stock exchange",
-    "ESG"
-   ]
-  },
-  {
-   "number": 5,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_inclusive_case_answer",
-   "type": "short-answer",
-   "caselet": "Sanjeevani Clinics runs eleven centres in low-income urban districts. A consultation costs ₹120 against ₹600 at the nearest private hospital, and 78% of its patients earn under ₹15,000 a month. Fees cover operating costs and fund two new centres a year, while a philanthropic grant covered only the original fit-out. A consultant now proposes adding a cosmetic dermatology line at ₹4,000 a visit, arguing the margin would let the group expand faster. The existing centres already run at 94% capacity with a three-day wait.",
-   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-   "prompt": null,
-   "rubricPointCount": 3,
-   "termsAvailable": [
-    "inclusive business",
-    "primary objective",
-    "financially sustainable"
-   ]
-  },
-  {
-   "number": 6,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_vaatsalya_case_answer",
-   "type": "short-answer",
-   "caselet": "A hospital group runs six 200-bed tertiary facilities in three large cities, whose cardiac and oncology units sit at 61% occupancy. Its own records show 44% of admissions travel more than 90 km, most for deliveries, dialysis and routine surgery needing no tertiary equipment. A normal delivery costs the patient about ₹38,000. A proposal on the table is a network of 40-bed centres in semi-urban towns handling primary and secondary care only, at an estimated ₹11,000 per delivery and staffed by locally recruited clinicians.",
-   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-   "prompt": null,
-   "rubricPointCount": 3,
-   "termsAvailable": [
-    "semi-urban",
-    "cross-subsidy"
-   ]
-  },
-  {
-   "number": 7,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_aravind_case_answer",
-   "type": "short-answer",
-   "caselet": "An eye hospital has four ophthalmologists and a nine-week cataract waiting list. A time study finds each surgeon spends 71% of the working day on counselling, vision measurement, dilation checks and post-operative dressing, and 29% operating. Complication rates sit at the national benchmark and the trustees have said that must not move. The hospital already employs 22 trained paramedical staff, mostly assigned to reception. A consultant proposes recruiting two more surgeons, at a cost current surpluses cannot fund.",
-   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-   "prompt": null,
-   "rubricPointCount": 3,
-   "termsAvailable": [
-    "cataract",
-    "ophthalmologist",
-    "cross-subsidize"
-   ]
-  },
-  {
-   "number": 8,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_waste_case_answer",
-   "type": "short-answer",
-   "caselet": "Temples in one city send about 8 tonnes of flower waste a week to landfill, where it decomposes into a local waterway. A venture collects it free, converts it into incense and natural dyes, and employs 60 women from nearby low-income settlements at ₹11,000 a month against the ₹6,500 they earned in informal work. Retail buyers pay a premium for the provenance and current output sells out. Scaling to 20 tonnes needs a second site and either mechanised sorting, which would halve the workforce, or 60 more women hired and trained.",
-   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-   "prompt": null,
-   "rubricPointCount": 3,
-   "termsAvailable": [
-    "waste picker",
-    "informal sector"
-   ]
-  },
-  {
    "number": 9,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_impact_investing_case_answer",
-   "type": "short-answer",
-   "caselet": "A fund raises ₹500 crore for affordable housing. It sets a target that 70% of units go to households below a stated income line, requires quarterly reporting on who actually occupies them, and expects a 9% return so the capital can be recycled into further projects. One developer in the pipeline offers 16% but will commit to only 25% of units below the income line, and proposes reporting sales value rather than buyer income. The investment committee is split, noting the fund's headline return currently sits below its target.",
-   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
-   "prompt": null,
-   "rubricPointCount": 3,
-   "termsAvailable": [
-    "impact investing",
-    "risk-adjusted",
-    "social stock exchange",
-    "ESG"
-   ]
-  },
-  {
-   "number": 10,
    "section": "A",
    "marks": 10,
    "id": "ibm_grameen_case_answer",
@@ -209,6 +230,22 @@
     "credit history",
     "adverse selection",
     "moral hazard"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_replication_case_answer",
+   "type": "short-answer",
+   "caselet": "A rural services company runs eight centres it owns and staffs directly, and holds requests from 60 towns. It has ₹4 crore of capital against ₹90 lakh needed per owned centre, and nobody who knows hiring conditions in those towns. Two pilots run by local entrepreneurs who funded their own fit-out reached break-even in seven months against eleven for owned centres. One of those pilots missed the group's training standard, and a client audit flagged inconsistent output quality across the network.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "diversification",
+    "center partner",
+    "smallholder"
    ]
   }
  ]

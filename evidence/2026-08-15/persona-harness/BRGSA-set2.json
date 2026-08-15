@@ -2,7 +2,7 @@
  "subject": "BRGSA",
  "subjectTitle": "Business Research and Growth Systems Architecture",
  "set": 2,
- "digest": "971806fc",
+ "digest": "1e9121d0",
  "instructions": {
   "sat": "22 August, 13:00–15:00",
   "minutes": 120,
@@ -37,296 +37,16 @@
    "number": 1,
    "section": "A",
    "marks": 2,
-   "id": "type_two",
+   "id": "brgsa_m3_cohort_cla2",
    "type": "mcq",
-   "caselet": null,
-   "stem": "A useful pricing change genuinely improves conversion, but an underpowered test concludes that nothing changed. Which error is this?",
+   "caselet": "A subscription product reports that overall month-3 retention has held at 38% for a year, and the team is treating the product as stable. Split by signup month, the January cohort retained 47% at month three, April 39%, July 33% and October 28%. Monthly signups have roughly tripled over the same year.",
+   "stem": "What is the most defensible reading?",
    "prompt": null,
    "options": [
-    "A Type I error, a false positive",
-    "No error because the result was not significant",
-    "Survivorship bias alone, with no testing error involved",
-    "A Type II error, a false negative"
-   ],
-   "termsAvailable": [
-    "Type I error",
-    "Type II error",
-    "false positive",
-    "false negative",
-    "significance level"
-   ]
-  },
-  {
-   "number": 2,
-   "section": "A",
-   "marks": 2,
-   "id": "brgsa_m5_channel_cla1",
-   "type": "mcq",
-   "caselet": "A team spends ₹2,00,000 on a paid channel. Their average contract value is ₹1,000 a month and their acquisition cost on that channel lands near ₹8,000.",
-   "stem": "What should the team do?",
-   "prompt": null,
-   "options": [
-    "Stop the channel on price-point mismatch, because that arithmetic is settled before any creative decision is taken.",
-    "Keep the channel and raise the price, since a contract worth more would make the same acquisition cost acceptable.",
-    "Improve the creative and the targeting first, since a high acquisition cost usually reflects a weak campaign rather than the channel.",
-    "Continue for a full quarter, because paid channels need time before their true cost per customer can be judged."
-   ],
-   "termsAvailable": [
-    "average contract value",
-    "ACV",
-    "channel market fit"
-   ]
-  },
-  {
-   "number": 3,
-   "section": "A",
-   "marks": 2,
-   "id": "type_one",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "A test declares a new onboarding flow better when there is actually no real improvement. Which error occurred?",
-   "prompt": null,
-   "options": [
-    "Cohort decay, where a group's behaviour drifts across the whole measurement period afterwards",
-    "A sampling frame problem, where the wrong population was measured from the start",
-    "Type II: a false negative, missing a real effect that was actually there",
-    "Type I: a false positive, declaring an effect that is not there"
-   ],
-   "termsAvailable": [
-    "Type I error",
-    "Type II error",
-    "false positive",
-    "false negative",
-    "significance level"
-   ]
-  },
-  {
-   "number": 4,
-   "section": "A",
-   "marks": 2,
-   "id": "null_logic",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "For an A/B landing-page test, which plain-language null hypothesis is best formed?",
-   "prompt": null,
-   "options": [
-    "There is never a meaningful difference between A and B until the evidence is strong enough to reject that position",
-    "Both variants must receive an identical number of conversions before the test result can be considered valid at all",
-    "Variant B will definitely win once enough traffic has been sent through both of the pages being compared",
-    "The team prefers Variant A and should state that preference before the test begins"
-   ],
-   "termsAvailable": [
-    "null hypothesis",
-    "alternative hypothesis",
-    "reject the null",
-    "falsifiable"
-   ]
-  },
-  {
-   "number": 5,
-   "section": "A",
-   "marks": 2,
-   "id": "brgsa_m7_pricing_cla1",
-   "type": "mcq",
-   "caselet": "Two companies each average $10,000 in annual revenue per account. One charges a flat rate; the other charges per seat. A year later the second has grown revenue per account substantially and the first has not, with no change in either customer base.",
-   "stem": "What explains the difference?",
-   "prompt": null,
-   "options": [
-    "The per-seat company raised its list price during the year, which the flat-rate company chose not to do.",
-    "The structures make different promises about growth: per-seat revenue grows as a customer's team grows, flat rate does not.",
-    "The per-seat company's customers were larger organisations to begin with, so the same structure produced more revenue from each of them.",
-    "The flat-rate company has better retention, which it bought by holding its price steady through the year."
-   ],
-   "termsAvailable": [
-    "pricing structure",
-    "tiered",
-    "seat",
-    "free tier"
-   ]
-  },
-  {
-   "number": 6,
-   "section": "A",
-   "marks": 2,
-   "id": "cac_scope",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "A team spends ₹3,00,000 on a channel and acquires 120 paying customers attributable to it. What is channel CAC?",
-   "prompt": null,
-   "options": [
-    "₹2,500",
-    "₹25,000",
-    "₹3,600",
-    "₹250"
-   ],
-   "termsAvailable": [
-    "blended CAC",
-    "channel CAC",
-    "cohort-adjusted"
-   ]
-  },
-  {
-   "number": 7,
-   "section": "A",
-   "marks": 2,
-   "id": "retention_shape",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "A retention curve falls sharply, then settles into a stable plateau. What is the most useful interpretation?",
-   "prompt": null,
-   "options": [
-    "Acquisition cost must therefore be close to zero for this product to work",
-    "Every user will eventually churn no matter what the product does",
-    "The product should be scaled immediately, regardless of what the unit economics say",
-    "Early activation is weak, but the curve flattens, so a retained core always finds durable value"
-   ],
-   "termsAvailable": [
-    "floor",
-    "slow bleed",
-    "improving cohorts"
-   ]
-  },
-  {
-   "number": 8,
-   "section": "A",
-   "marks": 2,
-   "id": "retention_unit",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "For a team-based B2B SaaS product, which retention unit is usually more decision-useful than counting individual logins alone?",
-   "prompt": null,
-   "options": [
-    "The count of social media followers",
-    "The paying account or team",
-    "The total number of website visitors",
-    "Every employee working in the addressable market"
-   ],
-   "termsAvailable": [
-    "champion",
-    "B2B retention",
-    "champion turnover"
-   ]
-  },
-  {
-   "number": 9,
-   "section": "A",
-   "marks": 2,
-   "id": "stage_fit",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "An early startup has no repeatable channel and uncertain retention. Which move fits its stage?",
-   "prompt": null,
-   "options": [
-    "Maximise automation everywhere before making direct customer contact",
-    "Optimise quarterly media efficiency at scale across paid channels",
-    "Build a large specialist growth organisation immediately",
-    "Run founder-close, high-learning tests to find repeatability"
-   ],
-   "termsAvailable": [
-    "payback period",
-    "early stage company",
-    "scale stage company"
-   ]
-  },
-  {
-   "number": 10,
-   "section": "A",
-   "marks": 2,
-   "id": "mock_channel",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "A channel reaches the ICP precisely but takes 14 months to yield results; the startup has three months of runway. Which channel-fit property fails most directly?",
-   "prompt": null,
-   "options": [
-    "The precision of its targeting",
-    "Product desirability itself, by the course's own definition of it",
-    "The clarity of the message being sent out alone",
-    "Time to result relative to the business constraint"
-   ],
-   "termsAvailable": [
-    "average contract value",
-    "ACV",
-    "channel market fit"
-   ]
-  },
-  {
-   "number": 11,
-   "section": "A",
-   "marks": 2,
-   "id": "outbound_system",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "Which change most clearly turns cold email activity into an outbound system?",
-   "prompt": null,
-   "options": [
-    "Defining ICP, list quality, sequence and qualification as one repeatable flow, never as separate tactics",
-    "Counting every single email open as a genuine sales opportunity worth adding to the pipeline",
-    "Sending a much larger volume of the same generic messages out to everyone every single week",
-    "Changing the email copy every single day without ever stating a hypothesis to test first"
-   ],
-   "termsAvailable": [
-    "trigger",
-    "reply engine",
-    "reply rate",
-    "multi-touch"
-   ]
-  },
-  {
-   "number": 12,
-   "section": "A",
-   "marks": 2,
-   "id": "mock_growth",
-   "type": "mcq",
-   "caselet": "Paid traffic converts, but new users fail activation and churn. Marketing hits its lead target; product ships features; neither owns the transition.",
-   "stem": "What would a growth diagnosis do first?",
-   "prompt": null,
-   "options": [
-    "Rename the marketing team as the growth team",
-    "Buy substantially more paid traffic",
-    "Own the cross-functional activation/retention transition and define one shared constraint metric",
-    "Celebrate that both teams hit their targets"
-   ],
-   "termsAvailable": [
-    "experiment",
-    "activation",
-    "overlap"
-   ]
-  },
-  {
-   "number": 13,
-   "section": "A",
-   "marks": 2,
-   "id": "first_customers",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "Which pairing best fits the course's early customer-acquisition logic?",
-   "prompt": null,
-   "options": [
-    "Both: nationwide paid acquisition at full scale from day one",
-    "B2B: mass television advertising from day one; B2C: one-to-one enterprise demonstrations",
-    "B2B: focused founder-led sales; B2C: concentrated cohort launch with seeding, proof, and repurchase",
-    "Both: wait for organic search traffic to arrive on its own"
-   ],
-   "termsAvailable": [
-    "waitlist",
-    "visible proof",
-    "repurchase loop"
-   ]
-  },
-  {
-   "number": 14,
-   "section": "A",
-   "marks": 2,
-   "id": "cohort_truth",
-   "type": "mcq",
-   "caselet": "Monthly active users rose from 10,000 to 14,000 after a large campaign. Each new signup cohort, however, retains fewer users by week four than the cohort before it.",
-   "stem": "What does the cohort view reveal?",
-   "prompt": null,
-   "options": [
-    "Acquisition volume is masking deteriorating retention",
-    "Retention is improving because the total user number is larger",
-    "The campaign has proven that product-market fit exists",
-    "Cohorts cannot meaningfully be compared across time"
+    "The October cohort is simply too young to judge, so the fall is an artefact of measuring groups at different ages",
+    "Signups tripling is the finding, and the retention split is a consequence of serving a larger and more varied market than before",
+    "Each new cohort is retaining worse than the one before it, and rising signup volume is holding the blended figure flat",
+    "Retention is stable, since the aggregate figure has not moved across a full year of trading and that is the measure of the product"
    ],
    "termsAvailable": [
     "cohort",
@@ -335,7 +55,396 @@
    ]
   },
   {
+   "number": 2,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m6_churn_cla2",
+   "type": "mcq",
+   "caselet": "A B2B tool loses 4% of accounts a month. Exit interviews with 30 leavers find 19 never completed the initial data import, 7 left when their internal champion changed job, and 4 said a competitor was cheaper. The team is preparing a discount offer for accounts showing low usage.",
+   "stem": "What should the team do instead?",
+   "prompt": null,
+   "options": [
+    "Proceed with the discount, because price is the only cause a company can act on directly and quickly",
+    "Fix the import and build a second contact inside each account, since price explains four of thirty departures",
+    "Survey the remaining accounts before acting, since thirty interviews is too small a base for any decision",
+    "Accept 4% as the market rate for this category and concentrate the effort on winning replacement accounts"
+   ],
+   "termsAvailable": [
+    "network effect",
+    "two-sided",
+    "cold start",
+    "moat"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m8_decision_cla1",
+   "type": "mcq",
+   "caselet": "An experiment hypothesised activation moving from 34% to 45%. It lands at 38%, and the team wants to keep iterating.",
+   "stem": "What settles whether to continue?",
+   "prompt": null,
+   "options": [
+    "Whether another variation could plausibly close the remaining gap, which is the test for a worthwhile iteration.",
+    "Whether the team has capacity, since a live experiment that is improving the number is worth keeping while resources allow.",
+    "The thresholds written before the experiment went live, since all four parts of the rule are agreed in advance.",
+    "Whether 38% is a statistically significant improvement over 34%, which is what decides if the effect is real."
+   ],
+   "termsAvailable": [
+    "scale threshold",
+    "kill threshold",
+    "successful kill"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m8_priority_cla1",
+   "type": "mcq",
+   "caselet": "A team's easiest idea — a homepage headline test shippable in an afternoon — ranks fourth on ICE behind three slower activation experiments. Activation is the team's primary constraint.",
+   "stem": "What should the team do?",
+   "prompt": null,
+   "options": [
+    "Run the headline test first, since shipping something quickly builds momentum for the slower experiments behind it.",
+    "Run the activation experiments first, because impact is scored against the primary constraint and ease is one input of three.",
+    "Re-score the headline test, since an experiment shippable in an afternoon should score higher on ease than it evidently did.",
+    "Run all four in parallel, which removes the need to rank them and produces four results in the same period."
+   ],
+   "termsAvailable": [
+    "ICE score",
+    "primary constraint",
+    "confidence score",
+    "ease score"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 2,
+   "id": "case_experiment",
+   "type": "mcq",
+   "caselet": "An activation test reaches its pre-set sample. Variant B moves the named activation metric from 34% to 39%, inside the pre-registered iterate band of 37–42%. Revenue has not matured yet.",
+   "stem": "What should the team do?",
+   "prompt": null,
+   "options": [
+    "Move the scale threshold down to 39% after seeing how the result landed",
+    "Ignore the named activation metric entirely and use the total click count instead",
+    "Call Variant B the winner because the number improved in the test run",
+    "Iterate according to the rule and continue tracking the defensible downstream link"
+   ],
+   "termsAvailable": [
+    "fail to reject",
+    "lift",
+    "arm"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 2,
+   "id": "channel_fit",
+   "type": "mcq",
+   "caselet": "A high-ACV B2B tool sells to heads of sales at 50–200 employee companies. A cheap, broad-interest video channel brings many views but almost no qualified meetings.",
+   "stem": "What is the core diagnosis?",
+   "prompt": null,
+   "options": [
+    "The channel's targeting and output never match the product's economics and ICP",
+    "The product clearly cannot have found product-market fit yet, because a working product would perform in any channel",
+    "The high view count is proof enough that the channel is working exactly as intended",
+    "All B2B products require television advertising in order to reach the relevant decision-makers at scale"
+   ],
+   "termsAvailable": [
+    "average contract value",
+    "ACV",
+    "channel market fit"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 2,
+   "id": "mock_type_one",
+   "type": "mcq",
+   "caselet": "A team checks results every hour and stops the first time p < 0.05. The apparent win disappears in the next full cohort.",
+   "stem": "Which risk did the stopping behaviour inflate?",
+   "prompt": null,
+   "options": [
+    "The density of the network effects",
+    "Type II: a false negative only",
+    "The estimate of customer lifetime value",
+    "Type I: a false positive"
+   ],
+   "termsAvailable": [
+    "Type I error",
+    "Type II error",
+    "false positive",
+    "false negative",
+    "significance level"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 2,
+   "id": "mock_full_case",
+   "type": "mcq",
+   "caselet": "A D2C brand validates demand with paid pre-orders. Its first cohort activates through a 21-day routine, repurchase predicts retention, and acquisition is profitable. The team now has ten experiment ideas but capacity for two.",
+   "stem": "Which sequence best protects the evidence chain?",
+   "prompt": null,
+   "options": [
+    "Choose the two ideas with the highest reach scores and run them",
+    "Run all ten with smaller samples each",
+    "Optimise for the total follower count across all channels instead",
+    "Name the current constraint, score ideas against it with evidence/capacity, pre-register decisions, then reallocate after results"
+   ],
+   "termsAvailable": [
+    "growth workbook",
+    "AARRR"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 2,
+   "id": "case_network",
+   "type": "mcq",
+   "caselet": "A fitness app gives ₹100 for each invite. Invites spike, but the product is no more useful to existing users when friends join, and the spike ends when the reward stops.",
+   "stem": "What was built?",
+   "prompt": null,
+   "options": [
+    "A durable and defensible network effect between the users",
+    "A habit loop, by the course's own working definition",
+    "A pricing-led revenue expansion engine for the existing base",
+    "An incentivised referral campaign, not a network effect"
+   ],
+   "termsAvailable": [
+    "network effect",
+    "two-sided",
+    "cold start",
+    "moat"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 2,
+   "id": "ltv_early",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Why estimate LTV before 18 months of mature data exists?",
+   "prompt": null,
+   "options": [
+    "To claim a precise figure for future revenue in the plan, which makes the forecast easier to defend",
+    "To replace retention measurement altogether with a single summary number that is easier to report",
+    "Because CAC never carries decision meaning without an estimate of the value it buys",
+    "Because all customers turn out to have roughly the same lifetime value anyway in practice"
+   ],
+   "termsAvailable": [
+    "LTV",
+    "ARPU",
+    "gross margin",
+    "lifespan"
+   ]
+  },
+  {
+   "number": 11,
+   "section": "A",
+   "marks": 2,
+   "id": "mock_friction",
+   "type": "mcq",
+   "caselet": "Seven onboarding steps each lose only a small percentage of users, but fewer than one-third reach the first value event.",
+   "stem": "Which principle best explains the result?",
+   "prompt": null,
+   "options": [
+    "Reasonable step-level friction always compounds across the whole path to aha",
+    "Adding more explanatory steps will always fix the cognitive load problem",
+    "The aha moment must always be the signup event itself by definition",
+    "Small step-level losses at each stage cannot compound into anything"
+   ],
+   "termsAvailable": [
+    "cognitive friction",
+    "technical friction",
+    "smart defaults",
+    "drop-off"
+   ]
+  },
+  {
+   "number": 12,
+   "section": "A",
+   "marks": 2,
+   "id": "handoff_sla",
+   "type": "mcq",
+   "caselet": "Marketing marks a lead qualified, sales waits nine days, and customer success receives no record of the promised use case after purchase.",
+   "stem": "What system fix is highest leverage?",
+   "prompt": null,
+   "options": [
+    "A new company logo and visual identity",
+    "Explicit handoff definitions, required context, owner, and response-time SLAs",
+    "Substantially more top-of-funnel traffic",
+    "Remove the CRM from the sales process entirely"
+   ],
+   "termsAvailable": [
+    "handoff",
+    "SLA",
+    "account executive",
+    "customer success"
+   ]
+  },
+  {
+   "number": 13,
+   "section": "A",
+   "marks": 2,
+   "id": "ice_priority",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "What keeps an ICE score from becoming a polished opinion?",
+   "prompt": null,
+   "options": [
+    "Scoring every single idea a ten on all three of the dimensions at once every time",
+    "Removing the written assumptions that sit behind each of the three scores entirely from the record",
+    "Tying all three scores to something checkable: the constraint, the evidence, and real capacity",
+    "Letting the most senior person in the room set all three of the values alone"
+   ],
+   "termsAvailable": [
+    "ICE score",
+    "primary constraint",
+    "confidence score",
+    "ease score"
+   ]
+  },
+  {
+   "number": 14,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m1_demand_cla1",
+   "type": "mcq",
+   "caselet": "A founder has budgeted six months to build an AI meeting recorder and a marketing campaign to launch it. A colleague suggests putting up a page with the real offer and seeing whether anyone acts on it, before any of that starts.",
+   "stem": "What is the strongest argument for running the page first?",
+   "prompt": null,
+   "options": [
+    "Every plan that goes straight to build carries an untested demand assumption, and the test buys that certainty in days rather than months.",
+    "The page removes the risk from the build, since a positive result means the product can be scoped with confidence.",
+    "Building first is the more reliable route to learning, because real usage data from a working product is stronger evidence than a page view.",
+    "A landing page produces marketing material the launch campaign is going to need anyway, so none of the work is wasted either way."
+   ],
+   "termsAvailable": [
+    "lean validation",
+    "build trap",
+    "demand",
+    "landing page"
+   ]
+  },
+  {
    "number": 15,
+   "section": "A",
+   "marks": 2,
+   "id": "allocation_rule",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "What is the purpose of a 70/20/10 portfolio split across known winners, new bets, and exploratory options?",
+   "prompt": null,
+   "options": [
+    "To balance exploitation with learning under constrained capacity",
+    "To guarantee that every experiment run will succeed",
+    "To spend seventy percent of the budget on the newest idea",
+    "To prevent any reallocation of budget mid-quarter"
+   ],
+   "termsAvailable": [
+    "binding currency",
+    "slack budget",
+    "new bets"
+   ]
+  },
+  {
+   "number": 16,
+   "section": "A",
+   "marks": 2,
+   "id": "case_constraint",
+   "type": "mcq",
+   "caselet": "A B2B tool gets 70 qualified meetings per month, 40 trials, 25 paid accounts, but only 4 accounts are active after 90 days. Marketing proposes doubling outbound volume.",
+   "stem": "Where should the next growth cycle focus?",
+   "prompt": null,
+   "options": [
+    "Post-sale adoption/retention and the handoff into customer success",
+    "A significantly broader ICP definition",
+    "A larger volume of outbound activity",
+    "More incentives for meetings booked"
+   ],
+   "termsAvailable": [
+    "constraint",
+    "step conversion",
+    "activation constraint"
+   ]
+  },
+  {
+   "number": 17,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m1_evidence_cla1",
+   "type": "mcq",
+   "caselet": "A team reports 200 positive survey responses, 30 wait-list signups and 4 refundable deposits taken under stated terms. The founder wants to lead the investor update with the 200.",
+   "stem": "How should the three signals be weighted?",
+   "prompt": null,
+   "options": [
+    "By what each cost the person to give, which makes the four deposits the primary evidence and the survey background.",
+    "By volume, since 200 responses is a far larger sample than four deposits and is therefore the more reliable number to lead with.",
+    "Equally, because each is a genuine expression of interest and discarding any of them throws away information.",
+    "By recency, taking whichever signal was collected most recently as the best guide to current demand."
+   ],
+   "termsAvailable": [
+    "pre-sales validation",
+    "commitment spectrum",
+    "letter of intent",
+    "prospect"
+   ]
+  },
+  {
+   "number": 18,
+   "section": "A",
+   "marks": 2,
+   "id": "aha_event",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Which is the strongest definition of an aha moment for analytics?",
+   "prompt": null,
+   "options": [
+    "The moment when a user first sees an advertisement for the product somewhere else",
+    "A specific, timestamped event where a user first experiences the promised value",
+    "The moment when users first feel the magic of it",
+    "Any completed signup on the product at all, regardless of when it happens"
+   ],
+   "termsAvailable": [
+    "aha",
+    "promised value",
+    "time to aha moment",
+    "causation"
+   ]
+  },
+  {
+   "number": 19,
+   "section": "A",
+   "marks": 2,
+   "id": "mock_cohort",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Which dashboard change most directly prevents new acquisition from hiding a retention decline?",
+   "prompt": null,
+   "options": [
+    "Plot retention by signup cohort, since only equal age makes cohorts comparable",
+    "Remove the denominators from every chart shown on the dashboard",
+    "Show the larger total-user numbers more prominently",
+    "Combine all customers into a single blended average figure"
+   ],
+   "termsAvailable": [
+    "cohort",
+    "aggregate data",
+    "starting event"
+   ]
+  },
+  {
+   "number": 20,
    "section": "A",
    "marks": 2,
    "id": "survey_bias",
@@ -354,110 +463,6 @@
     "leading question",
     "social desirability",
     "hypothetical"
-   ]
-  },
-  {
-   "number": 16,
-   "section": "A",
-   "marks": 2,
-   "id": "mock_motion",
-   "type": "mcq",
-   "caselet": "A complex enterprise product needs security review, multi-stakeholder approval, custom integration, and a high annual contract.",
-   "stem": "Which primary motion is better matched?",
-   "prompt": null,
-   "options": [
-    "Pure self-serve PLG with no human support",
-    "Sales-led growth supported by product experience",
-    "No deliberate acquisition motion of any kind",
-    "Consumer referral coupons on their own, with no sales involvement at any deal size"
-   ],
-   "termsAvailable": [
-    "product-led growth",
-    "sales led growth"
-   ]
-  },
-  {
-   "number": 17,
-   "section": "A",
-   "marks": 2,
-   "id": "brgsa_m4_constraint_cla1",
-   "type": "mcq",
-   "caselet": "A funnel runs 10,000 visitors, 1,200 signups, 400 activations and 30 paying customers.",
-   "stem": "Where is the constraint?",
-   "prompt": null,
-   "options": [
-    "Signup to activation at 33%, since only the slowest stage sets the pace and effort on any other adds nothing.",
-    "Visitor to signup, where 8,800 people are lost — by far the largest fall anywhere in the funnel.",
-    "Nowhere yet, because a funnel with four stages needs a much longer observation window before any constraint in it can fairly be named.",
-    "Activation to paid, at 7.5%, which is the lowest conversion rate of the three stages shown."
-   ],
-   "termsAvailable": [
-    "constraint",
-    "step conversion",
-    "activation constraint"
-   ]
-  },
-  {
-   "number": 18,
-   "section": "A",
-   "marks": 2,
-   "id": "case_experiment",
-   "type": "mcq",
-   "caselet": "An activation test reaches its pre-set sample. Variant B moves the named activation metric from 34% to 39%, inside the pre-registered iterate band of 37–42%. Revenue has not matured yet.",
-   "stem": "What should the team do?",
-   "prompt": null,
-   "options": [
-    "Iterate according to the rule and continue tracking the defensible downstream link",
-    "Ignore the named activation metric entirely and use the total click count instead",
-    "Call Variant B the winner because the number improved in the test run",
-    "Move the scale threshold down to 39% after seeing how the result landed"
-   ],
-   "termsAvailable": [
-    "fail to reject",
-    "lift",
-    "arm"
-   ]
-  },
-  {
-   "number": 19,
-   "section": "A",
-   "marks": 2,
-   "id": "brgsa_m8_decision_cla1",
-   "type": "mcq",
-   "caselet": "An experiment hypothesised activation moving from 34% to 45%. It lands at 38%, and the team wants to keep iterating.",
-   "stem": "What settles whether to continue?",
-   "prompt": null,
-   "options": [
-    "The thresholds written before the experiment went live, since all four parts of the rule are agreed in advance.",
-    "Whether the team has capacity, since a live experiment that is improving the number is worth keeping while resources allow.",
-    "Whether 38% is a statistically significant improvement over 34%, which is what decides if the effect is real.",
-    "Whether another variation could plausibly close the remaining gap, which is the test for a worthwhile iteration."
-   ],
-   "termsAvailable": [
-    "scale threshold",
-    "kill threshold",
-    "successful kill"
-   ]
-  },
-  {
-   "number": 20,
-   "section": "A",
-   "marks": 2,
-   "id": "churn_diagnostic",
-   "type": "mcq",
-   "caselet": null,
-   "stem": "Which view best helps locate when and for whom churn occurs?",
-   "prompt": null,
-   "options": [
-    "Cohort retention and time-to-churn together, always segmented by the relevant customer unit",
-    "The total number of emails ever sent",
-    "The all-time cumulative count of customers acquired",
-    "The total quarterly advertising impressions delivered across all channels"
-   ],
-   "termsAvailable": [
-    "involuntary churn",
-    "cliff",
-    "net revenue retention"
    ]
   },
   {

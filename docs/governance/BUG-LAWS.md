@@ -1098,6 +1098,56 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   measurement, which is the reason `tools/screenshot.mjs` now exists and the reason it does not
   replace `ui-audit.js`.
 
+### LAW-68 🔴 — Closing one shape cue can open its neighbour, so measure the ranks you did not close
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15. "Pick the longest option" had been driven to 20.7–29.5%, at or
+  under chance on all four subjects — by `comparableWrong`, which selects distractors
+  *closest in length to the correct answer*. Nobody measured the next rank down. "Pick the
+  second-longest" was paying **32.9–38.5% on every subject**. Evidence:
+  `evidence/2026-08-15/t6-rehaul-completion/verification.md` §9.
+- **Why:** The defence *is* the cause. Clustering four option lengths tightly around the
+  answer removes the top-rank signal and concentrates the answer one rank below it. A fix
+  aimed at one exploitable property will move probability onto a neighbouring property,
+  and a gate list written against the exploits already known cannot see where it went.
+  The bank validator's `lengthRankShares` did not catch it either, for a second reason
+  worth separating: it counts the answer's exact position in a sort, which **a candidate
+  cannot execute where lengths tie**. Resolving ties by guessing — as every strategy in
+  the persona harness does — moves the figure by up to ten points, and only the second
+  number describes what anybody can actually do.
+- **Law:** When a shape-based exploit is closed, measure the adjacent shapes in the same
+  pass and record them, whether or not they moved. A metric that describes a position
+  nobody can occupy is not a measure of exploitability; state every rule as something a
+  candidate executes, with ties resolved by guessing.
+- **Verify:** `node tools/run-persona-strategies.mjs --gate` carries `longest`,
+  `secondLongest`, `combined` and `combinedWithLength` with stated limits.
+  **`fixedB` is deliberately reported and NOT gated:** answer slots are dealt flat by
+  construction and `validate_t6_bank.js` confirms 0.25/0.25/0.25/0.25 exactly, so gating
+  one 50-of-100 draw with a ±6-point standard error measures the draw rather than the
+  bank. Before authoring a fix, check whether selection can even reach it — three
+  `comparableWrong` variants gave byte-identical numbers here, because the mcq families
+  carry exactly three authored distractors.
+
+### LAW-69 🟡 — A reserved item is on every paper, so its bias is never diluted
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-15. Two examiner-only BRGSA mcqs were added; `combinedWithLength` on
+  the drawn paper went from 24% to **33.6%** while the 78-item pool sat at 26%, with all
+  three seeds reading ~33. Evidence: same file, §8.
+- **Why:** A shared item's shape bias is diluted by the draw — 20 of 78 means it appears on
+  about a quarter of papers. A reserved item is ranked first by `examPrefer` and therefore
+  appears on **all** of them, so one item won outright by a mechanical rule moves the whole
+  paper's figure roughly four times as far. Reserved items have to be *better* than average
+  on craft, not merely average, and the intuition that a couple of new items cannot move a
+  paper-level number is wrong for exactly this class.
+- **Law:** Every reserved item is checked individually against the mechanical rules before
+  it ships, not only in the aggregate the paper reports.
+- **Verify:** `tests/examiner-slice.test.mjs` — "no reserved objective item is won outright
+  by a mechanical rule". It caught nine on its first run, seven of them authored the same
+  session. Fix by removing a *filler* absolute so a distractor survives the elimination, or
+  by making a distractor more specific; never by trimming the correct answer (LAW-48) or by
+  weakening a load-bearing over-claim.
+
 ### LAW-66 🔴 — A correct answer may only use vocabulary the run has taught, and citation is not the test
 
 - **Tier/Status:** REDLINE · ACTIVE

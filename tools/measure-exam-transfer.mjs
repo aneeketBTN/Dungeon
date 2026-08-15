@@ -84,8 +84,10 @@ function examShuffle(items, seed) {
 }
 
 function examPrefer(questions, prefer) {
-  if (!prefer || !prefer.length) return questions;
+  const hasReserved = questions.some((q) => q.examOnly);
+  if ((!prefer || !prefer.length) && !hasReserved) return questions;
   const band = (question) => {
+    if (!prefer || !prefer.length) return 0;
     const index = prefer.indexOf(question.writtenMode);
     return index < 0 ? prefer.length : index;
   };
@@ -274,10 +276,20 @@ if (gate) {
   for (const courseId of COURSE_IDS) {
     const subject = report.subjects[courseId];
     const written = subject.overlap.sections.C || subject.overlap.sections.A;
+    if (!written) problems.push(`${courseId} has no section to report`);
     if (courseId === "BRGSA" && subject.overlap.sections.C.anyRouteOverlapPct > 0) {
       problems.push(`BRGSA Section C overlap is ${subject.overlap.sections.C.anyRouteOverlapPct}% — the reserved slice should make it 0`);
     }
-    if (!written) problems.push(`${courseId} has no section to report`);
+    /* Every concept a paper can test must have at least one examiner surface a
+       learner cannot have met while studying. This is the assertion authoring
+       controls, and it is the one that went from 0/16 on three subjects to 16/16 on
+       all four — so it is the one worth holding, because it regresses silently the
+       moment a concept is added without a reserved item to go with it. */
+    const transfer = subject.sameConceptDifferentSurface;
+    if (transfer.withADistinctExaminerSurface < transfer.conceptsOnPaper) {
+      problems.push(`${courseId}: ${transfer.conceptsOnPaper - transfer.withADistinctExaminerSurface} concept(s) have no distinct examiner surface — ` +
+        transfer.without.map((row) => row.conceptId).join(", "));
+    }
   }
   if (problems.length) {
     console.error("\nT4 FAILED:");

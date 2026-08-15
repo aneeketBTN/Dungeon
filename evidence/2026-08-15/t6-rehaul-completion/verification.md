@@ -1,4 +1,19 @@
-# Verification — finishing the bank overhaul: the blocked lesson, the reserved slice, and T1/T2/T4/T5
+# Verification — finishing the bank overhaul
+
+> **Second pass (same day) closed the four items this file originally listed as open.**
+> The examiner-only slice now covers **all four subjects** — 44 reserved items, and every
+> concept on every paper has a distinct examiner surface (**16/16 × 4**, from 0/16 on
+> three of them). Overlap fell from 100% to **60–80%**. The 14 SPMS multiple-select stems
+> that asked what "the lecture" said now ask what is true, and `spms_roadmap_msq`'s
+> date-recall option is gone. BRGSA self-containment is **audited for the first time and
+> clean**. And the standing IBM option-length warning turned out to be a bank-wide
+> exploit the brief had mis-scoped: **"pick the second-longest" paid 32.9–38.5% on all
+> four subjects**, is now measured, gated, and down to **18.9–28.2%**. Details in §8–§11
+> below; the original pass follows from §0.
+
+---
+
+## The first pass — the blocked lesson, the reserved slice, and T1/T2/T4/T5
 
 `VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)` · 2026-08-15 · branch
 `feat/bank-rehaul-completion` · not merged, not deployed.
@@ -388,3 +403,208 @@ hidden mid-paper, as it should be.
 Everything authored here is `WAITING_OWNER_CONTENT_ACCEPTANCE`: one lesson, four SCLM
 numericals with their near misses, six integrated scenarios, four fallback diagnosis cues,
 one reworded MCQ option. Not merged, not deployed, `main` untouched.
+
+---
+
+# Second pass — closing the four items the section above left open
+
+`VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)` · same day, same branch.
+
+## 8 — The examiner-only slice, now on all four subjects
+
+44 reserved items, additive on every subject — nothing Learn could reach before was
+withdrawn, which is what §4.2 requires and what `tests/examiner-slice.test.mjs` asserts
+by re-checking each concept's surface floor **with the slice removed**.
+
+| | reserved | shape |
+| --- | --- | --- |
+| SPMS | 16 | 8 multi-select, 8 mcq |
+| SCLM | 16 | 16 mcq |
+| BRGSA | 8 | 6 integrated scenarios, 2 mcq |
+| IBM | 4 | 4 integrated scenarios |
+
+**T4, before → after this pass:**
+
+| | overlap (ladder) | concepts with a distinct examiner surface |
+| --- | --- | --- |
+| SPMS | 100% → **68%** | 0/16 → **16/16** |
+| BRGSA | 74.2% → **69.2%** | 14/16 → **16/16** |
+| SCLM | 100% → **80%** | 0/16 → **16/16** |
+| IBM | 100% → **60%** | 0/16 → **16/16** |
+
+T4's gate now holds the per-concept assertion, because that is the half authoring
+controls and it regresses silently the moment a concept is added without a reserved item.
+
+**SPMS Section B had no slack at all** — 20 drawn from a pool of 20 — so its "three
+seeded sets" were one set printed three times across 40 of the paper's 75 marks, on the
+only negatively marked section in the term. The pool is now 28 and Section B overlap is
+60%.
+
+**Reservation was generalised beyond written sections.** `examPrefer` previously ranked
+reserved items only where a section declared a `writtenMode` order; it now applies to
+every section type, because an examiner-only item exists to be on the paper whatever
+format it takes. Mode band still decides first — a ten-mark slot needs a ten-mark item.
+
+### A finding worth keeping: a reserved item's bias is never diluted
+
+Adding two reserved BRGSA mcqs moved `combinedWithLength` on the drawn paper from 24% to
+**33.6%** while the 78-item pool sat at 26% — and all three seeds read ~33, which is not
+sampling noise. One of the two was won outright by the rule, and a reserved item is on
+**every** paper, so its shape bias arrives undiluted where a shared item's would have
+been cut to roughly a quarter. Fixing that single item took the figure to 28.6%.
+
+`tests/examiner-slice.test.mjs` now asserts no reserved objective item is won outright by
+"eliminate the absolutes, then take the second-longest". It caught **nine** on first run,
+including seven I had just written. Each was fixed by removing a filler absolute (so a
+distractor survives the filter) or by making a distractor more specific — never by
+trimming a correct answer or weakening a load-bearing over-claim.
+
+## 9 — "Pick the second-longest", which the brief had mis-scoped
+
+§10 recorded this as *"IBM option lengths still put the correct answer at rank 3 of 4 in
+50% of items"*. Measured properly it is **all four subjects**, and IBM is not the worst:
+
+```
+SPMS 38.5%   BRGSA 32.9%   SCLM 32.9%   IBM 35.9%      (chance 25%)
+```
+
+Two things were wrong with the original framing. The validator's `lengthRankShares`
+counts the answer's exact position in a sort, which **a candidate cannot execute where
+lengths tie** — resolving ties by guessing, as every other rule in the harness does,
+moves the number by up to ten points. And the cause is not IBM-specific: it is
+`comparableWrong`, which selects distractors *closest in length to the correct answer*.
+That was the right move against "pick the longest" — which pays 20.7–29.5%, at or under
+chance — and it clusters the four lengths so tightly that the answer lands one rank below
+the top far more often than chance. **Defeating one shape cue manufactured its
+neighbour**, and nothing was watching that rank.
+
+**A structural fix was tested and rejected on measurement.** Three `comparableWrong`
+variants — authored order, no length sort at all, and a stable-hash spread target —
+produced **byte-identical numbers**, because the mcq families have exactly three authored
+distractors and selection therefore has no freedom whatsoever. It is a prose job, and
+knowing that before starting is worth the twenty minutes it took.
+
+23 distractors were then made more specific — each now states the faulty reasoning it
+stands for rather than only naming the wrong action:
+
+```
+SPMS 38.5 → 26.9    BRGSA 32.9 → 22.4    SCLM 32.9 → 27.0    IBM 35.9 → 28.2
+longest unmoved on every subject; lengthRankSpread roughly halved everywhere
+```
+
+After the new tranches landed, the pools re-measured at SPMS 25.5, BRGSA 21.9, SCLM 18.9,
+IBM 28.2. **The standing IBM length warning has cleared** — the bank validator now reports
+0 errors and 0 warnings.
+
+`secondLongest` and `combinedWithLength` are both in `run-persona-strategies.mjs` with
+stated limits and a `--gate`. `combined` was deliberately **not** changed: its 32% limit
+was calibrated against its three-rule form in the brief, and folding a fourth rule into it
+would have made every earlier reading of that number incomparable with this one.
+
+**`fixedB` is now reported and not gated, with the reason written down.** Answer slots are
+dealt flat by construction and the bank validator confirms 0.25/0.25/0.25/0.25 on every
+subject; what the harness measures is one 50-of-100 draw, where the standard error is
+about 6 points. SCLM read 32 / 28 / 32 from a provably flat pool. Gating that sample
+measures the draw, not the bank.
+
+### LAW-67, a second time, in the tool written to catch it
+
+Adding the strategy exposed it: `process.argv[2]` was taken as the harness directory, so
+`--gate` became a directory name, every export lookup missed, and the gate **printed a
+pass over a report containing nothing at all**. Fixed, and the tool now refuses outright
+when no exports are found.
+
+## 10 — SPMS multiple-select stems, and the date-recall option
+
+**14 of 20** stems asked what *"the lecture"* said rather than what is true — the brief
+records fifteen; the measured number is fourteen. All 14 rewritten to ask about the world:
+*"Select every statement that matches how the lecture uses MoSCoW"* becomes *"Select every
+statement that is true of how MoSCoW is used."*
+
+`spms_roadmap_msq` carried *"WhatsApp launched first on iPhone, with the Android version
+arriving around 2011"* as a **correct** option among framework claims. The release history
+has a proper home in `spms_roadmap_msq_sequence`, which exists to read that case; the
+option is replaced by the lesson's own strongest claim — *"What has been deliberately
+deferred is as much a part of it as what has been scheduled."*
+
+**LAW-53 returned the moment I authored, and is now a test.** Four of the eight new
+examiner-only multi-selects came out 3-of-4 and one 4-of-4, which on +1/−1 scoring capped
+at the question's 2 marks means **ticking every option scores full marks**. Nothing failed;
+it was caught by printing the shape distribution by hand. `tests/examiner-slice.test.mjs`
+now asserts ticking everything is strictly worse than answering. Shapes are
+`{3-of-5: 20, 2-of-4: 6, 2-of-5: 2}`.
+
+## 11 — BRGSA self-containment, audited for the first time
+
+`tools/measure-self-containment.mjs --gate` — new, and the first check against the
+guarantee `T6_EXAM_PATTERN.md` has made since it was written:
+
+```
+SPMS   brandFigureRecall 0   namesACaseItDoesNotShow 0
+BRGSA  brandFigureRecall 0   namesACaseItDoesNotShow 0
+SCLM   brandFigureRecall 0   namesACaseItDoesNotShow 0
+IBM    brandFigureRecall 0   namesACaseItDoesNotShow 0
+```
+
+**Three probe narrowings were needed first, all verified against real items**, and the
+first draft would have reported 25 defects that are not defects:
+
+- **Computation is not recall.** `cac_scope` gives ₹3,00,000 and 120 customers and answers
+  ₹2,500. A `derivable()` check over the four operations and a ratio-to-percentage
+  distinguishes a figure the candidate can produce from one they must remember.
+- **Small numbers are inputs even when they are not figures.** The carried-figure floor of
+  10 excludes "the three checks" correctly, and excluded an alpha of 0.25 — which made a
+  derivable answer (100 + 0.25 × 20 = 105) read as recall on eight SCLM surfaces.
+- **A brand that is the concept's own name is a label.** *"Which statement best explains
+  SELCO affordability system?"* names its subject; it does not point at a hidden case.
+
+A third tier, `unreachedByThisCheck`, is reported and explicitly **not** a defect list —
+12 SCLM items state a computed figure the check cannot reach in two operations. A probe
+that reports its own reach as the bank's defect count costs exactly as much trust as one
+that misses a defect.
+
+## 12 — Gates, second pass
+
+```
+npm test                                        exit 0   (three new assertions)
+node tools/validate_t6_bank.js "<transcripts>"  0 errors, 0 warnings
+node tools/check_exam_readiness.mjs             exit 0
+node tools/check_lesson_file.mjs                exit 0
+node tools/check-palette.mjs                    exit 0
+node tools/build-site.mjs                       exit 0
+node tools/measure-name-matching.js --gate      exit 0
+node tools/measure-self-containment.mjs --gate  exit 0   NEW
+node tools/measure-cold-learner.mjs --gate      T1  exit 0
+node tools/run-persona-strategies.mjs --gate    T3  exit 0  NEW gate
+node tools/measure-exam-transfer.mjs --gate     T4  exit 0  tightened
+node tools/measure-persona-regression.mjs --gate T5 exit 0
+node tools/screenshot.mjs --port 8099           16/16, 0 failed
+```
+
+In the page, one subject per page load (LAW-62):
+
+```
+teach-before-test.js  SPMS 12/0 · BRGSA 12/0 · SCLM 12/0 · IBM 12/0
+lesson-layering.js    0 descents
+primer-prediction.js  ok:true, answerableFromTheConceptName: [] on all four
+export-run.js         paperDigestMatch TRUE, 0 shortfalls, available 75/75
+ui-audit.js           375 and 1280 on an SPMS paper mid-question, Section B (new
+                      multi-selects on screen): 0 across all nine detectors
+```
+
+`paperDigestMatch: true` is again the load-bearing one — it proves the harness mirror
+still matches the app after `examPrefer` was generalised to every section type.
+
+## 13 — What is still not done
+
+- **No second reader on any prose.** 44 reserved items, 14 rewritten stems and ~60
+  adjusted distractors are all one person's reading. Owner acceptance is owed on all of it.
+- **SCLM Section C's match warning** stands: 3 questions per paper share one prompt and the
+  pool has 5 spare. It is the one surviving readiness warning.
+- **BRGSA Section A and Section B overlap remain at 98.3% and 100%.** Its Section C is
+  fully reserved and its two new mcqs closed the per-concept assertion, but the objective
+  sections still draw almost entirely from shared items.
+- **The 64 concept `summary`/`application` strings** — untouched, as in the first pass.
+- **`unreachedByThisCheck`** — 16 items across three subjects that a person should glance
+  at, listed in `self-containment.json`.
+- All new content remains `WAITING_OWNER_CONTENT_ACCEPTANCE`. Not merged, not deployed.

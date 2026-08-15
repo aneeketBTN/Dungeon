@@ -6295,8 +6295,14 @@
    * and an unnamed mode lands after every named one rather than being dropped, so a
    * section still fills when its preferred items run out. */
   function examPrefer(questions, prefer) {
-    if (!prefer || !prefer.length) return questions;
+    /* Reservation applies to every section, with or without a declared mode order: an
+       examiner-only item exists to be on the paper, whatever format the section takes.
+       Only the mode band is opt-in, because only some sections have a length their
+       slot is worth. */
+    var hasReserved = questions.some(function (question) { return question.examOnly; });
+    if ((!prefer || !prefer.length) && !hasReserved) return questions;
     var band = function (question) {
+      if (!prefer || !prefer.length) return 0;
       var index = prefer.indexOf(question.writtenMode);
       return index < 0 ? prefer.length : index;
     };

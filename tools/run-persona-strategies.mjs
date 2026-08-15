@@ -106,8 +106,15 @@ const STRATEGIES = {
       const on = keep.filter((i) => q.options[i].toLowerCase().includes(name));
       if (on.length) keep = on;
     }
-    /* Length is the last thing a person applies, after the content rules have already
-       narrowed the field — so it breaks the tie here rather than deciding first. */
+    return keep;
+  },
+  /* The same three content rules, then length as the tie-break a person would reach
+     for last. Kept SEPARATE from `combined` rather than folded into it: `combined`
+     carries a 32% limit calibrated against its three-rule form in the overhaul brief,
+     and quietly adding a fourth rule to it would have made every earlier reading of
+     that number incomparable with this one. */
+  combinedWithLength: (q) => {
+    let keep = STRATEGIES.combined(q);
     if (keep.length > 1) {
       const lengths = keep.map((i) => words(q.options[i]));
       const max = Math.max(...lengths);
@@ -128,9 +135,19 @@ const STRATEGIES = {
  * the other shape rules take, because it is the same kind of rule and a candidate can
  * execute it just as easily. `chance` is excluded — it is the baseline, not a rule. */
 const LIMITS = {
-  longest: 30, secondLongest: 30, fixedB: 30, onTopic: 32,
-  noAbsolutes: 30, ethical: 35, combined: 32
+  longest: 30, secondLongest: 30, onTopic: 32,
+  noAbsolutes: 30, ethical: 35, combined: 32, combinedWithLength: 32
 };
+
+/* `fixedB` is reported and deliberately NOT gated here.
+ *
+ * "Always press B" is a claim about the bank's answer slots, and `validate_t6_bank.js`
+ * already checks that exactly: `answerSlotShares` is 0.25/0.25/0.25/0.25 on every
+ * subject, because `balanceAnswerPositions` deals slots flat by construction. What
+ * this file measures is one 50-of-100 draw from that flat pool, where the standard
+ * error is about 6 points — so a gate at 30% fires on sampling noise roughly a third
+ * of the time and says nothing about the bank. SCLM read 32 / 28 / 32 across its three
+ * sets from a provably flat pool. Gating the sample would be measuring the draw. */
 
 /* Every seeded set that has been exported, not just the first.
  *

@@ -638,9 +638,9 @@
    "stem": "Which reading of this outcome is most defensible?",
    "prompt": null,
    "options": [
-    "The inventory driver was moved without moving the transport and information that would let replenishment keep up.",
-    "The lost sales are a forecasting failure, because the cut would have been safe against a more accurate forecast.",
     "The inventory reduction was executed badly; the same cut done properly would have released capital without lost sales.",
+    "The lost sales are a forecasting failure, because the cut would have been safe against a more accurate forecast.",
+    "The inventory driver was moved without moving the transport and information that would let replenishment keep up.",
     "Inventory should be raised back to its previous level, since the trial shows this chain cannot run on less stock."
    ],
    "termsAvailable": [

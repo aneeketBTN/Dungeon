@@ -1,5 +1,51 @@
 # Dungeon
-> **The five open items are closed, and the gates that judge them now exist (2026-08-15; newest):**
+> **Every subject now has a reserved examiner slice, and "pick the second-longest" is closed
+> (2026-08-15; newest):** the four items the block below left open are done. **44 reserved
+> items across all four subjects**, and every concept on every paper has a distinct examiner
+> surface — **16/16 × 4**, from **0/16 on three of them** — with overlap 100% → **60–80%**.
+> **SPMS Section B had no slack whatever**: 20 drawn from a pool of 20, so its "three seeded
+> sets" were one set printed three times across 40 of that paper's 75 marks, on the only
+> negatively marked section in the term. Pool now 28. **The standing IBM option-length
+> warning was mis-scoped and much larger than recorded.** "Pick the second-longest" paid
+> **32.9–38.5% on all four subjects** and IBM was not the worst; it exists because the
+> defence against "pick the longest" created it — `comparableWrong` selects distractors
+> *closest in length to the answer*, which beat `longest` (20.7–29.5%, at or under chance)
+> and clustered the four lengths so the answer sits one rank down. **Defeating one shape cue
+> manufactured its neighbour and nothing was watching that rank.** The validator's
+> `lengthRankShares` could not see it either: it counts an exact sort position a candidate
+> cannot execute where lengths tie, and resolving ties by guessing moves the figure by up to
+> ten points. **A structural fix was tested and rejected on measurement** — three
+> `comparableWrong` variants produced *byte-identical* numbers, because the mcq families
+> carry exactly three authored distractors and selection has no freedom at all. 23
+> distractors were made more specific instead: **38.5 → 26.9, 32.9 → 22.4, 32.9 → 27.0,
+> 35.9 → 28.2**, `longest` unmoved, `lengthRankSpread` roughly halved, and **the length
+> warning cleared**. `secondLongest` and `combinedWithLength` are now gated; `fixedB` is
+> reported and deliberately **not** gated, because slots are dealt flat by construction
+> (0.25 × 4 on every subject) and a 50-of-100 draw carries ±6 points, so gating it measures
+> the draw. **A reserved item's bias is never diluted** — it is on *every* paper, so two new
+> BRGSA mcqs moved `combinedWithLength` from 24% to 33.6% while the pool sat at 26%, all
+> three seeds reading ~33; one item's fix took it to 28.6%, and a new test caught **nine**
+> such items including seven I had just written. **LAW-53 returned the moment I authored**:
+> four of eight new multi-selects came out 3-of-4 and one 4-of-4, which on this section's
+> +1/−1 scoring means ticking everything scores full marks — nothing failed, it was caught by
+> printing shapes by hand, and it is now a test. **LAW-67 recurred in the tool written to
+> catch it**: `--gate` was consumed as the harness directory, so T3 printed a pass over an
+> empty report. **14 of 20 SPMS multiple-select stems** asked what "the lecture" said (the
+> brief records fifteen); all rewritten, and `spms_roadmap_msq`'s WhatsApp release date is
+> no longer a *correct* option among framework claims. **BRGSA self-containment is audited
+> for the first time since the pattern promised it: 0 items need a brand figure the page
+> does not carry, 0 name a case they do not show** — after three probe narrowings, since the
+> first draft would have reported 25 non-defects (computation is not recall; a brand that is
+> the concept's own name is a label). `VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)`
+> at `evidence/2026-08-15/t6-rehaul-completion/verification.md`: twelve gates exit 0, LAW-47
+> **12 routes × 4 subjects, 0 violations**, 0 layering descents, `paperDigestMatch: true`,
+> screenshots **16/16 and read**, and ui-audit clean on all nine detectors at 375 and 1280
+> with the new multi-selects on screen. **Still open: no second reader on any of it** (44
+> reserved items, 14 rewritten stems, ~60 adjusted distractors), BRGSA Sections A and B still
+> at 98.3%/100% overlap, SCLM's match-prompt warning, and the 64 summary/application strings.
+> All new content `WAITING_OWNER_CONTENT_ACCEPTANCE`. Not merged, not deployed.
+>
+> **The five open items are closed, and the gates that judge them now exist (2026-08-15):**
 > the previous session ended "no new items, no examiner-only slice, no SCLM-M03-L06 lesson,
 > T1/T2/T4/T5". All five are done and every gate exits 0. **`check_exam_readiness` exits 0 for
 > the first time** — SCLM Section B is **8 of 6** numericals, so the 8 marks it could not award

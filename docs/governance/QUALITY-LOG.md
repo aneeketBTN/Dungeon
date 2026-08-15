@@ -44,6 +44,59 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 ## Issue → Cause → Fix
 
+- **I-SECOND-LONGEST-PAYS (2026-08-15)** — Issue: learning integrity, measurement. "Pick the
+  second-longest option" paid **32.9–38.5% against 25% chance on all four subjects** and was
+  in no gate. Cause: the defence against "pick the longest" produced it. `comparableWrong`
+  selects distractors closest in length to the correct answer, which took `longest` to
+  20.7–29.5% and clustered the four lengths so the answer sits one rank below the top far
+  more often than chance. The bank validator's `lengthRankShares` also could not see it,
+  because it counts an exact sort position a candidate cannot execute where lengths tie —
+  resolving ties by guessing moves the figure up to ten points. Fix: a structural change was
+  tested and rejected on measurement (three `comparableWrong` variants gave byte-identical
+  numbers; the mcq families carry exactly three authored distractors, so selection has no
+  freedom), then 23 distractors were made more specific — each now states the faulty
+  reasoning it stands for instead of only naming the wrong action. SPMS 38.5 → **26.9**,
+  BRGSA 32.9 → **22.4**, SCLM 32.9 → **27.0**, IBM 35.9 → **28.2**, `longest` unmoved on
+  every subject, `lengthRankSpread` roughly halved, and the standing IBM length warning
+  cleared. Now gated as `secondLongest` and `combinedWithLength`. Recorded as **LAW-68**.
+
+- **I-RESERVED-ITEM-BIAS-UNDILUTED (2026-08-15)** — Issue: measurement. Two examiner-only
+  BRGSA mcqs took `combinedWithLength` on the drawn paper from 24% to 33.6% while the
+  78-item pool sat at 26%, with all three seeds reading ~33 — systematic, not sampling
+  noise. Cause: `examPrefer` ranks reserved items first, so they are on **every** paper,
+  and one item won outright by a mechanical rule moves the paper figure roughly four times
+  as far as a shared item carrying the same bias. Fix: one item's option lengths adjusted
+  (33.6 → 28.6), and `tests/examiner-slice.test.mjs` now checks every reserved objective
+  item individually — it caught nine, seven of them authored the same session. Recorded as
+  **LAW-69**.
+
+- **I-LAW-53-RETURNS-ON-AUTHORING (2026-08-15)** — Issue: exam fidelity. Writing eight new
+  examiner-only multi-selects re-introduced LAW-53 immediately: four came out 3-correct-of-4
+  and one 4-of-4, which on SPMS Section B's +1 per right, −1 per wrong, capped at the
+  question's 2 marks means **ticking every option scores full marks**. Cause: the law was a
+  thing to remember rather than a thing to check, and nothing failed — the shape was only
+  caught by printing the distribution by hand. Fix: five items reshaped to 3-of-5, and
+  `tests/examiner-slice.test.mjs` now asserts that ticking everything is strictly worse than
+  answering. A defect that returns the moment someone authors in good faith needs a test.
+
+- **I-GATE-CONSUMED-ITS-OWN-FLAG (2026-08-15)** — Issue: gate truthfulness; **LAW-67, a
+  second time, in a tool written to catch it**. `run-persona-strategies.mjs` took
+  `process.argv[2]` as the harness directory, so `--gate` became a directory name, every
+  export lookup missed, and the gate printed "T3 passed" over a report containing nothing at
+  all — while `secondLongest` was over its limit on three subjects. Fix: flags filtered out
+  of the path argument, and the tool now refuses outright when no exports are found.
+
+- **I-BRGSA-SELF-CONTAINMENT-UNAUDITED (2026-08-15)** — Issue: exam fidelity. The BRGSA paper
+  guarantees no question requires memorising a Clairo or Zoko figure, and the bank had never
+  been checked against it since the pattern was written. Result: **0 items require a brand
+  figure the page does not carry and 0 name a case they do not show**, on all four subjects.
+  The finding is in the probe rather than the bank: three narrowings were needed before the
+  answer was true, and the first draft would have reported 25 non-defects — computation is
+  not recall (`cac_scope` gives ₹3,00,000 and 120 and answers ₹2,500), a small number can be
+  a derivation input without being a carried figure (an alpha of 0.25 made 100 + 0.25 × 20 =
+  105 read as recall on eight surfaces), and a brand that is the concept's own name is a
+  label rather than a hidden case. Standing check: `tools/measure-self-containment.mjs`.
+
 - **I-ANSWER-VOCABULARY-OUTSIDE-CITED-LECTURES (2026-08-15)** — Issue: learning integrity. A
   scored item's correct answer used a course term defined in a lecture the item does **not**
   cite. `smoke_signal` cites `BRGSA-M01-L02` and its answer read "exposed **prospects** take a

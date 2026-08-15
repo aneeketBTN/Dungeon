@@ -5999,5 +5999,429 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "repair": "Say what would change your recommendation, or what it costs to follow it."
       }
     ]
+  },
+  "ibm_exam_clinic_network": {
+    "id": "ibm_exam_clinic_network",
+    "courseId": "IBM",
+    "conceptId": "ibm_inclusive",
+    "stem": "Write the assessment the board should have before approving the eight new centres. Deal with the impact claim directly, and say what should change.",
+    "caselet": "A diagnostics chain opened twelve collection centres in low-income urban wards, pricing a basic blood panel at ₹190 against the ₹650 charged in the city centre. Volumes reached 38% of the break-even level and have not moved in eleven months. A survey of 400 households in the catchment finds that 71% have heard of the centres, 62% say the price is affordable, and 9% have used one. Of those who have not, the most common reasons given are that results take four days and must be collected in person, and that the centres open 10:00 to 16:00, inside the hours most respondents are at work. The chain's impact report states that patients using its centres are diagnosed earlier than the district average, and the board is citing this to justify opening eight more. The chain's own laboratory runs at 34% of capacity, and a corporate client has offered a contract for employee health screening at full commercial rates that would use the idle capacity.",
+    "sourceIds": [
+      "IBM-M01-L03",
+      "IBM-M01-L07",
+      "IBM-M05-L07",
+      "IBM-M08-L05"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Separates affordability from access, identifies availability and turnaround as the binding barriers rather than price, challenges the impact claim as a selection effect rather than a measured one, and recognises the corporate contract as a shared-value route rather than cross-subsidy."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — 71% awareness and 62% affordability against 9% use, 38% of break-even, the four-day in-person collection, the 10:00 to 16:00 hours, or the laboratory at 34% of capacity."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: price was solved and the design was not, so more centres multiply an offer people already know about and cannot reach, while the idle laboratory is the asset that could make the model sustain itself."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the expansion should be held, names opening hours and result turnaround as what to fix first, and recommends taking the corporate contract to use idle capacity."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would justify the eight centres — utilisation rising after the access fixes — or the risk that commercial work crowds out the intended patients."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_exam_lender_growth": {
+    "id": "ibm_exam_lender_growth",
+    "courseId": "IBM",
+    "conceptId": "ibm_grameen",
+    "stem": "Write the recommendation on which offer to take and what to change. The chief executive's reading of portfolio quality should be addressed explicitly.",
+    "caselet": "A microfinance institution has grown its borrower base from 41,000 to 96,000 in two years. Loan officers each now manage 610 borrowers against a design figure of 320, and group meetings have moved from weekly to monthly. Of borrowers taking a third-cycle loan, 24% are recorded as holding a loan from at least one other lender, up from 6%. Portfolio-at-risk over 30 days stands at 1.1%, which the chief executive cites as evidence that lending quality is intact. Field officers report that repayments are increasingly made by the group rather than the individual, and three officers have resigned citing collection pressure. An impact investor has offered ₹40 crore at terms requiring 35% annual borrower growth for three years. A separate offer, at a lower return expectation, requires borrower-level outcome reporting and caps growth at 15%.",
+    "sourceIds": [
+      "IBM-M03-L03",
+      "IBM-M03-L05",
+      "IBM-M08-L01",
+      "IBM-M07-L05"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Identifies portfolio-at-risk as a lagging indicator masked by group repayment, names multiple borrowing and caseload as the leading indicators of over-indebtedness, and distinguishes capital whose terms drive volume from capital whose terms track outcomes."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — 610 borrowers per officer against a design 320, 6% to 24% multiple borrowing, monthly rather than weekly meetings, 1.1% portfolio-at-risk, or the 35% growth covenant against the 15% cap."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: caseload growth removed the group method's screening and monitoring, multiple borrowing rose as a result, and group repayment is holding the arrears figure down so the risk does not appear where the chief executive is looking."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the growth-covenant offer should be declined, that caseload and meeting frequency should be restored, and that multiple borrowing should be checked before disbursal."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what the slower capital costs — foregone scale and reach — or what would make faster growth safe."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_exam_care_replication": {
+    "id": "ibm_exam_care_replication",
+    "courseId": "IBM",
+    "conceptId": "ibm_vaatsalya",
+    "stem": "Write the assessment of why the replication failed and what should be done now, including a recommendation on the back-office proposal.",
+    "caselet": "A maternal-care provider runs a 60-bed hospital in a district town, delivering about 240 births a month at ₹9,400 against ₹31,000 at the nearest private alternative. Its two obstetricians spend roughly 20% of their time on deliveries and the rest on antenatal checks, counselling and discharge paperwork; 14 trained nurse-midwives are assigned mainly to ward duties. Waiting time for an antenatal appointment is three weeks. The provider opened three further units in nearby districts, each staffed by recruiting one obstetrician locally and replicating the building layout. Two are running at under a third of capacity and one has closed. A review finds that in the original town the provider had spent four years building referral relationships with 60 village health workers who account for 78% of its admissions; in the new districts no such network was built. A separate proposal would open a small rural back-office unit employing local graduates to handle scheduling, records and insurance claims for all four sites.",
+    "sourceIds": [
+      "IBM-M02-L04",
+      "IBM-M02-L08",
+      "IBM-M04-L04",
+      "IBM-M04-L05"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Identifies the referral network rather than the building as the replicable asset, applies task-shifting to the specialists' 20% utilisation, and judges the back-office proposal as a livelihood model that must also stand as an operation."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — ₹9,400 against ₹31,000, 240 births a month, the 20% of specialist time, 14 nurse-midwives on ward duties, the three-week wait, or 78% of admissions from 60 village health workers."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: the original site's volume rests on a four-year referral network, so copying the physical form without it reproduces the cost base and none of the demand, while the specialists' time is the constraint capacity depends on."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that further replication should stop until the referral network is built first, that non-specialist tasks should move to the nurse-midwives, and gives a clear answer on the back-office unit."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would make the remaining units viable, or the cost and risk of holding the closed unit's district."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_exam_farm_collective": {
+    "id": "ibm_exam_farm_collective",
+    "courseId": "IBM",
+    "conceptId": "ibm_fpo",
+    "stem": "Write the recommendation on how the remaining grant should be spent. Address the membership proposal directly.",
+    "caselet": "A farmer producer organisation has registered 2,100 members across nine villages in three years, funded by a grant that is measured on membership numbers and ends in seven months. Members sell about 8% of their produce through it; the rest goes to the same village traders as before, at roughly 18% below the price the organisation has negotiated with a single institutional buyer. That buyer takes graded produce only, and the organisation has no grading shed, so 31% of what it does aggregate is rejected and sold back into the local market at a loss. Roughly 40 tonnes a month of crop residue is burned in the fields; a nearby enterprise buys residue for briquetting at ₹2,100 a tonne but requires baled, dry material collected at a single point. Sixty members have asked for training in grading and post-harvest handling, and there is no programme. The board is proposing to spend the remaining grant on a membership drive to reach 3,000 before the funding closes.",
+    "sourceIds": [
+      "IBM-M07-L04",
+      "IBM-M06-L05",
+      "IBM-M06-L02",
+      "IBM-M05-L10"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Distinguishes membership from participation as the measure that matters, identifies grading capacity as the binding constraint on realised price, treats the residue as an unused income stream rather than waste, and names skills as an input the model currently assumes."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — 2,100 members against 8% of produce sold through the organisation, the 18% price gap, 31% rejection, 40 tonnes a month at ₹2,100 a tonne, or the sixty members asking for training."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: the price advantage is real but unrealisable without grading and handling skill, so members rationally keep selling to traders, and a membership drive adds names to an organisation that cannot yet serve the ones it has."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the membership drive should not proceed, and directs the remaining grant to grading capacity, post-harvest training, and the residue collection point."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names the dependence on a single buyer, or what happens when the grant ends and the organisation must cover its own costs."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
   }
 });

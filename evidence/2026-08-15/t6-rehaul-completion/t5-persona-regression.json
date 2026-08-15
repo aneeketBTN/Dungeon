@@ -173,8 +173,8 @@
       "set": 1,
       "persona": "cold",
       "askedDecisions": 14,
-      "correct": 5,
-      "scorePct": 35.7,
+      "correct": 4,
+      "scorePct": 28.6,
       "stalledAt": {
         "step": 3,
         "id": "sclm_fit_repair_cloze",
@@ -185,12 +185,12 @@
         "wrongDecisions": 3
       },
       "feedback": {
-        "wrongDecisions": 9,
-        "distinctCues": 5,
+        "wrongDecisions": 10,
+        "distinctCues": 6,
         "topCue": {
           "cue": "Return to the governing idea and check the option against it directly before selecting.",
           "covers": 3,
-          "share": 0.333
+          "share": 0.3
         },
         "noCueOffered": 0
       }

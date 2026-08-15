@@ -6,241 +6,160 @@
     "SPMS": {
       "overlap": {
         "note": "Upper bounds from study-set POOLS, not deliveries. ladder = sets 1-8, the sequence every learner walks. anyRoute = all ten, including set 10 whose pool is the entire subject.",
-        "paperLadderPct": 100,
-        "paperAnyRoutePct": 100,
+        "paperLadderPct": 68,
+        "paperAnyRoutePct": 68,
         "sections": {
           "A": {
             "marksPerPaper": 35,
-            "ladderOverlapPct": 100,
-            "anyRouteOverlapPct": 100,
-            "poolSize": 52,
+            "ladderOverlapPct": 77.1,
+            "anyRouteOverlapPct": 77.1,
+            "poolSize": 60,
             "drawn": 35,
-            "slack": 17
+            "slack": 25
           },
           "B": {
             "marksPerPaper": 40,
-            "ladderOverlapPct": 100,
-            "anyRouteOverlapPct": 100,
-            "poolSize": 20,
+            "ladderOverlapPct": 60,
+            "anyRouteOverlapPct": 60,
+            "poolSize": 28,
             "drawn": 20,
-            "slack": 0
+            "slack": 8
           }
         }
       },
       "sameConceptDifferentSurface": {
         "conceptsOnPaper": 16,
-        "withADistinctExaminerSurface": 0,
-        "without": [
-          {
-            "conceptId": "spms_roadmap",
-            "closest": "spms_syn_plan",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_priority",
-            "closest": "spms_priority_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_jtbd",
-            "closest": "spms_jtbd_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_tamsam",
-            "closest": "spms_tamsam_connect",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_alternatives",
-            "closest": "spms_alternatives_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_value_pricing",
-            "closest": "spms_value_pricing_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_chasm",
-            "closest": "spms_chasm_apply",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_dfv",
-            "closest": "spms_dfv_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_positioning",
-            "closest": "spms_positioning_connect",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_requirements",
-            "closest": "spms_requirements_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_traceability",
-            "closest": "spms_traceability_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_unit_economics",
-            "closest": "spms_unit_economics_connect",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_privacy",
-            "closest": "spms_syn_responsible",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_lean_canvas",
-            "closest": "spms_lean_canvas_connect",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_metrics",
-            "closest": "spms_metrics_connect",
-            "overlap": 1
-          },
-          {
-            "conceptId": "spms_buyer_journey",
-            "closest": "spms_buyer_journey_connect",
-            "overlap": 1
-          }
-        ]
+        "withADistinctExaminerSurface": 16,
+        "without": []
       },
       "detail": [
         {
           "conceptId": "spms_roadmap",
           "learnSurfaces": 16,
-          "bestExamItem": "spms_syn_plan",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_priority",
-          "learnSurfaces": 15,
-          "bestExamItem": "spms_priority_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_jtbd",
-          "learnSurfaces": 15,
-          "bestExamItem": "spms_jtbd_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "spms_roadmap_msq_exam",
+          "maxOverlapWithLearn": 0.107,
+          "hasDistinctSurface": true
         },
         {
           "conceptId": "spms_tamsam",
           "learnSurfaces": 14,
-          "bestExamItem": "spms_tamsam_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_alternatives",
-          "learnSurfaces": 14,
-          "bestExamItem": "spms_alternatives_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_value_pricing",
-          "learnSurfaces": 14,
-          "bestExamItem": "spms_value_pricing_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_chasm",
-          "learnSurfaces": 14,
-          "bestExamItem": "spms_chasm_apply",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_dfv",
-          "learnSurfaces": 14,
-          "bestExamItem": "spms_dfv_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_positioning",
-          "learnSurfaces": 14,
-          "bestExamItem": "spms_positioning_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_requirements",
-          "learnSurfaces": 15,
-          "bestExamItem": "spms_requirements_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_traceability",
-          "learnSurfaces": 14,
-          "bestExamItem": "spms_traceability_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_unit_economics",
-          "learnSurfaces": 15,
-          "bestExamItem": "spms_unit_economics_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "spms_privacy",
-          "learnSurfaces": 15,
-          "bestExamItem": "spms_syn_responsible",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "spms_tamsam_msq_exam",
+          "maxOverlapWithLearn": 0.022,
+          "hasDistinctSurface": true
         },
         {
           "conceptId": "spms_lean_canvas",
           "learnSurfaces": 14,
-          "bestExamItem": "spms_lean_canvas_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "spms_lean_canvas_msq_exam",
+          "maxOverlapWithLearn": 0.018,
+          "hasDistinctSurface": true
         },
         {
-          "conceptId": "spms_metrics",
+          "conceptId": "spms_traceability",
+          "learnSurfaces": 14,
+          "bestExamItem": "spms_traceability_msq_exam",
+          "maxOverlapWithLearn": 0.016,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_unit_economics",
           "learnSurfaces": 15,
-          "bestExamItem": "spms_metrics_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "spms_unit_economics_msq_exam",
+          "maxOverlapWithLearn": 0.016,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_alternatives",
+          "learnSurfaces": 14,
+          "bestExamItem": "spms_alternatives_msq_exam",
+          "maxOverlapWithLearn": 0.015,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_value_pricing",
+          "learnSurfaces": 14,
+          "bestExamItem": "spms_value_pricing_cla1",
+          "maxOverlapWithLearn": 0.014,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_priority",
+          "learnSurfaces": 15,
+          "bestExamItem": "spms_priority_cla1",
+          "maxOverlapWithLearn": 0.011,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_chasm",
+          "learnSurfaces": 14,
+          "bestExamItem": "spms_chasm_cla1",
+          "maxOverlapWithLearn": 0.01,
+          "hasDistinctSurface": true
         },
         {
           "conceptId": "spms_buyer_journey",
           "learnSurfaces": 14,
-          "bestExamItem": "spms_buyer_journey_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "spms_buyer_journey_cla1",
+          "maxOverlapWithLearn": 0.01,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_positioning",
+          "learnSurfaces": 14,
+          "bestExamItem": "spms_positioning_cla1",
+          "maxOverlapWithLearn": 0.005,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_dfv",
+          "learnSurfaces": 14,
+          "bestExamItem": "spms_dfv_msq_exam",
+          "maxOverlapWithLearn": 0.005,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_jtbd",
+          "learnSurfaces": 15,
+          "bestExamItem": "spms_jtbd_cla1",
+          "maxOverlapWithLearn": 0.003,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_privacy",
+          "learnSurfaces": 15,
+          "bestExamItem": "spms_privacy_cla1",
+          "maxOverlapWithLearn": 0.003,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_requirements",
+          "learnSurfaces": 15,
+          "bestExamItem": "spms_requirements_cla1",
+          "maxOverlapWithLearn": 0,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "spms_metrics",
+          "learnSurfaces": 15,
+          "bestExamItem": "spms_metrics_msq_exam",
+          "maxOverlapWithLearn": 0,
+          "hasDistinctSurface": true
         }
       ]
     },
     "BRGSA": {
       "overlap": {
         "note": "Upper bounds from study-set POOLS, not deliveries. ladder = sets 1-8, the sequence every learner walks. anyRoute = all ten, including set 10 whose pool is the entire subject.",
-        "paperLadderPct": 74.2,
-        "paperAnyRoutePct": 75,
+        "paperLadderPct": 69.2,
+        "paperAnyRoutePct": 70,
         "sections": {
           "A": {
             "marksPerPaper": 40,
-            "ladderOverlapPct": 98.3,
-            "anyRouteOverlapPct": 100,
-            "poolSize": 76,
+            "ladderOverlapPct": 88.3,
+            "anyRouteOverlapPct": 90,
+            "poolSize": 78,
             "drawn": 20,
-            "slack": 56
+            "slack": 58
           },
           "B": {
             "marksPerPaper": 20,
@@ -262,35 +181,10 @@
       },
       "sameConceptDifferentSurface": {
         "conceptsOnPaper": 16,
-        "withADistinctExaminerSurface": 14,
-        "without": [
-          {
-            "conceptId": "brgsa_m3_cohort",
-            "closest": "cohort_truth",
-            "overlap": 1
-          },
-          {
-            "conceptId": "brgsa_m6_churn",
-            "closest": "churn_diagnostic",
-            "overlap": 1
-          }
-        ]
+        "withADistinctExaminerSurface": 16,
+        "without": []
       },
       "detail": [
-        {
-          "conceptId": "brgsa_m3_cohort",
-          "learnSurfaces": 18,
-          "bestExamItem": "cohort_truth",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "brgsa_m6_churn",
-          "learnSurfaces": 17,
-          "bestExamItem": "churn_diagnostic",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
         {
           "conceptId": "brgsa_m8_decision",
           "learnSurfaces": 17,
@@ -320,10 +214,10 @@
           "hasDistinctSurface": true
         },
         {
-          "conceptId": "brgsa_m6_habit",
+          "conceptId": "brgsa_m3_cohort",
           "learnSurfaces": 18,
-          "bestExamItem": "brgsa_exam_roadmap_call",
-          "maxOverlapWithLearn": 0.008,
+          "bestExamItem": "brgsa_m3_cohort_cla2",
+          "maxOverlapWithLearn": 0.01,
           "hasDistinctSurface": true
         },
         {
@@ -341,17 +235,17 @@
           "hasDistinctSurface": true
         },
         {
+          "conceptId": "brgsa_m6_habit",
+          "learnSurfaces": 18,
+          "bestExamItem": "brgsa_exam_roadmap_call",
+          "maxOverlapWithLearn": 0.008,
+          "hasDistinctSurface": true
+        },
+        {
           "conceptId": "brgsa_m7_pricing",
           "learnSurfaces": 17,
           "bestExamItem": "brgsa_exam_price_experiment",
           "maxOverlapWithLearn": 0.006,
-          "hasDistinctSurface": true
-        },
-        {
-          "conceptId": "brgsa_m8_priority",
-          "learnSurfaces": 19,
-          "bestExamItem": "brgsa_exam_roadmap_call",
-          "maxOverlapWithLearn": 0.004,
           "hasDistinctSurface": true
         },
         {
@@ -362,10 +256,24 @@
           "hasDistinctSurface": true
         },
         {
+          "conceptId": "brgsa_m8_priority",
+          "learnSurfaces": 19,
+          "bestExamItem": "brgsa_exam_roadmap_call",
+          "maxOverlapWithLearn": 0.004,
+          "hasDistinctSurface": true
+        },
+        {
           "conceptId": "brgsa_m3_economics",
           "learnSurfaces": 17,
           "bestExamItem": "brgsa_exam_price_experiment",
           "maxOverlapWithLearn": 0.003,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "brgsa_m6_churn",
+          "learnSurfaces": 17,
+          "bestExamItem": "brgsa_m6_churn_cla2",
+          "maxOverlapWithLearn": 0,
           "hasDistinctSurface": true
         },
         {
@@ -394,16 +302,16 @@
     "SCLM": {
       "overlap": {
         "note": "Upper bounds from study-set POOLS, not deliveries. ladder = sets 1-8, the sequence every learner walks. anyRoute = all ten, including set 10 whose pool is the entire subject.",
-        "paperLadderPct": 100,
-        "paperAnyRoutePct": 100,
+        "paperLadderPct": 80,
+        "paperAnyRoutePct": 80,
         "sections": {
           "A": {
             "marksPerPaper": 50,
-            "ladderOverlapPct": 100,
-            "anyRouteOverlapPct": 100,
-            "poolSize": 84,
+            "ladderOverlapPct": 68,
+            "anyRouteOverlapPct": 68,
+            "poolSize": 100,
             "drawn": 50,
-            "slack": 34
+            "slack": 50
           },
           "B": {
             "marksPerPaper": 24,
@@ -425,419 +333,257 @@
       },
       "sameConceptDifferentSurface": {
         "conceptsOnPaper": 16,
-        "withADistinctExaminerSurface": 0,
-        "without": [
-          {
-            "conceptId": "sclm_leads",
-            "closest": "sclm_leads_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_reengineering",
-            "closest": "sclm_reengineering_apply",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_drivers",
-            "closest": "sclm_drivers_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_newsvendor",
-            "closest": "sclm_newsvendor_connect",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_sop",
-            "closest": "sclm_sop_cla1",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_smoothing",
-            "closest": "sclm_smoothing_apply",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_turnaround",
-            "closest": "sclm_turnaround_cla1",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_stockyard",
-            "closest": "sclm_stockyard_apply",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_portfolio",
-            "closest": "sclm_portfolio_cla1",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_bullwhip",
-            "closest": "sclm_bullwhip_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_eoq",
-            "closest": "sclm_syn_inventory",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_coldstore",
-            "closest": "sclm_coldstore_connect",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_multimodal",
-            "closest": "sclm_multimodal_cla2",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_akshaya",
-            "closest": "sclm_akshaya_connect",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_ports",
-            "closest": "sclm_ports_explain",
-            "overlap": 1
-          },
-          {
-            "conceptId": "sclm_fit",
-            "closest": "sclm_fit_connect",
-            "overlap": 1
-          }
-        ]
+        "withADistinctExaminerSurface": 16,
+        "without": []
       },
       "detail": [
         {
-          "conceptId": "sclm_leads",
-          "learnSurfaces": 15,
-          "bestExamItem": "sclm_leads_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_reengineering",
-          "learnSurfaces": 15,
-          "bestExamItem": "sclm_reengineering_apply",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_drivers",
-          "learnSurfaces": 16,
-          "bestExamItem": "sclm_drivers_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
           "conceptId": "sclm_newsvendor",
           "learnSurfaces": 19,
-          "bestExamItem": "sclm_newsvendor_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_sop",
-          "learnSurfaces": 16,
-          "bestExamItem": "sclm_sop_cla1",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_smoothing",
-          "learnSurfaces": 17,
-          "bestExamItem": "sclm_smoothing_apply",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_turnaround",
-          "learnSurfaces": 16,
-          "bestExamItem": "sclm_turnaround_cla1",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_stockyard",
-          "learnSurfaces": 15,
-          "bestExamItem": "sclm_stockyard_apply",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_portfolio",
-          "learnSurfaces": 15,
-          "bestExamItem": "sclm_portfolio_cla1",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_bullwhip",
-          "learnSurfaces": 15,
-          "bestExamItem": "sclm_bullwhip_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_eoq",
-          "learnSurfaces": 20,
-          "bestExamItem": "sclm_syn_inventory",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_coldstore",
-          "learnSurfaces": 15,
-          "bestExamItem": "sclm_coldstore_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_multimodal",
-          "learnSurfaces": 15,
-          "bestExamItem": "sclm_multimodal_cla2",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_akshaya",
-          "learnSurfaces": 15,
-          "bestExamItem": "sclm_akshaya_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "sclm_ports",
-          "learnSurfaces": 15,
-          "bestExamItem": "sclm_ports_explain",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "sclm_newsvendor_cla3",
+          "maxOverlapWithLearn": 0.019,
+          "hasDistinctSurface": true
         },
         {
           "conceptId": "sclm_fit",
           "learnSurfaces": 15,
-          "bestExamItem": "sclm_fit_connect",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "sclm_fit_cla3",
+          "maxOverlapWithLearn": 0.014,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_bullwhip",
+          "learnSurfaces": 15,
+          "bestExamItem": "sclm_bullwhip_cla3",
+          "maxOverlapWithLearn": 0.012,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_eoq",
+          "learnSurfaces": 20,
+          "bestExamItem": "sclm_eoq_cla3",
+          "maxOverlapWithLearn": 0.01,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_portfolio",
+          "learnSurfaces": 15,
+          "bestExamItem": "sclm_portfolio_cla3",
+          "maxOverlapWithLearn": 0.01,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_ports",
+          "learnSurfaces": 15,
+          "bestExamItem": "sclm_ports_cla3",
+          "maxOverlapWithLearn": 0.009,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_sop",
+          "learnSurfaces": 16,
+          "bestExamItem": "sclm_sop_cla3",
+          "maxOverlapWithLearn": 0.009,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_coldstore",
+          "learnSurfaces": 15,
+          "bestExamItem": "sclm_coldstore_cla3",
+          "maxOverlapWithLearn": 0.008,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_drivers",
+          "learnSurfaces": 16,
+          "bestExamItem": "sclm_drivers_cla3",
+          "maxOverlapWithLearn": 0.005,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_turnaround",
+          "learnSurfaces": 16,
+          "bestExamItem": "sclm_turnaround_cla3",
+          "maxOverlapWithLearn": 0.005,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_stockyard",
+          "learnSurfaces": 15,
+          "bestExamItem": "sclm_stockyard_cla3",
+          "maxOverlapWithLearn": 0.004,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_leads",
+          "learnSurfaces": 15,
+          "bestExamItem": "sclm_leads_cla3",
+          "maxOverlapWithLearn": 0.004,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_smoothing",
+          "learnSurfaces": 17,
+          "bestExamItem": "sclm_smoothing_cla3",
+          "maxOverlapWithLearn": 0.004,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_reengineering",
+          "learnSurfaces": 15,
+          "bestExamItem": "sclm_reengineering_cla3",
+          "maxOverlapWithLearn": 0.004,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_akshaya",
+          "learnSurfaces": 15,
+          "bestExamItem": "sclm_akshaya_cla3",
+          "maxOverlapWithLearn": 0,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "sclm_multimodal",
+          "learnSurfaces": 15,
+          "bestExamItem": "sclm_multimodal_cla3",
+          "maxOverlapWithLearn": 0,
+          "hasDistinctSurface": true
         }
       ]
     },
     "IBM": {
       "overlap": {
         "note": "Upper bounds from study-set POOLS, not deliveries. ladder = sets 1-8, the sequence every learner walks. anyRoute = all ten, including set 10 whose pool is the entire subject.",
-        "paperLadderPct": 100,
-        "paperAnyRoutePct": 100,
+        "paperLadderPct": 60,
+        "paperAnyRoutePct": 60,
         "sections": {
           "A": {
             "marksPerPaper": 100,
-            "ladderOverlapPct": 100,
-            "anyRouteOverlapPct": 100,
-            "poolSize": 36,
+            "ladderOverlapPct": 60,
+            "anyRouteOverlapPct": 60,
+            "poolSize": 40,
             "drawn": 10,
-            "slack": 26
+            "slack": 30
           }
         }
       },
       "sameConceptDifferentSurface": {
         "conceptsOnPaper": 16,
-        "withADistinctExaminerSurface": 0,
-        "without": [
-          {
-            "conceptId": "ibm_selco",
-            "closest": "ibm_case_energy_offer",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_bop",
-            "closest": "ibm_case_energy_offer",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_social_business",
-            "closest": "ibm_case_energy_offer",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_shared_value",
-            "closest": "ibm_case_energy_offer",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_grameen",
-            "closest": "ibm_case_lender_pressure",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_responsible_lending",
-            "closest": "ibm_case_lender_pressure",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_impact_investing",
-            "closest": "ibm_case_lender_pressure",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_rural_bpo",
-            "closest": "ibm_case_rural_scale",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_replication",
-            "closest": "ibm_case_rural_scale",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_labournet",
-            "closest": "ibm_case_rural_scale",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_vaatsalya",
-            "closest": "ibm_case_hospital_growth",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_aravind",
-            "closest": "ibm_case_hospital_growth",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_impact_measurement",
-            "closest": "ibm_case_hospital_growth",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_fpo",
-            "closest": "ibm_fpo_case_answer",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_inclusive",
-            "closest": "ibm_inclusive_case_answer",
-            "overlap": 1
-          },
-          {
-            "conceptId": "ibm_waste",
-            "closest": "ibm_waste_case_answer",
-            "overlap": 1
-          }
-        ]
+        "withADistinctExaminerSurface": 16,
+        "without": []
       },
       "detail": [
         {
-          "conceptId": "ibm_selco",
-          "learnSurfaces": 16,
-          "bestExamItem": "ibm_case_energy_offer",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_bop",
-          "learnSurfaces": 16,
-          "bestExamItem": "ibm_case_energy_offer",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_social_business",
-          "learnSurfaces": 16,
-          "bestExamItem": "ibm_case_energy_offer",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_shared_value",
+          "conceptId": "ibm_impact_measurement",
           "learnSurfaces": 17,
-          "bestExamItem": "ibm_case_energy_offer",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_grameen",
-          "learnSurfaces": 15,
-          "bestExamItem": "ibm_case_lender_pressure",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "ibm_exam_clinic_network",
+          "maxOverlapWithLearn": 0.029,
+          "hasDistinctSurface": true
         },
         {
           "conceptId": "ibm_responsible_lending",
           "learnSurfaces": 17,
-          "bestExamItem": "ibm_case_lender_pressure",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "ibm_exam_lender_growth",
+          "maxOverlapWithLearn": 0.019,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_grameen",
+          "learnSurfaces": 15,
+          "bestExamItem": "ibm_exam_lender_growth",
+          "maxOverlapWithLearn": 0.016,
+          "hasDistinctSurface": true
         },
         {
           "conceptId": "ibm_impact_investing",
           "learnSurfaces": 16,
-          "bestExamItem": "ibm_case_lender_pressure",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "ibm_exam_lender_growth",
+          "maxOverlapWithLearn": 0.016,
+          "hasDistinctSurface": true
         },
         {
           "conceptId": "ibm_rural_bpo",
           "learnSurfaces": 16,
-          "bestExamItem": "ibm_case_rural_scale",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_replication",
-          "learnSurfaces": 16,
-          "bestExamItem": "ibm_case_rural_scale",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_labournet",
-          "learnSurfaces": 16,
-          "bestExamItem": "ibm_case_rural_scale",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_vaatsalya",
-          "learnSurfaces": 16,
-          "bestExamItem": "ibm_case_hospital_growth",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_aravind",
-          "learnSurfaces": 17,
-          "bestExamItem": "ibm_case_hospital_growth",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_impact_measurement",
-          "learnSurfaces": 17,
-          "bestExamItem": "ibm_case_hospital_growth",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
-        },
-        {
-          "conceptId": "ibm_fpo",
-          "learnSurfaces": 15,
-          "bestExamItem": "ibm_fpo_case_answer",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "ibm_exam_care_replication",
+          "maxOverlapWithLearn": 0.013,
+          "hasDistinctSurface": true
         },
         {
           "conceptId": "ibm_inclusive",
           "learnSurfaces": 15,
-          "bestExamItem": "ibm_inclusive_case_answer",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "ibm_exam_clinic_network",
+          "maxOverlapWithLearn": 0.01,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_vaatsalya",
+          "learnSurfaces": 16,
+          "bestExamItem": "ibm_exam_care_replication",
+          "maxOverlapWithLearn": 0.007,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_aravind",
+          "learnSurfaces": 17,
+          "bestExamItem": "ibm_exam_care_replication",
+          "maxOverlapWithLearn": 0.007,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_replication",
+          "learnSurfaces": 16,
+          "bestExamItem": "ibm_exam_care_replication",
+          "maxOverlapWithLearn": 0.007,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_fpo",
+          "learnSurfaces": 15,
+          "bestExamItem": "ibm_exam_farm_collective",
+          "maxOverlapWithLearn": 0.007,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_bop",
+          "learnSurfaces": 16,
+          "bestExamItem": "ibm_exam_clinic_network",
+          "maxOverlapWithLearn": 0.006,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_shared_value",
+          "learnSurfaces": 17,
+          "bestExamItem": "ibm_exam_clinic_network",
+          "maxOverlapWithLearn": 0.004,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_labournet",
+          "learnSurfaces": 16,
+          "bestExamItem": "ibm_exam_farm_collective",
+          "maxOverlapWithLearn": 0.003,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_social_business",
+          "learnSurfaces": 16,
+          "bestExamItem": "ibm_exam_lender_growth",
+          "maxOverlapWithLearn": 0,
+          "hasDistinctSurface": true
         },
         {
           "conceptId": "ibm_waste",
           "learnSurfaces": 15,
-          "bestExamItem": "ibm_waste_case_answer",
-          "maxOverlapWithLearn": 1,
-          "hasDistinctSurface": false
+          "bestExamItem": "ibm_exam_farm_collective",
+          "maxOverlapWithLearn": 0,
+          "hasDistinctSurface": true
+        },
+        {
+          "conceptId": "ibm_selco",
+          "learnSurfaces": 16,
+          "bestExamItem": "ibm_exam_farm_collective",
+          "maxOverlapWithLearn": 0,
+          "hasDistinctSurface": true
         }
       ]
     }

@@ -214,6 +214,41 @@ reported per section by `tools/measure-exam-transfer.mjs` (T4).
 
 ---
 
+## R9 — A reserved item must be better than average on craft
+
+**Why:** an examiner-only item is ranked first by `examPrefer`, so it is on **every**
+paper. A shared item's shape bias is diluted by the draw; a reserved one's is not, and
+one reserved item won outright by a mechanical rule moves the paper-level figure roughly
+four times as far. Measured: two new BRGSA mcqs took `combinedWithLength` from 24% to
+33.6% while the pool sat at 26%.
+
+**Banned:** a reserved objective item answerable by eliminating the absolutes and then
+taking the second-longest survivor.
+
+**Fix by** removing a *filler* absolute so a distractor survives the elimination, or by
+making a distractor more specific. Never by trimming the correct answer (LAW-48), and
+never by weakening a load-bearing over-claim.
+
+**Gate:** `tests/examiner-slice.test.mjs` — "no reserved objective item is won outright by
+a mechanical rule". Nine on its first run.
+
+---
+
+## R10 — Ticking every option must be strictly worse than answering
+
+**Banned:** on a negatively marked multi-select, any shape where `correct − wrong` reaches
+the question's marks. SPMS Section B scores +1 per right option and −1 per wrong, floored
+at zero and capped at 2, so **3-of-4 and 4-of-4 both pay full marks for ticking
+everything**. 3-of-5, 2-of-4 and 2-of-5 do not.
+
+**Why it is a rule and not a memory:** this is LAW-53, and it came back the moment eight
+new multi-selects were authored in good faith — four of them 3-of-4 and one 4-of-4, with
+nothing failing to say so.
+
+**Gate:** `tests/examiner-slice.test.mjs`. Current shapes: 3-of-5 ×20, 2-of-4 ×6, 2-of-5 ×2.
+
+---
+
 ## R5 — One visible prompt, one question
 
 **Banned:** shipping many questions that present identically. A candidate meeting the

@@ -113,8 +113,10 @@ function spreadByStem(questions) {
 /* Mirrored from app/t6.js alongside the rest of the paper builder; the digest check in
    tools/browser-checks/export-run.js is what keeps this copy honest. */
 function examPrefer(questions, prefer) {
-  if (!prefer || !prefer.length) return questions;
+  const hasReserved = questions.some((q) => q.examOnly);
+  if ((!prefer || !prefer.length) && !hasReserved) return questions;
   const band = (question) => {
+    if (!prefer || !prefer.length) return 0;
     const index = prefer.indexOf(question.writtenMode);
     return index < 0 ? prefer.length : index;
   };

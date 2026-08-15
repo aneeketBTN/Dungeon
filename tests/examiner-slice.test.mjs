@@ -55,23 +55,108 @@ function reservedIn(courseId) {
   return questionsOf(courseId).filter((question) => question.examOnly);
 }
 
-test("the slice exists and every reserved item is a real, complete question", () => {
-  const reserved = reservedIn("BRGSA");
-  assert.ok(reserved.length >= 5,
-    `BRGSA needs at least five reserved items for three distinct Section C draws, has ${reserved.length}`);
-  for (const question of reserved) {
-    assert.equal(question.type, "short-answer");
-    assert.equal(question.writtenMode, "integrated");
-    assert.ok(question.caselet && question.caselet.length > 400, `${question.id} has no substantial caselet`);
-    assert.ok(question.exemplar && question.exemplar.length > 400, `${question.id} has no worked exemplar`);
-    assert.ok(Array.isArray(question.rubric) && question.rubric.length >= 4,
-      `${question.id} has too few criteria for a ten-mark response`);
-    /* Every criterion must be diagnosable, or a miss cannot route to a repair. */
-    for (const criterion of question.rubric) {
-      assert.ok((question.writtenGaps || []).some((gap) => gap.criterionId === criterion.id),
-        `${question.id} cannot diagnose a gap on ${criterion.id}`);
+test("every subject has a reserved slice, and every reserved item is complete", () => {
+  for (const courseId of Object.keys(COURSES)) {
+    const reserved = reservedIn(courseId);
+    assert.ok(reserved.length > 0, `${courseId} has no examiner-only items`);
+    for (const question of reserved) {
+      if (question.type === "short-answer") {
+        assert.equal(question.writtenMode, "integrated");
+        assert.ok(question.caselet && question.caselet.length > 400, `${question.id} has no substantial caselet`);
+        assert.ok(question.exemplar && question.exemplar.length > 400, `${question.id} has no worked exemplar`);
+        assert.ok(Array.isArray(question.rubric) && question.rubric.length >= 4,
+          `${question.id} has too few criteria for a ten-mark response`);
+        for (const criterion of question.rubric) {
+          assert.ok((question.writtenGaps || []).some((gap) => gap.criterionId === criterion.id),
+            `${question.id} cannot diagnose a gap on ${criterion.id}`);
+        }
+      } else {
+        /* Objective reserved items still owe a diagnosis on every distractor: an
+           examiner item routes into repair after the paper, and a wrong option with
+           no diagnosis routes nowhere. */
+        assert.ok(Array.isArray(question.options) && question.options.length >= 4,
+          `${question.id} has too few options`);
+        const answers = question.type === "msq" ? (question.answers || []) : [question.answer];
+        (question.diagnoses || []).forEach((diagnosis, index) => {
+          if (answers.indexOf(index) >= 0) return;
+          assert.ok(diagnosis && diagnosis.why && diagnosis.cue,
+            `${question.id} option ${index} is wrong with nothing to say about why`);
+        });
+      }
     }
   }
+});
+
+/* BRGSA's Section C is fully reserved, so it needs enough of them to draw three
+   different papers from. Two slots drawn twice from four collided once already. */
+test("BRGSA has enough reserved scenarios for three distinct Section C draws", () => {
+  const scenarios = reservedIn("BRGSA").filter((q) => q.writtenMode === "integrated");
+  assert.ok(scenarios.length >= 5,
+    `Section C draws 2 and offers 3 sets; ${scenarios.length} reserved scenarios cannot make them distinct`);
+});
+
+/* A reserved item is on EVERY paper, so its shape bias is never diluted by the draw.
+ *
+ * Measured: adding two reserved BRGSA mcqs moved `combinedWithLength` on the drawn
+ * paper from 24% to 33.6% while the 78-item pool sat at 26% — three independent seeds
+ * all reading ~33, because one of the two was won outright by the rule and appeared on
+ * all three sets. A shared item carrying the same bias would have been diluted to
+ * roughly a quarter of that. Reserved items therefore have to be BETTER than average
+ * on craft, not merely average, and this is the check that says so. */
+test("no reserved objective item is won outright by a mechanical rule", () => {
+  const ABSOLUTES = /\b(only|all|every|always|never|entirely|automatically|simply|any|no other|nothing else)\b/i;
+  const UNETHICAL = /\b(hide|hiding|delete|deleting|ignore|ignoring|double-count|conceal|omit|misreport)\b/i;
+  const words = (value) => String(value || "").trim().split(/\s+/).filter(Boolean).length;
+  const offenders = [];
+  for (const courseId of Object.keys(COURSES)) {
+    for (const question of reservedIn(courseId)) {
+      if (question.type !== "mcq" || !Array.isArray(question.options)) continue;
+      let keep = question.options.map((_, i) => i);
+      const drop = (test) => { const next = keep.filter((i) => !test(question.options[i])); if (next.length) keep = next; };
+      drop((o) => ABSOLUTES.test(o));
+      drop((o) => UNETHICAL.test(o));
+      if (keep.length > 1) {
+        const lengths = keep.map((i) => words(question.options[i]));
+        const max = Math.max(...lengths);
+        const below = lengths.filter((l) => l < max);
+        if (below.length) {
+          const second = Math.max(...below);
+          const narrowed = keep.filter((i) => words(question.options[i]) === second);
+          if (narrowed.length) keep = narrowed;
+        }
+      }
+      if (keep.length === 1 && keep[0] === question.answer) offenders.push(`${courseId}/${question.id}`);
+    }
+  }
+  assert.equal(offenders.length, 0,
+    `these reserved items are answerable by eliminating absolutes then taking the second-longest, on every paper: ${offenders.join(", ")}`);
+});
+
+/* LAW-53, as a gate rather than as a memory.
+ *
+ * All eight original SPMS multi-selects were 3-correct-of-4, which on a section
+ * scoring +1 per right option, -1 per wrong, floored at zero and capped at the
+ * question's 2 marks, means ticking every option scores FULL marks. It was found by
+ * submitting a paper with nothing answered in Section A and reading 16/16.
+ *
+ * Writing eight new examiner-only multi-selects re-introduced it immediately: four
+ * came out 3-of-4 and one 4-of-4, and nothing failed — the shape was only caught by
+ * printing the distribution by hand. A defect that returns the moment someone authors
+ * in good faith is a defect that needs a test, not a law to remember. */
+test("ticking every option never reaches full marks on the negatively marked section", () => {
+  const MARKS = 2;
+  const offenders = [];
+  for (const question of questionsOf("SPMS")) {
+    if (question.type !== "msq") continue;
+    const right = (question.answers || []).length;
+    const wrong = (question.options || []).length - right;
+    const scored = Math.min(MARKS, Math.max(0, right - wrong));
+    if (scored >= MARKS) {
+      offenders.push(`${question.id} (${right}-of-${right + wrong} scores ${scored}/${MARKS})`);
+    }
+  }
+  assert.equal(offenders.length, 0,
+    `ticking everything must be strictly worse than answering: ${offenders.join(", ")}`);
 });
 
 test("no reserved item reaches any study-set pool", () => {

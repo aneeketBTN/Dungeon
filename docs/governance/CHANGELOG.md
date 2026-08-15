@@ -1,5 +1,44 @@
 # Changelog
 
+## 2026-08-15 — A reserved slice on every paper, and the exploit the defence created
+
+Evidence: `evidence/2026-08-15/t6-rehaul-completion/verification.md` §8–§13.
+`VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)`, same branch, not merged. Closes
+the four items the entry below left open.
+
+- **44 reserved items across all four subjects.** Every concept on every paper now has an
+  examiner surface a learner cannot have met while studying — **16/16 × 4**, from 0/16 on
+  three of them — and overlap fell from 100% to 60–80%. Additive throughout: nothing Learn
+  could reach before was withdrawn, asserted by re-checking each concept's surface floor
+  with the slice removed.
+- **SPMS Section B had zero slack** — 20 drawn from a pool of 20, so three "different"
+  seeded sets were identical across 40 of that paper's 75 marks, on the term's only
+  negatively marked section. Pool now 28.
+- **"Pick the second-longest" was the real shape exploit, on all four subjects.** The brief
+  recorded it as an IBM rank-3 warning; measured, SPMS 38.5%, IBM 35.9%, BRGSA and SCLM
+  32.9%. It exists *because* the defence against "pick the longest" created it —
+  `comparableWrong` selects distractors closest in length to the answer, which beat
+  `longest` and left the answer one rank below the top. A structural fix was tested and
+  rejected: three selection variants gave byte-identical numbers, because the mcq families
+  have exactly three authored distractors. 23 distractors made more specific instead →
+  26.9 / 22.4 / 27.0 / 28.2, `longest` unmoved, **the standing length warning cleared**.
+- **`fixedB` is now reported and not gated**, with the reason recorded: slots are dealt
+  flat by construction and the validator confirms 0.25 × 4, so gating a 50-of-100 draw
+  measures sampling noise rather than the bank.
+- **A reserved item's shape bias is never diluted**, because it appears on every paper. Two
+  new BRGSA mcqs moved `combinedWithLength` from 24% to 33.6% while the pool sat at 26%.
+  A new test caught nine such items, seven of them written in this session.
+- **LAW-53 returned during authoring** — four of eight new multi-selects were 3-of-4 and one
+  4-of-4, so ticking everything scored full marks. Caught by hand, now a test.
+- **LAW-67 recurred inside the tool written to catch it**: `--gate` was taken as the harness
+  directory, so T3 reported a pass over an empty report.
+- **14 of 20 SPMS multiple-select stems** asked what "the lecture" said rather than what is
+  true (the brief records fifteen). All rewritten. `spms_roadmap_msq` no longer carries a
+  WhatsApp release date as a *correct* option among framework claims.
+- **BRGSA self-containment audited for the first time**: 0 items require a brand figure the
+  page does not carry, 0 name a case they do not show. Three probe narrowings were needed
+  first — the first draft would have reported 25 non-defects.
+
 ## 2026-08-15 — The five open items, and the four gates that judge them
 
 Evidence: `evidence/2026-08-15/t6-rehaul-completion/verification.md`.
