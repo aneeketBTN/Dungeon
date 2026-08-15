@@ -8,7 +8,7 @@ var vm = require("vm");
 var root = path.join(__dirname, "..", "app");
 var context = {window: {}, atob: function (value) { return Buffer.from(value, "base64").toString("binary"); }};
 vm.createContext(context);
-["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_challenges.js"].forEach(function (relative) {
+["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_challenges.js"].forEach(function (relative) {
   var filename = path.join(root, relative);
   vm.runInContext(fs.readFileSync(filename, "utf8"), context, {filename: filename});
 });
@@ -21,6 +21,81 @@ var seenIds = new Set();
 
 function words(value) {
   return String(value || "").trim().split(/\s+/).filter(Boolean).length;
+}
+
+/* LAW-61, enforced instead of audited.
+ *
+ * "In the drilling-machine example, select every need the purchase actually serves" —
+ * with no drilling machine anywhere on the page. The law has been a REDLINE since
+ * 2026-08-14 and had NO gate behind it: the fix was a manual two-pass audit of all 816
+ * questions, so nothing stopped the next one. An item like this validates, schedules
+ * and marks correctly; it is simply unanswerable by reasoning, which is invisible to
+ * every other check here.
+ *
+ * Two detectors, both on what the candidate can actually see:
+ *
+ *   DANGLING   the stem points at a specific example, case or scenario and the
+ *              question ships no caselet to point at. On the examiner there is no
+ *              lesson at all, so the referent has never existed.
+ *   ORPHAN     the stem says "the same X" / "this X" where X never appears in the
+ *              caselet. This is what put "The same distributor settles on an order
+ *              quantity of 600 units" in SCLM Section B ahead of any distributor.
+ *
+ * Deliberately narrow. It fires on a pointing phrase plus a missing referent, never on
+ * a stem that merely contains the word "case", because a gate that cries wolf gets
+ * switched off and this one has to survive.
+ */
+var POINTS_AT_AN_EXAMPLE = /\b(in|from|for) the ([a-z][a-z-]* ){0,3}(example|case|caselet|scenario|situation|passage|extract|vignette)\b|\bthe (above|earlier|previous|preceding|foregoing) \w+|\bas (described|shown|given|stated) (above|earlier|previously)\b/i;
+var NAMES_A_PRIOR_THING = /\bthe same ([a-z][a-z-]*(?: [a-z][a-z-]*)?)\b/i;
+
+function visibleText(question) {
+  return [question.caselet, question.stem, question.prompt]
+    .filter(function (value) { return typeof value === "string"; }).join(" ");
+}
+
+function checkReferents(question) {
+  var stem = [question.stem, question.prompt]
+    .filter(function (v) { return typeof v === "string"; }).join(" ");
+  if (!stem) return;
+  var caselet = typeof question.caselet === "string" ? question.caselet : "";
+
+  if (POINTS_AT_AN_EXAMPLE.test(stem) && !caselet.trim()) {
+    errors.push(question.id + " points at an example its stem never shows (LAW-61): \"" +
+      stem.slice(0, 90) + "\"");
+  }
+
+  var sameMatch = NAMES_A_PRIOR_THING.exec(stem);
+  if (sameMatch) {
+    /* Two very different uses of "the same X" share a shape:
+     *
+     *   ANAPHORIC     "The same distributor settles on an order quantity of 600" —
+     *                 pointing back at a distributor this question never introduced.
+     *                 The real defect, and it sat in SCLM Section B.
+     *   DISTRIBUTIVE  "sends the same weekly email to every user, regardless of
+     *                 their stage" — one thing given to many, introduced right here.
+     *                 Perfectly answerable, and the first version of this check
+     *                 flagged it.
+     *
+     * They separate on two things: a distributive reading carries a to/for/across
+     * every|each|all marker, and an anaphoric one has its noun appear nowhere else in
+     * what the candidate can see. Requiring BOTH keeps the gate quiet enough to stay
+     * switched on. */
+    /* The head noun is the FIRST word after "the same" — "the same distributor
+       settles" is a distributor, not a settles. Taking the last word of the capture
+       named the verb that followed it. */
+    var phrase = sameMatch[1].trim().split(/\s+/);
+    var noun = phrase[0];
+    var tail = stem.slice(sameMatch.index, sameMatch.index + sameMatch[0].length + 40);
+    var distributive = /\b(to|for|across|with)\s+(every|each|all|both|any)\b/i.test(tail);
+    var seenElsewhere = visibleText(question)
+      .toLowerCase()
+      .split(sameMatch[0].toLowerCase()).join(" ")
+      .indexOf(noun.toLowerCase()) >= 0;
+    if (noun && noun.length > 3 && !distributive && !seenElsewhere) {
+      errors.push(question.id + " says \"the same " + sameMatch[1] +
+        "\" but nothing the candidate can see introduces that " + noun + " (LAW-61)");
+    }
+  }
 }
 
 function checkOptionShape(question, label, options, answer, allowExcludedLegacy) {
@@ -77,6 +152,46 @@ function longestOptionScore(questions) {
     if (lengths[question.answer] === longest) wins += 1 / tied;
   });
   return scored ? {scored: scored, score: wins / scored} : {scored: 0, score: 0};
+}
+
+/* Answer POSITION spread — where the correct answer sits in the list as printed.
+ *
+ * The two checks above watch how long the correct answer is. Neither watches
+ * where it is, and that is the hole a real exploit went through: BRGSA's
+ * hand-authored MCQs placed the answer at slot B in 85% of cases, with fifteen
+ * consecutive. Three test students found it independently, and one scored 40/40
+ * on a section of a subject he had never studied by pressing B down the column.
+ *
+ * Chance is 1/n. This errors rather than warns, because unlike the length checks
+ * it passes today and a regression here is silently worth free marks. Grouped by
+ * option count so a five-option item is judged against 20%, not 25%. */
+var SLOT_BIAS_LIMIT = 0.35;
+
+function answerSlotSpread(questions) {
+  var groups = {};
+  questions.forEach(function (question) {
+    if (question.type && question.type !== "mcq") return;
+    if (Array.isArray(question.answers)) return;
+    if (!Array.isArray(question.options) || typeof question.answer !== "number") return;
+    if (question.options.length < 2) return;
+    var size = question.options.length;
+    groups[size] = groups[size] || {counts: [], total: 0};
+    groups[size].counts[question.answer] = (groups[size].counts[question.answer] || 0) + 1;
+    groups[size].total += 1;
+  });
+  var worst = {share: 0, slot: null, size: null, total: 0};
+  var shares = {};
+  Object.keys(groups).forEach(function (size) {
+    var group = groups[size];
+    var list = [];
+    for (var slot = 0; slot < Number(size); slot += 1) {
+      var share = (group.counts[slot] || 0) / group.total;
+      list.push(Math.round(share * 100) / 100);
+      if (share > worst.share) worst = {share: share, slot: slot, size: Number(size), total: group.total};
+    }
+    shares[size] = list;
+  });
+  return {shares: shares, worst: worst};
 }
 
 /* Length RANK spread — the generalisation of the check above.
@@ -221,13 +336,22 @@ courseIds.forEach(function (courseId) {
     });
     if (seenIds.has(question.id)) errors.push("Duplicate question ID " + question.id);
     seenIds.add(question.id);
+    checkReferents(question);
     if (!Array.isArray(question.skills) || !question.skills.length) errors.push(question.id + " has no skill tags");
     if (!Array.isArray(question.sourceIds) || !question.sourceIds.length) errors.push(question.id + " has no sourceIds");
-    if (question.type === "mcq" || question.type === "primer") {
+    if (question.type === "primer") {
+      /* LAW-63. A primer asks for a prediction and reveals the rule afterwards, so an
+       * options array is not a shape variation here — it is the defect: an option list
+       * needs a key, and the key was the same sentence the panel had already printed.
+       * The gate therefore forbids options outright rather than checking their shape,
+       * and requires the case that the prediction is made against. */
+      if (question.options !== undefined || question.answer !== undefined) errors.push(question.id + " must not offer options; a primer takes a prediction and has no keyed answer");
+      if (!question.primerOnly || !question.primerCase || !question.primerFact || !question.primerApplication || !question.primerConnection) errors.push(question.id + " lacks adaptive primer content");
+      if (question.primerCase && question.primerCase.indexOf(question.primerFact) >= 0) errors.push(question.id + " prints its own principle inside the case it asks about");
+    } else if (question.type === "mcq") {
       if (!Array.isArray(question.options) || question.options.length < 3 || question.options.length > 4) errors.push(question.id + " must use three or four plausible MCQ options");
       checkOptionShape(question, "MCQ answer", question.options, question.answer, true);
       if (!Array.isArray(question.misconceptions) || question.misconceptions.length !== question.options.length) errors.push(question.id + " lacks option-level misconception tags");
-      if (question.type === "primer" && (!question.primerOnly || !question.primerFact || !question.primerApplication || !question.primerConnection)) errors.push(question.id + " lacks adaptive primer content");
     } else if (question.type === "cloze" || question.type === "case-cloze") {
       if (!Array.isArray(question.blanks) || !question.blanks.length || !Array.isArray(question.template) || question.template.length !== question.blanks.length + 1) errors.push(question.id + " has an invalid cloze structure");
       (question.blanks || []).forEach(function (blank, index) { checkOptionShape(question, "blank " + (index + 1), blank.options, blank.answer, false); });
@@ -285,7 +409,12 @@ courseIds.forEach(function (courseId) {
       if (!question.selfReviewOnly || !Array.isArray(question.rubric) || question.rubric.length < 2 || !question.exemplar) errors.push(question.id + " lacks a transparent self-review rubric or exemplar");
       if ((question.options || question.answer) !== undefined) errors.push(question.id + " must not imply opaque automatic grading");
       if (["BRGSA", "IBM"].indexOf(courseId) < 0) errors.push(question.id + " invents a written-response format outside the published paper pattern");
-      if (["short", "case"].indexOf(question.writtenMode) < 0) errors.push(question.id + " does not declare whether it is short-form or case-based writing");
+      /* `integrated` is the third mode, added with the eight cross-concept scenarios
+         in t6_integrated.js. The gate predated them and was never widened — and it
+         never fired to say so, because this validator did not load that file at all
+         (fixed above). The whole of the newest and best-rated content in the product
+         was passing a check that had never seen it. */
+      if (["short", "case", "integrated"].indexOf(question.writtenMode) < 0) errors.push(question.id + " does not declare whether it is short-form, case-based or integrated writing");
       var rubricIds = (question.rubric || []).map(function (criterion) { return criterion.id; });
       var gapIds = {};
       (question.writtenGaps || []).forEach(function (gap) {
@@ -545,6 +674,20 @@ var total = courseIds.reduce(function (sum, courseId) { return sum + Object.keys
  * regression it was written for. Growth is expected; shrinkage is the bug. */
 if (total < 792) errors.push("Bank shrank to " + total + " items; the floor is 792 (728 generated challenges + 64 adaptive primers). A drop means the generator lost surfaces.");
 
+var LETTERS = ["A", "B", "C", "D", "E", "F"];
+courseIds.forEach(function (courseId) {
+  var questions = Object.keys(courses[courseId].questions).map(function (id) { return courses[courseId].questions[id]; });
+  var worst = answerSlotSpread(questions).worst;
+  if (!worst.total || worst.share <= SLOT_BIAS_LIMIT) return;
+  errors.push(
+    courseId + ": the correct answer sits at option " + (LETTERS[worst.slot] || worst.slot) +
+    " in " + Math.round(worst.share * 100) + "% of " + worst.total + " " + worst.size +
+    "-option questions (chance is " + Math.round((1 / worst.size) * 100) + "%), so \"always pick " +
+    (LETTERS[worst.slot] || worst.slot) + "\" is a strategy. Answer position must be dealt evenly, " +
+    "not left wherever the author happened to put it."
+  );
+});
+
 console.log(JSON.stringify({
   ok: errors.length === 0,
   lessons: {authored: Object.keys(lessons).length, coverage: lessonCoverage},
@@ -564,7 +707,10 @@ console.log(JSON.stringify({
       // first. Four 0.25s means length carries no signal at all; one tall bar is a
       // strategy, whichever rank it sits on. Watches what longestOptionScore cannot.
       lengthRankShares: spread.shares.map(function (share) { return Math.round(share * 100) / 100; }),
-      lengthRankSpread: Math.round(spread.spread * 100) / 100
+      lengthRankSpread: Math.round(spread.spread * 100) / 100,
+      // Where the correct answer sits as printed. Flat is the target; one tall
+      // bar is "always pick that letter", which is worth free marks.
+      answerSlotShares: answerSlotSpread(questions).shares
     };
     return result;
   }, {}),

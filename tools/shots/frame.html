@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dungeon shot frame</title>
+<!--
+  The screenshot frame.
+
+  WHY THIS EXISTS
+  Every verification since 2026-08-12 has closed with "no screenshots — the Browser pane
+  was not compositing". An undisplayed pane composites no frames, so the pane's own
+  screenshot times out saying so. Headless Chrome has no pane to display — but
+  `chrome --screenshot` photographs a page as it loads and cannot click, so on its own it
+  can only ever capture a landing screen.
+
+  This is the way round it. The frame is same-origin with the app, so it drives the real
+  UI inside an iframe exactly as tools/browser-checks/*.js do in the pane, and then holds
+  still. Chrome photographs the frame; the frame is the app at the size asked for. It is
+  the fixed-width same-origin iframe technique LAW-64 already prescribes for measuring
+  layout, used for pictures instead of numbers.
+
+  It ships nothing: `tools/` is outside the build allowlist.
+
+  EVERYTHING WAITS
+  The app renders its dashboard after its own boot, and crossing between Learn and the
+  examiner runs through `document.startViewTransition`, which is asynchronous. The first
+  version of this file drove the UI on the iframe's `load` event and failed on fourteen
+  of sixteen scenes with "no subject card reads 'SPMS'" — the cards had not been rendered
+  yet. So every step waits for the thing it is about to press.
+
+  URL CONTRACT
+    ?scene=<name>&w=<px>&h=<px>&theme=light|dark|system&subject=SPMS|BRGSA|SCLM|IBM
+-->
+<style>
+  html, body { margin: 0; padding: 0; background: #ffffff; }
+  body.dark { background: #101314; }
+  iframe { border: 0; display: block; }
+  /* Visible only when a scene throws, and deliberately loud: a blank screenshot and a
+     screenshot of a failed drive look identical otherwise. */
+  #shot-error {
+    position: fixed; inset: 0; z-index: 9999; display: none;
+    padding: 24px; font: 16px/1.5 ui-monospace, monospace;
+    color: #fff; background: #a3121b; white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+<div id="shot-error"></div>
+<script>
+(function () {
+  "use strict";
+  var params = new URLSearchParams(location.search);
+  var scene = params.get("scene") || "dashboard";
+  var width = Number(params.get("w") || 1280);
+  var height = Number(params.get("h") || 800);
+  var theme = params.get("theme") || "system";
+  var subject = params.get("subject") || "SPMS";
+  var KEY = "term6.revision.v2";
+
+  function fail(message) {
+    var box = document.getElementById("shot-error");
+    box.style.display = "block";
+    box.textContent = "The scene did not complete.\nscene: " + scene + "\n\n" + message;
+    /* The driver reads the title, not the body — the body's own explanation of this
+       banner used to match the driver's search for it and condemned four good shots. */
+    document.title = "shot broken: " + scene;
+  }
+
+  /* The app reads its profile from storage once, at load, so anything staged has to be
+     written BEFORE the iframe is created — never after. */
+  try { localStorage.removeItem(KEY); } catch (error) { /* first run */ }
+  if (theme === "dark" || theme === "light") {
+    try { localStorage.setItem("term6.appearance", theme); } catch (error) { /* ignore */ }
+    if (theme === "dark") document.body.classList.add("dark");
+  }
+
+  var frame = document.createElement("iframe");
+  frame.width = width;
+  frame.height = height;
+  frame.src = "/app/t6.html";
+  document.body.appendChild(frame);
+
+  /* ---- waiting -------------------------------------------------------------------
+   * Poll rather than listen: the app exposes no ready event, and the things being
+   * waited for arrive from three different mechanisms (boot render, a view transition,
+   * a re-render after a click). A deadline in virtual time costs no wall clock. */
+  function waitFor(describe, test, timeoutMs) {
+    return new Promise(function (resolve, reject) {
+      var deadline = Date.now() + (timeoutMs || 6000);
+      (function poll() {
+        var value;
+        try { value = test(); } catch (error) { value = null; }
+        if (value) return resolve(value);
+        if (Date.now() > deadline) return reject(new Error("timed out waiting for " + describe));
+        setTimeout(poll, 40);
+      })();
+    });
+  }
+
+  function doc() { return frame.contentDocument; }
+  function win() { return frame.contentWindow; }
+
+  function card(code) {
+    return Array.prototype.slice.call(doc().querySelectorAll("#course-grid .course-card"))
+      .filter(function (button) {
+        var label = button.querySelector(".course-code");
+        return label && label.textContent.trim() === code;
+      })[0];
+  }
+
+  function pick(selector) { return doc().querySelector(selector); }
+
+  /* Advance one step of a learn run through the real controls: fill whatever the
+     surface asks for, commit, continue. */
+  function advance() {
+    var d = doc();
+    var textarea = d.querySelector("#options textarea");
+    if (textarea) {
+      textarea.value = "I think the rule is that the promise sets what the chain has to be good at.";
+      textarea.dispatchEvent(new (win().Event)("input", { bubbles: true }));
+    }
+    var groups = {};
+    Array.prototype.slice.call(d.querySelectorAll("#options input[type=radio]")).forEach(function (radio) {
+      if (!groups[radio.name]) { groups[radio.name] = 1; radio.click(); }
+    });
+    var option = d.querySelector("#options .option");
+    if (option && !Object.keys(groups).length) option.click();
+    var confidence = d.getElementById("confidence-check");
+    if (confidence && !confidence.hidden) {
+      var choice = confidence.querySelector("input[type=radio], button");
+      if (choice) choice.click();
+    }
+    var commit = d.getElementById("commit-answer");
+    if (commit && !commit.hidden && !commit.disabled) commit.click();
+    var next = d.getElementById("next-question");
+    if (next && !next.hidden) next.click();
+  }
+
+  /* ---- the scenes ---------------------------------------------------------------
+   * Each reaches its screen through the controls a learner uses. A scene that cannot
+   * find its control rejects, and the frame paints the failure rather than
+   * photographing whatever happened to be on screen. */
+  var SCENES = {
+    /* The homepage on a fresh profile — what a learner meets first. */
+    dashboard: function () {
+      return waitFor("the " + subject + " subject card", function () { return card(subject); })
+        .then(function (button) { button.click(); })
+        .then(function () { return waitFor("the set list", function () { return pick("#set-list .set-card"); }); });
+    },
+
+    /* The first lesson of the subject's first step: the teaching surface. */
+    lesson: function () {
+      return SCENES.dashboard()
+        .then(function () { pick("#set-list .set-card").click(); })
+        .then(function () {
+          return waitFor("a lesson on screen", function () {
+            var panel = doc().getElementById("lesson-panel");
+            return panel && !panel.hidden;
+          });
+        });
+    },
+
+    /* A scored question inside a real run, reached by answering the ones before it. */
+    question: function () {
+      return SCENES.lesson().then(function () {
+        var tries = 0;
+        function onward() {
+          var options = doc().getElementById("options");
+          var hasControl = options && options.querySelector(".option, input[type=radio]");
+          var isPrediction = options && options.querySelector("textarea");
+          if (hasControl && !isPrediction && tries > 0) return Promise.resolve();
+          if (tries > 10) return Promise.reject(new Error("no scored question reached in 10 steps"));
+          tries += 1;
+          advance();
+          return waitFor("the next step", function () { return doc().getElementById("options"); }, 3000).then(onward);
+        }
+        return onward();
+      });
+    },
+
+    /* The examiner's front door. Crossing runs through a view transition. */
+    "exam-home": function () {
+      return waitFor("the Exam switch", function () { return doc().getElementById("mode-exam"); })
+        .then(function (button) { button.click(); })
+        .then(function () {
+          return waitFor("the paper cards", function () { return pick("#exam-papers [data-exam-set]"); });
+        });
+    },
+
+    /* A paper mid-question: the screen the 2026-08-14 layout sweep never visited, and
+       where the legend chip was found painting across its own label (LAW-64). */
+    "exam-question": function () {
+      return SCENES["exam-home"]()
+        .then(function () {
+          var open = pick('#exam-papers [data-exam-course="' + subject + '"][data-exam-set="0"]');
+          if (!open) throw new Error("no paper button for " + subject);
+          open.click();
+        })
+        .then(function () {
+          return waitFor("the pre-clock cover", function () { return doc().getElementById("exam-begin"); });
+        })
+        .then(function (begin) { if (!begin.hidden) begin.click(); })
+        .then(function () { return waitFor("a question on the paper", function () { return pick(".exam-stem"); }); });
+    }
+  };
+
+  frame.addEventListener("load", function () {
+    if (!SCENES[scene]) {
+      return fail("unknown scene; have: " + Object.keys(SCENES).join(", "));
+    }
+    if (theme === "dark" || theme === "light") {
+      try {
+        if (win().T6Theme && typeof win().T6Theme.set === "function") win().T6Theme.set(theme);
+      } catch (error) { /* the app decides; the frame's ground colour still matches */ }
+    }
+    SCENES[scene]()
+      .then(function () {
+        /* Settle before the shutter.
+         *
+         * A shot taken mid-transition photographs a frame no learner sees for longer
+         * than 200ms. The first version finished every animation once and waited
+         * 120ms, and the mobile dashboard still came back with the resume bar's
+         * "Start this study set / Go →" ghosted underneath the real button — the bar
+         * renders and then hides itself when it finds no run to resume, and the
+         * shutter landed inside that. Finishing once is not enough: finishing one
+         * animation can start another (`allow-discrete` + `@starting-style` is exactly
+         * that shape), so this finishes repeatedly until two consecutive checks find
+         * nothing running. */
+        function quiet(rounds) {
+          var d = doc();
+          if (typeof d.getAnimations !== "function") {
+            return new Promise(function (resolve) { setTimeout(resolve, 250); });
+          }
+          var live = d.getAnimations().filter(function (animation) { return animation.playState === "running"; });
+          live.forEach(function (animation) {
+            try { animation.finish(); } catch (error) { /* infinite ones cannot finish */ }
+          });
+          if (!live.length && rounds >= 2) {
+            return new Promise(function (resolve) { setTimeout(resolve, 250); });
+          }
+          if (rounds > 40) throw new Error("the page never stopped animating");
+          return new Promise(function (resolve) { setTimeout(resolve, 60); })
+            .then(function () { return quiet(live.length ? 0 : rounds + 1); });
+        }
+        return quiet(0);
+      })
+      .then(function () { document.title = "shot ready: " + scene; })
+      .catch(function (error) { fail(String((error && error.stack) || error)); });
+  });
+})();
+</script>
+</body>
+</html>

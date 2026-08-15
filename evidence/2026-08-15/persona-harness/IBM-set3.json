@@ -1,0 +1,184 @@
+{
+ "subject": "IBM",
+ "subjectTitle": "Inclusive Business Model",
+ "set": 3,
+ "digest": "afc89098",
+ "instructions": {
+  "sat": "23 August, 09:00–11:00",
+  "minutes": 120,
+  "calculator": null,
+  "marksOnTheRealPaper": 100,
+  "marksAvailableHere": 100,
+  "sections": [
+   {
+    "id": "A",
+    "count": 10,
+    "marks": 10,
+    "rule": "Ten written answers on a caselet released two days before the exam."
+   }
+  ],
+  "shortfalls": [],
+  "caveat": "A mock cannot reproduce this paper, because the case is the paper. This is timed writing practice against the frameworks."
+ },
+ "paper": [
+  {
+   "number": 1,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_selco_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain SELCO affordability system in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "kerosene",
+    "doorstep finance",
+    "doorstep servicing"
+   ]
+  },
+  {
+   "number": 2,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_aravind_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Process specialisation in healthcare in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "cataract",
+    "ophthalmologist",
+    "cross-subsidize"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_vaatsalya_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain No-frills healthcare access in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "semi-urban",
+    "cross-subsidy"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_rural_bpo_case_answer",
+   "type": "short-answer",
+   "caselet": "A BPO is considering a delivery centre in a district town where about 1,200 graduates enter the market each year and few migrate for work. Wage expectations run 40% below the metro rate, and attrition at comparable rural centres is 8% against 45% in cities. The available contracts are document processing and regional-language customer support, with a client quality bar of a 2% error ceiling audited monthly. Local candidates have strong regional-language ability and little exposure to accented international voice work, and the town loses power for about 90 minutes a day.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "business process outsourcing",
+    "franchisee",
+    "migration"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_grameen_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Group-based microfinance in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "collateral",
+    "credit history",
+    "adverse selection",
+    "moral hazard"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_shared_value_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Shared value in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "value sharing",
+    "financially viable",
+    "public goods"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_waste_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Inclusive waste enterprise in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "waste picker",
+    "informal sector"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_responsible_lending_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Responsible lending in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "MFI",
+    "default",
+    "non-performing asset"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_inclusive_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Inclusive business in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "inclusive business",
+    "primary objective",
+    "financially sustainable"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_shared_value_case_answer",
+   "type": "short-answer",
+   "caselet": "A dairy processor buys from 12,000 smallholders. Rejections for bacterial count run at 19%, forcing spot purchases at a 23% premium whenever supply falls short. Farmers average 4.1 litres per animal per day against a 7-litre regional benchmark, and most sell through intermediaries who deduct 15%. A proposal would fund village chilling units, veterinary services and direct payment at ₹6 crore over three years, projected to lift yield to 6 litres, cut rejections to 6% and raise farmer realisation by 22%. The CFO asks why a processor should pay for farm productivity.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "value sharing",
+    "financially viable",
+    "public goods"
+   ]
+  }
+ ]
+}

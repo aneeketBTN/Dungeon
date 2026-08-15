@@ -1,0 +1,22 @@
+{
+  "SCLM": {
+    "questions": 67,
+    "noAbsolutes": 32.6,
+    "longest": 53.7,
+    "fixedB": 35.8,
+    "ethical": 25.1,
+    "correctCarriesAbsolute": "3%",
+    "wrongCarriesAbsolute": "19.5%",
+    "chance": 25.1
+  },
+  "BRGSA": {
+    "questions": 80,
+    "noAbsolutes": 38.6,
+    "longest": 86.7,
+    "fixedB": 31.3,
+    "ethical": 24.9,
+    "correctCarriesAbsolute": "7.5%",
+    "wrongCarriesAbsolute": "37.9%",
+    "chance": 25
+  }
+}

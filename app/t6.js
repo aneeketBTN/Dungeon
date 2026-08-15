@@ -108,16 +108,64 @@
     {id: "weak", label: "What needs work", hint: "Open misses and missing evidence first", summary: "concepts that need work"},
     {id: "new", label: "New ground", hint: "Concepts you have not started", summary: "concepts you have not started"}
   ];
+  /* "Every concept" is a coverage rule wearing a length's clothes: it asks for one
+   * question per eligible concept, so its size is the subject's, not a fixed number.
+   * It lives under "How long" because that is the question it answers for a learner
+   * — as long as it takes to touch each idea once. */
   var PRACTICE_LENGTHS = [
     {id: "quick", label: "Quick", target: 6},
     {id: "standard", label: "Standard", target: 12},
-    {id: "deep", label: "Deep", target: 18}
+    {id: "deep", label: "Deep", target: 18},
+    {id: "sweep", label: "Every concept", target: null, sweep: true}
   ];
   var PRACTICE_MODES = [
     {id: "learning", label: "After each answer", hint: "Explanation and repair straight away"},
     {id: "simulation", label: "Held to the end", hint: "Answers and rubrics wait for the review"}
   ];
-  var DEFAULT_BUILDER = {shape: "mixed", focus: "all", length: "standard", mode: "learning"};
+
+  /* Difficulty was always in the bank — every scheduled question carries 2 to 5 —
+   * and nothing on the learn side had ever let anyone ask for it. It is the dial the
+   * three presets actually turn, so it is a real chip row rather than something the
+   * presets do behind the panel's back: a preset is a saved position of these dials
+   * and nothing more. Bands overlap on purpose. A 3 is the top of the ground-covering
+   * band and the floor of the applied one, because the same question is a stretch for
+   * someone starting and a warm-up for someone finishing. */
+  var PRACTICE_BANDS = [
+    {id: "foundation", label: "Plainest", hint: "The direct surfaces: recall and one-step reading", min: 2, max: 3, summary: "the plainest surfaces"},
+    {id: "applied", label: "Applied", hint: "Cases, matching and short answers on a single idea", min: 3, max: 4, summary: "applied questions"},
+    {id: "hardest", label: "Hardest", hint: "Module bosses and synthesis across two ideas at once", min: 4, max: 5, summary: "the hardest surfaces"},
+    {id: "any", label: "Any", hint: "Draw from every difficulty in the subject", min: 0, max: 9, summary: "any difficulty"}
+  ];
+
+  /* The three ways in, named for the stretch of marks each is built for. Every preset
+   * is exactly a set of the dials above, so the panel can never disagree with the card
+   * a learner pressed, and tinkering after pressing one simply lands on "Custom"
+   * instead of leaving a lit card describing a run that is no longer the one queued. */
+  var PRACTICE_PRESETS = [
+    {
+      id: "foundation",
+      range: "0 → 60",
+      label: "Cover everything once",
+      promise: "Every concept in the subject, one question each, on its plainest surface.",
+      settings: {band: "foundation", shape: "mixed", focus: "all", length: "sweep", mode: "learning"}
+    },
+    {
+      id: "applied",
+      range: "60 → 80",
+      label: "Test each idea properly",
+      promise: "The same ideas from several angles — cases, matching, and writing rather than recognition.",
+      settings: {band: "applied", shape: "mixed", focus: "all", length: "deep", mode: "learning"}
+    },
+    {
+      id: "hardest",
+      range: "80 → 100",
+      label: "Only the hardest surfaces",
+      promise: "Module bosses and synthesis questions that need two ideas at once and the subject behind them.",
+      settings: {band: "hardest", shape: "mixed", focus: "all", length: "standard", mode: "learning"}
+    }
+  ];
+  var BUILDER_DIALS = ["band", "shape", "focus", "length", "mode"];
+  var DEFAULT_BUILDER = clone(PRACTICE_PRESETS[0].settings);
 
   function $(id) { return document.getElementById(id); }
   function $all(selector) { return Array.prototype.slice.call(document.querySelectorAll(selector)); }
@@ -210,6 +258,26 @@
       Boolean(optionById(PRACTICE_MODES, candidate.mode));
   }
 
+  /* Difficulty arrived after the builder shipped, so a profile saved before it has
+   * four dials and not five. That is a missing field, not a corrupt one: fill it and
+   * keep everything the learner had chosen, rather than throwing their settings away
+   * for the sake of a key that did not exist when they made them. */
+  function normalizeBuilder(candidate) {
+    if (!validBuilder(candidate)) return clone(DEFAULT_BUILDER);
+    if (!optionById(PRACTICE_BANDS, candidate.band)) candidate.band = "any";
+    return candidate;
+  }
+
+  /* Which card lights up is read back from the dials, never stored beside them. A
+   * stored preset id is a second source of truth that drifts the moment one chip is
+   * pressed, and a card claiming a run the queue will not deliver is exactly the
+   * lying control LAW-01 exists to prevent. */
+  function presetFor(settings) {
+    return PRACTICE_PRESETS.filter(function (preset) {
+      return BUILDER_DIALS.every(function (dial) { return preset.settings[dial] === settings[dial]; });
+    })[0] || null;
+  }
+
   function validProfile(candidate) {
     return candidate && candidate.version === 2 && COURSE_IDS.indexOf(candidate.selectedCourse) >= 0 &&
       candidate.conceptAttempts && candidate.completed && (!candidate.active || validSession(candidate.active));
@@ -227,7 +295,7 @@
     candidate.examMisses = candidate.examMisses && typeof candidate.examMisses === "object" ? candidate.examMisses : {};
     candidate.examAttempts = candidate.examAttempts && typeof candidate.examAttempts === "object" ? candidate.examAttempts : {};
     candidate.writtenPractice = candidate.writtenPractice && typeof candidate.writtenPractice === "object" ? candidate.writtenPractice : {};
-    if (!validBuilder(candidate.builder)) candidate.builder = clone(DEFAULT_BUILDER);
+    candidate.builder = normalizeBuilder(candidate.builder);
     if (candidate.active) {
       /* A model request cannot survive a page lifetime. If the page closed while
          grading, restore the answer as ready to submit instead of resuming a
@@ -438,10 +506,80 @@
       .filter(Boolean);
   }
 
-  // Lessons a question depends on that the learner has not been taught yet.
-  function pendingLessonsFor(question) {
+  /* Where a lecture sits in the course's own teaching sequence.
+   *
+   * A lecture id is `<SUBJECT>-M<NN>-L<NN>`, and both numbers are positional: the
+   * modules run in teaching order and the Nth section of a module file is L<N>.
+   * So module-then-lecture *is* the order the course builds its ideas in, and
+   * nothing else needs inventing — there is no separate prerequisite graph, and
+   * the concept records carry prose (`bridge`) rather than links.
+   *
+   * An unparseable id sorts last rather than first: an unknown position must not
+   * silently claim to be the foundation everything else builds on. */
+  function lectureTeachingRank(lectureId) {
+    var parsed = /-M(\d+)-L(\d+)$/.exec(String(lectureId || ""));
+    return parsed ? (Number(parsed[1]) * 1000) + Number(parsed[2]) : Number.MAX_SAFE_INTEGER;
+  }
+
+  /* A surface's place in the sequence is the LAST lecture it needs, not the first.
+   * A question citing M01-L05 and M01-L10 cannot be asked until both are taught,
+   * so ranking it by L05 would drag L10's lesson forward into the middle of L05's
+   * block and undo the layering this ordering exists to create. */
+  function teachingRankOf(question) {
+    var ranks = lectureIdsFor(question).map(lectureTeachingRank);
+    return ranks.length ? Math.max.apply(null, ranks) : Number.MAX_SAFE_INTEGER;
+  }
+
+  function conceptIdsOf(question) {
+    if (!question) return [];
+    return unique([question.conceptId].concat(question.supportingConceptIds || [])).filter(Boolean);
+  }
+
+  /* A lesson the learner has read, whose idea their answers since say they did not
+   * take away.
+   *
+   * `lessonsRead` was a one-way latch and `pendingLessonsFor` filtered on it, so a
+   * lecture met once was never taught again — including by the routes that exist for
+   * nothing else. `conceptRepairIds` is commented "One concept, several surfaces,
+   * taught first"; `startExamRepair` prints "Taught first, then tested again" on
+   * screen; the re-attempt path below says "must not overtake its own teaching". All
+   * three were true only for a learner meeting the lecture for the first time. For
+   * everybody else the lesson was dropped and the repair run opened on a question —
+   * which is the one case where the learner has just proved they need the material.
+   *
+   * Re-teaching is scoped narrowly on purpose, because the failure on the other side
+   * is making somebody re-read a page they know every time they slip:
+   *
+   *   - only where the caller asks for it: remediation and in-run re-attempts, never
+   *     a fresh study set, the sweep, or the examiner;
+   *   - only on evidence recorded AFTER the lesson was read, so the errors that sent
+   *     them to the lesson cannot immediately send them back to it;
+   *   - only while the gap is still open — a wrong answer already followed by a right
+   *     one is somebody who recovered, and re-teaching that is noise, not help.
+   *
+   * The last scored answer being wrong is the whole test. It is deliberately about
+   * the concept rather than the question: getting the same item wrong twice and
+   * getting two different items on one idea wrong are the same gap. */
+  function lessonNeedsReteach(courseId, lectureId, conceptIds) {
+    var readAt = lessonsReadMap()[lectureId];
+    if (!readAt) return false;
+    return (conceptIds || []).some(function (conceptId) {
+      var since = attemptsFor(courseId, conceptId).filter(function (attempt) {
+        return attempt.scored !== false && attempt.correct !== null && attempt.at > readAt;
+      });
+      if (!since.length) return false;
+      return since[since.length - 1].correct === false;
+    });
+  }
+
+  /* Lessons a question depends on that the learner has not been taught yet — or, when
+   * `reteachCourseId` is supplied, has been taught and demonstrably has not kept. */
+  function pendingLessonsFor(question, reteachCourseId) {
+    var conceptIds = reteachCourseId ? conceptIdsOf(question) : [];
     return lectureIdsFor(question).filter(function (lectureId) {
-      return lessonFor(lectureId) && !lessonIsRead(lectureId);
+      if (!lessonFor(lectureId)) return false;
+      if (!lessonIsRead(lectureId)) return true;
+      return Boolean(reteachCourseId) && lessonNeedsReteach(reteachCourseId, lectureId, conceptIds);
     });
   }
 
@@ -994,6 +1132,101 @@
     return activeSurfaces.length ? activeSurfaces : surfaces;
   }
 
+  /* Which concepts are genuinely connected, derived from the bank rather than asserted.
+   *
+   * An edge exists only where an authored surface tests both concepts at once — the
+   * question's own concept plus its `supportingConceptIds`. That is a deliberately
+   * strict definition, and it is strict for a reason: a link is only useful to a
+   * learner if there is something to practise it ON. Two ideas that merely sit in the
+   * same module, or on neighbouring lectures, would be a claim with no surface behind
+   * it, and the product would be asserting a relationship it cannot then exercise.
+   *
+   * Measured on the shipped bank, that yields each concept's module partner (a match
+   * question plus five boss steps, six surfaces), and in SCLM two real cross-module
+   * edges through `sclm_syn_inventory`, which tests EOQ, newsvendor and smoothing
+   * together. Nothing else. So the graph is sparse and honest, and the isolated case
+   * below is the common one rather than an afterthought.
+   *
+   * Built once per course and cached: the bank does not change at runtime. */
+  var conceptLinkCache = {};
+  function conceptLinks(courseId) {
+    if (conceptLinkCache[courseId]) return conceptLinkCache[courseId];
+    var edges = {};
+    var course = getCourse(courseId);
+    Object.keys(course.questions).forEach(function (questionId) {
+      var question = course.questions[questionId];
+      if (question.primerOnly) return;
+      var ids = unique([question.conceptId].concat(question.supportingConceptIds || [])).filter(Boolean);
+      for (var a = 0; a < ids.length; a += 1) {
+        for (var b = a + 1; b < ids.length; b += 1) {
+          [[ids[a], ids[b]], [ids[b], ids[a]]].forEach(function (pair) {
+            var from = edges[pair[0]] || (edges[pair[0]] = {});
+            (from[pair[1]] || (from[pair[1]] = [])).push(question);
+          });
+        }
+      }
+    });
+    conceptLinkCache[courseId] = edges;
+    return edges;
+  }
+
+  function linkedConceptIds(courseId, conceptId) {
+    return Object.keys(conceptLinks(courseId)[conceptId] || {});
+  }
+
+  /* The surface that actually joins two concepts. A boss is three steps and heavy for
+   * a repair run, so a plain joint question wins when the bank offers one — which,
+   * measured, it always does. The boss is the fallback rather than the default. */
+  function linkSurface(courseId, aId, bId, avoidIds) {
+    var candidates = ((conceptLinks(courseId)[aId] || {})[bId] || [])
+      .filter(function (question) { return (avoidIds || []).indexOf(question.id) < 0; });
+    if (!candidates.length) return null;
+    var ranked = candidates.slice().sort(function (a, b) {
+      return (a.boss ? 1 : 0) - (b.boss ? 1 : 0)
+        || questionLastAttemptAt(courseId, a.id) - questionLastAttemptAt(courseId, b.id);
+    });
+    return ranked[0];
+  }
+
+  /* Pair the weaknesses that are connected; report the rest as isolated.
+   *
+   * Greedy in priority order, which is the property that matters: the weakest concept
+   * gets first choice of partner, so pairing never demotes the thing the learner most
+   * needs. A concept is paired ONLY with another concept that is itself in the weak
+   * set — a link to something already Strong is not a shared weakness, and treating it
+   * as one would practise a gap the learner does not have. Everything left over is
+   * isolated, and is returned as such rather than quietly pretended into a group. */
+  function groupWeaknesses(courseId, orderedConcepts) {
+    var remaining = orderedConcepts.slice();
+    var units = [];
+    while (remaining.length) {
+      var concept = remaining.shift();
+      var partnerIds = linkedConceptIds(courseId, concept.id);
+      var partnerIndex = -1;
+      remaining.forEach(function (candidate, index) {
+        if (partnerIndex >= 0) return;
+        if (partnerIds.indexOf(candidate.id) >= 0) partnerIndex = index;
+      });
+      if (partnerIndex < 0) {
+        units.push({kind: "isolated", concepts: [concept]});
+        continue;
+      }
+      var partner = remaining.splice(partnerIndex, 1)[0];
+      /* Inside a pair the earlier lecture still comes first: a shared weakness is no
+       * reason to stop building in the order the course builds. */
+      var pair = [concept, partner].sort(function (a, b) {
+        return conceptTeachingRank(courseId, a.id) - conceptTeachingRank(courseId, b.id);
+      });
+      units.push({kind: "linked", concepts: pair, leadConceptId: concept.id});
+    }
+    return units;
+  }
+
+  function conceptTeachingRank(courseId, conceptId) {
+    var concept = getConcept(courseId, conceptId);
+    return concept ? lectureTeachingRank(concept.source) : Number.MAX_SAFE_INTEGER;
+  }
+
   function questionLastAttemptAt(courseId, questionId) {
     var question = getQuestion(courseId, questionId);
     if (!question) return 0;
@@ -1106,19 +1339,20 @@
     return Math.max(0, Math.min(3, state.support || 0));
   }
 
-  function recordPrimerAttempt(courseId, question, correct) {
+  /* A primer records that it was shown, and nothing else.
+   *
+   * It used to move the support ladder on whether the learner picked the right option
+   * — an option that was printed on the same screen (LAW-63), so the ladder was reading
+   * whether somebody could match a string. The ladder's real input was always
+   * `updatePrimerFromChallenge`: how the concept's *scored* questions went. That is the
+   * only thing that moves it now. `predicted` is kept apart from `shown` because
+   * "I would be guessing" is a legitimate answer at first contact and should not read
+   * as a missed prediction. */
+  function recordPrimerAttempt(courseId, question, predicted) {
     var state = primerStateFor(courseId, question.conceptId);
     state.shown += 1;
+    state.predicted = (state.predicted || 0) + (predicted ? 1 : 0);
     state.lastAt = Date.now();
-    if (correct) {
-      state.correct += 1;
-      state.easyStreak += 1;
-      state.support = Math.max(0, state.support - 1);
-    } else {
-      state.wrong += 1;
-      state.easyStreak = 0;
-      state.support = Math.min(3, Math.max(2, state.support + 1));
-    }
   }
 
   function updatePrimerFromChallenge(courseId, conceptId, question, correct) {
@@ -2147,21 +2381,147 @@
    * module stepper — and an inspector panel that was the only place the missing
    * evidence appeared. renderConceptShelf() now carries both on the row itself. */
 
+  /* What a set actually delivers.
+   *
+   * `questionIds` is a four-item seed list left over from before the sets drew from
+   * module pools; `questionCount` is what `questionIdsForSet` really selects. Both
+   * were being read — the set card used the second and the homepage recommendation
+   * used the first — so the same set was advertised as 4 questions in one place and
+   * 8 in another, on the same screen. */
+  function setQuestionCount(definition) {
+    return definition.questionCount || (definition.questionIds || []).length;
+  }
+
+  function conceptIsTaught(courseId, conceptId) {
+    var concept = getConcept(courseId, conceptId);
+    return Boolean(concept && lessonFor(concept.source) && lessonIsRead(concept.source));
+  }
+
+  /* The course's own ladder, which the bank has always had and the product never
+   * showed.
+   *
+   * Sets 1–8 are modules 1–8, two concepts each, and they are a sequence rather than
+   * a menu. Measured across all four subjects (tools/measure-learn-exam-coverage.js),
+   * walking them in order carries a learner from about a tenth of their paper's marks
+   * to all of them: SPMS 10.7% → 100%, BRGSA 8.8% → 100%, SCLM 9.7% → 100%, IBM 10%
+   * → 100%. Sets 9 and 10 sit outside the ladder deliberately — 9 tests connections
+   * between concepts already met and 10 is the builder — so neither introduces
+   * anything and neither is a step.
+   *
+   * What a learner saw instead was ten identical cards under "Ten study sets are
+   * available" and "You do not have to complete all ten": no position, no statement
+   * of what each set adds or rests on, and nothing separating the eight that build
+   * the subject from the two that revisit it. Someone who finished set 1 had been
+   * taught two concepts of sixteen and the product gave them no way to know it.
+   *
+   * `taught` here is the lesson having been read, not the questions having gone well.
+   * Those are different claims and this is deliberately the weaker: it says what has
+   * been put in front of the learner. What they can do with it is `conceptStatus`,
+   * which the evidence panels already report and which this never folds in. */
+  function courseLadder(courseId) {
+    var course = getCourse(courseId);
+    var rungs = [];
+    var carried = [];
+    course.runs.forEach(function (definition) {
+      if (!(definition.module >= 1 && definition.module <= 8)) return;
+      var concepts = course.concepts.filter(function (concept) { return concept.module === definition.module; });
+      var taught = concepts.filter(function (concept) { return conceptIsTaught(courseId, concept.id); });
+      rungs.push({
+        definition: definition,
+        step: rungs.length + 1,
+        concepts: concepts,
+        taughtCount: taught.length,
+        complete: taught.length === concepts.length && concepts.length > 0,
+        restsOn: carried.slice()
+      });
+      carried = carried.concat(concepts);
+    });
+    /* The first rung not yet fully taught is where the learner is. Everything before
+       it is behind them; everything after builds on ground they have not covered. */
+    var current = rungs.filter(function (rung) { return !rung.complete; })[0] || null;
+    rungs.forEach(function (rung) {
+      rung.state = rung.complete ? "done" : current && rung.step === current.step ? "current" : "later";
+    });
+    return {
+      rungs: rungs,
+      current: current,
+      steps: rungs.length,
+      taughtConcepts: rungs.reduce(function (sum, rung) { return sum + rung.taughtCount; }, 0),
+      totalConcepts: course.concepts.length
+    };
+  }
+
+  function conceptNameList(concepts) {
+    var names = concepts.map(function (concept) { return concept.name; });
+    if (names.length <= 1) return names.join("");
+    return names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
+  }
+
   function renderSetList(courseId) {
     var course = getCourse(courseId);
     var holder = $("set-list");
+    var ladder = courseLadder(courseId);
+    var byId = {};
+    ladder.rungs.forEach(function (rung) { byId[rung.definition.id] = rung; });
+
+    /* The heading carries the shape of the thing. "Ten study sets are available" and
+       "You do not have to complete all ten" described a menu, and the eight that are
+       a sequence were the ones it was describing. */
+    var headingEl = $("sets-title");
+    var noteEl = $("sets-note");
+    if (headingEl) {
+      headingEl.textContent = ladder.current
+        ? "The subject in " + ladder.steps + " steps — you are on step " + ladder.current.step
+        : "The subject in " + ladder.steps + " steps — all of them taught";
+    }
+    if (noteEl) {
+      noteEl.textContent = ladder.current
+        ? "Each step teaches two concepts and rests on the ones before it. " +
+          ladder.taughtConcepts + " of " + ladder.totalConcepts +
+          " concepts taught so far. The last two sets are not steps: they revisit what the eight have covered."
+        : "All " + ladder.totalConcepts + " concepts have been taught. The last two sets revisit them — set 9 tests the connections between them, and the practice check builds its own mix.";
+    }
+
     holder.innerHTML = "";
     course.runs.forEach(function (definition) {
       var records = profile.completed[courseId] || {};
       var record = records[String(definition.id)];
       var active = profile.active && profile.active.courseId === courseId && profile.active.setId === definition.id;
       var state = active ? "Resume" : record ? "Best " + record.best + "%" : definition.mock ? "Available now" : "Start";
+      var rung = byId[definition.id];
       var button = document.createElement("button");
       button.type = "button";
-      button.className = "set-card" + (record ? " complete" : "") + (definition.mock ? " mock" : "");
-      button.setAttribute("aria-label", (definition.mock ? "Flexible practice check" : "Study set " + definition.id) + ": " + definition.title + ". " + state);
-      button.innerHTML = "<span class='set-number'>" + (definition.mock ? "P" : definition.id) + "</span><span><b>" + escapeHtml(definition.title) + "</b>" +
-        "<small>" + (definition.questionCount || definition.questionIds.length) + " questions · ~" + definition.minutes + " min</small></span><span class='set-state'>" + state + "</span>";
+      button.className = "set-card" + (record ? " complete" : "") + (definition.mock ? " mock" : "") +
+        (rung ? " ladder-" + rung.state : "");
+
+      /* What this step adds, and what it stands on. Both are stated because the
+         second is the half that makes a step a step: a learner who knows set 4 rests
+         on the six concepts before it can tell whether they are ready for it, and a
+         learner who does not is choosing from a menu. */
+      var detail = "";
+      if (rung) {
+        detail = "<small class='set-adds'>Adds " + escapeHtml(conceptNameList(rung.concepts)) + "</small>";
+        if (rung.restsOn.length) {
+          detail += "<small class='set-rests'>Rests on the " + rung.restsOn.length +
+            " concept" + (rung.restsOn.length === 1 ? "" : "s") + " before it" +
+            (rung.state === "later" ? " — not all taught yet" : "") + "</small>";
+        } else {
+          detail += "<small class='set-rests'>Starts the subject — nothing before it</small>";
+        }
+      }
+
+      var stepBadge = rung
+        ? "<span class='set-step'>Step " + rung.step + " of " + ladder.steps + "</span>"
+        : "<span class='set-step set-step-aside'>" + (definition.mock ? "Your own mix" : "Revisits all " + ladder.totalConcepts) + "</span>";
+
+      button.setAttribute("aria-label",
+        (rung ? "Step " + rung.step + " of " + ladder.steps : definition.mock ? "Flexible practice check" : "Study set " + definition.id) +
+        ": " + definition.title + ". " +
+        (rung ? "Adds " + conceptNameList(rung.concepts) + ". " : "") + state);
+      button.innerHTML = "<span class='set-number'>" + (definition.mock ? "P" : definition.id) + "</span>" +
+        "<span class='set-body'><b>" + escapeHtml(definition.title) + "</b>" + detail +
+        "<small class='set-cost'>" + setQuestionCount(definition) + " questions · ~" + definition.minutes + " min</small></span>" +
+        "<span class='set-meta'>" + stepBadge + "<span class='set-state'>" + state + "</span></span>";
       button.addEventListener("click", function () { if (definition.mock) openPracticeSetup(courseId); else startStudySet(courseId, definition.id); });
       holder.appendChild(button);
     });
@@ -2200,15 +2560,34 @@
     var unseen = concepts.filter(function (concept) { return conceptStatus(courseId, concept.id) === "unseen"; });
     if (needs.length) {
       needs.sort(function (a, b) { return conceptPriority(courseId, b).score - conceptPriority(courseId, a).score; });
-      return {kind:"priority",title:"Practise the concepts that need work first",copy:"Start with " + needs[0].name + " because " + conceptPriority(courseId, needs[0]).reason + ". The set uses a different question family before repeating wording.",minutes:"~10 minutes",questions:"Up to 8 questions"};
+      return {kind:"priority",title:"Practise the concepts that need work first",copy:"Start with " + needs[0].name + " because " + conceptPriority(courseId, needs[0]).reason + ". The set uses a different question family before repeating wording.",minutes:"~10 minutes",questions:"Up to " + PRIORITY_RUN_LENGTH + " questions"};
     }
     if (developing.length) {
       developing.sort(function (a, b) { return conceptPriority(courseId, b).score - conceptPriority(courseId, a).score; });
-      return {kind:"priority",title:"Build the missing evidence",copy:"Start with " + developing[0].name + " because " + conceptPriority(courseId, developing[0]).reason + ".",minutes:"~12 minutes",questions:"Up to 8 questions"};
+      return {kind:"priority",title:"Build the missing evidence",copy:"Start with " + developing[0].name + " because " + conceptPriority(courseId, developing[0]).reason + ".",minutes:"~12 minutes",questions:"Up to " + PRIORITY_RUN_LENGTH + " questions"};
     }
     if (unseen.length) {
-      var firstModule = unseen[0].module;
-      return {kind:"set",setId:firstModule,title:"Start the next part of the subject",copy:"Study Module " + firstModule + ": " + course.modules[firstModule - 1] + ". It is a short set and updates the map immediately.",minutes:"~7 minutes",questions:getStudySet(courseId, firstModule).questionIds.length + " questions"};
+      /* The next rung of the ladder, named as a rung. Recommending "Module 5" told a
+         learner where the material sat in the course and nothing about where they
+         were in it, and the question count came from `questionIds` — the stale seed
+         list — so the hero advertised four questions for a set that delivers eight. */
+      var ladder = courseLadder(courseId);
+      var rung = ladder.rungs.filter(function (row) { return row.definition.module === unseen[0].module; })[0]
+        || ladder.current;
+      var definition = rung ? rung.definition : getStudySet(courseId, unseen[0].module);
+      return {
+        kind: "set", setId: definition.id,
+        title: rung ? "Step " + rung.step + " of " + ladder.steps + ": " + definition.title : "Start the next part of the subject",
+        copy: rung
+          ? "Adds " + conceptNameList(rung.concepts) + ". " +
+            (rung.restsOn.length
+              ? "It rests on the " + rung.restsOn.length + " concepts before it, which you have been taught."
+              : "It starts the subject, so nothing comes before it.") +
+            " You have been taught " + ladder.taughtConcepts + " of " + ladder.totalConcepts + " concepts in this subject."
+          : "Study Module " + definition.module + ": " + course.modules[definition.module - 1] + ".",
+        minutes: "~" + definition.minutes + " minutes",
+        questions: setQuestionCount(definition) + " questions"
+      };
     }
     return {kind:"mock",title:"All core concepts have strong current evidence",copy:"Build your own check below to see whether the subject still holds together. It is practice, not a prediction of the final paper.",minutes:"8–24 minutes",questions:"Choose the mix"};
   }
@@ -2289,6 +2668,44 @@
     startPriorityPractice(profile.selectedCourse);
   }
 
+  /* Questions the examiner will use, so Learn can leave them alone.
+   *
+   * There is one bank, and every question on every paper is drawable in Learn. The
+   * damage that does is small per item and large in aggregate: a candidate who meets
+   * an item they answered in a study set scores a mark for recall, and the mock
+   * reports it as knowledge — the same over-crediting the evidence model refuses to
+   * do everywhere else.
+   *
+   * It cannot be fixed on the examiner's side. Three sections have no slack (SCLM
+   * Section A needs 50 mcqs from a pool of 52), and making the draw depend on the
+   * learner would mean two students sit different papers, which is not a mock.
+   *
+   * Learn is the side with room. Measured across the four subjects, a learner who
+   * completes all ten study sets is delivered 88 questions out of pools holding
+   * 168–207, so Learn is already choosing a minority of what it could serve. It can
+   * choose a different minority.
+   *
+   * Deliberately a LATE tiebreaker rather than a filter. Never-attempted, format
+   * spread and concept coverage all still decide first and are unchanged; this only
+   * separates candidates those rules rank equally. A hard exclusion would let the
+   * examiner's draw quietly starve a module of its best surfaces, which trades a
+   * small honesty problem for a real teaching one. */
+  var examReservedCache = {};
+
+  function examReservedIds(courseId) {
+    if (examReservedCache[courseId]) return examReservedCache[courseId];
+    var reserved = {};
+    if (EXAM_PAPERS[courseId]) {
+      for (var set = 0; set < EXAM_SET_COUNT; set++) {
+        var paper = buildExamPaper(courseId, examSeed(courseId, set));
+        if (!paper) continue;
+        paper.questions.forEach(function (entry) { reserved[entry.question.id] = true; });
+      }
+    }
+    examReservedCache[courseId] = reserved;
+    return reserved;
+  }
+
   function selectQuestionsFromPool(courseId, poolIds, count, requiredIds) {
     var selectedIds = [];
     var required = (requiredIds || []).slice().sort(function (a, b) {
@@ -2307,6 +2724,7 @@
         var question = getQuestion(courseId, id);
         return values.concat([question.conceptId].concat(question.supportingConceptIds || []));
       }, []);
+      var reserved = examReservedIds(courseId);
       candidates.sort(function (aId, bId) {
         var a = getQuestion(courseId, aId), b = getQuestion(courseId, bId);
         var aNew = questionLastAttemptAt(courseId, aId) ? 1 : 0;
@@ -2315,13 +2733,43 @@
         var bTypeUsed = usedTypes.indexOf(b.type || "mcq") >= 0 ? 1 : 0;
         var aConceptUsed = usedConcepts.indexOf(a.conceptId) >= 0 ? 1 : 0;
         var bConceptUsed = usedConcepts.indexOf(b.conceptId) >= 0 ? 1 : 0;
-        return aNew - bNew || aTypeUsed - bTypeUsed || aConceptUsed - bConceptUsed || questionLastAttemptAt(courseId, aId) - questionLastAttemptAt(courseId, bId) || stableQuestionOrder(aId) - stableQuestionOrder(bId);
+        /* After coverage, before recency: two questions the teaching rules rank
+           equally should not both be ones the examiner is holding. */
+        var aReserved = reserved[aId] ? 1 : 0;
+        var bReserved = reserved[bId] ? 1 : 0;
+        return aNew - bNew || aTypeUsed - bTypeUsed || aConceptUsed - bConceptUsed || aReserved - bReserved || questionLastAttemptAt(courseId, aId) - questionLastAttemptAt(courseId, bId) || stableQuestionOrder(aId) - stableQuestionOrder(bId);
       });
       selectedIds.push(candidates.shift());
     }
+    return orderForDelivery(courseId, selectedIds);
+  }
+
+  /* Selection is variety-driven and stays that way — which questions a run contains
+   * is chosen for format spread, concept coverage and weak-first, and all of that is
+   * deliberate. This is only the order they arrive in, which is why every route that
+   * chooses its own questions (the sweep included) hands them through here rather
+   * than sequencing them itself.
+   *
+   * Concepts are layered: the run walks the course's own sequence, so each lesson
+   * builds on the one before it. That was the intent all along and the app already
+   * says so out loud — a primer that follows another concept prints "Carry forward:
+   * <previous>. Now add <this>", and the step header reads "builds on what you just
+   * did". Until this sort existed those lines were fed whatever order fell out of
+   * `stableQuestionOrder`, a hash of the question id, so the promise was made to a
+   * sequence nothing had sequenced.
+   *
+   * The sort is stable, so whatever ordering the caller established survives within a
+   * lecture. Constructed responses and bosses stay at the end: they synthesise across
+   * the whole run, so they belong after everything they draw on. */
+  function orderForDelivery(courseId, selectedIds) {
     var bossIds = selectedIds.filter(function (id) { return getQuestion(courseId, id).boss; });
     var constructedIds = selectedIds.filter(function (id) { return getQuestion(courseId, id).type === "short-answer"; });
-    return selectedIds.filter(function (id) { return bossIds.indexOf(id) < 0 && constructedIds.indexOf(id) < 0; }).concat(constructedIds, bossIds);
+    var ordered = selectedIds
+      .filter(function (id) { return bossIds.indexOf(id) < 0 && constructedIds.indexOf(id) < 0; })
+      .sort(function (aId, bId) {
+        return teachingRankOf(getQuestion(courseId, aId)) - teachingRankOf(getQuestion(courseId, bId));
+      });
+    return ordered.concat(constructedIds, bossIds);
   }
 
   function stableQuestionOrder(value) {
@@ -2341,11 +2789,52 @@
     return selectQuestionsFromPool(courseId, definition.questionPoolIds, count, required);
   }
 
-  function layeredQueue(courseId, questionIds, mode) {
+  /* Which runs re-teach a lesson the learner has already read. Remediation does,
+   * because it exists because something went wrong; discovery does not, because a
+   * study set is where the material is met rather than repaired. */
+  var RETEACHING_KINDS = ["priority", "exam-repair", "concept"];
+
+  function layeredQueue(courseId, questionIds, mode, options) {
     var queue = [];
     var introduced = [];
     var taughtHere = [];
     var previousConceptId = null;
+    var reteachIn = (options && options.reteach) ? courseId : null;
+
+    /* Every lecture this run will owe a lesson for, in the course's teaching order.
+     *
+     * Ordering the questions is not enough on its own to make the lessons layer.
+     * Two surfaces break the correspondence: a boss or a constructed response is
+     * deliberately held to the end of the run, and a question ranks by the LAST
+     * lecture it cites — so either can be the first surface to owe a lesson for an
+     * EARLY lecture, which would then be introduced after material that builds on
+     * it. Measured across the four subjects, that produced four backward steps,
+     * including a module-3 foundation taught last because only the boss cited it.
+     *
+     * So the run commits to the whole list up front and drains it in order: when a
+     * surface needs lecture X, everything still owed at or before X is taught, X
+     * included. Lesson order is then monotonic by construction rather than by
+     * accident, and LAW-47 holds a fortiori — a lesson can only ever come earlier
+     * than the surface that triggered it, never later. */
+    var owed = [];
+    if (mode !== "simulation") {
+      questionIds.forEach(function (id) {
+        var question = getQuestion(courseId, id);
+        if (!question) return;
+        var surfaces = [question];
+        var primer = primerSupportLevel(courseId, question.conceptId) > 0
+          ? primerQuestionFor(courseId, question.conceptId)
+          : null;
+        if (primer) surfaces.push(primer);
+        surfaces.forEach(function (surface) {
+          pendingLessonsFor(surface, reteachIn).forEach(function (lectureId) {
+            if (owed.indexOf(lectureId) < 0) owed.push(lectureId);
+          });
+        });
+      });
+      owed.sort(function (a, b) { return lectureTeachingRank(a) - lectureTeachingRank(b); });
+    }
+
     questionIds.forEach(function (id) {
       var question = getQuestion(courseId, id);
       if (!question) return;
@@ -2363,8 +2852,15 @@
        * lesson — the original defect in miniature. */
       function teachFirst(surface, conceptId) {
         if (mode === "simulation") return;
-        pendingLessonsFor(surface).forEach(function (lectureId) {
-          if (taughtHere.indexOf(lectureId) >= 0) return;
+        var needed = pendingLessonsFor(surface, reteachIn);
+        if (!needed.length) return;
+        /* Drain the owed list up to the latest lecture this surface needs. Anything
+         * earlier that is still outstanding is a foundation this surface is about to
+         * be tested on top of, so it goes first. */
+        var upTo = Math.max.apply(null, needed.map(lectureTeachingRank));
+        owed.filter(function (lectureId) {
+          return lectureTeachingRank(lectureId) <= upTo && taughtHere.indexOf(lectureId) < 0;
+        }).forEach(function (lectureId) {
           queue.push({
             id: lessonItemId(lectureId, conceptId),
             initial: false,
@@ -2372,6 +2868,10 @@
             origin: null,
             lesson: true,
             lectureId: lectureId,
+            /* Read before this run put it back. Recorded here rather than derived at
+               render time, because rendering the first re-taught lesson re-stamps
+               `lessonsRead` and every one after it would then read as first contact. */
+            reteach: lessonIsRead(lectureId),
             previousConceptId: previousConceptId
           });
           taughtHere.push(lectureId);
@@ -2407,11 +2907,13 @@
   function createSession(courseId, details, questionIds) {
     var initialStatuses = {};
     getCourse(courseId).concepts.forEach(function (concept) { initialStatuses[concept.id] = conceptStatus(courseId, concept.id); });
-    var queue = layeredQueue(courseId, questionIds, details.mode || "learning");
+    var queue = layeredQueue(courseId, questionIds, details.mode || "learning",
+      {reteach: RETEACHING_KINDS.indexOf(details.kind) >= 0});
     return {
       courseId: courseId,
       kind: details.kind,
       mode: details.mode || "learning",
+      band: details.band || null,
       shape: details.shape || null,
       focus: details.focus || null,
       length: details.length || null,
@@ -2420,6 +2922,11 @@
       conceptId: details.conceptId || null,
       title: details.title,
       kicker: details.kicker,
+      /* Set by the weakness route: which surface checks which pair of linked concepts,
+       * and which weaknesses had no linked partner. Both are needed at render time to
+       * say honestly what a given step is doing. */
+      linkChecks: details.linkChecks || {},
+      isolatedConceptNames: details.isolatedConceptNames || [],
       queue: queue,
       baseCount: questionIds.length,
       supportCount: queue.length - questionIds.length,
@@ -2450,6 +2957,14 @@
     if (!builder || !toggle) return;
     builder.hidden = !open;
     toggle.setAttribute("aria-expanded", String(open));
+    if (!open) return;
+    /* The dials open only when they are already carrying settings no card describes —
+     * a learner who left the builder mid-tinker should find their mix where they left
+     * it rather than behind a closed disclosure. Set on opening the section and never
+     * on re-render, so a panel opened by hand stays open while chips are pressed. */
+    var details = $("builder-details");
+    if (details) details.open = !presetFor(builderSettings());
+    renderPracticeBuilder();
   }
 
   function openPracticeSetup(courseId) {
@@ -2491,25 +3006,41 @@
     return true;
   }
 
-  function practiceCandidates(courseId, shape, focus, statuses) {
+  function bandMatches(bandId, question) {
+    var band = optionById(PRACTICE_BANDS, bandId) || optionById(PRACTICE_BANDS, "any");
+    var difficulty = question.difficulty || 2;
+    return difficulty >= band.min && difficulty <= band.max;
+  }
+
+  function practiceCandidates(courseId, settings, statuses) {
     statuses = statuses || conceptStatusMap(courseId);
     var course = getCourse(courseId);
     return Object.keys(course.questions).map(function (id) { return course.questions[id]; })
       .filter(function (question) {
         return !question.optionShapeRisk && !question.primerOnly &&
-          shapeMatches(shape, question) && focusMatches(focus, question, statuses);
+          shapeMatches(settings.shape, question) && focusMatches(settings.focus, question, statuses) &&
+          bandMatches(settings.band, question);
       });
   }
 
-  function practiceAnchors(courseId, shape, pool) {
+  function practiceAnchors(courseId, settings, pool) {
     function oldestFirst(questions, limit) {
       return questions.slice().sort(function (a, b) {
         return questionLastAttemptAt(courseId, a.id) - questionLastAttemptAt(courseId, b.id);
       }).slice(0, limit).map(function (question) { return question.id; });
     }
-    if (shape === "application") return oldestFirst(pool.filter(function (question) { return question.boss; }), 2);
-    if (shape === "generation") return oldestFirst(pool.filter(function (question) { return question.type === "short-answer"; }), 4);
-    if (shape !== "mixed") return [];
+    /* A module boss is the hardest thing the bank can ask — three steps telling two
+     * concepts apart — and `selectQuestionsFromPool` deliberately admits bosses only
+     * as anchors. So the hardest band has to name them, or the run advertised as the
+     * hardest surfaces would contain at most one of them by accident. Three is the
+     * quota a study set uses for the same reason. */
+    if (settings.band === "hardest") {
+      var bosses = oldestFirst(pool.filter(function (question) { return question.boss; }), 3);
+      if (bosses.length) return bosses;
+    }
+    if (settings.shape === "application") return oldestFirst(pool.filter(function (question) { return question.boss; }), 2);
+    if (settings.shape === "generation") return oldestFirst(pool.filter(function (question) { return question.type === "short-answer"; }), 4);
+    if (settings.shape !== "mixed") return [];
     var anchors = [];
     ["mcq", "cloze", "case-cloze", "match", "short-answer", "boss"].forEach(function (type) {
       var candidate = oldestFirst(pool.filter(function (question) { return question.type === type; }), 1)[0];
@@ -2518,28 +3049,64 @@
     return anchors;
   }
 
-  function lengthTarget(id) {
-    return (optionById(PRACTICE_LENGTHS, id) || PRACTICE_LENGTHS[1]).target;
+  function lengthIsSweep(id) {
+    return Boolean((optionById(PRACTICE_LENGTHS, id) || {}).sweep);
+  }
+
+  /* A sweep's size is the subject's, so it can only be answered against a pool. Every
+   * other length is the number printed on the chip. */
+  function lengthTarget(id, pool) {
+    var option = optionById(PRACTICE_LENGTHS, id) || PRACTICE_LENGTHS[1];
+    if (!option.sweep) return option.target;
+    return unique((pool || []).map(function (question) { return question.conceptId; })).length;
   }
 
   function estimateMinutes(count) {
     return Math.max(3, Math.round(count * 1.25));
   }
 
+  /* One question per concept, taking each concept's plainest available surface.
+   *
+   * The generic selector cannot make this promise. Its variety keys rank format
+   * spread above concept spread, so asking it for sixteen questions from a
+   * sixteen-concept subject returns *about* one each — which is fine for a mixed run
+   * and useless for a card that says "every concept in the subject, one question
+   * each". A promise that specific has to be selected for, not hoped for. */
+  function sweepSelection(courseId, pool) {
+    var byConcept = {};
+    pool.forEach(function (question) {
+      (byConcept[question.conceptId] = byConcept[question.conceptId] || []).push(question);
+    });
+    return Object.keys(byConcept).map(function (conceptId) {
+      return byConcept[conceptId].slice().sort(function (a, b) {
+        var aSeen = questionLastAttemptAt(courseId, a.id) ? 1 : 0;
+        var bSeen = questionLastAttemptAt(courseId, b.id) ? 1 : 0;
+        return (a.difficulty || 2) - (b.difficulty || 2) || aSeen - bSeen ||
+          questionLastAttemptAt(courseId, a.id) - questionLastAttemptAt(courseId, b.id) ||
+          stableQuestionOrder(a.id) - stableQuestionOrder(b.id);
+      })[0].id;
+    });
+  }
+
   function practicePlan(courseId, settings, statuses) {
-    var pool = practiceCandidates(courseId, settings.shape, settings.focus, statuses);
-    var target = Math.min(lengthTarget(settings.length), pool.length);
-    var anchors = practiceAnchors(courseId, settings.shape, pool).slice(0, target);
-    var ids = target ? selectQuestionsFromPool(courseId, pool.map(function (question) { return question.id; }), target, anchors) : [];
+    var pool = practiceCandidates(courseId, settings, statuses);
+    var poolIds = pool.map(function (question) { return question.id; });
+    var target = Math.min(lengthTarget(settings.length, pool), pool.length);
+    if (lengthIsSweep(settings.length)) {
+      var swept = orderForDelivery(courseId, sweepSelection(courseId, pool));
+      return {ids: swept, poolSize: pool.length, count: swept.length, concepts: swept.length};
+    }
+    var anchors = practiceAnchors(courseId, settings, pool).slice(0, target);
+    var ids = target ? selectQuestionsFromPool(courseId, poolIds, target, anchors) : [];
     return {ids: ids, poolSize: pool.length, count: ids.length};
   }
 
   function practiceShapeQuestionIds(courseId, shape) {
-    return practicePlan(courseId, {shape: shape, focus: "all", length: "standard"}).ids;
+    return practicePlan(courseId, {shape: shape, focus: "all", length: "standard", band: "any"}).ids;
   }
 
   function builderSettings() {
-    if (!validBuilder(profile.builder)) profile.builder = clone(DEFAULT_BUILDER);
+    profile.builder = normalizeBuilder(profile.builder);
     return profile.builder;
   }
 
@@ -2560,35 +3127,72 @@
     });
   }
 
+  function withDials(base, overrides) {
+    var merged = {};
+    BUILDER_DIALS.forEach(function (dial) { merged[dial] = base[dial]; });
+    Object.keys(overrides || {}).forEach(function (dial) { merged[dial] = overrides[dial]; });
+    return merged;
+  }
+
+  /* What a plan is, said in facts a learner can check against the run they get. The
+   * three cards each earn their sentence from their own plan rather than from the
+   * label on the card, so a subject whose bank cannot honour a level says so on the
+   * card instead of quietly delivering a different run. */
+  function planFacts(courseId, plan, settings) {
+    if (!plan.count) return "";
+    var questions = plan.count + " question" + (plan.count === 1 ? "" : "s");
+    if (lengthIsSweep(settings.length)) return questions + " · one per concept";
+    var bosses = plan.ids.filter(function (id) { return getQuestion(courseId, id).boss; }).length;
+    if (bosses) return questions + " · " + bosses + " module boss" + (bosses === 1 ? "" : "es");
+    return questions + " · " + unique(plan.ids.map(function (id) { return getQuestion(courseId, id).type || "mcq"; })).length + " formats";
+  }
+
   // LAW-01: a builder choice must change the run. Unavailable combinations are disabled with the
   // reason, and a length that cannot add questions collapses to the shorter one that matches it.
   function renderPracticeBuilder() {
+    var section = $("practice-builder");
+    // Nothing below is visible while the section is folded away, and all of it costs
+    // pool scans and a full plan per preset. The dashboard renders often; this does not.
+    if (!section || section.hidden) return;
     var courseId = profile.selectedCourse;
     var settings = builderSettings();
     var statuses = conceptStatusMap(courseId);
-    function poolSize(shape, focus) { return practiceCandidates(courseId, shape, focus, statuses).length; }
+    function poolFor(overrides) { return practiceCandidates(courseId, withDials(settings, overrides), statuses); }
+    function poolSize(overrides) { return poolFor(overrides).length; }
 
     // A narrowing choice that selects the whole pool is not a real choice, so it collapses to
     // "Anything" instead of pretending to filter.
-    var wholePool = poolSize(settings.shape, "all");
-    if (settings.focus !== "all" && poolSize(settings.shape, settings.focus) >= wholePool) settings.focus = "all";
-    if (!poolSize(settings.shape, settings.focus)) settings.focus = "all";
-    if (!poolSize(settings.shape, settings.focus)) settings.shape = "mixed";
-    var available = poolSize(settings.shape, settings.focus);
-    function achievable(lengthId) { return Math.min(lengthTarget(lengthId), available); }
+    var wholePool = poolSize({focus: "all"});
+    if (settings.focus !== "all" && poolSize({}) >= wholePool) settings.focus = "all";
+    if (!poolSize({})) settings.focus = "all";
+    if (!poolSize({})) settings.shape = "mixed";
+    // Reachable only from a restored profile: every impossible combination is disabled below
+    // before it can be pressed, so this is the net under a bank that changed after a save.
+    if (!poolSize({})) settings.band = "any";
+    var pool = poolFor({});
+    var available = pool.length;
+    function achievable(lengthId) { return Math.min(lengthTarget(lengthId, pool), available); }
     PRACTICE_LENGTHS.forEach(function (option) {
-      if (option.target >= lengthTarget(settings.length)) return;
+      if (option.sweep || lengthIsSweep(settings.length)) return;
+      if (option.target >= lengthTarget(settings.length, pool)) return;
       if (achievable(option.id) === achievable(settings.length)) settings.length = option.id;
     });
 
+    renderPresetCards(courseId, settings, statuses);
+
+    renderChipGroup("builder-band", PRACTICE_BANDS, settings.band, function (option) {
+      var size = poolSize({band: option.id});
+      return {available: size > 0, note: size ? option.hint + " · " + size + " to draw from" : "Nothing at this difficulty tests what you chose above"};
+    }, function (id) { settings.band = id; commitBuilderChange(); });
+
     renderChipGroup("builder-shape", PRACTICE_SHAPES, settings.shape, function (option) {
-      var size = poolSize(option.id, settings.focus);
-      return {available: size > 0, note: size ? option.hint : "None of these are left for the concepts you chose"};
+      var size = poolSize({shape: option.id});
+      return {available: size > 0, note: size ? option.hint : "None of these are left at this difficulty"};
     }, function (id) { settings.shape = id; commitBuilderChange(); });
 
     renderChipGroup("builder-focus", PRACTICE_FOCUS, settings.focus, function (option) {
-      var size = poolSize(settings.shape, option.id);
-      var whole = poolSize(settings.shape, "all");
+      var size = poolSize({focus: option.id});
+      var whole = poolSize({focus: "all"});
       if (option.id === "all") return {available: size > 0, note: size ? option.hint + " · " + size + " to draw from" : "No question matches this combination"};
       if (!size) return {available: false, note: option.id === "weak" ? "Nothing in this subject needs work yet" : "No untouched concept is left here"};
       if (size >= whole) return {available: false, note: option.id === "weak" ? "Every concept here needs work, so this is the same as anything" : "Nothing is started yet, so this is the same as anything"};
@@ -2597,14 +3201,18 @@
 
     renderChipGroup("builder-length", PRACTICE_LENGTHS, settings.length, function (option) {
       var count = achievable(option.id);
-      var duplicateOf = PRACTICE_LENGTHS.filter(function (other) {
-        return other.target < option.target && achievable(other.id) === count;
+      /* A sweep is never "the same run as" a fixed length that happens to be the same
+       * size: one takes each concept once, the other takes whatever the variety keys
+       * pick. Same count, different run, so neither collapses into the other. */
+      var duplicateOf = option.sweep ? null : PRACTICE_LENGTHS.filter(function (other) {
+        return !other.sweep && other.target < option.target && achievable(other.id) === count;
       })[0];
       return {
         available: count > 0 && !duplicateOf,
         note: !count ? "No questions available"
           : duplicateOf ? "Only " + count + " here, the same run as " + duplicateOf.label.toLowerCase()
-          : count + " questions · about " + estimateMinutes(count) + " min"
+          : option.sweep ? count + " concepts · one question each"
+          : count + " questions"
       };
     }, function (id) { settings.length = id; commitBuilderChange(); });
 
@@ -2612,14 +3220,54 @@
       return {available: true, note: option.hint};
     }, function (id) { settings.mode = id; commitBuilderChange(); });
 
-    var count = achievable(settings.length);
-    $("builder-start").disabled = !count;
-    $("builder-summary").textContent = !count
+    var preset = presetFor(settings);
+    $("builder-details-note").textContent = preset
+      ? "Difficulty, format, focus, length, feedback"
+      : "Custom mix · no preset matches these settings";
+
+    var plan = practicePlan(courseId, settings, statuses);
+    /* The one time claim on the screen, and it is made against the run that will
+     * actually be queued — lessons and primers included. Counting only the scored
+     * questions understated a first run through a subject by every lesson in it. */
+    var items = plan.count ? layeredQueue(courseId, plan.ids, settings.mode).length : 0;
+    var support = items - plan.count;
+    $("builder-start").disabled = !plan.count;
+    $("builder-summary").textContent = !plan.count
       ? "No question matches this combination yet. Change one choice above."
-      : count + " question" + (count === 1 ? "" : "s") + " from " + getCourse(courseId).shortTitle + " · " +
-        optionById(PRACTICE_SHAPES, settings.shape).label.toLowerCase() + " · " +
+      : plan.count + " question" + (plan.count === 1 ? "" : "s") + " from " + getCourse(courseId).shortTitle + " · " +
+        optionById(PRACTICE_BANDS, settings.band).summary +
+        (settings.shape === "mixed" ? "" : " · " + optionById(PRACTICE_SHAPES, settings.shape).label.toLowerCase()) + " · " +
         optionById(PRACTICE_FOCUS, settings.focus).summary + " · explanations " +
-        optionById(PRACTICE_MODES, settings.mode).label.toLowerCase() + " · about " + estimateMinutes(count) + " minutes.";
+        optionById(PRACTICE_MODES, settings.mode).label.toLowerCase() + " · about " + estimateMinutes(items) + " minutes" +
+        (support > 0 ? ", including " + support + " short lesson" + (support === 1 ? "" : "s") + " and primer" + (support === 1 ? "" : "s") + " placed before the questions that need them." : ".");
+  }
+
+  function renderPresetCards(courseId, settings, statuses) {
+    var holder = $("builder-presets");
+    if (!holder) return;
+    var active = presetFor(settings);
+    holder.innerHTML = "";
+    PRACTICE_PRESETS.forEach(function (preset) {
+      var plan = practicePlan(courseId, preset.settings, statuses);
+      var chosen = Boolean(active) && active.id === preset.id;
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "preset-card" + (chosen ? " selected" : "");
+      button.disabled = !plan.count && !chosen;
+      button.setAttribute("aria-pressed", String(chosen));
+      button.innerHTML = "<span class='preset-range'>" + escapeHtml(preset.range) + "</span>" +
+        "<b>" + escapeHtml(preset.label) + "</b>" +
+        "<small>" + escapeHtml(preset.promise) + "</small>" +
+        "<span class='preset-count'>" + escapeHtml(plan.count
+          ? planFacts(courseId, plan, preset.settings)
+          : "This subject has nothing left at this level") + "</span>";
+      button.addEventListener("click", function () {
+        if (button.disabled || chosen) return;
+        BUILDER_DIALS.forEach(function (dial) { settings[dial] = preset.settings[dial]; });
+        commitBuilderChange();
+      });
+      holder.appendChild(button);
+    });
   }
 
   function commitBuilderChange() {
@@ -2629,20 +3277,25 @@
 
   function startBuiltPractice(override) {
     var courseId = profile.selectedCourse;
-    var settings = validBuilder(override) ? override : builderSettings();
+    var settings = validBuilder(override) ? normalizeBuilder(override) : builderSettings();
     var plan = practicePlan(courseId, settings);
     if (!plan.ids.length) return toast("No question matches that combination yet.");
     var shape = optionById(PRACTICE_SHAPES, settings.shape);
     var focus = optionById(PRACTICE_FOCUS, settings.focus);
+    var preset = presetFor(settings);
     var simulation = settings.mode === "simulation";
     session = createSession(courseId, {
       kind: simulation ? "practice-check" : "practice-shape",
       mode: settings.mode,
+      band: settings.band,
       shape: settings.shape,
       focus: settings.focus,
       length: settings.length,
-      title: shape.runTitle + (settings.focus === "all" ? "" : " · " + focus.summary),
-      kicker: (simulation ? "Explanations held to the end" : "Explanations after each answer") + " · " + plan.count + " questions"
+      // The run is named for the card that started it, so the header a learner reads
+      // mid-run is the promise they pressed rather than a description of the dials.
+      title: preset ? preset.label : shape.runTitle + (settings.focus === "all" ? "" : " · " + focus.summary),
+      kicker: (preset ? preset.range + " · " : "") +
+        (simulation ? "Explanations held to the end" : "Explanations after each answer") + " · " + plan.count + " questions"
     }, plan.ids);
     profile.active = clone(session);
     saveProfile();
@@ -2754,6 +3407,11 @@
     return {score:score, reason:reason};
   }
 
+  /* Room for the joint checks. A linked pair costs three items — one repair each, then
+   * the surface that tests them together — where an isolated weakness costs one, so a
+   * run of eight would have bought the links by dropping concepts. */
+  var PRIORITY_RUN_LENGTH = 10;
+
   function startPriorityPractice(courseId) {
     var course = getCourse(courseId);
     profile.selectedCourse = courseId;
@@ -2767,10 +3425,64 @@
       return aTime - bTime;
     });
     var targets = concepts.slice(0, 8);
-    var ids = targets.map(function (concept) { return chooseQuestion(courseId, concept.id, null, []) || questionSurfaces(courseId, concept.id)[0]; })
-      .filter(Boolean).map(function (question) { return question.id; });
+
+    /* Weaknesses that are connected are repaired together and then checked together;
+     * weaknesses that are not are repaired alone and SAID to be alone. The second half
+     * matters as much as the first — an isolated gap dressed up as part of a group
+     * teaches a connection the learner has no evidence for. */
+    var units = groupWeaknesses(courseId, targets);
+    var ids = [];
+    var linkChecks = {};
+    var linkedNames = [];
+    var isolatedNames = [];
+
+    units.forEach(function (unit) {
+      /* Check the whole unit fits before starting it, not just that there is one slot
+       * left. A pair costs three items, so testing for "any room" let a run that
+       * promised ten deliver twelve. A unit that does not fit is dropped rather than
+       * split: half a pair is an isolated repair mislabelled as a link. */
+      var cost = unit.kind === "linked" ? 3 : 1;
+      if (ids.length + cost > PRIORITY_RUN_LENGTH) return;
+      var chosen = unit.concepts.map(function (concept) {
+        var question = chooseQuestion(courseId, concept.id, null, ids) || questionSurfaces(courseId, concept.id)[0];
+        return question || null;
+      }).filter(Boolean);
+      if (!chosen.length) return;
+
+      if (unit.kind === "isolated") {
+        ids.push(chosen[0].id);
+        isolatedNames.push(unit.concepts[0].name);
+        return;
+      }
+
+      var joint = linkSurface(courseId, unit.concepts[0].id, unit.concepts[1].id, ids.concat(chosen.map(function (q) { return q.id; })));
+      /* Without a joint surface there is nothing to check, so the pair is not claimed
+       * as linked — the two are simply practised, and reported as standing alone. */
+      if (!joint) {
+        chosen.forEach(function (question) { ids.push(question.id); });
+        unit.concepts.forEach(function (concept) { isolatedNames.push(concept.name); });
+        return;
+      }
+      chosen.forEach(function (question) { ids.push(question.id); });
+      ids.push(joint.id);
+      linkChecks[joint.id] = unit.concepts.map(function (concept) { return concept.name; });
+      linkedNames.push(unit.concepts[0].name + " + " + unit.concepts[1].name);
+    });
+
     var firstPriority = targets.length ? conceptPriority(courseId, targets[0]) : null;
-    session = createSession(courseId, {kind:"priority", title:"Focused practice", kicker:firstPriority ? "Starts here because " + firstPriority.reason : "Based on your concept evidence"}, ids);
+    var shape = [];
+    if (linkedNames.length) shape.push(linkedNames.length === 1 ? "one linked pair" : linkedNames.length + " linked pairs");
+    if (isolatedNames.length) shape.push(isolatedNames.length === 1 ? "one on its own" : isolatedNames.length + " on their own");
+    var kicker = firstPriority ? "Starts here because " + firstPriority.reason : "Based on your concept evidence";
+    if (shape.length) kicker += " · " + shape.join(", ");
+
+    session = createSession(courseId, {
+      kind: "priority",
+      title: "Focused practice",
+      kicker: kicker,
+      linkChecks: linkChecks,
+      isolatedConceptNames: isolatedNames
+    }, ids);
     profile.active = clone(session);
     saveProfile();
     beginPractice();
@@ -2888,7 +3600,16 @@
     $("task-prompt").hidden = false;
     renderGlossaryBlock(question);
     var focusLabels = (item.writtenFocus || []).map(function (id) { return writtenCriterionLabel(session.courseId, id); });
-    $("question-pattern").textContent = isPrimer ? "Adaptive primer" : focusLabels.length ? "Dungeon re-check · " + focusLabels.join(" + ") : item.isReattempt ? "Re-attempt · new perspective" : question.pattern;
+    /* A joint surface in the weakness route is doing something the learner cannot see
+     * from the question alone: checking two gaps against each other. Naming both makes
+     * the step legible, and the names come from the pairing that actually happened
+     * rather than from anything the question asserts about itself. */
+    var linkedPair = (session.linkChecks || {})[question.id];
+    $("question-pattern").textContent = isPrimer ? "Predict first"
+      : focusLabels.length ? "Dungeon re-check · " + focusLabels.join(" + ")
+      : linkedPair ? "Both together · " + linkedPair.join(" + ")
+      : item.isReattempt ? "Re-attempt · new perspective"
+      : question.pattern;
     $("question-count").textContent = isPrimer ? "Primer before the next challenge" : "Question " + Math.min(challengePosition(), session.baseCount) + " of " + session.baseCount;
     $("question-node").textContent = question.node;
     var status = conceptStatus(session.courseId, question.conceptId);
@@ -2898,18 +3619,27 @@
     $("source-ref").hidden = false;
     renderCourseEvidence(lectureIdsFor(question), session.courseId);
     $("case-block").hidden = isPrimer || !question.caselet;
-    $("caselet").textContent = question.caselet || "";
+    $("caselet").innerHTML = caseParagraphs(question.caselet);
     /* A one-line caselet is a prompt and reads well set large; a full case is a
      * document. At 20px/650 a 537-character IBM case filled two thirds of a
      * 375px screen before the question, so long cases drop to body type. */
     $("caselet").classList.toggle("is-long", String(question.caselet || "").length > 240);
     $("prompt-flow").classList.toggle("has-case", !isPrimer && !!question.caselet);
     renderPrimerPanel(question, item);
-    $("task-kicker").textContent = question.caselet ? "Then decide" : "Your task";
+    /* The kicker is the one eyebrow a learner actually sees — `.question-meta`, where
+     * the pattern line lives, is `display: none` by design so diagnostic metadata does
+     * not compete with the question. A joint check has to be named here or it is not
+     * named at all: without it the step looks like an ordinary question and the reason
+     * two weaknesses were brought together stays invisible. */
+    $("task-kicker").textContent = linkedPair ? "Both together · " + linkedPair.join(" + ")
+      : question.caselet ? "Then decide"
+      : "Your task";
+    $("prompt-flow").classList.toggle("has-kicker", !isPrimer && (!!question.caselet || !!linkedPair));
     $("feedback").className = "feedback";
     $("feedback").innerHTML = "";
     $("commit-answer").hidden = false;
-    $("commit-answer").textContent = isPrimer ? "Check primer" : question.type === "short-answer" && session.mode === "simulation" ? "Save response" : question.type === "short-answer" && session.subjectiveStage === "grading" ? "Checking with " + writtenAuthorityName() + "…" : question.type === "short-answer" && session.subjectiveStage === "rubric" ? "Compare with exemplar" : writtenGradingApplies(question) ? "Check with " + writtenAuthorityName() : question.type === "short-answer" ? "Review with rubric" : "Check answer";
+    // "Check primer" described marking something. Nothing here is checked against a key.
+    $("commit-answer").textContent = isPrimer ? "Show me the rule" : question.type === "short-answer" && session.mode === "simulation" ? "Save response" : question.type === "short-answer" && session.subjectiveStage === "grading" ? "Checking with " + writtenAuthorityName() + "…" : question.type === "short-answer" && session.subjectiveStage === "rubric" ? "Compare with exemplar" : writtenGradingApplies(question) ? "Check with " + writtenAuthorityName() : question.type === "short-answer" ? "Review with rubric" : "Check answer";
     $("commit-answer").disabled = !hasCompleteResponse(question) || !confidenceReady() || session.answered || session.subjectiveStage === "grading";
     $("next-question").hidden = true;
     renderResponseControl(question);
@@ -2993,10 +3723,11 @@
     var card = $("question-card");
     card.classList.remove("is-correct", "is-wrong", "is-primer");
     card.classList.add("is-lesson");
-    $("question-pattern").textContent = "Lesson";
+    var reteach = Boolean(item && item.reteach);
+    $("question-pattern").textContent = reteach ? "Lesson · again" : "Lesson";
     $("question-node").textContent = data.title;
     $("question-status").className = "status-pill lesson";
-    $("question-status").textContent = "Teaching first";
+    $("question-status").textContent = reteach ? "Back because you needed it" : "Teaching first";
     $("source-ref").hidden = true;
 
     $("lesson-panel").hidden = false;
@@ -3010,8 +3741,21 @@
     $("feedback").innerHTML = "";
     $("prompt-flow").classList.remove("has-case");
 
-    $("lesson-kicker").innerHTML = "<span>Module " + escapeHtml(data.module) + " · lesson " + escapeHtml(data.order) +
-      (item && item.previousConceptId ? " · builds on what you just did" : "") + "</span>" +
+    /* Where this lesson sits in THIS RUN, not in the module file.
+     *
+     * `data.order` is the lecture's position inside its module, so the first lesson
+     * of the first study set was headed "Module 1 · lesson 5" and a learner reading
+     * carefully went looking for lessons 1 to 4. They do not exist as far as he is
+     * concerned: the course has fifty-odd lectures per subject and the bank cites
+     * sixteen, so the numbers are necessarily sparse. The sparse number is still
+     * worth printing — it is how you find the lecture in the real course — but it
+     * cannot be the headline, because as a headline it reads as a gap. */
+    var lessonItems = session.queue.filter(function (entry) { return entry.lesson; });
+    var lessonPlace = lessonItems.map(function (entry) { return entry.lectureId; }).indexOf(data.lectureId) + 1;
+    $("lesson-kicker").innerHTML = "<span>" +
+      (lessonPlace > 0 ? "Lesson " + lessonPlace + " of " + lessonItems.length + " in this run · " : "") +
+      "module " + escapeHtml(data.module) + ", lecture " + escapeHtml(data.order) +
+      (reteach ? " · you have read this before" : item && item.previousConceptId ? " · builds on what you just did" : "") + "</span>" +
       courseEvidenceTagsHtml([data.lectureId], session.courseId, data.module);
     $("lesson-heading").textContent = data.title;
     $("lesson-objective").innerHTML = "<b>After this you can:</b> " + escapeHtml(data.objective);
@@ -3033,12 +3777,16 @@
         }).join("") + "</dl>"
       : "";
 
-    $("lesson-connects").textContent = data.connects || "";
+    $("lesson-connects").innerHTML = lessonHandoffHtml(data, item);
 
     $("commit-answer").hidden = true;
     $("next-question").hidden = false;
-    $("next-question").innerHTML = "I have read this <span aria-hidden='true'>→</span>";
-    $("question-help").textContent = "Nothing here is scored. The questions after it use these words.";
+    $("next-question").innerHTML = (reteach ? "Read again" : "I have read this") + " <span aria-hidden='true'>→</span>";
+    /* A lesson that reappears without saying why reads as the app losing track of
+       you. It is here because the evidence asked for it, so it says that. */
+    $("question-help").textContent = reteach
+      ? "Nothing here is scored. This lecture is back because your last answer on it was wrong — the question after it comes from here."
+      : "Nothing here is scored. The questions after it use these words.";
 
     // Reading is recorded immediately: the learner has been shown the material,
     // and the queue must not re-teach it on resume.
@@ -3048,6 +3796,77 @@
     renderTopicList();
     updatePracticeProgress();
     $("lesson-heading").focus({preventScroll: true});
+  }
+
+  /* A lesson's closing handoff, made true of the run the learner is actually in.
+   *
+   * Every lesson ends by pointing forward, and twelve of BRGSA's fifteen handoffs
+   * and two of IBM's name "the next lecture" specifically
+   * (tools/measure-lesson-handoffs.js). The bank cites 16 lectures where BRGSA has
+   * 50 authored, so the lecture being promised is usually one no run will ever
+   * deliver: "The next lecture is the cheapest one: the smoke test" is followed by
+   * pre-sales, and IBM's "The next lecture sorts them" is followed by lecture 7 —
+   * whose skipped material was then examined for ten marks.
+   *
+   * The delivered order is not the problem and was fixed separately (0 descents
+   * over 40 sets). The problem is the sentence, and it cannot be fixed by rewriting
+   * it: a priority run, a study set and the sweep deliver different subsets, so no
+   * fixed sentence is true of all of them. It has to be computed against this run.
+   *
+   * Two readers stopped and went back convinced they had skipped something. Neither
+   * had. That is the cost being paid — not a wrong fact, but a learner losing trust
+   * in the sequence, which is the one thing a step-by-step course cannot afford. */
+  var PROMISES_NEXT_LECTURE = /\bthe next lecture\b|\bnext lecture\b|\bthe next one\b/i;
+
+  /* The decision, separated from the markup so the persona harness can read exactly
+     what a learner is told without a second copy of the rule. `nextLectureId` is the
+     next LESSON in this run, or null when the lecture is followed by its questions. */
+  function lessonHandoff(data, nextLectureId) {
+    var connects = String(data.connects || "");
+    var nextData = nextLectureId ? lessonFor(nextLectureId) : null;
+
+    /* Is the promised lecture the one arriving? The course's own next authored
+       lecture is the one the prose means; anything else falsifies it. */
+    var promises = PROMISES_NEXT_LECTURE.test(connects);
+    var courseNext = null;
+    if (promises) {
+      var here = lectureTeachingRank(data.lectureId);
+      Object.keys(LESSONS).forEach(function (lectureId) {
+        if (String(lectureId).indexOf(String(data.lectureId).split("-")[0] + "-") !== 0) return;
+        var rank = lectureTeachingRank(lectureId);
+        if (rank > here && (courseNext === null || rank < lectureTeachingRank(courseNext))) courseNext = lectureId;
+      });
+    }
+    var kept = !promises || (nextLectureId && nextLectureId === courseNext);
+    return {
+      connects: connects,
+      promisesNextLecture: promises,
+      kept: !!kept,
+      /* Said rather than hidden. The sentence is the lecture's own and is true of
+         the course; it is this run that departs from it, and a learner who has been
+         told that can stop looking for the lecture they did not miss. */
+      note: (promises && !kept)
+        ? "That is the course's order. This run does not follow it here — it delivers only the lectures your questions rest on" +
+          (courseNext && LESSONS[courseNext] ? ", so " + LESSONS[courseNext].title + " is not part of it." : ".")
+        : null,
+      nextInRun: nextData ? nextData.title : "the questions this lecture answers"
+    };
+  }
+
+  function lessonHandoffHtml(data, item) {
+    var queue = (session && session.queue) || [];
+    var position = queue.indexOf(item);
+    var nextLectureId = null;
+    for (var i = position + 1; i >= 0 && i < queue.length; i++) {
+      if (queue[i].lesson) { nextLectureId = queue[i].lectureId; break; }
+    }
+    var handoff = lessonHandoff(data, nextLectureId);
+    var html = handoff.connects
+      ? "<p class='lesson-connects-body" + (handoff.kept ? "" : " is-superseded") + "'>" + escapeHtml(handoff.connects) + "</p>"
+      : "";
+    if (handoff.note) html += "<p class='lesson-handoff-note'>" + escapeHtml(handoff.note) + "</p>";
+    html += "<p class='lesson-handoff-next'><b>Next in this run:</b> " + escapeHtml(handoff.nextInRun) + "</p>";
+    return html;
   }
 
   /* On a scored question, the lecture's glossary stays one disclosure away. A
@@ -3071,27 +3890,83 @@
     }).join("");
   }
 
+  function primerLevelOf(item) {
+    return Math.max(1, Math.min(3, item.primerLevel || 1));
+  }
+
+  /* Before the learner commits, this panel carries the situation and nothing that
+   * names the rule. It used to open with "Know this: <primerFact>" — the exact string
+   * the question then asked them to pick out of four options (LAW-63). The principle
+   * now lives in `renderPrimerReveal`, on the other side of their own answer. */
   function renderPrimerPanel(question, item) {
     var panel = $("primer-panel");
     var visible = question.type === "primer";
     panel.hidden = !visible;
     if (!visible) return;
-    var level = Math.max(1, Math.min(3, item.primerLevel || 1));
-    $("primer-level").textContent = level === 1 ? "Layer 1 · minimum to carry" : level === 2 ? "Primer returning · use it" : "Primer strengthened · repair the mix-up";
-    var parts = ["<p><b>Know this:</b> " + escapeHtml(question.primerFact) + "</p>"];
+    var level = primerLevelOf(item);
+    $("primer-level").textContent = level === 1 ? "First contact · predict before you are told"
+      : level === 2 ? "Primer returning · predict again"
+      : "Primer strengthened · this one has caught you before";
+    var parts = [];
     if (item.previousConceptId) {
       var previous = getConcept(session.courseId, item.previousConceptId);
-      if (previous) parts.unshift("<p class='primer-carry'><b>Carry forward:</b> " + escapeHtml(previous.name) + ". Now add " + escapeHtml(question.node) + ".</p>");
+      if (previous) parts.push("<p class='primer-carry'><b>Carry forward:</b> " + escapeHtml(previous.name) + ". Now add " + escapeHtml(question.node) + ".</p>");
     }
-    if (level >= 2) parts.push("<p><b>Use it like this:</b> " + escapeHtml(question.primerApplication) + "</p>");
-    if (level >= 3) parts.push("<p><b>Do not confuse it with:</b> " + escapeHtml(question.primerMisconception) + "</p>");
-    parts.push("<p class='primer-connection'><b>Connection to keep:</b> " + escapeHtml(question.primerConnection) + "</p>");
+    if (question.primerCase) parts.push("<p><b>What happens:</b> " + escapeHtml(question.primerCase) + "</p>");
+    /* At the strengthened level the learner has already missed this concept, so the
+     * trap is named up front. It is a warning about a wrong reading, not the right
+     * one, so it still gives away nothing the prediction is for. */
+    if (level >= 3) parts.push("<p class='primer-trap'><b>Last time this looked like:</b> " + escapeHtml(question.primerMisconception) + "</p>");
     $("primer-content").innerHTML = parts.join("");
+  }
+
+  /* One prediction, in the learner's own words, before anything names the rule.
+   *
+   * Nothing here is marked. A prediction that misses is what makes the reveal land, so
+   * there is no answer key, no score, and no evidence — which is also why it can ask
+   * for reasoning at first contact, when a keyed question could only ask for recall of
+   * something never taught. */
+  function renderPrediction(question) {
+    var holder = prepareResponseHolder("prediction-options");
+    var label = document.createElement("label");
+    label.className = "prediction-label";
+    label.innerHTML = "<span>Your prediction</span><small>Nothing here is marked or recorded as evidence. Being wrong is useful — committing to a guess is what makes the answer stick.</small>";
+    var textarea = document.createElement("textarea");
+    textarea.setAttribute("aria-label", "What rule do you think this case shows");
+    textarea.placeholder = "I think the rule is… because in this case…";
+    textarea.value = typeof selected === "string" ? selected : "";
+    textarea.disabled = !!session.answered;
+    textarea.addEventListener("input", function () {
+      selected = textarea.value;
+      session.selected = selected;
+      updateCommitState();
+    });
+    label.appendChild(textarea);
+    holder.appendChild(label);
+    /* Every other response control writes this line, so a primer that did not inherited
+     * whatever the previous surface left — on a first run that is the lesson's "the
+     * questions after it use these words", describing something else entirely. */
+    $("question-help").textContent = "There is no right answer to match. Commit to a guess, then the rule appears next to it.";
+    if (session.answered) return;
+    var skip = document.createElement("button");
+    skip.type = "button";
+    skip.className = "button secondary compact prediction-skip";
+    skip.textContent = "I would be guessing — just show me";
+    skip.addEventListener("click", function () {
+      session.primerSkipped = true;
+      selected = typeof selected === "string" ? selected : "";
+      commitAnswer();
+    });
+    holder.appendChild(skip);
   }
 
   function hasCompleteResponse(question) {
     if (question.type === "short-answer") return session.subjectiveStage === "rubric" ? true : typeof selected === "string" && selected.trim().length >= 20;
-    if (question.type === "mcq" || question.type === "primer" || !question.type) return typeof selected === "number";
+    /* A primer has no keyed answer, so "complete" means a prediction was committed to,
+     * or the learner said out loud that they would be guessing. Both reveal the same
+     * material; only one of them claims a prediction was made. */
+    if (question.type === "primer") return Boolean(session.primerSkipped) || (typeof selected === "string" && selected.trim().length > 0);
+    if (question.type === "mcq" || !question.type) return typeof selected === "number";
     /* MSQ: any selection is a complete response. Selecting nothing is not — under
      * the paper's marking a blank scores zero either way, but committing an empty
      * answer is almost always a mis-click rather than a decision. */
@@ -3108,6 +3983,7 @@
   }
 
   function renderResponseControl(question) {
+    if (question.type === "primer") return renderPrediction(question);
     if (question.type === "short-answer") return renderShortAnswer(question);
     if (question.type === "cloze" || question.type === "case-cloze") return renderCloze(question);
     if (question.type === "match") return renderMatch(question);
@@ -3812,7 +4688,9 @@
 
   function diagnosisFor(question, response) {
     if (!question || !response || response.correct) return null;
-    if (question.type === "mcq" || question.type === "primer" || !question.type) {
+    // A prediction has no keyed wrong option, so there is no belief to name.
+    if (question.type === "primer") return null;
+    if (question.type === "mcq" || !question.type) {
       return (question.diagnoses || [])[response.selected] || null;
     }
     /* MSQ indexes diagnoses by option, but `selected` is the set the learner
@@ -3842,7 +4720,12 @@
   }
 
   function evaluateResponse(question) {
-    if (question.type === "mcq" || question.type === "primer" || !question.type) {
+    /* A prediction has no key, so it has no verdict. `correct: null` is the same shape
+     * a constructed response uses and every consumer already reads it as "not scored"
+     * — `updatePrimerFromChallenge` returns on it, and the results screen counts only
+     * `scored` responses. */
+    if (question.type === "primer") return {correct: null, partial: 0, partResults: [], conceptResults: {}, misconception: null};
+    if (question.type === "mcq" || !question.type) {
       var mcqCorrect = selected === question.answer;
       var mcqDiagnosis = mcqCorrect ? null : (question.diagnoses || [])[selected];
       return {correct: mcqCorrect, partial: mcqCorrect ? 1 : 0, partResults: [mcqCorrect], conceptResults: {}, misconception: mcqCorrect ? null : (mcqDiagnosis ? mcqDiagnosis.tag : (question.misconceptions || [])[selected] || "wrong-option")};
@@ -3953,9 +4836,15 @@
 
     /* Bringing a question forward must not overtake its own teaching. Any lesson
      * the re-attempt depends on is placed immediately ahead of it, and removed
-     * from wherever it was queued later so it is not delivered twice. */
+     * from wherever it was queued later so it is not delivered twice.
+     *
+     * This is the sharpest case for re-teaching and it asks for it by name: the
+     * learner got this idea wrong seconds ago and the app is about to ask them
+     * again. Sending them back into the question with nothing in between is how the
+     * second attempt becomes a second guess. */
     var reattemptQuestion = getQuestion(session.courseId, item.id);
-    pendingLessonsFor(reattemptQuestion).forEach(function (lectureId) {
+    pendingLessonsFor(reattemptQuestion, session.courseId).forEach(function (lectureId) {
+      var alreadyRead = lessonIsRead(lectureId);
       for (var scan = session.queue.length - 1; scan > session.index; scan -= 1) {
         if (session.queue[scan].lesson && session.queue[scan].lectureId === lectureId) {
           session.queue.splice(scan, 1);
@@ -3969,6 +4858,7 @@
         origin: null,
         lesson: true,
         lectureId: lectureId,
+        reteach: alreadyRead,
         previousConceptId: question.conceptId
       });
       insertAt += 1;
@@ -4267,7 +5157,8 @@
     var correct = evaluation.correct;
     var timing = responseTimingMeta(question);
     var before = conceptStatus(session.courseId, question.conceptId);
-    if (question.type === "primer") recordPrimerAttempt(session.courseId, question, correct);
+    var predicted = question.type === "primer" && !session.primerSkipped && typeof selected === "string" && selected.trim().length > 0;
+    if (question.type === "primer") recordPrimerAttempt(session.courseId, question, predicted);
     else if (session.mode !== "simulation") recordAttempt(session.courseId, question, evaluation, confidence, item, session.blockId, timing);
     var after = conceptStatus(session.courseId, question.conceptId);
     var afterEvidence = conceptEvidence(session.courseId, question.conceptId);
@@ -4287,6 +5178,7 @@
       correct: correct,
       scored: question.type !== "primer",
       primer: question.type === "primer",
+      primerPredicted: predicted,
       primerLevel: item.primerLevel || null,
       durationBucket: timing.durationBucket,
       rapidGuess: timing.rapidGuess,
@@ -4319,7 +5211,9 @@
   }
 
   function correctAnswerKey(question) {
-    if (question.type === "mcq" || question.type === "primer" || !question.type) return [question.options[question.answer]];
+    // A primer is not keyed; its principle is revealed by renderPrimerResolved.
+    if (question.type === "primer") return [];
+    if (question.type === "mcq" || !question.type) return [question.options[question.answer]];
     if (question.type === "msq") return (question.answers || []).map(function (index) { return question.options[index]; });
     if (question.type === "numeric") return [String(question.answer) + (question.unit ? " " + question.unit : "")];
     if (question.type === "match") return question.rows.map(function (row) { return row.label + " → " + question.choices[row.answer]; });
@@ -4478,12 +5372,28 @@
     $("next-question").innerHTML = session.index + 1 >= session.queue.length ? "Finish this set <span aria-hidden='true'>→</span>" : "Continue <span aria-hidden='true'>→</span>";
   }
 
+  /* The reveal: the principle, arriving as the answer to the learner's own prediction.
+   *
+   * There is deliberately no verdict. Nothing compared their words to a key, so calling
+   * a prediction right or wrong would be a claim the app cannot support — and the
+   * prediction is worth making either way. Their own words are quoted back above the
+   * rule so the comparison is theirs to draw, which is the whole mechanism. */
   function renderPrimerResolved(question, response) {
+    var level = primerLevelOf(currentItem());
     var feedback = $("feedback");
-    feedback.className = "feedback visible" + (response.correct ? " primer-pass" : " wrong");
-    feedback.innerHTML = response.correct
-      ? "<span class='feedback-label'>Primer ready to use</span><p>Good. The next question will ask you to use this idea, not repeat the definition.</p>"
-      : "<span class='feedback-label'>Primer strengthened</span><p>Keep the precise principle active: " + escapeHtml(question.primerFact) + "</p><p class='bridge'><b>Connection:</b> " + escapeHtml(question.primerConnection) + "</p>";
+    feedback.className = "feedback visible primer-pass";
+    var parts = ["<span class='feedback-label'>" + (response.primerPredicted ? "Here is the rule you were reaching for" : "Here is the rule") + "</span>"];
+    if (response.primerPredicted) {
+      parts.push("<p class='primer-said'><b>You said:</b> " + escapeHtml(String(response.selected).trim()) + "</p>");
+    }
+    parts.push("<p class='primer-rule'><b>The rule:</b> " + escapeHtml(question.primerFact) + "</p>");
+    if (level >= 2) parts.push("<p><b>Use it like this:</b> " + escapeHtml(question.primerApplication) + "</p>");
+    if (level >= 3) parts.push("<p><b>Do not confuse it with:</b> " + escapeHtml(question.primerMisconception) + "</p>");
+    parts.push("<p class='bridge'><b>Connection to keep:</b> " + escapeHtml(question.primerConnection) + "</p>");
+    if (response.primerPredicted) {
+      parts.push("<p class='primer-note'>Compare that against what you wrote. The gap between the two is the thing worth remembering — it is not marked and nothing about it was recorded.</p>");
+    }
+    feedback.innerHTML = parts.join("");
     $("commit-answer").hidden = true;
     $("next-question").hidden = false;
     $("next-question").innerHTML = "Use it in the next challenge <span aria-hidden='true'>→</span>";
@@ -4495,6 +5405,7 @@
     session.answered = false;
     session.selected = null;
     session.confidence = null;
+    session.primerSkipped = false;
     session.subjectiveStage = null;
     session.rubricSelection = [];
     session.localGradeFallback = null;
@@ -4524,7 +5435,37 @@
       : question && question.type === "primer" ? "Primer before the next challenge"
       : "Question " + Math.min(challengePosition(), session.baseCount) + " of " + session.baseCount;
     $("practice-progress-fill").style.width = (total ? answered / total * 100 : 0) + "%";
-    $("due-count").textContent = String(session.queue.slice(session.index + 1).filter(function (item) { return item.isReattempt; }).length);
+    var queued = session.queue.slice(session.index + 1).filter(function (item) { return item.isReattempt; });
+    $("due-count").textContent = String(queued.length);
+    $("due-note").textContent = reattemptSummary(queued);
+  }
+
+  /* What is actually queued, rather than one fixed sentence about misses.
+   *
+   * The count was honest and its caption was not. A correct answer schedules a
+   * re-attempt whenever confidence was low or the concept has fewer than three
+   * correct behind it — deliberately, and it is one of the better things the engine
+   * does — but the box underneath read "A missed idea returns in a different
+   * question" whatever was in it. Students watched the number climb through a run
+   * they were getting right and concluded the tracking was broken. It was not; it
+   * was mislabelled, which from the outside is the same thing.
+   *
+   * The distinction the caption has to carry is repair versus confirmation, because
+   * a learner seeing "2 due" is entitled to know whether that means they got two
+   * things wrong. */
+  function reattemptSummary(items) {
+    var confirmations = items.filter(function (item) {
+      return ["low-confidence-correct", "developing"].indexOf(item.reason) >= 0;
+    }).length;
+    var repairs = items.length - confirmations;
+    if (!items.length) return "Answers that need a second look are queued here.";
+    if (!confirmations) return repairs === 1
+      ? "One missed idea returns in a different question."
+      : repairs + " missed ideas return in different questions.";
+    if (!repairs) return confirmations === 1
+      ? "You got this one right. It returns once in a different question to confirm it."
+      : "You got these right. They return in different questions to confirm it.";
+    return repairs + " to repair, " + confirmations + " you got right that return once to confirm it.";
   }
 
   function finishSession() {
@@ -4616,7 +5557,8 @@
 
   function selectedAnswerList(question, response) {
     if (response.subjective) return [response.selected];
-    if (question.type === "mcq" || question.type === "primer" || !question.type) return [question.options[response.selected] || "No answer recorded"];
+    if (question.type === "primer") return [String(response.selected || "").trim() || "No prediction made"];
+    if (question.type === "mcq" || !question.type) return [question.options[response.selected] || "No answer recorded"];
     if (question.type === "match") return question.rows.map(function (row, index) { return row.label + " → " + question.choices[response.selected[index]]; });
     if (question.type === "boss") return question.steps.map(function (step, index) { return step.label + ": " + step.options[response.selected[index]]; });
     return question.blanks.map(function (blank, index) { return blank.label + ": " + blank.options[response.selected[index]]; });
@@ -4659,6 +5601,9 @@
     if (lastFinished.kind === "practice-check" || lastFinished.kind === "practice-shape") {
       profile.selectedCourse = lastFinished.courseId;
       return startBuiltPractice({
+        // A run saved before difficulty was a dial has no band, and "any" is exactly
+        // what it drew from, so repeating it repeats the same pool.
+        band: lastFinished.band || "any",
         shape: lastFinished.shape || "mixed",
         focus: lastFinished.focus || "all",
         length: lastFinished.length || "standard",
@@ -4874,7 +5819,8 @@
 
   function demoSelection(question, shouldBeCorrect) {
     if (question.type === "short-answer") return "I would name the governing idea, make a recommendation from the case evidence, and explain the causal reason behind that decision.";
-    if (question.type === "mcq" || question.type === "primer" || !question.type) return shouldBeCorrect ? question.answer : (question.answer + 1) % question.options.length;
+    if (question.type === "primer") return "I think this is about committing to a decision rule before the evidence arrives, so the result cannot be reinterpreted afterwards.";
+    if (question.type === "mcq" || !question.type) return shouldBeCorrect ? question.answer : (question.answer + 1) % question.options.length;
     var parts = question.type === "boss" ? question.steps : question.type === "match" ? question.rows : question.blanks;
     return parts.map(function (part, index) {
       if (shouldBeCorrect || index > 0) return part.answer;
@@ -5079,8 +6025,8 @@
         renderQuestion();
       }
       if (name === "question-primer-recovery") {
-        var primerQuestion = currentQuestion();
-        selected = (primerQuestion.answer + 1) % primerQuestion.options.length;
+        // The reveal state: a prediction committed to, the rule shown against it.
+        selected = demoSelection(currentQuestion(), false);
         session.selected = selected;
         commitAnswer();
       }
@@ -5405,6 +6351,25 @@
         " × " + section.marks + " mark" + (section.marks === 1 ? "" : "s") + "</b>" +
         "<p>" + escapeHtml(section.rule) + "</p></div>";
     }).join("");
+    /* Readiness against this exact draw, not the paper in general — this is the
+       screen where somebody commits two hours to one set, so the number has to be
+       that set's. Measured on a profile that had done the first study set and
+       nothing else, every paper here was ~90% untaught and no screen said so. */
+    var readiness = examReadiness(exam.courseId, exam.setIndex);
+    var readinessNote = $("exam-readiness");
+    if (readinessNote) {
+      readinessNote.hidden = !readiness || !readiness.total;
+      if (readiness && readiness.total) {
+        readinessNote.className = "exam-readiness" + (readiness.allTaught ? " is-ready" : "");
+        var seen = readiness.marks && readiness.marks.alreadyMet
+          ? " " + readiness.marks.alreadyMet + " of this paper's " + readiness.marks.total +
+            " questions (" + readiness.marks.alreadyMetMarks + " marks) are ones you have already answered in Learn — Dungeon draws both from one bank, so a mark on those shows recall rather than fresh knowledge."
+          : "";
+        readinessNote.textContent = examReadinessCopy(readiness) +
+          (readiness.allTaught ? "" : " Sitting it now is a fair thing to do — it will show you the shape of the paper — but a low score here is Learn not having happened yet, not a verdict on you.") +
+          seen;
+      }
+    }
     var shortfalls = exam.paper.shortfalls;
     var note = $("exam-shortfall");
     note.hidden = shortfalls.length === 0;
@@ -5530,7 +6495,7 @@
     /* `caselet` is a string on some question families and null on others, and null is
        typeof "object" — so this checks the type rather than truthiness alone. */
     if (typeof question.caselet === "string" && question.caselet) {
-      head += "<div class='exam-caselet'>" + escapeHtml(question.caselet) + "</div>";
+      head += "<div class='exam-caselet'>" + caseParagraphs(question.caselet) + "</div>";
     }
     head += "<h2 class='exam-stem'>" + escapeHtml(question.stem || question.prompt || "") + "</h2>";
     /* Numeric items carry the scenario in `stem` and the actual ask in `prompt`; only
@@ -5538,12 +6503,42 @@
     if (question.prompt && question.stem && question.prompt !== question.stem) {
       head += "<p class='exam-prompt'>" + escapeHtml(question.prompt) + "</p>";
     }
-    if (type === "mcq" || type === "case-cloze") {
+    if (type === "mcq") {
       return head + "<div class='exam-options' role='radiogroup'>" + (question.options || []).map(function (option, index) {
         return "<button type='button' class='exam-option" + (item.response === index ? " chosen" : "") +
           "' role='radio' aria-checked='" + (item.response === index) + "' data-choice='" + index + "'>" +
           "<span class='option-key'>" + "ABCDEFGH"[index] + "</span><span>" + escapeHtml(option) + "</span></button>";
       }).join("") + "</div>";
+    }
+    /* A case-cloze is a scenario with two blanks, each carrying its own four options.
+     * It was sharing the mcq branch, which reads `question.options` — a field no
+     * case-cloze has — so BRGSA's whole Section B drew its caselet, drew the task
+     * line, and then drew an empty `div.exam-options`. Twenty of eighty marks with
+     * no radio, no select, no textarea: unanswerable by any means, on every sitting.
+     *
+     * The scorer had the same fault (`item.response === question.answer`, against an
+     * `answer` that lives on each blank rather than the question), so even a student
+     * who could somehow have answered would have scored zero.
+     *
+     * Selects rather than buttons, matching the `match` branch: two grouped choices
+     * belong to one question, and a radiogroup per blank inside one item is the shape
+     * that misleads a candidate about how it is marked. */
+    if (type === "case-cloze") {
+      var blanks = question.blanks || [];
+      var chosenBlanks = item.response && typeof item.response === "object" ? item.response : {};
+      if (!blanks.length) return head + examUnrenderable(question);
+      return head + "<p class='exam-hint'>Both parts must be right for the marks. No partial credit.</p>" +
+        "<div class='exam-cloze'>" + blanks.map(function (blank, index) {
+          return "<div class='exam-cloze-row'><label for='exam-cloze-" + index + "'>" +
+            escapeHtml(blank.label || ("Part " + (index + 1))) + "</label>" +
+            "<select id='exam-cloze-" + index + "' data-blank='" + index + "'>" +
+            "<option value=''>Choose</option>" +
+            (blank.options || []).map(function (option, optionIndex) {
+              return "<option value='" + optionIndex + "'" +
+                (String(chosenBlanks[index]) === String(optionIndex) ? " selected" : "") + ">" +
+                escapeHtml(option) + "</option>";
+            }).join("") + "</select></div>";
+        }).join("") + "</div>";
     }
     if (type === "msq") {
       var chosen = Array.isArray(item.response) ? item.response : [];
@@ -5578,11 +6573,26 @@
           }).join("") + "</select></div>";
       }).join("") + "</div>";
     }
-    /* short-answer and anything else written */
-    return head + "<label class='exam-written'><span>Your answer</span>" +
-      "<textarea id='exam-written-input' rows='12' placeholder='Write your full answer here.'>" +
-      escapeHtml(item.response === null ? "" : String(item.response)) + "</textarea></label>" +
-      "<p class='exam-hint'>Written answers are not machine-marked. After you submit you will review this against the rubric yourself.</p>";
+    if (type === "short-answer") {
+      return head + "<label class='exam-written'><span>Your answer</span>" +
+        "<textarea id='exam-written-input' rows='12' placeholder='Write your full answer here.'>" +
+        escapeHtml(item.response === null ? "" : String(item.response)) + "</textarea></label>" +
+        "<p class='exam-hint'>Written answers are not machine-marked. After you submit you will review this against the rubric yourself.</p>";
+    }
+    /* Anything the renderer does not know how to draw.
+     *
+     * The old default was the written textarea, so a type mismatch produced a
+     * plausible-looking answer box rather than an error — and case-cloze did not even
+     * reach it, because it fell into the mcq branch and drew an empty div. Either way
+     * the paper looked fine and could not be answered. A candidate is owed the
+     * knowledge that this question is broken, and so is whoever has to fix it. */
+    return head + examUnrenderable(question);
+  }
+
+  function examUnrenderable(question) {
+    return "<p class='exam-unrenderable'><b>This question cannot be shown.</b> Its format (" +
+      escapeHtml(question.type || "unknown") + ") did not render, so it cannot be answered and is " +
+      "excluded from the marks available on this paper. This is a fault in Dungeon, not in your answer.</p>";
   }
 
   /* Every response passes through here so the history is captured once, in one place.
@@ -5630,6 +6640,17 @@
         renderExamPalette();
       });
     });
+    /* Case-cloze blanks. Same object-keyed shape as `match` above, so the palette,
+       `examHasResponse` and the change-tracking all treat them alike. */
+    $all("#exam-question-body select[data-blank]").forEach(function (select) {
+      select.addEventListener("change", function () {
+        var picked = item.response && typeof item.response === "object" ? item.response : {};
+        if (select.value === "") delete picked[select.dataset.blank];
+        else picked[select.dataset.blank] = select.value;
+        recordExamResponse(item, picked);
+        renderExamPalette();
+      });
+    });
   }
 
   /* Scoring, by the paper's rules rather than the learning system's.
@@ -5648,8 +6669,18 @@
          options cannot pay out more than the two marks the paper says it is worth. */
       return {awarded: Math.min(item.marks, Math.max(0, right - wrong)), possible: item.marks, machine: true};
     }
-    if (type === "mcq" || type === "case-cloze") {
+    if (type === "mcq") {
       return {awarded: item.response === question.answer ? item.marks : 0, possible: item.marks, machine: true};
+    }
+    /* Every blank or nothing, for the same reason `match` is all-or-nothing: the paper
+       gives Section B five marks and states no partial-credit rule, and inventing one
+       the examiner has not stated teaches a wrong expectation about the real paper.
+       Five marks over two blanks does not divide evenly either. */
+    if (type === "case-cloze") {
+      var blanks = question.blanks || [];
+      var picked = item.response && typeof item.response === "object" ? item.response : {};
+      var filled = blanks.filter(function (blank, index) { return String(picked[index]) === String(blank.answer); }).length;
+      return {awarded: blanks.length && filled === blanks.length ? item.marks : 0, possible: item.marks, machine: true};
     }
     if (type === "numeric") {
       var value = parseFloat(String(item.response === null ? "" : item.response).replace(/[,₹\s]/g, ""));
@@ -6244,6 +7275,115 @@
     return {paper: met[0], set: nextSet(met[0]), reason: "weakest"};
   }
 
+  /* How much of a paper the learner has actually been taught.
+   *
+   * The examiner is meant to be where somebody goes to be tested on what they have
+   * been taught, and it had no idea what that was. `buildExamPaper` draws from the
+   * whole bank; nothing anywhere compared that against the learner's own progress.
+   * Measured on a fresh profile that had finished study set 1 — the first thing the
+   * product recommends — the paper it then offered was 90% material nobody had
+   * taught them: SPMS 8 of 75 marks reachable, BRGSA 7 of 80, SCLM 7 of 72, IBM 10
+   * of 100. That is not the examiner being hard. That is Learn not having happened
+   * yet, and the examiner is the only screen positioned to say so.
+   *
+   * Two numbers, because they answer different questions. `concepts` is
+   * seed-independent and describes the paper as a whole, so it can be shown on a
+   * card that offers three sets. `marks` is the real built paper for one set, and is
+   * shown where somebody is about to commit two hours to that exact draw.
+   *
+   * "Taught" is the same weak claim the ladder makes — the lesson has been read.
+   * Deliberately not "answered well": telling a candidate they are 60% ready because
+   * their evidence is strong would be a prediction, and this product does not make
+   * those. It says what has been put in front of them. */
+  function examReadiness(courseId, setIndex) {
+    var spec = EXAM_PAPERS[courseId];
+    if (!spec) return null;
+    var course = getCourse(courseId);
+    var onPaper = {};
+    spec.sections.forEach(function (section) {
+      examPool(courseId, section.type).forEach(function (question) {
+        conceptIdsOf(question).forEach(function (id) { if (getConcept(courseId, id)) onPaper[id] = true; });
+      });
+    });
+    var paperConcepts = Object.keys(onPaper);
+    var taughtConcepts = paperConcepts.filter(function (id) { return conceptIsTaught(courseId, id); });
+
+    var marks = null;
+    if (typeof setIndex === "number") {
+      var paper = buildExamPaper(courseId, examSeed(courseId, setIndex));
+      if (paper) {
+        /* A question resting on one taught concept and one untaught one is not a
+           taught question. Counting it as half-ready would overstate exactly the
+           thing this exists to stop overstating. */
+        var reachable = paper.questions.filter(function (entry) {
+          var ids = conceptIdsOf(entry.question);
+          return ids.length && ids.every(function (id) {
+            return !getConcept(courseId, id) || conceptIsTaught(courseId, id);
+          });
+        });
+        marks = {
+          taught: reachable.reduce(function (sum, entry) { return sum + entry.marks; }, 0),
+          available: paper.available
+        };
+        marks.percent = marks.available ? Math.round((marks.taught / marks.available) * 100) : 0;
+
+        /* How much of this paper the learner has already answered in Learn.
+         *
+         * There is one bank. Measured across all four subjects, **100% of every
+         * paper is drawable in Learn** — not a leak of a few items, no reservation
+         * at any point — and three sections have no slack to partition with (SCLM
+         * Section A needs 50 from a pool of 52). Reserving an examiner-only slice is
+         * bank growth, which is content work.
+         *
+         * What can be fixed without inventing content is the score concealing it. A
+         * candidate who meets an item they answered twenty minutes ago and scores
+         * the mark has demonstrated recall, and a mock that reports that as
+         * knowledge is the same over-crediting the evidence model refuses to do
+         * everywhere else. So it is counted and said. */
+        var met = paper.questions.filter(function (entry) {
+          return questionLastAttemptAt(courseId, entry.question.id) > 0;
+        });
+        marks.alreadyMet = met.length;
+        marks.alreadyMetMarks = met.reduce(function (sum, entry) { return sum + entry.marks; }, 0);
+        marks.total = paper.questions.length;
+      }
+    }
+
+    var ladder = courseLadder(courseId);
+    return {
+      courseId: courseId,
+      taught: taughtConcepts.length,
+      total: paperConcepts.length,
+      allTaught: paperConcepts.length > 0 && taughtConcepts.length === paperConcepts.length,
+      none: taughtConcepts.length === 0,
+      marks: marks,
+      nextStep: ladder.current,
+      ladderSteps: ladder.steps
+    };
+  }
+
+  /* One sentence, used on the card, the hero and the cover. It names the gap and,
+     when there is one, the specific next Learn step that closes part of it — a
+     readiness figure with no route out of it is just a discouraging number. */
+  function examReadinessCopy(readiness) {
+    if (!readiness || !readiness.total) return "";
+    if (readiness.allTaught) {
+      return "You have been taught all " + readiness.total + " concepts this paper draws on" +
+        (readiness.marks ? ", covering every one of its " + readiness.marks.available + " marks." : ".");
+    }
+    var head = readiness.none
+      ? "Learn has not taught you any of the " + readiness.total + " concepts this paper draws on yet"
+      : "You have been taught " + readiness.taught + " of the " + readiness.total + " concepts this paper draws on";
+    var middle = readiness.marks
+      ? " — about " + readiness.marks.percent + "% of this set's " + readiness.marks.available + " marks"
+      : "";
+    var tail = readiness.nextStep
+      ? ". Step " + readiness.nextStep.step + " of " + readiness.ladderSteps + " in Learn adds " +
+        conceptNameList(readiness.nextStep.concepts) + "."
+      : ".";
+    return head + middle + tail;
+  }
+
   /* What a section cannot fill from the bank. Seed-independent, so it can be told
      before a paper is built — and told here as well as on the card, because the hero
      is where most people will start from and it must not be the one honest place
@@ -6722,6 +7862,70 @@
     saveProfile();
   }
 
+  /* Cross to Learn and open the step that closes part of the gap just quoted. The
+     whole point of stating readiness on the examiner is that Learn owns the fix, so
+     the control goes there and starts the work rather than dropping somebody on a
+     dashboard to find it themselves. */
+  function startNextLadderStep(courseId) {
+    var ladder = courseLadder(courseId);
+    profile.selectedCourse = courseId;
+    crossProducts("learn", function () {
+      if (ladder.current) return startStudySet(courseId, ladder.current.definition.id);
+      renderDashboard();
+      showScreen("dashboard-screen");
+    });
+  }
+
+  /* A read-only handle for tools/browser-checks/export-run.js.
+   *
+   * The persona harness has to serve the EXACT paper a candidate would sit — same
+   * draw, same order — and `buildExamPaper` lives in this closure. The alternative
+   * was to mirror it in the harness, which is the drifting second copy of the rules
+   * that teach-before-test.js exists to warn about: a persona would then be testing
+   * the copy rather than the app.
+   *
+   * It discloses nothing new. Every question, option and answer it can reach is
+   * already sitting in `window.T6_COURSES` for anyone with a console open, so this
+   * adds no surface — it only saves the harness from reimplementing the seed and the
+   * section spec. Read-only by construction: each call builds a fresh object and
+   * none of them touch `exam`, the profile, or the screen. */
+  window.__dungeonExport = {
+    paper: function (courseId, setIndex) {
+      var spec = EXAM_PAPERS[courseId];
+      var built = buildExamPaper(courseId, examSeed(courseId, setIndex || 0));
+      if (!built) return null;
+      return {
+        courseId: courseId, setIndex: setIndex || 0, minutes: EXAM_MINUTES,
+        total: spec.total, available: built.available, shortfalls: built.shortfalls,
+        caveat: spec.caveat || null,
+        sections: spec.sections.map(function (section) {
+          return {id: section.id, label: section.label, type: section.type,
+            count: section.count, marks: section.marks, rule: section.rule};
+        }),
+        items: built.questions.map(function (entry) {
+          return {section: entry.section, marks: entry.marks, question: entry.question};
+        })
+      };
+    },
+    readiness: function (courseId, setIndex) { return examReadiness(courseId, setIndex); },
+    ladder: function (courseId) { return courseLadder(courseId); },
+    /* What a lesson's closing handoff actually SAYS in a given run — the prose plus
+       the correction the app prints when the run departs from the course's order.
+       Exported rather than left to the harness because the first version of the
+       harness printed the raw `connects` string and so reported a promise the app had
+       already qualified on screen. `lectureIds` is the run's lessons in order. */
+    handoffs: function (lectureIds) {
+      var ids = (lectureIds || []).slice();
+      return ids.map(function (lectureId, index) {
+        var data = lessonFor(lectureId);
+        if (!data) return {lectureId: lectureId, missing: true};
+        var handoff = lessonHandoff(data, ids[index + 1] || null);
+        handoff.lectureId = lectureId;
+        return handoff;
+      });
+    }
+  };
+
   function examSetLabel(index) { return "Set " + (index + 1); }
 
   function examPercent(row) {
@@ -6745,6 +7949,16 @@
         openExaminer(button.dataset.examCourse, Number(button.dataset.examSet));
       });
     });
+    /* The examiner's job here is to hand the learner back, not to keep them. If a
+       paper is mostly untaught, the useful control on that screen is the one that
+       goes and teaches it — a readiness figure with no way to act on it is just a
+       discouraging number. */
+    $all("#exam-papers [data-teach-course]").forEach(function (button) {
+      button.addEventListener("click", function (event) {
+        event.stopPropagation();
+        startNextLadderStep(button.dataset.teachCourse);
+      });
+    });
   }
 
   function renderExamPaperCard(courseId) {
@@ -6755,6 +7969,14 @@
        owed it before they commit two hours, not at the end. */
     var short = examShortfalls(courseId);
     var negative = spec.sections.some(function (s) { return s.negative; });
+
+    var readiness = examReadiness(courseId);
+    var readinessLine = readiness && readiness.total
+      ? "<p class='exam-paper-readiness" + (readiness.allTaught ? " is-ready" : "") + "'>" +
+        escapeHtml(examReadinessCopy(readiness)) +
+        (readiness.allTaught ? "" : " <button type='button' class='link-button' data-teach-course='" +
+          escapeHtml(courseId) + "'>Teach me that first</button>") + "</p>"
+      : "";
 
     var sets = "";
     for (var i = 0; i < EXAM_SET_COUNT; i++) {
@@ -6790,6 +8012,10 @@
       (short.length ? "<p class='exam-paper-short'>" + short.map(function (row) {
         return row.section.label + " has " + row.have + " of " + row.section.count + " questions in the bank";
       }).join("; ") + ". This mock scores out of what is actually here, not out of " + spec.total + ".</p>" : "") +
+      /* Third thing said before the click, for the same reason as the other two: a
+         candidate is owed it. The difference is that this one is about them rather
+         than about the bank, and it is the only one Learn can close. */
+      readinessLine +
       "<div class='exam-sets'>" + sets + "</div></article>";
   }
 
@@ -7158,19 +8384,41 @@
         var terms = lessonVocabulary(item.question);
         var used = terms.filter(function (term) { return new RegExp("\\b" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "s?\\b", "i").test(text); });
         var rubric = item.question.rubric || [];
+        /* Whether the learner was ever given this lecture.
+         *
+         * Measured on a real sitting: on the one lecture Learn had delivered, the
+         * candidate scored 3 of 3 on its vocabulary; across the nine it had not, under
+         * a third. The metric tracks DELIVERY almost perfectly and was reporting it as
+         * the candidate's failing, then telling them "examiners look for the
+         * framework's vocabulary" about words no screen had ever shown them.
+         *
+         * The measurement is good and stays. What changes is whose gap it is. */
+        var untaught = lectureIdsFor(item.question).filter(function (lectureId) {
+          return lessonFor(lectureId) && !lessonIsRead(lectureId);
+        });
         return "<article class='written-review'>" +
           "<b>" + escapeHtml(item.question.node || item.question.stem || "Written answer") + "</b>" +
           "<div class='insight-grid'>" +
             "<div class='insight-card'><small>Length</small><b>" + words + "</b><span>words, " + clockWords(item.seconds) + " spent</span></div>" +
-            (terms.length ? "<div class='insight-card'><small>Course vocabulary</small><b>" + used.length + " of " + terms.length +
-              "</b><span>" + (used.length ? escapeHtml(used.slice(0, 4).join(", ")) : "none of this lecture's terms appear") + "</span></div>" : "") +
+            (terms.length ? "<div class='insight-card" + (untaught.length ? " is-untaught" : "") + "'><small>Course vocabulary</small><b>" +
+              used.length + " of " + terms.length + "</b><span>" +
+              (untaught.length
+                ? "Learn has not taught you this lecture yet, so this is our gap, not yours"
+                : used.length ? escapeHtml(used.slice(0, 4).join(", ")) : "none of this lecture's terms appear") +
+              "</span></div>" : "") +
             (rubric.length ? "<div class='insight-card'><small>Rubric points</small><b>" + rubric.length + "</b><span>to check your answer against below</span></div>" : "") +
           "</div>" +
           (rubric.length ? "<ul class='rubric-points'>" + rubric.map(function (point) {
             return "<li><b>" + escapeHtml(point.label) + "</b><span>" + escapeHtml(point.description) + "</span></li>";
           }).join("") + "</ul>" : "") +
+          /* The scolding only applies to somebody who was given the words. Telling a
+             candidate to use a framework's vocabulary when no screen has shown them
+             that framework is the app blaming them for its own gap — and it sat
+             directly under a rubric card saying the exact term is optional. */
           (terms.length && used.length < Math.ceil(terms.length / 2)
-            ? "<p class='insight-verdict'>You answered in your own words rather than the course's. Examiners look for the framework's vocabulary, because it is the evidence you are using the framework and not describing it from outside.</p>"
+            ? (untaught.length
+              ? "<p class='insight-verdict'>Learn has not delivered this lecture yet, so its vocabulary was never put in front of you. Teaching it is on us — the count above is a gap in your revision plan, not a mark against this answer.</p>"
+              : "<p class='insight-verdict'>You answered in your own words rather than the course's. Examiners look for the framework's vocabulary, because it is the evidence you are using the framework and not describing it from outside.</p>")
             : "") +
           "</article>";
       }).join("");
@@ -7751,7 +8999,8 @@
       if (event.target && /^(SELECT|INPUT|TEXTAREA)$/.test(event.target.tagName)) return;
       if (event.target && event.target.tagName === "BUTTON" && (!event.target.classList.contains("option") || event.key === "Enter")) return;
       var question = currentQuestion();
-      var isMcq = !question.type || question.type === "mcq" || question.type === "primer";
+      // A primer takes typed prose, so arrow keys belong to the caret, not to options.
+      var isMcq = !question.type || question.type === "mcq";
       if (!session.answered && isMcq && /^(ArrowRight|ArrowDown|ArrowLeft|ArrowUp)$/.test(event.key)) {
         event.preventDefault();
         var direction = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1;
@@ -7777,6 +9026,21 @@
   }
 
   function unique(values) { return values.filter(function (value, index) { return values.indexOf(value) === index; }); }
+  /* A case is read, not glanced at, and a 500-character single block is where a
+   * reader loses their place. Authored cases separate their beats with a blank
+   * line — setting up the situation, then what happens, then what it costs — and
+   * this turns each beat into its own paragraph. A case written as one block still
+   * renders as one paragraph, so older content is unaffected. Escaped, because the
+   * caller assigns the result as HTML. */
+  function caseParagraphs(text) {
+    return String(text || "")
+      .split(/\n{2,}/)
+      .map(function (part) { return part.trim(); })
+      .filter(Boolean)
+      .map(function (part) { return "<p>" + escapeHtml(part) + "</p>"; })
+      .join("");
+  }
+
   function escapeHtml(value) {
     return String(value).replace(/[&<>'"]/g, function (character) {
       return {"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[character];

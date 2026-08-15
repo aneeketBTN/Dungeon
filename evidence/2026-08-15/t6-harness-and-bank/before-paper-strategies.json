@@ -1,0 +1,62 @@
+{
+  "SPMS": {
+    "mcqQuestions": 35,
+    "mcqMarks": 35,
+    "paperMarks": 75,
+    "craftCannotReach": 40,
+    "percentOfMcqMarks": {
+      "longest": 32.1,
+      "fixedB": 22.9,
+      "onTopic": 17.1,
+      "noAbsolutes": 43.8,
+      "ethical": 27.1,
+      "combined": 36.4,
+      "chance": 25
+    }
+  },
+  "BRGSA": {
+    "mcqQuestions": 20,
+    "mcqMarks": 40,
+    "paperMarks": 80,
+    "craftCannotReach": 40,
+    "percentOfMcqMarks": {
+      "longest": 28.8,
+      "fixedB": 20,
+      "onTopic": 25,
+      "noAbsolutes": 36.2,
+      "ethical": 26.7,
+      "combined": 40,
+      "chance": 25
+    }
+  },
+  "SCLM": {
+    "mcqQuestions": 50,
+    "mcqMarks": 50,
+    "paperMarks": 72,
+    "craftCannotReach": 22,
+    "percentOfMcqMarks": {
+      "longest": 11,
+      "fixedB": 24,
+      "onTopic": 17,
+      "noAbsolutes": 36,
+      "ethical": 25.8,
+      "combined": 29.3,
+      "chance": 25
+    }
+  },
+  "IBM": {
+    "mcqQuestions": 0,
+    "mcqMarks": 0,
+    "paperMarks": 100,
+    "craftCannotReach": 100,
+    "percentOfMcqMarks": {
+      "longest": null,
+      "fixedB": null,
+      "onTopic": null,
+      "noAbsolutes": null,
+      "ethical": null,
+      "combined": null,
+      "chance": null
+    }
+  }
+}

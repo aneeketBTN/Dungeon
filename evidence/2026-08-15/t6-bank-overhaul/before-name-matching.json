@@ -1,0 +1,561 @@
+{
+  "optionSetsMeasured": 1049,
+  "chanceForFourOptions": 25,
+  "byFamily": [
+    {
+      "family": "term_cloze",
+      "sets": 62,
+      "percent": 100,
+      "hundredPayoffSets": 62,
+      "threshold": 32,
+      "over": true
+    },
+    {
+      "family": "repair_cloze",
+      "sets": 62,
+      "percent": 81.9,
+      "hundredPayoffSets": 46,
+      "threshold": 32,
+      "over": true
+    },
+    {
+      "family": "case_cloze",
+      "sets": 124,
+      "percent": 70.8,
+      "hundredPayoffSets": 77,
+      "threshold": 32,
+      "over": true
+    },
+    {
+      "family": "explain",
+      "sets": 47,
+      "percent": 66,
+      "hundredPayoffSets": 23,
+      "threshold": 32,
+      "over": true
+    },
+    {
+      "family": "bridge_cloze",
+      "sets": 62,
+      "percent": 48.5,
+      "hundredPayoffSets": 19,
+      "threshold": 32,
+      "over": true
+    },
+    {
+      "family": "boss",
+      "sets": 480,
+      "percent": 41.3,
+      "hundredPayoffSets": 75,
+      "threshold": 32,
+      "over": true
+    },
+    {
+      "family": "apply",
+      "sets": 47,
+      "percent": 36.2,
+      "hundredPayoffSets": 9,
+      "threshold": 32,
+      "over": true
+    },
+    {
+      "family": "other",
+      "sets": 118,
+      "percent": 29.8,
+      "hundredPayoffSets": 13,
+      "threshold": 32,
+      "over": false
+    },
+    {
+      "family": "connect",
+      "sets": 47,
+      "percent": 0.5,
+      "hundredPayoffSets": 0,
+      "threshold": 10,
+      "over": false
+    }
+  ],
+  "bySubjectFamily": [
+    {
+      "courseId": "BRGSA",
+      "family": "term_cloze",
+      "sets": 15,
+      "percent": 100
+    },
+    {
+      "courseId": "IBM",
+      "family": "term_cloze",
+      "sets": 16,
+      "percent": 100
+    },
+    {
+      "courseId": "SCLM",
+      "family": "term_cloze",
+      "sets": 16,
+      "percent": 100
+    },
+    {
+      "courseId": "SPMS",
+      "family": "term_cloze",
+      "sets": 15,
+      "percent": 100
+    },
+    {
+      "courseId": "SPMS",
+      "family": "repair_cloze",
+      "sets": 15,
+      "percent": 90
+    },
+    {
+      "courseId": "SCLM",
+      "family": "repair_cloze",
+      "sets": 16,
+      "percent": 85.9
+    },
+    {
+      "courseId": "IBM",
+      "family": "repair_cloze",
+      "sets": 16,
+      "percent": 84.4
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "case_cloze",
+      "sets": 30,
+      "percent": 79.4
+    },
+    {
+      "courseId": "SPMS",
+      "family": "case_cloze",
+      "sets": 30,
+      "percent": 76.7
+    },
+    {
+      "courseId": "SPMS",
+      "family": "explain",
+      "sets": 15,
+      "percent": 75
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "repair_cloze",
+      "sets": 15,
+      "percent": 66.7
+    },
+    {
+      "courseId": "SCLM",
+      "family": "explain",
+      "sets": 16,
+      "percent": 66.1
+    },
+    {
+      "courseId": "IBM",
+      "family": "case_cloze",
+      "sets": 32,
+      "percent": 65.6
+    },
+    {
+      "courseId": "IBM",
+      "family": "other",
+      "sets": 4,
+      "percent": 64.6
+    },
+    {
+      "courseId": "SCLM",
+      "family": "case_cloze",
+      "sets": 32,
+      "percent": 62.5
+    },
+    {
+      "courseId": "SPMS",
+      "family": "bridge_cloze",
+      "sets": 15,
+      "percent": 58.9
+    },
+    {
+      "courseId": "IBM",
+      "family": "explain",
+      "sets": 16,
+      "percent": 57.3
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "bridge_cloze",
+      "sets": 15,
+      "percent": 53.3
+    },
+    {
+      "courseId": "SPMS",
+      "family": "apply",
+      "sets": 15,
+      "percent": 53.3
+    },
+    {
+      "courseId": "SPMS",
+      "family": "other",
+      "sets": 4,
+      "percent": 50
+    },
+    {
+      "courseId": "SPMS",
+      "family": "boss",
+      "sets": 120,
+      "percent": 46.2
+    },
+    {
+      "courseId": "IBM",
+      "family": "boss",
+      "sets": 120,
+      "percent": 44.8
+    },
+    {
+      "courseId": "IBM",
+      "family": "bridge_cloze",
+      "sets": 16,
+      "percent": 42.2
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "boss",
+      "sets": 120,
+      "percent": 41.7
+    },
+    {
+      "courseId": "SCLM",
+      "family": "bridge_cloze",
+      "sets": 16,
+      "percent": 40.6
+    },
+    {
+      "courseId": "SCLM",
+      "family": "boss",
+      "sets": 120,
+      "percent": 32.6
+    },
+    {
+      "courseId": "IBM",
+      "family": "apply",
+      "sets": 16,
+      "percent": 31.3
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "other",
+      "sets": 74,
+      "percent": 29.1
+    },
+    {
+      "courseId": "SCLM",
+      "family": "other",
+      "sets": 36,
+      "percent": 25.2
+    },
+    {
+      "courseId": "SCLM",
+      "family": "apply",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "SPMS",
+      "family": "connect",
+      "sets": 15,
+      "percent": 1.7
+    },
+    {
+      "courseId": "IBM",
+      "family": "connect",
+      "sets": 16,
+      "percent": 0
+    },
+    {
+      "courseId": "SCLM",
+      "family": "connect",
+      "sets": 16,
+      "percent": 0
+    }
+  ],
+  "hundredPayoffExamples": [
+    {
+      "courseId": "BRGSA",
+      "id": "scale_iterate_pivot",
+      "family": "other",
+      "part": "options",
+      "answer": "Iterate around the retained segment before considering a full pivot"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "primary_constraint",
+      "family": "other",
+      "part": "options",
+      "answer": "Activation—the narrowest current constraint"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "lifecycle_fit",
+      "family": "other",
+      "part": "options",
+      "answer": "Lifecycle engagement matched to the user's current state and next valu"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "churn_diagnostic",
+      "family": "other",
+      "part": "options",
+      "answer": "Cohort retention plus time-to-churn distribution, segmented by the rel"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "mock_cohort",
+      "family": "other",
+      "part": "options",
+      "answer": "Plot retention by signup cohort and time since entry"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "mock_friction",
+      "family": "other",
+      "part": "options",
+      "answer": "Reasonable step-level friction compounds across the whole path to aha"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m1_demand_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Demand validation"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m1_demand_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Demand validation"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m1_evidence_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Pre-sales commitment and evidence strength"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m1_evidence_repair_cloze",
+      "family": "repair_cloze",
+      "part": "blank0",
+      "answer": "Demand signals sit on a commitment spectrum: social engagement is the "
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m1_evidence_case_cloze",
+      "family": "case_cloze",
+      "part": "blank0",
+      "answer": "Weight every demand signal by what it cost the prospect to give, and r"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m1_evidence_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Pre-sales commitment and evidence strength"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m2_design_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Null hypothesis and test design"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m2_design_case_cloze",
+      "family": "case_cloze",
+      "part": "blank0",
+      "answer": "State the null, the sample size and the decision threshold before the "
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m2_design_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Null hypothesis and test design"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m2_error_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Decision errors"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m2_error_case_cloze",
+      "family": "case_cloze",
+      "part": "blank0",
+      "answer": "Decide which of the two errors is more costly for this particular deci"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m2_error_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Decision errors"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m3_cohort_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Cohorts and retention"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m3_cohort_repair_cloze",
+      "family": "repair_cloze",
+      "part": "blank0",
+      "answer": "A cohort groups users by when they entered so retention can be compare"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m3_cohort_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Cohorts and retention"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m4_constraint_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Growth constraint"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m4_constraint_bridge_cloze",
+      "family": "bridge_cloze",
+      "part": "blank0",
+      "answer": "A constraint is worth attacking only when it is within your control an"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m4_constraint_case_cloze",
+      "family": "case_cloze",
+      "part": "blank0",
+      "answer": "Locate the single narrowest stage with funnel and cohort math, and wor"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m4_constraint_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Growth constraint"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m4_customers_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Early-stage and scale-stage growth"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m4_customers_bridge_cloze",
+      "family": "bridge_cloze",
+      "part": "blank0",
+      "answer": "Early learning has to stay close to whoever can change the product, be"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m4_customers_repair_cloze",
+      "family": "repair_cloze",
+      "part": "blank0",
+      "answer": "Early-stage growth is a search for repeatability run close to the foun"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m4_customers_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Early-stage and scale-stage growth"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m5_channel_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Channel fit"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m5_channel_bridge_cloze",
+      "family": "bridge_cloze",
+      "part": "blank0",
+      "answer": "A channel can reach exactly the right buyer and still fail on cost or "
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m5_channel_repair_cloze",
+      "family": "repair_cloze",
+      "part": "blank0",
+      "answer": "Every channel has fixed properties — targeting, control, input cost, o"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m5_channel_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Channel fit"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m5_activation_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Activation and onboarding friction"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m5_activation_bridge_cloze",
+      "family": "bridge_cloze",
+      "part": "blank0",
+      "answer": "Each drop applies to whoever is left, so several individually reasonab"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m5_activation_repair_cloze",
+      "family": "repair_cloze",
+      "part": "blank0",
+      "answer": "Activation is the first observable moment a user experiences the promi"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m5_activation_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Activation and onboarding friction"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m6_habit_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Habit and lifecycle"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m6_habit_case_cloze",
+      "family": "case_cloze",
+      "part": "blank1",
+      "answer": "Habit and lifecycle"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m6_churn_term_cloze",
+      "family": "term_cloze",
+      "part": "blank0",
+      "answer": "Referral and network effects"
+    }
+  ],
+  "hundredPayoffTotal": 324
+}

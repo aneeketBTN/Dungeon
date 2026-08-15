@@ -275,7 +275,7 @@
             </button>
             <button class="route" id="builder-toggle" type="button" data-route="mock" aria-expanded="false" aria-controls="practice-builder">
               <b>Build your own practice</b>
-              <small>Choose the shape, focus, length, and when explanations appear.</small>
+              <small>Three levels, from covering every concept once to only the hardest questions.</small>
             </button>
             <button class="route" id="written-practice-route" type="button" data-route="written-practice">
               <b>Practise written answers</b>
@@ -283,17 +283,25 @@
             </button>
           </div>
 
+          <!-- One decision on the way in: how far you are trying to get. The three presets
+               are the whole control for most runs; the four dials that used to be the front
+               door are still here, still connected, but folded away until they are wanted. -->
           <section class="practice-builder" id="practice-builder" aria-labelledby="builder-title" tabindex="-1" hidden>
             <div class="section-heading compact-heading">
-              <div><p class="eyebrow">Mix and match</p><h2 id="builder-title">Build your own practice</h2></div>
-              <p>Every choice below changes the questions you actually get. This is practice, not a copy of the final paper.</p>
+              <div><p class="eyebrow">Pick where you are</p><h2 id="builder-title">Build your own practice</h2></div>
+              <p>Three ready-made runs, named for the stretch of marks each one is built for. This is practice, not a copy of the final paper.</p>
             </div>
-            <div class="builder-groups">
-              <fieldset class="builder-group"><legend>What it tests</legend><div class="chip-row" id="builder-shape"></div></fieldset>
-              <fieldset class="builder-group"><legend>Which concepts</legend><div class="chip-row" id="builder-focus"></div></fieldset>
-              <fieldset class="builder-group"><legend>How long</legend><div class="chip-row" id="builder-length"></div></fieldset>
-              <fieldset class="builder-group"><legend>When explanations appear</legend><div class="chip-row" id="builder-mode"></div></fieldset>
-            </div>
+            <div class="preset-row" id="builder-presets" role="group" aria-label="Practice level"></div>
+            <details class="builder-details" id="builder-details">
+              <summary id="builder-details-summary"><span class="details-label">Change the details</span><span class="details-note" id="builder-details-note"></span></summary>
+              <div class="builder-groups">
+                <fieldset class="builder-group"><legend>How hard</legend><div class="chip-row" id="builder-band"></div></fieldset>
+                <fieldset class="builder-group"><legend>What it tests</legend><div class="chip-row" id="builder-shape"></div></fieldset>
+                <fieldset class="builder-group"><legend>Which concepts</legend><div class="chip-row" id="builder-focus"></div></fieldset>
+                <fieldset class="builder-group"><legend>How long</legend><div class="chip-row" id="builder-length"></div></fieldset>
+                <fieldset class="builder-group"><legend>When explanations appear</legend><div class="chip-row" id="builder-mode"></div></fieldset>
+              </div>
+            </details>
             <div class="builder-footer">
               <p class="builder-summary" id="builder-summary" aria-live="polite"></p>
               <button class="button primary" id="builder-start" type="button">Start this practice <span aria-hidden="true">→</span></button>
@@ -301,8 +309,10 @@
           </section>
 
           <div class="set-block">
-            <h3 id="sets-title">Ten study sets are available</h3>
-            <p class="block-note">You do not have to complete all ten. Later practice narrows to evidence that is still missing.</p>
+            <!-- Both lines are written by renderSetList against the subject's own
+                 ladder; the text here is the pre-render fallback only. -->
+            <h3 id="sets-title">The subject, step by step</h3>
+            <p class="block-note" id="sets-note">Each step teaches two concepts and rests on the ones before it.</p>
             <div class="set-list" id="set-list" role="group" aria-labelledby="sets-title"></div>
           </div>
         </section>
@@ -422,7 +432,9 @@
           <p class="eyebrow">In this set</p>
           <h2 id="topic-panel-title">Topics</h2>
           <ol id="topic-list"></ol>
-          <div class="due-box"><small>Re-attempts due</small><b id="due-count">0</b><p>A missed idea returns in a different question.</p></div>
+          <!-- The note is written by updatePracticeProgress from what is actually
+               queued: a re-attempt is not always a miss. -->
+          <div class="due-box"><small>Re-attempts due</small><b id="due-count">0</b><p id="due-note">Answers that need a second look are queued here.</p></div>
         </aside>
 
         <article class="question-card" id="question-card">
@@ -443,8 +455,8 @@
               <div id="primer-content"></div>
             </section>
             <section class="case-block" id="case-block" aria-labelledby="case-label" tabindex="-1" hidden>
-              <p class="case-label" id="case-label">Case</p>
-              <p class="caselet" id="caselet"></p>
+              <p class="case-label" id="case-label">The case</p>
+              <div class="caselet" id="caselet"></div>
             </section>
             <p class="source-ref" id="source-ref">Source</p>
             <details class="glossary-block" id="glossary-block" hidden>
@@ -482,7 +494,14 @@
         <button class="text-button" id="results-home" type="button">← Revision dashboard</button>
         <div class="results-hero">
           <div><p class="eyebrow" id="results-kicker">Study set complete</p><h1 id="results-title">Your next step is clear.</h1><p id="results-copy">Your next practice is based on what this set revealed.</p></div>
-          <div class="score-ring" id="score-ring"><strong id="result-score">0%</strong><small id="score-caption">scored questions</small></div>
+          <!-- The caption sits under the ring, not inside it. A circle is narrower than
+               its own box everywhere except the middle, so a caption whose length the
+               app decides at runtime ("16 scored questions") had no width it could be
+               guaranteed to fit — and it ran across the ring's stroke. -->
+          <div class="score-block">
+            <div class="score-ring" id="score-ring"><strong id="result-score">0%</strong></div>
+            <small class="score-caption" id="score-caption">scored questions</small>
+          </div>
         </div>
         <div class="result-stats">
           <article><small>Correct first try</small><b id="result-correct">0</b></article>
@@ -581,6 +600,8 @@
           <dl class="exam-facts" id="exam-facts"></dl>
           <div class="exam-rules" id="exam-rules"></div>
           <p class="exam-shortfall" id="exam-shortfall" hidden></p>
+          <!-- How much of this paper Learn has taught. Written by renderExamBrief. -->
+          <p class="exam-readiness" id="exam-readiness" hidden></p>
           <div class="exam-brief-actions">
             <button class="button secondary" id="exam-leave-brief" type="button">Back</button>
             <button class="button primary" id="exam-begin" type="button">Start the clock</button>

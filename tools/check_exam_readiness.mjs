@@ -48,7 +48,7 @@ async function readExamPapers() {
 /* ---- the bank ------------------------------------------------------------------ */
 
 async function readBank() {
-  const files = ["t6_brgsa.js", "t6_catalog.js", "t6_diagnoses.js", "t6_lessons.js", "t6_challenges.js"];
+  const files = ["t6_brgsa.js", "t6_catalog.js", "t6_diagnoses.js", "t6_lessons.js", "t6_integrated.js", "t6_challenges.js"];
   const sandbox = {};
   sandbox.window = sandbox;
   for (const file of files) {

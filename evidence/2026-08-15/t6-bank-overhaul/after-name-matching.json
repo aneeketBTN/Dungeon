@@ -1,0 +1,442 @@
+{
+  "optionSetsMeasured": 1049,
+  "chanceForFourOptions": 25,
+  "byFamily": [
+    {
+      "family": "other",
+      "sets": 118,
+      "percent": 29.8,
+      "hundredPayoffSets": 13,
+      "threshold": 32,
+      "over": false
+    },
+    {
+      "family": "boss",
+      "sets": 480,
+      "percent": 29.6,
+      "hundredPayoffSets": 10,
+      "threshold": 32,
+      "over": false
+    },
+    {
+      "family": "contrast",
+      "sets": 62,
+      "percent": 25,
+      "hundredPayoffSets": 0,
+      "threshold": 32,
+      "over": false
+    },
+    {
+      "family": "bridge_cloze",
+      "sets": 62,
+      "percent": 25,
+      "hundredPayoffSets": 0,
+      "threshold": 32,
+      "over": false
+    },
+    {
+      "family": "repair_cloze",
+      "sets": 62,
+      "percent": 25,
+      "hundredPayoffSets": 0,
+      "threshold": 32,
+      "over": false
+    },
+    {
+      "family": "case_cloze",
+      "sets": 124,
+      "percent": 25,
+      "hundredPayoffSets": 0,
+      "threshold": 32,
+      "over": false
+    },
+    {
+      "family": "explain",
+      "sets": 47,
+      "percent": 25,
+      "hundredPayoffSets": 0,
+      "threshold": 32,
+      "over": false
+    },
+    {
+      "family": "apply",
+      "sets": 47,
+      "percent": 25,
+      "hundredPayoffSets": 0,
+      "threshold": 32,
+      "over": false
+    },
+    {
+      "family": "connect",
+      "sets": 47,
+      "percent": 0.5,
+      "hundredPayoffSets": 0,
+      "threshold": 10,
+      "over": false
+    }
+  ],
+  "bySubjectFamily": [
+    {
+      "courseId": "IBM",
+      "family": "other",
+      "sets": 4,
+      "percent": 64.6
+    },
+    {
+      "courseId": "SPMS",
+      "family": "other",
+      "sets": 4,
+      "percent": 50
+    },
+    {
+      "courseId": "IBM",
+      "family": "boss",
+      "sets": 120,
+      "percent": 39.6
+    },
+    {
+      "courseId": "SCLM",
+      "family": "boss",
+      "sets": 120,
+      "percent": 29.2
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "other",
+      "sets": 74,
+      "percent": 29.1
+    },
+    {
+      "courseId": "SPMS",
+      "family": "boss",
+      "sets": 120,
+      "percent": 28.5
+    },
+    {
+      "courseId": "SCLM",
+      "family": "other",
+      "sets": 36,
+      "percent": 25.2
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "contrast",
+      "sets": 15,
+      "percent": 25
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "bridge_cloze",
+      "sets": 15,
+      "percent": 25
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "repair_cloze",
+      "sets": 15,
+      "percent": 25
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "case_cloze",
+      "sets": 30,
+      "percent": 25
+    },
+    {
+      "courseId": "IBM",
+      "family": "explain",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "IBM",
+      "family": "apply",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "IBM",
+      "family": "contrast",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "IBM",
+      "family": "bridge_cloze",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "IBM",
+      "family": "repair_cloze",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "IBM",
+      "family": "case_cloze",
+      "sets": 32,
+      "percent": 25
+    },
+    {
+      "courseId": "SCLM",
+      "family": "explain",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "SCLM",
+      "family": "apply",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "SCLM",
+      "family": "contrast",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "SCLM",
+      "family": "bridge_cloze",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "SCLM",
+      "family": "repair_cloze",
+      "sets": 16,
+      "percent": 25
+    },
+    {
+      "courseId": "SCLM",
+      "family": "case_cloze",
+      "sets": 32,
+      "percent": 25
+    },
+    {
+      "courseId": "SPMS",
+      "family": "explain",
+      "sets": 15,
+      "percent": 25
+    },
+    {
+      "courseId": "SPMS",
+      "family": "apply",
+      "sets": 15,
+      "percent": 25
+    },
+    {
+      "courseId": "SPMS",
+      "family": "contrast",
+      "sets": 15,
+      "percent": 25
+    },
+    {
+      "courseId": "SPMS",
+      "family": "bridge_cloze",
+      "sets": 15,
+      "percent": 25
+    },
+    {
+      "courseId": "SPMS",
+      "family": "repair_cloze",
+      "sets": 15,
+      "percent": 25
+    },
+    {
+      "courseId": "SPMS",
+      "family": "case_cloze",
+      "sets": 30,
+      "percent": 25
+    },
+    {
+      "courseId": "BRGSA",
+      "family": "boss",
+      "sets": 120,
+      "percent": 21.2
+    },
+    {
+      "courseId": "SPMS",
+      "family": "connect",
+      "sets": 15,
+      "percent": 1.7
+    },
+    {
+      "courseId": "IBM",
+      "family": "connect",
+      "sets": 16,
+      "percent": 0
+    },
+    {
+      "courseId": "SCLM",
+      "family": "connect",
+      "sets": 16,
+      "percent": 0
+    }
+  ],
+  "hundredPayoffExamples": [
+    {
+      "courseId": "BRGSA",
+      "id": "scale_iterate_pivot",
+      "family": "other",
+      "part": "options",
+      "answer": "Always iterate around the retained segment before considering a full p"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "primary_constraint",
+      "family": "other",
+      "part": "options",
+      "answer": "Activation—the narrowest current constraint"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "lifecycle_fit",
+      "family": "other",
+      "part": "options",
+      "answer": "Lifecycle engagement always matched to the user's current state and ne"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "churn_diagnostic",
+      "family": "other",
+      "part": "options",
+      "answer": "Cohort retention and time-to-churn together, always segmented by the r"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "mock_cohort",
+      "family": "other",
+      "part": "options",
+      "answer": "Plot retention by signup cohort, since only equal age makes cohorts co"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "mock_friction",
+      "family": "other",
+      "part": "options",
+      "answer": "Reasonable step-level friction always compounds across the whole path "
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m1_demand_cla1",
+      "family": "other",
+      "part": "options",
+      "answer": "Every plan that goes straight to build carries an untested demand assu"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m1_evidence_cla1",
+      "family": "other",
+      "part": "options",
+      "answer": "By what each cost the person to give, which makes the four deposits th"
+    },
+    {
+      "courseId": "BRGSA",
+      "id": "brgsa_m3_cohort_cla1",
+      "family": "other",
+      "part": "options",
+      "answer": "Acquisition refilling a leaking bucket: the total is real and only coh"
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_syn_access",
+      "family": "other",
+      "part": "options",
+      "answer": "Keep the local access model and move standard preparation and follow-u"
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_syn_scale",
+      "family": "other",
+      "part": "options",
+      "answer": "Scale has removed the screening and accountability that made lending i"
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m4_boss_1",
+      "family": "boss",
+      "part": "step1",
+      "answer": "Replicating rural services: Use a controlled partner model with local "
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m4_boss_2",
+      "family": "boss",
+      "part": "step1",
+      "answer": "Replicating rural services: Use a controlled partner model with local "
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m4_boss_3",
+      "family": "boss",
+      "part": "step1",
+      "answer": "Replicating rural services: Use a controlled partner model with local "
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m4_boss_4",
+      "family": "boss",
+      "part": "step1",
+      "answer": "Replicating rural services: Use a controlled partner model with local "
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m4_boss_5",
+      "family": "boss",
+      "part": "step1",
+      "answer": "Replicating rural services: Use a controlled partner model with local "
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m8_boss_1",
+      "family": "boss",
+      "part": "step0",
+      "answer": "Impact investing: Classify it as impact investing because intent, meas"
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m8_boss_2",
+      "family": "boss",
+      "part": "step0",
+      "answer": "Impact investing: Classify it as impact investing because intent, meas"
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m8_boss_3",
+      "family": "boss",
+      "part": "step0",
+      "answer": "Impact investing: Classify it as impact investing because intent, meas"
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m8_boss_4",
+      "family": "boss",
+      "part": "step0",
+      "answer": "Impact investing: Classify it as impact investing because intent, meas"
+    },
+    {
+      "courseId": "IBM",
+      "id": "ibm_m8_boss_5",
+      "family": "boss",
+      "part": "step0",
+      "answer": "Impact investing: Classify it as impact investing because intent, meas"
+    },
+    {
+      "courseId": "SCLM",
+      "id": "sclm_newsvendor_cla2",
+      "family": "other",
+      "part": "options",
+      "answer": "The newsvendor model, settled by there being one buying opportunity wi"
+    },
+    {
+      "courseId": "SPMS",
+      "id": "spms_syn_model",
+      "family": "other",
+      "part": "options",
+      "answer": "The offer may create value, but its acquisition or retention economics"
+    }
+  ],
+  "hundredPayoffTotal": 23
+}

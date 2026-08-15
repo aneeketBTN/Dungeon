@@ -7,6 +7,24 @@
       "runtimeArgs": ["tools/server.py"],
       "port": 8099,
       "autoPort": true
+    },
+    {
+      "name": "dungeon-joe",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["tools/server.py", "8091"],
+      "port": 8091
+    },
+    {
+      "name": "dungeon-lazy",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["tools/server.py", "8092"],
+      "port": 8092
+    },
+    {
+      "name": "dungeon-diligent",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["tools/server.py", "8093"],
+      "port": 8093
     }
   ]
 }

@@ -950,6 +950,206 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 - **Verify:** Inject a CJK artifact into the first structured response and prove the second attempt is
   clean; inject it twice and prove the result abstains without returning corrupted learner copy.
 
+### LAW-61 🔴 — A question that names an example must carry it, not borrow it from the lesson
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-14, owner screenshot. "In the drilling-machine example, select every need the
+  purchase actually serves." — no drilling machine anywhere on the page, and options that then said
+  "the certificate" and "more than a decade of study" as though something had introduced them. Four
+  SPMS multiple-select items did this (drilling machine, Zerodha, ride-hailing MoSCoW, WhatsApp);
+  the multi-select builder had no `caselet` field at all, so none of them could have shown one.
+- **Why:** The authoring leaned on teach-before-test to supply the example, and that is not what
+  LAW-47 guarantees. A lesson delivered four questions earlier is memory; a question is answered
+  against what is on the page. Worse, the same items are SPMS Section B, and **the examiner delivers
+  no lesson** — there the referent has never existed. One of the four was not in its lesson either,
+  so it could only ever be answered from the transcript. The failure is invisible to every existing
+  gate: the item validates, schedules, and marks correctly. It is simply unanswerable by reasoning.
+- **Comply:** If a stem points at a specific example, case, product, company, or scenario, that
+  question ships the example in `caselet`. Write it from the lecture's own clean transcript, and
+  **withhold whatever the question asks the learner to supply** — a case that names the three layers
+  is not a case, it is the answer set. Options, `answers`, and `diagnoses` stay unchanged, so the
+  marking contract and any section shape spread are untouched. If a question family cannot carry a
+  caselet, either give its builder one or do not write a referential stem for it. A stem that cites
+  *"the lecture"* as authority for a framework ("as the lecture presents them") is a milder, separate
+  problem and no caselet fixes it — rewrite it to ask what is true.
+- **Verify:** Load the bank the way `tools/validate_t6_bank.js` does and scan every question with no
+  caselet, twice: once for deictic phrasing (`the <X> example`, `this example`, `the lecture's <X>`,
+  `the lecture uses/gives/presents/names`, `the case above`, `the same scenario`) and once for
+  capitalised non-sentence-initial tokens minus framework acronyms, which catches an example no
+  pattern anticipated. Every hit either shows its example or names no example. Then open one changed
+  item on **both** surfaces — the learn question (`case-block.hidden === false`, kicker reads
+  "Then decide") and the examiner (`.exam-caselet` present) — because they are separate render
+  paths and the examiner is the one with no lesson behind it.
+
+### LAW-63 🔴 — Support material never prints the answer to the question it supports
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-14, owner report — "a primer is just tapping the same mcq as the question
+  verbatim" — measured while verifying the practice presets. Evidence:
+  `evidence/2026-08-14/t6-practice-presets/verification.md`.
+- **Why:** `renderPrimerPanel` prints `Know this: <primerFact>` directly above the options, and
+  `addPrimer` sets `primerFact: data.summary` — the same string it makes the correct option. **64 of
+  64 primers reveal their own answer on their own screen**, so the task is to find a sentence already
+  on the page. The distractors cannot rescue it: they are other concepts' summaries, per the rule
+  `t6_catalog.js` states for the whole bank — "distractors in this bank are not invented: they are
+  borrowed from other concepts" — so with the panel covered the item is still answerable by
+  topic-matching and unanswerable by reasoning, exactly what `relevantWrong()` fixed for case
+  questions and was never applied here. The panel's four strings are also the correct answer to **493
+  scored questions** across the bank; on a real fresh sweep, **14 of 16** SPMS questions had their
+  answer printed on a screen the learner had already seen (BRGSA 0, SCLM 10, IBM 13). Nothing catches
+  it: the primer creates no evidence, so it corrupts no score — it simply teaches nothing, and it
+  spends the concept's first contact doing it.
+- **Closed by:** the prediction primer, 2026-08-14. The panel now carries the case and withholds the
+  rule; the learner commits a prediction in their own words; the principle arrives as the answer to
+  it. Nothing is keyed, marked, or recorded as evidence, so there is no answer to print. Verified at
+  `evidence/2026-08-14/t6-practice-presets/verification.md`.
+- **Comply:** A support surface may print the *material* a principle is derived from — a case, a
+  carry-forward, a named trap it has already fallen for — and must not print, before the learner
+  commits, the answer to the question it is itself asking. Reveal it **after**, as the consequence of
+  the learner's own reasoning. **Scope, deliberately narrow:** teaching a principle before a later
+  scored question is LAW-47 doing its job, not a leak, and a rule forbidding it would forbid lessons.
+  What this Law forbids is the same *surface* holding the question and its answer.
+  If a support surface asks a keyed question at all, its distractors must be same-concept
+  misreadings — a distractor borrowed from another concept makes the item topic-matchable and is not
+  a distractor. Two collisions make that hard here and are worth knowing before designing one:
+  `confusions` are already `_explain`'s distractors and `bridge` is already `_connect`'s answer, so
+  asking for either moves the leak rather than closing it. Asking for a *prediction* — unkeyed,
+  unmarked, no evidence — sidesteps the collision entirely and is what the primer now does.
+- **Verify:** In the page, not in Node: only the running app knows what a panel renders. For every
+  support surface, assert that no string on screen before the learner commits is a correct option,
+  blank answer, or boss-step answer of any scheduled question sharing its `conceptId`, and that
+  committing moves neither `conceptAttempts` nor `totalAnswers` — measured as a **delta across the
+  commit**, since a run that answers scored questions between support surfaces has legitimate
+  evidence by the second one. Then assert the reveal still carries what the panel withheld, or the
+  fix has deleted the teaching rather than repositioning it.
+  `tools/browser-checks/primer-prediction.js` does all of this over every concept in a subject.
+- **Excluded, and reported separately:** the concept's own name. The layering copy has to print it —
+  "Carry forward: <previous>. Now add <this>" is what makes a run read as a sequence — so **32
+  scheduled questions per subject whose correct answer *is* that name** (`_term_cloze`, and the
+  framework blank of `_case_cloze`) are answerable from orientation copy regardless of what any
+  support surface does. That is a question-design problem, not a support-surface one; the check
+  reports it under `answerableFromTheConceptName` rather than folding it into this Law.
+
+### LAW-64 🔴 — Text has to fit the box that holds it, and the probe has to be able to see it
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-14, owner screenshot of the results ring: "16 scored questions" printed across
+  the ring's own stroke. `tools/browser-checks/ui-audit.js` had reported that screen clean in the
+  same session. Evidence: `evidence/2026-08-14/t6-practice-presets/verification.md`.
+- **Why:** The probe measured the viewport edge, tap size, corner radii, paragraph length, font floor
+  and row raggedness, and **nothing about whether content fits its container** — so the one class of
+  defect a reader notices first was the one nothing could see. Two more were sitting behind it. The
+  mastery key is `<i><b>Label</b> — description</i>`, three children in a row styled
+  `grid-template-columns: auto minmax(0,1fr)`; a grid assigns columns per child, so at 375px the
+  columns resolved to 274px and 28.7px, the bold label wrapped inside 28.7px and ran 19px past the
+  panel, and its own description landed on the row below it. And the answer-review disclosures were
+  23px targets, twelve to a review. A clean report from a probe that cannot see the defect class
+  reads exactly like a clean screen.
+- **Comply:** Never size a text container to the string it happens to hold today, and never put
+  runtime-length text inside a round one — a circle is narrower than its box everywhere except the
+  middle, so there is no width that can be guaranteed to fit. Put the caption outside the shape.
+  Do not use `display: grid` or `flex` on an element whose children are an inline sentence: every
+  child, including anonymous text runs, becomes an item and takes a cell. A hanging indent
+  (`padding-left` + negative `text-indent`) is what "marker then flowing text" actually wants.
+- **Verify:** `ui-audit.js` carries `clipped`, `circleFit` and `overlaps`, and every layout claim
+  runs all three at 320, 375 and 1280 across each screen in fixed-width same-origin iframes.
+  Measure **glyph runs** via `Range.getClientRects()`, never `scrollWidth`: `scrollWidth` on an
+  inline box describes its containing block, so a wrapped `<b>` reports an overflow the width of its
+  own second line and forty false findings bury two real ones. For a circle, test the chord
+  `2·sqrt(r² − dy²)` at the text's height, using cap height either side of the run's centre rather
+  than the line box — a 14px badge holding an 11px "i" on a 29px line otherwise reports its circle as
+  zero wide. Exclude visually-hidden labels by **shape** (a ~1px box with `overflow: hidden` around a
+  full sentence), not by class name, so the next one written is covered too.
+- **Note:** the fix is the detector as much as the CSS. Three defects were live behind a probe that
+  had reported those screens clean twice in the same session.
+- **Recurrence 2026-08-15, and the reason it hid:** `.exam-legend li` is
+  `grid-template-columns: 26px 1fr`, and `.exam-chip` carries `min-width: 44px` to meet the tap
+  floor. The chip overflowed its own 26px cell, ate the 9px gap, and painted **9×17px across its
+  own label** on all five legend rows at every width above the narrow breakpoint. It never showed
+  at 375 because the narrow block already sizes the chip to 22px, and the 2026-08-14 sweep covered
+  the dashboard, examiner **home** and lesson — never a paper mid-question. **A viewport sweep is
+  only as wide as the screens it visits;** name the screens, not just the widths. Fixed by not
+  inheriting the tap floor on a swatch: `li .exam-chip` was already `cursor: default`, which had
+  been saying it is not a control for as long as the defect existed.
+- **Note on tap size vs. layout:** raising something to 44px is a change to layout as well as to
+  hit area. Every place a tap floor is applied inside a fixed grid track is a candidate for this,
+  and the two rules never meet in the same file.
+- **Recurrence 2026-08-15, twice, both found by the first real screenshots and neither visible to
+  the probe.** Evidence: `evidence/2026-08-15/t6-harness-and-bank/verification.md`.
+  **(a) The Bag launcher docked on top of the theme toggle during a paper.** The launcher is docked
+  to the top-right on both the practice screen and a running paper, but the matching
+  `padding-inline-end` that reserves its space was written for `.app-header` on practice and for
+  `.exam-bar` on the paper — and the theme toggle lives in `.app-header`. Measured at 1280:
+  launcher 1201–1247, toggle 1183–1227, so the bag covered all but 18px of a 44px control. This is
+  F-01 (the bag over Submit) one bar higher up. `ui-audit.js` cannot see it: its `overlaps`
+  detector compares text-bearing siblings, and these are two icon-only buttons in different
+  stacking contexts.
+  **(b) The subject cards laid themselves out differently depending on the bank.** `.course-head`
+  is a wrapping flex row of code, negative-marking flag and date, with `margin-left: auto` pushing
+  the date right. In a 186px card the content needs 166px and has 164px, so the date wrapped —
+  but only on the one subject carrying the `-1` flag. SPMS's head measured 46px against 23px for
+  the other three, so its date dropped to a second line and right-aligned under the code. Four
+  cards in one rail, one laid out differently, because of a two-pixel overflow caused by a 21px
+  chip only one subject has. `ragged` did not fire because the cards do share a height; the
+  raggedness is *inside* them.
+  **The general lesson:** a DOM audit compares things it knows are siblings. It cannot see two
+  independently-positioned layers colliding, and it cannot see a layout that is *self-consistent
+  but different from the card beside it*. Both are obvious in a picture and invisible in a
+  measurement, which is the reason `tools/screenshot.mjs` now exists and the reason it does not
+  replace `ui-audit.js`.
+
+### LAW-65 🔴 — A blind file is blind by assertion, and the hole in a diagnosis array is an answer key
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15, finishing the persona harness. `tools/browser-checks/export-run.js`
+  attached `view._feedback` — the per-option diagnoses — to the candidate half of the export,
+  directly beneath the comment *"Withheld from the candidate file and carried in the key."*
+  Evidence: `evidence/2026-08-15/t6-harness-and-bank/verification.md`.
+- **Why:** The array has a **hole at the correct option**: `validate_t6_bank.js` requires a
+  diagnosis on every scored distractor and the answer carries none, so `diagnoses[answer]` is
+  `null` in **216 of 216** single-answer MCQs. Printing it beside the options hands over the
+  answer as reliably as the answer index would. The whole point of the blind file is that a
+  persona's blindness stops resting on their choosing not to look — a leaked key silently
+  restores the condition the previous run was criticised for, and every finding from that run
+  becomes unfalsifiable. This is LAW-47's recurrence in a different file: *a comment asserting
+  an invariant is not the invariant.*
+- **Comply:** A candidate-facing export carries what is on screen **before the learner commits**
+  and nothing else. Withholding is asserted in code, not in prose: walk the serialised candidate
+  object for `answer`, `answers`, `diagnoses`, `rubric`, `exemplar`, `explanation`, `link`,
+  `misconceptions`, `primerFact`, `tolerance`, `nearMisses`, `feedback`, and fail on a hit.
+  Support surfaces get a second check by content, not by field name — a primer's rule must not
+  appear on the primer's own step (LAW-63).
+- **Verify:** `node tools/export-learn-run.mjs` exits non-zero on any leak and names the path it
+  found it at. **Scope the content check to the surface**, not to the run: the first version
+  searched every step for the primer's rule and fired on all eight primers in four subjects, all
+  false — the rule is the concept summary, so it is legitimately the correct option of the
+  `_explain` and `_repair_cloze` items later in the run, which is teach-before-test working.
+
+### LAW-62 🟡 — One page load, one set: a rendered lesson is marked read in memory
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-14, measuring lesson order across all 40 study sets. The probe blanked
+  `profile.lessonsRead` in `localStorage` before each set — exactly as
+  `tools/browser-checks/teach-before-test.js` does — and reported 53 LAW-47 violations and 4 backward
+  steps. Both were artefacts.
+- **Why:** `renderLesson` calls `markLessonRead` the moment a lesson is displayed, deliberately, so a
+  resume does not re-teach it. That write lands on the profile held **in memory**; the app reads its
+  profile from storage once, at load. Blanking storage therefore changes nothing for the running
+  page. Opening set 2 after set 1 gets a queue missing whatever set 1 displayed, and it compounds
+  across a loop. The contamination is *order-dependent*, so it is not a constant offset that cancels
+  between a before and an after — it varies with the ordering under test, which is the worst case
+  for a comparison.
+- **Comply:** Any probe that needs a first-time-learner queue opens **exactly one** run per page
+  load: clear `lessonsRead`, reload, open one set, read `profile.active.queue`. To measure something
+  across many sets in one session, measure a property that does not read `lessonsRead` — question
+  selection and ordering do not — and say in the probe why that property was chosen.
+- **Verify:** Assert `Object.keys(profile.lessonsRead).length === 0` immediately **before** the
+  measured click, not at the start of the loop. If a multi-set loop is unavoidable, also read it
+  after the loop and report it beside the result rather than assuming it stayed empty.
+- **Note:** `teach-before-test.js` has this shape and still passes. Its result stands — a missing
+  lesson can only add violations, never hide one — but it is measuring a thinner queue than a real
+  first-time learner sees. It also skips set 10, whose card is labelled `P` rather than a number.
+
 ### LAW-50 🟡 — A lesson array closed with the wrong bracket is invisible until the file is parsed
 
 - **Tier/Status:** WATCH · ACTIVE

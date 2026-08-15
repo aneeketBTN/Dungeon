@@ -1,5 +1,538 @@
 # Changelog
 
+## 2026-08-15 — Both craft exploits closed, and the bag leaves the Examiner
+
+Evidence: `evidence/2026-08-15/t6-bank-overhaul/verification.md`.
+`VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)`, branch only. Supersedes the two
+entries below, which recorded the audit and the first half of the fix.
+
+- **Personas, both surfaces, all four subjects.** Paper: SPMS combined 34.5 → **16.3**,
+  BRGSA 37.8 → **15.3**, SCLM 24.5 → **20.1**. Delivered study run: SPMS 50 → **19.2**,
+  BRGSA 37.8 → **28.2**, SCLM 48.2 → **22.0**, **IBM 67.3 → 23.1**. Every rule at or under
+  chance; both gates exit 0.
+- **F-06 closed.** `apply` 45.8 → **20.0**, `explain` 43.1 → **16.5**, `boss` 33.1 →
+  **23.6**, `authored` 31.4 → **23.7**, `case_cloze` 31.5 → **22.2**. Two honest levers:
+  23 filler removals (`simply`, and `\ball\b`/`\bany\b` matching "at all" / "in any way",
+  which are not quantifiers — only **9.6%** of absolute-carrying distractors, the other
+  90.4% being load-bearing and left alone), and **76 correct answers restated at the
+  course's real strength**, every added universal taken from that concept's own accepted
+  `bridge`. No absolute was manufactured and no distractor was watered down.
+- **Name-matching closed**: 324 → **23** option sets paying 100%; `term_cloze` retired to
+  `contrast` on an owner decision, since a label-selection item is 100% name-matchable by
+  construction and the bank floor forbids deleting a surface per concept.
+- **Five defects came from verification rather than from the gates.** An "It" substitution
+  firing on 11 of 64 summaries traded the name cue for a **length** cue; labelling
+  `case_cloze`'s decision blank printed eight options on one 36-character prefix and
+  misattributed a decision to a framework name (fixed as a *trailing* tag);
+  **appending** universals pushed IBM's "pick the longest" to **66%**, so all 76 rewrites
+  were redone in place and IBM's rank-3 share went 0.50 → **0.38**, flatter than baseline;
+  two option-shape errors on `sclm_smoothing`; and unlabelling `explain` on a plausible
+  hypothesis sent it to **61.9%**, so the label stays.
+- **The bag is gone from the Examiner** (owner). It is a Learn tool and the paper carries
+  its own Calculator and countdown. This ends a defect class rather than relocating it:
+  the bag was docked into the paper's corner because it covered Submit, and docking then
+  covered all but 18px of the theme toggle.
+- **The two header bars align.** `.app-header` used `clamp(16px,3vw,40px)` and `.exam-bar`
+  `clamp(12px,2.5vw,22px)`, so the logo started at x=38.4 and "Section A" beneath it at
+  x=22. The 76px/82px `padding-inline-end` reservations existed only for the docked
+  launcher and were reserving empty space against nothing.
+- **The question palette no longer cuts a row in half.** `max-height: 46vh` is an
+  arbitrary slice of the window; on SCLM's 50-question section at 1280×900 it resolved to
+  414px and cut row nine through the chips. A row is 44px + 7px gap, so it is now
+  `calc(round(down, 46vh + 7px, 51px) - 7px)` = 401px, a whole eight rows. 0 chips cut at
+  375 and 1280. The mobile rule carried the same defect independently (`100px` cuts 5px
+  into a third row) and is now `calc(2 * 51px - 7px)` = 95px.
+- **The mobile paper is no longer top-heavy and its sections are no longer cut off.** At
+  375 a 66px header above a 75px bar was **141px of chrome** before a word of the question,
+  and `.exam-sections` had a **108px viewport over 266px of content** — Sections B and C
+  were gone entirely, question counts included. The header now hides during a running paper
+  as it already did mid-question on the practice screen, and the freed row pays for the
+  section tabs going full width: **343/343, all three visible**.
+- **Every state chip is a regular shape now.** The tab silhouettes used a flat
+  `var(--r-panel)` of 10px, and the same chip class renders at 44px (palette), 26px
+  (desktop legend) and **22px (mobile legend)** — 23% of one and **45%** of another, where
+  the top corners met in a near-semicircle above a square bottom. Restating it as a
+  percentage fixed the scaling and **not the look**: an asymmetrically rounded box reads as
+  a distorted square at any size. The distinction moved off the outline onto two regular
+  orthogonal signals — **square vs circle** for marked-for-review, **underline vs none** for
+  answered — so the five states stay readable without colour. `check-palette.mjs`'s
+  shape assertion covers the four `.dot` mastery states, not these chips.
+- **The clock went back to the trailing edge** — a regression from the row-wrap above:
+  flex packs to the start, so moving the section tabs to their own row sent the timer from
+  the right edge to the left.
+- **Three new `ui-audit.js` detectors and `docs/governance/UI-CHECKLIST.md`.** All three of
+  the owner's UI reports were found by eye on a screen the probe had just called clean.
+  `hiddenScroll` (a scroller showing <60% of its content), `cutRows` (a container drawing a
+  child in half) and `barInset` (stacked bars with different content insets) each were
+  reintroduced as a live fixture, confirmed to fire, and confirmed to go quiet on restore.
+  `cutRows` staying correctly quiet when spare pixels fall in a *gap* is what caught a
+  factual error in this file's own previous entry: the mobile `100px` was **not** cutting a
+  chip, and that claim is corrected.
+- **Bank validator is now 0 errors AND 0 warnings** — the pre-existing IBM length warning
+  cleared. 83/83, palette clean, build clean, **screenshots 16/16 and read**, LAW-47 clean,
+  0 layering descents, `answerableFromTheConceptName: []`, `paperDigestMatch: true`.
+- **Still not done:** no new items, no examiner-only slice, no SCLM-M03-L06 lesson, T1/T2/
+  T4/T5 not built.
+
+## 2026-08-15 — The bank stops answering to its own heading
+
+Evidence: `evidence/2026-08-15/t6-bank-overhaul/verification.md`.
+`VERIFIED(REAL_BROWSER + AUTOMATED)`, branch only. Supersedes the entry below, which
+recorded the audit before the fix was built.
+
+- **324 → 28** option sets where name-matching pays 100%. Per family: `term_cloze`
+  100.0 → retired; `repair_cloze` 81.9 → **25.0**; `case_cloze` 70.8 → **25.0**;
+  `explain` 66.0 → **25.0**; `bridge_cloze` 48.5 → **25.0**; `boss` 41.3 → **31.2**;
+  `apply` 36.2 → **25.0**; `connect` 0.5 → **0.5** (untouched, it was already right).
+- **Learn-side, through the real app:** SPMS 53.8 → **25.0**, BRGSA 44.9 → **26.9**,
+  SCLM 46.4 → **26.8**, IBM 59.6 → **32.7**. IBM is still over the 32 limit and its
+  residue is absolutes (37.8), not name-matching — F-06, which needs the concept-string
+  rewrite. `npm run review` exits non-zero on it rather than hiding it.
+- **`term_cloze` retired to `contrast` (owner decision).** A label-selection item is
+  100% name-matchable *by construction* — exactly one option can be the concept's name.
+  Deleting it was not available: the bank floor is 792 items and every concept needs ≥10
+  surfaces and ≥8 families, so a retirement that drops one surface per concept fails four
+  gates. `contrast` keeps the job and makes it answerable only by reading — all four
+  options are claims about this concept, three of them neighbours' claims wearing its
+  label. 96.9% → 25.0%.
+- **The fix is `connect`'s direction, and the opposite one was measured and rejected.**
+  Stripping each concept's name from its own prose hits the same numbers and produces
+  "Lean this idea asks whether real people will take a real action" and "a payment or
+  signed it is a different category", and takes `connect` from 0.5% to 26.6%. No authored
+  word was changed by what shipped: the label is added, the prose is untouched, and
+  over-claims keep their "alone" and "only".
+- **Three defects caught by verification rather than by the gates.** (1) A first draft
+  pronounced a self-reference as "It", which fires on 11 of 64 summaries — all correct
+  answers — shortening only the correct option and trading a name cue for a LENGTH cue;
+  SPMS earned a new validator warning the moment it was added, and `lengthRankShares` are
+  now byte-identical to baseline. (2) Labelling `case_cloze`'s decision blank printed
+  eight options each opening on the same 36-character prefix, and misattributed a
+  *decision* to a framework name; fixed as a trailing tag, since the rule matches a
+  substring anywhere so position is free. (3) Taking module siblings unconditionally made
+  `sclm_smoothing`'s summary tower over theirs and failed the shape guard twice; fixed by
+  routing selection through `relevantWrong()` (LAW-48's existing contract).
+- **`primer-prediction.js` now reports `answerableFromTheConceptName: []`** — it was the
+  standing report of this defect. LAW-47 clean over the real app, 0 layering descents
+  across 40 sets and 257 pairs, `paperDigestMatch: true`, and 0 overflow / clipped /
+  circleFit / overlaps / ragged at 375 and 1280 with new options on screen.
+- **The failsafes fired as designed:** `export-learn-run.mjs` refused the stale SCLM
+  skeleton and named the ids (`SCLM carries no question sclm_fit_term_cloze`) instead of
+  emitting `unknown`, and `export-run.js` refused a second run in one page load (LAW-62).
+- **New: `npm run review`** — one command for every gate plus a readable page of the
+  actual option text per family, because a green gate says nothing about whether the
+  sentences still read well. Defect (2) is exactly what it exists to catch.
+- **Still not done:** the 64 `summary`/`application` strings are not rewritten, so F-06
+  is untouched (18.6% / 39.3%); no new items; no examiner-only slice; no SCLM-M03-L06
+  lesson; T1/T2/T4/T5/T6 not built; screenshots still owed.
+
+## 2026-08-15 — A third of the bank answers to its own heading, and R3 finally has a gate
+
+Evidence: `evidence/2026-08-15/t6-bank-overhaul/verification.md`.
+`VERIFIED(AUTOMATED)`, branch only. No bank content edited; nothing learner-visible changed.
+
+- **R3's on-topic-ness row has said "Gate: none yet" since it was written.**
+  `tools/measure-name-matching.js` closes it: every option set in the built bank — **1049** of
+  them — scored per family with `measure-learn-craft.mjs`'s exact rule, so the numbers are
+  comparable. `--gate` exits non-zero above 32% per family, 10% for `connect`.
+- **324 option sets — a third of the bank — pay 100%**, meaning the correct answer is the only
+  option naming the concept. Per family: `term_cloze` **100.0**, `repair_cloze` 81.9,
+  `case_cloze` 70.8, `explain` 66.0, `bridge_cloze` 48.5, **`boss` 41.3**, `apply` 36.2,
+  `connect` **0.5**.
+- **`boss` is new information and is the largest family in the bank** — 480 option sets, 41.3%.
+  It was invisible to every earlier measurement: the craft tool samples about twelve boss steps
+  in a single run, and the previous per-family cut folded boss into "other".
+- **The prescribed diagnosis did not survive measurement.** The standing brief attributes
+  name-matching to distractors borrowed from other concepts and prescribes `relevantWrong()`
+  everywhere. But `explain` and `apply` already use authored **same-concept** distractors and
+  still leak 66.0% and 36.2%. The rule is `argmax`: **195 of 384** of their distractors name the
+  concept and are eliminated anyway for naming it less densely than the correct answer. The
+  cross-concept borrowing is real but confined to `repair_cloze` and `bridge_cloze`.
+- **`connect` at 0.5% is the worked example, and it was measured, not assumed.** It names the
+  concept in every option. The mirror fix — stripping each concept's name from its own prose —
+  was simulated before anything was edited: it drives every family to 21.8–27.1% and produces
+  "Lean this idea asks whether real people will take a real action", "a payment or signed it is
+  a different category" and "starts from the this idea position". **Rejected on readability**,
+  which is the mirror of watering down a distractor, and because it takes `connect` from 0.5%
+  to 26.6%. Recorded in CONTENT-RULES so it is not re-derived.
+- **A label-selection item is 100% name-matchable by construction.** `term_cloze` and
+  `case_cloze`'s framework blank ask for the concept's own name among four concept names, so no
+  distractor choice can help. Retiring or rewriting them changes scheduled coverage and is an
+  owner call. Suppressing the name on the step would move the metric without changing what the
+  learner already read three steps earlier, and was not done.
+- **`tests/name-matching-gate.test.mjs`** asserts the gate itself, because both of this
+  session's own probe errors were load-order faults: the gate must load every bank file
+  `app/t6.html` loads, must load `t6_brgsa.js` before `t6_catalog.js`, must reach all four
+  subjects, must hold `connect` at ≤10%, and `--gate`'s exit code must agree with its report
+  in both directions. 78/78 → **83/83**.
+- **Two probe defects caught before they became findings** (§7 earning its keep twice): reading
+  `.coverage` instead of `.lessons.coverage` made a healthy validator look like the
+  empty-coverage failure; and loading the catalog without `t6_brgsa.js` yielded 48 concepts
+  instead of 64, which made BRGSA score 100% on `explain` while reporting "0 of 96 distractors
+  missing the name" — the contradiction resolved when it turned out **BRGSA carries no
+  `confusions` and no `applicationWrong` fields at all**.
+- **Deliberately not done:** no rehaul, no new items, no examiner-only slice, no rewrite of the
+  64 summary/application strings, no SCLM-M03-L06 lesson. A half-applied distractor rule leaves
+  the measurement describing neither bank, so nothing was half-applied.
+
+## 2026-08-15 — Screenshots, at last, and the two defects they found in the first sweep
+
+Evidence: `evidence/2026-08-15/t6-harness-and-bank/verification.md`, closing section.
+`VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)`, branch only. **LAW-64** recurrence ×2.
+
+- **Pixel acceptance has been owed since 2026-08-12** because an undisplayed Browser pane
+  composites no frames: its `screenshot` times out, `document.timeline.currentTime` stays pinned at
+  0, and every CSS transition reads as its start value. The fix goes round the pane rather than
+  through it. Headless Chrome has no pane to display — but `chrome --screenshot` photographs a page
+  as it loads and cannot click, so on its own it only ever captures a landing screen.
+- **`tools/shots/frame.html` is the way round that.** It is same-origin with the app, so it opens
+  `/app/t6.html` in a fixed-width iframe and drives the real UI exactly as the browser checks do in
+  the pane — the LAW-64 iframe technique used for pictures instead of numbers — then holds still.
+  Chrome photographs the frame. No CDP, no WebSocket, no dependency, no extension.
+- **Everything waits.** The first version drove on the iframe's `load` event and failed 14 of 16
+  scenes with "no subject card reads 'SPMS'": the dashboard renders after the app's own boot, and
+  crossing to the examiner runs through `document.startViewTransition`. Every step now waits for
+  the thing it is about to press.
+- **And everything settles.** The first version finished animations once and waited 120ms, and the
+  mobile dashboard still came back with the resume bar's "Start this study set / Go →" ghosted
+  under the real button — the bar renders and hides itself when it finds no run to resume, and the
+  shutter landed inside that. Finishing one animation can start another, so it now finishes
+  repeatedly until two consecutive checks find nothing running.
+- **`tools/screenshot.mjs`** takes 16 shots over 5 screens × 2 viewports × both themes. It reads
+  each frame's `<title>` back to fail a shot whose scene did not complete — its own first version
+  searched the DOM for the failure banner's text and condemned four good screenshots, because that
+  text also appears in the frame's source comment explaining the banner.
+- **`REDLINE` LAW-64 (a) — the Bag launcher sat on top of the theme toggle during a paper.** The
+  launcher docks top-right on both the practice screen and a running paper, but the
+  `padding-inline-end` that reserves its space was written for `.app-header` on practice and for
+  `.exam-bar` on the paper — and the theme toggle is in `.app-header`. Measured at 1280: the bag
+  covered all but 18px of a 44px control. This is F-01 one bar higher up. `ui-audit`'s `overlaps`
+  compares text-bearing siblings; these are two icon-only buttons in different stacking contexts.
+- **`REDLINE` LAW-64 (b) — the subject cards laid out differently depending on the bank.**
+  `.course-head` wraps, and in a 186px card the content needs 166px against 164px available — so
+  the date wrapped onto its own line and right-aligned, but **only on the subject carrying the
+  `-1` negative-marking chip**. Four cards in one rail, one different, because of a two-pixel
+  overflow. The date now gets its own row on every card, so they are identical whatever the bank
+  says about the paper. `ragged` did not fire because the cards do share a height.
+- **The general lesson, recorded in the Law:** a DOM audit compares things it knows are siblings.
+  It cannot see two independently-positioned layers colliding, and it cannot see a layout that is
+  self-consistent but different from the card beside it. Both are obvious in a picture. Screenshots
+  do not replace `ui-audit.js` — they fail differently, which is the whole point.
+- **Two briefs written for the next sessions:** `docs/briefs/PROMPT-BANK-OVERHAUL.md` (the full
+  bank re-check / rehaul / recreate plus an examiner-only slice, with six acceptance tests to
+  build) and `docs/briefs/PROMPT-EXPERIENCE-AND-TELEMETRY.md` (the student-experience check and a
+  decision-first dashboard, organised so every panel exists because a decision waits on it). The
+  second records the owner's authorisation to update the privacy policy, and the cost that comes
+  with it: bumping the agreement version sends every active tester back through the acceptance gate,
+  and the papers are sat 22–23 August.
+- Gates re-run after the CSS changes: 78/78, palette clean, 18 assets, 16/16 shots.
+
+## 2026-08-15 — A learn run you can read, and the CLAs measured before they were used
+
+Evidence: `evidence/2026-08-15/t6-harness-and-bank/verification.md`.
+`VERIFIED(REAL_BROWSER + AUTOMATED)`, branch only. New content is
+`WAITING_OWNER_CONTENT_ACCEPTANCE`. `REDLINE` **LAW-65**; **LAW-64** recurrence.
+
+- **The learn half of the persona harness works.** It had refused to run rather than emit wrong
+  data, which was right; the cause was three faults stacked. It wrote `{selectedCourse}` into
+  storage *after load*, and the app reads its profile from storage exactly once, at load. It called
+  `window.__dungeonSelectSubject`, which does not exist. So it clicked whichever set list was on
+  screen and looked those ids up in a different subject's bank, where every one of them resolved to
+  `unknown`. It now drives the real subject rail — find the card by its `.course-code`, click it,
+  **assert the app moved**, then open the set and assert the run that started is the one asked for.
+- **The order comes from the app; the prose comes from the bank.** `export-run.js` returns a ~1 KB
+  skeleton — one line per step — and `tools/export-learn-run.mjs` hydrates it into a 21–24 KB
+  candidate run plus its key. Nothing about scheduling is re-implemented in Node, which is the line
+  `teach-before-test.js` draws and the reason the paper mirror needs a digest check and this does
+  not. An id the subject's bank does not carry is a fatal error naming the id, never an `unknown`
+  row. The paper guard now compares digests **in the page**, fetching the Node-written file over the
+  dev server rather than handing a hash back to be eyeballed: **4 / 4 MATCH.**
+- **`REDLINE` LAW-65 — the per-option feedback was on the candidate side, under a comment saying it
+  was not.** A diagnosis array has a hole at the correct option — 216 of 216 single-answer MCQs have
+  `diagnoses[answer] === null` — so printing it beside the options is an answer key. Moved to the
+  key file, where it belongs anyway: what a learner is told **after** committing is how "am I
+  learning?" is decided. Blindness is now asserted by a walk over the candidate object, not by prose.
+- **Two probe defects caught before they became findings.** The lesson glossary field is `plain`;
+  the first hydrator guessed and wrote `null` under every term in four subjects. And the LAW-63
+  assertion fired on all eight primers and was wrong every time — it searched the whole run for the
+  primer's rule, which is the concept summary and therefore legitimately the correct option of the
+  `_explain` and `_repair_cloze` items later in that run. Scoped to the primer's own surface: 0 hits.
+- **The handoff is read from the app, not from the lesson record.** `lessonHandoff()` is separated
+  from its markup and exposed through `window.__dungeonExport.handoffs()`. The first export printed
+  `connects` verbatim and reported a broken promise the product had already qualified on screen.
+- **48 new single-answer items from the CLAs — SCLM 32, BRGSA 16.** In `t6_challenges.js` beside the
+  SPMS multiple-selects and the SCLM numericals, deliberately **not** in a new file: `t6_integrated.js`
+  was added as one and was missing from four load lists at once (F-47). Ids end `_cla<n>`. Two per
+  SCLM concept rotating definition / scenario / numeric / judgement; one per BRGSA concept,
+  scenario-led in the CLAs' own shape. Nothing is one of their questions.
+- **The premise did not survive measurement, and is corrected.** F-06 was to be closed by "stating
+  correct answers with the absolutes the course itself uses". The course's own papers put an
+  absolute in the correct answer **3.0% (SCLM) and 7.5% (BRGSA)** of the time — *less often than the
+  12% bank being fixed*. Copying their phrasing would have widened the gap. The rule applied instead
+  is narrow: state a claim universally where the lecture's own claim is universal, and nowhere else.
+- **The same measurement found something larger.** "Pick the longest option" pays **53.7%** on the
+  real SCLM paper and **86.7%** on the real BRGSA paper against 25% chance, where Dungeon's own
+  papers pay 11–32% because `checkOptionShape` and the bank-wide length guard exist. "Always press
+  B" pays 31–36% there against Dungeon's dealt-flat slots. **The most gameable property of this
+  course's assessment is one the product already fixed.**
+- **F-08 — the examiner has a reserved slice for the first time.** SCLM Section A draws 50 from a
+  pool that went **52 → 84**: from two spare questions to thirty-four. BRGSA 60 → 76.
+- **F-06 — closed on SCLM, not on BRGSA, and the reason is stated.** Mean of sets 1–3:
+  "eliminate the absolutes" on SCLM **36.0 → 29.5**, beating its own course paper's 32.6, with all
+  rules combined at **24.5** — the craft now misleads. BRGSA sits at 36.6 because Section A draws 20
+  from 76, so about four are new and the rest are legacy items whose correct answers carry an
+  absolute 0 of 20 times on the drawn paper. SPMS is untouched at 41.2 — no items were added there.
+- **`run-persona-strategies.mjs` now measures sets 1–3 and reports the mean.** One seed cannot tell a
+  bank change from a draw: the sixteen BRGSA items moved set 1 from 36.2 to 46.3 *while the
+  bank-wide bias fell*, purely because the reshuffled draw picked up four items where all three
+  distractors carry an absolute.
+- **Length was a defect introduced and then measured out.** First draft put the correct answer
+  longest in 18 of 32 SCLM items — under `checkOptionShape`'s threshold, and enough to move the
+  paper's "pick the longest" score from 11.0 to 31.5. Fixed by making distractors more specific
+  rather than by trimming answers: rank shares now `0.24 / 0.26 / 0.36 / 0.14`.
+- **`tools/measure-learn-craft.mjs` is new, and reports the exploit the mock cannot see.** Inside a
+  study set the dominant strategy is not absolutes but **name-matching the concept: 45–60%** against
+  25% chance, reaching 67.3% on IBM with both rules together. A mock spans sixteen concepts; a set
+  is one or two deep, so a learner who has read only the set's title can eliminate on vocabulary.
+- **`REDLINE` LAW-64 recurrence — the exam legend overlapped itself at every desktop width.**
+  `.exam-legend li` is `grid-template-columns: 26px 1fr` and `.exam-chip` carries `min-width: 44px`
+  for the tap floor, so the chip overflowed its 26px cell and painted 9×17px across its own label on
+  all five rows. Invisible at 375 (the narrow block sizes it to 22px) and never audited, because the
+  2026-08-14 sweep covered the dashboard, examiner *home* and lesson — not a paper mid-question.
+- **F-25 corrected.** Correct-answer feedback restating the chosen option is **9 of 32** scored items
+  across the four runs, not "every time": it is the `_repair_cloze` family plus two `_explain` items.
+  The wrong-answer panel remains the best content in the product and is thinner than it reads — 161
+  diagnoses in those runs draw on **55 distinct cues**, the top one covering 33 of them.
+- Gates: 78/78, bank `ok: true` with 0 errors against the transcripts, palette clean, 18 assets
+  built, LAW-47 clean over 12 routes in each of SPMS, SCLM and BRGSA, 0 layering descents, reteach
+  3/3, and 0 overflow / clipped / circleFit / overlaps / sub-44px on the exam and learn surfaces at
+  375 and 1280 with a new item on screen. Pixel acceptance still owed: `resize_window` works but the
+  pane is not displayed, so `screenshot` times out.
+
+## 2026-08-14 — Text that did not fit its box, and the probe that could not see it
+
+Evidence: `evidence/2026-08-14/t6-practice-presets/verification.md`, third section.
+`VERIFIED(REAL_BROWSER + AUTOMATED)`, branch only. Tester-visible. `REDLINE` **LAW-64**.
+
+- Owner screenshot: the results ring printing "16 scored questions" across its own stroke, with the
+  standing instruction that overlapping and mis-sized text cannot happen and readability on desktop
+  and mobile is paramount. `ui-audit.js` had reported that screen clean twice in the same session.
+- **The probe was extended before anything was fixed.** It measured the viewport edge, tap size,
+  corner radii, paragraph length, font floor and row raggedness — and nothing about whether content
+  fits its container. Three detectors added: `clipped` (text runs painted outside the box laying them
+  out), `circleFit` (text in a round container against the **chord** at the height it sits), and
+  `overlaps` (two text-bearing siblings intersecting).
+- `clipped` measures **glyph runs** via `Range.getClientRects()`, not `scrollWidth` — `scrollWidth`
+  on an inline box describes its containing block, so the first version reported every bold word in
+  a wrapped sentence as overflowing and buried two real defects in forty false ones. `circleFit` uses
+  cap height either side of the run's centre, not the line box, or every icon badge in the app reads
+  as a zero-width circle. Visually-hidden labels are excluded by shape, not class name.
+- **Fixed 1 — the ring.** The caption moved out of the circle into a `.score-block` stack beneath it.
+  At 122px inner width it fitted the box; the circle is 110px wide at the height it sat and the text
+  needed 118px. A circle has no width a runtime-length string can be guaranteed to fit.
+- **Fixed 2 — the mastery key, and the worst of the three.** Each entry is
+  `<i><b>Label</b> — description</i>`, three children in a row styled
+  `grid-template-columns: auto minmax(0,1fr)`. A grid assigns columns per child, so at 375px the
+  columns resolved to 274px and 28.7px: "Needs practice" wrapped inside 28.7px and ran **19px past
+  the panel edge** with its description on the row below. Now a hanging indent.
+- **Fixed 3 — three tap targets under the floor**, visible once the noise cleared: answer-review
+  disclosures at 23px (twelve to a review), `horizon-choice` at 43px (`min-height: 42px` plus a 1px
+  border), and the Tele-MANAS crisis link at 35×16, now 44px through padding with an equal negative
+  margin so its sentence does not move.
+- Swept at **320, 375 and 1280** across every screen — dashboard, all six practice surfaces, primer,
+  feedback, results, simulation results, written repair, the builder with its dials expanded, exam
+  home, a running paper and its results — in fixed-width same-origin iframes. **0 findings.**
+  78/78, palette, build and bank clean; LAW-01 and LAW-63 re-run `ok: true`. Screenshots still owed.
+
+## 2026-08-14 — Three levels replace four dials in the practice builder
+
+Evidence: `evidence/2026-08-14/t6-practice-presets/verification.md`.
+`VERIFIED(REAL_BROWSER + AUTOMATED)`, branch only. Tester-visible.
+
+- "Build your own practice" now opens on three cards named for the stretch of marks each is built
+  for — `0 → 60` cover everything once, `60 → 80` test each idea properly, `80 → 100` only the
+  hardest surfaces. The four dials that used to be the front door are unchanged, still connected,
+  and folded into a "Change the details" disclosure.
+- **A preset is exactly a set of the dials, and the lit card is read back from them.** A stored
+  preset id would be a second source of truth that drifts the moment a chip is pressed, so pressing
+  a chip after a card lands on "Custom mix" rather than leaving a card describing a run the queue
+  will not deliver (LAW-01).
+- Two new dials, both things the presets were going to turn anyway. **How hard** exposes the
+  `difficulty` every scheduled question has carried since the bank was built and which nothing on the
+  learn side could ever ask for — Plainest (d2–3), Applied (d3–4), Hardest (d4–5), Any, overlapping
+  on purpose. **How long → Every concept** is a coverage rule rather than a size, so its target is
+  the subject's concept count.
+- `0 → 60` selects its own questions. `selectQuestionsFromPool` ranks format spread above concept
+  spread, so asking it for sixteen from a sixteen-concept subject returns *about* one each — fine for
+  a mixed run, not a promise. `sweepSelection` takes each concept's plainest surface and hands it to
+  `orderForDelivery`, the ordering rule factored out of `selectQuestionsFromPool` so both routes
+  sequence a run identically and LAW-47 holds by construction. `80 → 100` names three module bosses
+  as anchors, since the selector admits bosses only as anchors and the card counts them.
+- The time claim is now made against the **queue** rather than the question count: a first `0 → 60`
+  is 16 questions and 32 lessons and primers, and counting only questions understated it by every
+  lesson in the subject. The 1.25 min/item constant is untouched and still uncalibrated.
+- New standing check `tools/browser-checks/practice-presets.js` reads each card's printed sentence
+  and asserts it against `profile.active.queue` — count, concept coverage, boss count, format count,
+  band compliance, run header. `ok: true`. `teach-before-test.js` now loops all three presets:
+  0/0/0 violations across 40, 41 and 27 items. 78/78, palette clean, build clean, 0 overflow and 0
+  sub-44px targets at 1280×800 and 375×812. No screenshots — the pane was not compositing.
+## 2026-08-14 — The primer asks for a prediction instead of printing its own answer
+
+Same evidence file, second half. `VERIFIED(REAL_BROWSER + AUTOMATED)`, branch only. Tester-visible.
+New prose stays `WAITING_OWNER_CONTENT_ACCEPTANCE`.
+
+- Owner report: "a primer is just tapping the same mcq as the question verbatim." Measured, and
+  worse: `renderPrimerPanel` printed `Know this: <primerFact>` directly above options whose correct
+  entry was that same string — **64 of 64** — and the distractors were other concepts' summaries, so
+  with the panel covered the item was still answerable by topic-matching. First contact with every
+  idea in the course was spent matching a string. `REDLINE` **LAW-63**.
+- **Predict, then reveal**, chosen by the owner from three shapes. The panel now carries the
+  concept's caselet and withholds the rule; the learner writes what they think the case shows; the
+  principle arrives afterwards as the answer to their own prediction, with their words quoted above
+  it. No key, no marking, no evidence — being wrong is the mechanism, which is also why it can ask
+  for reasoning at first contact where a keyed question could only ask for unrecalled recall. An
+  honest escape ("I would be guessing — just show me") reveals without claiming a prediction.
+- The reveal carries **no verdict** and takes the cyan guidance colour rather than the green
+  "correct" treatment it used to inherit: nothing compared their prose to a key.
+- **Why not a two-step keyed build:** every same-concept string is already spoken for — `confusions`
+  are `_explain`'s distractors, `applicationWrong` is `_apply`'s option set, `bridge` is
+  `_connect`'s answer — so a keyed primer built from them pre-answers a scored question. And BRGSA
+  carries no same-concept near-misses at all, so 16 of 64 concepts would need transcript-grounded
+  authoring first.
+- `recordPrimerAttempt` no longer moves the support ladder. It was reading whether the learner could
+  match a string printed above the options; the ladder is now driven entirely by
+  `updatePrimerFromChallenge` — how the concept's *scored* questions went — and the primer records
+  `shown` and `predicted` only.
+- The bank gate now **forbids** options on a primer rather than checking their shape, since an
+  options array needs a key and the key was the leak.
+- New standing check `tools/browser-checks/primer-prediction.js`: over every concept in a subject,
+  nothing on screen before the commit is a correct answer to any scheduled question on that concept,
+  no options or keyed answer exist, an empty prediction is refused, the commit moves neither
+  `conceptAttempts` nor `totalAnswers` (as a delta, not an absolute — the first version of the check
+  got this wrong), and the reveal still carries what the panel withheld. `ok: true`, 16/16.
+- **Reported, not fixed:** `_term_cloze` and `_case_cloze`'s framework blank take the concept's own
+  name as their answer, while the layering copy has to print that name for a run to read as a
+  sequence — **32 scheduled questions per subject, 128 in all**. Not a support-surface defect and
+  outside LAW-63; the check reports it under `answerableFromTheConceptName`. Fixing it changes
+  scheduled coverage, so it is an owner call.
+- **A defect in this session's own check:** `teach-before-test.js` reported `ok: true` over three
+  routes instead of twelve, because a saved run resumes into the practice screen, the dashboard
+  never renders, and every set button it looks for is absent. It now records what it could not reach
+  and an unreached route makes the result not-ok. Same family as LAW-62.
+- After the rework: LAW-47 clean across sets 1–9 and all three presets with `skipped: []`, preset
+  check unchanged, 0 overflow and 0 sub-44px targets on both the prediction and reveal screens at
+  375×812 and 1280×800, 78/78, palette and build clean, `validate_t6_bank.js` `ok: true`. The bank
+  validator ran **without the lecture transcripts**, so its coverage block is empty and the LAW-49
+  vocabulary gate did not execute — a skipped check, not a passed one.
+
+## 2026-08-14 — Linked weaknesses are practised together; isolated ones are named
+
+Evidence: `evidence/2026-08-14/t6-weakness-linking/verification.md`.
+`VERIFIED(REAL_BROWSER + AUTOMATED)`, branch only. Tester-visible.
+
+- The weakness route now pairs two weak concepts when the bank genuinely connects them and checks
+  the pair with a surface that tests both, and reports every other weakness as standing on its own.
+- **"Close enough" is defined by the bank, not by proximity.** An edge exists only where one authored
+  surface tests both concepts (`conceptId` + `supportingConceptIds`). `data/graphs/` holds no Term 6
+  graph — its files are BEHECON, GER, MACRO, NABM, NPD — and concept records carry prose, not links,
+  so same-module or adjacent-lecture heuristics would have been claims with no surface to exercise.
+  Measured: each concept has exactly one partner, its module sibling, joined by a `_match` question
+  and five boss steps; SCLM adds two real cross-module edges through `sclm_syn_inventory`. Nothing
+  else. The graph is sparse and isolation is the common case.
+- A weakness is paired **only when its partner is also weak** — a link to something already Strong is
+  not a shared weakness. Pairing is greedy in priority order so the weakest concept gets first choice
+  of partner, and inside a pair the earlier lecture still comes first.
+- A linked unit runs *repair A → repair B → the surface that tests both*; a joint question is
+  preferred over a boss. If no joint surface is available the pair is **not claimed as linked**.
+- Run length 8 → 10 (`PRIORITY_RUN_LENGTH`), since a pair costs three items; the two homepage strings
+  that said "Up to 8 questions" now read the constant. `startPriorityPractice` stays the one route
+  ordered by weakness rather than teaching sequence — its kicker states that contract.
+- The kicker reports the shape ("2 linked pairs, 4 on their own") and a joint surface is labelled
+  **BOTH TOGETHER · A + B**. That label first went into `#question-pattern`, which lives inside
+  `.question-meta { display: none }`, so it passed a `textContent` assertion while being invisible;
+  it now uses the task kicker via a `has-kicker` class generalised from the case work.
+- Two defects found by the verification and fixed: the run delivered **12 items against a stated cap
+  of 10** because the budget asked "is there room" rather than "does this unit fit"; and the first
+  version of the standing check seeded two fixtures in one page session and got the same answer
+  twice, from neither of them (LAW-62).
+- New standing check `tools/browser-checks/weakness-linking.js`: no invented links, every claimed
+  pair actually checked, isolated never folded into a pair. `ok: true`. Layering and LAW-47 checks
+  re-run clean; 78/78, `check:exam SPMS` clean, bank/palette/build clean.
+
+## 2026-08-14 — Questions that name an example now show it
+
+Evidence: `evidence/2026-08-14/t6-example-questions-show-their-example/verification.md`
+(branch only; `WAITING_OWNER_CONTENT_ACCEPTANCE` — four new caselets and four revised stems are
+course content shown to testers as fact and the owner has read none of it).
+
+- Audited **all 816 questions** in the active bank for a stem that points at an example the learner
+  never sees, in two passes: sixteen deictic phrasings plus a proper-noun sweep over every stem
+  shipping no caselet. The defect is confined to SPMS Section B's twenty authored multiple-select
+  items and appears nowhere else; 580 of the 816 already carry a caselet.
+- Of those twenty, **four** name a concrete example — `spms_jtbd_msq` (the drilling machine),
+  `spms_tamsam_msq` (Zerodha), `spms_priority_msq_buckets` (ride-hailing MoSCoW), and
+  `spms_roadmap_msq_sequence` (WhatsApp). `addAuthoredMultiSelect` had no `caselet` field, so none
+  of them could have shown one. All four now do.
+- The lesson was not covering this. `SPMS-M07-L01`'s lesson does not contain the ride-hailing bucket
+  assignment its question asks for, so that item was answerable only from the transcript — and the
+  examiner, which is where all twenty are sat, delivers no lesson at all.
+- Each case is written from its own lecture's clean transcript and withholds what the question asks
+  for: the doctor's own words but not the words *functional*, *emotional*, *social*; Zerodha's three
+  populations but no TAM/SAM/SOM labels; the candidate features and the three-month bucket with
+  nothing sorted. WhatsApp's case does state what the team knew, because that fact is the hinge its
+  two wrong readings turn on.
+- Options, `answers`, and `diagnoses` are byte-identical, so the marking contract, per-option
+  diagnoses, and the LAW-53 shape spread (`3-of-5 ×12, 2-of-4 ×6, 2-of-5 ×2`) are untouched.
+  `npm run check:exam SPMS` exits 0, `npm test` 78/78, bank validator `ok: true` with the lecture
+  gate confirmed live.
+- **Second pass, same day:** the first cut was faithful and badly written — three parallel
+  "Asked why…, she says…" clauses in one 557-character block. All four rewritten as scenarios in
+  three beats. `caseParagraphs()` renders blank-line-separated beats as paragraphs on both surfaces;
+  a case written as one block is unaffected. Hierarchy fixed in CSS: the **THE CASE** label was
+  screen-reader-only, the **THEN DECIDE** kicker was computed by JS and then hidden by a global
+  `display: none`, and nothing separated material from ask — now an eyebrow, an eyebrow, and a 1px
+  rule (a divider, not a nested card). `.caselet.is-long` was unbounded and ran past 100 characters
+  per line; capped at 62ch and measured at 71.
+- Logged as `REDLINE` **LAW-61** and `I-INVISIBLE-EXAMPLE` in the quality log. Left open and
+  reported rather than changed: fifteen of the twenty MSQ stems still ask what *"the lecture"* said
+  rather than what is true, and `spms_roadmap_msq` carries a date recall as a correct option.
+
+## 2026-08-14 — Concepts are layered: a run walks the course's own order
+
+Evidence: `evidence/2026-08-14/t6-lesson-order-diagnosis/verification.md`.
+`VERIFIED(REAL_BROWSER + AUTOMATED)`, branch only. Tester-visible — the order of every run changes.
+
+- **The defect:** SPMS study set 1 taught `M01-L10` before `M01-L05`, in the run the homepage
+  captions *"in the order the subject teaches it"*. Lecture position was not an input to scheduling
+  anywhere. `layeredQueue()` places a lesson immediately before the first surface citing it, so
+  lesson order was a by-product of question order; `selectQuestionsFromPool()` ordered questions by
+  never-attempted → format variety → concept variety → least-recent → a hash of the question id. On
+  a fresh profile the first four keys tie, so the opening question of a run — and the first lesson a
+  learner ever meets — was chosen by that hash (`spms_jtbd_explain`, 205,902,689, lowest in a
+  23-question pool). Neither chained for layering nor random: deterministic, and arbitrary with
+  respect to teaching.
+- **The app was already promising the build it did not have.** A primer following another concept
+  prints "Carry forward: `<previous>`. Now add `<this>`", and the step header reads "builds on what
+  you just did". That copy has shipped against a sequence nothing had sequenced.
+- **The fix, in two parts, both in `app/t6.js`.** Selection is untouched — format spread, concept
+  coverage and weak-first are deliberate and stay. The selected questions are then sorted by teaching
+  rank (`module * 1000 + lecture`, ranked by the *last* lecture a question cites, stable so variety
+  survives within a lecture, bosses and constructed responses still last). And `layeredQueue` now
+  commits to the run's whole lesson list up front and drains it in order — ordering the questions
+  alone still left 4 backward steps, because a boss held to the end can be the first surface to owe
+  an early lecture's lesson. Lesson delivery is now monotonic by construction, and LAW-47 holds a
+  fortiori.
+- **Measured across all 40 sets in four subjects: 94 descents over 37 of 40 sets → 0.** Consecutive
+  pair count identical at 253 before and after, which is the proof selection did not move. BRGSA set
+  9 now runs 18 lessons from `M01-L01` to `M08-L01` with zero backward steps; the SPMS set 9
+  carry-forward chain reads as the syllabus in order.
+- `startPriorityPractice` is deliberately excluded: it is remediation ordered by need and its kicker
+  states that order to the learner.
+- New standing check `tools/browser-checks/lesson-layering.js`. Official LAW-47 check still
+  `ok: true`. 78/78, `check:exam SPMS` clean, bank validator `ok: true`, palette clean, build clean.
+- Logged as `I-LAYERING`, plus `WATCH` **LAW-62** for the measurement trap this exposed: rendering a
+  lesson marks it read *in memory*, so a probe that opens several sets in one page load contaminates
+  itself — the first version of this measurement reported 53 LAW-47 violations that did not exist.
+
 ## 2026-08-14 — BRGSA concept records, corrected anchors, and case exemplars that quote the case
 
 Evidence: `evidence/2026-08-14/t6-frozen-evidence-and-answer-retention/verification.md`

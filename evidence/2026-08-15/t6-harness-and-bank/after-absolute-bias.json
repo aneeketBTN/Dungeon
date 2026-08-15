@@ -1,0 +1,72 @@
+{
+  "overall": {
+    "correctCarriesAbsolute": "18.6%",
+    "wrongCarriesAbsolute": "39.3%",
+    "questions": 264
+  },
+  "byFamily": [
+    {
+      "family": "authored",
+      "questions": 120,
+      "correctCarriesAbsolute": "20.8%",
+      "wrongCarriesAbsolute": "34.2%",
+      "gap": 13.4,
+      "survivorsPerQuestion": 2.77,
+      "examples": [
+        {
+          "id": "survey_bias",
+          "correct": "Stated intention under social pressure predicts actual purchase behaviour poorly"
+        },
+        {
+          "id": "founder_led",
+          "correct": "Founders can compress product, customer, and message learning into each conversation"
+        }
+      ]
+    },
+    {
+      "family": "explain",
+      "questions": 48,
+      "correctCarriesAbsolute": "14.6%",
+      "wrongCarriesAbsolute": "58.3%",
+      "gap": 43.7,
+      "survivorsPerQuestion": 2.1,
+      "examples": [
+        {
+          "id": "spms_jtbd_explain",
+          "correct": "Jobs to be done focuses on the functional, emotional, and social progress a customer seeks"
+        },
+        {
+          "id": "spms_privacy_explain",
+          "correct": "Privacy by design makes lawful purpose, consent, minimisation, protection, user rights, an"
+        }
+      ]
+    },
+    {
+      "family": "apply",
+      "questions": 48,
+      "correctCarriesAbsolute": "2.1%",
+      "wrongCarriesAbsolute": "51.4%",
+      "gap": 49.3,
+      "survivorsPerQuestion": 2.44,
+      "examples": [
+        {
+          "id": "spms_jtbd_apply",
+          "correct": "Design around access, trust, and reassurance rather than treating video calling itself as "
+        },
+        {
+          "id": "spms_tamsam_apply",
+          "correct": "Treat global investors as TAM, Indian online retail investors as SAM, and the reachable co"
+        }
+      ]
+    },
+    {
+      "family": "connect",
+      "questions": 48,
+      "correctCarriesAbsolute": "33.3%",
+      "wrongCarriesAbsolute": "20.8%",
+      "gap": -12.5,
+      "survivorsPerQuestion": 3.04,
+      "examples": []
+    }
+  ]
+}

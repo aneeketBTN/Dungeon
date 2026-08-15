@@ -1,0 +1,170 @@
+{
+  "optionSetsMeasured": 1064,
+  "chanceForFourOptions": 25,
+  "threshold": 30,
+  "overall": {
+    "correctCarriesAbsolute": "43.3%",
+    "wrongCarriesAbsolute": "39.7%",
+    "questions": 1064
+  },
+  "byFamily": [
+    {
+      "family": "boss",
+      "questions": 480,
+      "correctCarriesAbsolute": "33.3%",
+      "wrongCarriesAbsolute": "31.6%",
+      "gap": -1.7,
+      "eliminationPayoff": 23.6,
+      "over": false,
+      "survivorsPerQuestion": 2.72,
+      "examples": [
+        {
+          "id": "spms_m5_boss_1",
+          "correct": "Buyer journey communication: First make the problem and relevant value understandable, the"
+        },
+        {
+          "id": "spms_m5_boss_2",
+          "correct": "Buyer journey communication: First make the problem and relevant value understandable, the"
+        }
+      ]
+    },
+    {
+      "family": "case_cloze",
+      "questions": 128,
+      "correctCarriesAbsolute": "57%",
+      "wrongCarriesAbsolute": "49.5%",
+      "gap": -7.5,
+      "eliminationPayoff": 22.2,
+      "over": false,
+      "survivorsPerQuestion": 1.95,
+      "examples": [
+        {
+          "id": "spms_priority_case_cloze",
+          "correct": "MoSCoW and RICE prioritisation: MoSCoW sorts necessity and RICE compares reach, impact, co"
+        },
+        {
+          "id": "spms_privacy_case_cloze",
+          "correct": "Privacy by design: Privacy by design makes lawful purpose, consent, minimisation, protecti"
+        }
+      ]
+    },
+    {
+      "family": "authored",
+      "questions": 120,
+      "correctCarriesAbsolute": "35.8%",
+      "wrongCarriesAbsolute": "32.2%",
+      "gap": -3.6,
+      "eliminationPayoff": 23.7,
+      "over": false,
+      "survivorsPerQuestion": 2.68,
+      "examples": [
+        {
+          "id": "brgsa_m3_economics_cla1",
+          "correct": "Estimate it now from the inputs you already have, state the lifespan you assumed, and upda"
+        },
+        {
+          "id": "sclm_syn_flow",
+          "correct": "End-to-end cycle time and hand-off coordination, because idle detention can consume capaci"
+        }
+      ]
+    },
+    {
+      "family": "contrast",
+      "questions": 64,
+      "correctCarriesAbsolute": "64.1%",
+      "wrongCarriesAbsolute": "56.8%",
+      "gap": -7.3,
+      "eliminationPayoff": 24,
+      "over": false,
+      "survivorsPerQuestion": 1.66,
+      "examples": [
+        {
+          "id": "spms_priority_contrast",
+          "correct": "MoSCoW and RICE prioritisation: MoSCoW sorts necessity and RICE compares reach, impact, co"
+        },
+        {
+          "id": "spms_privacy_contrast",
+          "correct": "Privacy by design: Privacy by design makes lawful purpose, consent, minimisation, protecti"
+        }
+      ]
+    },
+    {
+      "family": "bridge_cloze",
+      "questions": 64,
+      "correctCarriesAbsolute": "40.6%",
+      "wrongCarriesAbsolute": "46.9%",
+      "gap": 6.3,
+      "eliminationPayoff": 27,
+      "over": false,
+      "survivorsPerQuestion": 2.19,
+      "examples": [
+        {
+          "id": "brgsa_m5_activation_bridge_cloze",
+          "correct": "Activation and onboarding friction: Each drop applies to whoever is left, so several indiv"
+        },
+        {
+          "id": "brgsa_m7_pricing_bridge_cloze",
+          "correct": "Pricing structure and NRR: Two companies charging the same average revenue per user grow a"
+        }
+      ]
+    },
+    {
+      "family": "repair_cloze",
+      "questions": 64,
+      "correctCarriesAbsolute": "64.1%",
+      "wrongCarriesAbsolute": "65.6%",
+      "gap": 1.5,
+      "eliminationPayoff": 26,
+      "over": false,
+      "survivorsPerQuestion": 1.39,
+      "examples": [
+        {
+          "id": "spms_priority_repair_cloze",
+          "correct": "MoSCoW and RICE prioritisation: MoSCoW sorts necessity and RICE compares reach, impact, co"
+        },
+        {
+          "id": "spms_privacy_repair_cloze",
+          "correct": "Privacy by design: Privacy by design makes lawful purpose, consent, minimisation, protecti"
+        }
+      ]
+    },
+    {
+      "family": "explain",
+      "questions": 48,
+      "correctCarriesAbsolute": "68.8%",
+      "wrongCarriesAbsolute": "54.9%",
+      "gap": -13.9,
+      "eliminationPayoff": 16.5,
+      "over": false,
+      "survivorsPerQuestion": 1.67,
+      "examples": [
+        {
+          "id": "sclm_portfolio_explain",
+          "correct": "Tailored sourcing portfolio: A sourcing portfolio matches responsive sources to volatile, "
+        }
+      ]
+    },
+    {
+      "family": "apply",
+      "questions": 48,
+      "correctCarriesAbsolute": "58.3%",
+      "wrongCarriesAbsolute": "50%",
+      "gap": -8.3,
+      "eliminationPayoff": 20,
+      "over": false,
+      "survivorsPerQuestion": 1.92,
+      "examples": []
+    },
+    {
+      "family": "connect",
+      "questions": 48,
+      "correctCarriesAbsolute": "33.3%",
+      "wrongCarriesAbsolute": "20.8%",
+      "gap": -12.5,
+      "eliminationPayoff": 20.1,
+      "over": false,
+      "survivorsPerQuestion": 3.04,
+      "examples": []
+    }
+  ]
+}
