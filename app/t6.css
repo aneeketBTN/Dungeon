@@ -368,13 +368,39 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    still doing work on this page (better-layout: controls must look interactive). */
 .route-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 12px; }
 .route { min-height: 84px; padding: 15px 17px; display: grid; align-content: center; gap: 5px; text-align: start; color: inherit; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-card); cursor: pointer; transition: border-color .15s ease, transform .15s ease; }
-.route:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+.route:hover:not(:disabled) { border-color: var(--line-strong); transform: translateY(-1px); }
 .route b { font-size: var(--t-body); }
 .route small { color: var(--muted); font-size: var(--t-small); line-height: 1.4; }
 .route[aria-expanded="true"] { border-color: var(--blue); background: var(--blue-tint); box-shadow: inset 0 0 0 1px var(--blue); }
+.route:disabled { cursor: not-allowed; opacity: .62; }
 
 .practice-builder { margin-top: 12px; padding: 24px 26px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
 .practice-builder:focus { outline: none; }
+/* The three levels are the builder's front door, so they are cards rather than chips:
+   one press is the whole decision for most runs, and each carries the count it will
+   actually deliver so the promise on the card is checkable before it is pressed. */
+.preset-row { margin-top: 18px; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+.preset-card { min-height: 168px; padding: 16px 17px; display: grid; align-content: start; gap: 7px; text-align: start; color: inherit; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-card); cursor: pointer; transition: border-color .15s ease, transform .15s ease; }
+.preset-card:hover:not(:disabled) { border-color: var(--line-strong); background: var(--card-hover); }
+.preset-range { color: var(--blue); font-size: var(--t-micro); font-weight: 850; letter-spacing: .08em; }
+.preset-card b { font-size: var(--t-body); line-height: 1.25; }
+.preset-card small { color: var(--muted); font-size: var(--t-small); line-height: 1.4; }
+/* The card's claim, and the thing LAW-01 is measured against, so it sits a step above
+   the eyebrow rather than at the type scale's floor. */
+.preset-count { align-self: end; margin-top: 4px; padding-top: 9px; width: 100%; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: var(--t-small); font-weight: 800; }
+.preset-card.selected { border: 2px solid var(--blue); padding: 15px 16px; background: var(--blue-tint); box-shadow: 0 0 0 3px var(--blue-glow-soft); }
+.preset-card:disabled { cursor: not-allowed; opacity: .55; }
+
+/* Every dial the presets set, still connected and still able to make a run nothing
+   on a card describes — folded away because four rows of chips is not the first
+   question anyone opening this screen is asking. */
+.builder-details { margin-top: 18px; border-top: 1px solid var(--line); }
+.builder-details > summary { min-height: 44px; padding: 12px 0 0; display: flex; align-items: center; gap: 9px; cursor: pointer; list-style: none; }
+.builder-details > summary::-webkit-details-marker { display: none; }
+.builder-details > summary::before { content: ""; width: 8px; height: 8px; flex: none; border-right: 2px solid var(--blue); border-bottom: 2px solid var(--blue); transform: translateY(-2px) rotate(-45deg); transition: transform .15s ease; }
+.builder-details[open] > summary::before { transform: translateY(-2px) rotate(45deg); }
+.builder-details .details-label { color: var(--blue); font-size: var(--t-meta); font-weight: 850; }
+.builder-details .details-note { min-width: 0; color: var(--muted); font-size: var(--t-micro); font-weight: 700; }
 .builder-groups { margin-top: 18px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px 20px; }
 .builder-group { min-width: 0; margin: 0; padding: 0; border: 0; }
 .builder-group legend { padding: 0 0 9px; color: var(--muted); font-size: var(--t-micro); font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
@@ -481,8 +507,15 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    very different lengths (444/332/383/81px), so flex-wrap gave each its own ragged
    line. A grid aligns the status dots into two clean columns. */
 .mastery-key { margin-top: 11px; padding: 13px 15px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px 22px; color: var(--muted); background: var(--card-soft); border-radius: var(--r-card); font-size: var(--t-small); }
-.mastery-key span { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: start; gap: 7px; }
-.mastery-key .dot { margin-top: 5px; }
+/* A hanging indent, not a nested grid. Each entry is `<i><b>Label</b> — description</i>`
+   — three children — and the row was `grid-template-columns: auto minmax(0,1fr)`, so
+   the dot took column 1, the bold label took column 2, and the description became an
+   anonymous item on a second row. At 375px the columns resolved to 274px and 28.7px:
+   the label was squeezed into 28.7px, wrapped onto two lines, and its text ran 19px
+   past the panel while its own description sat on the line below it. A grid assigns
+   columns per child, so an inline sentence can never be one of its cells. */
+.mastery-key span { display: block; padding-left: 18px; text-indent: -18px; }
+.mastery-key .dot { margin-right: 8px; vertical-align: 0; }
 .mastery-key b { color: var(--ink); }
 .calibration-summary { margin: 10px 2px 0; color: var(--muted); font-size: var(--t-small); }
 /* The four evidence states, drawn as four silhouettes.
@@ -532,18 +565,32 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    Their content lives on .shelf-row now. */
 
 .set-list { margin-top: 14px; display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
-.set-card { min-height: 86px; padding: 13px 14px; display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 12px; border: 1px solid var(--line); background: var(--card-soft); border-radius: var(--r-card); text-align: left; cursor: pointer; }
+.set-card { min-height: 86px; padding: 13px 14px; display: grid; grid-template-columns: 42px minmax(0,1fr) auto; align-items: start; gap: 12px; border: 1px solid var(--line); background: var(--card-soft); border-radius: var(--r-card); text-align: left; cursor: pointer; }
 .set-card:hover { border-color: var(--line-strong); }
 .set-number { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; font-weight: 900; }
 .set-card b, .set-card small { display: block; }
 .set-card small { margin-top: 3px; color: var(--muted); }
+.set-body { min-width: 0; }
+.set-meta { display: grid; justify-items: end; gap: 4px; text-align: right; }
 .set-state { color: var(--blue); font-size: var(--t-micro); font-weight: 850; }
+/* Position in the sequence. It is the one fact the old card could not carry, and
+   the reason a learner could finish one set of eight and read it as finishing. */
+.set-step { color: var(--muted); font-size: var(--t-micro); font-weight: 850; white-space: nowrap; }
+.set-step-aside { font-weight: 650; font-style: italic; }
+.set-adds { color: var(--ink); }
+.set-rests, .set-cost { font-size: var(--t-micro); }
+.set-card.ladder-current { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-glow-soft); }
+.set-card.ladder-current .set-step { color: var(--blue); }
+/* Later steps are dimmed, never disabled: the ground they rest on is not covered
+   yet, which is worth saying and is not the app's decision to make for anyone. */
+.set-card.ladder-later .set-adds, .set-card.ladder-later .set-rests { opacity: .72; }
 .set-card.complete { background: var(--green-soft); }
 .set-card.mock { color: var(--on-deep); background: var(--deep); border-color: var(--deep-edge); }
 .set-card.mock small { color: var(--on-deep-muted); }
 .set-card.mock .set-state { color: var(--blue-on-deep); }
 .horizon-picker { display: flex; flex-wrap: wrap; gap: 8px; }
-.horizon-choice { min-height: 42px; padding: 9px 12px; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: var(--r-control); font-weight: 800; cursor: pointer; }
+/* 42 was one short of the floor before its border was counted, and 43 after. */
+.horizon-choice { min-height: 44px; padding: 9px 12px; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: var(--r-control); font-weight: 800; cursor: pointer; }
 .horizon-choice.selected, .horizon-choice[aria-pressed="true"] { color: var(--ink); background: var(--blue-soft); border-color: var(--blue); }
 .horizon-plan { max-width: 820px; margin-top: 15px; }
 .horizon-plan h3 { margin: 0 0 7px; font: 650 20px Georgia, serif; }
@@ -591,6 +638,25 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .primer-panel p:first-child { margin-top: 0; }
 .primer-panel .primer-carry { padding-bottom: 10px; color: var(--muted); border-bottom: 1px solid var(--blue-line); font-size: var(--t-small); }
 .primer-panel .primer-connection { padding-top: 10px; border-top: 1px solid var(--blue-line); }
+/* Named up front only once a concept has already caught the learner, and it names a
+   wrong reading — so it is a warning, not a hint, and it takes the warning's colour. */
+.primer-panel .primer-trap { padding-top: 10px; border-top: 1px solid var(--blue-line); color: var(--amber); font-size: var(--t-meta); }
+
+/* The prediction. It is prose like a constructed response but nothing about it is
+   marked, so it is deliberately shorter and lighter than the short-answer box — this
+   is a guess before first contact, not a written answer. */
+.prediction-options { gap: 14px; }
+.prediction-label { display: grid; gap: 8px; font-weight: 800; }
+.prediction-label small { color: var(--muted); font-weight: 500; }
+.prediction-label textarea { width: 100%; min-height: 96px; padding: 13px 14px; resize: vertical; color: var(--ink); background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-card); line-height: 1.55; }
+.prediction-label textarea:disabled { color: var(--ink); background: var(--card-soft); opacity: 1; }
+.prediction-skip { justify-self: start; }
+
+/* The reveal. Their own words sit above the rule so the comparison is theirs to draw;
+   the rule itself is the one line that has to survive being skimmed. */
+.feedback .primer-said { padding: 10px 12px; color: var(--ink-soft); background: var(--veil-inset); border-left: 3px solid var(--rule-on-veil); border-radius: var(--r-mark); font-weight: 500; }
+.feedback .primer-rule { font-weight: 800; }
+.feedback .primer-note { padding-top: 9px; border-top: 1px solid var(--rule-on-veil); color: var(--ink-soft); font-size: var(--t-meta); font-weight: 500; }
 .question-card.is-primer h1 { max-width: 680px; font-size: clamp(24px,2.7vw,34px); }
 .question-card.is-primer .options { margin-top: 20px; }
 
@@ -599,7 +665,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
  * explanation, worked example, and vocabulary rather than nested cards. */
 .status-pill.lesson { color: var(--blue); background: var(--blue-soft); }
 .lesson-panel { margin: 0; max-width: 720px; }
-.lesson-kicker { margin: 0 0 10px; color: var(--blue); font-size: var(--t-micro); font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.lesson-kicker { margin: 0 0 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 7px; color: var(--blue); font-size: var(--t-micro); font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.lesson-kicker .course-evidence-tag { letter-spacing: .04em; }
 .lesson-heading { margin: 0 0 6px; font-size: clamp(26px,3vw,38px); line-height: 1.18; }
 .lesson-heading:focus-visible { outline: 3px solid var(--focus); outline-offset: 6px; }
 .lesson-objective { margin: 0 0 22px; padding-bottom: 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: var(--t-body); }
@@ -615,11 +682,17 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .lesson-glossary dt, .glossary-block dt { font-size: var(--t-body); font-weight: 800; }
 .lesson-glossary dd, .glossary-block dd { margin: 0; color: var(--muted); font-size: var(--t-body); }
 .lesson-connects { margin: 24px 0 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--t-meta); font-style: italic; }
+.lesson-connects-body { margin: 0; }
+/* The lecture's own handoff, kept but demoted where this run departs from the
+   course order — the sentence is true of the course and not of what comes next. */
+.lesson-connects-body.is-superseded { opacity: .7; }
+.lesson-handoff-note { margin: 8px 0 0; font-style: normal; }
+.lesson-handoff-next { margin: 10px 0 0; color: var(--ink); font-style: normal; }
 
 /* On a scored question the vocabulary stays one disclosure away, closed by
  * default so it never competes with the learner's question. */
 .glossary-block { margin: 14px 0 0; }
-.glossary-block > summary { color: var(--blue); cursor: pointer; font-size: var(--t-small); font-weight: 800; }
+.glossary-block > summary { min-height: 44px; display: flex; align-items: center; color: var(--blue); cursor: pointer; font-size: var(--t-small); font-weight: 800; }
 .glossary-block > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .glossary-block[open] > summary { margin-bottom: 12px; }
 
@@ -627,15 +700,39 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
   .lesson-glossary dl, .glossary-block dl { grid-template-columns: 1fr; gap: 4px; }
   .lesson-glossary dd, .glossary-block dd { margin-bottom: 10px; }
 }
+/* The case and the ask are two different jobs on one surface, and until the eye
+   can tell them apart it reads as one undifferentiated column of text. So the
+   case gets named, the ask gets named, and a rule separates material from
+   instruction — the same divider idiom the lesson surface already uses, not a
+   nested card (which the design rules reserve for controls and state changes). */
 .case-block { margin: 0; padding: 0; color: inherit; background: transparent; border: 0; border-radius: 0; }
 .case-block:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
-.case-label { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+/* Was screen-reader-only, which left a sighted learner facing an unheralded slab
+   of serif with nothing saying it was the case rather than the question. */
+.case-label { margin: 0 0 10px; color: var(--muted); font-size: var(--t-micro); font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .caselet { margin: 0; color: inherit; font: 650 clamp(20px,2.2vw,24px)/1.48 Georgia, "Times New Roman", serif; }
-.source-ref { display: none; }
+/* Set as reading matter, not as a headline. IBM's cases carry a setting, figures
+   and a tension the learner has to cite from, so they are read rather than
+   glanced at, and the display size that suits a one-line caselet becomes a wall.
+   `max-width` is measure, not layout: unbounded, a case ran past 100 characters
+   per line on a wide card, which is roughly where the eye stops finding the next
+   line reliably. */
+.caselet.is-long { max-width: 62ch; font: 400 clamp(16px,1.6vw,18px)/1.66 Georgia, "Times New Roman", serif; }
+.caselet p { margin: 0 0 .75em; }
+.caselet p:last-child { margin-bottom: 0; }
+.source-ref { margin: 0 0 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.course-evidence-tag { min-height: 26px; padding: 4px 9px; display: inline-flex; align-items: center; color: var(--blue); background: var(--blue-tint); border: 1px solid var(--blue-line); border-radius: var(--r-control); font-size: var(--t-micro); font-weight: 850; letter-spacing: .04em; line-height: 1; white-space: nowrap; }
 .task-prompt { margin-top: 0; }
-.prompt-flow.has-case .task-prompt { margin-top: 18px; }
-.case-block[hidden] ~ .task-prompt { margin-top: 0; }
+/* Everything above the rule is what the learner is given; everything below it is
+   what they are asked. Without it the case, its provenance chip, the vocabulary
+   disclosure and the question all sat at one even rhythm and nothing grouped. */
+.prompt-flow.has-case .task-prompt { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+.case-block[hidden] ~ .task-prompt { margin-top: 0; padding-top: 0; border-top: 0; }
 .task-prompt > span { display: none; }
+/* `task-kicker` reads "Then decide" once a case is present and "Your task"
+   otherwise. It was computed and then hidden by this rule, so the one word that
+   told a learner the case had ended never reached the page. */
+.prompt-flow.has-kicker .task-prompt > span { display: block; margin: 0 0 8px; color: var(--muted); font-size: var(--t-micro); font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .question-card h1 { margin: 0; font: 650 clamp(28px,3.4vw,42px)/1.12 Georgia, serif; letter-spacing: -.02em; }
 .prompt-flow.has-case h1 { font: 800 clamp(18px,1.8vw,22px)/1.3 Arial, sans-serif; letter-spacing: 0; }
 .options { margin-top: 26px; display: grid; gap: 9px; }
@@ -865,10 +962,17 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .boss-step > b { color: var(--muted); font-size: var(--t-micro); letter-spacing: .06em; text-transform: uppercase; }
 .boss-step > span { margin-bottom: 5px; font-weight: 750; }
 .short-answer-options { gap: 16px; }
+.written-plan { display: grid; gap: 3px; padding: 2px 0 2px 12px; border-left: 2px solid var(--blue); color: var(--muted); font-size: var(--t-small); line-height: 1.45; }
+.written-plan b { color: var(--ink); font-size: var(--t-meta); }
+.written-plan span { display: block; }
 .short-answer-label { display: grid; gap: 8px; font-weight: 800; }
 .short-answer-label small { color: var(--muted); font-weight: 500; }
 .short-answer-label textarea { width: 100%; min-height: 150px; padding: 13px 14px; resize: vertical; color: var(--ink); background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-card); line-height: 1.55; }
 .short-answer-label textarea:disabled { color: var(--ink); background: var(--card-soft); opacity: 1; }
+.local-grade-wait { padding: 14px 16px; display: grid; gap: 5px; background: var(--blue-soft); border-inline-start: 4px solid var(--blue); border-radius: 0 var(--r-mark) var(--r-mark) 0; }
+.local-grade-wait b { font-size: var(--t-meta); }
+.local-grade-wait span { line-height: 1.45; }
+.local-grade-wait small { color: var(--muted); font-size: var(--t-small); line-height: 1.45; }
 .rubric-check { margin: 4px 0 0; padding: 18px 0 0; border: 0; border-top: 1px solid var(--line); }
 .rubric-check legend { padding: 0; font-weight: 850; }
 .rubric-check > p { margin: 4px 0 12px; color: var(--muted); font-size: var(--t-small); }
@@ -877,22 +981,57 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .rubric-check input { margin-top: 3px; }
 .rubric-check b, .rubric-check small { display: block; }
 .rubric-check small { margin-top: 2px; color: var(--muted); }
+/* Deliberately quiet: a standing line under every free-text box, not an alarm.
+   It has to be findable by someone who is not going to type the reason into a
+   revision app, which is most people. */
+.written-support-line { margin: 6px 0 0; font-size: var(--t-meta); color: var(--ink-soft); line-height: 1.5; }
+.written-support-line b { font-weight: 600; color: var(--ink); }
+/* A crisis line is the one link in the app that must not be a 35x16 target. Padding
+   plus an equal negative margin gives it a 44px hit area without moving the sentence
+   it sits in. */
+.written-support-line a { display: inline-block; padding: 14px 6px; margin: -14px -6px; color: inherit; text-underline-offset: 3px; }
+
+/* Shown instead of a mark. Same calm register as the standing line - this moment
+   should not look like an error state, because nothing went wrong. */
+.written-support-response { margin: 12px 0 0; padding: 16px 18px; display: grid; gap: 8px;
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-card); }
+.written-support-response b { font-size: var(--t-body); }
+.written-support-response span { font-size: var(--t-meta); color: var(--ink-soft); line-height: 1.55; }
+.written-support-response small { font-size: var(--t-meta); color: var(--ink-faint); }
+.written-support-response a { color: inherit; font-weight: 600; text-underline-offset: 3px; }
+.written-support-response:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+.local-grade-fallback { margin: 2px 0 0; padding: 12px 14px; background: var(--amber-soft); border-inline-start: 4px solid var(--amber); border-radius: 0 var(--r-mark) var(--r-mark) 0; font-size: var(--t-meta); }
+.local-grade-criteria { display: grid; gap: 9px; margin: 14px 0; padding: 0; list-style: none; }
+.local-grade-criterion { display: grid; gap: 4px; padding: 11px 13px; background: var(--card); border: 1px solid var(--line); border-inline-start: 4px solid var(--line-strong); border-radius: var(--r-card); }
+.local-grade-criterion.met { border-inline-start-color: var(--green); }
+.local-grade-criterion.missing { border-inline-start-color: var(--amber); }
+.local-grade-criterion span { font-size: var(--t-meta); }
+.local-grade-criterion small { color: var(--muted); font-size: var(--t-small); }
+.local-grade-criterion .criterion-evidence { margin-top: 3px; display: flex; flex-wrap: wrap; gap: 6px; }
+.written-gap-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 3px; }
+.written-gap-list span { width: fit-content; padding: 3px 7px; border: 1px solid var(--amber-line); border-radius: var(--r-pill); background: var(--amber-soft); color: var(--ink); font-size: var(--t-small); }
 .confidence-check { margin: 20px 0 0; padding: 0; border: 0; }
 .confidence-check legend { margin-bottom: 8px; color: var(--muted); font-size: var(--t-small); font-weight: 800; }
 .confidence-check > div { display: flex; flex-wrap: wrap; gap: 8px; }
 .confidence-check label { position: relative; cursor: pointer; }
 .confidence-check input { position: absolute; opacity: 0; pointer-events: none; }
-.confidence-check label span { min-height: 40px; padding: 9px 13px; display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--card); border-radius: var(--r-pill); font-size: var(--t-small); font-weight: 800; }
+.confidence-check label span { min-height: 44px; padding: 9px 13px; display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--card); border-radius: var(--r-pill); font-size: var(--t-small); font-weight: 800; }
 .confidence-check input:checked + span { color: var(--on-blue); background: var(--blue); border-color: var(--blue); }
 .confidence-check input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 3px; }
 .confidence-check.resolved label { cursor: default; }
 .confidence-check > small { display: block; margin-top: 8px; color: var(--muted); font-size: var(--t-micro); }
-.confidence-skip { min-height: 34px; margin-top: 5px; padding: 3px 0; font-size: var(--t-small); }
+.confidence-skip { min-height: 44px; margin-top: 5px; padding: 7px 0; font-size: var(--t-small); }
 .confidence-skip[aria-pressed="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 .feedback { display: none; margin-top: 18px; padding: 16px 18px; border-radius: var(--r-panel); }
 .feedback.visible { display: block; color: var(--green); background: var(--green-soft); border: 1px solid var(--green-line); }
 .feedback.visible.wrong { color: var(--red); background: var(--red-soft); border-color: var(--red-line); }
 .feedback.visible.deferred, .feedback.visible.reviewed { color: var(--ink-soft); background: var(--card-soft); border-color: var(--line); }
+/* A revealed primer is guidance, not a verdict. It used to inherit the green "correct"
+   treatment, which was a claim about an answer nothing had marked — and now there is no
+   answer to mark at all. Cyan is this stylesheet's insight colour and says what this is:
+   here is the idea, not here is your score. */
+.feedback.visible.primer-pass { color: var(--blue); background: var(--blue-soft); border-color: var(--blue-line); }
 .feedback-label { display: block; font-weight: 900; }
 .feedback p { margin: 7px 0 0; }
 .feedback .bridge { padding-top: 9px; border-top: 1px solid var(--rule-on-veil); }
@@ -926,9 +1065,11 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .results-hero .eyebrow { color: var(--blue-on-deep); }
 .results-hero h1 { max-width: 680px; margin: 8px 0; font: 650 clamp(37px,5vw,60px)/1.03 Georgia, serif; }
 .results-hero p:not(.eyebrow) { max-width: 600px; color: var(--on-deep-muted); }
+.score-block { display: grid; justify-items: center; gap: 11px; }
 .score-ring { width: 142px; height: 142px; display: grid; place-content: center; text-align: center; border: 10px solid var(--deep-rule); border-radius: 50%; }
 .score-ring strong { font: 700 34px Georgia, serif; }
-.score-ring small { color: var(--on-deep-muted); }
+/* Under the ring, where its width is the column's and not a chord's. */
+.score-caption { max-width: 156px; color: var(--on-deep-muted); font-size: var(--t-small); line-height: 1.35; text-align: center; }
 .result-stats { margin-top: 15px; display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
 .result-stats article { padding: 17px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-panel); }
 .result-stats small, .result-stats b { display: block; }
@@ -942,6 +1083,7 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .review-item.needs { border-left-color: var(--red); }
 .review-item small, .review-item b { display: block; }
 .review-item small { color: var(--muted); }
+.review-evidence { margin-top: 7px; display: flex; flex-wrap: wrap; gap: 6px; }
 .review-item b { margin: 4px 0; }
 .review-item p { margin: 0; color: var(--muted); }
 .review-item > span { display: block; margin-top: 9px; color: var(--blue); font-size: var(--t-micro); font-weight: 800; }
@@ -953,8 +1095,11 @@ button.label-tablet:disabled { cursor: default; opacity: .6; }
 .answer-review article.reviewed { border-left: 5px solid var(--blue); }
 .answer-review h3 { margin: 0 0 8px; font-size: 16px; }
 .answer-review p { margin: 7px 0 0; color: var(--muted); }
-.answer-review details { margin-top: 11px; }
-.answer-review summary { color: var(--blue); font-weight: 800; cursor: pointer; }
+.answer-review details { margin-top: 5px; }
+/* One of these per question, twelve to a review, and each was a 23px target. The
+   padding carries the row to the floor and the details margin absorbs it, so the
+   spacing between cards is unchanged. */
+.answer-review summary { min-height: 44px; padding: 12px 0; display: flex; align-items: center; color: var(--blue); font-weight: 800; cursor: pointer; }
 .answer-review ul { margin: 7px 0 0; padding-left: 20px; }
 
 .reset-dialog { width: min(620px,calc(100% - 30px)); padding: 28px; border: 0; border-radius: var(--r-panel); box-shadow: var(--shadow-deep); }
@@ -1012,6 +1157,10 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
   .focus-panel { grid-template-columns: 1fr; }
   .focus-goal { border-inline-start: 0; border-top: 1px solid var(--deep-line); padding-top: 24px; }
   .evidence-pair, .builder-groups { grid-template-columns: 1fr; }
+  /* Three levels are a comparison, so they stay side by side as long as they can be
+     read; below this they stack rather than shrink into three unreadable columns. */
+  .preset-row { grid-template-columns: 1fr; }
+  .preset-card { min-height: 0; }
   .course-grid, .overall-stats { grid-template-columns: repeat(2,1fr); }
   .builder-footer { align-items: stretch; flex-direction: column; }
   .builder-footer .button { width: 100%; }
@@ -1077,9 +1226,28 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
   .course-grid::-webkit-scrollbar { display: none; }
   .course-card { flex: 0 0 186px; scroll-snap-align: start; min-height: 96px; grid-template-columns: 1fr; gap: 4px; }
   .course-name { min-height: 30px; font-size: var(--t-small); }
+  /* Two rows, always — not "one row, unless it happens not to fit".
+   *
+   * `.course-head` is a wrapping flex row of code, negative-marking flag and
+   * date, with `margin-left: auto` pushing the date right. In a 186px card the
+   * content needs 166px and has 164px, so the date wrapped — but ONLY on the
+   * subject that carries the flag. SPMS's head measured 46px against 23px for
+   * the other three, so its date dropped to a second line and right-aligned
+   * itself under the code, leaving a hole. Four cards side by side in one rail,
+   * one of them laid out differently, because of a two-pixel overflow caused by
+   * a 21px chip that only one subject has.
+   *
+   * A layout that depends on whether this subject has negative marking is not a
+   * layout. The date gets its own row on every card, so they are identical
+   * whatever the bank says about the paper. */
+  .course-head { display: grid; grid-template-columns: auto auto 1fr; align-items: center; row-gap: 2px; }
+  .course-meta { grid-column: 1 / -1; margin-left: 0; }
   .builder-groups { gap: 14px; }
   .chip-option { min-height: 58px; padding: 9px 10px; }
   .chip-option small { font-size: var(--t-micro); }
+  .preset-card { padding: 14px 13px; }
+  .preset-card.selected { padding: 13px 12px; }
+  .builder-details > summary { flex-wrap: wrap; }
   .section-heading { align-items: flex-start; flex-direction: column; }
   .section-heading h2 { font-size: 29px; }
   .overall-stats { grid-template-columns: repeat(2,1fr); }
@@ -1099,7 +1267,7 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
    * tap away, and the option's key column is tightened to give the text more width
    * per line. */
   body:has(.practice-screen.active) .app-header { display: none; }
-  .practice-header { min-height: 74px; grid-template-columns: 1fr auto; padding: 9px 13px; }
+  .practice-header { min-height: 74px; grid-template-columns: 1fr auto; padding: 9px 76px 9px 13px; }
   .practice-header .text-button { font-size: 0; }
   .practice-header .text-button::after { content: "← Dashboard"; font-size: var(--t-small); }
   .practice-identity { text-align: right; }
@@ -1197,6 +1365,7 @@ details.lesson-row[open] > .lesson-row-head { border-bottom: 1px solid var(--lin
 .lesson-row-title { flex: 1 1 auto; min-width: 180px; font-size: 15px; font-weight: 800; }
 .lesson-row.missing .lesson-row-title { color: var(--muted); font-weight: 700; }
 .lesson-row-source { color: var(--muted); font-size: var(--t-micro); font-variant-numeric: tabular-nums; }
+.lesson-row-source.course-evidence-tag { color: var(--blue); font-weight: 850; }
 .lesson-row-pill { padding: 4px 10px; border-radius: var(--r-pill); font-size: var(--t-micro); font-weight: 900; letter-spacing: .04em; }
 .lesson-row-pill.live { color: var(--green); background: var(--green-soft); }
 .lesson-row-pill.readonly { color: var(--blue); background: var(--blue-soft); }
@@ -1250,11 +1419,28 @@ details.lesson-row[open] > .lesson-row-head { border-bottom: 1px solid var(--lin
 .exam-rule p { margin: 5px 0 0; color: var(--muted); font-size: var(--t-meta); }
 /* Said before the clock starts, in the colour the product uses for "this needs care". */
 .exam-shortfall { margin: 16px 0 0; padding: 13px 15px; color: var(--amber); background: var(--amber-soft); border: 1px solid var(--amber-line); border-radius: var(--r-card); font-size: var(--t-meta); }
+/* How much of the paper Learn has taught. Amber while there is a gap, green once
+   there is not — the same two states the shortfall note uses, because it is the
+   same kind of statement: something the candidate is owed before the clock. */
+.exam-readiness { margin: 12px 0 0; padding: 13px 15px; color: var(--amber); background: var(--amber-soft); border: 1px solid var(--amber-line); border-radius: var(--r-card); font-size: var(--t-meta); }
+.exam-readiness.is-ready { color: var(--green); background: var(--green-soft); border-color: var(--green-line); }
+.exam-paper-readiness { margin: 10px 0 0; color: var(--amber); font-size: var(--t-meta); line-height: 1.45; }
+.exam-paper-readiness.is-ready { color: var(--green); }
+/* Inline control inside a sentence. 44px minimum applies to it like everything
+   else (LAW from the mobile pass), so it carries its own vertical padding rather
+   than inheriting the paragraph's line box. */
+.link-button { min-height: 44px; padding: 0 2px; color: var(--blue); background: none; border: 0; font: inherit; font-weight: 850; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.link-button:hover { text-decoration-thickness: 2px; }
 .exam-brief-actions { margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
 
 /* The runner */
 .exam-runner { display: flex; flex-direction: column; flex: 1; min-height: 0; }
-.exam-bar { position: sticky; top: 0; z-index: 12; display: flex; align-items: center; gap: 16px; padding: 8px clamp(12px,2.5vw,22px); background: var(--card); border-bottom: 1px solid var(--line); }
+/* The inline padding matches `.app-header` exactly, because the two bars are stacked and
+   a candidate reads them as one block. They did not: the header used
+   clamp(16px,3vw,40px) and this used clamp(12px,2.5vw,22px), so at 1280 the Dungeon logo
+   started at x=38.4 and "Section A" directly beneath it started at x=22 — a 16px step
+   between two edges that should be one line. Keep these two values identical. */
+.exam-bar { position: sticky; top: 0; z-index: 12; display: flex; align-items: center; gap: 16px; padding: 8px clamp(16px,3vw,40px); background: var(--card); border-bottom: 1px solid var(--line); }
 .exam-sections { display: flex; gap: 6px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .exam-sections::-webkit-scrollbar { display: none; }
 .exam-section-tab { min-height: 44px; padding: 5px 13px; display: grid; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: var(--r-control); font-size: var(--t-small); font-weight: 800; white-space: nowrap; cursor: pointer; }
@@ -1273,7 +1459,9 @@ details.lesson-row[open] > .lesson-row-head { border-bottom: 1px solid var(--lin
 .exam-question { min-width: 0; padding: clamp(18px,3vw,34px) clamp(15px,3vw,34px) 30px; }
 .exam-question:focus-visible { outline: none; }
 .exam-qmeta { display: flex; justify-content: space-between; gap: 14px; margin: 0 0 14px; color: var(--muted); font-size: var(--t-small); font-weight: 800; }
-.exam-caselet { margin-bottom: 16px; padding: 15px 17px; background: var(--card-soft); border-inline-start: 4px solid var(--blue); border-radius: 0 var(--r-card) var(--r-card) 0; font: 400 15px/1.6 Georgia, serif; }
+.exam-caselet { max-width: 64ch; margin-bottom: 18px; padding: 16px 18px; background: var(--card-soft); border-inline-start: 4px solid var(--blue); border-radius: 0 var(--r-card) var(--r-card) 0; font: 400 15.5px/1.64 Georgia, serif; }
+.exam-caselet p { margin: 0 0 .75em; }
+.exam-caselet p:last-child { margin-bottom: 0; }
 .exam-stem { margin: 0 0 20px; max-width: 72ch; font: 650 clamp(18px,2.1vw,23px)/1.4 Georgia, serif; }
 .exam-prompt { margin: -10px 0 18px; max-width: 72ch; font-size: 15px; font-weight: 700; }
 .exam-msq-note { margin: -10px 0 16px; color: var(--amber); font-size: var(--t-small); font-weight: 700; }
@@ -1291,22 +1479,83 @@ details.lesson-row[open] > .lesson-row-head { border-bottom: 1px solid var(--lin
 .exam-match-row { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
 .exam-match-row select { min-height: 46px; padding: 8px 11px; color: var(--ink); background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-card); }
 
+/* Case-cloze: a scenario with two blanks, each its own choice. Stacked rather than
+   two-column like `match`, because a blank's label is a full task line and not a
+   short prompt, and at 375px a 1.2fr/1fr split leaves the select unusable. */
+.exam-cloze { display: grid; gap: 14px; max-width: 760px; }
+.exam-cloze-row { display: grid; gap: 7px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.exam-cloze-row label { color: var(--ink); font-weight: 700; }
+.exam-cloze-row select { min-height: 46px; padding: 8px 11px; color: var(--ink); background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-card); }
+/* A question the renderer could not draw. Loud on purpose: it is our fault and the
+   candidate must not spend time looking for the control. */
+.exam-unrenderable { margin: 16px 0 0; padding: 14px 16px; color: var(--red); background: var(--red-soft); border: 1px solid var(--red-line); border-radius: var(--r-card); font-size: var(--t-meta); }
+
 /* The palette */
 .exam-rail { position: sticky; top: 60px; align-self: start; padding: 18px 16px; border-inline-start: 1px solid var(--line); background: var(--card-soft); }
 .exam-legend { display: grid; gap: 7px; margin: 0 0 18px; padding: 0; list-style: none; }
 .exam-legend li { display: grid; grid-template-columns: 26px 1fr; align-items: center; gap: 9px; color: var(--muted); font-size: var(--t-micro); }
 .exam-rail-heading { margin: 0 0 9px; font-size: var(--t-micro); font-weight: 850; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-.exam-palette { display: grid; grid-template-columns: repeat(auto-fill,minmax(40px,1fr)); gap: 7px; max-height: 46vh; overflow-y: auto; }
+/* The palette's height is a whole number of rows, never a fraction of the viewport.
+ *
+ * `max-height: 46vh` is an arbitrary slice of the window, so it almost never lands on a
+ * row boundary. On SCLM's fifty-question Section A at 1280x900 it resolved to 414px and
+ * cut row nine exactly through the middle of the chips, against a hard container edge —
+ * a row of half-height boxes, which reads as a rendering fault rather than as "there is
+ * more below". Reported as "this weird box".
+ *
+ * A row is one 44px chip plus the 7px gap above it, so N rows occupy N*51 - 7. The
+ * largest N that fits 46vh is floor((46vh + 7) / 51), and `round(down, …)` states exactly
+ * that. Chips are therefore always whole, at every viewport height, with the scrollbar
+ * left to say there is more.
+ *
+ * The plain `46vh` above it is the fallback and must stay: where `round()` is
+ * unsupported the declaration is dropped and the old behaviour returns, which is worse
+ * but not broken. Fading the cut row with a mask was tried first and only made a
+ * half-chip look deliberate; the row still was not whole. */
+.exam-palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(40px,1fr));
+  gap: 7px;
+  max-height: 46vh;
+  max-height: calc(round(down, 46vh + 7px, 51px) - 7px);
+  overflow-y: auto;
+}
 /* Five states, five shapes as well as five colours. Colour alone under time
    pressure is exactly where a candidate with a colour-vision difference loses. */
 .exam-chip { min-width: 44px; min-height: 44px; display: grid; place-items: center; border: 1px solid var(--line-strong); border-radius: var(--r-mark); background: var(--card); color: var(--ink); font-size: var(--t-small); font-weight: 850; font-style: normal; cursor: pointer; }
-.exam-chip.answered { color: var(--on-green); background: var(--green); border-color: var(--green); border-radius: 0 0 var(--r-panel) var(--r-panel); }
-.exam-chip.not-answered { color: var(--on-red); background: var(--red); border-color: var(--red); border-radius: var(--r-panel) var(--r-panel) 0 0; }
+/* Every chip is a REGULAR shape: a rounded square, or a circle. Owner decision.
+ *
+ * The states used to be told apart by warping the box — `0 0 10px 10px` for answered and
+ * `10px 10px 0 0` for not-answered, a pair of tab silhouettes. Two things were wrong with
+ * it. The radius was absolute while the same class renders at 44px (palette), 26px
+ * (desktop legend) and 22px (mobile legend), so 10px was 23% of one chip and 45% of
+ * another, and at 22px the top corners met in a near-semicircle over a hard square
+ * bottom. Restating it as a percentage fixed the scaling and not the look: an
+ * asymmetrically rounded box reads as a distorted square whatever size it is drawn at.
+ *
+ * The states still have to survive a colour-vision difference — a candidate under time
+ * pressure who cannot separate the red and the green must still read the palette. So the
+ * distinction moves off the outline and onto two regular, orthogonal signals:
+ *
+ *   square vs circle    not marked for review / marked for review
+ *   bar vs no bar       answered / not answered
+ *
+ * which gives five states from regular shapes: filled square, filled square with an
+ * underline, soft square, circle, circle with an underline. The underline is an inset
+ * shadow, so it costs no layout and cannot overflow the chip. */
+.exam-chip.answered { color: var(--on-green); background: var(--green); border-color: var(--green); box-shadow: inset 0 -7px 0 -2px var(--on-green); }
+.exam-chip.not-answered { color: var(--on-red); background: var(--red); border-color: var(--red); }
 .exam-chip.not-visited { color: var(--muted); background: var(--grey-soft); }
 .exam-chip.marked { color: var(--on-blue); background: var(--blue); border-color: var(--blue); border-radius: 50%; }
 .exam-chip.answered-marked { color: var(--on-blue); background: var(--blue); border-color: var(--blue); border-radius: 50%; box-shadow: inset 0 -7px 0 -2px var(--green); }
 .exam-chip.current { outline: 3px solid var(--focus); outline-offset: 2px; }
-li .exam-chip { cursor: default; }
+/* In the legend a chip is a swatch, not a control — which is what `cursor: default`
+   below has always said. So it must not inherit the 44px tap floor: the legend row is
+   `grid-template-columns: 26px 1fr`, and a 44px item overflows its own 26px cell by
+   18px, eats the 9px gap, and paints 9px across the label beside it. Five rows, at
+   every desktop width. LAW-64, and the narrow-viewport block already sized it down to
+   22px, which is why 375 audited clean and this never showed. */
+li .exam-chip { min-width: 26px; min-height: 26px; cursor: default; }
 
 .exam-actions { position: sticky; bottom: 0; z-index: 12; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; padding: 11px clamp(12px,2.5vw,22px) calc(11px + env(safe-area-inset-bottom,0px)); background: var(--card); border-top: 1px solid var(--line); }
 .exam-actions-left, .exam-actions-right { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -1358,8 +1607,35 @@ li .exam-chip { cursor: default; }
   .exam-legend li { grid-template-columns: auto auto; gap: 5px; }
   .exam-legend li span { font-size: var(--t-micro); }
   .exam-legend .exam-chip { min-width: 22px; min-height: 22px; font-size: var(--t-micro); }
-  /* Two rows deep, scrollable past that. */
-  .exam-palette { max-height: 100px; grid-template-columns: repeat(auto-fill,minmax(44px,1fr)); }
+  /* The top row goes during a running paper, exactly as it already does mid-question on
+     the practice screen.
+     Measured at 375 on a live paper: the header is 66px and the exam bar 75px, so 141px
+     of a 812px screen was chrome before the candidate saw a word of the question. The
+     header carries the brand, the mocks-completed count and the appearance control, and
+     the Learn/Exam switch is already withheld while a paper runs — none of it is usable
+     mid-paper, and Submit lives in the sticky footer. */
+  body:has(#exam-runner:not([hidden])) .app-header { display: none; }
+  /* The section tabs get a row of their own, which is what the header paid for.
+     They sit in the same flex row as the clock (112px) and the Calculator (92px), so on
+     a 375px screen they were squeezed to a **108px** viewport over **266px** of content:
+     "Section A" showed and Sections B and C were simply gone, along with their question
+     counts. A horizontal scroller nobody can see is not navigation, and which section a
+     candidate is in is not optional information. Full width, below the clock. */
+  .exam-bar { flex-wrap: wrap; row-gap: 9px; }
+  .exam-sections { order: 2; flex: 1 0 100%; }
+  /* The clock stays where it is on desktop: at the end of its row.
+     Moving the section tabs onto their own row left the clock and the Calculator alone on
+     the first one, and flex packs to the start — so the timer jumped from the right edge
+     to the left and read as floating in the middle of nothing. `margin-inline-start: auto`
+     puts the pair back against the trailing edge, which is where a candidate who has used
+     the desktop paper is already looking. */
+  .exam-clock { margin-inline-start: auto; }
+  /* Two whole rows, stated exactly: a row is a 44px chip plus its 7px gap, so two are
+     2 x 51 - 7 = 95. The previous 100px was NOT cutting a chip — measured, its five spare
+     pixels fell in the gap above row three, so nothing was drawn in half. Pinned to the
+     row arithmetic anyway so it cannot drift into the desktop's defect when the chip or
+     gap size changes. */
+  .exam-palette { max-height: calc(2 * 51px - 7px); grid-template-columns: repeat(auto-fill,minmax(44px,1fr)); }
   .exam-facts { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .exam-actions { gap: 8px; }
   .exam-actions-left, .exam-actions-right { flex: 1 1 100%; }
@@ -1551,8 +1827,8 @@ body.coin-in-view .mode-switch { max-width: 0; opacity: 0; border-width: 0; marg
 /* The launcher floats with the thing it opens, on the right, above the corner. It
    is not header furniture: the header says what the page is, and this is a tool you
    pick up and put down. */
-.bag-launcher { position: fixed; z-index: 40; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 8px 15px; color: inherit; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-pill); box-shadow: var(--shadow-deep); cursor: grab; font: inherit; font-weight: 800; touch-action: none; transition: transform .16s ease, border-color .16s ease; }
-.bag-launcher:hover { border-color: var(--deep); transform: translateY(-1px); }
+.bag-launcher { position: fixed; z-index: 40; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 8px 15px; color: inherit; background: color-mix(in srgb, var(--card) 72%, transparent); border: 1px solid color-mix(in srgb, var(--line-strong) 70%, transparent); border-radius: var(--r-pill); box-shadow: none; opacity: .64; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: grab; font: inherit; font-weight: 800; touch-action: none; transition: transform .16s ease, border-color .16s ease, opacity .16s ease, background .16s ease; }
+.bag-launcher:hover, .bag-launcher:focus-visible { border-color: var(--line-strong); background: color-mix(in srgb, var(--card) 92%, transparent); opacity: 1; transform: translateY(-1px); }
 body.has-resume-bar .bag-launcher { inset-block-end: calc(90px + env(safe-area-inset-bottom, 0px)); }
 /* Once it has been dragged, script owns both axes and the resting corner rules must
    stop applying — otherwise the launcher is pinned to two edges at once. */
@@ -1581,7 +1857,55 @@ body.has-resume-bar .bag-launcher.is-placed { inset-block-end: auto; }
    page, with a shadow to say it is above rather than in, and no scrim at all.
 
    It lifts clear of the resume bar when that is out, so the two never stack. */
-.bag-panel { position: fixed; z-index: 41; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); width: min(330px, calc(100vw - 24px)); max-height: min(76vh, 720px); overflow-y: auto; padding: 16px 18px 20px; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-panel); box-shadow: var(--shadow-deep); }
+.bag-panel { position: fixed; z-index: 41; inset-inline-end: 18px; inset-block-end: calc(18px + env(safe-area-inset-bottom, 0px)); width: min(330px, calc(100vw - 24px)); max-height: min(76vh, 720px); overflow-y: auto; padding: 16px 18px 20px; background: color-mix(in srgb, var(--card) 94%, transparent); border: 1px solid var(--line-strong); border-radius: var(--r-panel); box-shadow: var(--shadow); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+/* During practice the closed bag has a reserved home in the practice header. A
+   saved drag position must never put it over the case or question copy. The open
+   tool panel still floats only after the learner deliberately opens it. */
+body:has(.practice-screen.active) .bag-launcher,
+body:has(.practice-screen.active) .bag-launcher.is-placed {
+  inset-inline-start: auto !important;
+  inset-inline-end: 18px !important;
+  inset-block-start: 12px !important;
+  inset-block-end: auto !important;
+  min-width: 46px;
+  width: 46px;
+  padding: 0;
+  justify-content: center;
+  cursor: pointer;
+}
+body:has(.practice-screen.active) .bag-launcher .bag-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+body:has(.practice-screen.active) .app-header { padding-inline-end: 82px; }
+body:has(.practice-screen.active) .header-subject { display: none; }
+
+/* The bag is a Learn tool and does not exist on the examiner. Owner decision,
+ * 2026-08-15.
+ *
+ * It used to be docked into the paper's top-right corner instead, and the history is
+ * worth keeping because it is why the docking existed at all: `.exam-actions` is a
+ * sticky footer with Submit at its right end, which was the launcher's resting corner
+ * one layer up (z-index 40 against 12). Every click aimed at Submit opened the bag, and
+ * the panel — 330px wide, up to 76vh tall, in that same corner — then covered the footer
+ * and the question palette while the clock ran. Three students hit it on three subjects;
+ * one spent six minutes unable to submit a finished paper. Docking cleared the footer but
+ * then covered all but 18px of the theme toggle one bar higher up, which needed a second
+ * reservation to fix.
+ *
+ * Removing it entirely ends that whole class of defect rather than relocating it, and
+ * costs the candidate nothing the paper permits: the exam carries its own Calculator in
+ * `.exam-bar`, and its own countdown, so the bag's two tools are both already there.
+ *
+ * `data-mode` is set by `showScreen` from the screen id and is never stored, so this
+ * cannot disagree with the route the candidate is actually on.
+ *
+ * The two `padding-inline-end` reservations that used to sit here existed ONLY to keep
+ * the docked launcher off the section tabs and the theme toggle. With no launcher they
+ * reserved 76px and 82px of empty space against nothing, which is what pushed the exam
+ * bar and the header out of alignment with each other. */
+:root[data-mode="exam"] .bag-launcher,
+:root[data-mode="exam"] .bag-panel,
+:root[data-mode="exam"] .bag-restore,
+:root[data-mode="exam"] .bag-trash { display: none !important; }
 body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inset-bottom, 0px)); }
 .bag-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
 .bag-head h2 { margin: 0; font: 650 20px Georgia, serif; }
@@ -1616,6 +1940,8 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
      the whole time, so it should occupy a thumb and no more. */
   .bag-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .bag-launcher { inset-inline-end: 12px; inset-block-end: calc(12px + env(safe-area-inset-bottom, 0px)); min-width: 52px; min-height: 52px; padding: 0; justify-content: center; }
+  body:has(.practice-screen.active) .bag-launcher,
+  body:has(.practice-screen.active) .bag-launcher.is-placed { inset-inline-end: 11px !important; inset-block-start: 11px !important; width: 52px; }
   body.has-resume-bar .bag-launcher { inset-block-end: calc(84px + env(safe-area-inset-bottom, 0px)); }
   /* On a phone the panel spans the width and sits on the bottom edge — still floating
      over the page, just with nowhere sensible to float to. */
@@ -1665,6 +1991,10 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 .insight-note { margin: 0 0 12px; max-width: 68ch; color: var(--muted); font-size: var(--t-meta); }
 .insight-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(155px,1fr)); gap: 10px; }
 .insight-card { padding: 13px 14px; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-card); }
+/* A score against a lecture the learner was never given. Marked as ours rather
+   than theirs, so the number is not read as a verdict on the answer. */
+.insight-card.is-untaught { background: var(--amber-soft); border-color: var(--amber-line); }
+.insight-card.is-untaught span { color: var(--amber); }
 .insight-card small { display: block; color: var(--muted); font-size: var(--t-micro); font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
 .insight-card b { display: block; margin: 5px 0 4px; font: 700 25px/1 Georgia, serif; }
 .insight-card span { display: block; color: var(--muted); font-size: var(--t-small); line-height: 1.45; }
@@ -1690,6 +2020,16 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 .depth-route { margin-top: 10px; }
 .written-review { margin-top: 12px; padding: 15px 16px; background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-card); }
 .written-review > b { display: block; margin-bottom: 10px; font-size: var(--t-body); }
+.exam-deep-review { display: grid; gap: 12px; margin-top: 18px; }
+.exam-deep-status { margin: 0; padding: 11px 13px; border-inline-start: 3px solid var(--blue); background: var(--blue-veil); color: var(--muted); font-size: var(--t-meta); }
+.exam-forensic-review { display: grid; gap: 11px; }
+.exam-forensic-review h5 { margin: 0; font: 650 19px/1.2 Georgia, serif; }
+.exam-forensic-review > p { margin: 0; }
+.exam-answer-summary { color: var(--muted); }
+.exam-review-column { display: grid; gap: 5px; }
+.exam-review-column ul { margin: 0; padding-inline-start: 21px; }
+.exam-review-column li + li { margin-top: 5px; }
+.exam-review-column q { color: var(--muted); }
 .rubric-points { display: grid; gap: 7px; margin: 12px 0 0; padding: 0; list-style: none; }
 .rubric-points li { display: grid; gap: 2px; padding: 9px 11px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-mark); }
 .rubric-points b { font-size: var(--t-meta); }
@@ -1747,6 +2087,7 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
    "you pressed it", and it has to be quick because it is the most-repeated
    animation in the app. */
 .button:active:not(:disabled), .route:active, .chip-option:active:not(:disabled),
+.preset-card:active:not(:disabled),
 .course-card:active, .set-card:active, .theme-toggle:active { transform: translateY(0) scale(.976); transition-duration: .06s; }
 .option:active:not(:disabled), .choice:active:has(input:not(:disabled)) { transform: scale(.994); }
 .option, .choice { transition: border-color .15s ease, background .15s ease, transform .1s ease; }

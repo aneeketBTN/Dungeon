@@ -29,7 +29,7 @@ window.T6_COURSE = {
     val_definition: {
       id: "val_definition", module: 1, source: "BRGSA-M01-L01", node: "Lean validation", pattern: "Concept MCQ",
       stem: "What makes lean validation different from simply doing more market research?",
-      options: ["It estimates the total addressable market from desk research before speaking to any real buyers", "It turns the demand assumption into a test with a decision threshold before a full build", "It replaces customer evidence with the founder's own judgment about the problem", "It begins only after the product is complete and ready to put in front of customers"], answer: 1,
+      options: ["It estimates the total addressable market from desk research before speaking to any real buyers", "It always turns the demand assumption into a test whose threshold is set before any build", "It replaces customer evidence with the founder's own judgment about the problem", "It begins only after the product is complete and ready to put in front of customers"], answer: 1,
       explanation: "Lean validation tests whether demand is actually present before costly building or campaigning. The test and its decision threshold matter more than collecting agreeable opinions.",
       link: "Validation converts uncertainty into a pre-declared test before resources are committed.", repairId: "case_validate"
     },
@@ -58,7 +58,7 @@ window.T6_COURSE = {
     survey_bias: {
       id: "survey_bias", module: 1, source: "BRGSA-M01-L05", node: "Survey bias", pattern: "Application MCQ",
       stem: "Why is ‘Would you buy this?’ a weak primary validation question?",
-      options: ["People cannot understand a product before launch", "Stated intention under social pressure predicts actual purchase behaviour poorly", "Surveys always require more than a thousand responses before they mean anything", "Only direct competitors are allowed to run such surveys"], answer: 1,
+      options: ["People cannot understand a product before launch", "Stated intention under social pressure never reliably predicts actual purchase behaviour", "Surveys always require more than a thousand responses before they mean anything", "Only direct competitors are allowed to run such surveys"], answer: 1,
       explanation: "Respondents may be sincere and still mispredict their future behaviour. Surveys are useful tools, but hypothetical willingness is weak purchase evidence.",
       link: "Use surveys to learn language and problems; use behaviour or commitment to validate demand.", repairId: "case_validate"
     },
@@ -66,7 +66,7 @@ window.T6_COURSE = {
     null_logic: {
       id: "null_logic", module: 2, source: "BRGSA-M02-L01", node: "Null hypothesis", pattern: "Concept MCQ",
       stem: "For an A/B landing-page test, which plain-language null hypothesis is best formed?",
-      options: ["Variant B will definitely win once enough traffic has been sent through both of the pages being compared", "There is no meaningful difference between A and B unless the evidence is strong enough to reject that position", "Both variants must receive an identical number of conversions before the test result can be considered valid in any way at all", "The team prefers Variant A and should state that preference before the test begins"], answer: 1,
+      options: ["Variant B will definitely win once enough traffic has been sent through both of the pages being compared", "There is never a meaningful difference between A and B until the evidence is strong enough to reject that position", "Both variants must receive an identical number of conversions before the test result can be considered valid at all", "The team prefers Variant A and should state that preference before the test begins"], answer: 1,
       explanation: "The null is the default no-effect or no-difference position. Evidence must earn the right to reject it.",
       link: "Start from no meaningful effect; let adequate evidence move the decision.", repairId: "case_experiment"
     },
@@ -111,7 +111,7 @@ window.T6_COURSE = {
     retention_shape: {
       id: "retention_shape", module: 3, source: "BRGSA-M03-L02", node: "Retention curves", pattern: "Interpretation MCQ",
       stem: "A retention curve falls sharply, then settles into a stable plateau. What is the most useful interpretation?",
-      options: ["Every user will eventually churn no matter what the product does", "Early activation is weak, but a retained core appears to find durable value", "Acquisition cost must therefore be close to zero for this product to work at all", "The product should be scaled immediately, regardless of what the unit economics say"], answer: 1,
+      options: ["Every user will eventually churn no matter what the product does", "Early activation is weak, but the curve flattens, so a retained core always finds durable value", "Acquisition cost must therefore be close to zero for this product to work", "The product should be scaled immediately, regardless of what the unit economics say"], answer: 1,
       explanation: "The early cliff points to onboarding/activation loss; the plateau suggests a segment receives recurring value.",
       link: "Curve shape translates behaviour over time into a product or growth decision.", repairId: "case_cohort"
     },
@@ -125,7 +125,7 @@ window.T6_COURSE = {
     ltv_early: {
       id: "ltv_early", module: 3, source: "BRGSA-M03-L04", node: "Early LTV", pattern: "Decision MCQ",
       stem: "Why estimate LTV before 18 months of mature data exists?",
-      options: ["To claim a precise figure for future revenue in the plan", "Because CAC has no decision meaning without an estimate of the value it buys", "To replace retention measurement altogether with a single summary number that is easier to report", "Because all customers turn out to have roughly the same lifetime value anyway in practice"], answer: 1,
+      options: ["To claim a precise figure for future revenue in the plan", "Because CAC never carries decision meaning without an estimate of the value it buys", "To replace retention measurement altogether with a single summary number that is easier to report", "Because all customers turn out to have roughly the same lifetime value anyway in practice"], answer: 1,
       explanation: "Early LTV is an assumption-bearing estimate, not prophecy. It completes the unit-economics comparison and should be updated as cohorts mature.",
       link: "CAC tells what growth costs; LTV estimates what that cost purchases.", repairId: "case_cohort"
     },
@@ -133,7 +133,7 @@ window.T6_COURSE = {
       id: "scale_iterate_pivot", module: 3, source: "BRGSA-M03-L05", node: "Scale, iterate, or pivot", pattern: "Caselet",
       caselet: "A product has a small but stable retention plateau and acceptable unit economics among one narrow segment. Its broad campaign performs poorly.",
       stem: "Which decision is best supported?",
-      options: ["Scale the broad acquisition campaign immediately across every channel", "Iterate around the retained segment before considering a full pivot", "Pivot away from the product entirely without doing any segment analysis first", "Ignore retention altogether and optimise for total impressions delivered instead"], answer: 1,
+      options: ["Scale the broad acquisition campaign immediately across every channel", "Always iterate around the retained segment before considering a full pivot", "Pivot away from the product entirely without doing any segment analysis first", "Ignore retention altogether and optimise for total impressions delivered instead"], answer: 1,
       explanation: "A retained core suggests real value exists somewhere. The next step is to refine segment, message, or experience—not confuse weak breadth with zero value.",
       link: "Scale follows repeatable retention and economics; iterate repairs a link; pivot changes a failed premise.", repairId: "case_cohort"
     },
@@ -141,7 +141,7 @@ window.T6_COURSE = {
     growth_discipline: {
       id: "growth_discipline", module: 4, source: "BRGSA-M04-L01", node: "Marketing, product, and growth", pattern: "Concept MCQ",
       stem: "Which description best distinguishes growth from marketing and product?",
-      options: ["Growth is really just another name for the paid advertising budget and its management", "Growth owns the cross-functional system that connects acquisition, product value, retention, and revenue", "Growth only ships product features and hands them to marketing", "Growth reports the total follower count and impressions to the leadership team each month"], answer: 1,
+      options: ["Growth is really just another name for the paid advertising budget and its management", "Growth owns the whole system connecting acquisition, product value, retention and revenue, never one channel", "Growth only ships product features and hands them to marketing", "Growth reports the total follower count and impressions to the leadership team each month"], answer: 1,
       explanation: "Marketing brings and shapes demand; product creates/delivers value; growth joins the transitions and measures the system.",
       link: "Growth diagnoses the system across team boundaries, not a renamed channel team.", repairId: "mock_growth"
     },
@@ -155,7 +155,7 @@ window.T6_COURSE = {
     founder_led: {
       id: "founder_led", module: 4, source: "BRGSA-M04-L03", node: "Founder-led traction", pattern: "Application MCQ",
       stem: "Why can founder-led acquisition outperform an early hired growth function?",
-      options: ["Founders always cost the company far less in salary than any hired specialist would", "Founders can compress product, customer, and message learning into each conversation", "Hired growth teams are simply not able to sell the product effectively", "Founder outreach automatically scales upward as the company grows larger over time"], answer: 1,
+      options: ["Founders always cost the company far less in salary than any hired specialist would", "Founders can compress product, customer, and message learning into each conversation", "Hired growth teams are not able to sell the product effectively", "Founder outreach automatically scales upward as the company grows larger over time"], answer: 1,
       explanation: "In the earliest stage, the point is rapid learning as much as volume. Founders carry context and can change the product or proposition directly.",
       link: "Founder-led does not mean founder forever; it means learning stays close to authority while the motion is unknown.", repairId: "case_constraint"
     },
@@ -179,21 +179,21 @@ window.T6_COURSE = {
       id: "channel_fit", module: 5, source: "BRGSA-M05-L01", node: "Channel-market fit", pattern: "Caselet",
       caselet: "A high-ACV B2B tool sells to heads of sales at 50–200 employee companies. A cheap, broad-interest video channel brings many views but almost no qualified meetings.",
       stem: "What is the core diagnosis?",
-      options: ["The product clearly cannot have found any product-market fit at all yet", "The channel's targeting and output properties do not match the product's economics and ICP", "The high view count is proof enough that the channel is working exactly as intended", "All B2B products require television advertising in order to reach the relevant decision-makers at scale"], answer: 1,
+      options: ["The product clearly cannot have found product-market fit yet", "The channel's targeting and output never match the product's economics and ICP", "The high view count is proof enough that the channel is working exactly as intended", "All B2B products require television advertising in order to reach the relevant decision-makers at scale"], answer: 1,
       explanation: "Channel-market fit asks whether a channel's targeting, control, input, output, time, and economics match the product and ICP.",
       link: "A good product in a mismatched channel can still lose money.", repairId: "mock_channel"
     },
     outbound_system: {
       id: "outbound_system", module: 5, source: "BRGSA-M05-L02", node: "B2B outbound", pattern: "Decision MCQ",
       stem: "Which change most clearly turns cold email activity into an outbound system?",
-      options: ["Sending a much larger volume of the same generic messages out to everyone every single week", "Defining the ICP, list quality, sequence, qualification, and stage metrics as one repeatable flow", "Counting every single email open as a genuine sales opportunity worth adding to the pipeline", "Changing the email copy every single day without ever stating a hypothesis to test first"], answer: 1,
+      options: ["Sending a much larger volume of the same generic messages out to everyone every single week", "Defining ICP, list quality, sequence and qualification as one repeatable flow, never as separate tactics", "Counting every single email open as a genuine sales opportunity worth adding to the pipeline", "Changing the email copy every single day without ever stating a hypothesis to test first"], answer: 1,
       explanation: "Outbound becomes controllable when inputs, stages, qualification, follow-up, and decisions are explicit—not when volume alone increases.",
       link: "A system names its stages and conversion logic; a campaign merely sends.", repairId: "case_constraint"
     },
     organic_loop: {
       id: "organic_loop", module: 5, source: "BRGSA-M05-L03", node: "B2C organic loops", pattern: "Concept MCQ",
       stem: "What separates an organic loop from a one-off viral campaign?",
-      options: ["A loop always runs without requiring any creative work from the team at all", "The output of one cycle becomes an input that can bring or activate the next user", "A loop simply generates a larger number of impressions than a campaign", "A campaign cannot make use of referrals in any form whatsoever"], answer: 1,
+      options: ["A loop always runs without requiring any creative work from the team at all", "The output of every cycle becomes an input that brings or activates the next user", "A loop generates a larger number of impressions than a campaign", "A campaign cannot make use of referrals in any form whatsoever"], answer: 1,
       explanation: "A loop is self-feeding by design. A spike can be large and still end when the campaign ends.",
       link: "Funnel output exits; loop output re-enters as input.", repairId: "case_network"
     },
@@ -207,7 +207,7 @@ window.T6_COURSE = {
     activation_metric: {
       id: "activation_metric", module: 5, source: "BRGSA-M05-L06", node: "Activation metric design", pattern: "Application MCQ",
       stem: "Which activation metric is fully formed?",
-      options: ["A running total of 4,000 activated users counted across the whole product since launch day", "The users who said that they liked the onboarding experience when they were asked about it", "Percentage of verified free signups who receive their first automated follow-up within 7 days", "The total number of follow-up emails that the system has ever sent to anyone at all"], answer: 2,
+      options: ["A running total of 4,000 activated users counted across the whole product since launch day", "The users who said that they liked the onboarding experience when they were asked about it", "Percentage of verified free signups who receive their first automated follow-up within 7 days", "The total number of follow-up emails that the system has ever sent to anyone"], answer: 2,
       explanation: "A well-formed metric contains an event, time window, cohort, and denominator. The percentage of a named cohort within a bounded window supplies all four.",
       link: "Activation event is one occurrence; activation metric aggregates those events for a defined cohort and window.", repairId: "case_activation"
     },
@@ -215,14 +215,14 @@ window.T6_COURSE = {
     habit_loop: {
       id: "habit_loop", module: 6, source: "BRGSA-M06-L01", node: "Habit loops", pattern: "Concept MCQ",
       stem: "Why does the course place habit loops beneath retention, referral, and lifecycle work?",
-      options: ["Because a habit eliminates the need for the product to deliver any value at all", "Because a repeatable cue-action-reward cycle can make return behaviour recur without reacquiring the user each time", "Because every product should be sending daily notifications to its users", "Because habit formation is really just another kind of pricing model"], answer: 1,
+      options: ["Because a habit eliminates the need for the product to deliver any value at all", "Because a repeatable cue-action-reward cycle makes return behaviour recur without ever reacquiring the user", "Because every product should be sending daily notifications to its users", "Because habit formation is really just another kind of pricing model"], answer: 1,
       explanation: "A habit loop explains recurring behaviour. It must deliver value; repeated prompting without value is not a durable loop.",
       link: "Retention becomes durable when the product's value recurs through a repeatable behaviour cycle.", repairId: "case_network"
     },
     lifecycle_fit: {
       id: "lifecycle_fit", module: 6, source: "BRGSA-M06-L02", node: "Lifecycle engagement", pattern: "Decision MCQ",
       stem: "A team sends the same weekly email to every user, regardless of their stage. What is missing?",
-      options: ["A greater overall volume of email being sent", "Lifecycle engagement matched to the user's current state and next value action", "A substantially larger top-of-funnel for the whole team to work with each month", "A referral discount offered to every single existing user on the mailing list"], answer: 1,
+      options: ["A greater overall volume of email being sent", "Lifecycle engagement always matched to the user's current state and next value action", "A substantially larger top-of-funnel for the whole team to work with each month", "A referral discount offered to every single existing user on the mailing list"], answer: 1,
       explanation: "Lifecycle engagement supports the loop by helping users at the relevant moment. A generic drip is activity without state logic.",
       link: "Lifecycle messaging should move a specific state transition, not merely occupy a calendar.", repairId: "case_network"
     },
@@ -243,7 +243,7 @@ window.T6_COURSE = {
     churn_diagnostic: {
       id: "churn_diagnostic", module: 6, source: "BRGSA-M06-L06", node: "Churn diagnostics", pattern: "Decision MCQ",
       stem: "Which view best helps locate when and for whom churn occurs?",
-      options: ["The all-time cumulative count of customers acquired", "Cohort retention plus time-to-churn distribution, segmented by the relevant customer unit", "The total number of emails ever sent", "The total quarterly advertising impressions delivered across all channels"], answer: 1,
+      options: ["The all-time cumulative count of customers acquired", "Cohort retention and time-to-churn together, always segmented by the relevant customer unit", "The total number of emails ever sent", "The total quarterly advertising impressions delivered across all channels"], answer: 1,
       explanation: "Churn diagnostics combines rates and timing. Gross churn, NRR, cohort retention, and time-to-churn answer different parts of the leak.",
       link: "Diagnose churn by cohort, unit, reason, and time—not by one cumulative count.", repairId: "mock_churn"
     },
@@ -251,7 +251,7 @@ window.T6_COURSE = {
     pricing_structure: {
       id: "pricing_structure", module: 7, source: "BRGSA-M07-L01", node: "Pricing models", pattern: "Concept MCQ",
       stem: "Why does the course call pricing a structure rather than just a number?",
-      options: ["Because the published price should never be allowed to change afterwards", "Because tiers, units, limits, and packaging shape customer behaviour and the expansion path", "Because only the finance team is permitted to set it in the first place", "Because a lower headline number is always better for winning new customers more quickly"], answer: 1,
+      options: ["Because the published price should never be allowed to change afterwards", "Because tiers, units, limits and packaging shape every part of customer behaviour and the expansion path", "Because only the finance team is permitted to set it in the first place", "Because a lower headline number is always better for winning new customers more quickly"], answer: 1,
       explanation: "Pricing architecture determines how customers enter, use, upgrade, and expand—not only what one transaction costs.",
       link: "Price communicates and engineers a route through value, not merely a charge.", repairId: "case_nrr"
     },
@@ -265,7 +265,7 @@ window.T6_COURSE = {
     pipeline_stage: {
       id: "pipeline_stage", module: 7, source: "BRGSA-M07-L03", node: "B2B pipeline logic", pattern: "Application MCQ",
       stem: "Why must a B2B pipeline define entry and exit criteria for each stage?",
-      options: ["To make the CRM records look complete and tidy for internal reporting purposes each quarter", "So conversion and blockage reflect real buyer progress rather than subjective sales labels", "To increase the number of email opens recorded across each outreach sequence sent to the list", "To avoid having to speak to customers directly at any point in the process"], answer: 1,
+      options: ["To make the CRM records look complete and tidy for internal reporting purposes each quarter", "So conversion always reflects real buyer progress and never a subjective sales label", "To increase the number of email opens recorded across each outreach sequence sent to the list", "To avoid having to speak to customers directly at any point in the process"], answer: 1,
       explanation: "A stage should represent a real change in buyer commitment or qualification. Otherwise pipeline math cannot locate the constraint.",
       link: "Pipeline stages are evidence states, not decorative columns.", repairId: "case_constraint"
     },
@@ -280,7 +280,7 @@ window.T6_COURSE = {
     payback_period: {
       id: "payback_period", module: 7, source: "BRGSA-M07-L05", node: "Payback period", pattern: "Decision MCQ",
       stem: "Two channels have the same CAC. Channel A recovers it in 6 months; Channel B in 18 months, with similar retention risk. Why is A easier to scale?",
-      options: ["It guarantees a higher lifetime value per customer", "Capital returns sooner and can be reinvested with less cash exposure", "It carries no acquisition cost of its own at all to recover", "Payback period never affects how quickly a company is able to grow at all"], answer: 1,
+      options: ["It guarantees a higher lifetime value per customer", "Capital returns sooner and can be reinvested with less cash exposure", "It carries no acquisition cost of its own to recover", "Payback period never affects how quickly a company is able to grow at all"], answer: 1,
       explanation: "Payback measures how long acquisition cash remains tied up. Faster recovery increases the rate at which the same capital can fund the next cohort.",
       link: "CAC size is incomplete without knowing how quickly gross profit earns it back.", repairId: "mock_payback"
     },
@@ -288,7 +288,7 @@ window.T6_COURSE = {
     ice_priority: {
       id: "ice_priority", module: 8, source: "BRGSA-M08-L01", node: "ICE prioritisation", pattern: "Application MCQ",
       stem: "What keeps an ICE score from becoming a polished opinion?",
-      options: ["Scoring every single idea a ten on all three of the dimensions at once every time", "Tying impact to the current constraint, confidence to evidence, and ease to real capacity", "Letting the most senior person in the room set all three of the values alone", "Removing the written assumptions that sit behind each of the three scores entirely from the record"], answer: 1,
+      options: ["Scoring every single idea a ten on all three of the dimensions at once every time", "Tying all three scores to something checkable: the constraint, the evidence, and real capacity", "Letting the most senior person in the room set all three of the values alone", "Removing the written assumptions that sit behind each of the three scores entirely from the record"], answer: 1,
       explanation: "ICE is disciplined only when its three judgments are explicit and anchored to the constraint and available evidence.",
       link: "Prioritisation is a claim about leverage under uncertainty and capacity.", repairId: "case_operate"
     },
@@ -333,7 +333,7 @@ window.T6_COURSE = {
       id: "case_experiment", module: 2, source: "BRGSA-M02-L06", node: "A/B decision", pattern: "Cross-module caselet",
       caselet: "An activation test reaches its pre-set sample. Variant B moves the named activation metric from 34% to 39%, inside the pre-registered iterate band of 37–42%. Revenue has not matured yet.",
       stem: "What should the team do?",
-      options: ["Call Variant B the winner because the number improved at all in the test run", "Iterate according to the rule and continue tracking the defensible downstream link", "Move the scale threshold down to 39% after seeing how the result landed", "Ignore the named activation metric entirely and use the total click count instead"], answer: 1,
+      options: ["Call Variant B the winner because the number improved in the test run", "Iterate according to the rule and continue tracking the defensible downstream link", "Move the scale threshold down to 39% after seeing how the result landed", "Ignore the named activation metric entirely and use the total click count instead"], answer: 1,
       explanation: "The result belongs to the iterate band. Rewriting the threshold or metric after the result destroys the protection the rule created.",
       link: "A trustworthy experiment produces the pre-declared decision, including an unglamorous iterate.", repairId: "decision_rule"
     },
@@ -357,7 +357,7 @@ window.T6_COURSE = {
       id: "case_activation", module: 5, source: "BRGSA-M05-L06", node: "Activation design", pattern: "Cross-module caselet",
       caselet: "Users who complete a 12-step profile are retained, so the team calls profile completion the aha moment. New-user recordings show most people leave before experiencing the product's core output.",
       stem: "What is the best response?",
-      options: ["Add more required profile fields in order to strengthen the user's commitment", "Identify the first value event, move/remove pre-value friction, and define activation around that event", "Use the count of completed profiles as the denominator for the activation metric instead of signups", "Measure the all-time total number of profiles ever created on the product up to today"], answer: 1,
+      options: ["Add more required profile fields in order to strengthen the user's commitment", "Identify the first value event and define activation around it, removing every step before it that does not help", "Use the count of completed profiles as the denominator for the activation metric instead of signups", "Measure the all-time total number of profiles ever created on the product up to today"], answer: 1,
       explanation: "Profile completion may correlate because only motivated survivors finish it. The team must locate the actual value event and reduce friction before it.",
       link: "Do not confuse the effort a survivor endured with the value that caused retention.", repairId: "activation_metric"
     },
@@ -373,7 +373,7 @@ window.T6_COURSE = {
       id: "case_nrr", module: 7, source: "BRGSA-M07-L02", node: "Expansion architecture", pattern: "Cross-module caselet",
       caselet: "A SaaS company grows 35% through new sales, but the starting cohort falls from ₹20 lakh to ₹16 lakh MRR after expansion, churn, and downgrades.",
       stem: "What does the cohort's NRR say?",
-      options: ["NRR is 125%, so the revenue base is compounding", "NRR is 80%; acquisition is masking a shrinking base", "NRR cannot be calculated at all without new sales figures", "NRR is 35% for this cohort"], answer: 1,
+      options: ["NRR is 125%, so the revenue base is compounding", "NRR is 80%; acquisition is masking a shrinking base", "NRR cannot be calculated without new sales figures", "NRR is 35% for this cohort"], answer: 1,
       explanation: "₹16 lakh ÷ ₹20 lakh = 80% NRR. New-customer growth must not be smuggled into the existing cohort's performance.",
       link: "Headline growth can coexist with a structurally leaking revenue base.", repairId: "nrr_meaning"
     },
@@ -404,7 +404,7 @@ window.T6_COURSE = {
     mock_cohort: {
       id: "mock_cohort", module: 3, source: "BRGSA-M03-L01", node: "Cohort interpretation", pattern: "Mock MCQ",
       stem: "Which dashboard change most directly prevents new acquisition from hiding a retention decline?",
-      options: ["Show the larger total-user numbers more prominently", "Plot retention by signup cohort and time since entry", "Remove the denominators from every chart shown on the dashboard", "Combine all customers into a single blended average figure"], answer: 1,
+      options: ["Show the larger total-user numbers more prominently", "Plot retention by signup cohort, since only equal age makes cohorts comparable", "Remove the denominators from every chart shown on the dashboard", "Combine all customers into a single blended average figure"], answer: 1,
       explanation: "Cohort-by-age views compare like with like and reveal whether new groups hold value better or worse.",
       link: "Cohorts separate growth in inflow from improvement in staying power.", repairId: "cohort_truth"
     },
@@ -427,7 +427,7 @@ window.T6_COURSE = {
       id: "mock_friction", module: 5, source: "BRGSA-M05-L05", node: "Onboarding friction", pattern: "Mock caselet",
       caselet: "Seven onboarding steps each lose only a small percentage of users, but fewer than one-third reach the first value event.",
       stem: "Which principle best explains the result?",
-      options: ["Small step-level losses at each stage cannot compound into anything at all", "Reasonable step-level friction compounds across the whole path to aha", "The aha moment must always be the signup event itself by definition", "Adding more explanatory steps will always fix the cognitive load problem"], answer: 1,
+      options: ["Small step-level losses at each stage cannot compound into anything", "Reasonable step-level friction always compounds across the whole path to aha", "The aha moment must always be the signup event itself by definition", "Adding more explanatory steps will always fix the cognitive load problem"], answer: 1,
       explanation: "Each drop applies to the remaining users, so multiple modest frictions can destroy total activation. Remove or defer nonessential pre-value work.",
       link: "Audit the complete new-user path, not each step in isolation.", repairId: "aha_event"
     },

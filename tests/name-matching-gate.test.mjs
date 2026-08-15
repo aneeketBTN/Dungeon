@@ -1,0 +1,111 @@
+/*
+ * The R3 name-matching gate has to be measuring the whole bank, and has to stay
+ * measuring it.
+ *
+ * Two ways this gate can go quietly wrong, both of which have real precedent here:
+ *
+ *   1. Its LOAD_ORDER drifts from the app's. `t6_integrated.js` was added as a new
+ *      bank file and was missing from four load lists at once, shipping unvalidated
+ *      for weeks. A gate reading three of four bank files reports a clean bank.
+ *   2. It loads t6_catalog.js without t6_brgsa.js first. The catalog builds BRGSA's
+ *      course only once window.T6_COURSE exists, so the wrong order yields 48
+ *      concepts instead of 64 and BRGSA reads as absent rather than as failing.
+ *
+ * Both produce a green run over a bank nobody checked, which is the failure mode this
+ * repository keeps paying for.
+ */
+
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const root = path.join(here, "..");
+const toolPath = path.join(root, "tools", "measure-name-matching.js");
+
+function bankFilesFromHtml() {
+  const html = fs.readFileSync(path.join(root, "app", "t6.html"), "utf8");
+  return [...html.matchAll(/<script src="(sets\/t6_[a-z_]+\.js)"><\/script>/g)]
+    .map((match) => "app/" + match[1]);
+}
+
+function loadOrderFromTool() {
+  const source = fs.readFileSync(toolPath, "utf8");
+  const block = source.match(/var LOAD_ORDER = \[([\s\S]*?)\];/);
+  assert.ok(block, "measure-name-matching.js must declare a LOAD_ORDER array");
+  return [...block[1].matchAll(/"([^"]+)"/g)].map((match) => match[1]);
+}
+
+test("the gate loads every bank file the app loads", () => {
+  const shipped = bankFilesFromHtml();
+  const loaded = loadOrderFromTool();
+  /* Lessons and diagnoses carry no option sets, so the gate does not need them; every
+     file that DOES define questions must be present. */
+  const questionFiles = shipped.filter((file) => !/t6_(lessons|diagnoses)\.js$/.test(file));
+  for (const file of questionFiles) {
+    assert.ok(loaded.includes(file),
+      `${file} is loaded by app/t6.html but not by the R3 gate — the gate would report a clean bank having never read it`);
+  }
+});
+
+test("the gate loads t6_brgsa.js before t6_catalog.js", () => {
+  const loaded = loadOrderFromTool();
+  const brgsa = loaded.indexOf("app/sets/t6_brgsa.js");
+  const catalog = loaded.indexOf("app/sets/t6_catalog.js");
+  assert.ok(brgsa >= 0 && catalog >= 0, "both BRGSA and the catalog must be loaded");
+  assert.ok(brgsa < catalog,
+    "t6_catalog.js builds BRGSA's course from window.T6_COURSE, so loading it first silently drops all 16 BRGSA concepts");
+});
+
+test("the gate measures all four subjects and reports every family", () => {
+  const output = execFileSync(process.execPath, [toolPath, "--json"], {encoding: "utf8", cwd: root});
+  const report = JSON.parse(output);
+
+  assert.ok(report.optionSetsMeasured > 900,
+    `expected the whole bank (~1000 option sets), measured ${report.optionSetsMeasured}`);
+
+  const subjects = new Set(report.bySubjectFamily.map((row) => row.courseId));
+  for (const subject of ["SPMS", "BRGSA", "SCLM", "IBM"]) {
+    assert.ok(subjects.has(subject), `${subject} is missing from the report — check the load order`);
+  }
+
+  /* A family silently dropped is a leak that survives a green gate, so every row must
+     carry a threshold and a set count rather than being skipped. */
+  for (const row of report.byFamily) {
+    assert.ok(row.sets > 0, `${row.family} reported zero option sets`);
+    assert.equal(typeof row.threshold, "number", `${row.family} carries no threshold`);
+  }
+});
+
+test("connect stays fixed — it is the proof the R3 approach works", () => {
+  const output = execFileSync(process.execPath, [toolPath, "--json"], {encoding: "utf8", cwd: root});
+  const report = JSON.parse(output);
+  const connect = report.byFamily.find((row) => row.family === "connect");
+  assert.ok(connect, "the connect family must be measured");
+  /* connect names the concept in EVERY option, which is the direction that fixes this
+     exploit without damaging prose. It measures 0.5%. If it ever climbs, the fix has
+     been undone and the remaining families lose their worked example. */
+  assert.ok(connect.percent <= 10,
+    `connect is at ${connect.percent}% — it was 0.5%, and it is the model the other families are meant to follow`);
+});
+
+test("--gate exits non-zero while a family is over its limit", () => {
+  let exitCode = 0;
+  try {
+    execFileSync(process.execPath, [toolPath, "--gate"], {encoding: "utf8", cwd: root, stdio: "pipe"});
+  } catch (error) {
+    exitCode = error.status;
+  }
+  const output = execFileSync(process.execPath, [toolPath, "--json"], {encoding: "utf8", cwd: root});
+  const anyOver = JSON.parse(output).byFamily.some((row) => row.over);
+  /* This asserts the gate's own wiring, not the bank's current state: whichever way
+     the bank sits, --gate must agree with the report. A gate that cannot fail is not
+     a gate, and one that fails green is worse. */
+  assert.equal(exitCode !== 0, anyOver,
+    anyOver
+      ? "families are over the limit but --gate exited 0"
+      : "no family is over the limit but --gate exited non-zero");
+});

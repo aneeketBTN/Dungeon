@@ -1,0 +1,187 @@
+{
+ "subject": "IBM",
+ "subjectTitle": "Inclusive Business Model",
+ "set": 1,
+ "digest": "20a66748",
+ "instructions": {
+  "sat": "23 August, 09:00–11:00",
+  "minutes": 120,
+  "calculator": null,
+  "marksOnTheRealPaper": 100,
+  "marksAvailableHere": 100,
+  "sections": [
+   {
+    "id": "A",
+    "count": 10,
+    "marks": 10,
+    "rule": "Ten written answers on a caselet released two days before the exam."
+   }
+  ],
+  "shortfalls": [],
+  "caveat": "A mock cannot reproduce this paper, because the case is the paper. This is timed writing practice against the frameworks."
+ },
+ "paper": [
+  {
+   "number": 1,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_inclusive_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Inclusive business in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "inclusive business",
+    "primary objective",
+    "financially sustainable"
+   ]
+  },
+  {
+   "number": 2,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_replication_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Replicating rural services in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "diversification",
+    "center partner",
+    "smallholder"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_rural_bpo_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Rural BPO model in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "business process outsourcing",
+    "franchisee",
+    "migration"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_impact_investing_case_answer",
+   "type": "short-answer",
+   "caselet": "A fund raises ₹500 crore for affordable housing. It sets a target that 70% of units go to households below a stated income line, requires quarterly reporting on who actually occupies them, and expects a 9% return so the capital can be recycled into further projects. One developer in the pipeline offers 16% but will commit to only 25% of units below the income line, and proposes reporting sales value rather than buyer income. The investment committee is split, noting the fund's headline return currently sits below its target.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "impact investing",
+    "risk-adjusted",
+    "social stock exchange",
+    "ESG"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_social_business_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Social business in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "social business",
+    "supply chain"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_grameen_case_answer",
+   "type": "short-answer",
+   "caselet": "A lender wants to reach 30 villages where 82% of households hold no bank-acceptable collateral and no formal credit record, and its two field officers cannot assess 4,000 households individually. A pilot in four villages lent to self-formed groups of five women, releasing funds to two members first and to the rest only after the first repayments arrived, with weekly meetings held in the village. Repayment reached 97% over eighteen months. Head office now proposes dropping the meetings and the staged release to cut cost per loan, keeping the group label.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "collateral",
+    "credit history",
+    "adverse selection",
+    "moral hazard"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_grameen_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Group-based microfinance in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "collateral",
+    "credit history",
+    "adverse selection",
+    "moral hazard"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_responsible_lending_case_answer",
+   "type": "short-answer",
+   "caselet": "A microfinance institution has grown disbursements 140% in two years. Field agents earn 60% of their variable pay per additional loan disbursed and nothing tied to repayment. A sample of 500 borrowers finds the median household now services four concurrent microloans, 38% used their most recent loan to repay an existing one, and total monthly debt service reaches 71% of reported household income. Portfolio-at-risk still reads 1.2%, because refinancing keeps accounts current. The growth committee wants two new districts next quarter.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "MFI",
+    "default",
+    "non-performing asset"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_fpo_case_answer",
+   "type": "short-answer",
+   "caselet": "Nine hundred farmers in one block grow a distinctive aromatic rice. Each markets 2 to 4 tonnes through village traders at ₹22 a kg, while the same rice retails in city stores at ₹95. No individual farmer can meet a retailer's 200-tonne minimum consignment or fund the certification a premium buyer requires. A producer company has been registered with the farmers as shareholders and grant funding covers three years of working capital, but it has nobody with buyer relationships, packaging experience, or the means to hold quality across 900 growers. A neighbouring FPO collapsed after two seasons for exactly that reason.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "FPO",
+    "aggregation",
+    "bargaining power"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_selco_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain SELCO affordability system in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "kerosene",
+    "doorstep finance",
+    "doorstep servicing"
+   ]
+  }
+ ]
+}

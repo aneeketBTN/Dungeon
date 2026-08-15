@@ -1,0 +1,1370 @@
+{
+ "subject": "SCLM",
+ "subjectTitle": "Supply Chain & Logistics Management",
+ "set": 3,
+ "digest": "3c903060",
+ "instructions": {
+  "sat": "23 August, 13:00–15:00",
+  "minutes": 120,
+  "calculator": "scientific",
+  "marksOnTheRealPaper": 80,
+  "marksAvailableHere": 72,
+  "sections": [
+   {
+    "id": "A",
+    "count": 50,
+    "marks": 1,
+    "rule": "One correct option. One mark each. No negative marking."
+   },
+   {
+    "id": "B",
+    "count": 6,
+    "marks": 4,
+    "rule": "Enter the final figure only. No marks for working."
+   },
+   {
+    "id": "C",
+    "count": 3,
+    "marks": 2,
+    "rule": "Match every pair. Two marks each. All or nothing."
+   }
+  ],
+  "shortfalls": [
+   {
+    "section": "B",
+    "want": 6,
+    "have": 4,
+    "type": "numeric"
+   }
+  ],
+  "caveat": null
+ },
+ "paper": [
+  {
+   "number": 1,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_stockyard_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Stockyard location trade-off?",
+   "prompt": null,
+   "options": [
+    "Stockyard location trade-off: A location model should ignore minimum viable throughput, because a site's cost per unit does not depend on how much passes through it.",
+    "Stockyard location trade-off: The geographically central site is always optimal, because the shortest average distance to demand settles the location question.",
+    "Stockyard location trade-off: Primary and secondary movement cost the same per unit moved in every scenario, so only total distance needs minimising.",
+    "Stockyard location trade-off: Stockyard design balances primary and secondary transport cost, service-distance limits, throughput constraints, and inventory instead of choosing the fewest sites automatically."
+   ],
+   "termsAvailable": [
+    "stockyard",
+    "primary transportation",
+    "secondary transportation",
+    "minimum throughput",
+    "clearing and forwarding agent"
+   ]
+  },
+  {
+   "number": 2,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_drivers_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Six supply-chain drivers is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Six supply-chain drivers to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Six supply-chain drivers has settled the choice, later evidence should not change the decision.",
+    "Six supply-chain drivers improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Managers deliver strategic fit by configuring several connected drivers, not by maximising one lever in isolation.",
+    "Six supply-chain drivers works independently of the people, the constraints, and the decisions around it."
+   ],
+   "termsAvailable": [
+    "facilities",
+    "inventory",
+    "transportation",
+    "information",
+    "sourcing",
+    "pricing",
+    "supply chain surplus",
+    "dual sourcing"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_smoothing_apply",
+   "type": "mcq",
+   "caselet": "Last period's forecast was 100, actual demand was 120, and alpha is 0.25.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Exponential smoothing: Set the next forecast to 120, because the latest actual replaces the old forecast entirely.",
+    "Exponential smoothing: Move the forecast down to 95, applying the 25% adjustment against the direction of the error.",
+    "Exponential smoothing: Keep it at 100, because smoothing averages past demand and never responds to a single period's error.",
+    "Exponential smoothing: Move the next forecast upward by 25% of the 20-unit error, giving 105."
+   ],
+   "termsAvailable": [
+    "smoothing constant",
+    "forecast error"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_leads_cla2",
+   "type": "mcq",
+   "caselet": "On the Logistics Performance Index a country scores 3.6 on timeliness and 3.0 on customs, on a 5.0 scale. Its rank is 47 on customs and 47 on infrastructure, against an overall rank of 38.",
+   "stem": "What do the ranks add that the scores do not?",
+   "prompt": null,
+   "options": [
+    "They show where other countries are clustered above, so they locate where improvement buys the most position.",
+    "They indicate which of the six pillars are measured objectively, since only those pillars can be placed in a ranking.",
+    "They correct the reported scores for the different number of survey respondents each pillar happens to receive.",
+    "They convert the pillar scores onto one common scale, which the 5.0 ratings are not otherwise comparable on."
+   ],
+   "termsAvailable": [
+    "LEADS",
+    "Logistics Performance Index",
+    "perception-based survey",
+    "pillars"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_bullwhip_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Bullwhip effect?",
+   "prompt": null,
+   "options": [
+    "Bullwhip effect: It occurs only when final consumer demand itself swings sharply, so a stable retail pattern rules the effect out.",
+    "Bullwhip effect: It is the fall in transport cost that stable ordering produces once each stage batches its shipments efficiently.",
+    "Bullwhip effect: The bullwhip effect is the amplification of order variability upstream even when end-customer demand changes only modestly.",
+    "Bullwhip effect: Upstream orders are always less variable than retail sales, because each stage smooths what it passes on."
+   ],
+   "termsAvailable": [
+    "bullwhip effect",
+    "supply chain coordination",
+    "demand amplification",
+    "order variability",
+    "safety inventory",
+    "upstream"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_multimodal_apply",
+   "type": "mcq",
+   "caselet": "Sea freight is far cheaper per tonne than rail but arrives in one very large annual lot and requires port, barge, and inland handling.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Multimodal cost trade-off: Choose rail because it moves smaller consignments, without costing the inventory that each shipment size creates.",
+    "Multimodal cost trade-off: Choose sea immediately on the line-haul rate per tonne, since the gap against rail is too large to be reversed.",
+    "Multimodal cost trade-off: Exclude port, barge, and inland handling from both options, comparing only the long-haul movement between them.",
+    "Multimodal cost trade-off: Compare movement cost plus inventory and handling before choosing sea, because the freight rate never decides a mode by itself."
+   ],
+   "termsAvailable": [
+    "standing charges",
+    "cycle stock",
+    "buffer stock",
+    "pipeline stock",
+    "cycle time",
+    "payload"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_ports_apply",
+   "type": "mcq",
+   "caselet": "A terminal adds modern handling capacity, but road and rail evacuation remain congested and ships still face delays.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Ports and PPP: Declare the port problem fixed because the cranes are newer than the ones they replaced.",
+    "Ports and PPP: Remove performance oversight once private investment is committed, since the operator now carries the commercial risk.",
+    "Ports and PPP: Treat terminal investment, hinterland connectivity and service as one system, since capacity pays only when both sides work.",
+    "Ports and PPP: Measure port capability by total national coastline length rather than by cargo actually moved."
+   ],
+   "termsAvailable": [
+    "major ports",
+    "non-major ports",
+    "public private partnerships",
+    "coastal movement"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_newsvendor_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Newsvendor decision?",
+   "prompt": null,
+   "options": [
+    "Newsvendor decision: It assumes demand is constant and replenishment repeats indefinitely, so the same quantity is reordered in every cycle of the year.",
+    "Newsvendor decision: Only the purchase cost of the item matters here, because salvage value and lost margin sit outside the ordering decision altogether.",
+    "Newsvendor decision: The newsvendor model chooses a one-time quantity under uncertain demand by balancing the cost of one unit too few against one unit too many.",
+    "Newsvendor decision: Underage and overage costs push the order quantity in the same direction, so raising either of them raises the quantity that should be ordered this season."
+   ],
+   "termsAvailable": [
+    "single period",
+    "underage",
+    "overage",
+    "salvage",
+    "critical ratio",
+    "expected payoff"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_drivers_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Six supply-chain drivers?",
+   "prompt": null,
+   "options": [
+    "Six supply-chain drivers: Facilities, inventory, transportation, information, sourcing, and pricing jointly set the balance between responsiveness and efficiency.",
+    "Six supply-chain drivers: Each driver can be optimised independently, so the best network is the sum of six separate local optima.",
+    "Six supply-chain drivers: Adding facilities always lowers both total cost and total inventory, since local stock is cheaper to hold.",
+    "Six supply-chain drivers: Transportation speed alone determines supply-chain performance, because every other driver follows the delivery schedule."
+   ],
+   "termsAvailable": [
+    "facilities",
+    "inventory",
+    "transportation",
+    "information",
+    "sourcing",
+    "pricing",
+    "supply chain surplus",
+    "dual sourcing"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_newsvendor_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Newsvendor decision is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Newsvendor decision to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Newsvendor decision has settled the choice, later evidence should not change the decision.",
+    "The economic cost of being short versus long determines which point in the uncertain demand distribution is worth covering.",
+    "Newsvendor decision works independently of the people, the constraints, and the decisions around it.",
+    "Newsvendor decision improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all."
+   ],
+   "termsAvailable": [
+    "single period",
+    "underage",
+    "overage",
+    "salvage",
+    "critical ratio",
+    "expected payoff"
+   ]
+  },
+  {
+   "number": 11,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_ports_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Ports and PPP?",
+   "prompt": null,
+   "options": [
+    "Ports and PPP: Port performance is determined only by whether the terminal is publicly or privately owned, and nothing else moves the number.",
+    "Ports and PPP: Container traffic can move at scale without hinterland links, because a terminal's own handling capacity sets its throughput by itself.",
+    "Ports and PPP: Ports support trade and coastal movement; public-private participation can add capacity and operating capability, but performance still depends on connected infrastructure and governance.",
+    "Ports and PPP: Private participation automatically removes every maritime constraint, so oversight of service performance can be withdrawn once the investment arrives and the equipment is installed."
+   ],
+   "termsAvailable": [
+    "major ports",
+    "non-major ports",
+    "public private partnerships",
+    "coastal movement"
+   ]
+  },
+  {
+   "number": 12,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_portfolio_apply",
+   "type": "mcq",
+   "caselet": "A firm sells one mature high-volume item and one volatile product with short life, high stockout cost, and frequent engineering changes.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Tailored sourcing portfolio: Choose suppliers on landed cost alone, without weighing disruption exposure or the obsolescence risk carried by a short-life product.",
+    "Tailored sourcing portfolio: Use a low-cost source for stable volume and a faster one for the volatile item, never one cost objective for every item.",
+    "Tailored sourcing portfolio: Place both items with the longest-lead, lowest-price supplier, because a single consolidated relationship simplifies management and maximises volume leverage on unit price.",
+    "Tailored sourcing portfolio: Reserve the responsive, collaborative source for the stable commodity and leave the volatile item on the slow low-price supplier."
+   ],
+   "termsAvailable": [
+    "tailored sourcing",
+    "onshore",
+    "nearshore",
+    "offshore",
+    "sourcing risk",
+    "multiple sourcing"
+   ]
+  },
+  {
+   "number": 13,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_smoothing_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Exponential smoothing is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Exponential smoothing to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Exponential smoothing works independently of the people, the constraints, and the decisions around it.",
+    "Forecast error is the signal; alpha controls how quickly planning responds without throwing away accumulated history.",
+    "Once Exponential smoothing has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Exponential smoothing improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all."
+   ],
+   "termsAvailable": [
+    "smoothing constant",
+    "forecast error"
+   ]
+  },
+  {
+   "number": 14,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_akshaya_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Akshaya Patra meal logistics?",
+   "prompt": null,
+   "options": [
+    "Akshaya Patra meal logistics: Cooking volume alone determines successful meal delivery, because a kitchen that meets its target has met its obligation.",
+    "Akshaya Patra meal logistics: Route labels and loading sequence have no effect on service, since every container eventually holds the same meal for the same schools.",
+    "Akshaya Patra meal logistics: Akshaya Patra coordinates menu, mechanised production, labelled containers, route sequencing, vehicles, hygiene, and school time windows as one high-volume service system.",
+    "Akshaya Patra meal logistics: Nutritional standards can be set separately from menu and logistics design, because nutrition is decided before any vehicle is loaded."
+   ],
+   "termsAvailable": [
+    "centralized kitchen",
+    "last in, first out",
+    "route number",
+    "container rack systems"
+   ]
+  },
+  {
+   "number": 15,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_reengineering_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Supply-chain re-engineering?",
+   "prompt": null,
+   "options": [
+    "Supply-chain re-engineering: It means cutting one department's budget without examining the stages upstream and downstream of it.",
+    "Supply-chain re-engineering: Re-engineering redesigns end-to-end flows to remove hidden time, inventory, hand-offs, and cost while meeting distinct customer service needs.",
+    "Supply-chain re-engineering: Customer segments should receive identical logistics regardless of need, since one uniform service level is simplest to run and audit.",
+    "Supply-chain re-engineering: More inventory is the default answer to every service problem, because stock is what protects a customer from delay."
+   ],
+   "termsAvailable": [
+    "customer profile",
+    "timeliness",
+    "reverse logistics",
+    "facilitating technologies",
+    "technological minimum"
+   ]
+  },
+  {
+   "number": 16,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_reengineering_cla2",
+   "type": "mcq",
+   "caselet": "A redesign is presented with a costed inventory reduction, a technology plan and a clear customer segmentation. The distributors and transporters who would have to change how they work were not involved and have said they will not.",
+   "stem": "How should the redesign be judged?",
+   "prompt": null,
+   "options": [
+    "It should proceed and treat the objections as a change-management task, separate from the supply chain design and handled after approval.",
+    "It should be replaced with a cost-reduction plan, because costs are the only motivation that does not depend on cooperation.",
+    "It is sound, since the analysis covers inventory, technology and customer profile, which are the substantive parts.",
+    "It fails on the attitudes of the actors, which is one of the five motivations and not a soft addition to them."
+   ],
+   "termsAvailable": [
+    "customer profile",
+    "timeliness",
+    "reverse logistics",
+    "facilitating technologies",
+    "technological minimum"
+   ]
+  },
+  {
+   "number": 17,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_smoothing_cla2",
+   "type": "mcq",
+   "caselet": "A depot forecast 500 units for last month. Actual demand came in at 560. The smoothing constant in use is 0.25.",
+   "stem": "What is this month's forecast?",
+   "prompt": null,
+   "options": [
+    "515 units",
+    "530 units",
+    "560 units",
+    "485 units"
+   ],
+   "termsAvailable": [
+    "smoothing constant",
+    "forecast error"
+   ]
+  },
+  {
+   "number": 18,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_fit_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Strategic fit?",
+   "prompt": null,
+   "options": [
+    "Strategic fit: Stable demand always means low implied uncertainty, because uncertainty is a property of volume alone.",
+    "Strategic fit: Every supply chain should maximise responsiveness regardless of cost, because faster service always wins more customers than price does.",
+    "Strategic fit: Strategic fit aligns the supply chain's efficiency and responsiveness with the customer promise and its implied uncertainty.",
+    "Strategic fit: Competitive strategy and supply-chain design can be set independently, since marketing owns the promise and operations owns cost."
+   ],
+   "termsAvailable": [
+    "strategic fit",
+    "implied demand uncertainty",
+    "responsiveness",
+    "efficiency",
+    "cost responsiveness frontier",
+    "zone of strategic fit",
+    "tailored supply chain"
+   ]
+  },
+  {
+   "number": 19,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_leads_apply",
+   "type": "mcq",
+   "caselet": "A state ranks poorly on tracking, infrastructure, regulatory environment, and cargo safety in stakeholder surveys.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "LEADS index: Ignore the stakeholder evidence entirely, since perception surveys cannot indicate anything about how a state's logistics actually performs.",
+    "LEADS index: Treat the state's rank as a firm-level profit statement and plan individual company budgets from it.",
+    "LEADS index: Improve only warehouse capacity, because infrastructure, regulation, tracking, and cargo safety are not what the index reads.",
+    "LEADS index: Use the dimensions to target state policy, remembering the measure is perception-based and never a guarantee of firm performance."
+   ],
+   "termsAvailable": [
+    "LEADS",
+    "Logistics Performance Index",
+    "perception-based survey",
+    "pillars"
+   ]
+  },
+  {
+   "number": 20,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_fit_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Strategic fit is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Strategic fit to the wider subject?",
+   "prompt": null,
+   "options": [
+    "The customer promise creates operating requirements; performance fails when the network is built for a different promise.",
+    "Strategic fit improves one local measure, so effects elsewhere in the system stop mattering.",
+    "Strategic fit works independently of the people, the constraints, and the decisions around it.",
+    "Once Strategic fit has settled the choice, later evidence should not change the decision."
+   ],
+   "termsAvailable": [
+    "strategic fit",
+    "implied demand uncertainty",
+    "responsiveness",
+    "efficiency",
+    "cost responsiveness frontier",
+    "zone of strategic fit",
+    "tailored supply chain"
+   ]
+  },
+  {
+   "number": 21,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_akshaya_cla2",
+   "type": "mcq",
+   "caselet": "An automated rotimaking machine is rated at 40,000 rotis an hour and delivers closer to 35,000. Atta arrives as a rectangular sheet and the rotis cut from it are circular.",
+   "stem": "What does the shortfall point to?",
+   "prompt": null,
+   "options": [
+    "An under-specified machine, so the answer is a second line rated above the required throughput.",
+    "A maintenance problem, since a machine running below its rated capacity is by definition not being serviced adequately by its contractor.",
+    "Alignment issues and rejected rotis that return for reuse, with the circular cut from a rectangular sheet leaving unused portions.",
+    "A staffing shortfall, because a rated capacity assumes a trained operator standing at every station along the whole line."
+   ],
+   "termsAvailable": [
+    "centralized kitchen",
+    "last in, first out",
+    "route number",
+    "container rack systems"
+   ]
+  },
+  {
+   "number": 22,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_portfolio_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Tailored sourcing portfolio?",
+   "prompt": null,
+   "options": [
+    "Tailored sourcing portfolio: Innovative products with short lives must always be sourced fully offshore, since low labour cost matters most where margins are thin.",
+    "Tailored sourcing portfolio: A sourcing portfolio matches responsive sources to volatile, high-value or time-sensitive items and efficient sources to stable, predictable volume while managing disruption risk.",
+    "Tailored sourcing portfolio: Nearshoring removes every cost and disruption trade-off at once, so a closer supplier needs no comparison against a cheaper distant one on total cost.",
+    "Tailored sourcing portfolio: One globally cheapest supplier is best for every item, because unit price is the only sourcing dimension that reaches the income statement."
+   ],
+   "termsAvailable": [
+    "tailored sourcing",
+    "onshore",
+    "nearshore",
+    "offshore",
+    "sourcing risk",
+    "multiple sourcing"
+   ]
+  },
+  {
+   "number": 23,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_fit_apply",
+   "type": "mcq",
+   "caselet": "Marketing promises high variety and same-day availability while operations uses slow transport, long batches, and suppliers chosen only for low price.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Strategic fit: Add more product variety and same-day options without changing transport, batch sizes, or supplier selection.",
+    "Strategic fit: Measure suppliers only on unit purchase price and ignore availability, because the lowest landed cost defines a fit supply chain.",
+    "Strategic fit: Redesign the chain for the promised responsiveness or change the promise, because performance always fails when the two diverge.",
+    "Strategic fit: Keep both strategies unchanged, because each function is already locally efficient on its own budget and targets."
+   ],
+   "termsAvailable": [
+    "strategic fit",
+    "implied demand uncertainty",
+    "responsiveness",
+    "efficiency",
+    "cost responsiveness frontier",
+    "zone of strategic fit",
+    "tailored supply chain"
+   ]
+  },
+  {
+   "number": 24,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_ports_cla1",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "How does India's use of shipping compare with the global pattern?",
+   "prompt": null,
+   "options": [
+    "India ships over 95% of its trade by volume against a global 80%, but only 65% by value against a global 70%.",
+    "India ships a smaller share of its trade by volume than the world average, but a larger share by value.",
+    "India's volume and value shares are both close to the global figures, so its port profile is unremarkable.",
+    "India ships almost all of its trade by sea on both measures at once, which is what distinguishes it from other large coastal economies."
+   ],
+   "termsAvailable": [
+    "major ports",
+    "non-major ports",
+    "public private partnerships",
+    "coastal movement"
+   ]
+  },
+  {
+   "number": 25,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_sop_apply",
+   "type": "mcq",
+   "caselet": "A plant with costly hiring and training faces seasonal demand, while its product can be stored economically.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Sales and operations planning: Ignore the forecast until daily orders arrive, because only confirmed orders justify committing capacity.",
+    "Sales and operations planning: Absorb the whole peak with backlog even where customers will not tolerate delay, since backlog costs nothing to hold.",
+    "Sales and operations planning: Use a level plan and draw inventory down, since a forecast becomes a decision only when reconciled with capacity cost.",
+    "Sales and operations planning: Hire and release workers to match each monthly demand change exactly, since matching output to demand avoids holding inventory."
+   ],
+   "termsAvailable": [
+    "aggregate planning",
+    "chase strategy",
+    "flexibility strategy",
+    "level strategy",
+    "backlog",
+    "sales and operations planning"
+   ]
+  },
+  {
+   "number": 26,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_turnaround_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Transport turnaround is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Transport turnaround to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Transport turnaround works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "Transport turnaround improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Removing non-value waiting increases the productive cycles of the same asset, linking coordination directly to capacity.",
+    "Once Transport turnaround has settled the choice, later evidence should not be allowed to reopen or change the decision."
+   ],
+   "termsAvailable": [
+    "turnaround time",
+    "rake",
+    "locomotive detention",
+    "engine on load",
+    "throughput"
+   ]
+  },
+  {
+   "number": 27,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_sop_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Sales and operations planning?",
+   "prompt": null,
+   "options": [
+    "Sales and operations planning: It is a daily dispatch schedule for today's orders and makes no capacity or inventory decisions.",
+    "Sales and operations planning: S&OP balances forecast demand with capacity, utilisation, inventory, backlog, and outsourcing over a medium-term horizon.",
+    "Sales and operations planning: A level plan changes capacity every period to match demand exactly, hiring and releasing as the forecast moves.",
+    "Sales and operations planning: A chase plan holds workforce and output constant while inventory absorbs every change in demand."
+   ],
+   "termsAvailable": [
+    "aggregate planning",
+    "chase strategy",
+    "flexibility strategy",
+    "level strategy",
+    "backlog",
+    "sales and operations planning"
+   ]
+  },
+  {
+   "number": 28,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_stockyard_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Stockyard location trade-off is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Stockyard location trade-off to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Stockyard location trade-off improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "A network location changes both legs of transport and facility utilisation; service constraints turn the cheapest map into a feasible operating design.",
+    "Once Stockyard location trade-off has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Stockyard location trade-off works in exactly the same way independently of the people, the constraints, and the decisions that surround it."
+   ],
+   "termsAvailable": [
+    "stockyard",
+    "primary transportation",
+    "secondary transportation",
+    "minimum throughput",
+    "clearing and forwarding agent"
+   ]
+  },
+  {
+   "number": 29,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_turnaround_apply",
+   "type": "mcq",
+   "caselet": "A loaded rake waits an average 13 hours for a locomotive, limiting monthly trips despite adequate loading capacity.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Transport turnaround: Measure only tonnes loaded per wagon and ignore cycle time, since a fuller wagon is always a more productive one.",
+    "Transport turnaround: Increase factory output while loaded wagons continue to stand idle, because production volume is what limits despatch.",
+    "Transport turnaround: Buy additional rakes before addressing the 13-hour wait, since more assets must produce more trips.",
+    "Transport turnaround: Coordinate an engine-on-load arrangement and accountability for the hand-off so detention falls and trips per rake rise."
+   ],
+   "termsAvailable": [
+    "turnaround time",
+    "rake",
+    "locomotive detention",
+    "engine on load",
+    "throughput"
+   ]
+  },
+  {
+   "number": 30,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_stockyard_apply",
+   "type": "mcq",
+   "caselet": "Secondary delivery becomes more expensive than primary line-haul and dealers require an overnight service radius.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Stockyard location trade-off: Minimise primary line-haul distance while leaving secondary delivery cost out of the comparison entirely.",
+    "Stockyard location trade-off: Re-evaluate site locations using the changed cost structure, coverage limit, demand, and minimum throughput together.",
+    "Stockyard location trade-off: Keep the existing sites, because demand locations alone determine where a stockyard belongs.",
+    "Stockyard location trade-off: Consolidate into one large site regardless of dealer distance, since fewer sites always mean lower total network cost."
+   ],
+   "termsAvailable": [
+    "stockyard",
+    "primary transportation",
+    "secondary transportation",
+    "minimum throughput",
+    "clearing and forwarding agent"
+   ]
+  },
+  {
+   "number": 31,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_leads_connect",
+   "type": "mcq",
+   "caselet": "A student can state what LEADS index is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects LEADS index to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once LEADS index has settled the choice, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision.",
+    "LEADS index improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "LEADS index works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "A shared diagnostic makes system weaknesses visible and gives states a basis for coordinated improvement, not a guarantee of firm performance."
+   ],
+   "termsAvailable": [
+    "LEADS",
+    "Logistics Performance Index",
+    "perception-based survey",
+    "pillars"
+   ]
+  },
+  {
+   "number": 32,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_portfolio_cla1",
+   "type": "mcq",
+   "caselet": "A components buyer supplies two lines. Line A is a mature part with high volume and stable weekly demand. Line B is a new variant with uncertain demand and frequent design changes. The buyer wants to consolidate both onto one offshore supplier to simplify management.",
+   "stem": "What does tailored sourcing say about that consolidation?",
+   "prompt": null,
+   "options": [
+    "Consolidation is right, because a single supplier operating at scale lowers unit cost on both lines and simplifies coordination for the buying team.",
+    "Move both onshore instead, since offshore sourcing is unsuitable wherever design changes are expected at all.",
+    "Keep both offshore but hold extra inventory of each, which covers the lead time without changing supplier.",
+    "Split them, because no single supplier suits every product: A fits a low-cost source and B needs a responsive one."
+   ],
+   "termsAvailable": [
+    "tailored sourcing",
+    "onshore",
+    "nearshore",
+    "offshore",
+    "sourcing risk",
+    "multiple sourcing"
+   ]
+  },
+  {
+   "number": 33,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_multimodal_cla2",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "What are standing charges in a chartered-shipping cost build-up?",
+   "prompt": null,
+   "options": [
+    "The demurrage that becomes payable when loading or unloading runs beyond the laytime agreed in the charter.",
+    "The cost of hiring the vessel for the period, which accrues whether or not it is moving.",
+    "The port fees charged for a berth, which are levied once per call regardless of tonnage handled.",
+    "The fixed component of the barge operating cost, prorated across the days the barges are actually worked."
+   ],
+   "termsAvailable": [
+    "standing charges",
+    "cycle stock",
+    "buffer stock",
+    "pipeline stock",
+    "cycle time",
+    "payload"
+   ]
+  },
+  {
+   "number": 34,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_portfolio_cla2",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "A firm qualifies a second supplier as a backup but routes no volume to it. What is the most likely consequence?",
+   "prompt": null,
+   "options": [
+    "Sourcing risk is fully removed, because a qualified supplier can be activated whenever the primary fails.",
+    "The backup becomes cheaper over time, since it competes for the volume it is not currently receiving.",
+    "Procurement cost falls immediately, as the primary supplier lowers its price against a visible alternative.",
+    "The backup stops investing and drifts out of qualification, so the hedge is weaker than the paperwork suggests."
+   ],
+   "termsAvailable": [
+    "tailored sourcing",
+    "onshore",
+    "nearshore",
+    "offshore",
+    "sourcing risk",
+    "multiple sourcing"
+   ]
+  },
+  {
+   "number": 35,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_sop_cla1",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Which lever separates a chase strategy from a level strategy in aggregate planning?",
+   "prompt": null,
+   "options": [
+    "Chase varies capacity to follow demand; level holds production steady and lets inventory absorb the swings.",
+    "Chase plans over a shorter horizon than level, which is why it is used for seasonal products.",
+    "Chase is used by service firms and level by manufacturers, which is the whole of the distinction.",
+    "Chase relies on subcontracting while level relies on overtime, and neither uses inventory as a buffer."
+   ],
+   "termsAvailable": [
+    "aggregate planning",
+    "chase strategy",
+    "flexibility strategy",
+    "level strategy",
+    "backlog",
+    "sales and operations planning"
+   ]
+  },
+  {
+   "number": 36,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_sop_cla2",
+   "type": "mcq",
+   "caselet": "Ahead of the festive season a packaged food brand's marketing team plans a large promotion, operations plans stable production to avoid overtime, procurement plans a bulk packaging buy, and finance plans to hold working capital down. Each plan is signed off inside its own function.",
+   "stem": "What is the failure this situation describes?",
+   "prompt": null,
+   "options": [
+    "One of the four functions has misread the demand forecast, and the other three are correct exactly as they stand.",
+    "Every function is right on its own terms, and the firm has four defensible plans where it needs one agreed plan.",
+    "The promotion should be cancelled, because a supply chain cannot support a demand spike it did not create.",
+    "Working capital targets should always outrank promotional plans, since inventory is the most expensive buffer."
+   ],
+   "termsAvailable": [
+    "aggregate planning",
+    "chase strategy",
+    "flexibility strategy",
+    "level strategy",
+    "backlog",
+    "sales and operations planning"
+   ]
+  },
+  {
+   "number": 37,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_smoothing_cla1",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "In exponential smoothing, what is the smoothing constant actually deciding?",
+   "prompt": null,
+   "options": [
+    "How many past periods are averaged before the mean of that window is taken as the next forecast.",
+    "The width of the tolerance band inside which a forecast counts as having been accurate.",
+    "How far ahead the forecast can be projected before it must be recalculated from scratch.",
+    "The proportion of the last forecast error carried into the next forecast, so every forecast is the previous one corrected."
+   ],
+   "termsAvailable": [
+    "smoothing constant",
+    "forecast error"
+   ]
+  },
+  {
+   "number": 38,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_eoq_cla1",
+   "type": "mcq",
+   "caselet": "A retailer sells 8,000 units of a stable line each year. Placing an order costs ₹250 whatever its size, and holding one unit for a year costs ₹10.",
+   "stem": "What order quantity minimises the total of ordering and holding cost?",
+   "prompt": null,
+   "options": [
+    "400 units",
+    "632 units",
+    "283 units",
+    "800 units"
+   ],
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory"
+   ]
+  },
+  {
+   "number": 39,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_turnaround_cla1",
+   "type": "mcq",
+   "caselet": "A rake cycle of 99 hours breaks down as loading 3.5 hours, idle before loading 7.5, waiting for a locomotive after loading 13, transit out 34, transit back 30, and unloading and readying about 9.75.",
+   "stem": "Which element is the largest single inefficiency to attack, as opposed to the largest block of time?",
+   "prompt": null,
+   "options": [
+    "Waiting for a locomotive at 13 hours, which is detention created by the engine being reassigned elsewhere.",
+    "Unloading and readying at about 9.75 hours, which is the element most directly under the plant's control.",
+    "Idle time before loading at 7.5 hours, which is pure waiting and adds nothing to the movement.",
+    "Transit out at 34 hours, which is the largest element in the cycle and therefore the biggest prize."
+   ],
+   "termsAvailable": [
+    "turnaround time",
+    "rake",
+    "locomotive detention",
+    "engine on load",
+    "throughput"
+   ]
+  },
+  {
+   "number": 40,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_reengineering_cla1",
+   "type": "mcq",
+   "caselet": "Two customer groups buy one product. One group accepts delivery any time within a few days. The other needs it inside a narrow window each morning.",
+   "stem": "Which customer-profile attribute separates these two groups?",
+   "prompt": null,
+   "options": [
+    "Order size, since a customer needing a fixed time is usually buying in smaller quantities.",
+    "Cost sensitivity, because a narrow delivery window is a premium service and is priced as one.",
+    "Reverse logistics needs, since tighter delivery windows generate more returns and repeat visits.",
+    "Timeliness, which is a separate attribute from response time and is what decides the design here."
+   ],
+   "termsAvailable": [
+    "customer profile",
+    "timeliness",
+    "reverse logistics",
+    "facilitating technologies",
+    "technological minimum"
+   ]
+  },
+  {
+   "number": 41,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_eoq_apply",
+   "type": "mcq",
+   "caselet": "A component has stable annual demand, fixed cost per order, constant lead time, no discounts, and known annual holding cost.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Economic order quantity: Order a full year's demand in one lot, because a single ordering charge always beats twelve smaller ones.",
+    "Economic order quantity: Use a newsvendor critical ratio to set the recurring order size, since both models choose a quantity under cost pressure.",
+    "Economic order quantity: Treat the EOQ quantity as the reorder point itself, so replenishment starts when stock falls to that number.",
+    "Economic order quantity: Use EOQ for the lot size, and never let it answer the separate question of when replenishment must start."
+   ],
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory"
+   ]
+  },
+  {
+   "number": 42,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_bullwhip_apply",
+   "type": "mcq",
+   "caselet": "Retail sales move slightly, but retailer, wholesaler, and manufacturer orders show progressively larger peaks and troughs.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Bullwhip effect: Assume consumer demand moved by the same amount, and read the manufacturer's order swings as a true demand signal.",
+    "Bullwhip effect: Add more safety stock at every stage without addressing the order distortion that created the swings.",
+    "Bullwhip effect: Diagnose amplification across incentives, batching, forecast updates and lead times, since only a shared demand signal stops it.",
+    "Bullwhip effect: Ask each stage to optimise its own profit without sharing demand data, since local accountability serves the chain best."
+   ],
+   "termsAvailable": [
+    "bullwhip effect",
+    "supply chain coordination",
+    "demand amplification",
+    "order variability",
+    "safety inventory",
+    "upstream"
+   ]
+  },
+  {
+   "number": 43,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_eoq_cla2",
+   "type": "mcq",
+   "caselet": "A stem gives annual demand, a figure of ₹90 described as a cost, and a second figure of ₹4 also described as a cost.",
+   "stem": "How should the two cost figures be assigned to K and h?",
+   "prompt": null,
+   "options": [
+    "The larger figure is always the ordering cost, since a fixed charge levied per order exceeds the cost of holding a single unit for a year.",
+    "Only the units separate them: currency per order is K, currency per unit per year is h, and the size of the figure decides nothing.",
+    "Assign them either way and take whichever assignment produces the smaller order quantity, which is the safer policy.",
+    "The figure quoted first is K, because a stem states the fixed cost before the variable one."
+   ],
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory"
+   ]
+  },
+  {
+   "number": 44,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_leads_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains LEADS index?",
+   "prompt": null,
+   "options": [
+    "LEADS index: It ranks countries rather than Indian states and union territories, so it cannot guide state-level policy.",
+    "LEADS index: It is a direct count of warehouse square footage and nothing more, so a state improves its score by building sheds.",
+    "LEADS index: LEADS uses stakeholder perceptions and operating indicators to compare state logistics strengths and improvement areas and encourage policy competition.",
+    "LEADS index: A high score proves every firm in the state has low logistics cost, since the index measures realised firm outcomes."
+   ],
+   "termsAvailable": [
+    "LEADS",
+    "Logistics Performance Index",
+    "perception-based survey",
+    "pillars"
+   ]
+  },
+  {
+   "number": 45,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_bullwhip_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Bullwhip effect is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Bullwhip effect to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Bullwhip effect has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Bullwhip effect improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Small local reactions compound across stages; coordination and shared demand signals stop defensive decisions from amplifying uncertainty.",
+    "Bullwhip effect works in exactly the same way independently of the people, the constraints, and the decisions that surround it."
+   ],
+   "termsAvailable": [
+    "bullwhip effect",
+    "supply chain coordination",
+    "demand amplification",
+    "order variability",
+    "safety inventory",
+    "upstream"
+   ]
+  },
+  {
+   "number": 46,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_multimodal_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Multimodal cost trade-off?",
+   "prompt": null,
+   "options": [
+    "Multimodal cost trade-off: Mode choice compares end-to-end transport, handling, port, inventory, lot-size, and service effects—not freight rate alone.",
+    "Multimodal cost trade-off: The lowest line-haul price is always the lowest total logistics cost, because freight dominates every other line.",
+    "Multimodal cost trade-off: Handling and first or last-mile legs can be ignored, because both modes incur them equally.",
+    "Multimodal cost trade-off: Large sea lots never create inventory cost, since the goods are paid for only when they are sold."
+   ],
+   "termsAvailable": [
+    "standing charges",
+    "cycle stock",
+    "buffer stock",
+    "pipeline stock",
+    "cycle time",
+    "payload"
+   ]
+  },
+  {
+   "number": 47,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_coldstore_apply",
+   "type": "mcq",
+   "caselet": "An efficient operator considers a new city with different commodity flows, trader relationships, seasonal demand, and refrigerated transport needs.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Cold-storage expansion: Test local utilisation, commodity fit, economics and financing first, because cold capacity pays only when all of them hold.",
+    "Cold-storage expansion: Copy the current facility exactly, because management skill transfers automatically to any market the operator enters.",
+    "Cold-storage expansion: Decide from the price of available land alone, treating construction cost as the whole of the expansion question.",
+    "Cold-storage expansion: Assume the new capacity stays full throughout the year, so a single peak-season utilisation figure can carry the case."
+   ],
+   "termsAvailable": [
+    "cold storage",
+    "capacity utilization",
+    "equity to debt ratio",
+    "geographical diversification"
+   ]
+  },
+  {
+   "number": 48,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_coldstore_cla1",
+   "type": "mcq",
+   "caselet": "An operator runs four profitable cold storage facilities in one city, in a sector where rivals have closed on rising electricity costs, weak capacity utilisation and poor management. A candidate city offers the largest addressable demand of the three under consideration, but would need him to run the site through a manager he could visit rarely.",
+   "stem": "What should carry most weight in the decision?",
+   "prompt": null,
+   "options": [
+    "Whether the site can be run the way the existing four are, because his advantage was never the location.",
+    "The subsidy available in the candidate state, since it is the one input that directly reduces the investment needed at the outset.",
+    "The size of the addressable demand in that city, which is what ultimately determines the revenue a facility can earn.",
+    "The prevailing land price, because in a capital-intensive sector it is the largest single cost of entry."
+   ],
+   "termsAvailable": [
+    "cold storage",
+    "capacity utilization",
+    "equity to debt ratio",
+    "geographical diversification"
+   ]
+  },
+  {
+   "number": 49,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_leads_cla1",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "What does LEADS measure, and how is it collected?",
+   "prompt": null,
+   "options": [
+    "Export performance by state, compiled from customs declarations and port throughput records filed by each state government each year.",
+    "The financial performance of the largest logistics companies, ranked from the audited accounts they file at the end of each year.",
+    "Road and rail infrastructure quality, measured directly by survey teams sent out to each state in turn every second year.",
+    "Logistics efficiency across all states and union territories, collected as a perception survey of service providers and users."
+   ],
+   "termsAvailable": [
+    "LEADS",
+    "Logistics Performance Index",
+    "perception-based survey",
+    "pillars"
+   ]
+  },
+  {
+   "number": 50,
+   "section": "A",
+   "marks": 1,
+   "id": "sclm_akshaya_cla1",
+   "type": "mcq",
+   "caselet": "One vehicle carries containers for fourteen to eighteen schools on a fixed route. The meal has to still be hot at the last stop.",
+   "stem": "How should the vehicle be loaded?",
+   "prompt": null,
+   "options": [
+    "Last in, first out: the first school on the route is loaded last, never by what is convenient at the kitchen.",
+    "In the order the containers left the kitchen, which keeps the staging area and the loaded vehicle in step all morning.",
+    "By school size, largest first, so the biggest deliveries are cleared while the food is at its hottest.",
+    "Heaviest containers first, so the load is stable and the vehicle can be driven at route speed."
+   ],
+   "termsAvailable": [
+    "centralized kitchen",
+    "last in, first out",
+    "route number",
+    "container rack systems"
+   ]
+  },
+  {
+   "number": 51,
+   "section": "B",
+   "marks": 4,
+   "id": "sclm_smoothing_numeric",
+   "type": "numeric",
+   "caselet": "A regional warehouse forecast 1,200 units for last month. Actual demand came in at 1,320 units. The smoothing constant in use is 0.2.",
+   "stem": "A regional warehouse forecast 1,200 units for last month. Actual demand came in at 1,320 units. The smoothing constant in use is 0.2.",
+   "prompt": "What is the forecast for this month?",
+   "unit": "units",
+   "termsAvailable": [
+    "smoothing constant",
+    "forecast error"
+   ]
+  },
+  {
+   "number": 52,
+   "section": "B",
+   "marks": 4,
+   "id": "sclm_eoq_numeric",
+   "type": "numeric",
+   "caselet": "A distributor expects steady annual demand of 12,000 units. Each order placed costs ₹600 regardless of its size. Holding one unit for a year costs ₹40.",
+   "stem": "A distributor expects steady annual demand of 12,000 units. Each order placed costs ₹600 regardless of its size. Holding one unit for a year costs ₹40.",
+   "prompt": "What order quantity minimises the total of ordering and holding cost?",
+   "unit": "units",
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory"
+   ]
+  },
+  {
+   "number": 53,
+   "section": "B",
+   "marks": 4,
+   "id": "sclm_eoq_numeric_2",
+   "type": "numeric",
+   "caselet": "A distributor settles on an order quantity of 600 units against annual demand of 12,000 units, an ordering cost of ₹600 per order, and a holding cost of ₹40 per unit per year.",
+   "stem": "A distributor settles on an order quantity of 600 units against annual demand of 12,000 units, an ordering cost of ₹600 per order, and a holding cost of ₹40 per unit per year.",
+   "prompt": "What is the total annual ordering plus holding cost at that order quantity?",
+   "unit": "₹",
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory"
+   ]
+  },
+  {
+   "number": 54,
+   "section": "B",
+   "marks": 4,
+   "id": "sclm_newsvendor_numeric",
+   "type": "numeric",
+   "caselet": "A seasonal item sells for ₹900 and costs ₹500 to buy. There is one buying opportunity, and anything unsold at the end of the season clears at ₹200.",
+   "stem": "A seasonal item sells for ₹900 and costs ₹500 to buy. There is one buying opportunity, and anything unsold at the end of the season clears at ₹200.",
+   "prompt": "What is the critical ratio? Give it as a decimal.",
+   "unit": null,
+   "termsAvailable": [
+    "single period",
+    "underage",
+    "overage",
+    "salvage",
+    "critical ratio",
+    "expected payoff"
+   ]
+  },
+  {
+   "number": 55,
+   "section": "C",
+   "marks": 2,
+   "id": "sclm_m2_match",
+   "type": "match",
+   "caselet": null,
+   "stem": "Match each prompt to the precise explanation or action.",
+   "prompt": null,
+   "rows": [
+    "Exponential smoothing — principle",
+    "Sales and operations planning — principle",
+    "Exponential smoothing — decision",
+    "Sales and operations planning — decision"
+   ],
+   "choices": [
+    "Move the next forecast upward by 25% of the 20-unit error, giving 105.",
+    "Exponential smoothing updates the old forecast by a fraction alpha of the latest forecast error; a larger alpha reacts more strongly to recent demand.",
+    "Use a level plan and draw inventory down, since a forecast becomes a decision only when reconciled with capacity cost.",
+    "S&OP balances forecast demand with capacity, utilisation, inventory, backlog, and outsourcing over a medium-term horizon."
+   ],
+   "termsAvailable": [
+    "smoothing constant",
+    "forecast error",
+    "aggregate planning",
+    "chase strategy",
+    "flexibility strategy",
+    "level strategy",
+    "backlog",
+    "sales and operations planning"
+   ]
+  },
+  {
+   "number": 56,
+   "section": "C",
+   "marks": 2,
+   "id": "sclm_m3_match",
+   "type": "match",
+   "caselet": null,
+   "stem": "Match each prompt to the precise explanation or action.",
+   "prompt": null,
+   "rows": [
+    "Economic order quantity — principle",
+    "Newsvendor decision — principle",
+    "Economic order quantity — decision",
+    "Newsvendor decision — decision"
+   ],
+   "choices": [
+    "Use a critical-ratio decision based on underage and overage costs to select the demand quantile.",
+    "The newsvendor model chooses a one-time quantity under uncertain demand by balancing the cost of one unit too few against one unit too many.",
+    "EOQ chooses an order size that balances annual ordering cost against holding cost under stable demand, lead time, price, and no-shortage assumptions.",
+    "Use EOQ for the lot size, and never let it answer the separate question of when replenishment must start."
+   ],
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory",
+    "single period",
+    "underage",
+    "overage",
+    "salvage",
+    "critical ratio",
+    "expected payoff"
+   ]
+  },
+  {
+   "number": 57,
+   "section": "C",
+   "marks": 2,
+   "id": "sclm_m4_match",
+   "type": "match",
+   "caselet": null,
+   "stem": "Match each prompt to the precise explanation or action.",
+   "prompt": null,
+   "rows": [
+    "Tailored sourcing portfolio — principle",
+    "Bullwhip effect — principle",
+    "Tailored sourcing portfolio — decision",
+    "Bullwhip effect — decision"
+   ],
+   "choices": [
+    "A sourcing portfolio matches responsive sources to volatile, high-value or time-sensitive items and efficient sources to stable, predictable volume while managing disruption risk.",
+    "Use a low-cost source for stable volume and a faster one for the volatile item, never one cost objective for every item.",
+    "The bullwhip effect is the amplification of order variability upstream even when end-customer demand changes only modestly.",
+    "Diagnose amplification across incentives, batching, forecast updates and lead times, since only a shared demand signal stops it."
+   ],
+   "termsAvailable": [
+    "tailored sourcing",
+    "onshore",
+    "nearshore",
+    "offshore",
+    "sourcing risk",
+    "multiple sourcing",
+    "bullwhip effect",
+    "supply chain coordination",
+    "demand amplification",
+    "order variability",
+    "safety inventory",
+    "upstream"
+   ]
+  }
+ ]
+}

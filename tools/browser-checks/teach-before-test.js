@@ -106,36 +106,65 @@
 
   var results = [];
   var violations = [];
+  var skipped = [];
 
-  for (var setNumber = 1; setNumber <= 10; setNumber += 1) {
-    if (!startSet(setNumber)) continue;
+  /* A saved run resumes straight into the practice screen, so the dashboard never
+   * renders and every set button this looks for is absent. The loop below then finds
+   * nothing, skips silently, and the result reads `ok: true` over three checks instead
+   * of twelve — which is how this check reported clean while measuring a third of what
+   * it claims to. Say so instead. */
+  if (!document.getElementById("dashboard-screen").classList.contains("active")) {
+    skipped.push("dashboard was not on screen — the app resumed into a saved run, so no set could be started");
+  }
+
+  /* Nine, not ten. Set 10's card is labelled `P` rather than a number (LAW-62's note),
+     so it has never matched this loop — and now that an unreached route makes the
+     result not-ok, asking for it would fail the check on a known absence rather than
+     on a defect. It is reached through the builder instead. */
+  for (var setNumber = 1; setNumber <= 9; setNumber += 1) {
+    if (!startSet(setNumber)) { skipped.push("set " + setNumber + ": no matching set button"); continue; }
     var result = inspect((profile().active || {}).courseId || profile().selectedCourse, "set " + setNumber);
     results.push(result.where + ": " + result.items + " items, " + result.violations.length + " violations");
     violations = violations.concat(result.violations);
   }
 
-  // The mixed builder takes a different path into layeredQueue, so check it too.
-  var state = profile();
-  state.active = null;
-  state.lessonsRead = {};
-  write(state);
-  var mixed = Array.prototype.slice.call(document.querySelectorAll("button")).filter(function (b) {
-    return /Start this practice/.test(b.textContent || "");
-  })[0];
-  if (mixed) {
-    mixed.click();
-    var mixedResult = inspect((profile().active || {}).courseId || profile().selectedCourse, "mixed builder");
-    results.push(mixedResult.where + ": " + mixedResult.items + " items, " + mixedResult.violations.length + " violations");
-    violations = violations.concat(mixedResult.violations);
+  /* The builder takes a different path into layeredQueue, so check it too — once per
+   * preset. The 0 → 60 sweep matters most here: it is the only route that selects its
+   * own questions rather than going through `selectQuestionsFromPool`, and it is the
+   * one that puts every concept in the subject into a single run, so it owes the
+   * longest lesson list of anything the app builds. */
+  var toggle = document.getElementById("builder-toggle");
+  if (toggle && document.getElementById("practice-builder").hidden) toggle.click();
+  var presetCount = document.querySelectorAll("#builder-presets .preset-card").length;
+  for (var preset = 0; preset < presetCount; preset += 1) {
+    var state = profile();
+    state.active = null;
+    state.lessonsRead = {};
+    write(state);
+    if (document.getElementById("practice-builder").hidden) toggle.click();
+    var card = document.querySelectorAll("#builder-presets .preset-card")[preset];
+    var range = card.querySelector(".preset-range").textContent.trim();
+    card.click();
+    var start = document.getElementById("builder-start");
+    if (start.disabled) { skipped.push("builder " + range + ": start button disabled"); continue; }
+    start.click();
+    var presetResult = inspect((profile().active || {}).courseId || profile().selectedCourse, "builder " + range);
+    results.push(presetResult.where + ": " + presetResult.items + " items, " + presetResult.violations.length + " violations");
+    violations = violations.concat(presetResult.violations);
+    var leave = document.getElementById("leave-practice");
+    if (leave) leave.click();
   }
 
   if (saved === null) localStorage.removeItem(KEY); else localStorage.setItem(KEY, saved);
 
   return JSON.stringify({
-    ok: violations.length === 0,
+    /* Coverage is part of the verdict. A pass over three routes is not the pass this
+       check advertises, so anything it could not reach makes the result not-ok. */
+    ok: violations.length === 0 && skipped.length === 0,
     law: "LAW-47",
     checked: results,
     violations: violations,
+    skipped: skipped,
     note: "Profile restored. Re-load the page before continuing to use the app."
   }, null, 2);
 })();

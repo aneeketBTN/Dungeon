@@ -52,6 +52,53 @@
     return value && !/[.!?]$/.test(value) ? value + "." : value;
   }
 
+  /* Attribute a claim to a named concept (CONTENT-RULES R3, "on-topic-ness").
+   *
+   * R3 says every option must name the concept, or none may. Measured 2026-08-15, the
+   * families below broke it in the same way: the correct answer named the concept and
+   * the distractors named somebody else's, so "keep the option that mentions the thing
+   * this set is called" paid 82-100%. The rule is `argmax`, so a distractor that names
+   * the concept less densely than the correct answer is still eliminated — presence is
+   * not enough, the density has to match.
+   *
+   * Two directions were measured before either was written. Stripping each concept's
+   * name out of its own prose reaches the same numbers and was REJECTED: it produces
+   * "Lean this idea asks whether real people will take a real action" and takes
+   * `connect` from 0.5% to 26.6%. Moving a metric by destroying the sentence is the
+   * mirror of watering down a distractor.
+   *
+   * This is the other direction, and it is `connect`'s — the one family already at
+   * 0.5%, which reaches it by naming the concept in EVERY option. Attaching a
+   * neighbour's claim to this concept does not make the claim true; it makes it a
+   * specific false claim ABOUT this concept, which is what a distractor is for.
+   *
+   * The colon form is deliberate. It is grammatical for any head noun, singular or
+   * plural ("Decision errors: A Type I error scales..."), and it changes no letter
+   * case, so acronyms survive — an earlier draft lower-cased the first word and
+   * produced "cAC carries no decision meaning". */
+  function attributeTo(text, fromName, toName) {
+    var body = String(text || "").trim().replace(/\.$/, "");
+    if (!body) return "";
+    /* The label goes on EVERY option unchanged, including the one that already opens on
+       its own name. An earlier draft pronounced that self-reference as "It" to avoid
+       "Strategic fit: Strategic fit aligns the supply chain...", and it cost more than
+       it bought: it fires on 11 of 64 summaries, all of them correct answers, so it
+       shortened the correct option by three or four words while its distractors kept
+       theirs. That is an R3 LENGTH cue traded for an R3 NAME cue — SPMS crossed the
+       validator's rank-3 threshold and earned a new warning the moment it was added.
+       Uniform labelling adds the same words to every option, so length ranks are
+       preserved exactly and the redundant reading on those 11 is the price. */
+    return toName + ": " + ensureSentence(body);
+  }
+
+  /* Every option in one set, rewritten as a claim about the same concept, so no option
+     can be picked out by which one mentions the syllabus. `entries` is [{text, owner}]. */
+  function attributedChoices(entries, conceptName) {
+    return entries.map(function (entry) {
+      return attributeTo(entry.text, entry.owner, conceptName);
+    });
+  }
+
   function paralleliseOptions(question) {
     if (!Array.isArray(question.options) || question.options.length < 3 || typeof question.answer !== "number") return;
     var correctLength = wordCount(question.options[question.answer]);
@@ -96,6 +143,7 @@
       summary: concept.summary || seed.explanation || seed.link,
       confusions: concept.confusions || wrong,
       caselet: concept.caselet || applicationSeed.caselet || brgsaCaseOverrides[concept.id] || applicationSeed.stem,
+      caseEvidence: concept.caseEvidence || "",
       application: concept.application || (Array.isArray(applicationSeed.options) ? applicationSeed.options[applicationSeed.answer] : seed.explanation),
       applicationWrong: concept.applicationWrong || applicationWrong,
       bridge: concept.bridge || seed.link || seed.explanation,
@@ -424,11 +472,185 @@
       return;
     }
     if (Array.isArray(question.options)) {
-      question.diagnoses = diagnoseGroup(question.options, question.answer, self, provenance, hints, authored, question.id);
+      /* Same rule the msq branch states, for the same reason: a hand-written
+       * distractor is wrong in a specific way the generator cannot infer from
+       * provenance, so an authored diagnosis is kept and only a gap is filled.
+       * Generated questions carry none, so for them this is a no-op. */
+      var authoredHere = question.diagnoses || [];
+      var generated = diagnoseGroup(question.options, question.answer, self, provenance, hints, authored, question.id);
+      question.diagnoses = generated.map(function (diagnosis, index) {
+        if (index === question.answer) return null;
+        var own = authoredHere[index];
+        return (own && (own.why || own.label)) ? own : diagnosis;
+      });
       question.misconceptions = question.diagnoses.map(function (diagnosis) {
         return diagnosis ? diagnosis.tag : null;
       });
     }
+  }
+
+  /* Where the correct answer sits.
+   *
+   * `rotateOptions` spreads the generated families evenly — SPMS, IBM and SCLM
+   * each land on a flat 25/25/25/25. It only governs questions the generator
+   * builds. Authored questions carry the answer wherever the author put it, and
+   * an author reaches for the same slot far more often than chance does: BRGSA's
+   * hand-written MCQs place it at index 1 in 85% of cases, with a run of fifteen
+   * consecutive. Three test students independently noticed and answered the rest
+   * of that section by pressing B without reading it. One scored 40/40 that way.
+   *
+   * So the guard belongs after every path that can add a question rather than
+   * inside any one of them. This runs last, over the whole course.
+   *
+   * The permutation is a hash of the question id and nothing else, so it is the
+   * same on every reload, every build and every device. That matters beyond
+   * tidiness: the frozen evidence pack, a learner's saved responses and the
+   * answer keys quoted in the ledgers all address options by index, and an order
+   * that drifted between sessions would silently invalidate them.
+   *
+   * Everything index-addressed moves together — the answer, the parallel
+   * `diagnoses` array and the `misconceptions` derived from it — because the
+   * option-level diagnosis is the best writing in the product and it is attached
+   * by position. Reordering options without it would leave every wrong answer
+   * explained as though it were a different wrong answer. */
+  function idHash(value) {
+    var text = String(value);
+    var hash = 2166136261;
+    for (var i = 0; i < text.length; i += 1) {
+      hash ^= text.charCodeAt(i);
+      hash = (hash * 16777619) >>> 0;
+    }
+    return hash >>> 0;
+  }
+
+  // Fisher-Yates driven by a small LCG, seeded from the id alone.
+  function permutationFor(seedText, length) {
+    var seed = idHash(seedText) || 1;
+    var order = [];
+    for (var i = 0; i < length; i += 1) order.push(i);
+    for (var j = length - 1; j > 0; j -= 1) {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      var k = seed % (j + 1);
+      var held = order[j];
+      order[j] = order[k];
+      order[k] = held;
+    }
+    return order;
+  }
+
+  function reorder(list, order) {
+    if (!Array.isArray(list)) return list;
+    return order.map(function (from) { return list[from]; });
+  }
+
+  /* `order` lists the old index now sitting at each new position, so the inverse
+   * is what an answer index needs: where did old slot n end up. */
+  function inverseOf(order) {
+    var where = [];
+    order.forEach(function (from, to) { where[from] = to; });
+    return where;
+  }
+
+  function debiasGroup(holder, seedText) {
+    if (!Array.isArray(holder.options) || holder.options.length < 2) return;
+    var order = permutationFor(seedText, holder.options.length);
+    var where = inverseOf(order);
+    holder.options = reorder(holder.options, order);
+    if (Array.isArray(holder.diagnoses)) holder.diagnoses = reorder(holder.diagnoses, order);
+    if (Array.isArray(holder.misconceptions) && holder.misconceptions.length === order.length) {
+      holder.misconceptions = reorder(holder.misconceptions, order);
+    }
+    if (typeof holder.answer === "number" && holder.answer >= 0) holder.answer = where[holder.answer];
+    if (Array.isArray(holder.answers)) {
+      holder.answers = holder.answers.map(function (index) { return where[index]; }).sort(function (a, b) { return a - b; });
+    }
+  }
+
+  function debiasOptionOrder(question) {
+    if (question.type === "match") {
+      /* Rows keep their order; only the choice list is permuted. The four-label
+       * matching items ran slot1=B, slot2=C, slot3=D, slot4=A in all four
+       * subjects, which is a single fixed key a learner meets sixteen times. */
+      if (!Array.isArray(question.choices) || question.choices.length < 2) return;
+      var order = permutationFor(question.id + ":choices", question.choices.length);
+      var where = inverseOf(order);
+      question.choices = reorder(question.choices, order);
+      question.rows.forEach(function (row) {
+        if (Array.isArray(row.diagnoses)) row.diagnoses = reorder(row.diagnoses, order);
+        if (typeof row.answer === "number" && row.answer >= 0) row.answer = where[row.answer];
+      });
+      return;
+    }
+    if (question.type === "boss") {
+      (question.steps || []).forEach(function (step, index) {
+        debiasGroup(step, question.id + ":step" + index);
+      });
+      return;
+    }
+    if (question.type === "cloze" || question.type === "case-cloze") {
+      (question.blanks || []).forEach(function (blank, index) {
+        debiasGroup(blank, question.id + ":blank" + index);
+      });
+      return;
+    }
+    debiasGroup(question, question.id);
+  }
+
+  /* Shuffling alone is not enough.
+   *
+   * A per-question shuffle removes the authored bias but re-introduces drift:
+   * over 52 questions a fair shuffle lands one letter near 38% often enough to
+   * be worth guessing, and "pick C" is the same exploit as "pick B" with a
+   * smaller edge. The generated families were already exactly flat before any of
+   * this, and that property is worth keeping rather than trading for randomness.
+   *
+   * So the correct answer's slot is dealt, not rolled: each option-count group
+   * gets equal numbers of every slot, and which question receives which slot is
+   * a deterministic shuffle of that dealt list. Exactly uniform, and with no
+   * cycle to read off — the failure mode of a plain rotation.
+   *
+   * Distractor order still comes from debiasOptionOrder above; this only decides
+   * where the correct one sits, by swapping it into place. */
+  function swapInto(holder, target) {
+    var from = holder.answer;
+    if (from === target) return;
+    var limit = Math.max(from, target);
+    function swap(list) {
+      if (!Array.isArray(list) || list.length <= limit) return;
+      var held = list[from];
+      list[from] = list[target];
+      list[target] = held;
+    }
+    swap(holder.options);
+    swap(holder.diagnoses);
+    if (Array.isArray(holder.misconceptions) && holder.misconceptions.length === holder.options.length) {
+      swap(holder.misconceptions);
+    }
+    holder.answer = target;
+  }
+
+  function balanceAnswerPositions(course) {
+    var groups = {};
+    Object.keys(course.questions).sort().forEach(function (id) {
+      var question = course.questions[id];
+      // Single-answer MCQs only. Multi-select has no one slot to balance, and the
+      // nested shapes are dealt with per holder by debiasOptionOrder.
+      if (question.type && question.type !== "mcq") return;
+      if (Array.isArray(question.answers)) return;
+      if (!Array.isArray(question.options) || typeof question.answer !== "number") return;
+      if (question.options.length < 2) return;
+      var size = question.options.length;
+      groups[size] = groups[size] || [];
+      groups[size].push(question);
+    });
+    Object.keys(groups).forEach(function (key) {
+      var list = groups[key];
+      var size = Number(key);
+      var targets = list.map(function (ignored, index) { return index % size; });
+      var order = permutationFor(course.id + ":slots:" + size, targets.length);
+      targets = order.map(function (from) { return targets[from]; });
+      list.forEach(function (question, index) { swapInto(question, targets[index]); });
+    });
   }
 
   function addQuestion(course, question) {
@@ -462,8 +684,13 @@
          cue: "Ask which skill produced the evidence. Design evidence answers desirability; engineering evidence answers feasibility."}},
      explanation: "Each area needs a different skill — design for desirability, engineering for feasibility, business for viability. A prototype proves you can build it, which is the feasibility question; viability asks whether it can profit or fund the business."},
 
+    /* The case is the doctor's own answers, and deliberately not the three labels the
+     * lecture puts on them — naming the functional, emotional, and social layers in the
+     * case would hand over the option set. The cost line is there because the lecture
+     * uses it to show where price actually enters, which is the fourth option's trap. */
     {concept: "spms_jtbd", source: "SPMS-M01-L10", node: "Jobs to be done",
-     stem: "In the drilling-machine example, select every need the purchase actually serves.",
+     caselet: "A doctor has just finished her residency. She walks into a hardware shop and asks for a drilling bit and a drilling machine.\n\nAsk her what she is hanging, and it turns out to be photos — one photo, really: her MD certificate. Ask why it has to go up on the wall, and the answer moves again. Her patients see it. New ones especially, she says, want to know they are with a qualified doctor. Ten years of her life went into earning it, and she is proud of it.\n\nWhat she is buying is a drill bit, a frame, and a hole in the wall.",
+     stem: "Select every need this purchase actually serves.",
      options: [
        "Functional — the certificate has to go onto the wall",
        "Emotional — pride in more than a decade of study",
@@ -477,10 +704,15 @@
        4: {tag: "Invented a fourth layer", label: "Added a need the framework does not name",
          why: "This choice assumed repetition is one of the needs stacked inside a purchase. The lecture names three — functional, emotional, social. A certificate framed once is not a habitual purchase at all, which is what makes this a fourth layer imported from elsewhere.",
          cue: "Count the layers the lecture names. If your answer needs a fourth, it is not this framework."}},
-     explanation: "The example stacks a functional, an emotional, and a social need in one purchase. Cost enters only through customer value, which is benefit minus cost — it is not one of the layers of the job."},
+     explanation: "This one purchase stacks a functional, an emotional, and a social need. Cost enters only through customer value, which is benefit minus cost — it is not one of the layers of the job."},
 
+    /* The case gives the three populations and the two constraints that separate them,
+     * and never names TAM, SAM or SOM — mapping the funnel onto them is the question.
+     * The two wrong options are claims about the method, so they stay unanswerable from
+     * the case alone and the item still needs the framework. */
     {concept: "spms_tamsam", source: "SPMS-M02-L04", node: "TAM, SAM, and SOM",
-     stem: "Select every statement that matches the lecture's Zerodha market sizing.",
+     caselet: "Zerodha is an online investment platform. In principle anyone, anywhere, who wants to buy exchange traded securities or mutual funds could use it.\n\nIn practice not everyone can. Cross-border investing carries its own regulatory framework, which leaves the platform serving online retail investors in India.\n\nAnd not all of those are available either. Twenty to forty lakh of them already have a broker — Kotak Securities, ICICI Direct, HDFC Securities. What is genuinely open is the cost-conscious investor who would rather save the brokerage and do their own research.",
+     stem: "Select every statement that sizes this market correctly.",
      options: [
        "TAM is every retail investor who could use the product, worldwide",
        "Regulation on cross-border investing narrows SAM to online retail investors in India",
@@ -697,8 +929,13 @@
          cue: "Expand the letters before assuming a name is geographic."}},
      explanation: "MoSCoW is an acronym — must, should, could, won't — used as a filter rather than a ranking. Naming what won't be done is the half that makes scope control real."},
 
+    /* This one had the least to stand on: the lecture's ride-hailing bucket assignment
+     * is not in the lesson either, so before the case existed the item could only be
+     * answered by remembering the transcript. The case lists the candidates and the
+     * release window and assigns nothing — the sorting is the question. */
     {concept: "spms_priority", variant: "buckets", source: "SPMS-M07-L01", node: "MoSCoW and RICE prioritisation",
-     stem: "For the ride-hailing product the lecture uses, select every capability it places in must have.",
+     caselet: "A ride-hailing product has three months before its first release, and everyone wants something in it — customers, investors, the sales team.\n\nThe team writes down what it could build. Booking a ride. Taking payment. GPS tracking. Driver ratings, so a rider can choose between two drivers. Multi-stop planning, so they can drop someone off on the way. In-car entertainment that follows whoever is driving.\n\nSix candidates, one release, and MoSCoW to sort them: must have, should have, could have, won't have.",
+     stem: "Select every capability that belongs in must have for this release.",
      options: [
        "Booking a ride",
        "Payments",
@@ -732,8 +969,14 @@
          cue: "Look for the axis. Without one, nothing has been sequenced."}},
      explanation: "A roadmap translates strategy into releases along a time axis, over a three-to-five-year horizon. WhatsApp's iPhone-first launch, with Android around 2011, is the lecture's worked sequence."},
 
+    /* The case has to carry the "they knew" fact, because that fact is the whole hinge:
+     * the two wrong readings here are an oversight and a resourcing accident, and a
+     * learner who cannot see what the team knew is guessing between three stories rather
+     * than reading one. The framework option is not in the case, so it still costs
+     * something to get right. */
     {concept: "spms_roadmap", variant: "sequence", source: "SPMS-M07-L04", node: "Product roadmap",
-     stem: "Select every statement that reads WhatsApp's evolution the way the lecture does.",
+     caselet: "WhatsApp started in 2009, into a market that already had Skype, Yahoo Messenger, ICQ and plenty more.\n\nIt launched on iPhone. Android followed around the middle of 2011 — and the team already knew that a large share of the people it wanted were on Android, in Asia.\n\nThe rest arrived on its own schedule: message history search around 2011, chat backup after 2012. The company was acquired in 2014 still without end-to-end encryption.",
+     stem: "Select every statement that reads this release history the way the course does.",
      options: [
        "Launching on iPhone first shows the team did not know where its users were",
        "The Android delay was a resourcing accident rather than a decision",
@@ -855,6 +1098,14 @@
         difficulty: 3,
         variantFamily: item.concept + "_msq",
         boss: false,
+        /* Four of these items are read off a case the lecture tells rather than a
+         * framework it states, and they used to name that case without showing it
+         * ("In the drilling-machine example…"). A caselet is the field the question
+         * surface already renders above the stem, and the examiner renders too — which
+         * matters more here than anywhere else, because Section B is sat with no lesson
+         * in front of it. Items that state a rule rather than read a case leave it
+         * null and render exactly as before. */
+        caselet: item.caselet || null,
         stem: item.stem,
         options: item.options,
         answers: item.answers,
@@ -914,7 +1165,10 @@
      link: "The order size fixes how often you reorder, which is what the next decision — when to place the order — is built on."},
 
     {concept: "sclm_eoq", source: "SCLM-M03-L03", node: "Economic order quantity",
-     stem: "The same distributor settles on an order quantity of 600 units against annual demand of 12,000 units, an ordering cost of ₹600 per order, and a holding cost of ₹40 per unit per year.",
+     /* Was "The same distributor…", pointing back at a distributor that exists only in
+        a different question — and on a paper the draw can order any way it likes, so
+        "the same" was frequently the first mention a candidate ever saw. LAW-61. */
+     stem: "A distributor settles on an order quantity of 600 units against annual demand of 12,000 units, an ordering cost of ₹600 per order, and a holding cost of ₹40 per unit per year.",
      prompt: "What is the total annual ordering plus holding cost at that order quantity?", unit: "₹", answer: 24000, tolerance: 50,
      nearMisses: [
        {value: 36000, tolerance: 50, tag: "Charged holding on the whole order", label: "Held the full order quantity all year",
@@ -982,10 +1236,1307 @@
     });
   }
 
-  function addTermCloze(course, concept, data) {
-    var choices = choiceSet(data.name, nearbyConcepts(course, concept).map(function (entry) { return entry.name; }), stableNumber(concept.id));
+  /* ---------------------------------------------------------------------
+   * Course-assessment items — one concept, several genuinely different questions.
+   *
+   * WHY THESE EXIST
+   * Two findings close here at once. **F-08**: SCLM Section A draws 50 questions
+   * from a pool of 52, so the examiner has no slack, every paper question is
+   * reachable in Learn, and there has never been a reserved slice. **F-06**:
+   * "eliminate every option carrying only/all/every/never/always" pays 36–44%
+   * against 25% chance, because in the generated families the correct answer is a
+   * hedged definition and the distractors are over-claims.
+   *
+   * The bank was sparse because it treated roughly three question families per
+   * concept as a ceiling. These subjects are theoretical, so one idea supports many
+   * different questions — a definition, a scenario, a numeric case, a judgement
+   * call are four questions about one concept, not one question four times.
+   *
+   * SOURCE, AND WHAT WAS AND WAS NOT TAKEN FROM IT
+   * The owner's own course assessments (`docs/course-material/`, gitignored) are the
+   * reference for style, coverage and difficulty — **not** a bank to copy. Nothing
+   * here is one of their questions. What was taken is the shape: BRGSA's are
+   * scenario-led ("A founder wants to avoid spending months building a product
+   * before discovering whether anyone will pay…"), SCLM's mix definition, small
+   * computation and case reading. Every item is written against a lecture that
+   * already has a lesson, so LAW-47 holds with no extra scheduling work, and every
+   * fact is one the lesson states.
+   *
+   * ON ABSOLUTES, MEASURED BEFORE AUTHORING
+   * The instruction was to state correct answers with the absolutes the course
+   * itself uses. Measured against the real assessments, the course barely uses them
+   * there: correct options carry one 3% of the time in the SCLM paper and 7.5% in
+   * the BRGSA paper, against 12% in this bank — **lower than what is being fixed**.
+   * So copying their phrasing cannot close the gap, and the honest rule is narrower:
+   * where the lecture's own claim is genuinely universal, say it universally, and do
+   * not manufacture one where it is not. "Shorter lead times, higher variety, more
+   * channels, higher service levels and faster innovation ALL raise implied demand
+   * uncertainty" is the lecture's sentence. "His advantage was NEVER the location"
+   * is the lecture's sentence. Thirteen of these thirty-two correct answers carry an
+   * absolute because thirteen of the underlying claims are absolute.
+   *
+   * The other half of the same fix is on the distractor side and is not a watering
+   * down: a wrong option here is often a *hedged, plausible, wrong* claim rather
+   * than an over-claim, so eliminating the absolutes no longer eliminates the
+   * distractors. Over-claims that are load-bearing are kept as over-claims —
+   * "transportation speed alone determines performance" needs "alone" or it stops
+   * being the error it exists to catch.
+   *
+   * WHY THIS SITS IN THIS FILE RATHER THAN A NEW ONE
+   * `t6_integrated.js` was added as its own file and was missing from four load
+   * lists at once, so eight scenarios shipped unvalidated for weeks (F-47). Every
+   * list that loads this file already loads it. The ids all end `_cla<n>` so the
+   * tranche stays greppable, and `tools/measure-absolute-bias.js` reports it as its
+   * own family.
+   *
+   * All of this prose is new and is WAITING_OWNER_CONTENT_ACCEPTANCE.
+   * ------------------------------------------------------------------- */
+  var COURSE_ASSESSMENT_ITEMS = {SCLM: [
+    /* ---- Module 1 ---------------------------------------------------- */
+    {concept: "sclm_fit", source: "SCLM-M01-L04", node: "Strategic fit", mode: "definition",
+     stem: "What raises the implied demand uncertainty a supply chain has to absorb?",
+     options: [
+       "Shorter lead times, wider variety, more channels, higher service levels and faster innovation all raise it.",
+       "Only the variability of the underlying demand raises it, since the promise made about it is a marketing matter.",
+       "Nothing raises it except a forecast error large enough to cause a stockout in the current period.",
+       "It rises when suppliers are chosen on price rather than on reliability, and falls again when they are not."
+     ],
+     answer: 0,
+     wrong: {
+       1: {tag: "Confused demand variation with implied uncertainty", label: "Read the demand, not the promise",
+           why: "Implied demand uncertainty is the uncertainty the chain faces because of the promise it made, not how variable demand is. A product with perfectly stable demand still creates high implied uncertainty if you promise it in two hours.",
+           cue: "Ask what was promised before asking how demand moves. The promise is what the chain has to absorb."},
+       2: {tag: "Treated uncertainty as an outcome", label: "Named a consequence as the cause",
+           why: "A stockout is one of the things high implied uncertainty makes likelier — higher forecast error, more stockouts, more markdowns. It is downstream of the uncertainty, not what creates it.",
+           cue: "Separate what raises the uncertainty from what the uncertainty then costs you."},
+       3: {tag: "Substituted a driver decision", label: "Named a sourcing choice instead",
+           why: "Choosing suppliers on price is a sourcing decision that sets where the chain sits between efficiency and responsiveness. It changes what the chain can absorb, not how much the promise asks it to absorb.",
+           cue: "Implied uncertainty is set by the customer promise. Driver choices decide whether you can meet it."}
+     },
+     explanation: "Implied demand uncertainty is the uncertainty the supply chain must absorb because of the promise it made. Shorter lead times, higher variety, more channels, higher service levels and faster innovation all raise it, which is why a stable-demand product promised in two hours still needs responsiveness.",
+     link: "The level of implied uncertainty is what decides whether responsiveness or efficiency is the right design, so it is read first."},
+
+    {concept: "sclm_fit", source: "SCLM-M01-L04", node: "Strategic fit", mode: "scenario",
+     caselet: "A value retailer promises low prices and dependable availability on a stable range of staples. Its distribution runs on full truckloads, long production batches and suppliers selected mainly on landed cost. A new leadership team wants to add two-hour delivery in eight cities without changing sourcing, transport or the range.",
+     stem: "What does this proposal do to the retailer's strategic fit?",
+     options: [
+       "It leaves fit intact, because the range and the suppliers are unchanged and the promise is what customers judge.",
+       "It improves fit, since faster service is a stronger customer promise than dependable availability at a low price.",
+       "It breaks fit, because a two-hour promise raises implied uncertainty while the chain is still built for efficiency.",
+       "It has no bearing on fit, which is decided by the competitive strategy on its own rather than by the chain."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Held the chain constant and the promise variable", label: "Changed the promise and called the chain unaffected",
+           why: "The promise is exactly what the chain has to be built for. Changing it while holding sourcing, transport and range fixed is what a loss of fit is; the unchanged half is the problem, not the reassurance.",
+           cue: "When one of the two halves moves, check the other. Fit is a relation, not a property of either side."},
+       1: {tag: "Ranked promises instead of matching them", label: "Treated one promise as better than another",
+           why: "There is no ranking of customer promises in this framework. A value retailer promising low prices and availability can be in perfect fit; the question is whether the chain is built for the promise, not which promise is superior.",
+           cue: "The framework never asks which promise is better. It asks whether this chain matches this promise."},
+       3: {tag: "Dropped the supply chain side", label: "Made fit a property of strategy alone",
+           why: "Fit is alignment between the competitive strategy and the supply chain strategy. A competitive strategy on its own cannot be in or out of fit — there is nothing for it to be aligned with.",
+           cue: "Name both sides before judging fit. If you have only named one, you have not tested anything."}
+     },
+     explanation: "A two-hour promise shortens lead times sharply, which raises implied demand uncertainty. Full truckloads, long batches and price-selected suppliers are efficiency choices that suit low implied uncertainty. The chain would then be optimised for a different promise than the one being sold, which is what a loss of fit looks like from the inside.",
+     link: "The repair is either to rebuild distribution and sourcing for the promised responsiveness, or to change the promise."},
+
+    {concept: "sclm_drivers", source: "SCLM-M01-L06", node: "Six supply-chain drivers", mode: "definition",
+     stem: "Why is pricing treated as a supply chain driver rather than only as a marketing decision?",
+     options: [
+       "Because a lower price reduces the cost of goods sold and therefore the cost the chain has to carry.",
+       "Because it shapes when demand arrives, so it changes volumes and replenishment needs the chain must serve.",
+       "Because prices are set by the cost of transportation and facilities rather than by what customers will pay.",
+       "Because discounting is the fastest way to clear inventory once a facility decision has gone wrong."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Confused price with cost", label: "Read the price as an input cost",
+           why: "Price is what the firm charges, not what it pays. Lowering it does not reduce the cost of goods sold; it changes revenue and, more importantly here, the timing and size of demand.",
+           cue: "Ask which side of the transaction the number sits on before reasoning about it."},
+       2: {tag: "Reversed the direction", label: "Made cost set the price",
+           why: "The claim runs backwards. Pricing is a driver because of what it does to demand timing, not because transport and facility costs determine it — and cost-plus pricing is not what the lecture describes.",
+           cue: "A driver is a lever the manager pulls. Ask what pulling it changes, not what set it."},
+       3: {tag: "Named a symptom", label: "Reduced pricing to a clearance tactic",
+           why: "Clearing stock with a discount is one use of price, but it does not explain why pricing is one of the six. Pricing express delivery higher sorts customers by what they value, and a promotion is a supply chain event that moves volumes and replenishment.",
+           cue: "Ask what the lever does routinely, not what it can rescue occasionally."}
+     },
+     explanation: "Pricing is one of the six drivers because it shapes when demand arrives. Pricing express delivery higher sorts customers by what they value; a promotion is a supply chain event that changes volumes and replenishment needs. Facilities, inventory, transportation, information, sourcing and pricing together set the balance between responsiveness and efficiency.",
+     link: "Information is often the largest driver because it improves every other one, and pricing is the one most often left out of the list."},
+
+    {concept: "sclm_drivers", source: "SCLM-M01-L06", node: "Six supply-chain drivers", mode: "judgement",
+     caselet: "A grocery chain cuts inventory hard across its regional warehouses to release working capital. Six weeks later, working capital is down as planned and lost sales have risen sharply in the same regions.",
+     stem: "Which reading of this outcome is most defensible?",
+     options: [
+       "The inventory reduction was executed badly; the same cut done properly would have released capital without lost sales.",
+       "The inventory driver was moved without moving the transport and information that would let replenishment keep up.",
+       "The lost sales are a forecasting failure, because the cut would have been safe against a more accurate forecast.",
+       "Inventory should be raised back to its previous level, since the trial shows this chain cannot run on less stock."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Blamed execution for a structural trade", label: "Called an expected trade-off an implementation fault",
+           why: "The drivers interact, so a decision on one usually forces a change in at least one other. Cutting inventory improves working capital and raises lost sales unless transport and information can replenish faster. That is the trade, not a botched rollout.",
+           cue: "Before blaming execution, ask which second driver the first one was going to move."},
+       2: {tag: "Reached for forecasting", label: "Explained a driver interaction as forecast error",
+           why: "A better forecast would help, but the mechanism here is that cover was removed without shortening replenishment. Attributing it to forecasting skips the driver that actually changed.",
+           cue: "Name the lever that moved before naming the analysis that might have softened it."},
+       3: {tag: "Reverted instead of rebalancing", label: "Undid the decision rather than completing it",
+           why: "Restoring stock returns to the original position and learns nothing. The framework's point is that the right combination depends on the competitive strategy and the uncertainty faced, so the useful move is to pair the inventory cut with faster transport or better information.",
+           cue: "A driver decision is a set, not a single dial. Ask what has to move with it, not whether to move it back."}
+     },
+     explanation: "Cutting inventory improves working capital, but lost sales rise unless transportation and information can replenish faster. The drivers interact, so a decision on one usually forces a change in at least one other, and there is no best combination in general — the right one depends on the competitive strategy and the uncertainty being faced.",
+     link: "Information is often the largest driver precisely because it is what lets the others be set more aggressively."},
+
+    /* ---- Module 2 ---------------------------------------------------- */
+    {concept: "sclm_smoothing", source: "SCLM-M02-L06", node: "Exponential smoothing", mode: "definition",
+     stem: "In exponential smoothing, what is the smoothing constant actually deciding?",
+     options: [
+       "How many past periods are averaged before the mean of that window is taken as the next forecast.",
+       "The proportion of the last forecast error carried into the next forecast, so every forecast is the previous one corrected.",
+       "The width of the tolerance band inside which a forecast counts as having been accurate.",
+       "How far ahead the forecast can be projected before it must be recalculated from scratch."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Substituted a moving average", label: "Described a different method",
+           why: "A moving average is built from a window of past actuals. Exponential smoothing never re-forecasts from scratch: it takes the previous forecast and corrects it by part of its own error.",
+           cue: "Look for the previous forecast in the formula. If your method does not use it, it is not this one."},
+       2: {tag: "Confused alpha with a tolerance", label: "Read the constant as an accuracy threshold",
+           why: "Alpha is a proportion applied to the error, not a band around the answer. It decides how much of the miss is carried forward, which is a responsiveness choice.",
+           cue: "Alpha multiplies the error. A tolerance would be compared with it."},
+       3: {tag: "Confused alpha with a horizon", label: "Read the constant as a forecast horizon",
+           why: "Nothing in Ft = Ft−1 + α(At−1 − Ft−1) refers to how far ahead you are forecasting. Alpha decides how much of the last error to absorb, period by period.",
+           cue: "Read what alpha is multiplied by. It is the error term, not a time index."}
+     },
+     explanation: "Ft = Ft−1 + α(At−1 − Ft−1). Every forecast is the previous forecast plus a proportion of the error it made. Alpha is that proportion, which makes it a choice about responsiveness: a high alpha chases recent actuals and reacts fast to a real shift and to noise, a low alpha stays smooth and is slow to notice a genuine change.",
+     link: "Because alpha is a judgement about why demand moves, the same data can justify two different forecasts."},
+
+    {concept: "sclm_smoothing", source: "SCLM-M02-L06", node: "Exponential smoothing", mode: "numeric",
+     caselet: "A depot forecast 500 units for last month. Actual demand came in at 560. The smoothing constant in use is 0.25.",
+     stem: "What is this month's forecast?",
+     options: ["485 units", "515 units", "530 units", "560 units"],
+     answer: 1,
+     wrong: {
+       0: {tag: "Subtracted the correction", label: "Moved the forecast away from the error",
+           why: "Actual demand came in above the forecast, so the error is positive and the next forecast has to move up towards it. 500 + 0.25 × (560 − 500) = 515.",
+           cue: "Check the direction before the arithmetic. Actual above forecast means the new forecast rises."},
+       2: {tag: "Halved the gap", label: "Used an alpha the stem did not give",
+           why: "530 is 500 plus half the 60-unit error, which is alpha = 0.5. The stem gives 0.25, so only a quarter of the miss is carried forward.",
+           cue: "Substitute the stated alpha rather than the one the gap looks like it wants."},
+       3: {tag: "Used the actual as the forecast", label: "Let last month's outcome become the prediction",
+           why: "Taking the actual is exponential smoothing with alpha set to 1, which carries the whole error — including all the noise — into the next period.",
+           cue: "If your answer equals the actual, you have used alpha = 1 whatever the question stated."}
+     },
+     explanation: "Ft = Ft−1 + α(At−1 − Ft−1) = 500 + 0.25 × (560 − 500) = 500 + 15 = 515 units. Ft−1 is the previous forecast, not the previous actual; reversing the two is the error the arithmetic will never reveal.",
+     link: "A quarter of the miss is carried forward because alpha is a deliberate choice about how much of a surprise to believe."},
+
+    {concept: "sclm_sop", source: "SCLM-M02-L12", node: "Sales and operations planning", mode: "definition",
+     stem: "Which lever separates a chase strategy from a level strategy in aggregate planning?",
+     options: [
+       "Chase varies capacity to follow demand; level holds production steady and lets inventory absorb the swings.",
+       "Chase plans over a shorter horizon than level, which is why it is used for seasonal products.",
+       "Chase is used by service firms and level by manufacturers, which is the whole of the distinction.",
+       "Chase relies on subcontracting while level relies on overtime, and neither uses inventory as a buffer."
+     ],
+     answer: 0,
+     wrong: {
+       1: {tag: "Confused strategy with horizon", label: "Made the difference a matter of timing",
+           why: "Both strategies plan across the same 3-to-18-month aggregate horizon. What separates them is which buffer absorbs the mismatch — capacity for chase, inventory for level.",
+           cue: "Ask which lever moves, not how far ahead the plan runs."},
+       2: {tag: "Turned a tendency into the definition", label: "Read an example as the rule",
+           why: "Services often suit chase and commodities often suit level, but that is a consequence of which buffer is cheap in each setting, not the definition. Most real firms run a hybrid.",
+           cue: "An industry is where a strategy tends to fit. It is not what the strategy is."},
+       3: {tag: "Mixed up the levers", label: "Assigned both strategies to capacity",
+           why: "Subcontracting and overtime are both capacity moves, so this describes two versions of chase. Level's defining move is holding production and workforce steady while stock or backlog absorbs the swings.",
+           cue: "If both halves of your answer change capacity, you have not found the level strategy."}
+     },
+     explanation: "Chase uses capacity — hiring, shifts, overtime, subcontracting — so production follows demand. Flexibility uses utilisation, holding installed capacity steady while hours vary. Level uses inventory: production and workforce stay steady and stock or backlog absorbs the swings. Which fits is a question about which buffer is cheap in that industry.",
+     link: "Level is dangerous in fashion or short-life electronics, where the inventory buffer obsoletes or forces markdowns."},
+
+    {concept: "sclm_sop", source: "SCLM-M02-L12", node: "Sales and operations planning", mode: "scenario",
+     caselet: "Ahead of the festive season a packaged food brand's marketing team plans a large promotion, operations plans stable production to avoid overtime, procurement plans a bulk packaging buy, and finance plans to hold working capital down. Each plan is signed off inside its own function.",
+     stem: "What is the failure this situation describes?",
+     options: [
+       "One of the four functions has misread the demand forecast, and the other three are correct exactly as they stand.",
+       "The promotion should be cancelled, because a supply chain cannot support a demand spike it did not create.",
+       "Every function is right on its own terms, and the firm has four defensible plans where it needs one agreed plan.",
+       "Working capital targets should always outrank promotional plans, since inventory is the most expensive buffer."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Looked for a wrong function", label: "Assumed one plan must be the error",
+           why: "Nothing in the four plans is a mistake. The promotion is genuine revenue, stable production genuinely is cheaper, bulk buying genuinely lowers unit cost and lower working capital genuinely is healthier. The failure is that they were made separately.",
+           cue: "When every plan defends itself, stop looking for the wrong one and look for the missing agreement."},
+       1: {tag: "Removed the conflict instead of resolving it", label: "Cancelled the demand rather than planning for it",
+           why: "S&OP exists to answer what promotion can be supported without breaking service levels, not to rule promotions out. The output is one committed plan checked against real capacity and supply constraints.",
+           cue: "Ask what size of promotion the chain can carry before asking whether to run one."},
+       3: {tag: "Ranked the functions", label: "Made one function's objective the tie-breaker",
+           why: "Standing rules about which function wins reproduce the problem one level up. S&OP aligns the demand plan, the supply plan and the financial plan into one answer rather than deciding in advance whose number matters most.",
+           cue: "A cross-functional process is not a hierarchy. Look for the shared plan, not the senior objective."}
+     },
+     explanation: "S&OP is a cross-functional process, not a meeting. Without it each function optimises its own objective and the chain wins on one metric while losing on another. Every plan here is right on its own terms, which is exactly why four defensible plans are worse than one agreed plan checked for feasibility against real capacity and supply constraints.",
+     link: "The output is a single committed demand, supply and financial plan, which is what makes the promotion size a decision rather than a surprise."},
+
+    /* ---- Module 3 ---------------------------------------------------- */
+    {concept: "sclm_eoq", source: "SCLM-M03-L03", node: "Economic order quantity", mode: "numeric",
+     caselet: "A retailer sells 8,000 units of a stable line each year. Placing an order costs ₹250 whatever its size, and holding one unit for a year costs ₹10.",
+     stem: "What order quantity minimises the total of ordering and holding cost?",
+     options: ["283 units", "400 units", "632 units", "800 units"],
+     answer: 2,
+     wrong: {
+       0: {tag: "Dropped the 2 under the root", label: "Left the factor of 2 out of the formula",
+           why: "283 is the root of D·K/h. The 2 comes from average cycle stock being Q/2 rather than Q — you hold half an order on average across the cycle, not all of it.",
+           cue: "The 2 is not decoration. Leaving it out makes the answer low by a factor of about 1.41."},
+       1: {tag: "Divided demand by a round number", label: "Chose a convenient order size",
+           why: "400 is a tenth of annual demand, which is a reasonable-looking policy and not the one that minimises cost. EOQ is fixed by D, K and h together, not by a round number of orders.",
+           cue: "Substitute into √(2DK/h) rather than reasoning about how many orders feel right."},
+       3: {tag: "Swapped the ordering and holding costs", label: "Put the costs in the wrong places",
+           why: "Using ₹10 as the ordering cost and ₹250 as the holding cost gives 800. K and h are told apart by their units: K is currency per order, charged once however large the order; h is currency per unit per year.",
+           cue: "Read the units before substituting. Per order and per unit per year cannot swap places."}
+     },
+     explanation: "EOQ = √(2DK/h) = √(2 × 8,000 × 250 ÷ 10) = √400,000 ≈ 632 units. The purchase cost drops out because it contains no Q at all, so it cannot affect which order quantity is cheapest.",
+     link: "The order size fixes how often you reorder, which is what the reorder-point decision is then built on."},
+
+    {concept: "sclm_eoq", source: "SCLM-M03-L03", node: "Economic order quantity", mode: "judgement",
+     caselet: "A stem gives annual demand, a figure of ₹90 described as a cost, and a second figure of ₹4 also described as a cost.",
+     stem: "How should the two cost figures be assigned to K and h?",
+     options: [
+       "The larger figure is always the ordering cost, since a fixed charge levied per order exceeds the cost of holding a single unit for a year.",
+       "Only the units separate them: currency per order is K, currency per unit per year is h, and the size of the figure decides nothing.",
+       "Assign them either way and take whichever assignment produces the smaller order quantity, which is the safer policy.",
+       "The figure quoted first is K, because a stem states the fixed cost before the variable one."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Used magnitude as the test", label: "Sorted the costs by size",
+           why: "Nothing fixes the relative size of an ordering cost and a unit-year holding cost; they measure different things. Both figures in an EOQ stem are costs, and only their units say which is which.",
+           cue: "A rule about which number is bigger is a rule about this stem, not about the formula."},
+       2: {tag: "Chose by outcome", label: "Picked the assignment with the answer you preferred",
+           why: "Swapping K and h changes the answer without producing anything that looks wrong, which is exactly why it has to be settled from the units rather than from the result. A smaller order quantity is not automatically safer either.",
+           cue: "Fix the mapping before computing. An answer cannot validate the assumption that produced it."},
+       3: {tag: "Used stem order as the test", label: "Read the sequence as the assignment",
+           why: "There is no convention about which cost a stem states first, and a real question will vary it. The unit is the only reliable signal.",
+           cue: "Read the unit attached to the number, not its position in the sentence."}
+     },
+     explanation: "D is annual demand in units per year, K is the fixed ordering cost in currency per order charged once regardless of size, and h is the annual holding cost in currency per unit per year, often modelled as i·C. Two of these are 'cost' and a stem will give you both; only the unit tells you which is which, which is where marks are actually lost.",
+     link: "Mapping before computing is the same discipline the newsvendor stem needs, where every clause is doing classification work."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L05", node: "Newsvendor decision", mode: "definition",
+     stem: "What does the critical ratio tell you, and what range can it take?",
+     options: [
+       "It is the ratio of underage to overage cost, and it rises without limit as margins improve.",
+       "It is the share of expected demand that has to be met to break even, and it lies somewhere between the unit cost and the selling price.",
+       "It is a share of total mismatch cost, so it always lies between 0 and 1 and sets how far up the demand distribution to order.",
+       "It is the probability that a season sells out, which is estimated from last season's actual sales."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Took the ratio of the two costs", label: "Compared the costs instead of taking a share",
+           why: "Cu ÷ Co can exceed 1, and a value above 1 cannot be a position in a demand distribution. The critical ratio is Cu ÷ (Cu + Co) — a share of the total mismatch cost.",
+           cue: "The critical ratio is a probability. Anything outside 0 to 1 is the wrong construction."},
+       1: {tag: "Confused it with break-even", label: "Read the ratio as a volume target",
+           why: "Break-even is about covering fixed cost with contribution. The critical ratio is built from underage and overage and answers a different question: how far up the demand distribution to order given one buying opportunity.",
+           cue: "Ask what the ratio is made of. If it is not Cu and Co, it is not the critical ratio."},
+       3: {tag: "Confused it with an estimate", label: "Treated the ratio as an observation",
+           why: "The ratio is computed from costs, not estimated from history. Past sales inform the demand distribution the ratio is then applied to, which is a separate input.",
+           cue: "Separate the ratio from the distribution it is used against."}
+     },
+     explanation: "Underage is Cu = P − C, the margin lost on a sale you could not fulfil. Overage is cost less salvage, what you lose on a unit that does not sell. The critical ratio is Cu ÷ (Cu + Co), a share of total mismatch cost, so it always falls between 0 and 1 and sets how far up the demand distribution to order.",
+     link: "High underage relative to overage means stockouts hurt more than leftovers, so you order generously; the reverse means you order cautiously."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L05", node: "Newsvendor decision", mode: "scenario",
+     caselet: "A buyer places one pre-season order for a printed festive range. Demand for the print is uncertain, there is no chance to reorder once the season starts, and unsold stock is cleared at well below cost afterwards.",
+     stem: "Which model does this description specify, and which clause settles it?",
+     options: [
+       "Economic order quantity, settled by the fact that stock is being ordered in a batch rather than continuously.",
+       "Exponential smoothing, settled by the uncertainty in demand, which is what a forecast exists to handle.",
+       "Aggregate planning, settled by the seasonal pattern, which is what a chase, flexibility or level strategy is chosen against each season.",
+       "The newsvendor model, settled by there being one buying opportunity with no replenishment and a salvage value below cost."
+     ],
+     answer: 3,
+     wrong: {
+       0: {tag: "Reached for EOQ", label: "Applied a repeating-order model to a single order",
+           why: "EOQ answers how much to order at a time when demand is steady and orders repeat. Here nothing repeats, so there is no ordering-cost-versus-holding-cost trade to make.",
+           cue: "EOQ needs a repeating order. One buying opportunity rules it out before any arithmetic."},
+       1: {tag: "Named a forecasting method", label: "Answered the demand question instead of the decision",
+           why: "Smoothing produces a demand estimate; it does not say how much to order under a one-shot decision with salvage. The uncertain demand is an input to the newsvendor decision, not the model itself.",
+           cue: "Ask whether the method outputs a quantity to order or a number to expect."},
+       2: {tag: "Matched on seasonality", label: "Classified by the season rather than the structure",
+           why: "Aggregate planning sets capacity, production and inventory across a 3-to-18-month horizon. It does not answer how many units of one uncertain-demand item to buy when there is a single order.",
+           cue: "Seasonality appears in several models. Classify on the ordering structure instead."}
+     },
+     explanation: "One buying opportunity means single period; uncertain demand means no fixed D; clearing below cost means leftover units have a salvage value under cost. That is the newsvendor signature, so the move is to build Cu and the overage cost and take the critical ratio.",
+     link: "Every clause in a stem like this is doing classification work, and reading them as scene-setting is how the wrong model gets applied."},
+
+    /* ---- Module 4 ---------------------------------------------------- */
+    {concept: "sclm_portfolio", source: "SCLM-M04-L04", node: "Tailored sourcing portfolio", mode: "scenario",
+     caselet: "A components buyer supplies two lines. Line A is a mature part with high volume and stable weekly demand. Line B is a new variant with uncertain demand and frequent design changes. The buyer wants to consolidate both onto one offshore supplier to simplify management.",
+     stem: "What does tailored sourcing say about that consolidation?",
+     options: [
+       "Consolidation is right, because a single supplier operating at scale lowers unit cost on both lines and simplifies coordination for the buying team.",
+       "Split them, because no single supplier suits every product: A fits a low-cost source and B needs a responsive one.",
+       "Move both onshore instead, since offshore sourcing is unsuitable wherever design changes are expected at all.",
+       "Keep both offshore but hold extra inventory of each, which covers the lead time without changing supplier."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Optimised for management simplicity", label: "Bought coordination with responsiveness",
+           why: "Consolidation does lower coordination effort and often unit cost. It also puts a variant with uncertain demand and frequent design changes on a long lead time with no engineering support nearby, which is what tailored sourcing exists to avoid.",
+           cue: "Ask what each product needs before asking what the buyer would prefer to manage."},
+       2: {tag: "Turned a factor into a ban", label: "Made offshore wrong in general",
+           why: "The lecture is explicit that this is not a rule that offshore is good or bad. An innovative product can be offshored if the firm modularises the design, freezes interfaces early and keeps final differentiation near the market.",
+           cue: "Align the choice with uncertainty, lead time and the cost of being wrong, rather than with a standing preference."},
+       3: {tag: "Hedged with the wrong instrument", label: "Used inventory against a design risk",
+           why: "Inventory is the simpler hedge for stable, low-value items that do not go obsolete. A variant with frequent design changes obsoletes exactly the stock being held, so the hedge does not match the risk.",
+           cue: "Match the hedge to the risk type: inventory for stable items, a second source for supply risk, contracts for price risk."}
+     },
+     explanation: "Tailored sourcing deliberately combines supplier types because different products need different strengths. A stable, mature, predictable line suits a low-cost source, possibly offshore, on long runs. A volatile line with frequent design changes suits a responsive source, onshore or nearshore, with smaller lots and more engineering support.",
+     link: "The same logic decides the hedge: multiple sourcing, inventory and contracts each cover a different kind of sourcing risk."},
+
+    {concept: "sclm_portfolio", source: "SCLM-M04-L04", node: "Tailored sourcing portfolio", mode: "judgement",
+     stem: "A firm qualifies a second supplier as a backup but routes no volume to it. What is the most likely consequence?",
+     options: [
+       "The backup stops investing and drifts out of qualification, so the hedge is weaker than the paperwork suggests.",
+       "The backup becomes cheaper over time, since it competes for the volume it is not currently receiving.",
+       "Sourcing risk is fully removed, because a qualified supplier can be activated whenever the primary fails.",
+       "Procurement cost falls immediately, as the primary supplier lowers its price against a visible alternative."
+     ],
+     answer: 0,
+     wrong: {
+       1: {tag: "Assumed competitive pressure without volume", label: "Expected a supplier to compete for nothing",
+           why: "Competition needs something to win. A supplier receiving no volume and no prospect of it has little reason to hold price, and multiple sourcing carries qualification and coordination cost regardless.",
+           cue: "Ask what the second supplier is actually being paid to do before predicting how it will behave."},
+       2: {tag: "Treated a hedge as removal", label: "Read a backup as the elimination of risk",
+           why: "Multiple sourcing reduces sourcing risk; it does not remove it, and it is not free — qualification cost, coordination cost and possibly higher unit cost all apply. A backup that has not run recently may not be usable when it is needed.",
+           cue: "A hedge changes the size of a loss. It rarely removes the exposure."},
+       3: {tag: "Claimed an unearned saving", label: "Assumed leverage from an unused alternative",
+           why: "A price concession is possible but is not what the lecture identifies as the consequence to plan for. The named cost is that a backup receiving no volume will not invest or stay qualified.",
+           cue: "Ask what happens to the hedge itself, not what it might extract from the incumbent."}
+     },
+     explanation: "Multiple sourcing gives you a backup, but it is not free: qualification cost, coordination cost, possibly higher unit cost, and a backup that receives no volume will not invest or stay qualified. The hedge has to be maintained to remain a hedge.",
+     link: "Where the risk is obsolescence-free and low value, inventory is the simpler hedge; where it is price or exchange rate, contracts are."},
+
+    {concept: "sclm_bullwhip", source: "SCLM-M04-L05", node: "Bullwhip effect", mode: "definition",
+     stem: "Which statement describes the bullwhip effect correctly?",
+     options: [
+       "End-customer demand becomes more volatile as a product matures, which upstream stages then have to absorb.",
+       "Order variability grows at each stage moving upstream, so a modest change in retail sales becomes a large swing in supplier orders.",
+       "Retail prices swing more than wholesale prices, because retailers pass promotions through faster than manufacturers.",
+       "Replenishment lead times lengthen in proportion to the number of stages, which is what makes a long chain expensive to run and slow to refill."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Located the amplification in demand", label: "Made real demand the thing that swings",
+           why: "The bullwhip is about order variability, not demand variability. The defining observation is that consumer sales stay relatively stable while orders upstream swing hard.",
+           cue: "Separate how much real demand moves from how much a stage's orders move."},
+       2: {tag: "Substituted a pricing effect", label: "Described price rather than order flow",
+           why: "Promotions do move orders, and are one contributing cause, but the effect itself is amplification of order variability upstream, not of prices downstream.",
+           cue: "Ask what quantity is being amplified and in which direction it travels."},
+       3: {tag: "Substituted lead-time growth", label: "Named a consequence as the definition",
+           why: "Replenishment lead time does rise as congestion and priority shifts set in, and that raises safety stock again. It is one of the costs the bullwhip creates rather than what the bullwhip is.",
+           cue: "Distinguish the amplification itself from the costs it produces."}
+     },
+     explanation: "The bullwhip effect is demand amplification moving upstream: order fluctuations become larger and more volatile from retailer to wholesaler to manufacturer to supplier. The name is the analogy — a small movement of the handle creates a large movement at the tip.",
+     link: "Its costs run in one direction: manufacturing, inventory, lead time, transport and handling all rise while product availability falls."},
+
+    {concept: "sclm_bullwhip", source: "SCLM-M04-L05", node: "Bullwhip effect", mode: "scenario",
+     caselet: "A manufacturer's order book swings violently while the retailer's consumer sales barely move. Each stage in between says it is simply ordering against what it can see, and none has changed its ordering rule.",
+     stem: "What is the most defensible diagnosis?",
+     options: [
+       "One stage is over-ordering deliberately to protect itself, and the swings will settle once that stage has been identified.",
+       "The forecasts are poor; better forecasting at each stage would remove most of the amplification.",
+       "The chain is structural: delay, partial information and local ordering rules produce this even when every stage orders rationally.",
+       "Consumer demand must in fact be moving somewhere, since order swings this large cannot arise from genuinely stable end demand."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Looked for a culprit stage", label: "Explained a system property as one actor's behaviour",
+           why: "Every stage doing what is locally best is the mechanism, not an exception to it. The beer distribution game shows decision-makers creating oscillation even when the environment is simple and nobody is protecting themselves.",
+           cue: "When no stage has changed its rule, the explanation is in the structure connecting them."},
+       1: {tag: "Diagnosed a forecasting failure", label: "Treated amplification as prediction error",
+           why: "The lecture is explicit that this should not be diagnosed as bad forecasting. Information sharing and coordination attack the cause; better local forecasts against a distorted signal do not.",
+           cue: "Trace the signal before improving the estimate made from it."},
+       3: {tag: "Denied the observation", label: "Rejected the data to keep the model",
+           why: "Stable consumer sales alongside violent upstream orders is the observation the effect is named for — Procter & Gamble's Pampers chain is the standard instance. The gap is the finding, not an inconsistency.",
+           cue: "When the data contradicts the assumption, check whether the effect being described is exactly that contradiction."}
+     },
+     explanation: "The bullwhip is a structural outcome of multi-stage systems with delay, partial information and local decision rules. Incentives conflict across stages because ownership differs, and information is delayed and distorted as it moves, so no stage sees true end demand — only a transformed version of it.",
+     link: "That is why the repair is coordination and information sharing rather than a better forecast at any single stage."},
+
+    /* ---- Module 5 ---------------------------------------------------- */
+    {concept: "sclm_reengineering", source: "SCLM-M05-L06", node: "Supply-chain re-engineering", mode: "definition",
+     caselet: "Two customer groups buy one product. One group accepts delivery any time within a few days. The other needs it inside a narrow window each morning.",
+     stem: "Which customer-profile attribute separates these two groups?",
+     options: [
+       "Order size, since a customer needing a fixed time is usually buying in smaller quantities.",
+       "Cost sensitivity, because a narrow delivery window is a premium service and is priced as one.",
+       "Timeliness, which is a separate attribute from response time and is what decides the design here.",
+       "Reverse logistics needs, since tighter delivery windows generate more returns and repeat visits."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Reached for order size", label: "Named a different profile attribute",
+           why: "Order size is a real segmentation attribute — typically larger in B2B than B2C — but nothing in the description bears on quantity. The difference stated is about when delivery has to land.",
+           cue: "Match the attribute to what the description actually varies."},
+       1: {tag: "Reached for cost sensitivity", label: "Explained the requirement by its price",
+           why: "How a service is priced does not identify which attribute distinguishes the segments. The stated difference is a narrow band versus a window, which is timeliness.",
+           cue: "Segment on what the customer needs, then decide what it costs to serve."},
+       3: {tag: "Reached for reverse logistics", label: "Invented a consequence to fit an attribute",
+           why: "Reverse logistics covers returns, repairs and drop-and-pick. Nothing here suggests flows back from the customer, and a tight window does not by itself create them.",
+           cue: "Check that the attribute you name appears in the description rather than being implied by it."}
+     },
+     explanation: "Customer profile is a set of attributes you can segment on: value addition sought, order size, response time, timeliness, delivery location, reverse logistics needs, reliability and cost sensitivity. Timeliness — needing a product at a specific time or narrow band — is deliberately kept separate from response time, because collapsing the two throws away the distinction that decides the design.",
+     link: "Customer profile is the first of five motivations for re-engineering, alongside inventory, cost, facilitating technologies and the attitudes of the actors."},
+
+    {concept: "sclm_reengineering", source: "SCLM-M05-L06", node: "Supply-chain re-engineering", mode: "judgement",
+     caselet: "A redesign is presented with a costed inventory reduction, a technology plan and a clear customer segmentation. The distributors and transporters who would have to change how they work were not involved and have said they will not.",
+     stem: "How should the redesign be judged?",
+     options: [
+       "It is sound, since the analysis covers inventory, technology and customer profile, which are the substantive parts.",
+       "It fails on the attitudes of the actors, which is one of the five motivations and not a soft addition to them.",
+       "It should proceed and treat the objections as a change-management task, separate from the supply chain design and handled after approval.",
+       "It should be replaced with a cost-reduction plan, because costs are the only motivation that does not depend on cooperation."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Counted three of five", label: "Judged a redesign on its analysis alone",
+           why: "The five motivations are customer profile, inventory management, costs, facilitating technologies and attitudes. A redesign the actors will not cooperate with does not happen, whatever the other four say.",
+           cue: "Check the list you are working from is complete before declaring the analysis covered."},
+       2: {tag: "Deferred the constraint", label: "Moved the binding condition out of scope",
+           why: "Willingness to coordinate is listed as a motivation for re-engineering, not as an implementation detail after it. Treating it as a separate workstream is what leaves a design on paper.",
+           cue: "If a factor can stop the redesign happening, it belongs inside the design decision."},
+       3: {tag: "Retreated to cost", label: "Assumed one motivation escapes cooperation",
+           why: "Cost reduction across a chain also needs the actors to change what they do, so it is no more immune than the others. Retreating to cost avoids the objection rather than answering it.",
+           cue: "Ask whether the alternative plan needs the same people to act differently."}
+     },
+     explanation: "The five motivations for improving or re-engineering a chain are customer profile, inventory management, costs, facilitating technologies, and attitudes — the willingness of the different actors to coordinate and to empathise with one another. The last one is not decoration: a redesign that the actors will not cooperate with does not happen.",
+     link: "Facilitating technologies showed up repeatedly in the module's cases as the thing that made a redesign possible; attitudes are what make it real."},
+
+    {concept: "sclm_stockyard", source: "SCLM-M05-L13", node: "Stockyard location trade-off", mode: "judgement",
+     caselet: "A location model returns several stockyard configurations whose monthly totals fall between about ₹8.5 and ₹8.75 lakhs. One configuration requires two new sites; another uses one site that already operates and one new one.",
+     stem: "How should the recommendation be made?",
+     options: [
+       "Rank the configurations by cost and take the lowest, since that is what the model was built to identify.",
+       "Re-run the model with tighter data, because a recommendation cannot rest on differences this small.",
+       "Treat differences inside that band as noise at the available data accuracy and choose on managerial practicality.",
+       "Choose the configuration with the most sites, since more stocking points always shorten the secondary distance travelled."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Ranked inside the noise", label: "Read a difference the data cannot support",
+           why: "The model narrows the field; it never picks the winner. At the accuracy the data actually supports, totals between roughly ₹8.5 and ₹8.75 lakhs are not meaningfully different, so ranking them is reading precision that is not there.",
+           cue: "Ask what difference the data can actually resolve before ordering results by it."},
+       1: {tag: "Deferred the decision to better data", label: "Asked for precision instead of a judgement",
+           why: "The scenarios are what you reason with, and their spread is the finding. More precise inputs would not change that several configurations are equivalent on cost and different on practicality.",
+           cue: "When results cluster, the next question is a managerial one, not a modelling one."},
+       3: {tag: "Adopted a standing rule", label: "Preferred more sites regardless of the scenario",
+           why: "The number of stockyards moves with the constraints — a 350-kilometre secondary limit wants three, a minimum-throughput constraint collapses the current structure onto one. There is no standing rule that more is better.",
+           cue: "Let the constraints decide the count. That is what varying them was for."}
+     },
+     explanation: "The model returns solutions for scenarios rather than one answer, and most of them land inside a band too narrow for the data to separate. The recommendation is the practical one: use the site that already operates and open only the one that has to be new.",
+     link: "The same pattern repeats across states, and it is always a move away from the marketing office towards the demand geography."},
+
+    {concept: "sclm_stockyard", source: "SCLM-M05-L13", node: "Stockyard location trade-off", mode: "scenario",
+     caselet: "A network study finds that removing the secondary-distance limit gives the lowest total cost of any scenario. Overnight service to dealers requires secondary movement to stay inside 350 kilometres.",
+     stem: "What follows for the recommendation?",
+     options: [
+       "The unconstrained solution should be adopted, since it is the lowest total cost the model was able to find.",
+       "The 350-kilometre solution should be adopted and its extra cost read as the price of the overnight promise.",
+       "The service promise should be dropped, because the model has shown the constraint to be expensive.",
+       "The two results should be averaged, since the true optimum must lie somewhere between an unconstrained and a constrained run."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Ignored the binding constraint", label: "Took an infeasible optimum",
+           why: "The unconstrained run is naturally the cheapest because it is not required to do the job. A solution that cannot deliver overnight service is not a candidate for a network that has promised it.",
+           cue: "Check feasibility before cost. The cheapest infeasible answer is not an answer."},
+       2: {tag: "Reversed the decision order", label: "Let the model choose the service level",
+           why: "The service promise is a commercial decision that the model is asked to cost, not one it is asked to make. What the constrained run supplies is the price of keeping the promise, which is the input to that decision.",
+           cue: "Models price promises. They do not decide which promises to make."},
+       3: {tag: "Averaged incomparable runs", label: "Blended a feasible and an infeasible result",
+           why: "The two runs answer different questions — one with the overnight requirement, one without. There is no sense in which the truth lies between them.",
+           cue: "Only average results that answer the same question under the same constraints."}
+     },
+     explanation: "Adding the 350-kilometre secondary limit — what overnight servicing requires — moves the model onto a three-stockyard solution at a higher cost than the unconstrained run. That difference is what the overnight promise costs, which is exactly what a scenario model is for.",
+     link: "Constraints are added one at a time precisely so the cost of each commitment can be read off separately."},
+
+    /* ---- Module 6 ---------------------------------------------------- */
+    {concept: "sclm_coldstore", source: "SCLM-M06-L05", node: "Cold-storage expansion", mode: "judgement",
+     caselet: "An operator runs four profitable cold storage facilities in one city, in a sector where rivals have closed on rising electricity costs, weak capacity utilisation and poor management. A candidate city offers the largest addressable demand of the three under consideration, but would need him to run the site through a manager he could visit rarely.",
+     stem: "What should carry most weight in the decision?",
+     options: [
+       "The size of the addressable demand in that city, which is what ultimately determines the revenue a facility can earn.",
+       "The subsidy available in the candidate state, since it is the one input that directly reduces the investment needed at the outset.",
+       "Whether the site can be run the way the existing four are, because his advantage was never the location.",
+       "The prevailing land price, because in a capital-intensive sector it is the largest single cost of entry."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Ranked on demand alone", label: "Chose the biggest market",
+           why: "The evaluation deliberately runs on investment requirement, land prices, subsidy policies, infrastructure and competition — not market size alone. Demand that cannot be served at high utilisation with close involvement does not become profit.",
+           cue: "Ask what turns demand into margin in this business before ranking demand."},
+       1: {tag: "Elevated one input", label: "Let a subsidy decide the site",
+           why: "Subsidy policy is one of several factors, alongside investment requirement, land price, infrastructure and competition. It lowers entry cost without addressing whether the operating model survives the move.",
+           cue: "A subsidy changes what entry costs, not whether the business works once entered."},
+       3: {tag: "Elevated land price", label: "Optimised the cheapest input",
+           why: "Land price is on the list, but rivals in this sector failed on electricity costs, utilisation and management rather than on what they paid for land.",
+           cue: "Look at what actually killed comparable businesses before deciding which cost matters most."}
+     },
+     explanation: "His advantage was never the location. It was capacity utilisation, cost discipline and trader relationships, in a sector where rivals failed on electricity costs and weak management. A city that offers demand but prevents him reproducing high utilisation and close personal involvement removes the thing that made four facilities profitable.",
+     link: "At roughly 25:75 equity to debt, the borrowing still has to be serviced whether or not the operating model transfers."},
+
+    {concept: "sclm_coldstore", source: "SCLM-M06-L05", node: "Cold-storage expansion", mode: "scenario",
+     stem: "Why is geographical diversification treated as more than a way of reaching new demand in this sector?",
+     options: [
+       "Because it reduces business risk, in an industry with seasonal demand patterns and volatile profitability.",
+       "Because operating in several states removes the exposure to electricity costs that closed competing facilities.",
+       "Because a larger footprint qualifies an operator for central subsidies that a single-city operator cannot claim.",
+       "Because spreading sites lowers the equity share needed, since lenders price a diversified borrower differently."
+     ],
+     answer: 0,
+     wrong: {
+       1: {tag: "Claimed a risk was removed", label: "Turned diversification into immunity",
+           why: "Electricity cost is an operating exposure at every site. Spreading locations reduces dependence on one local market's swings; it does not remove a cost that applies wherever the facility runs.",
+           cue: "Ask which risk is local and which follows the business everywhere."},
+       2: {tag: "Invented a qualifying rule", label: "Attributed the move to a subsidy threshold",
+           why: "Subsidy policy varies by state and is one of the evaluation criteria for choosing a city. Nothing makes a multi-city footprint a condition of claiming it.",
+           cue: "Check whether the mechanism you are naming appears in the case at all."},
+       3: {tag: "Reached for financing", label: "Explained the strategy by the gearing",
+           why: "The equity-to-debt ratio sat near 25:75 across ventures, before and independent of any diversification. The stated purpose of spreading facilities is risk, not a change in how borrowing is priced.",
+           cue: "Separate what the strategy is for from what happened to be true of the balance sheet."}
+     },
+     explanation: "Cold storage is characterised by high operating costs, seasonal demand patterns and volatile profitability. Geographical diversification is meant to reduce business risk as much as to capture new demand, which is why the candidate cities are scored on investment requirement, land price, subsidy policy, infrastructure and competition rather than on demand alone.",
+     link: "The operating discipline that produced profit in one city is what has to survive the move, and that is a separate test from the scoring."},
+
+    {concept: "sclm_turnaround", source: "SCLM-M06-L07", node: "Transport turnaround", mode: "numeric",
+     caselet: "A rake cycle of 99 hours breaks down as loading 3.5 hours, idle before loading 7.5, waiting for a locomotive after loading 13, transit out 34, transit back 30, and unloading and readying about 9.75.",
+     stem: "Which element is the largest single inefficiency to attack, as opposed to the largest block of time?",
+     options: [
+       "Transit out at 34 hours, which is the largest element in the cycle and therefore the biggest prize.",
+       "Unloading and readying at about 9.75 hours, which is the element most directly under the plant's control.",
+       "Idle time before loading at 7.5 hours, which is pure waiting and adds nothing to the movement.",
+       "Waiting for a locomotive at 13 hours, which is detention created by the engine being reassigned elsewhere."
+     ],
+     answer: 3,
+     wrong: {
+       0: {tag: "Ranked by size, not by slack", label: "Attacked the largest number",
+           why: "Transit is the biggest element and is the movement itself — it is the distance being covered, not waste inside the cycle. Attacking it would need faster running, not a scheduling change.",
+           cue: "Separate time spent moving from time spent waiting before ranking targets."},
+       1: {tag: "Chose by controllability", label: "Picked the most convenient element",
+           why: "Unloading and readying is under the plant's control and is worth improving, but at about 9.75 hours it is smaller than the 13-hour detention and is doing productive work.",
+           cue: "Rank by recoverable hours, not by how easy the element is to reach."},
+       2: {tag: "Chose the smaller wait", label: "Found waiting but not the biggest waiting",
+           why: "Idle time before loading is genuine waiting and worth removing, but it is 7.5 hours against 13 hours of locomotive detention, which is the single largest inefficiency in the cycle.",
+           cue: "When two elements are both waste, compare their sizes before choosing."}
+     },
+     explanation: "The 13-hour wait for a locomotive after loading was the single largest inefficiency. The locomotive that delivered the empty rake was routinely reassigned to other railway operations, and neighbouring stations serving other industries were competing for the same engines.",
+     link: "That is what the engine-on-load system addresses: the locomotive stays attached instead of being detached and re-summoned."},
+
+    {concept: "sclm_turnaround", source: "SCLM-M06-L07", node: "Transport turnaround", mode: "judgement",
+     caselet: "A plant needs monthly despatch to rise from 52,000 tons to 70,000. Three routes are on the table: redesign wagons to carry more per trip, add rakes to make more trips, or cut the 99-hour rake cycle so the existing rakes make more trips.",
+     stem: "Why is the third route the one to take first?",
+     options: [
+       "Because it is the only route that increases throughput, the first two merely moving the same tonnage differently.",
+       "Because all of the extra throughput is already inside the existing cycle as waiting time, and the other two need capital and fresh stock.",
+       "Because railway agreements are easier to obtain than rolling stock, which makes it the fastest route to implement.",
+       "Because wagon redesign and extra rakes both raise fixed cost, and fixed cost is always the wrong lever in logistics whatever the throughput target."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Denied the alternatives work", label: "Claimed the other routes do nothing",
+           why: "Bigger loads per trip and more rakes both genuinely raise throughput. What separates them is that each needs capital expenditure and fresh stock, while the cycle route needs only a change to how the locomotive is scheduled.",
+           cue: "Compare what the options cost, not whether they work."},
+       2: {tag: "Assumed the agreement was easy", label: "Rated the route by how simple it looked",
+           why: "The agreement carried a three-hour loading window and a ₹3,800-per-hour penalty, and the trial still ran into engine withdrawals. An agreement on paper is not yet the practice.",
+           cue: "Read what the option commits you to before calling it the easy one."},
+       3: {tag: "Adopted a standing rule about cost", label: "Made fixed cost wrong in general",
+           why: "Nothing here says capacity should never be bought. The argument is specific: the throughput was already sitting inside the cycle as waiting time, so buying more assets pays for capacity you already have.",
+           cue: "Check whether the capacity is genuinely absent before deciding whether to buy it."}
+     },
+     explanation: "Alternatives one and two both need capital expenditure and fresh stock; the third needs only a change to how the locomotive is scheduled. Expected turnaround fell from 99 hours to about 80 and monthly trips rose from 21 to around 27 — roughly 12,000 additional tons a month, without new rolling stock.",
+     link: "Reading a cycle breakdown for where capacity already sits is the move; buying assets is what you do when it genuinely is not there."},
+
+    /* ---- Module 7 ---------------------------------------------------- */
+    {concept: "sclm_multimodal", source: "SCLM-M07-L06", node: "Multimodal cost trade-off", mode: "judgement",
+     caselet: "Sea transport lands a year's ore far below the rail cost, but moves the whole quantity in one or two shipments and therefore holds far more inventory. Several other options sit between the two on both counts.",
+     stem: "How should the inventory carrying cost be brought into the comparison?",
+     options: [
+       "Compute it for every option, since a ranking cannot be trusted until each of them has been costed on the same basis over the same period.",
+       "Leave it out, because carrying cost is an accounting charge rather than a cash cost of moving the material.",
+       "Compute it only for the option holding the most inventory: if even that still wins, no other option can overturn the ranking.",
+       "Apply a standard percentage to each option's transport cost, which keeps the comparison consistent across modes."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Costed everything", label: "Did the work the bound made unnecessary",
+           why: "Computing every option is not wrong, only unnecessary. The single-shipment option holds the most stock by construction, so its carrying cost is the largest any option could incur; if the worst case still wins, the rest cannot change the ranking.",
+           cue: "Ask whether a bound settles the question before costing every branch."},
+       1: {tag: "Excluded a real cost", label: "Treated inventory as free",
+           why: "Sea buys its transport saving by holding inventory — cycle stock averaging half the shipment, a month of buffer, and pipeline stock building at the loading end. Ignoring that is what makes the cheap mode look cheaper than it is.",
+           cue: "If an option's saving comes from holding more, the holding has to be priced."},
+       3: {tag: "Applied a flat rate", label: "Scaled inventory by transport spend",
+           why: "Carrying cost depends on how much stock each option holds and for how long, not on what its transport costs. A percentage of freight would charge the dearest mode the most while it is the cheapest mode that holds the stock.",
+           cue: "Price the inventory each option creates, not the freight bill it generates."}
+     },
+     explanation: "This is a bounding argument, not a shortcut. Evaluate the option carrying the most inventory — the whole year's requirement landed in one go — and if that still comes in below the dearer-to-move alternatives, stop. The same logic already removed the road variant on the inbound leg, which was dominated on cost with nothing else to weigh.",
+     link: "Cycle stock, buffer stock and pipeline stock are the three components that make a single large shipment expensive to hold."},
+
+    {concept: "sclm_multimodal", source: "SCLM-M07-L06", node: "Multimodal cost trade-off", mode: "definition",
+     stem: "What are standing charges in a chartered-shipping cost build-up?",
+     options: [
+       "The cost of hiring the vessel for the period, which accrues whether or not it is moving.",
+       "The port fees charged for a berth, which are levied once per call regardless of tonnage handled.",
+       "The demurrage that becomes payable when loading or unloading runs beyond the laytime agreed in the charter.",
+       "The fixed component of the barge operating cost, prorated across the days the barges are actually worked."
+     ],
+     answer: 0,
+     wrong: {
+       1: {tag: "Named a port charge", label: "Located the cost at the berth",
+           why: "Port fees are a separate line. Standing charges are the hire cost of the vessel across the whole cycle, which is why a longer cycle time raises them even if nothing else changes.",
+           cue: "Ask what the charge is for: the ship's time, or the port's service."},
+       2: {tag: "Named a penalty", label: "Confused hire with overrun",
+           why: "Demurrage is a penalty for exceeding agreed time. Standing charges accrue as a matter of course for the period the vessel is on hire, whether or not anything goes wrong.",
+           cue: "Separate what is always payable from what is payable only on an overrun."},
+       3: {tag: "Attached it to the barges", label: "Assigned the vessel's cost to the transfer craft",
+           why: "Barge operating cost is its own line and is prorated across the unloading days. Standing charges belong to the hired vessel and run across the full cycle.",
+           cue: "Trace each cost line to the asset it belongs to before naming it."}
+     },
+     explanation: "The sea option is assembled from fuel, loading, unloading, barge operating cost, and standing charges — the cost of hiring the vessel for the period. Because they accrue across the whole cycle, travel plus port time is what sets them, which is why cycle time rather than sailing time is the figure to work with.",
+     link: "Longer cycle time raises both the hire cost and the inventory held, which is why the two have to be evaluated together."},
+
+    {concept: "sclm_ports", source: "SCLM-M07-L07", node: "Ports and PPP", mode: "definition",
+     stem: "How does India's use of shipping compare with the global pattern?",
+     options: [
+       "India ships a smaller share of its trade by volume than the world average, but a larger share by value.",
+       "India ships over 95% of its trade by volume against a global 80%, but only 65% by value against a global 70%.",
+       "India's volume and value shares are both close to the global figures, so its port profile is unremarkable.",
+       "India ships almost all of its trade by sea on both measures at once, which is what distinguishes it from other large coastal economies."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Reversed both shares", label: "Inverted the comparison",
+           why: "It is the other way round on both measures. India is well above the global figure on volume and below it on value, which is what widens the gap between the two.",
+           cue: "Check the direction of each share separately before comparing them."},
+       2: {tag: "Flattened the difference", label: "Called a wide gap unremarkable",
+           why: "The gap between volume share and value share is much wider for India than globally, and the lecture poses that specifically as a question worth reflecting on.",
+           cue: "Compare the gap, not just each share against its own benchmark."},
+       3: {tag: "Collapsed value into volume", label: "Applied one share to both measures",
+           why: "Volume share is over 95%, but value share is 65% — below the global 70%. Treating them as the same number is exactly what hides the finding.",
+           cue: "Volume and value are different questions about the same cargo."}
+     },
+     explanation: "Globally, shipping moves 70% of trade by value and 80% by volume. India moves over 95% by volume and 65% by value, so the gap between the two is far wider than the global one. That points at what is being shipped — dense low-value bulk — rather than at how well it is being shipped.",
+     link: "Value share runs below volume share everywhere, because high-value goods can justify air or land; what is distinctive here is the size of the gap."},
+
+    {concept: "sclm_ports", source: "SCLM-M07-L07", node: "Ports and PPP", mode: "scenario",
+     stem: "What does the major/non-major split say about how Indian port capacity is governed?",
+     options: [
+       "Non-major ports are small feeder facilities, so the central government effectively governs national throughput along the whole coastline.",
+       "Non-major ports are state-driven and now handle roughly 46% of traffic, a share that has risen over the past decade.",
+       "The split is administrative only, since both categories are operated under one central concession framework and reported against a single standard.",
+       "Private operators are confined to the non-major ports, which is what has allowed that category to grow so quickly over the past decade."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Understated the non-major share", label: "Treated state ports as marginal",
+           why: "Non-major ports handled about 740 million tons against 854 for major ports — near a 46/54 split. The Gujarat Maritime Board alone accounts for 30% of national traffic.",
+           cue: "Check the tonnage before deciding which category is the small one."},
+       2: {tag: "Denied the governance difference", label: "Called the split purely administrative",
+           why: "Major ports are driven by the central government and non-major by state governments, which is a real difference in who sets policy and investment. Public private partnerships now run over 74% of traffic across both.",
+           cue: "Ask who drives each category before deciding the distinction is nominal."},
+       3: {tag: "Confined private operation", label: "Restricted PPP to one category",
+           why: "Adani Ports and Special Economic Zone operates in both major and non-major ports and carried about 28% of national port traffic. Private participation is not confined to the state-driven group.",
+           cue: "Check whether the operators named appear on both sides of the split."}
+     },
+     explanation: "Roughly 1,600 million tons moved through Indian ports in 2024-25. Major ports, driven by the central government, handled 854 million tons; non-major ports, driven by state governments, about 740 — a 46% share that has risen over the past decade. The public private partnership share is over 74%.",
+     link: "India's top seven ports carry more than half the national throughput, and the largest global port alone handles more than three-quarters of India's total."},
+
+    /* ---- Module 8 ---------------------------------------------------- */
+    {concept: "sclm_leads", source: "SCLM-M08-L01", node: "LEADS index", mode: "definition",
+     stem: "What does LEADS measure, and how is it collected?",
+     options: [
+       "Export performance by state, compiled from customs declarations and port throughput records filed by each state government each year.",
+       "The financial performance of the largest logistics companies, ranked from the audited accounts they file at the end of each year.",
+       "Logistics efficiency across all states and union territories, collected as a perception survey of service providers and users.",
+       "Road and rail infrastructure quality, measured directly by survey teams sent out to each state in turn every second year."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Confused it with trade statistics", label: "Read the index as an export measure",
+           why: "LEADS is about logistics efficiency, not export volume. Its stated purpose is to identify strengths and improvement areas in state-level logistics performance.",
+           cue: "Ask what the index is trying to change. LEADS exists to move state policy, not to count trade."},
+       1: {tag: "Confused states with firms", label: "Ranked companies rather than states",
+           why: "The unit of comparison is the state, because state governments control infrastructure, services and the regulatory context. Publishing a state-by-state comparison is what creates the competitive environment.",
+           cue: "Identify what is being ranked before deciding what the data must be."},
+       3: {tag: "Confused perception with direct measurement", label: "Made the original method an objective survey",
+           why: "The method is a perception-based survey capturing responses from logistics stakeholders. Objectively examinable measures, including secondary infrastructure and regulatory data, were added over the years rather than being the original design.",
+           cue: "Ask who is being asked. A perception index collects ratings, not measurements."}
+     },
+     explanation: "Logistics Ease Across Different States is an index evaluating logistics efficiency across Indian states, built as a perception-based survey of logistics service providers and users across all states and union territories. It exists because the central government's lever on state logistics is competition.",
+     link: "It builds on the World Bank's Logistics Performance Index, which runs the same idea across countries."},
+
+    {concept: "sclm_leads", source: "SCLM-M08-L01", node: "LEADS index", mode: "judgement",
+     caselet: "On the Logistics Performance Index a country scores 3.6 on timeliness and 3.0 on customs, on a 5.0 scale. Its rank is 47 on customs and 47 on infrastructure, against an overall rank of 38.",
+     stem: "What do the ranks add that the scores do not?",
+     options: [
+       "They show where other countries are clustered above, so they locate where improvement buys the most position.",
+       "They correct the reported scores for the different number of survey respondents each pillar happens to receive.",
+       "They convert the pillar scores onto one common scale, which the 5.0 ratings are not otherwise comparable on.",
+       "They indicate which of the six pillars are measured objectively, since only those pillars can be placed in a ranking."
+     ],
+     answer: 0,
+     wrong: {
+       1: {tag: "Invented a statistical correction", label: "Read the rank as an adjustment",
+           why: "A rank is a position among other countries, not a weighting or a correction. Nothing about it accounts for sample size.",
+           cue: "Ask what a rank is computed from: everyone else's scores, not this country's data quality."},
+       2: {tag: "Confused rank with normalisation", label: "Treated the scores as incomparable",
+           why: "The scores already share one 5.0 scale across pillars. What a rank adds is relative position, which is a different fact from the absolute level.",
+           cue: "A score is absolute; a rank is relative. Both are readable, and they say different things."},
+       3: {tag: "Tied ranking to measurement type", label: "Made ranking depend on objectivity",
+           why: "All six pillars are ranked, including the perception-based ones. How a pillar is measured does not decide whether a position among countries can be reported.",
+           cue: "Separate how a number was collected from what can be computed with it."}
+     },
+     explanation: "A score is absolute; a rank is relative to everyone else. Customs and infrastructure scores are not dramatically low, but ranks of 47 against an overall rank of 38 show other countries clustered above on exactly those pillars, which is where improvement buys the most position.",
+     link: "That is the same mechanism LEADS applies inside India — publishing a state-by-state comparison is what creates the competition."},
+
+    {concept: "sclm_akshaya", source: "SCLM-M08-L03", node: "Akshaya Patra meal logistics", mode: "scenario",
+     caselet: "One vehicle carries containers for fourteen to eighteen schools on a fixed route. The meal has to still be hot at the last stop.",
+     stem: "How should the vehicle be loaded?",
+     options: [
+       "Heaviest containers first, so the load is stable and the vehicle can be driven at route speed.",
+       "By school size, largest first, so the biggest deliveries are cleared while the food is at its hottest.",
+       "In the order the containers left the kitchen, which keeps the staging area and the loaded vehicle in step all morning.",
+       "Last in, first out: the first school on the route is loaded last, never by what is convenient at the kitchen."
+     ],
+     answer: 3,
+     wrong: {
+       0: {tag: "Optimised for the vehicle", label: "Loaded for stability rather than for unloading",
+           why: "Load stability matters, but the sequence is dictated by the unloading order. Time spent digging for the right container at one school is time the rest of the load spends cooling.",
+           cue: "Ask what the loading sequence is for. Here it is the unloading sequence, not the drive."},
+       1: {tag: "Ranked by delivery size", label: "Sequenced by quantity instead of by route",
+           why: "Container sizes are already matched to each school's quantity. Ordering by size cuts across the route sequence, so a large early school and a large late school end up beside each other.",
+           cue: "Sequence by where a stop falls on the route, not by how much it takes."},
+       2: {tag: "Followed the kitchen", label: "Let production order set delivery order",
+           why: "This is exactly the convenience the design rejects. Rotis are made in one building while rice and vegetables are cooked in another, so kitchen order and route order have no reason to agree.",
+           cue: "Staging is where production order is turned into route order. That is what it is for."}
+     },
+     explanation: "Cooked food goes into containers sized to each school's quantity, labelled with school name and route number, then staged near the loading platforms in route-wise sequence. The loading sequence is dictated by the unloading sequence, never by what is convenient at the kitchen.",
+     link: "The fleet split works on the same margin: owned vehicles carry insulation and container racks, hired vehicles carry neither."},
+
+    {concept: "sclm_akshaya", source: "SCLM-M08-L03", node: "Akshaya Patra meal logistics", mode: "judgement",
+     caselet: "An automated rotimaking machine is rated at 40,000 rotis an hour and delivers closer to 35,000. Atta arrives as a rectangular sheet and the rotis cut from it are circular.",
+     stem: "What does the shortfall point to?",
+     options: [
+       "A maintenance problem, since a machine running below its rated capacity is by definition not being serviced adequately by its contractor.",
+       "Alignment issues and rejected rotis that return for reuse, with the circular cut from a rectangular sheet leaving unused portions.",
+       "An under-specified machine, so the answer is a second line rated above the required throughput.",
+       "A staffing shortfall, because a rated capacity assumes a trained operator standing at every station along the whole line."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Assumed a maintenance cause", label: "Read any shortfall as poor upkeep",
+           why: "A rated capacity is what the machine can do under ideal conditions. Alignment and rejects account for the difference here, and rejected rotis go back for reuse rather than being lost.",
+           cue: "Ask what the rating assumes before treating a shortfall as a fault."},
+       2: {tag: "Bought capacity", label: "Solved a yield problem with a second line",
+           why: "Adding a line pays for capacity the existing one is losing to alignment and cut geometry. The lecture's own question is whether a triangular or rectangular roti would waste less of the sheet.",
+           cue: "Fix the yield before buying the throughput again."},
+       3: {tag: "Attributed it to staffing", label: "Explained a mechanical yield loss by labour",
+           why: "Nothing in the constraint is about operators. The named causes are alignment issues, rejects returning for reuse, and the geometry of cutting circles from a rectangle.",
+           cue: "Check whether the cause you name is in the description before adopting it."}
+     },
+     explanation: "The rotimaking machine is rated at 40,000 rotis an hour and delivers closer to 35,000, because of alignment issues and rejected rotis that go back for reuse. Atta arrives as a rectangular sheet, so cutting circular rotis leaves unused portions — a design question the lecture draws out of the shortfall.",
+     link: "Layout adds its own drag: rotis are made in one building while rice and vegetables are cooked in another, which complicates loading at dispatch."}
+  ],
+
+  /* BRGSA's own assessments are scenario-led — a situation, then "which reading is
+     most defensible" — so these follow that shape rather than the definitional one
+     SCLM's use. One per concept: sixteen items, on the sixteen lectures that already
+     carry a lesson. */
+  BRGSA: [
+    {concept: "brgsa_m1_demand", source: "BRGSA-M01-L01", node: "Demand validation", mode: "scenario",
+     caselet: "A founder has budgeted six months to build an AI meeting recorder and a marketing campaign to launch it. A colleague suggests putting up a page with the real offer and seeing whether anyone acts on it, before any of that starts.",
+     stem: "What is the strongest argument for running the page first?",
+     options: [
+       "Every plan that goes straight to build carries an untested demand assumption, and the test buys that certainty in days rather than months.",
+       "A landing page produces marketing material the launch campaign is going to need anyway, so none of the work is wasted either way.",
+       "Building first is the more reliable route to learning, because real usage data from a working product is stronger evidence than a page view.",
+       "The page removes the risk from the build, since a positive result means the product can be scoped with confidence."
+     ],
+     answer: 0,
+     wrong: {
+       1: {tag: "Justified the test by its by-products", label: "Kept the test for the wrong reason",
+           why: "Reusable creative is a side benefit. The reason to test first is that the whole plan rests on an assumption nobody has checked, and checking it costs seven to fourteen days against six to eighteen months.",
+           cue: "Ask what the test is deciding. If your reason survives a negative result unchanged, it is not the reason."},
+       2: {tag: "Inverted the cost of learning", label: "Preferred the expensive way to buy the same information",
+           why: "Usage data is stronger, and it arrives after the money is spent. The build is the expensive way to buy the same information later; the test is the cheap way to buy it now.",
+           cue: "Compare what each route costs to be wrong, not which produces the better data."},
+       3: {tag: "Overclaimed what a test removes", label: "Read validation as risk elimination",
+           why: "A positive signal narrows the risk; it does not remove it, and a signal produced by a warm audience can be a false positive that creates confidence in the wrong direction.",
+           cue: "A test changes what you know. Ask who produced the signal before deciding what it settles."}
+     },
+     explanation: "Most products fail because nobody checked whether anyone wanted the thing before the building started. Lean validation answers that one question as quickly and cheaply as possible: seven to fourteen days and a few thousand rupees, against six to eighteen months and lakhs.",
+     link: "Building feels like progress and testing feels like delay, which is exactly backwards on cost."},
+
+    {concept: "brgsa_m1_evidence", source: "BRGSA-M01-L04", node: "Pre-sales commitment and evidence strength", mode: "scenario",
+     caselet: "A team reports 200 positive survey responses, 30 wait-list signups and 4 refundable deposits taken under stated terms. The founder wants to lead the investor update with the 200.",
+     stem: "How should the three signals be weighted?",
+     options: [
+       "By volume, since 200 responses is a far larger sample than four deposits and is therefore the more reliable number to lead with.",
+       "Equally, because each is a genuine expression of interest and discarding any of them throws away information.",
+       "By what each cost the person to give, which makes the four deposits the primary evidence and the survey background.",
+       "By recency, taking whichever signal was collected most recently as the best guide to current demand."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Ranked by sample size", label: "Preferred the larger number of weaker signals",
+           why: "Sample size does not upgrade a costless signal. Praise in a survey costs nothing to give, which is what makes 200 of them weaker evidence than four responses where somebody parted with money.",
+           cue: "Ask what each respondent gave up. A large sample of free actions is still a sample of free actions."},
+       1: {tag: "Refused to rank", label: "Treated all interest as equivalent",
+           why: "The commitment spectrum exists precisely to rank them. A person who clicks is curious, a person who signs up is interested, and a person who pays even a small deposit is behaving like a customer.",
+           cue: "Keeping every signal is fine. Weighting them equally is what the spectrum rules out."},
+       3: {tag: "Ranked by recency", label: "Used timing as the strength test",
+           why: "When a signal was collected says nothing about what it cost to produce. A survey taken this morning is still a survey.",
+           cue: "Strength here is about cost to the respondent, not about the date on the response."}
+     },
+     explanation: "Evidence is only as strong as the cost of producing it. Praise, likes and email opens cost nothing; a signup costs a little attention; a letter of intent costs reputation; a payment — even a partial, refundable one — costs money, and money is the hardest commitment to fake.",
+     link: "When you need the highest confidence before committing to a build, you ask for the costliest signal you can reasonably request."},
+
+    {concept: "brgsa_m2_design", source: "BRGSA-M02-L01", node: "Null hypothesis and test design", mode: "scenario",
+     caselet: "A team wants to test whether a new call-to-action improves signups. One member proposes stating the hypothesis as \"the new wording feels more natural to users\".",
+     stem: "What is wrong with that as a hypothesis?",
+     options: [
+       "It names the wrong metric, since signups are what the team cares about rather than how the wording feels.",
+       "It should predict a larger effect, because a small improvement is not worth the cost of running a test at all.",
+       "It is not falsifiable: every experiment starts from a stated no-difference position that a specific, measurable claim can argue against.",
+       "It fails to say which variant is the control, without which the two groups cannot be compared."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Fixed the metric, not the form", label: "Swapped the measure and left the hunch",
+           why: "Changing the metric to signups helps, but \"feels more natural\" would still be a hunch. What separates a hypothesis from a hunch is being specific, measurable and falsifiable.",
+           cue: "Ask whether a result could show the claim wrong. If not, no metric rescues it."},
+       1: {tag: "Confused effect size with testability", label: "Made the problem the size of the claim",
+           why: "How large an effect to look for is the minimum detectable effect question, decided separately. A vague claim is untestable at any effect size.",
+           cue: "Separate what you are claiming from how big the claim is."},
+       3: {tag: "Named a design detail", label: "Answered with a setup step",
+           why: "Identifying the control matters for running the test, but the hypothesis would still be unfalsifiable with a control named. The defect is in the statement itself.",
+           cue: "Fix the claim before fixing the apparatus that will test it."}
+     },
+     explanation: "Every experiment starts from a boring assumption: nothing changed. The null is that the change makes no difference. The alternative has to be specific enough to be shown wrong — \"raises signup rate by at least 10% within 30 days\" can be falsified; \"feels better\" cannot.",
+     link: "A test does not try to prove the null. It gathers enough evidence to reject it, and failing to do so is not proof the two options are identical."},
+
+    {concept: "brgsa_m2_error", source: "BRGSA-M02-L03", node: "Decision errors", mode: "judgement",
+     caselet: "A pricing change that genuinely improves conversion is tested on far too few users. The test reports no difference and the team drops the change.",
+     stem: "What has happened, and what follows?",
+     options: [
+       "A Type I error: the test has reported a result that was not real, so the alpha level should be tightened before anyone retests it.",
+       "A Type II error: the test was underpowered and missed a real effect, so it should be re-run with an adequate sample.",
+       "Neither error: the test returned the correct result for the data it had, so the decision to drop the change stands.",
+       "A measurement error: the conversion metric must have been defined inconsistently across the two groups."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Named the opposite error", label: "Called a missed effect a false positive",
+           why: "A Type I error reports an improvement that is not there. Here a real improvement was missed, which is a false negative. Tightening alpha would make that outcome more likely, not less.",
+           cue: "Ask what the test claimed. Claiming too much is Type I; claiming too little is Type II."},
+       2: {tag: "Accepted the null as proof", label: "Read no evidence as evidence of nothing",
+           why: "Failing to reject the null means you did not earn the right to claim a difference. It is not the same as showing there is none, and an underpowered test cannot see a real effect even when one is there.",
+           cue: "Separate 'no evidence of an effect' from 'evidence of no effect'."},
+       3: {tag: "Reached for instrumentation", label: "Explained a power problem as a definition problem",
+           why: "Nothing here suggests the metric differed between groups. The stated cause is sample size, and sample size is what protects against false negatives.",
+           cue: "Check whether the cause you name appears in the description before adopting it."}
+     },
+     explanation: "A Type II error is a false negative: a real improvement exists and the test misses it, so something that worked gets abandoned. Alpha controls the false-positive rate; sample size is what protects against false negatives.",
+     link: "Which error costs more is a business judgement, not a statistical one — abandoning a pricing model that genuinely worked is expensive."},
+
+    {concept: "brgsa_m3_cohort", source: "BRGSA-M03-L01", node: "Cohorts and retention", mode: "scenario",
+     caselet: "A product reports 10,000 users and signups growing 15% month on month. Eight thousand of those users joined more than six months ago and have not opened the product since January.",
+     stem: "What does the reported growth actually show?",
+     options: [
+       "Genuine growth, since the total is accurate and rising and the dormant users may still return later.",
+       "An acquisition problem, because 15% monthly signup growth is too slow to replace users at this rate of loss.",
+       "A pricing problem, since users who stop opening a product are usually signalling that it is not worth what they pay.",
+       "Acquisition refilling a leaking bucket: the total is real and only cohorts show whether the bucket itself improved."
+     ],
+     answer: 3,
+     wrong: {
+       0: {tag: "Trusted the total", label: "Took an accurate number as a correct conclusion",
+           why: "The total is accurate. The conclusion drawn from it is still wrong, because the total hides the composition — which is the whole point of the cricket-bench example, where ten bowlers turn out to be nearly all spinners.",
+           cue: "An accurate aggregate and a sound conclusion are different things. Ask what the sum is hiding."},
+       1: {tag: "Diagnosed the wrong stage", label: "Read a retention failure as an acquisition shortfall",
+           why: "Acquisition is working — that is what is carrying the total. The problem is that each cohort decays, which more acquisition cannot fix and can only hide for longer.",
+           cue: "Ask which stage the evidence is actually about before naming the fix."},
+       2: {tag: "Guessed a cause", label: "Named a reason the data does not reach",
+           why: "Price may be involved, but nothing here separates it from onboarding, fit or habit. A cohort view is what turns \"users leave\" into a question you can answer.",
+           cue: "Get the shape of the decay before choosing an explanation for it."}
+     },
+     explanation: "A cohort is a group defined by a shared starting event and tracked over time. Instead of asking how many users there are, you ask how many of March's joiners are still there in month three, and compare that with April and May. Acquisition can refill a leaking bucket indefinitely, and only cohorts show whether the bucket itself improved.",
+     link: "The same trap runs through every aggregate: the total was accurate and the conclusion drawn from it was still wrong."},
+
+    {concept: "brgsa_m3_economics", source: "BRGSA-M03-L04", node: "CAC and LTV", mode: "judgement",
+     caselet: "A founder refuses to compute lifetime value, saying the company is only eight months old and any figure would be a guess.",
+     stem: "What is the strongest response?",
+     options: [
+       "Estimate it now from the inputs you already have, state the lifespan you assumed, and update it as cohorts mature.",
+       "Use the industry average lifespan for the category, which removes the guesswork from the estimate entirely.",
+       "Wait until twelve to eighteen months of cohort data exist, since an early figure would mislead any decision that was built on it.",
+       "Compute it from revenue rather than gross profit, which avoids depending on a margin the company cannot yet measure."
+     ],
+     answer: 0,
+     wrong: {
+       1: {tag: "Borrowed someone else's assumption", label: "Replaced a stated assumption with a hidden one",
+           why: "An industry average is still an assumed lifespan, only one nobody in the company can challenge or update. The point is to write the assumption down beside the number, not to source it externally.",
+           cue: "Ask whether the assumption is visible. A borrowed one is not more certain, only less examined."},
+       2: {tag: "Deferred the estimate", label: "Waited for data before making a comparison",
+           why: "This is exactly the misconception the lecture removes. CAC on its own cannot tell you whether to spend; it needs an LTV to be compared against, and that comparison is needed now rather than in a year.",
+           cue: "Ask what decision is waiting on the number. If one is, an estimate with a stated assumption beats no number."},
+       3: {tag: "Changed the definition", label: "Used revenue where gross profit is required",
+           why: "LTV is total gross profit, not revenue. Money collected and immediately paid out to serve the customer never belonged to you, so a revenue-based figure overstates the value of every customer.",
+           cue: "Check which line the definition names before substituting an easier one."}
+     },
+     explanation: "LTV is ARPU × average customer lifespan × gross margin, and it is estimated now rather than waited for. An LTV without its stated lifespan is a number nobody can challenge or update — which makes it a claim rather than an estimate.",
+     link: "The estimate exists to complete a comparison: a ratio above about 3:1 against CAC says acquisition cost is not the binding constraint."},
+
+    {concept: "brgsa_m4_constraint", source: "BRGSA-M04-L04", node: "Growth constraint", mode: "numeric",
+     caselet: "A funnel runs 10,000 visitors, 1,200 signups, 400 activations and 30 paying customers.",
+     stem: "Where is the constraint?",
+     options: [
+       "Visitor to signup, where 8,800 people are lost — by far the largest fall anywhere in the funnel.",
+       "Activation to paid, at 7.5%, which is the lowest conversion rate of the three stages shown.",
+       "Signup to activation at 33%, since only the slowest stage sets the pace and effort on any other adds nothing.",
+       "Nowhere yet, because a funnel with four stages needs a much longer observation window before any constraint in it can fairly be named."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Read the absolute drop", label: "Took the biggest number as the biggest problem",
+           why: "The largest numeric fall is usually at the top simply because the top is the widest. 12% visitor-to-signup is a good benchmark, so this stage is performing, not failing.",
+           cue: "Compare step conversion rates, not the count of people lost at each step."},
+       1: {tag: "Took the lowest rate", label: "Ranked by conversion without a benchmark",
+           why: "7.5% activation-to-paid is low as a bare number, and a paid-conversion rate is expected to be. What identifies a constraint is the stage furthest from what it should be, and 33% signup-to-activation is the one holding the system back.",
+           cue: "A rate needs a benchmark before it can be called slow."},
+       3: {tag: "Deferred the diagnosis", label: "Asked for more data than the decision needs",
+           why: "The figures already show step conversion at each join, which is what identifies the constraint. Waiting spends the time the constraint is costing.",
+           cue: "Ask whether the data in front of you can answer the question before requesting more of it."}
+     },
+     explanation: "A constraint is the slowest stage in a system — the one that sets the pace. Making a non-constraint faster will not increase overall output. Here 12% visitor-to-signup is a good benchmark, so the constraint is signup-to-activation at 33%.",
+     link: "The largest absolute drop and the slowest stage are different questions, and only step conversion answers the second."},
+
+    {concept: "brgsa_m4_customers", source: "BRGSA-M04-L02", node: "Early-stage and scale-stage growth", mode: "judgement",
+     caselet: "A company that has raised a large round wants to triple paid acquisition spend. Asked for its payback period, the team cannot state one.",
+     stem: "How should the request be handled?",
+     options: [
+       "Approve it, since a large raise is exactly the capital that paid acquisition is meant to deploy at this stage.",
+       "Approve a third of it as a controlled test, which produces the payback figure that is currently missing.",
+       "Treat the company as early stage despite the funding, and find the repeatable channel and retention shape first.",
+       "Refuse on principle, because paid acquisition is a scale-stage tool and this company has not reached that stage."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Let funding settle the stage", label: "Read money in the bank as readiness",
+           why: "Money in the bank does not settle which game the company is playing. A company with a large raise and no repeatable channel is still early stage; a company with 5,000 users can already be scaling.",
+           cue: "Ask what is known, not what is funded."},
+       1: {tag: "Bought the answer at a discount", label: "Ran the same unproven motion smaller",
+           why: "A smaller version of an unproven motion produces a payback figure for a channel nobody has yet shown repeats. The missing work is the search, not a smaller instance of the scale.",
+           cue: "Ask whether the spend answers the open question or only shrinks it."},
+       3: {tag: "Turned a diagnosis into a ban", label: "Made a tool wrong by stage",
+           why: "The stage is not a rule about which tools are allowed. It is a statement about what is known, and the useful reply is to establish the channel and retention rather than to forbid a category of spend.",
+           cue: "Answer 'are we ready' with what to establish next, not with a prohibition."}
+     },
+     explanation: "Early stage is search mode and scale stage is scale mode. The test is whether you can say with a straight face that for every rupee in you get a known multiple back within a known period — cohort analysis done, payback period known, LTV:CAC measured. If you cannot, the manual work is the job.",
+     link: "Spending into an unproven motion buys volume that does not survive, and hides the search still to be done."},
+
+    {concept: "brgsa_m5_channel", source: "BRGSA-M05-L01", node: "Channel fit", mode: "scenario",
+     caselet: "A team spends ₹2,00,000 on a paid channel. Their average contract value is ₹1,000 a month and their acquisition cost on that channel lands near ₹8,000.",
+     stem: "What should the team do?",
+     options: [
+       "Improve the creative and the targeting first, since a high acquisition cost usually reflects a weak campaign rather than the channel.",
+       "Keep the channel and raise the price, since a contract worth more would make the same acquisition cost acceptable.",
+       "Stop the channel on price-point mismatch, because that arithmetic is settled before any creative decision is taken.",
+       "Continue for a full quarter, because paid channels need time before their true cost per customer can be judged."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Optimised past the arithmetic", label: "Treated a structural mismatch as a creative one",
+           why: "Eight thousand rupees to win a thousand-rupee-a-month contract cannot be rescued by optimisation. The channel and the price point were never compatible, and better creative moves the cost, not the order of magnitude.",
+           cue: "Check whether the gap is a percentage or a multiple before reaching for optimisation."},
+       1: {tag: "Changed the product to fit the channel", label: "Let the channel set the price",
+           why: "Raising price to justify a channel inverts the decision. Channel-market fit asks whether the channel matches the product, the ICP and the price point — the price is an input to that test, not an output of it.",
+           cue: "Fit the channel to the business. A channel that requires you to change the business has failed the test."},
+       3: {tag: "Waited out a settled result", label: "Bought time the arithmetic had already priced",
+           why: "Time refines an estimate that is close. Here the cost per customer is eight times the monthly contract value, which no reasonable revision brings into range.",
+           cue: "Ask what a longer run could plausibly change before paying for it."}
+     },
+     explanation: "Channel-market fit asks whether this channel matches your product, your ICP and — the filter that gets skipped — your price point. A channel with a high cost per acquired customer cannot serve a low average contract value however good the targeting is; the arithmetic decides before the creative does.",
+     link: "Quality also differs from volume, and channels differ in whether they scale at all — founder-led sales stops at a hard ceiling."},
+
+    {concept: "brgsa_m5_activation", source: "BRGSA-M05-L05", node: "Activation and onboarding friction", mode: "judgement",
+     caselet: "Onboarding asks a new user a multiple-choice preference question before they can proceed. The product team argues it is helpful because it personalises the experience.",
+     stem: "How should the step be judged?",
+     options: [
+       "Keep it, since personalisation raises long-term retention and the cost of answering one question is small against that eventual gain.",
+       "Keep it but move it later in the flow, which preserves the personalisation while reducing the number of early steps.",
+       "Replace it with a smart default unless the answer is required to reach the aha, since only that justifies a step.",
+       "Remove it and every other optional step, because onboarding should contain nothing but the single shortest path."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Justified a step by being helpful", label: "Used general usefulness as the test",
+           why: "A step is not justified by being helpful in general, only by moving the user toward first value. Reading, considering and answering costs about thirty seconds of attention and moves nobody closer to the aha.",
+           cue: "Ask what the step contributes to reaching first value, not whether it is a good idea."},
+       1: {tag: "Moved the friction", label: "Relocated a step instead of testing it",
+           why: "Moving it later reduces early friction, which helps. It still leaves the question unanswered: does answering it help the user reach value? If not, a smart default serves better wherever it sits.",
+           cue: "Apply the test to the step itself before deciding where to put it."},
+       3: {tag: "Over-corrected into a rule", label: "Stripped the flow rather than scoring it",
+           why: "The audit scores each step by what it costs and what it contributes — a required integration scores high on cost because nothing works without it, and still belongs. A blanket removal discards the steps that earn their place.",
+           cue: "Score the steps. A rule that removes all of them is not an audit."}
+     },
+     explanation: "Onboarding friction is anything between signup and the aha that costs a user time, attention or effort without contributing to reaching the aha. Cognitive, behavioural, technical and emotional friction each cost differently, and well-meaning onboarding is the usual culprit.",
+     link: "By the time a user has clicked through twelve helpful steps, half of them are gone."},
+
+    {concept: "brgsa_m6_habit", source: "BRGSA-M06-L01", node: "Habit and lifecycle", mode: "scenario",
+     caselet: "A subscription product finds from customer conversations that its main reason for churn is not dissatisfaction. Customers simply stopped remembering to use it. The team's plan is to increase the frequency of reminder emails.",
+     stem: "What is the weakness of that plan?",
+     options: [
+       "Reminder emails have low open rates, so the increase would reach too few of the lapsed customers to matter.",
+       "A product that only ever fires external triggers has rented its retention, since each nudge costs something every time.",
+       "Reminders should be sent to new users rather than lapsed ones, since a habit cannot be restarted once it is lost.",
+       "The team should discount instead, because a lapsed customer responds to price more reliably than to a reminder."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Attacked the channel's efficiency", label: "Argued about reach rather than dependency",
+           why: "Open rates would make the plan weaker, not wrong. What makes it a weakness is that an external trigger has to be fired again every time and never becomes self-sustaining.",
+           cue: "Ask what happens when you stop sending. That answer separates a rented habit from a built one."},
+       2: {tag: "Invented a rule about lapsed users", label: "Ruled out recovery",
+           why: "Nothing says a habit cannot be restarted. The lecture's move is to attach the action to a routine the user already has, which works for lapsed users as well as new ones.",
+           cue: "Look for the routine to attach to before deciding who can be recovered."},
+       3: {tag: "Substituted price for habit", label: "Answered a routine failure with a discount",
+           why: "The customers did not leave over price; they lost the routine. A discount changes the cost of a product they are not opening.",
+           cue: "Match the intervention to the reason given, not to the easiest lever available."}
+     },
+     explanation: "A habit has four phases — trigger, action, reward, investment — and triggers come in two kinds. External triggers are notifications and emails: you own them and they cost you something every time. Internal triggers are the user's own situation reminding them.",
+     link: "An external nudge that lands on a real internal moment can become an internal trigger; one that lands at random stays a cost forever."},
+
+    {concept: "brgsa_m6_churn", source: "BRGSA-M06-L05", node: "Referral and network effects", mode: "judgement",
+     caselet: "A marketplace has few buyers because it has few sellers, and few sellers because it has few buyers. The team plans a marketing campaign aimed equally at both groups.",
+     stem: "What does the framework suggest instead?",
+     options: [
+       "Name it a two-sided network with a cold start, and subsidise one side deliberately until the other becomes self-sustaining.",
+       "Raise the referral incentive on both sides at once, since a higher K-factor is what breaks a stalled marketplace open.",
+       "Focus on product quality first, because a network that is not yet valuable cannot be marketed to either group.",
+       "Treat it as a direct network effect, where any user added on either side raises the value for everyone else equally."
+     ],
+     answer: 0,
+     wrong: {
+       1: {tag: "Reached for virality", label: "Applied a spread mechanism to a value problem",
+           why: "Referral makes a product spread; a network effect makes it more valuable as users join. Referring people to a marketplace with nothing on the other side does not create the value they were referred for.",
+           cue: "Ask whether the problem is spread or value. They are not the same claim."},
+       2: {tag: "Deferred to product quality", label: "Answered a structural problem with polish",
+           why: "The product is not failing on quality; it is least valuable exactly when it most needs people to join. That is the cold start problem, and it is solved by giving one side a reason to arrive first.",
+           cue: "Ask why the product is not valuable yet. If the answer is 'nobody is here', quality is not the constraint."},
+       3: {tag: "Named the wrong kind", label: "Called a two-sided network a direct one",
+           why: "A direct network is one where users benefit from other users of the same kind. Here two distinct groups need each other, which is what makes marketing to both equally the wrong move.",
+           cue: "Count the groups. Two distinct groups that need each other is two-sided, not direct."}
+     },
+     explanation: "There are four kinds of network effect — direct, two-sided, indirect and data-driven — and each has a different cold start problem. Two-sided cold starts are not solved by marketing both sides equally; someone has to be given a reason to arrive before the value exists.",
+     link: "Value scales roughly with the square of the number of users, because value lives in the connections rather than in the accounts."},
+
+    {concept: "brgsa_m7_pricing", source: "BRGSA-M07-L01", node: "Pricing structure and NRR", mode: "scenario",
+     caselet: "Two companies each average $10,000 in annual revenue per account. One charges a flat rate; the other charges per seat. A year later the second has grown revenue per account substantially and the first has not, with no change in either customer base.",
+     stem: "What explains the difference?",
+     options: [
+       "The per-seat company raised its list price during the year, which the flat-rate company chose not to do.",
+       "The per-seat company's customers were larger organisations to begin with, so the same structure produced more revenue from each of them.",
+       "The structures make different promises about growth: per-seat revenue grows as a customer's team grows, flat rate does not.",
+       "The flat-rate company has better retention, which it bought by holding its price steady through the year."
+     ],
+     answer: 2,
+     wrong: {
+       0: {tag: "Explained it by the number", label: "Attributed a structural difference to a price change",
+           why: "Both companies started at the same revenue per account and neither changed customer base. The difference is what happens as a customer succeeds, which is a property of the structure and not of the list price.",
+           cue: "Ask what changed. If the customer base did not, look at how the structure responds to their growth."},
+       1: {tag: "Assumed different customers", label: "Changed the premise to explain the result",
+           why: "The two started at the same average revenue per account, so size is controlled for. Per-seat pricing grows with the customer's headcount; flat rate is unchanged by it.",
+           cue: "Check what the case has already held constant before proposing it as the cause."},
+       3: {tag: "Swapped in retention", label: "Explained expansion by churn",
+           why: "Retention would keep the base intact; it would not raise revenue per account. Expansion inside existing accounts is what a per-seat structure produces and a flat rate does not.",
+           cue: "Separate keeping a customer from growing one. They are different metrics."}
+     },
+     explanation: "Pricing is an engineered structure, not a number. Each structure makes a different promise about how revenue grows as the customer succeeds: per-seat grows with the team, flat rate does not, and identical revenue today can carry completely different futures.",
+     link: "A 5% improvement in pricing structure beats a 5% improvement in acquisition nearly every time, because it applies to every existing customer immediately."},
+
+    {concept: "brgsa_m7_pipeline", source: "BRGSA-M07-L04", node: "Sales integration and payback", mode: "scenario",
+     caselet: "Marketing reports four times more qualified leads than last year. Sales reports its revenue target. Customer success reports renewals. Headcount has grown and total revenue is flat.",
+     stem: "What is the most defensible diagnosis?",
+     options: [
+       "One of the three teams is misreporting, since three honest reports cannot coexist with flat revenue.",
+       "Marketing's lead quality has fallen, which is the usual cause when volume rises and revenue does not.",
+       "The market has softened, so the same motion is producing less revenue than it did a year ago.",
+       "Every handoff between the teams is a place the motion loses revenue that nobody records as lost."
+     ],
+     answer: 3,
+     wrong: {
+       0: {tag: "Looked for a false report", label: "Assumed the numbers must disagree",
+           why: "All three reports can be true at once. That is what makes the leak invisible: each team reports its own success honestly while the integrated motion loses money at every join.",
+           cue: "When each report is defensible, look between them rather than inside them."},
+       1: {tag: "Blamed the input", label: "Named lead quality without measuring a join",
+           why: "Lead quality is one candidate, and it is a hypothesis about one join. What the situation calls for is measuring conversion and elapsed time at each handoff before naming any of them.",
+           cue: "Measure the joins before choosing which one to blame."},
+       2: {tag: "Externalised the cause", label: "Explained an internal leak by the market",
+           why: "A softer market is possible and is not what the evidence points at. Volume rose sharply and revenue did not move, which is the shape of a motion losing what it is given.",
+           cue: "Prefer an explanation that accounts for the volume increase, not one that ignores it."}
+     },
+     explanation: "Revenue passes through several pairs of hands — marketing to sales, sales to account executive, account executive to customer success — and every handoff is a place the motion can lose revenue that nobody records as lost. Shared definitions and an SLA between teams are the correctives.",
+     link: "Volume poured into a leaking motion increases the loss proportionally; only the joins decide how much reaches revenue."},
+
+    {concept: "brgsa_m8_priority", source: "BRGSA-M08-L01", node: "Prioritisation", mode: "judgement",
+     caselet: "A team's easiest idea — a homepage headline test shippable in an afternoon — ranks fourth on ICE behind three slower activation experiments. Activation is the team's primary constraint.",
+     stem: "What should the team do?",
+     options: [
+       "Run the headline test first, since shipping something quickly builds momentum for the slower experiments behind it.",
+       "Run the activation experiments first, because impact is scored against the primary constraint and ease is one input of three.",
+       "Re-score the headline test, since an experiment shippable in an afternoon should score higher on ease than it evidently did.",
+       "Run all four in parallel, which removes the need to rank them and produces four results in the same period."
+     ],
+     answer: 1,
+     wrong: {
+       0: {tag: "Let ease decide", label: "Used the tiebreaker as the ranking",
+           why: "The ranking feeling wrong is the framework working. Ease is one input of three, not a tiebreaker that overrides the other two, and impact is scored against the constraint the team is actually limited by.",
+           cue: "Ask which of the three inputs you are letting decide, and whether the other two agree."},
+       2: {tag: "Adjusted the score to fit the preference", label: "Re-scored until the answer changed",
+           why: "Ease covers building and measuring together, and the headline test may already be scored correctly. Re-scoring to reach a preferred ranking is how ICE becomes decorative.",
+           cue: "Change a score when the evidence changes, not when the ranking disappoints."},
+       3: {tag: "Refused to prioritise", label: "Ran everything instead of ranking",
+           why: "Prioritisation exists because a team has many more ideas than capacity. Running four at once splits the capacity and usually contaminates the measurement of the constraint.",
+           cue: "Ask what running everything costs. If capacity were free, there would be nothing to prioritise."}
+     },
+     explanation: "Impact is scored against the primary constraint, never against any metric that happens to be movable. Confidence is scored on evidence, and ease covers building and measuring together. A healthy list is spread across the range; if everything scores alike, the prioritisation is decorative.",
+     link: "The ranking will sometimes feel wrong, and that is the discipline doing its job rather than failing."},
+
+    {concept: "brgsa_m8_decision", source: "BRGSA-M08-L03", node: "Decision rules", mode: "scenario",
+     caselet: "An experiment hypothesised activation moving from 34% to 45%. It lands at 38%, and the team wants to keep iterating.",
+     stem: "What settles whether to continue?",
+     options: [
+       "Whether 38% is a statistically significant improvement over 34%, which is what decides if the effect is real.",
+       "Whether the team has capacity, since a live experiment that is improving the number is worth keeping while resources allow.",
+       "Whether another variation could plausibly close the remaining gap, which is the test for a worthwhile iteration.",
+       "The thresholds written before the experiment went live, since all four parts of the rule are agreed in advance."
+     ],
+     answer: 3,
+     wrong: {
+       0: {tag: "Reached for significance", label: "Answered a decision question with a statistical one",
+           why: "38% may well be a real improvement and still be below the level worth maintaining. Significance says whether the effect exists; the kill threshold says whether it is worth the engineering time and infrastructure it costs.",
+           cue: "Separate 'is it real' from 'is it worth keeping'. Both can be answered and they can disagree."},
+       1: {tag: "Let capacity decide", label: "Used available resource as the criterion",
+           why: "Capacity is exactly what a kill threshold protects. A live experiment costs engineering time and infrastructure whether or not it is working, and a successful kill returns that capacity to the queue.",
+           cue: "Ask what the experiment is displacing, not whether it can be afforded."},
+       2: {tag: "Iterated without a bound", label: "Retried with no limit set in advance",
+           why: "A bounded iterate is a second attempt with a limit agreed beforehand. An unbounded one is the same experiment retried indefinitely because nobody wrote down when to stop.",
+           cue: "If you are iterating, say now how many attempts and to what threshold."}
+     },
+     explanation: "All four parts of the decision rule are written before the experiment goes active: the metric, the scale threshold, the kill threshold, and a time or sample bound. Once the numbers are agreed in advance, the arriving data settles the question, because the argument happened while nobody knew the answer.",
+     link: "Deciding after the data arrives is how teams end up picking the cohort that flatters the result."}
+  ]};
+
+  function addCourseAssessmentItems(course) {
+    var items = COURSE_ASSESSMENT_ITEMS[course.id];
+    if (!items) return;
+    var seen = {};
+    items.forEach(function (item) {
+      var concept = (course.concepts || []).filter(function (entry) { return entry.id === item.concept; })[0];
+      /* Silence here would be the F-47 failure again — a scenario that resolves to
+         nothing and is never missed. An unresolvable concept id is a defect in the
+         item, so say so rather than dropping it. */
+      if (!concept) throw new Error("Course-assessment item names an unknown concept: " + item.concept + " in " + course.id);
+      seen[item.concept] = (seen[item.concept] || 0) + 1;
+      addQuestion(course, {
+        id: item.concept + "_cla" + seen[item.concept],
+        courseId: course.id,
+        conceptId: item.concept,
+        supportingConceptIds: [],
+        module: concept.module,
+        source: item.source,
+        sourceIds: [item.source],
+        node: item.node,
+        pattern: item.mode === "numeric" ? "Compute and choose"
+          : item.mode === "definition" ? "State the idea precisely"
+          : item.mode === "scenario" ? "Read the situation" : "Make the call",
+        /* The perspective drives format/variety spread in selection, so a definition
+           and a judgement call on one concept are treated as the different questions
+           they are rather than as two of the same. */
+        perspective: item.mode === "definition" ? "explain" : item.mode === "numeric" ? "apply" : "decide",
+        type: "mcq",
+        skills: item.mode === "numeric" ? ["apply", "compute"] : item.mode === "definition" ? ["recognise", "distinguish"] : ["apply", "judge"],
+        difficulty: item.mode === "definition" ? 2 : item.mode === "numeric" ? 4 : 3,
+        variantFamily: item.concept + "_cla_" + item.mode,
+        boss: false,
+        caselet: item.caselet || null,
+        stem: item.stem,
+        options: item.options,
+        answer: item.answer,
+        diagnoses: item.options.map(function (_, index) {
+          return (item.wrong && item.wrong[index]) || null;
+        }),
+        explanation: item.explanation,
+        link: item.link
+      });
+    });
+  }
+
+  /* Retired: `_term_cloze`, replaced by `_contrast`. Owner decision, 2026-08-15.
+   *
+   * The old item printed the concept's summary with its name blanked out and asked the
+   * learner to pick that name from four concept names. Measured over the built bank it
+   * paid **100% on 62 of 62 option sets** — and a label-selection item cannot be
+   * repaired by choosing better distractors, because exactly one option can be the
+   * concept's name. Worse, the run's own orientation copy prints that name several
+   * steps earlier ("Carry forward: X. Now add Y"), so the answer was already on the
+   * screen the learner came from. Suppressing the name on the step would have moved
+   * the number without changing what the learner already knew, which is gaming the
+   * probe rather than fixing the item.
+   *
+   * The replacement keeps the same job — tell this concept apart from the ones beside
+   * it — and makes it answerable only by reading. All four options are claims about
+   * THIS concept; three of them are neighbouring concepts' claims wearing its label.
+   * Simulated before it was written: 96.9% -> 24.2%.
+   *
+   * Deleting the family outright was not an option: the bank floor is 792 items and
+   * every concept must keep at least 10 surfaces, 8 variant families, 10 actively
+   * scheduled surfaces and 6 active families. A retirement that drops a surface per
+   * concept fails all four gates, so this replaces rather than removes. */
+  function addContrastCheck(course, concept, data, allData) {
+    var neighbours = nearbyConcepts(course, concept);
+    var byId = {};
+    (allData || []).forEach(function (entry) { byId[entry.id] = entry; });
+
+    /* Neighbours first, length guard as a constraint — `relevantWrong`'s existing
+       contract (LAW-48). Taking the three module siblings unconditionally made
+       `sclm_smoothing`'s summary tower over theirs and exposed the answer by length, so
+       relevance is maximised subject to the shape guard rather than instead of it. */
+    var preferred = neighbours.map(function (neighbour) {
+      var source = byId[neighbour.id];
+      return source && source.summary;
+    }).filter(Boolean);
+    var fallback = (allData || []).filter(function (entry) {
+      return entry.id !== concept.id && entry.summary;
+    }).map(function (entry) { return entry.summary; });
+    var wrongSummaries = relevantWrong(data.summary, preferred, fallback);
+
+    var ownerOf = {};
+    (allData || []).forEach(function (entry) {
+      if (entry.summary) ownerOf[String(entry.summary).trim()] = entry.name;
+    });
+    var entries = [{text: data.summary, owner: data.name}].concat(wrongSummaries.map(function (text) {
+      return {text: text, owner: ownerOf[String(text).trim()]};
+    }));
+    /* A concept with too few neighbours carrying a summary would silently ship a
+       two-option item. Loudly is better than quietly (see LAW-65). */
+    if (entries.length < 4) throw new Error(course.id + "/" + concept.id + " has only " + entries.length + " summaries for a contrast check; a silent short option set is how content ships and is never served");
+
+    var attributed = attributedChoices(entries, data.name);
+    var correct = attributed[0];
+    var choices = choiceSet(correct, attributed.slice(1), stableNumber(concept.id));
     addQuestion(course, {
-      id: concept.id + "_term_cloze",
+      id: concept.id + "_contrast",
       courseId: course.id,
       conceptId: concept.id,
       supportingConceptIds: [],
@@ -993,17 +2544,18 @@
       source: data.source,
       sourceIds: [data.source],
       node: data.name,
-      pattern: "Fill the key term",
+      pattern: "Tell it from its neighbours",
       perspective: "retrieve",
       type: "cloze",
       skills: ["recognise", "distinguish"],
       difficulty: 2,
-      variantFamily: concept.id + "_term",
-      boss: false,
-      caselet: hideTerm(data.summary, data.name),
-      stem: "Complete the sentence with the concept that best fits the description.",
-      template: ["The concept is", ""],
-      blanks: [{label: "Choose the concept", options: choices.options, answer: choices.answer}],
+      variantFamily: concept.id + "_contrast",
+      /* No caselet. The old one was the summary with the name blanked, which is now
+         the correct option — the case would have printed the answer (LAW-63). */
+      caselet: "",
+      stem: "Three of these attach a neighbouring idea's claim to " + data.name + ". Which one is actually true of it?",
+      template: ["The claim that holds is", ""],
+      blanks: [{label: "Choose the claim that holds", options: choices.options, answer: choices.answer}],
       explanation: data.summary,
       link: data.bridge,
       misconceptions: choices.options.map(function (option, index) { return index === choices.answer ? null : "neighbouring-concept:" + option; }),
@@ -1011,11 +2563,23 @@
     });
   }
 
-  function addPrimer(course, concept, data, allData) {
-    var nearby = comparableWrong(data.summary, allData.filter(function (entry) {
-      return entry.id !== concept.id;
-    }).map(function (entry) { return entry.summary; }));
-    var choices = choiceSet(data.summary, nearby, stableNumber(concept.id + "primer"));
+  /* The primer, inverted (LAW-63).
+   *
+   * It used to print the principle — "Know this: <summary>" — and then ask the learner
+   * to pick that same sentence out of four options. All 64 of them, with the answer on
+   * the same screen, and with distractors borrowed from other concepts, so the task was
+   * to match a string: answerable without reading and unanswerable by reasoning. First
+   * contact with every idea in the course was spent doing that.
+   *
+   * It now runs the other way round. The learner meets the concrete case first and
+   * commits to what they think is going on, in their own words, before anything names
+   * the rule. The principle then arrives as the answer to their own prediction.
+   *
+   * Missing is the point, which is why nothing here is marked, scored, keyed, or turned
+   * into evidence — there is no answer to be wrong about. The support ladder is driven
+   * by the concept's scored questions through `updatePrimerFromChallenge`, which is the
+   * signal that was worth reading all along. */
+  function addPrimer(course, concept, data) {
     addQuestion(course, {
       id: concept.id + "_primer",
       courseId: course.id,
@@ -1028,30 +2592,39 @@
       pattern: "Primer",
       perspective: "primer",
       type: "primer",
-      skills: ["recognise"],
+      skills: ["predict"],
       difficulty: 1,
       variantFamily: concept.id + "_primer",
       boss: false,
       primerOnly: true,
+      // Shown before the learner commits: the situation, and nothing that names the rule.
+      primerCase: data.caselet,
+      // Shown only after they have committed, as the answer to their own prediction.
       primerFact: data.summary,
       primerApplication: data.application,
       primerConnection: data.bridge,
       primerMisconception: (data.confusions || [])[0] || "A nearby idea can look similar without using the same rule.",
       caselet: "",
-      stem: "Which principle should you carry into the next question?",
-      options: choices.options,
-      answer: choices.answer,
+      stem: "Before anything names it: what rule do you think this case is showing, and why?",
       explanation: data.summary,
-      link: data.bridge,
-      misconceptions: choices.options.map(function (option, index) {
-        return index === choices.answer ? null : "primer-neighbour:" + option;
-      })
+      link: data.bridge
     });
   }
 
   function addBridgeCloze(course, concept, data, allData) {
-    var otherBridges = comparableWrong(data.bridge, allData.filter(function (entry) { return entry.id !== concept.id; }).map(function (entry) { return entry.bridge; }));
-    var choices = balancedChoiceSet(data.bridge, otherBridges, stableNumber(concept.id + "bridge"), concept.id + "_bridge_choice");
+    /* Was: four different concepts' bridges, so the only option carrying this concept's
+       vocabulary was the correct one. Now every option is a causal explanation offered
+       FOR this concept, three of them borrowed from a neighbour — the learner has to
+       read the causality rather than spot the topic. (R3; measured 48.5% before.) */
+    var others = allData.filter(function (entry) { return entry.id !== concept.id && entry.bridge; });
+    var nearest = comparableWrong(data.bridge, others.map(function (entry) { return entry.bridge; }));
+    var ownerOf = {};
+    others.forEach(function (entry) { ownerOf[String(entry.bridge).trim()] = entry.name; });
+    var entries = [{text: data.bridge, owner: data.name}].concat(nearest.map(function (text) {
+      return {text: text, owner: ownerOf[String(text).trim()]};
+    }));
+    var attributed = attributedChoices(entries, data.name);
+    var choices = balancedChoiceSet(attributed[0], attributed.slice(1), stableNumber(concept.id + "bridge"), concept.id + "_bridge_choice");
     addQuestion(course, {
       id: concept.id + "_bridge_cloze",
       courseId: course.id,
@@ -1080,8 +2653,19 @@
   }
 
   function addMisconceptionRepair(course, concept, data, allData) {
-    var otherSummaries = comparableWrong(data.summary, allData.filter(function (entry) { return entry.id !== concept.id; }).map(function (entry) { return entry.summary; }));
-    var choices = balancedChoiceSet(data.summary, otherSummaries, stableNumber(concept.id + "repair"), concept.id + "_repair_choice");
+    /* Was: four different concepts' principles, which made "the correction" findable by
+       spotting the one sentence about this topic — 81.9%, the second worst family in the
+       bank. Now all four corrections are offered for THIS concept, so the learner has to
+       know which principle actually repairs the classmate's claim. (R3.) */
+    var others = allData.filter(function (entry) { return entry.id !== concept.id && entry.summary; });
+    var nearest = comparableWrong(data.summary, others.map(function (entry) { return entry.summary; }));
+    var ownerOf = {};
+    others.forEach(function (entry) { ownerOf[String(entry.summary).trim()] = entry.name; });
+    var entries = [{text: data.summary, owner: data.name}].concat(nearest.map(function (text) {
+      return {text: text, owner: ownerOf[String(text).trim()]};
+    }));
+    var attributed = attributedChoices(entries, data.name);
+    var choices = balancedChoiceSet(attributed[0], attributed.slice(1), stableNumber(concept.id + "repair"), concept.id + "_repair_choice");
     addQuestion(course, {
       id: concept.id + "_repair_cloze",
       courseId: course.id,
@@ -1119,7 +2703,47 @@
   function addCaseCloze(course, concept, data, allData) {
     var actionWrong = relevantWrong(data.application, data.applicationWrong || [], nearbyApplications(data, allData));
     var actionChoices = choiceSet(data.application, actionWrong, stableNumber(concept.id + "case"));
-    var termChoices = choiceSet(data.name, nearbyConcepts(course, concept).map(function (entry) { return entry.name; }), stableNumber(concept.id + "term2"));
+    /* The decision blank carries the concept as a TRAILING tag, not a leading label, and
+       the difference was found by reading the rendered screen rather than the number.
+       Leading labels made the case-cloze print eight options — two blanks of four — each
+       opening on the same 36-character prefix ("Desirability, feasibility, viability:
+       ..."), which buries the words that actually differ behind identical text. The rule
+       this defends against matches a substring anywhere in the option, so position is
+       free: the distinguishing decision leads, the tag trails, and the density is
+       equalised exactly as a prefix would. The framework blank below keeps the leading
+       form, because there the option IS a claim about the framework and reads correctly.
+       Dropping the tag entirely was measured too and costs 3-6 points (SPMS 25.0 ->
+       30.8, IBM 32.7 -> 34.6), so this keeps both the reading and the number. */
+    actionChoices.options = actionChoices.options.map(function (text) {
+      var body = String(text || "").trim();
+      if (!body) return text;
+      return ensureSentence(body) + " (" + data.name + ")";
+    });
+    /* The framework blank was the retired `_term_cloze`'s defect in a second place: pick
+       this concept's NAME out of four concept names, which is 100% name-matchable by
+       construction because exactly one option can be the concept's label. It now asks
+       what the framework requires rather than what it is called, so the options are
+       claims and the learner has to know which test this framework actually applies.
+       The concept's name stays in the template line above the blank, so the item still
+       reads as "the framework that justifies it is ...". */
+    var frameworkPreferred = nearbyConcepts(course, concept).map(function (entry) {
+      var neighbour = (allData || []).filter(function (candidate) { return candidate.id === entry.id; })[0];
+      return neighbour && neighbour.summary;
+    }).filter(Boolean);
+    var frameworkFallback = (allData || []).filter(function (entry) {
+      return entry.id !== concept.id && entry.summary;
+    }).map(function (entry) { return entry.summary; });
+    var frameworkOwner = {};
+    (allData || []).forEach(function (entry) {
+      if (entry.summary) frameworkOwner[String(entry.summary).trim()] = entry.name;
+    });
+    var frameworkEntries = [{text: data.summary, owner: data.name}].concat(
+      relevantWrong(data.summary, frameworkPreferred, frameworkFallback).map(function (text) {
+        return {text: text, owner: frameworkOwner[String(text).trim()]};
+      }));
+    if (frameworkEntries.length < 4) throw new Error(course.id + "/" + concept.id + " has only " + frameworkEntries.length + " summaries for the framework blank; a silent short option set is how content ships and is never served");
+    var framework = attributedChoices(frameworkEntries, data.name);
+    var termChoices = choiceSet(framework[0], framework.slice(1), stableNumber(concept.id + "term2"));
     addQuestion(course, {
       id: concept.id + "_case_cloze",
       courseId: course.id,
@@ -1150,6 +2774,10 @@
     });
   }
 
+  function writtenGap(id, criterionId, kind, scope, label, repair) {
+    return {id: id, criterionId: criterionId, kind: kind, scope: scope, label: label, repair: repair};
+  }
+
   function addShortAnswer(course, concept, data) {
     addQuestion(course, {
       id: concept.id + "_short_answer",
@@ -1158,29 +2786,153 @@
       supportingConceptIds: [],
       module: concept.module,
       source: data.source,
-      sourceIds: [data.source],
+      sourceIds: unique([data.source]),
       node: data.name,
-      pattern: "Construct a response",
+      pattern: "Short-form explanation",
       perspective: "generate",
       type: "short-answer",
       skills: ["explain", "apply", "generate"],
-      difficulty: 4,
-      variantFamily: concept.id + "_constructed-response",
+      difficulty: 3,
+      variantFamily: concept.id + "_short-form-response",
       boss: false,
-      estimatedMinutes: 4,
+      estimatedMinutes: 3,
       selfReviewOnly: true,
-      caselet: data.caselet,
-      stem: "Write a two-to-four sentence recommendation. Name the governing idea, state the decision, and explain why the case evidence supports it.",
+      writtenMode: "short",
+      caselet: null,
+      stem: "In two to three sentences, how would you explain " + data.name + " in your own words, and what kind of decision should it change?",
       rubric: [
-        {id: "principle", label: "Governing idea", description: "Uses " + data.name + " accurately rather than only naming a nearby concept."},
-        {id: "decision", label: "Decision", description: data.application},
-        {id: "reason", label: "Causal reason", description: data.bridge}
+        {id: "understanding", label: "Course understanding", description: "Explains " + data.name + " accurately in the learner's own words; the exact term is optional when the idea is clear."},
+        {id: "judgement", label: "Decision use", description: "Explains when the idea should change a decision, consistently with this course move: " + ensureSentence(data.application)}
       ],
-      exemplar: "Use " + data.name + " to frame the response. " + ensureSentence(data.application) + " " + ensureSentence(data.bridge),
+      writtenGaps: [
+        writtenGap("concept-missing", "understanding", "missing", "concept", "Course idea not explained", "State the idea in plain language before naming what it changes."),
+        writtenGap("concept-inaccurate", "understanding", "misunderstood", "concept", "Course idea used inaccurately", "Return to the course anchor and correct what the idea permits you to conclude."),
+        writtenGap("decision-use-missing", "judgement", "missing", "writing", "Decision use is missing", "Name the decision this idea should change, not only its definition."),
+        writtenGap("decision-use-inaccurate", "judgement", "misunderstood", "concept", "Decision use is inaccurate", "Check that the proposed decision follows from the course idea rather than merely sounding related.")
+      ],
+      exemplar: ensureSentence(data.summary) + " " + ensureSentence(data.application),
       explanation: data.summary,
       link: data.bridge,
       misconceptions: [],
+      repairId: concept.id + "_bridge_cloze"
+    });
+  }
+
+  function addCaseAnswer(course, concept, data) {
+    addQuestion(course, {
+      id: concept.id + "_case_answer",
+      courseId: course.id,
+      conceptId: concept.id,
+      supportingConceptIds: [],
+      module: concept.module,
+      /* The principle can come from the concept's opening lecture while the case,
+       * defensible decision, and causal link come from a later applied lecture.
+       * A case answer needs both authorities. */
+      source: data.caseSource || data.source,
+      sourceIds: unique([data.source, data.caseSource || data.source]),
+      node: data.name,
+      pattern: "Case-based written response",
+      perspective: "generate",
+      type: "short-answer",
+      skills: ["explain", "apply", "evaluate", "generate"],
+      difficulty: 4,
+      variantFamily: concept.id + "_case-response",
+      boss: false,
+      estimatedMinutes: course.id === "IBM" ? 6 : 5,
+      selfReviewOnly: true,
+      writtenMode: "case",
+      caselet: data.caselet,
+      stem: "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in " + (course.id === "IBM" ? "five to eight" : "four to six") + " sentences.",
+      rubric: [
+        {id: "understanding", label: "Course understanding", description: "Applies " + data.name + " accurately to this case; the exact term need not be named if the idea is clearly used."},
+        {id: "judgement", label: "Decision", description: ensureSentence(data.application)},
+        {id: "case_evidence", label: "Case evidence and reasoning", description: "Uses a specific fact from the case and explains why it supports the decision: " + ensureSentence(data.caseLink || data.bridge)}
+      ],
+      writtenGaps: [
+        writtenGap("concept-missing", "understanding", "missing", "concept", "Course idea not applied", "State the governing idea and show what it changes in this case."),
+        writtenGap("concept-inaccurate", "understanding", "misunderstood", "concept", "Course idea applied inaccurately", "Return to the course anchor and correct what the framework permits you to conclude."),
+        writtenGap("decision-missing", "judgement", "missing", "writing", "Decision is missing", "Make the recommendation explicit before defending it."),
+        writtenGap("decision-unsupported", "judgement", "misunderstood", "concept", "Decision does not follow", "Check that the recommendation follows from the governing idea and not from an unrelated preference."),
+        writtenGap("case-fact-missing", "case_evidence", "missing", "writing", "Decisive case fact is missing", "Name the fact that carries the recommendation rather than referring to the case generally."),
+        writtenGap("case-fact-misread", "case_evidence", "misunderstood", "concept", "Case evidence is misread", "Re-read what the case fact actually shows before using it as support."),
+        writtenGap("causal-link-missing", "case_evidence", "missing", "writing", "Fact-to-decision link is missing", "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier.")
+      ],
+      /* The exemplar has to satisfy the criteria it is shown beside.
+       *
+       * It previously read name + application + bridge + summary and never
+       * touched the caselet, so it could not meet "uses a specific fact from the
+       * case" - and the marker refused that criterion on 12 of 27 case exemplars,
+       * evenly across both subjects, while every other criterion tracked the
+       * subject's authoring quality. `caseEvidence` is the authored sentence that
+       * names the deciding fact and says why it carries the decision, which is
+       * exactly what the criterion asks a learner to produce. */
+      exemplar: "The governing course idea is " + data.name + ". " + ensureSentence(data.application) + " " +
+        (data.caseEvidence ? ensureSentence(data.caseEvidence) + " " : "") +
+        ensureSentence(data.caseLink || data.bridge) + " " + ensureSentence(data.caseExplanation || data.summary),
+      explanation: data.caseExplanation || data.summary,
+      link: data.caseLink || data.bridge,
+      misconceptions: [],
       repairId: concept.id + "_case_cloze"
+    });
+  }
+
+  /* Integrated scenarios are authored whole, not generated from concept fields.
+   *
+   * Every other written family is assembled — stem from the concept name, rubric
+   * from its application, exemplar from summary plus application. That assembly
+   * is exactly what produced model answers whose closing sentence did not follow
+   * from the question, and it cannot produce a situation that spans four
+   * concepts without naming any of them. So these carry their own caselet, task,
+   * criteria and exemplar, and this function only resolves the evidence
+   * boundary: the union of the declared concepts' lectures. */
+  function addIntegratedScenarios(course) {
+    var scenarios = (window.T6_INTEGRATED || {})[course.id] || [];
+    scenarios.forEach(function (scenario) {
+      var concepts = scenario.conceptIds.map(function (id) {
+        return course.concepts.filter(function (concept) { return concept.id === id; })[0];
+      }).filter(Boolean);
+      if (concepts.length !== scenario.conceptIds.length) return;
+      var primary = concepts[0];
+      addQuestion(course, {
+        id: scenario.id,
+        courseId: course.id,
+        conceptId: primary.id,
+        supportingConceptIds: concepts.slice(1).map(function (concept) { return concept.id; }),
+        module: scenario.module,
+        source: primary.source,
+        sourceIds: unique(concepts.map(function (concept) { return concept.source; })),
+        node: scenario.title,
+        pattern: "Integrated case response",
+        perspective: "generate",
+        type: "short-answer",
+        skills: ["explain", "apply", "evaluate", "generate"],
+        difficulty: 5,
+        variantFamily: scenario.id,
+        boss: false,
+        estimatedMinutes: 12,
+        selfReviewOnly: true,
+        writtenMode: "integrated",
+        caselet: scenario.caselet,
+        stem: scenario.task,
+        rubric: scenario.rubric.map(function (criterion) {
+          return {id: criterion.id, label: criterion.label, description: criterion.description};
+        }),
+        writtenGaps: [
+          writtenGap("ideas-missing", "diagnosis", "missing", "concept", "Governing ideas not named", "Say which course ideas this situation calls for before recommending anything."),
+          writtenGap("ideas-wrong", "diagnosis", "misunderstood", "concept", "Wrong ideas applied", "Re-read the situation for the symptom each framework is meant to explain."),
+          writtenGap("evidence-missing", "evidence", "missing", "writing", "Case figures not used", "Quote the numbers that carry your argument rather than describing the case."),
+          writtenGap("evidence-misread", "evidence", "misunderstood", "concept", "Case figures misread", "Check what each figure actually shows before resting a conclusion on it."),
+          writtenGap("integration-missing", "integration", "missing", "writing", "Ideas listed, not connected", "Show how one finding causes or constrains the next instead of covering them in turn."),
+          writtenGap("decision-missing", "decision", "missing", "writing", "No decision stated", "Commit to what should be done; an analysis without a recommendation scores nothing here."),
+          writtenGap("decision-unsupported", "decision", "misunderstood", "concept", "Decision does not follow", "Check the recommendation follows from the diagnosis rather than from general good practice."),
+          writtenGap("limit-missing", "limit", "missing", "writing", "No condition or cost named", "Say what would change your recommendation, or what it costs to follow it.")
+        ],
+        exemplar: scenario.exemplar,
+        explanation: scenario.title,
+        link: primary.bridge || "",
+        misconceptions: [],
+        repairId: primary.id + "_bridge_cloze"
+      });
     });
   }
 
@@ -1235,8 +2987,21 @@
     // concept's decision is a relevant distractor here rather than a borrowed one.
     var firstWrong = relevantWrong(first.application, (first.applicationWrong || []).concat([second.application]), nearbyApplications(first, allData));
     var secondWrong = relevantWrong(second.application, (second.applicationWrong || []).concat([first.application]), nearbyApplications(second, allData));
+    /* A boss `node` is "First → Second", so the name-matching rule keys on both names
+       at once and step 1's correct decision carried the first concept's vocabulary while
+       one of its distractors carried the second's. Measured 41.3% over 480 option sets —
+       the largest family in the bank, and one no earlier probe had broken out. Each
+       step's options are now labelled with that step's own concept, so every option in
+       the set carries the same name and the step is decided by the decision, not the
+       label. (R3; step 3 already names both concepts in all four options.) */
     var firstChoices = choiceSet(first.application, firstWrong, stableNumber(course.id + module + "a" + variant));
     var secondChoices = choiceSet(second.application, secondWrong, stableNumber(course.id + module + "b" + variant));
+    firstChoices.options = attributedChoices(firstChoices.options.map(function (text) {
+      return {text: text, owner: text === first.application ? first.name : null};
+    }), first.name);
+    secondChoices.options = attributedChoices(secondChoices.options.map(function (text) {
+      return {text: text, owner: text === second.application ? second.name : null};
+    }), second.name);
     var integrationCorrect = "Use " + first.name + " for the first decision and " + second.name + " for the second; neither result replaces the other.";
     var integrationSwap = "Use " + second.name + " for the first decision and " + first.name + " for the second; the labels can be swapped without changing the logic.";
     var integrationForward = "Use " + first.name + " for both decisions; once the first issue is solved, the second can be treated as the same problem.";
@@ -1351,13 +3116,22 @@
       return data;
     });
     course.concepts.forEach(function (concept) {
-      addPrimer(course, concept, dataById[concept.id], allData);
-      addTermCloze(course, concept, dataById[concept.id]);
+      addPrimer(course, concept, dataById[concept.id]);
+      addContrastCheck(course, concept, dataById[concept.id], allData);
       addBridgeCloze(course, concept, dataById[concept.id], allData);
       addMisconceptionRepair(course, concept, dataById[concept.id], allData);
       addCaseCloze(course, concept, dataById[concept.id], allData);
-      addShortAnswer(course, concept, dataById[concept.id]);
+      /* The final-paper contract has prose responses only in BRGSA and IBM.
+       * Those subjects receive both fast framework fluency and full case transfer.
+       * SPMS and SCLM still carry case-based objective/numeric work, but inventing
+       * prose practice for them would train a format their papers do not ask for. */
+      if (course.id === "BRGSA" || course.id === "IBM") {
+        addShortAnswer(course, concept, dataById[concept.id]);
+        addCaseAnswer(course, concept, dataById[concept.id]);
+      }
     });
+    /* After the per-concept families, because these span several of them. */
+    if (course.id === "BRGSA" || course.id === "IBM") addIntegratedScenarios(course);
     for (var module = 1; module <= 8; module += 1) {
       var pair = course.concepts.filter(function (concept) { return concept.module === module; });
       if (pair.length < 2) continue;
@@ -1369,11 +3143,15 @@
     // question added by any path is diagnosed without its author wiring anything up.
     addAuthoredMultiSelect(course);
     addAuthoredNumeric(course);
+    addCourseAssessmentItems(course);
 
     var provenance = buildProvenance(allData);
     Object.keys(course.questions).forEach(function (id) {
       attachDiagnoses(course.questions[id], dataById, provenance, authoredDiagnoses);
+      // Strictly after diagnosis, which addresses options by their authored index.
+      debiasOptionOrder(course.questions[id]);
     });
+    balanceAnswerPositions(course);
 
     configureRuns(course);
   });

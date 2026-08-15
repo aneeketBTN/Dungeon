@@ -1,0 +1,134 @@
+{
+  "ok": true,
+  "lessons": {
+    "authored": 106,
+    "coverage": {
+      "BRGSA": {
+        "scheduledQuestions": 223,
+        "questionsFullyTaught": 223,
+        "questionsWithoutLesson": 0,
+        "lecturesCited": 44,
+        "lecturesWithLesson": 44
+      },
+      "IBM": {
+        "scheduledQuestions": 199,
+        "questionsFullyTaught": 199,
+        "questionsWithoutLesson": 0,
+        "lecturesCited": 16,
+        "lecturesWithLesson": 16
+      },
+      "SCLM": {
+        "scheduledQuestions": 200,
+        "questionsFullyTaught": 200,
+        "questionsWithoutLesson": 0,
+        "lecturesCited": 16,
+        "lecturesWithLesson": 16
+      },
+      "SPMS": {
+        "scheduledQuestions": 184,
+        "questionsFullyTaught": 184,
+        "questionsWithoutLesson": 0,
+        "lecturesCited": 16,
+        "lecturesWithLesson": 16
+      }
+    }
+  },
+  "totals": {
+    "BRGSA": {
+      "questions": 240,
+      "bosses": 40,
+      "constructedResponses": 36,
+      "excludedLegacyMcqs": 1,
+      "longestOptionScore": 0.21,
+      "longestOptionSample": 76,
+      "lengthRankShares": [
+        0.24,
+        0.3,
+        0.25,
+        0.21
+      ],
+      "lengthRankSpread": 0.05,
+      "answerSlotShares": {
+        "4": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ]
+      }
+    },
+    "IBM": {
+      "questions": 216,
+      "bosses": 40,
+      "constructedResponses": 36,
+      "excludedLegacyMcqs": 1,
+      "longestOptionScore": 0.24,
+      "longestOptionSample": 52,
+      "lengthRankShares": [
+        0.08,
+        0.18,
+        0.5,
+        0.24
+      ],
+      "lengthRankSpread": 0.25,
+      "answerSlotShares": {
+        "4": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ]
+      }
+    },
+    "SCLM": {
+      "questions": 216,
+      "bosses": 40,
+      "constructedResponses": 0,
+      "excludedLegacyMcqs": 0,
+      "longestOptionScore": 0.14,
+      "longestOptionSample": 84,
+      "lengthRankShares": [
+        0.24,
+        0.26,
+        0.36,
+        0.14
+      ],
+      "lengthRankSpread": 0.11,
+      "answerSlotShares": {
+        "4": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ]
+      }
+    },
+    "SPMS": {
+      "questions": 200,
+      "bosses": 40,
+      "constructedResponses": 0,
+      "excludedLegacyMcqs": 0,
+      "longestOptionScore": 0.34,
+      "longestOptionSample": 52,
+      "lengthRankShares": [
+        0.1,
+        0.17,
+        0.39,
+        0.34
+      ],
+      "lengthRankSpread": 0.15,
+      "answerSlotShares": {
+        "4": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ]
+      }
+    }
+  },
+  "errors": [],
+  "warnings": [
+    "IBM: sorting each question's options by length puts the correct answer at rank 3 of 4 in 50% of 52 questions (chance is 25%), so \"always pick the second-longest option\" is a strategy. Shares by rank, shortest first: 8% / 18% / 50% / 24%. Vary how many distractors run longer than the correct answer instead of lengthening a fixed number of them."
+  ]
+}

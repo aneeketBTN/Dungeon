@@ -289,7 +289,9 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 - **Comply:** Require a substantive written response before showing criteria. Show the rubric
   before the exemplar in learning mode, record selected criteria as self-review, keep the response
   unscored, and exclude it from correctness percentages and independent Strong evidence. In
-  held-feedback mode, reveal neither rubric nor exemplar until the final review.
+  held-feedback mode, reveal neither rubric nor exemplar until the final review. The only machine-
+  marked exception is the explicitly enabled, source-bound local practice path governed by LAW-58;
+  production and every abstention retain this self-review contract.
 - **Verify:** Try empty and short responses, complete rubric self-review, inspect results and the
   concept dashboard, and confirm no automatic correct/incorrect label or Strong promotion exists.
 
@@ -817,6 +819,336 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   media queries resolve against the frame rather than the dead viewport.
 - **Verify:** The measured end state matches the geometry it should land on — for the switch, the
   thumb's centre within a pixel of the pressed label's centre, at every tested width.
+
+### LAW-57 🔴 — Response speed may gate a claim, never the answer or the learner
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-13 measurement foundation. A new research direction proposed response latency
+  as implicit evidence while the earlier evidence brief correctly prohibited inferring learner
+  states from speed.
+- **Why:** Raw latency is identified behavioural data once the profile syncs to D1, accessibility
+  and interruption can make slow responses meaningless, and a fast expert response can be valid.
+  Treating speed as correctness, confidence, effort, or ability would turn a weak signal into a
+  learner judgement. Reloading a pre-selected response creates a second trap: the page sees only the
+  time since reload and can falsely call an old answer instant.
+- **Comply:** Time with a monotonic page-lifetime clock from render to explicit answer commit; save
+  only the contract's coarse band and derived flags. A rapid response keeps its answer, feedback,
+  misconception, and scheduling effects but cannot supply Strong evidence or erase Strong evidence
+  already established by eligible attempts. Evaluate the latest-answer Strong gate against the
+  newest eligible attempt; an incorrect rapid answer still reaches the ordinary error gates because
+  speed never invalidates correctness. Never penalise
+  slowness. Historical untimed attempts stay eligible. A restored complete response is `unknown`,
+  not rapid. Keep the threshold provisional until real item/format evidence exists.
+- **Verify:** In an isolated Browser fixture, an otherwise Strong body with a rapid fifth response
+  stays Developing and names the reason; the same evidence without the flag becomes Strong. A
+  correct response inside the threshold records the rapid reason, one outside it does not, and an
+  immediately committed restored response also does not. Add a later rapid-correct response to an
+  already Strong body and confirm it remains Strong; change that response to incorrect and confirm
+  ordinary error rules still apply. Search the profile-writing path for raw millisecond fields and
+  find none.
+
+### LAW-58 🔴 — A local model earns criterion authority only through bounded evidence and abstention
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-13 local judgement slice. The owner authorised Qwen to check candidate written
+  answers, which would otherwise let fluent output become an unexplained grade and make a laptop a
+  covert production dependency. The first real-checkpoint pass also returned academically usable
+  content but wrapped an exact candidate quote in `The candidate states ...`; accepting that wrapper
+  would have made the purported evidence something the learner never wrote.
+- **Why:** The model can hallucinate course claims, obey prompt injection inside an answer, invent a
+  citation, produce malformed output, or repeat the same mistake in a second pass. A loopback server
+  that binds to the LAN can also accidentally expose candidate answers or model access. Even a
+  correct practice mark is not calibrated mastery or an official IIMB grade.
+- **Comply:** Enable the grader only by explicit local launch after the owner approves the exact
+  configured model ID and that ID is repeated in the approved-model setting; an ID mismatch keeps
+  the HTTP authority absent. Keep exact-ID approval distinct from quality calibration: a provisional
+  owner-local path may run while plainly `WAITING_LOCAL_MODEL_CALIBRATION`, but it cannot be called
+  academically verified until the owner-marked gate passes. Accept grading calls only from a
+  loopback client and same origin, one at a time; keep LM Studio itself on loopback. Retrieve only
+  the question's declared lecture IDs, including the applied lecture that authored the case and
+  decision rather than only the concept's opening lecture. Exclude candidate wording from retrieval
+  so evidence can be prepared before submission. Treat the answer and retrieved text as untrusted
+  data. Run one compact criterion judgement, then validate its complete schema, English-only output,
+  citations against the actual retrieval, and awarded answer evidence as a raw literal substring of
+  the submitted answer; abstain on uncertainty or any failed check. A second generation from the same
+  checkpoint is an audit/calibration option, not a per-answer authority requirement. Label the model
+  and authority boundary. Keep the attempt `scored:false`, prohibit Strong
+  evidence and all feedback while an examiner paper is running. Post-submit examiner review may use
+  the same authority only after the score and paper state are frozen; its misses may prioritise
+  repair, while its successes never close gaps or award mastery. Schedule repair only from an
+  accepted missing criterion. Keep criterion outcomes in a separate written-practice profile, not
+  concept mastery. Require every `not_met` result to select one or two server-owned gap codes for
+  that rubric criterion, distinguishing a missing move from a misunderstood one; free-form model
+  prose never enters the corrective pool. A miss may open a bounded confirmation counter, insert an unscored deterministic repair, and target the next fresh
+  authored written prompt; it may not infer a permanent ability trait or close from merely showing
+  the lesson. Require two later accepted criterion successes to close a newly opened gap.
+  Treat an in-flight model call as page-lifetime state: leaving or reloading cancels its authority,
+  ignores any late result, and restores the saved answer as ready to check rather than a permanent
+  spinner. For an awarded criterion, require the shortest raw literal substring from the submitted
+  answer—no prefix, commentary, or added quotation marks. Keep `answerEvidence` empty for
+  `not_met` and `uncertain`; do not loosen the validator to rescue persuasive model prose.
+- **Verify:** Unit-test answer-independent source-bound retrieval, prompt-injection placement and uncertainty,
+  invented citations, schema validation and repair routing. Through the real local HTTP and Browser
+  path, confirm health is opt-in, missing or mismatched model approval returns no grader route, the result names the model and citations, a missing criterion
+  queues a re-attempt plus an unscored repair and fresh-prompt confirmation, abstention creates no
+  criterion evidence and reveals the self-review fallback, cross-origin POST is denied, and
+  the public/normal local server exposes no grader route. Calibrate the real checkpoint separately;
+  leaving during a delayed call must resume as ready to grade and ignore the late result. A fake
+  OpenAI-compatible endpoint verifies plumbing only. Regression-test commentary-wrapped answer
+  evidence as invalid. Record real-model latency and synthetic/adversarial smoke separately from the
+  owner-marked 48-case gate, and never use a generated smoke set as its substitute.
+
+### LAW-59 🔴 — Hosted answer checking must bind model, corpus, consent, and claim together
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-13 hosted written-authority slice. Moving the local Qwen contract onto the
+  website creates four new failure classes at once: a different checkpoint can inherit local
+  calibration it never earned; a stale or unfiltered vector index can become the source of truth;
+  a public arbitrary-question endpoint can escape Dungeon's authored rubric boundary; and
+  candidate answers can enter logs, storage, or unbounded paid inference.
+- **Why:** “Qwen” is a family name, not evidence that two deployments behave alike. RAG only grounds
+  an answer if retrieval is filtered to an approved corpus and its returned metadata is validated.
+  A learner-facing judgement needs a Dungeon-owned prompt and rubric. Public inference also has a
+  cost and privacy surface that the loopback path does not.
+- **Comply:** The public route remains unavailable unless an explicit feature flag, exact configured
+  and approved model IDs, exact corpus version, AI binding, and Vectorize binding all agree. Create
+  metadata indexes before inserting transcript chunks; filter every query by course and corpus,
+  and authored grading additionally by the server-owned lecture IDs. Exclude candidate text from
+  retrieval queries. Validate returned metadata before putting it in a prompt. Use the same
+  compact-judgement plus deterministic citation/schema/literal-answer-evidence contract as local marking, but calibrate the hosted
+  checkpoint separately. Do not expose arbitrary-question coaching through the learner UI or public
+  Worker API; internal evaluation tooling must never claim a numeric mark. Require an authenticated learner,
+  same-origin POST, bounded JSON, daily per-email quota, updated tester consent, and a non-AI
+  fallback. Store only the usage counter; never log or store candidate answer, retrieved text, or
+  model output. Timed examiner papers never call the route before submission. An authored
+  post-submit examiner review may call both the server-owned rubric route and the non-numeric coach,
+  with question ID, lecture filters, quota, and the same no-storage boundary; arbitrary public
+  questions remain unavailable. The browser never calls the
+  Mac, Vectorize, or Workers AI directly.
+- **Verify:** Unit-test disabled/mismatched activation, server-owned authored questions, course /
+  corpus / lecture filters, 1,024-dimensional embeddings, invented citations, absent public coach
+  output, same-origin and session boundaries, request size, quota exhaustion, and content-free
+  metering. A Worker dry-run must show AI and Vectorize bindings while the committed vars stay off /
+  unapproved / unindexed. Run the 48-case rubric set against the exact hosted checkpoint and actual
+  Vectorize corpus before activation.
+  Real-Browser acceptance must prove enabled, abstention, quota, mobile layout, and the manual
+  fallback. Local calibration, mock bindings, or a non-empty index alone cannot close this gate.
+
+### LAW-60 🔴 — Corrupted model script never reaches learner feedback
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-13 real-model Browser check. Qwen inserted stray CJK glyphs between otherwise
+  English words in a suggested answer, making course guidance visibly corrupted.
+- **Why:** Fluent surrounding prose can make an encoding/tokenisation defect look like a course term.
+  Silently displaying it damages readability and trust; blindly stripping characters can join words
+  or alter quoted candidate evidence.
+- **Comply:** Tell every marking pass to write model-authored prose in English with plain ASCII
+  punctuation. Validate generated feedback, reasons, summaries, strengths, gaps, and suggested
+  answers for unexpected CJK scripts, while excluding exact candidate quotes from that check. Retry
+  once with an explicit encoding-repair instruction; if corruption recurs, abstain and show the
+  deterministic fallback. Apply the same contract locally and in Workers AI.
+- **Verify:** Inject a CJK artifact into the first structured response and prove the second attempt is
+  clean; inject it twice and prove the result abstains without returning corrupted learner copy.
+
+### LAW-61 🔴 — A question that names an example must carry it, not borrow it from the lesson
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-14, owner screenshot. "In the drilling-machine example, select every need the
+  purchase actually serves." — no drilling machine anywhere on the page, and options that then said
+  "the certificate" and "more than a decade of study" as though something had introduced them. Four
+  SPMS multiple-select items did this (drilling machine, Zerodha, ride-hailing MoSCoW, WhatsApp);
+  the multi-select builder had no `caselet` field at all, so none of them could have shown one.
+- **Why:** The authoring leaned on teach-before-test to supply the example, and that is not what
+  LAW-47 guarantees. A lesson delivered four questions earlier is memory; a question is answered
+  against what is on the page. Worse, the same items are SPMS Section B, and **the examiner delivers
+  no lesson** — there the referent has never existed. One of the four was not in its lesson either,
+  so it could only ever be answered from the transcript. The failure is invisible to every existing
+  gate: the item validates, schedules, and marks correctly. It is simply unanswerable by reasoning.
+- **Comply:** If a stem points at a specific example, case, product, company, or scenario, that
+  question ships the example in `caselet`. Write it from the lecture's own clean transcript, and
+  **withhold whatever the question asks the learner to supply** — a case that names the three layers
+  is not a case, it is the answer set. Options, `answers`, and `diagnoses` stay unchanged, so the
+  marking contract and any section shape spread are untouched. If a question family cannot carry a
+  caselet, either give its builder one or do not write a referential stem for it. A stem that cites
+  *"the lecture"* as authority for a framework ("as the lecture presents them") is a milder, separate
+  problem and no caselet fixes it — rewrite it to ask what is true.
+- **Verify:** Load the bank the way `tools/validate_t6_bank.js` does and scan every question with no
+  caselet, twice: once for deictic phrasing (`the <X> example`, `this example`, `the lecture's <X>`,
+  `the lecture uses/gives/presents/names`, `the case above`, `the same scenario`) and once for
+  capitalised non-sentence-initial tokens minus framework acronyms, which catches an example no
+  pattern anticipated. Every hit either shows its example or names no example. Then open one changed
+  item on **both** surfaces — the learn question (`case-block.hidden === false`, kicker reads
+  "Then decide") and the examiner (`.exam-caselet` present) — because they are separate render
+  paths and the examiner is the one with no lesson behind it.
+
+### LAW-63 🔴 — Support material never prints the answer to the question it supports
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-14, owner report — "a primer is just tapping the same mcq as the question
+  verbatim" — measured while verifying the practice presets. Evidence:
+  `evidence/2026-08-14/t6-practice-presets/verification.md`.
+- **Why:** `renderPrimerPanel` prints `Know this: <primerFact>` directly above the options, and
+  `addPrimer` sets `primerFact: data.summary` — the same string it makes the correct option. **64 of
+  64 primers reveal their own answer on their own screen**, so the task is to find a sentence already
+  on the page. The distractors cannot rescue it: they are other concepts' summaries, per the rule
+  `t6_catalog.js` states for the whole bank — "distractors in this bank are not invented: they are
+  borrowed from other concepts" — so with the panel covered the item is still answerable by
+  topic-matching and unanswerable by reasoning, exactly what `relevantWrong()` fixed for case
+  questions and was never applied here. The panel's four strings are also the correct answer to **493
+  scored questions** across the bank; on a real fresh sweep, **14 of 16** SPMS questions had their
+  answer printed on a screen the learner had already seen (BRGSA 0, SCLM 10, IBM 13). Nothing catches
+  it: the primer creates no evidence, so it corrupts no score — it simply teaches nothing, and it
+  spends the concept's first contact doing it.
+- **Closed by:** the prediction primer, 2026-08-14. The panel now carries the case and withholds the
+  rule; the learner commits a prediction in their own words; the principle arrives as the answer to
+  it. Nothing is keyed, marked, or recorded as evidence, so there is no answer to print. Verified at
+  `evidence/2026-08-14/t6-practice-presets/verification.md`.
+- **Comply:** A support surface may print the *material* a principle is derived from — a case, a
+  carry-forward, a named trap it has already fallen for — and must not print, before the learner
+  commits, the answer to the question it is itself asking. Reveal it **after**, as the consequence of
+  the learner's own reasoning. **Scope, deliberately narrow:** teaching a principle before a later
+  scored question is LAW-47 doing its job, not a leak, and a rule forbidding it would forbid lessons.
+  What this Law forbids is the same *surface* holding the question and its answer.
+  If a support surface asks a keyed question at all, its distractors must be same-concept
+  misreadings — a distractor borrowed from another concept makes the item topic-matchable and is not
+  a distractor. Two collisions make that hard here and are worth knowing before designing one:
+  `confusions` are already `_explain`'s distractors and `bridge` is already `_connect`'s answer, so
+  asking for either moves the leak rather than closing it. Asking for a *prediction* — unkeyed,
+  unmarked, no evidence — sidesteps the collision entirely and is what the primer now does.
+- **Verify:** In the page, not in Node: only the running app knows what a panel renders. For every
+  support surface, assert that no string on screen before the learner commits is a correct option,
+  blank answer, or boss-step answer of any scheduled question sharing its `conceptId`, and that
+  committing moves neither `conceptAttempts` nor `totalAnswers` — measured as a **delta across the
+  commit**, since a run that answers scored questions between support surfaces has legitimate
+  evidence by the second one. Then assert the reveal still carries what the panel withheld, or the
+  fix has deleted the teaching rather than repositioning it.
+  `tools/browser-checks/primer-prediction.js` does all of this over every concept in a subject.
+- **Excluded, and reported separately:** the concept's own name. The layering copy has to print it —
+  "Carry forward: <previous>. Now add <this>" is what makes a run read as a sequence — so **32
+  scheduled questions per subject whose correct answer *is* that name** (`_term_cloze`, and the
+  framework blank of `_case_cloze`) are answerable from orientation copy regardless of what any
+  support surface does. That is a question-design problem, not a support-surface one; the check
+  reports it under `answerableFromTheConceptName` rather than folding it into this Law.
+
+### LAW-64 🔴 — Text has to fit the box that holds it, and the probe has to be able to see it
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-14, owner screenshot of the results ring: "16 scored questions" printed across
+  the ring's own stroke. `tools/browser-checks/ui-audit.js` had reported that screen clean in the
+  same session. Evidence: `evidence/2026-08-14/t6-practice-presets/verification.md`.
+- **Why:** The probe measured the viewport edge, tap size, corner radii, paragraph length, font floor
+  and row raggedness, and **nothing about whether content fits its container** — so the one class of
+  defect a reader notices first was the one nothing could see. Two more were sitting behind it. The
+  mastery key is `<i><b>Label</b> — description</i>`, three children in a row styled
+  `grid-template-columns: auto minmax(0,1fr)`; a grid assigns columns per child, so at 375px the
+  columns resolved to 274px and 28.7px, the bold label wrapped inside 28.7px and ran 19px past the
+  panel, and its own description landed on the row below it. And the answer-review disclosures were
+  23px targets, twelve to a review. A clean report from a probe that cannot see the defect class
+  reads exactly like a clean screen.
+- **Comply:** Never size a text container to the string it happens to hold today, and never put
+  runtime-length text inside a round one — a circle is narrower than its box everywhere except the
+  middle, so there is no width that can be guaranteed to fit. Put the caption outside the shape.
+  Do not use `display: grid` or `flex` on an element whose children are an inline sentence: every
+  child, including anonymous text runs, becomes an item and takes a cell. A hanging indent
+  (`padding-left` + negative `text-indent`) is what "marker then flowing text" actually wants.
+- **Verify:** `ui-audit.js` carries `clipped`, `circleFit` and `overlaps`, and every layout claim
+  runs all three at 320, 375 and 1280 across each screen in fixed-width same-origin iframes.
+  Measure **glyph runs** via `Range.getClientRects()`, never `scrollWidth`: `scrollWidth` on an
+  inline box describes its containing block, so a wrapped `<b>` reports an overflow the width of its
+  own second line and forty false findings bury two real ones. For a circle, test the chord
+  `2·sqrt(r² − dy²)` at the text's height, using cap height either side of the run's centre rather
+  than the line box — a 14px badge holding an 11px "i" on a 29px line otherwise reports its circle as
+  zero wide. Exclude visually-hidden labels by **shape** (a ~1px box with `overflow: hidden` around a
+  full sentence), not by class name, so the next one written is covered too.
+- **Note:** the fix is the detector as much as the CSS. Three defects were live behind a probe that
+  had reported those screens clean twice in the same session.
+- **Recurrence 2026-08-15, and the reason it hid:** `.exam-legend li` is
+  `grid-template-columns: 26px 1fr`, and `.exam-chip` carries `min-width: 44px` to meet the tap
+  floor. The chip overflowed its own 26px cell, ate the 9px gap, and painted **9×17px across its
+  own label** on all five legend rows at every width above the narrow breakpoint. It never showed
+  at 375 because the narrow block already sizes the chip to 22px, and the 2026-08-14 sweep covered
+  the dashboard, examiner **home** and lesson — never a paper mid-question. **A viewport sweep is
+  only as wide as the screens it visits;** name the screens, not just the widths. Fixed by not
+  inheriting the tap floor on a swatch: `li .exam-chip` was already `cursor: default`, which had
+  been saying it is not a control for as long as the defect existed.
+- **Note on tap size vs. layout:** raising something to 44px is a change to layout as well as to
+  hit area. Every place a tap floor is applied inside a fixed grid track is a candidate for this,
+  and the two rules never meet in the same file.
+- **Recurrence 2026-08-15, twice, both found by the first real screenshots and neither visible to
+  the probe.** Evidence: `evidence/2026-08-15/t6-harness-and-bank/verification.md`.
+  **(a) The Bag launcher docked on top of the theme toggle during a paper.** The launcher is docked
+  to the top-right on both the practice screen and a running paper, but the matching
+  `padding-inline-end` that reserves its space was written for `.app-header` on practice and for
+  `.exam-bar` on the paper — and the theme toggle lives in `.app-header`. Measured at 1280:
+  launcher 1201–1247, toggle 1183–1227, so the bag covered all but 18px of a 44px control. This is
+  F-01 (the bag over Submit) one bar higher up. `ui-audit.js` cannot see it: its `overlaps`
+  detector compares text-bearing siblings, and these are two icon-only buttons in different
+  stacking contexts.
+  **(b) The subject cards laid themselves out differently depending on the bank.** `.course-head`
+  is a wrapping flex row of code, negative-marking flag and date, with `margin-left: auto` pushing
+  the date right. In a 186px card the content needs 166px and has 164px, so the date wrapped —
+  but only on the one subject carrying the `-1` flag. SPMS's head measured 46px against 23px for
+  the other three, so its date dropped to a second line and right-aligned under the code. Four
+  cards in one rail, one laid out differently, because of a two-pixel overflow caused by a 21px
+  chip only one subject has. `ragged` did not fire because the cards do share a height; the
+  raggedness is *inside* them.
+  **The general lesson:** a DOM audit compares things it knows are siblings. It cannot see two
+  independently-positioned layers colliding, and it cannot see a layout that is *self-consistent
+  but different from the card beside it*. Both are obvious in a picture and invisible in a
+  measurement, which is the reason `tools/screenshot.mjs` now exists and the reason it does not
+  replace `ui-audit.js`.
+
+### LAW-65 🔴 — A blind file is blind by assertion, and the hole in a diagnosis array is an answer key
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15, finishing the persona harness. `tools/browser-checks/export-run.js`
+  attached `view._feedback` — the per-option diagnoses — to the candidate half of the export,
+  directly beneath the comment *"Withheld from the candidate file and carried in the key."*
+  Evidence: `evidence/2026-08-15/t6-harness-and-bank/verification.md`.
+- **Why:** The array has a **hole at the correct option**: `validate_t6_bank.js` requires a
+  diagnosis on every scored distractor and the answer carries none, so `diagnoses[answer]` is
+  `null` in **216 of 216** single-answer MCQs. Printing it beside the options hands over the
+  answer as reliably as the answer index would. The whole point of the blind file is that a
+  persona's blindness stops resting on their choosing not to look — a leaked key silently
+  restores the condition the previous run was criticised for, and every finding from that run
+  becomes unfalsifiable. This is LAW-47's recurrence in a different file: *a comment asserting
+  an invariant is not the invariant.*
+- **Comply:** A candidate-facing export carries what is on screen **before the learner commits**
+  and nothing else. Withholding is asserted in code, not in prose: walk the serialised candidate
+  object for `answer`, `answers`, `diagnoses`, `rubric`, `exemplar`, `explanation`, `link`,
+  `misconceptions`, `primerFact`, `tolerance`, `nearMisses`, `feedback`, and fail on a hit.
+  Support surfaces get a second check by content, not by field name — a primer's rule must not
+  appear on the primer's own step (LAW-63).
+- **Verify:** `node tools/export-learn-run.mjs` exits non-zero on any leak and names the path it
+  found it at. **Scope the content check to the surface**, not to the run: the first version
+  searched every step for the primer's rule and fired on all eight primers in four subjects, all
+  false — the rule is the concept summary, so it is legitimately the correct option of the
+  `_explain` and `_repair_cloze` items later in the run, which is teach-before-test working.
+
+### LAW-62 🟡 — One page load, one set: a rendered lesson is marked read in memory
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-14, measuring lesson order across all 40 study sets. The probe blanked
+  `profile.lessonsRead` in `localStorage` before each set — exactly as
+  `tools/browser-checks/teach-before-test.js` does — and reported 53 LAW-47 violations and 4 backward
+  steps. Both were artefacts.
+- **Why:** `renderLesson` calls `markLessonRead` the moment a lesson is displayed, deliberately, so a
+  resume does not re-teach it. That write lands on the profile held **in memory**; the app reads its
+  profile from storage once, at load. Blanking storage therefore changes nothing for the running
+  page. Opening set 2 after set 1 gets a queue missing whatever set 1 displayed, and it compounds
+  across a loop. The contamination is *order-dependent*, so it is not a constant offset that cancels
+  between a before and an after — it varies with the ordering under test, which is the worst case
+  for a comparison.
+- **Comply:** Any probe that needs a first-time-learner queue opens **exactly one** run per page
+  load: clear `lessonsRead`, reload, open one set, read `profile.active.queue`. To measure something
+  across many sets in one session, measure a property that does not read `lessonsRead` — question
+  selection and ordering do not — and say in the probe why that property was chosen.
+- **Verify:** Assert `Object.keys(profile.lessonsRead).length === 0` immediately **before** the
+  measured click, not at the start of the loop. If a multi-set loop is unavoidable, also read it
+  after the loop and report it beside the result rather than assuming it stayed empty.
+- **Note:** `teach-before-test.js` has this shape and still passes. Its result stands — a missing
+  lesson can only add violations, never hide one — but it is measuring a thinner queue than a real
+  first-time learner sees. It also skips set 10, whose card is labelled `P` rather than a number.
 
 ### LAW-50 🟡 — A lesson array closed with the wrong bracket is invisible until the file is parsed
 

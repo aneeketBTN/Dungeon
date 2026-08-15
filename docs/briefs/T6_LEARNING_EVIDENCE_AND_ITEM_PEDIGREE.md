@@ -73,7 +73,9 @@ These are facts the system can elicit from a learner but does not know at first 
 - whether a mistake was repaired or merely avoided when the same wording returned.
 
 The product should expose these through varied tagged questions and confidence checks, not infer
-them from speed, personality labels, or a two-answer streak.
+them from personality labels, a two-answer streak, or response speed. Per C31, speed has one
+narrower use: a response too rapid to support the claim Strong may be excluded from that gate while
+its answer remains fully recorded and its correctness unchanged.
 
 ### Unknown unknowns
 
@@ -162,7 +164,9 @@ Strong is a guarded claim. All of these gates must pass:
 5. applied evidence from a new case or a valid unassisted reasoning step;
 6. the most recent attempt is correct;
 7. no unresolved recurring misconception, high-confidence error, uncertain-correct confirmation,
-   or relevant failed reasoning step remains.
+   or relevant failed reasoning step remains;
+8. every attempt used to satisfy those gates is Strong-eligible; an explicitly classified rapid
+   response keeps its result but does not supply Strong evidence.
 
 Whole-chain boss completion remains separately visible and valuable, but it is not treated as a
 permanent universal Strong gate without learner data. Valid boss steps update the concepts they
@@ -234,6 +238,8 @@ Every new attempt records:
 - misconception tag matched, if any;
 - hint/revealed-step use;
 - initial attempt or re-attempt;
+- a coarse response-duration band, `rapidGuess`, and `strongEligible`; raw elapsed milliseconds are
+  ephemeral and never saved;
 - practice-block ID and timestamp.
 
 Historical version-2 attempts remain valid as limited evidence. Missing tags are shown as unknown;
@@ -298,9 +304,11 @@ diagnosis, when any of the four fields is empty, when a `why` restates the corre
 one through any path picks the contract up automatically, because the diagnosis pass runs over every
 question in the course after generation rather than inside each generator.
 
-Support-only primers and self-reviewed constructed responses are exempt: neither presents a scored
-wrong option. Legacy items excluded from scheduling for option-shape risk are also exempt, since
-repairing them is a separate decision from scheduling them.
+Support-only primers and constructed responses are exempt: neither presents a scored wrong option.
+Constructed responses remain `scored:false` whether they use transparent self-review or the
+loopback-only, source-cited local Qwen criterion path; an accepted missing criterion may schedule a
+repair but cannot supply Strong evidence. Legacy items excluded from scheduling for option-shape
+risk are also exempt, since repairing them is a separate decision from scheduling them.
 
 ### Boss-question contract
 

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>What Dungeon keeps — privacy notice</title>
+  <meta name="description" content="What the Dungeon closed test stores, why, and how to have it deleted.">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <main class="login-shell">
+    <section class="login-panel legal-panel" aria-labelledby="privacy-title">
+      <div class="brand-mark" aria-hidden="true">T6</div>
+      <p class="eyebrow">Privacy notice</p>
+      <h1 id="privacy-title">What Dungeon keeps, and why</h1>
+      <p class="lede">Effective 13 August 2026. Dungeon is a small, invite-only revision test. This is the whole picture, not a summary.</p>
+
+      <h2>What is stored</h2>
+      <ul>
+        <li>The approved email address you gave Aneeket.</li>
+        <li>Your revision progress: answers, attempts, confidence choices, completion state, and a coarse band for how quickly you responded.</li>
+        <li>For a written check: which prompt was checked, whether each visible criterion was met, and a bounded label for whether a writing move was missing or misunderstood.</li>
+        <li>A summary of each mock paper — marks, how much you attempted, how long it took. The options you chose are not stored.</li>
+        <li>A hashed session token, the agreement version you accepted, the country code Cloudflare reports at login, and account-lock state.</li>
+        <li>A per-day count of written checks, to enforce the daily allowance. It holds no question, answer, or result.</li>
+      </ul>
+
+      <h2>Your written answers are kept for three months</h2>
+      <p>This is the one thing on this page that is not needed to run your own session, so it is worth reading properly.</p>
+      <p>Dungeon keeps the text you write in written practice for up to three months. The reason is that the machine marking is not yet good enough to be treated as a grade, and the only honest way to improve it is to compare what it decided against what a person reading the same answer would decide. That comparison needs the answers.</p>
+      <p>Your dashboard shows you your own results. The stored text is used to correct the rubrics and write better prompts for the students who take this course after you. It is not published, not sold, and not shown to other testers.</p>
+      <p><b>Ask and it will be deleted.</b> Sooner than three months, for any reason, without explaining why. Withdrawing from the test deletes your answers along with everything else. Deletion is a request to Aneeket, done by hand — there is no self-service button for it yet, and this page will say so until there is.</p>
+
+      <h2>Where your writing goes when it is checked</h2>
+      <p>To check an answer, Dungeon sends it to an AI model along with the question and the relevant course passages. That model may be Cloudflare Workers AI, or a third-party AI provider reached through a routing service. If one provider is unavailable the request can move to another, so Dungeon cannot promise in advance which company handles a given answer. Those companies operate under their own terms and may be outside India.</p>
+      <p><b>Nothing that identifies you travels with it.</b> No name, no email, no account identifier — the model receives the question, your writing, and the course material, and nothing else.</p>
+      <p>The course evidence for each question is fixed and ships inside the application, so no request has to search a hosted copy of the course material.</p>
+
+      <h2>If you write something difficult</h2>
+      <p>If what you write reads as personal distress rather than an exam answer, Dungeon stops before the check runs. That response is <b>not sent to any AI provider, not marked, not stored, and does not affect your progress.</b> You are shown support information instead.</p>
+      <p>Tele-MANAS is free, confidential and open 24 hours: <a href="tel:14416">14416</a> or <a href="tel:18008914416">1800-891-4416</a>.</p>
+
+      <h2>What is not collected</h2>
+      <p>Dungeon does not request precise location, does not store your raw IP address in its database, and does not save exact per-question response times — the browser derives a coarse band and discards the milliseconds. A fast answer keeps its correctness; speed only stops that one response from independently supporting the word Strong. Slow answers are never penalised.</p>
+
+      <h2>Honest limits</h2>
+      <p>Your approved email works like a password and inbox ownership is not verified. One active browser session per email. Logging in from a different country than your first login locks the account for review — travel, VPNs and mobile networks all cause this legitimately, so it is a signal, not an accusation.</p>
+
+      <h2>Asking for anything</h2>
+      <p>Corrections, explanations of a lock, withdrawal, or deletion: message Aneeket privately through the channel used to onboard you.</p>
+
+      <p class="legal-return"><a href="./">Back to Dungeon</a></p>
+    </section>
+  </main>
+</body>
+</html>

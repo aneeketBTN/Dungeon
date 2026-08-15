@@ -1,0 +1,697 @@
+{
+ "subject": "IBM",
+ "subjectTitle": "Inclusive Business Models",
+ "set": 1,
+ "half": "learn",
+ "queueDigest": "e99f3a58",
+ "schedule": {
+  "setId": 1,
+  "title": "Inclusive business basics",
+  "kicker": "Study set 1 of 10",
+  "steps": 12,
+  "scoredQuestions": 8,
+  "supportItems": 4,
+  "unresolvedSteps": 0,
+  "lessonsReadAfter": 1,
+  "readiness": {
+   "conceptsTaught": 1,
+   "conceptsTotal": 16,
+   "marks": {
+    "taught": 10,
+    "available": 100,
+    "percent": 10,
+    "alreadyMet": 0,
+    "alreadyMetMarks": 0,
+    "total": 10
+   },
+   "ladderSteps": 8,
+   "nextStep": {
+    "step": 1,
+    "set": 1,
+    "title": "Inclusive business basics",
+    "adds": [
+     "Inclusive business",
+     "Bottom-of-the-pyramid design"
+    ]
+   }
+  },
+  "ladder": [
+   {
+    "step": 1,
+    "set": 1,
+    "title": "Inclusive business basics",
+    "adds": [
+     "Inclusive business",
+     "Bottom-of-the-pyramid design"
+    ],
+    "state": "current"
+   },
+   {
+    "step": 2,
+    "set": 2,
+    "title": "Affordable health and education",
+    "adds": [
+     "No-frills healthcare access",
+     "Process specialisation in healthcare"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 3,
+    "set": 3,
+    "title": "Responsible finance and agriculture",
+    "adds": [
+     "Group-based microfinance",
+     "Responsible lending"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 4,
+    "set": 4,
+    "title": "Rural employment models",
+    "adds": [
+     "Rural BPO model",
+     "Replicating rural services"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 5,
+    "set": 5,
+    "title": "Shared value and energy access",
+    "adds": [
+     "Shared value",
+     "SELCO affordability system"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 6,
+    "set": 6,
+    "title": "Informal work and waste",
+    "adds": [
+     "LabourNet platform",
+     "Inclusive waste enterprise"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 7,
+    "set": 7,
+    "title": "Farmer organisations and social business",
+    "adds": [
+     "Farmer Producer Organisation",
+     "Social business"
+    ],
+    "state": "later"
+   },
+   {
+    "step": 8,
+    "set": 8,
+    "title": "Impact investment and measurement",
+    "adds": [
+     "Impact investing",
+     "Impact measurement"
+    ],
+    "state": "later"
+   }
+  ]
+ },
+ "ladder": [
+  {
+   "step": 1,
+   "set": 1,
+   "title": "Inclusive business basics",
+   "adds": [
+    "Inclusive business",
+    "Bottom-of-the-pyramid design"
+   ],
+   "state": "current"
+  },
+  {
+   "step": 2,
+   "set": 2,
+   "title": "Affordable health and education",
+   "adds": [
+    "No-frills healthcare access",
+    "Process specialisation in healthcare"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 3,
+   "set": 3,
+   "title": "Responsible finance and agriculture",
+   "adds": [
+    "Group-based microfinance",
+    "Responsible lending"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 4,
+   "set": 4,
+   "title": "Rural employment models",
+   "adds": [
+    "Rural BPO model",
+    "Replicating rural services"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 5,
+   "set": 5,
+   "title": "Shared value and energy access",
+   "adds": [
+    "Shared value",
+    "SELCO affordability system"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 6,
+   "set": 6,
+   "title": "Informal work and waste",
+   "adds": [
+    "LabourNet platform",
+    "Inclusive waste enterprise"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 7,
+   "set": 7,
+   "title": "Farmer organisations and social business",
+   "adds": [
+    "Farmer Producer Organisation",
+    "Social business"
+   ],
+   "state": "later"
+  },
+  {
+   "step": 8,
+   "set": 8,
+   "title": "Impact investment and measurement",
+   "adds": [
+    "Impact investing",
+    "Impact measurement"
+   ],
+   "state": "later"
+  }
+ ],
+ "run": [
+  {
+   "step": 1,
+   "kind": "lesson",
+   "lectureId": "IBM-M01-L03",
+   "reteach": false,
+   "title": "Introduction to inclusive business models",
+   "module": 1,
+   "lectureNumber": 3,
+   "objective": "Separate organisations by primary objective rather than by what they claim to care about.",
+   "explainer": [
+    "The distinction that runs through this whole course is not about sincerity, sector, or messaging. It is about which objective is primary — the one that wins when two goals pull apart.",
+    "A for-profit organisation's primary objective is to maximise profitability, which maximises shareholders' wealth. It may address needs of society, and often genuinely does, but that happens alongside the primary objective rather than in place of it. An inclusive business model reverses the order: its primary objective is to address a specific need of the poor.",
+    "The reversal does not make money optional. An inclusive business must still be financially sustainable, because an organisation that cannot cover its costs stops existing and therefore stops serving anyone. So it carries two requirements at once — address the need, and survive — with the need ranked first. That ranking is what the rest of the course tests every business against."
+   ],
+   "worked": {
+    "setup": "A company selling low-cost water filters says it exists to improve rural health.",
+    "move": "Ask what it would do if the most profitable segment were urban and middle-class.",
+    "because": "The answer reveals which objective is primary. Stated intent is not the test; what happens when profit and need diverge is the test."
+   },
+   "glossary": [
+    {
+     "term": "inclusive business",
+     "plain": "An organisation whose primary objective is addressing a specific need of the poor, while staying financially sustainable."
+    },
+    {
+     "term": "primary objective",
+     "plain": "The goal that wins when two goals conflict — the thing an organisation is actually structured for."
+    },
+    {
+     "term": "financially sustainable",
+     "plain": "Able to cover its own costs, so it can keep operating without running at a loss."
+    }
+   ],
+   "handoff": {
+    "connects": "Several kinds of organisation claim this territory. The next lecture sorts them.",
+    "promisesNextLecture": true,
+    "kept": false,
+    "note": "That is the course's order. This run does not follow it here — it delivers only the lectures your questions rest on, so Understanding social organisations is not part of it.",
+    "nextInRun": "Bottom of the pyramid markets",
+    "lectureId": "IBM-M01-L03"
+   }
+  },
+  {
+   "step": 2,
+   "kind": "primer",
+   "id": "ibm_inclusive_primer",
+   "concept": "Inclusive business",
+   "level": 1,
+   "levelLabel": "First contact · predict before you are told",
+   "carryForward": null,
+   "whatHappens": "Sanjeevani Clinics runs eleven centres in low-income urban districts. A consultation costs ₹120 against ₹600 at the nearest private hospital, and 78% of its patients earn under ₹15,000 a month. Fees cover operating costs and fund two new centres a year, while a philanthropic grant covered only the original fit-out. A consultant now proposes adding a cosmetic dermatology line at ₹4,000 a visit, arguing the margin would let the group expand faster. The existing centres already run at 94% capacity with a three-day wait.",
+   "knownTrap": null,
+   "stem": "Before anything names it: what rule do you think this case is showing, and why?",
+   "response": "free text — a prediction in the learner's own words. Nothing is marked or recorded.",
+   "termsAvailable": [
+    {
+     "term": "inclusive business",
+     "plain": "An organisation whose primary objective is addressing a specific need of the poor, while staying financially sustainable."
+    },
+    {
+     "term": "primary objective",
+     "plain": "The goal that wins when two goals conflict — the thing an organisation is actually structured for."
+    },
+    {
+     "term": "financially sustainable",
+     "plain": "Able to cover its own costs, so it can keep operating without running at a loss."
+    }
+   ]
+  },
+  {
+   "step": 3,
+   "kind": "question",
+   "id": "ibm_inclusive_case_cloze",
+   "type": "case-cloze",
+   "concept": "Inclusive business",
+   "caselet": "Sanjeevani Clinics runs eleven centres in low-income urban districts. A consultation costs ₹120 against ₹600 at the nearest private hospital, and 78% of its patients earn under ₹15,000 a month. Fees cover operating costs and fund two new centres a year, while a philanthropic grant covered only the original fit-out. A consultant now proposes adding a cosmetic dermatology line at ₹4,000 a visit, arguing the margin would let the group expand faster. The existing centres already run at 94% capacity with a three-day wait.",
+   "stem": "Fill both parts of the recommendation so the action and framework agree.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the decision",
+     "options": [
+      "Treat it as inclusive because serving an underserved need is the primary purpose and the model always sustains itself. (Inclusive business)",
+      "Call it inclusive only if shareholder return is its sole objective, since financial discipline is what separates a real business from charity. (Inclusive business)",
+      "Reject it as inclusive, because charging any fee to an underserved customer cancels the social purpose the model was built to serve. (Inclusive business)",
+      "Treat it as ordinary CSR, because social activity always sits outside the business model and is funded from profit. (Inclusive business)"
+     ]
+    },
+    {
+     "label": "Choose the framework",
+     "options": [
+      "Inclusive business: Aravind standardised pre- and post-operative work for paramedics so surgeons focused on surgery, never at the cost of clinical quality.",
+      "Inclusive business: An inclusive business must always do both: meet a specific need of underserved people, and remain financially sustainable.",
+      "Inclusive business: Serving bottom-of-the-pyramid markets always requires prices and delivery redesigned for structural constraints, never smaller copies of rich-market offers.",
+      "Inclusive business: Vaatsalya placed low-cost hospitals in semi-urban areas to cut patients' travel burden, trimming only costs that left essential quality intact."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "inclusive business",
+     "plain": "An organisation whose primary objective is addressing a specific need of the poor, while staying financially sustainable."
+    },
+    {
+     "term": "primary objective",
+     "plain": "The goal that wins when two goals conflict — the thing an organisation is actually structured for."
+    },
+    {
+     "term": "financially sustainable",
+     "plain": "Able to cover its own costs, so it can keep operating without running at a loss."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "kind": "question",
+   "id": "ibm_inclusive_repair_cloze",
+   "type": "cloze",
+   "concept": "Inclusive business",
+   "caselet": "A classmate writes: “Any profitable firm is inclusive if it sells a useful product to anyone who needs it.”",
+   "stem": "Replace the flawed claim with the precise principle.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the corrected principle",
+     "options": [
+      "Inclusive business: An inclusive waste enterprise creates shared value only when recovery, product demand and worker livelihoods all hold together.",
+      "Inclusive business: An inclusive business must always do both: meet a specific need of underserved people, and remain financially sustainable.",
+      "Inclusive business: Serving bottom-of-the-pyramid markets always requires prices and delivery redesigned for structural constraints, never smaller copies of rich-market offers.",
+      "Inclusive business: Rural service models scale through trusted local partners rather than capital-heavy control, under standards every partner must meet."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "inclusive business",
+     "plain": "An organisation whose primary objective is addressing a specific need of the poor, while staying financially sustainable."
+    },
+    {
+     "term": "primary objective",
+     "plain": "The goal that wins when two goals conflict — the thing an organisation is actually structured for."
+    },
+    {
+     "term": "financially sustainable",
+     "plain": "Able to cover its own costs, so it can keep operating without running at a loss."
+    }
+   ]
+  },
+  {
+   "step": 5,
+   "kind": "lesson",
+   "lectureId": "IBM-M01-L07",
+   "reteach": false,
+   "title": "Bottom of the pyramid markets",
+   "module": 1,
+   "lectureNumber": 7,
+   "objective": "State Prahalad's thesis precisely, including the design condition it depends on.",
+   "explainer": [
+    "C.K. Prahalad named the bottom of the pyramid — the base of the economic pyramid, meaning poor people considered as a market rather than as recipients of aid. His claim was that a company designing its product and service in the right manner can make a fortune there.",
+    "The argument rests on arithmetic that multinationals had been ignoring. Companies competed for the top of the pyramid, a comparatively small group, while the population below it was very large — roughly 4 billion people earning less than $1,500. Enormous volume at low margin can exceed modest volume at high margin, and nobody was serving it.",
+    "The condition is the part most often dropped when the thesis is repeated. \"Designed in the right manner\" is not decoration — existing products at existing prices do not work at this income level, so the design has to change. The single-serve sachet is the standard illustration: a one-rupee shampoo sachet made the product reachable for someone who could never buy a bottle. Note precisely what it fixes. It does not make shampoo cheaper per wash; it makes the purchase fit a daily cash flow rather than requiring a lump sum."
+   ],
+   "worked": {
+    "setup": "A consumer goods firm wants to enter low-income markets by discounting its existing large pack by 20%.",
+    "move": "Redesign the unit of purchase rather than the price of the existing unit.",
+    "because": "The constraint is often lump-sum cash availability, not the per-unit price. A cheaper large pack still demands money the buyer does not hold at once; a sachet meets the cash flow they actually have."
+   },
+   "glossary": [
+    {
+     "term": "bottom of the pyramid",
+     "plain": "The base of the economic pyramid — poor people regarded as a market."
+    },
+    {
+     "term": "market forces",
+     "plain": "Competition and profit-seeking, here proposed as tools for reaching the poor."
+    },
+    {
+     "term": "multinational",
+     "plain": "A large company operating across countries, historically competing only for the top of the pyramid."
+    },
+    {
+     "term": "sachet",
+     "plain": "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."
+    }
+   ],
+   "handoff": {
+    "connects": "The next lecture takes a company that did all of this, and asks what it cost.",
+    "promisesNextLecture": true,
+    "kept": false,
+    "note": "That is the course's order. This run does not follow it here — it delivers only the lectures your questions rest on, so Diageo's value chain innovation is not part of it.",
+    "nextInRun": "the questions this lecture answers",
+    "lectureId": "IBM-M01-L07"
+   }
+  },
+  {
+   "step": 6,
+   "kind": "primer",
+   "id": "ibm_bop_primer",
+   "concept": "Bottom-of-the-pyramid design",
+   "level": 1,
+   "levelLabel": "First contact · predict before you are told",
+   "carryForward": "Carry forward: Inclusive business. Now add Bottom-of-the-pyramid design.",
+   "whatHappens": "A packaged foods company sells a 2 kg fortified flour pack at ₹340, payable in a single transaction, through 400 urban supermarkets. It targets rural districts holding 90 million people and has reached 0.3% of them in two years. Field visits find median household cash arrives weekly rather than monthly, the nearest stocking retailer is 14 km away, and 2 kg exceeds what most families can store safely through the humid season. The country manager proposes doubling the advertising budget, citing the size of the untapped population.",
+   "knownTrap": null,
+   "stem": "Before anything names it: what rule do you think this case is showing, and why?",
+   "response": "free text — a prediction in the learner's own words. Nothing is marked or recorded.",
+   "termsAvailable": [
+    {
+     "term": "bottom of the pyramid",
+     "plain": "The base of the economic pyramid — poor people regarded as a market."
+    },
+    {
+     "term": "market forces",
+     "plain": "Competition and profit-seeking, here proposed as tools for reaching the poor."
+    },
+    {
+     "term": "multinational",
+     "plain": "A large company operating across countries, historically competing only for the top of the pyramid."
+    },
+    {
+     "term": "sachet",
+     "plain": "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."
+    }
+   ]
+  },
+  {
+   "step": 7,
+   "kind": "question",
+   "id": "ibm_bop_repair_cloze",
+   "type": "cloze",
+   "concept": "Bottom-of-the-pyramid design",
+   "caselet": "A classmate writes: “The model depends only on very high margins per customer, since poor households buy rarely and must be charged more.”",
+   "stem": "Replace the flawed claim with the precise principle.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the corrected principle",
+     "options": [
+      "Bottom-of-the-pyramid design: Rural service models scale through trusted local partners rather than capital-heavy control, under standards every partner must meet.",
+      "Bottom-of-the-pyramid design: Serving bottom-of-the-pyramid markets always requires prices and delivery redesigned for structural constraints, never smaller copies of rich-market offers.",
+      "Bottom-of-the-pyramid design: An inclusive waste enterprise creates shared value only when recovery, product demand and worker livelihoods all hold together.",
+      "Bottom-of-the-pyramid design: An inclusive business must always do both: meet a specific need of underserved people, and remain financially sustainable."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "bottom of the pyramid",
+     "plain": "The base of the economic pyramid — poor people regarded as a market."
+    },
+    {
+     "term": "market forces",
+     "plain": "Competition and profit-seeking, here proposed as tools for reaching the poor."
+    },
+    {
+     "term": "multinational",
+     "plain": "A large company operating across countries, historically competing only for the top of the pyramid."
+    },
+    {
+     "term": "sachet",
+     "plain": "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "kind": "question",
+   "id": "ibm_bop_explain",
+   "type": "mcq",
+   "concept": "Bottom-of-the-pyramid design",
+   "caselet": null,
+   "stem": "Which statement best explains Bottom-of-the-pyramid design?",
+   "prompt": null,
+   "options": [
+    "Bottom-of-the-pyramid design: Serving bottom-of-the-pyramid markets always requires prices and delivery redesigned for structural constraints, never smaller copies of rich-market offers.",
+    "Bottom-of-the-pyramid design: Existing premium products can be moved unchanged into poorer markets, because a good product sells wherever there is genuine unmet need.",
+    "Bottom-of-the-pyramid design: A product becomes inclusive as soon as it is sold in a developing economy, regardless of its price or design.",
+    "Bottom-of-the-pyramid design: The model depends only on very high margins per customer, since poor households buy rarely and must be charged more."
+   ],
+   "termsAvailable": [
+    {
+     "term": "bottom of the pyramid",
+     "plain": "The base of the economic pyramid — poor people regarded as a market."
+    },
+    {
+     "term": "market forces",
+     "plain": "Competition and profit-seeking, here proposed as tools for reaching the poor."
+    },
+    {
+     "term": "multinational",
+     "plain": "A large company operating across countries, historically competing only for the top of the pyramid."
+    },
+    {
+     "term": "sachet",
+     "plain": "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."
+    }
+   ]
+  },
+  {
+   "step": 9,
+   "kind": "question",
+   "id": "ibm_m1_match",
+   "type": "match",
+   "concept": "Inclusive business and Bottom-of-the-pyramid design",
+   "caselet": null,
+   "stem": "Match each prompt to the precise explanation or action.",
+   "prompt": null,
+   "rows": [
+    "Inclusive business — principle",
+    "Bottom-of-the-pyramid design — principle",
+    "Inclusive business — decision",
+    "Bottom-of-the-pyramid design — decision"
+   ],
+   "choices": [
+    "Redesign affordability, access and service around the constraints, because population size is never demand by itself.",
+    "Treat it as inclusive because serving an underserved need is the primary purpose and the model always sustains itself.",
+    "Serving bottom-of-the-pyramid markets always requires prices and delivery redesigned for structural constraints, never smaller copies of rich-market offers.",
+    "An inclusive business must always do both: meet a specific need of underserved people, and remain financially sustainable."
+   ],
+   "termsAvailable": [
+    {
+     "term": "inclusive business",
+     "plain": "An organisation whose primary objective is addressing a specific need of the poor, while staying financially sustainable."
+    },
+    {
+     "term": "primary objective",
+     "plain": "The goal that wins when two goals conflict — the thing an organisation is actually structured for."
+    },
+    {
+     "term": "financially sustainable",
+     "plain": "Able to cover its own costs, so it can keep operating without running at a loss."
+    },
+    {
+     "term": "bottom of the pyramid",
+     "plain": "The base of the economic pyramid — poor people regarded as a market."
+    },
+    {
+     "term": "market forces",
+     "plain": "Competition and profit-seeking, here proposed as tools for reaching the poor."
+    },
+    {
+     "term": "multinational",
+     "plain": "A large company operating across countries, historically competing only for the top of the pyramid."
+    },
+    {
+     "term": "sachet",
+     "plain": "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."
+    }
+   ]
+  },
+  {
+   "step": 10,
+   "kind": "question",
+   "id": "ibm_bop_bridge_cloze",
+   "type": "cloze",
+   "concept": "Bottom-of-the-pyramid design",
+   "caselet": "A packaged foods company sells a 2 kg fortified flour pack at ₹340, payable in a single transaction, through 400 urban supermarkets. It targets rural districts holding 90 million people and has reached 0.3% of them in two years. Field visits find median household cash arrives weekly rather than monthly, the nearest stocking retailer is 14 km away, and 2 kg exceeds what most families can store safely through the humid season. The country manager proposes doubling the advertising budget, citing the size of the untapped population.",
+   "stem": "Complete the causal explanation, not just the label.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the causal explanation",
+     "options": [
+      "Bottom-of-the-pyramid design: A social purpose becomes repeatable when it sits inside a no-loss operating model instead of depending only on periodic donations.",
+      "Bottom-of-the-pyramid design: Local information can reduce screening risk, but the structure works only when repayment capacity and group discipline remain real.",
+      "Bottom-of-the-pyramid design: A large underserved population becomes a market only when the offer removes the affordability and access barriers that suppress use.",
+      "Bottom-of-the-pyramid design: Where care is located changes who can use it; cost discipline matters only if essential quality and access remain intact."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "bottom of the pyramid",
+     "plain": "The base of the economic pyramid — poor people regarded as a market."
+    },
+    {
+     "term": "market forces",
+     "plain": "Competition and profit-seeking, here proposed as tools for reaching the poor."
+    },
+    {
+     "term": "multinational",
+     "plain": "A large company operating across countries, historically competing only for the top of the pyramid."
+    },
+    {
+     "term": "sachet",
+     "plain": "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."
+    }
+   ]
+  },
+  {
+   "step": 11,
+   "kind": "question",
+   "id": "ibm_bop_case_answer",
+   "type": "short-answer",
+   "concept": "Bottom-of-the-pyramid design",
+   "caselet": "A packaged foods company sells a 2 kg fortified flour pack at ₹340, payable in a single transaction, through 400 urban supermarkets. It targets rural districts holding 90 million people and has reached 0.3% of them in two years. Field visits find median household cash arrives weekly rather than monthly, the nearest stocking retailer is 14 km away, and 2 kg exceeds what most families can store safely through the humid season. The country manager proposes doubling the advertising budget, citing the size of the untapped population.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "writtenMode": "case",
+   "rubricPointCount": 3,
+   "selfReviewOnly": true,
+   "termsAvailable": [
+    {
+     "term": "bottom of the pyramid",
+     "plain": "The base of the economic pyramid — poor people regarded as a market."
+    },
+    {
+     "term": "market forces",
+     "plain": "Competition and profit-seeking, here proposed as tools for reaching the poor."
+    },
+    {
+     "term": "multinational",
+     "plain": "A large company operating across countries, historically competing only for the top of the pyramid."
+    },
+    {
+     "term": "sachet",
+     "plain": "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."
+    }
+   ]
+  },
+  {
+   "step": 12,
+   "kind": "question",
+   "id": "ibm_m1_boss_1",
+   "type": "boss",
+   "concept": "Inclusive business → Bottom-of-the-pyramid design",
+   "caselet": "One recommendation must resolve two linked decisions. First: Sanjeevani Clinics runs eleven centres in low-income urban districts. A consultation costs ₹120 against ₹600 at the nearest private hospital, and 78% of its patients earn under ₹15,000 a month. Fees cover operating costs and fund two new centres a year, while a philanthropic grant covered only the original fit-out. A consultant now proposes adding a cosmetic dermatology line at ₹4,000 a visit, arguing the margin would let the group expand faster. The existing centres already run at 94% capacity with a three-day wait. Then: A packaged foods company sells a 2 kg fortified flour pack at ₹340, payable in a single transaction, through 400 urban supermarkets. It targets rural districts holding 90 million people and has reached 0.3% of them in two years. Field visits find median household cash arrives weekly rather than monthly, the nearest stocking retailer is 14 km away, and 2 kg exceeds what most families can store safely through the humid season. The country manager proposes doubling the advertising budget, citing the size of the untapped population.",
+   "stem": "Build the reasoning chain. All three steps must agree before the conclusion is secure.",
+   "prompt": null,
+   "steps": [
+    {
+     "label": "Step 1 · Diagnose the first decision",
+     "prompt": "What should happen first?",
+     "options": [
+      "Inclusive business: Reject it as inclusive, because charging any fee to an underserved customer cancels the social purpose the model was built to serve.",
+      "Inclusive business: Treat it as ordinary CSR, because social activity always sits outside the business model and is funded from profit.",
+      "Inclusive business: Treat it as inclusive because serving an underserved need is the primary purpose and the model always sustains itself.",
+      "Inclusive business: Call it inclusive only if shareholder return is its sole objective, since financial discipline is what separates a real business from charity."
+     ]
+    },
+    {
+     "label": "Step 2 · Apply the second framework",
+     "prompt": "What should happen next?",
+     "options": [
+      "Bottom-of-the-pyramid design: Keep the offer unchanged, because a large population guarantees enough buyers will convert.",
+      "Bottom-of-the-pyramid design: Redesign affordability, access and service around the constraints, because population size is never demand by itself.",
+      "Bottom-of-the-pyramid design: Raise the pack size so each individual sale produces a larger absolute margin for the firm.",
+      "Bottom-of-the-pyramid design: Target only wealthy urban buyers while still describing the offer as a bottom-of-the-pyramid model in reporting."
+     ]
+    },
+    {
+     "label": "Step 3 · Join the reasoning",
+     "prompt": "Which final explanation keeps both decisions consistent?",
+     "options": [
+      "Use Inclusive business for the first decision and Bottom-of-the-pyramid design for the second; neither result replaces the other.",
+      "Use Bottom-of-the-pyramid design for both decisions; the later issue should determine the earlier diagnosis as well.",
+      "Use Inclusive business for both decisions; once the first issue is solved, the second can be treated as the same problem.",
+      "Use Bottom-of-the-pyramid design for the first decision and Inclusive business for the second; the labels can be swapped without changing the logic."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    {
+     "term": "inclusive business",
+     "plain": "An organisation whose primary objective is addressing a specific need of the poor, while staying financially sustainable."
+    },
+    {
+     "term": "primary objective",
+     "plain": "The goal that wins when two goals conflict — the thing an organisation is actually structured for."
+    },
+    {
+     "term": "financially sustainable",
+     "plain": "Able to cover its own costs, so it can keep operating without running at a loss."
+    },
+    {
+     "term": "bottom of the pyramid",
+     "plain": "The base of the economic pyramid — poor people regarded as a market."
+    },
+    {
+     "term": "market forces",
+     "plain": "Competition and profit-seeking, here proposed as tools for reaching the poor."
+    },
+    {
+     "term": "multinational",
+     "plain": "A large company operating across countries, historically competing only for the top of the pyramid."
+    },
+    {
+     "term": "sachet",
+     "plain": "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."
+    }
+   ]
+  }
+ ]
+}

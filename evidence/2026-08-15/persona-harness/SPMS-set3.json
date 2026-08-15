@@ -1,0 +1,1272 @@
+{
+ "subject": "SPMS",
+ "subjectTitle": "Software Product Management for Startups",
+ "set": 3,
+ "digest": "2fe8c414",
+ "instructions": {
+  "sat": "22 August, 09:00–11:00",
+  "minutes": 120,
+  "calculator": null,
+  "marksOnTheRealPaper": 75,
+  "marksAvailableHere": 75,
+  "sections": [
+   {
+    "id": "A",
+    "count": 35,
+    "marks": 1,
+    "rule": "One correct option. One mark each. No negative marking."
+   },
+   {
+    "id": "B",
+    "count": 20,
+    "marks": 2,
+    "rule": "Multiple correct options. +1 for each right option, −1 for each wrong one, and a question cannot score below zero."
+   }
+  ],
+  "shortfalls": [],
+  "caveat": null
+ },
+ "paper": [
+  {
+   "number": 1,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_dfv_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Desirability, feasibility, viability is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Desirability, feasibility, viability to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Desirability, feasibility, viability works independently of the people, the constraints, and the decisions around it.",
+    "Desirability, feasibility, viability improves one local measure, so effects elsewhere in the system stop mattering.",
+    "A product survives only where customer value, engineering reality, and business economics overlap; one cannot compensate indefinitely for another.",
+    "Once Desirability, feasibility, viability has settled the choice, later evidence should not change the decision."
+   ],
+   "termsAvailable": [
+    "desirability",
+    "feasibility",
+    "viability",
+    "design thinking"
+   ]
+  },
+  {
+   "number": 2,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_requirements_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Functional and quality requirements is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Functional and quality requirements to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Functional and quality requirements has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Functional and quality requirements improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Functional and quality requirements works independently of the people, the constraints, and the decisions around it.",
+    "A capability is incomplete without the quality conditions that make it safe, usable, and compliant in the real product."
+   ],
+   "termsAvailable": [
+    "requirement",
+    "functional requirement",
+    "non-functional requirement",
+    "requirements engineering"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_tamsam_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains TAM, SAM, and SOM?",
+   "prompt": null,
+   "options": [
+    "TAM, SAM, and SOM: TAM is the set of customers that the current sales team expects to win during this quarter from its existing pipeline of qualified leads and nothing more than that.",
+    "TAM, SAM, and SOM: TAM, SAM and SOM always narrow in that order: theoretical demand, the servable portion, then the realistic near-term share.",
+    "TAM, SAM, and SOM: Regulation, channel, and capability do not affect the serviceable market, since anyone who has the need is theoretically reachable by the product at some point in time.",
+    "TAM, SAM, and SOM: SOM is always larger than SAM, because the obtainable market includes every single future market that the firm might eventually decide it wants to enter in future."
+   ],
+   "termsAvailable": [
+    "Total Addressable Market",
+    "Serviceable Available Market",
+    "Serviceable Obtainable Market",
+    "Early Evangelist"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_jtbd_apply",
+   "type": "mcq",
+   "caselet": "A patient asks for online consultation but mainly needs quick access to a trusted doctor and confidence that the advice is legitimate.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Jobs to be done: Design around access, trust and reassurance, because the named feature is never the whole job.",
+    "Jobs to be done: Ignore the emotional need entirely, because anything that is not functional cannot be part of the job.",
+    "Jobs to be done: Assume every telehealth user values exactly the same outcome from the consultation they have booked.",
+    "Jobs to be done: Optimise only the video resolution, because that is the feature the customer actually named."
+   ],
+   "termsAvailable": [
+    "Jobs to Be Done",
+    "functional need",
+    "social need",
+    "customer value"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_chasm_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Crossing the chasm is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Crossing the chasm to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Crossing the chasm works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "Crossing the chasm improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Once Crossing the chasm has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Early enthusiasm proves possibility; mainstream adoption depends on reducing the practical and social risk of switching."
+   ],
+   "termsAvailable": [
+    "beachhead market",
+    "spray and pray",
+    "early adopters",
+    "social proof"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_value_pricing_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Value-based pricing?",
+   "prompt": null,
+   "options": [
+    "Value-based pricing: All customer segments receive the same value from the product and should therefore be charged an identical price for it.",
+    "Value-based pricing: Value-based pricing always starts from measurable customer value and willingness to pay, never from cost or the competitor's price.",
+    "Value-based pricing: Value can be priced without ever being articulated or measured, since the customer already knows what it is worth to them anyway.",
+    "Value-based pricing: Price should always equal unit cost plus a fixed markup, whatever the customer actually gains from using it."
+   ],
+   "termsAvailable": [
+    "value-based pricing",
+    "cost-based pricing",
+    "value creation",
+    "economic value",
+    "value pyramid"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_dfv_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Desirability, feasibility, viability?",
+   "prompt": null,
+   "options": [
+    "Desirability, feasibility, viability: A product opportunity must be wanted by customers, technically achievable, and economically sustainable; strength in only two dimensions leaves a predictable failure.",
+    "Desirability, feasibility, viability: A feasible and profitable concept does not need demonstrated customer demand, because the economics on paper already justify the decision to build it.",
+    "Desirability, feasibility, viability: Desirability means that the team can actually engineer the product to the quality standard that the market has come to expect of it.",
+    "Desirability, feasibility, viability: Viability is proven whenever users say they like an idea, since stated enthusiasm eventually converts into paid revenue at scale over enough time."
+   ],
+   "termsAvailable": [
+    "desirability",
+    "feasibility",
+    "viability",
+    "design thinking"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_lean_canvas_apply",
+   "type": "mcq",
+   "caselet": "An early startup needs to decide whether a problem is worth solving and which assumptions an MVP should test.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Lean Canvas: Use Lean Canvas to expose problem, solution, metrics, advantage, segments, channels, costs, and revenue as testable assumptions.",
+    "Lean Canvas: Avoid revising the canvas once evidence arrives, since the original plan should be allowed to hold.",
+    "Lean Canvas: Fill only the solution box and treat the rest as execution detail.",
+    "Lean Canvas: Use it as a final audited financial statement for the board to sign off."
+   ],
+   "termsAvailable": [
+    "Lean Canvas",
+    "Business Model Canvas",
+    "unique value proposition",
+    "unfair advantage",
+    "key metrics"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_alternatives_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Competition and alternatives is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Competition and alternatives to the wider subject?",
+   "prompt": null,
+   "options": [
+    "The customer's job defines the competitive field; positioning improves when the product beats the real behaviour it must replace.",
+    "Competition and alternatives improves one local measure, so effects elsewhere in the system stop mattering.",
+    "Competition and alternatives works independently of the people, the constraints, and the decisions around it.",
+    "Once Competition and alternatives has settled the choice, later evidence should not change the decision."
+   ],
+   "termsAvailable": [
+    "alternatives",
+    "market alternatives",
+    "direct competition",
+    "substitutes",
+    "inertia"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_positioning_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Product definition and positioning?",
+   "prompt": null,
+   "options": [
+    "Product definition and positioning: A positioning statement is really an internal technical specification, written for the engineering team to build the product from during the development phase itself.",
+    "Product definition and positioning: Product definition and positioning are identical feature lists, written out twice over for two different internal audiences to read and then approve before launch.",
+    "Product definition and positioning: Positioning does not require naming either a target user or the alternative the product is being compared against by the buyer at the time of purchase.",
+    "Product definition and positioning: Definition clarifies what is built and why; positioning always states the differentiated value to one target customer against alternatives."
+   ],
+   "termsAvailable": [
+    "product definition",
+    "product positioning",
+    "product vision",
+    "transaction friction"
+   ]
+  },
+  {
+   "number": 11,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_tamsam_connect",
+   "type": "mcq",
+   "caselet": "A student can state what TAM, SAM, and SOM is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects TAM, SAM, and SOM to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once TAM, SAM, and SOM has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "TAM, SAM, and SOM works independently of the people, the constraints, and the decisions around it.",
+    "Market sizing becomes actionable by narrowing theoretical need through service constraints to the customers the current product can actually win.",
+    "TAM, SAM, and SOM improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all."
+   ],
+   "termsAvailable": [
+    "Total Addressable Market",
+    "Serviceable Available Market",
+    "Serviceable Obtainable Market",
+    "Early Evangelist"
+   ]
+  },
+  {
+   "number": 12,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_priority_apply",
+   "type": "mcq",
+   "caselet": "Two features differ in user reach, likely impact, evidence confidence, and engineering effort, while a legal capability is non-negotiable.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "MoSCoW and RICE prioritisation: Put all three items into the Must have category so that no conflict arises between the stakeholders.",
+    "MoSCoW and RICE prioritisation: Choose the idea with the highest claimed impact and ignore the confidence and effort scores entirely when ranking them.",
+    "MoSCoW and RICE prioritisation: Mark the legal capability as Must and use a transparent RICE comparison for discretionary features, then review assumptions.",
+    "MoSCoW and RICE prioritisation: Let the loudest stakeholder in the room set the order of the whole backlog each time."
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "release planning"
+   ]
+  },
+  {
+   "number": 13,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_lean_canvas_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Lean Canvas?",
+   "prompt": null,
+   "options": [
+    "Lean Canvas: It removes customer segments and channels from business modelling to keep the single page simple enough to read.",
+    "Lean Canvas: Lean Canvas adapts one-page modelling to early uncertainty, treating every box as an assumption still to be tested.",
+    "Lean Canvas: It is used only to document a mature company's fixed operating model once that model has settled.",
+    "Lean Canvas: Its purpose is to finalise every assumption before any testing begins with real customers at all."
+   ],
+   "termsAvailable": [
+    "Lean Canvas",
+    "Business Model Canvas",
+    "unique value proposition",
+    "unfair advantage",
+    "key metrics"
+   ]
+  },
+  {
+   "number": 14,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_unit_economics_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Unit economics?",
+   "prompt": null,
+   "options": [
+    "Unit economics: A long payback period cannot create any cash-flow risk, as long as the lifetime value is high enough to cover it eventually.",
+    "Unit economics: Rapid revenue growth proves healthy unit economics automatically, because a fast-growing top line eventually covers everything underneath it in the end.",
+    "Unit economics: CAC should be compared with total revenue rather than gross contribution, because revenue is the number the customer actually pays each month.",
+    "Unit economics: Unit economics always tests profitability per customer or transaction: acquisition cost, contribution, lifetime value, churn and payback."
+   ],
+   "termsAvailable": [
+    "unit economics",
+    "customer acquisition cost",
+    "business model validation",
+    "customer relationship model"
+   ]
+  },
+  {
+   "number": 15,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_privacy_apply",
+   "type": "mcq",
+   "caselet": "An app collects broad personal data for an undefined future use and sends it to an unreviewed analytics vendor.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Privacy by design: Collect everything available now and decide what the stated purpose for it will be at some later point.",
+    "Privacy by design: Limit collection to a stated purpose, establish the lawful basis and user controls, protect the data, and verify the vendor's compliance before transfer.",
+    "Privacy by design: Treat the act of outsourcing as a complete transfer of legal responsibility to the vendor who now holds and processes the data on its behalf.",
+    "Privacy by design: Rely only on a long terms-of-service page that is published after the collection has already happened on the site."
+   ],
+   "termsAvailable": [
+    "GDPR",
+    "CCPA",
+    "DPDP",
+    "right to be forgotten",
+    "data protection by design"
+   ]
+  },
+  {
+   "number": 16,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_alternatives_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Competition and alternatives?",
+   "prompt": null,
+   "options": [
+    "Competition and alternatives: Only firms shipping the same feature list should be counted as competitors in this particular market.",
+    "Competition and alternatives: Competition should be defined first, before anyone works out the customer's underlying job.",
+    "Competition and alternatives: Competition includes every current or potential way customers accomplish the job, including substitutes and doing nothing—not only similar products.",
+    "Competition and alternatives: Customers cannot compare a product against manual work or against doing nothing about the problem."
+   ],
+   "termsAvailable": [
+    "alternatives",
+    "market alternatives",
+    "direct competition",
+    "substitutes",
+    "inertia"
+   ]
+  },
+  {
+   "number": 17,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_positioning_apply",
+   "type": "mcq",
+   "caselet": "A team describes its payment product only as 'an API with new database tables' when speaking to small merchants.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Product definition and positioning: Translate the internal definition into customer positioning: who it serves, the payment problem solved, the benefit, and why it differs from alternatives.",
+    "Product definition and positioning: Add more implementation detail into the customer message so the buyer understands exactly how the thing works.",
+    "Product definition and positioning: Remove the target segment from the statement so that everyone who reads it feels included in what the product offers.",
+    "Product definition and positioning: List the product's features on their own, without ever stating the customer outcome those features are supposed to produce."
+   ],
+   "termsAvailable": [
+    "product definition",
+    "product positioning",
+    "product vision",
+    "transaction friction"
+   ]
+  },
+  {
+   "number": 18,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_traceability_apply",
+   "type": "mcq",
+   "caselet": "A team cannot explain which user need a database field supports or which test proves the related requirement works.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Requirements traceability: Approve the field because something like it already exists in code.",
+    "Requirements traceability: Create links from the originating need to the product requirement, implementation item, and verification evidence.",
+    "Requirements traceability: Delete the original customer source once development work has actually started on that requirement.",
+    "Requirements traceability: Keep each artifact in a separate, unlinked document with no reference between them."
+   ],
+   "termsAvailable": [
+    "customer requirements",
+    "product requirements",
+    "project requirements",
+    "requirements elicitation"
+   ]
+  },
+  {
+   "number": 19,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_jtbd_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Jobs to be done is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Jobs to be done to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Jobs to be done has settled the choice, later evidence should not change the decision.",
+    "Jobs to be done improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Understanding the progress sought reveals which benefits create value and which features are only one possible means.",
+    "Jobs to be done works independently of the people, the constraints, and the decisions around it."
+   ],
+   "termsAvailable": [
+    "Jobs to Be Done",
+    "functional need",
+    "social need",
+    "customer value"
+   ]
+  },
+  {
+   "number": 20,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_syn_model",
+   "type": "mcq",
+   "caselet": "Customers report high value and accept the price, but acquisition payback is longer than typical retention.",
+   "stem": "What does the evidence imply?",
+   "prompt": null,
+   "options": [
+    "Increase acquisition spending further, because every additional signup adds revenue straight to the top line each month it renews.",
+    "The offer may create value, but its acquisition or retention economics must change before growth is sustainable.",
+    "Ignore retention entirely when calculating lifetime value, since that customer has already been won and counted.",
+    "High willingness to pay proves the whole business model is viable on its own."
+   ],
+   "termsAvailable": [
+    "unit economics",
+    "customer acquisition cost",
+    "business model validation",
+    "customer relationship model"
+   ]
+  },
+  {
+   "number": 21,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_value_pricing_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Value-based pricing is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Value-based pricing to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Value-based pricing has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Value-based pricing improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Pricing captures part of created value; clear segmentation and value evidence connect customer benefit to business viability.",
+    "Value-based pricing works independently of the people, the constraints, and the decisions around it."
+   ],
+   "termsAvailable": [
+    "value-based pricing",
+    "cost-based pricing",
+    "value creation",
+    "economic value",
+    "value pyramid"
+   ]
+  },
+  {
+   "number": 22,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_unit_economics_apply",
+   "type": "mcq",
+   "caselet": "A subscription spends ₹1,000 to acquire a customer and earns ₹100 monthly gross profit from that customer.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Unit economics: Recognise a ten-month CAC payback before considering retention, cash burn, and whether lifetime gross profit comfortably exceeds acquisition cost.",
+    "Unit economics: Compare CAC only with the top-line company revenue and stop the analysis there without looking at contribution.",
+    "Unit economics: Call the payback period one month, because the subscription happens to bill on a monthly cycle to the customer each time.",
+    "Unit economics: Ignore churn entirely, because the acquisition has already happened and that cost is already sunk anyway."
+   ],
+   "termsAvailable": [
+    "unit economics",
+    "customer acquisition cost",
+    "business model validation",
+    "customer relationship model"
+   ]
+  },
+  {
+   "number": 23,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_buyer_journey_apply",
+   "type": "mcq",
+   "caselet": "Potential users do not yet recognise a health-monitoring problem, but the campaign opens with a detailed comparison of advanced settings.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Buyer journey communication: Use the same decision-stage proof on audiences who are not yet aware that the problem exists at all.",
+    "Buyer journey communication: Add more technical detail into the very first message the buyer ever receives.",
+    "Buyer journey communication: First make the problem and relevant value understandable, then introduce alternatives and proof as the buyer advances.",
+    "Buyer journey communication: Wait until after the purchase is complete before explaining any of the value to the customer."
+   ],
+   "termsAvailable": [
+    "value communication",
+    "buyer's journey",
+    "customer journey",
+    "value messaging"
+   ]
+  },
+  {
+   "number": 24,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_traceability_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Requirements traceability?",
+   "prompt": null,
+   "options": [
+    "Requirements traceability: Once a requirement is written down, its original source and its tests can safely be discarded from the record.",
+    "Requirements traceability: Traceability is only a list of developer tasks kept inside the team's project tracking tool.",
+    "Requirements traceability: Customer requirements and project requirements should never be connected to one another anywhere in the documentation.",
+    "Requirements traceability: Traceability links every customer need through requirement, implementation and verification, so scope and change stay explainable."
+   ],
+   "termsAvailable": [
+    "customer requirements",
+    "product requirements",
+    "project requirements",
+    "requirements elicitation"
+   ]
+  },
+  {
+   "number": 25,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_requirements_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Functional and quality requirements?",
+   "prompt": null,
+   "options": [
+    "Functional and quality requirements: Security and performance are always optional feature requests that can be added later on if there is time.",
+    "Functional and quality requirements: Quality requirements do not need measurable conditions attached to them, since their general intent is already understood by everyone on the team.",
+    "Functional and quality requirements: A functional requirement describes only the colour and layout of the user interface as it finally appears on the screen.",
+    "Functional and quality requirements: Functional requirements state what the product must do and quality requirements how well; a capability is never complete without both."
+   ],
+   "termsAvailable": [
+    "requirement",
+    "functional requirement",
+    "non-functional requirement",
+    "requirements engineering"
+   ]
+  },
+  {
+   "number": 26,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_dfv_apply",
+   "type": "mcq",
+   "caselet": "A team can build a device and sell it at a margin, but research shows no meaningful customer problem or willingness to use it.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Desirability, feasibility, viability: Call it viable and assume customers will learn to want it once they have seen it working.",
+    "Desirability, feasibility, viability: Reduce the engineering scope even though feasibility has already been established for this particular build.",
+    "Desirability, feasibility, viability: Treat desirability as the missing test, since a product survives only where all three checks overlap.",
+    "Desirability, feasibility, viability: Launch immediately, because technical feasibility is itself proof that real demand exists."
+   ],
+   "termsAvailable": [
+    "desirability",
+    "feasibility",
+    "viability",
+    "design thinking"
+   ]
+  },
+  {
+   "number": 27,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_priority_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains MoSCoW and RICE prioritisation?",
+   "prompt": null,
+   "options": [
+    "MoSCoW and RICE prioritisation: A numeric score eliminates the need to examine the assumptions that produced that number in the first place anyway.",
+    "MoSCoW and RICE prioritisation: Every stakeholder request should be marked a Must have so that nobody involved is left disappointed.",
+    "MoSCoW and RICE prioritisation: RICE ignores effort and confidence entirely, and ranks competing ideas on reach and impact alone when scoring them.",
+    "MoSCoW and RICE prioritisation: MoSCoW sorts necessity and RICE compares reach, impact, confidence and effort; neither ever replaces judgement."
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "release planning"
+   ]
+  },
+  {
+   "number": 28,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_syn_plan",
+   "type": "mcq",
+   "caselet": "A new privacy requirement invalidates a planned data feature, but the roadmap still shows it as committed.",
+   "stem": "What is the responsible product response?",
+   "prompt": null,
+   "options": [
+    "Trace the affected requirement, revise priorities and the roadmap, and communicate how the strategic outcome will be met safely.",
+    "Hide the change from the stakeholders until after the release has already gone out to customers in production.",
+    "Build it unchanged, because a published roadmap cannot be moved once it has been committed to publicly.",
+    "Delete the privacy requirement from the backlog entirely so that the original delivery date can still be held as promised."
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  },
+  {
+   "number": 29,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_lean_canvas_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Lean Canvas is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Lean Canvas to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Lean Canvas has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Lean Canvas works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "Lean Canvas improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "A compact model makes linked business assumptions visible so learning can change the whole system rather than one feature at a time."
+   ],
+   "termsAvailable": [
+    "Lean Canvas",
+    "Business Model Canvas",
+    "unique value proposition",
+    "unfair advantage",
+    "key metrics"
+   ]
+  },
+  {
+   "number": 30,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_roadmap_apply",
+   "type": "mcq",
+   "caselet": "A team publishes exact five-year feature dates although technology, regulation, and customer evidence are changing quickly.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Product roadmap: Freeze every feature date in place in order to protect the credibility of the originally published plan.",
+    "Product roadmap: Keep the direction and outcome sequence, but never present distant work at near-term detail.",
+    "Product roadmap: Remove the long-term direction altogether and keep only the tasks that the team happens to be working on right now.",
+    "Product roadmap: Treat the roadmap as a sales contract carrying no uncertainty at all for the customer who has signed it."
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  },
+  {
+   "number": 31,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_priority_connect",
+   "type": "mcq",
+   "caselet": "A student can state what MoSCoW and RICE prioritisation is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects MoSCoW and RICE prioritisation to the wider subject?",
+   "prompt": null,
+   "options": [
+    "MoSCoW and RICE prioritisation improves one local measure, so effects elsewhere in the system stop mattering.",
+    "MoSCoW and RICE prioritisation works independently of the people, the constraints, and the decisions around it.",
+    "Once MoSCoW and RICE prioritisation has settled the choice, later evidence should not change the decision.",
+    "Prioritisation turns scarce capacity into an explicit decision by separating necessity from comparative value and evidence."
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "release planning"
+   ]
+  },
+  {
+   "number": 32,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_metrics_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Actionable product metrics is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Actionable product metrics to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Actionable product metrics has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Actionable product metrics improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "A metric earns its place when evidence can change resource allocation, product action, or risk response.",
+    "Actionable product metrics works independently of the people, the constraints, and the decisions around it."
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics"
+   ]
+  },
+  {
+   "number": 33,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_metrics_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Actionable product metrics?",
+   "prompt": null,
+   "options": [
+    "Actionable product metrics: The largest available number is always the best metric to report, because sheer scale is what demonstrates real progress.",
+    "Actionable product metrics: A metric remains useful even when no action anyone could take would ever change as a result of what that metric reports back.",
+    "Actionable product metrics: Early-stage products need only the profit measures that a mature company would report to its own board each year.",
+    "Actionable product metrics: A useful metric always changes a decision; an impressive total that changes none is only a vanity metric."
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics"
+   ]
+  },
+  {
+   "number": 34,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_roadmap_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Product roadmap?",
+   "prompt": null,
+   "options": [
+    "Product roadmap: A roadmap is an unchangeable promise of exactly which features will ship, and on exactly which dates, for years into the future.",
+    "Product roadmap: A roadmap turns strategy into an adaptable sequence of outcomes, always carrying more detail near term than far term.",
+    "Product roadmap: It is identical to the current sprint backlog, written out in a different format for a different audience each quarter.",
+    "Product roadmap: Market and technology change should not affect the roadmap, because a plan that keeps moving is not a plan."
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  },
+  {
+   "number": 35,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_chasm_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Crossing the chasm?",
+   "prompt": null,
+   "options": [
+    "Crossing the chasm: Mainstream users tolerate more risk and missing support than early adopters do, since they arrive later and therefore expect a good deal less.",
+    "Crossing the chasm: The best strategy is to broaden to every segment at once, before building any references or support structure at all.",
+    "Crossing the chasm: Crossing to mainstream customers always requires a focused beachhead, a complete experience, references and lower adoption risk.",
+    "Crossing the chasm: Mainstream adoption follows automatically once innovators approve, because the early verdict carries across to the whole market."
+   ],
+   "termsAvailable": [
+    "beachhead market",
+    "spray and pray",
+    "early adopters",
+    "social proof"
+   ]
+  },
+  {
+   "number": 36,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_jtbd_msq",
+   "type": "msq",
+   "caselet": "A doctor has just finished her residency. She walks into a hardware shop and asks for a drilling bit and a drilling machine.\n\nAsk her what she is hanging, and it turns out to be photos — one photo, really: her MD certificate. Ask why it has to go up on the wall, and the answer moves again. Her patients see it. New ones especially, she says, want to know they are with a qualified doctor. Ten years of her life went into earning it, and she is proud of it.\n\nWhat she is buying is a drill bit, a frame, and a hole in the wall.",
+   "stem": "Select every need this purchase actually serves.",
+   "prompt": null,
+   "options": [
+    "Habitual — the purchase repeats often enough that no decision is taken",
+    "Financial — the drill costs less than hiring someone to do it",
+    "Functional — the certificate has to go onto the wall",
+    "Emotional — pride in more than a decade of study",
+    "Social — new patients gain confidence they are seeing a qualified doctor"
+   ],
+   "termsAvailable": [
+    "Jobs to Be Done",
+    "functional need",
+    "social need",
+    "customer value"
+   ]
+  },
+  {
+   "number": 37,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_positioning_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that matches how the lecture separates definition from positioning.",
+   "prompt": null,
+   "options": [
+    "Positioning is written first, and the product vision is derived from it afterwards",
+    "Product positioning is how the product impacts users, and why they should use it",
+    "Product definition is what the product does, and is largely internal — the team and its partners build against it",
+    "Definition and positioning are two names for the same customer-facing statement"
+   ],
+   "termsAvailable": [
+    "product definition",
+    "product positioning",
+    "product vision",
+    "transaction friction"
+   ]
+  },
+  {
+   "number": 38,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_unit_economics_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every business type paired with the unit the lecture assigns it.",
+   "prompt": null,
+   "options": [
+    "The unit is whichever one makes the economics look strongest to investors",
+    "Marketplace — one customer lifetime",
+    "SaaS — one customer or account",
+    "E-commerce — one order",
+    "Ride-sharing — one ride"
+   ],
+   "termsAvailable": [
+    "unit economics",
+    "customer acquisition cost",
+    "business model validation",
+    "customer relationship model"
+   ]
+  },
+  {
+   "number": 39,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_value_pricing_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that matches how the lecture treats cost-based pricing.",
+   "prompt": null,
+   "options": [
+    "It is the fallback for when you do not know how the product will be deployed, or what it does to the customer's business",
+    "It prices your own inputs rather than the customer's outcome",
+    "It is the method to prefer once the product has a measurable economic value peg",
+    "Billing by engineer hours at $50 or $200 an hour is the familiar software-services case",
+    "It is what the lecture recommends for software products in particular"
+   ],
+   "termsAvailable": [
+    "value-based pricing",
+    "cost-based pricing",
+    "value creation",
+    "economic value",
+    "value pyramid"
+   ]
+  },
+  {
+   "number": 40,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_priority_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that matches how the lecture uses MoSCoW.",
+   "prompt": null,
+   "options": [
+    "Won't have is part of the method, and stating it is what makes scope control real",
+    "It works as a filtering criterion, closer to a triage than to a ranking",
+    "It ranks every item against every other to produce one ordered list",
+    "Moscow refers to the capital city, where the technique was first formalised"
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "release planning"
+   ]
+  },
+  {
+   "number": 41,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_privacy_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is correct about the privacy regimes as the lecture presents them.",
+   "prompt": null,
+   "options": [
+    "GDPR was enacted in May 2018 and became a model for Switzerland, Canada, and Australia",
+    "GDPR protects any personal data irrespective of its sensitivity",
+    "Data protection by design means the customer must request that their data be protected",
+    "US data protection is a single federal regime covering every category of data alike",
+    "US data protection leaves employee data outside its data protection regulations"
+   ],
+   "termsAvailable": [
+    "GDPR",
+    "CCPA",
+    "DPDP",
+    "right to be forgotten",
+    "data protection by design"
+   ]
+  },
+  {
+   "number": 42,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_buyer_journey_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every failure the lecture names when value is communicated badly.",
+   "prompt": null,
+   "options": [
+    "Using the wrong channels to carry the message",
+    "Pricing the product below the nearest competitor",
+    "Communicating too late, after the decision has already been taken",
+    "Publishing the product vision before the product definition"
+   ],
+   "termsAvailable": [
+    "value communication",
+    "buyer's journey",
+    "customer journey",
+    "value messaging"
+   ]
+  },
+  {
+   "number": 43,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_requirements_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "A customer says the product must send a message, and must deliver it within 200 milliseconds. Select every statement that classifies this correctly.",
+   "prompt": null,
+   "options": [
+    "Sending the message is a functional requirement — an action the product performs",
+    "The 200-millisecond bound is functional, because it describes what the product does",
+    "Both halves are non-functional, because the customer stated them in one sentence",
+    "The 200-millisecond bound is non-functional — a quality, confirmed by measurement under load"
+   ],
+   "termsAvailable": [
+    "requirement",
+    "functional requirement",
+    "non-functional requirement",
+    "requirements engineering"
+   ]
+  },
+  {
+   "number": 44,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_requirements_msq_definition",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that matches the lecture's definition of a requirement.",
+   "prompt": null,
+   "options": [
+    "It is any feature already present in the product",
+    "It describes a future capability, which is why requirements are elicited before anything is built",
+    "Requirements are classified by which team will end up building them",
+    "It is a wish or need for a future product capability, or a condition required by standards, contracts, or regulations",
+    "It is only a capability a customer has explicitly asked for"
+   ],
+   "termsAvailable": [
+    "requirement",
+    "functional requirement",
+    "non-functional requirement",
+    "requirements engineering"
+   ]
+  },
+  {
+   "number": 45,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_metrics_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that matches why the lecture says metrics matter more in a startup.",
+   "prompt": null,
+   "options": [
+    "They exist to report performance to investors on a fixed reporting cycle",
+    "They exist to reduce uncertainty as far as it can be reduced",
+    "The fundamental difference from a mature company is the level of uncertainty",
+    "A startup should report performance first and take up risk management once the business matures",
+    "Top line, bottom line, and net promoter score assume a steadier state than an early product has"
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics"
+   ]
+  },
+  {
+   "number": 46,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_chasm_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every strategy the lecture gives for crossing the chasm.",
+   "prompt": null,
+   "options": [
+    "Raise the price at launch so mainstream buyers read it as quality",
+    "Focus on a narrow beachhead market rather than spray and pray",
+    "Address the early market and the mainstream at the same time to build volume faster",
+    "Build trust through uptime, security, support, compliance, and social proof",
+    "Simplify onboarding and the interface for mainstream users"
+   ],
+   "termsAvailable": [
+    "beachhead market",
+    "spray and pray",
+    "early adopters",
+    "social proof"
+   ]
+  },
+  {
+   "number": 47,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_traceability_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that matches how the lecture traces a need into a requirement.",
+   "prompt": null,
+   "options": [
+    "Project requirements are written by the customer and passed to engineering unchanged",
+    "Customer requirements arrive already standardised, because customers state system requirements",
+    "Customer requirements describe business needs and aspirations rather than system specifications",
+    "Project requirements break a product requirement down for a release across smaller teams",
+    "Standardising generalises one customer's stated need so more customers of that nature are served by one product"
+   ],
+   "termsAvailable": [
+    "customer requirements",
+    "product requirements",
+    "project requirements",
+    "requirements elicitation"
+   ]
+  },
+  {
+   "number": 48,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_roadmap_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that matches the lecture's account of a roadmap.",
+   "prompt": null,
+   "options": [
+    "It fixes the next three to six months and deliberately goes no further",
+    "WhatsApp launched first on iPhone, with the Android version arriving around 2011",
+    "It translates product strategy into a series of releases on a time axis",
+    "It lists the features to build without ordering them, leaving sequence to the team"
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  },
+  {
+   "number": 49,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_alternatives_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select everything that counts as competition on the lecture's definition.",
+   "prompt": null,
+   "options": [
+    "Manual alternatives such as spreadsheets, consultants, or internal tools",
+    "Rival products in the same category",
+    "Only the firms the startup has publicly named as competitors",
+    "An alternative counts only once the customer has formally evaluated it",
+    "The customer deciding to carry on doing nothing"
+   ],
+   "termsAvailable": [
+    "alternatives",
+    "market alternatives",
+    "direct competition",
+    "substitutes",
+    "inertia"
+   ]
+  },
+  {
+   "number": 50,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_roadmap_msq_sequence",
+   "type": "msq",
+   "caselet": "WhatsApp started in 2009, into a market that already had Skype, Yahoo Messenger, ICQ and plenty more.\n\nIt launched on iPhone. Android followed around the middle of 2011 — and the team already knew that a large share of the people it wanted were on Android, in Asia.\n\nThe rest arrived on its own schedule: message history search around 2011, chat backup after 2012. The company was acquired in 2014 still without end-to-end encryption.",
+   "stem": "Select every statement that reads this release history the way the course does.",
+   "prompt": null,
+   "options": [
+    "A roadmap is a smart sequence for developing, releasing, and evolving a solution",
+    "Launching on iPhone first shows the team did not know where its users were",
+    "The Android delay was a resourcing accident rather than a decision",
+    "A roadmap is a set of releases with no strategic horizon behind it",
+    "The team launched on iPhone knowing a big chunk of its potential users were on Android in Asia"
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  },
+  {
+   "number": 51,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_metrics_msq_types",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every metric paired with what the lecture says it measures.",
+   "prompt": null,
+   "options": [
+    "Average revenue per user — revenue divided across the user base",
+    "Gross margin — profitability measured after all below-the-line costs",
+    "Customer lifetime value — what a customer is worth across the whole relationship, not one transaction",
+    "Net promoter score — the startup-appropriate replacement for reducing uncertainty"
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics"
+   ]
+  },
+  {
+   "number": 52,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_priority_msq_buckets",
+   "type": "msq",
+   "caselet": "A ride-hailing product has three months before its first release, and everyone wants something in it — customers, investors, the sales team.\n\nThe team writes down what it could build. Booking a ride. Taking payment. GPS tracking. Driver ratings, so a rider can choose between two drivers. Multi-stop planning, so they can drop someone off on the way. In-car entertainment that follows whoever is driving.\n\nSix candidates, one release, and MoSCoW to sort them: must have, should have, could have, won't have.",
+   "stem": "Select every capability that belongs in must have for this release.",
+   "prompt": null,
+   "options": [
+    "Booking a ride",
+    "Driver ratings that help a customer choose between drivers",
+    "Payments",
+    "GPS",
+    "Multi-stop route planning"
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "release planning"
+   ]
+  },
+  {
+   "number": 53,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_tamsam_msq",
+   "type": "msq",
+   "caselet": "Zerodha is an online investment platform. In principle anyone, anywhere, who wants to buy exchange traded securities or mutual funds could use it.\n\nIn practice not everyone can. Cross-border investing carries its own regulatory framework, which leaves the platform serving online retail investors in India.\n\nAnd not all of those are available either. Twenty to forty lakh of them already have a broker — Kotak Securities, ICICI Direct, HDFC Securities. What is genuinely open is the cost-conscious investor who would rather save the brokerage and do their own research.",
+   "stem": "Select every statement that sizes this market correctly.",
+   "prompt": null,
+   "options": [
+    "Regulation on cross-border investing narrows SAM to online retail investors in India",
+    "SOM is the figure to quote as the market when raising funds",
+    "TAM is every retail investor who could use the product, worldwide",
+    "SOM narrows further because incumbent brokerages already serve those investors",
+    "TAM is calculated last, by scaling the achievable share back up"
+   ],
+   "termsAvailable": [
+    "Total Addressable Market",
+    "Serviceable Available Market",
+    "Serviceable Obtainable Market",
+    "Early Evangelist"
+   ]
+  },
+  {
+   "number": 54,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_dfv_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that matches how the lecture presents the three-way framework.",
+   "prompt": null,
+   "options": [
+    "Viability is settled once a working prototype exists",
+    "Desirability is validated with design skills and empathy for the customer",
+    "Feasibility asks whether the product can be built with the technology available today",
+    "A product that is desirable and feasible but not viable is unsustainable",
+    "Feasibility is confirmed by customer interviews showing people want the product"
+   ],
+   "termsAvailable": [
+    "desirability",
+    "feasibility",
+    "viability",
+    "design thinking"
+   ]
+  },
+  {
+   "number": 55,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_lean_canvas_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every box that appears on the Lean Canvas but not on the Business Model Canvas.",
+   "prompt": null,
+   "options": [
+    "Channels",
+    "Customer segments",
+    "Problem",
+    "Unfair advantage",
+    "Solution"
+   ],
+   "termsAvailable": [
+    "Lean Canvas",
+    "Business Model Canvas",
+    "unique value proposition",
+    "unfair advantage",
+    "key metrics"
+   ]
+  }
+ ]
+}

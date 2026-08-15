@@ -1,0 +1,191 @@
+{
+ "subject": "IBM",
+ "subjectTitle": "Inclusive Business Model",
+ "set": 2,
+ "digest": "caa9a33e",
+ "instructions": {
+  "sat": "23 August, 09:00–11:00",
+  "minutes": 120,
+  "calculator": null,
+  "marksOnTheRealPaper": 100,
+  "marksAvailableHere": 100,
+  "sections": [
+   {
+    "id": "A",
+    "count": 10,
+    "marks": 10,
+    "rule": "Ten written answers on a caselet released two days before the exam."
+   }
+  ],
+  "shortfalls": [],
+  "caveat": "A mock cannot reproduce this paper, because the case is the paper. This is timed writing practice against the frameworks."
+ },
+ "paper": [
+  {
+   "number": 1,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_inclusive_case_answer",
+   "type": "short-answer",
+   "caselet": "Sanjeevani Clinics runs eleven centres in low-income urban districts. A consultation costs ₹120 against ₹600 at the nearest private hospital, and 78% of its patients earn under ₹15,000 a month. Fees cover operating costs and fund two new centres a year, while a philanthropic grant covered only the original fit-out. A consultant now proposes adding a cosmetic dermatology line at ₹4,000 a visit, arguing the margin would let the group expand faster. The existing centres already run at 94% capacity with a three-day wait.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "inclusive business",
+    "primary objective",
+    "financially sustainable"
+   ]
+  },
+  {
+   "number": 2,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_vaatsalya_case_answer",
+   "type": "short-answer",
+   "caselet": "A hospital group runs six 200-bed tertiary facilities in three large cities, whose cardiac and oncology units sit at 61% occupancy. Its own records show 44% of admissions travel more than 90 km, most for deliveries, dialysis and routine surgery needing no tertiary equipment. A normal delivery costs the patient about ₹38,000. A proposal on the table is a network of 40-bed centres in semi-urban towns handling primary and secondary care only, at an estimated ₹11,000 per delivery and staffed by locally recruited clinicians.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "semi-urban",
+    "cross-subsidy"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_case_hospital_growth",
+   "type": "short-answer",
+   "caselet": "A hospital group runs six 200-bed tertiary facilities in three large cities, with cardiac and oncology units at 61% occupancy. Its records show 44% of admissions travel more than 90 km, most for deliveries, dialysis and routine surgery requiring no tertiary equipment; a normal delivery costs such a patient about ₹38,000 including travel and lost wages. A proposal would open twelve 40-bed centres in semi-urban towns handling primary and secondary care only, at roughly ₹11,000 per delivery. Separately, the group's four surgeons each spend about 70% of their working day on counselling, measurement and post-operative dressing, with a nine-week waiting list; 22 trained paramedical staff are assigned mostly to reception. The group's impact report states that patients treated at its facilities earn more two years later than those who were not, and the board is citing this to justify expansion.",
+   "stem": "Advise the board. Address the expansion proposal, the capacity problem inside the existing hospitals, and the evidence the report is resting on.",
+   "prompt": null,
+   "rubricPointCount": 5,
+   "termsAvailable": [
+    "semi-urban",
+    "cross-subsidy",
+    "cataract",
+    "ophthalmologist",
+    "cross-subsidize",
+    "output",
+    "outcome",
+    "theory of change",
+    "control group",
+    "treatment group"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_aravind_case_answer",
+   "type": "short-answer",
+   "caselet": "An eye hospital has four ophthalmologists and a nine-week cataract waiting list. A time study finds each surgeon spends 71% of the working day on counselling, vision measurement, dilation checks and post-operative dressing, and 29% operating. Complication rates sit at the national benchmark and the trustees have said that must not move. The hospital already employs 22 trained paramedical staff, mostly assigned to reception. A consultant proposes recruiting two more surgeons, at a cost current surpluses cannot fund.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "cataract",
+    "ophthalmologist",
+    "cross-subsidize"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_waste_case_answer",
+   "type": "short-answer",
+   "caselet": "Temples in one city send about 8 tonnes of flower waste a week to landfill, where it decomposes into a local waterway. A venture collects it free, converts it into incense and natural dyes, and employs 60 women from nearby low-income settlements at ₹11,000 a month against the ₹6,500 they earned in informal work. Retail buyers pay a premium for the provenance and current output sells out. Scaling to 20 tonnes needs a second site and either mechanised sorting, which would halve the workforce, or 60 more women hired and trained.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "waste picker",
+    "informal sector"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_inclusive_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Inclusive business in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "inclusive business",
+    "primary objective",
+    "financially sustainable"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_impact_investing_case_answer",
+   "type": "short-answer",
+   "caselet": "A fund raises ₹500 crore for affordable housing. It sets a target that 70% of units go to households below a stated income line, requires quarterly reporting on who actually occupies them, and expects a 9% return so the capital can be recycled into further projects. One developer in the pipeline offers 16% but will commit to only 25% of units below the income line, and proposes reporting sales value rather than buyer income. The investment committee is split, noting the fund's headline return currently sits below its target.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "impact investing",
+    "risk-adjusted",
+    "social stock exchange",
+    "ESG"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_grameen_case_answer",
+   "type": "short-answer",
+   "caselet": "A lender wants to reach 30 villages where 82% of households hold no bank-acceptable collateral and no formal credit record, and its two field officers cannot assess 4,000 households individually. A pilot in four villages lent to self-formed groups of five women, releasing funds to two members first and to the rest only after the first repayments arrived, with weekly meetings held in the village. Repayment reached 97% over eighteen months. Head office now proposes dropping the meetings and the staged release to cut cost per loan, keeping the group label.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "collateral",
+    "credit history",
+    "adverse selection",
+    "moral hazard"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_vaatsalya_short_answer",
+   "type": "short-answer",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain No-frills healthcare access in your own words, and what kind of decision should it change?",
+   "prompt": null,
+   "rubricPointCount": 2,
+   "termsAvailable": [
+    "semi-urban",
+    "cross-subsidy"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_responsible_lending_case_answer",
+   "type": "short-answer",
+   "caselet": "A microfinance institution has grown disbursements 140% in two years. Field agents earn 60% of their variable pay per additional loan disbursed and nothing tied to repayment. A sample of 500 borrowers finds the median household now services four concurrent microloans, 38% used their most recent loan to repay an existing one, and total monthly debt service reaches 71% of reported household income. Portfolio-at-risk still reads 1.2%, because refinancing keeps accounts current. The growth committee wants two new districts next quarter.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "MFI",
+    "default",
+    "non-performing asset"
+   ]
+  }
+ ]
+}

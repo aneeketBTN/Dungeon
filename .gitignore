@@ -35,3 +35,9 @@ coordination/exchange/
 Thumbs.db
 *.pyc
 __pycache__/
+
+# Agent worktrees: checkouts of other branches living inside this one.
+.claude/worktrees/
+
+# Course CLAs — owner-supplied reference material, not for commit.
+docs/course-material/

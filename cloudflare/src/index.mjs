@@ -1,9 +1,14 @@
 import { createRemoteJWKSet, jwtVerify } from "jose";
+import {
+  WrittenAuthorityError,
+  gradeHostedAnswer,
+  hostedAuthorityHealth
+} from "./written-authority.mjs";
 
 const ACCESS_API = "https://api.cloudflare.com/client/v4";
 const SESSION_COOKIE = "dungeon_session";
 const SESSION_DAYS = 1;
-const AGREEMENT_VERSION = "2026-08-11-community-v2";
+const AGREEMENT_VERSION = "2026-08-13-written-answers-v3";
 const COMMUNITY_INVITE_URL = "https://chat.whatsapp.com/E9RThdcAzqFDTiWPUYcE3I";
 const REQUIRED_ACCESS_BINDINGS = ["ACCESS_ACCOUNT_ID", "ACCESS_GROUP_ID", "OWNER_EMAIL", "CF_API_TOKEN"];
 const REQUIRED_ADMIN_BINDINGS = [
@@ -479,7 +484,13 @@ export function createD1Store() {
 
     async revokeTester(env, email) {
       const db = requireDatabase(env);
-      await db.prepare("DELETE FROM testers WHERE email = ?").bind(email).run();
+      /* The archive row cascades from testers, but withdrawal is the promise this
+       * project is least able to get wrong, so it is deleted explicitly first
+       * rather than left to depend on foreign keys being enforced. */
+      await db.batch([
+        db.prepare("DELETE FROM written_answer_archive WHERE email = ?").bind(email),
+        db.prepare("DELETE FROM testers WHERE email = ?").bind(email)
+      ]);
     },
 
     async unlockTester(env, email) {
@@ -593,6 +604,84 @@ export function createD1Store() {
         db.prepare("UPDATE testers SET last_seen_at = ?, updated_at = ? WHERE email = ?").bind(now, now, email)
       ]);
       return {revision, updatedAt: now};
+    },
+
+    async reserveWrittenCheck(env, email, limit) {
+      const db = requireDatabase(env);
+      const now = new Date().toISOString();
+      const day = now.slice(0, 10);
+      const row = await db.prepare(`INSERT INTO written_authority_usage (email, usage_day, checks, updated_at)
+        VALUES (?, ?, 1, ?)
+        ON CONFLICT(email, usage_day) DO UPDATE SET checks = written_authority_usage.checks + 1,
+          updated_at = excluded.updated_at
+        WHERE written_authority_usage.checks < ?
+        RETURNING checks`)
+        .bind(email, day, now, limit).first();
+      if (!row) throw new RequestError(429, "WRITTEN_DAILY_LIMIT", "Today's written-check allowance has been used. Try again tomorrow.");
+      const checks = Number(row.checks || 0);
+      const resetsAt = new Date(Date.parse(`${day}T00:00:00Z`) + 86400000).toISOString();
+      return {checks, limit, remaining: Math.max(0, limit - checks), resetsAt};
+    },
+
+    /* The cohort-wide ceiling, reserved after the per-tester one.
+     *
+     * Order matters and neither order is perfect without a cross-statement
+     * transaction. Reserving the cohort slot first would let a tester who is already
+     * at their personal limit burn budget on a request that never reaches a model.
+     * Reserving it second means a request rejected here has consumed one of that
+     * tester's own slots. That is the rarer case and it errs toward spending less,
+     * which is the safe direction for a fixed budget. */
+    async reserveWrittenBudget(env, limit) {
+      const db = requireDatabase(env);
+      const now = new Date().toISOString();
+      const day = now.slice(0, 10);
+      const row = await db.prepare(`INSERT INTO written_authority_budget (usage_day, checks, updated_at)
+        VALUES (?, 1, ?)
+        ON CONFLICT(usage_day) DO UPDATE SET checks = written_authority_budget.checks + 1,
+          updated_at = excluded.updated_at
+        WHERE written_authority_budget.checks < ?
+        RETURNING checks`)
+        .bind(day, now, limit).first();
+      if (!row) {
+        throw new RequestError(429, "WRITTEN_BUDGET_LIMIT",
+          "Dungeon's shared written-checking budget for today is used up. The rubric and exemplar are still available, and checking resumes tomorrow.");
+      }
+      return {cohortChecks: Number(row.checks || 0), cohortLimit: limit};
+    },
+
+    /* Keep the answer so the marking can be corrected against a human reading.
+     *
+     * The expiry is written per row rather than enforced by a policy someone has to
+     * remember, and purgeExpiredWrittenAnswers deletes on it daily. A failure here
+     * must not cost the learner their result - they wrote the answer and the check
+     * ran, so the mark is returned either way and the archive miss is logged. */
+    async archiveWrittenAnswer(env, {email, questionId, courseId, answer, criteria, abstained, retentionDays}) {
+      const db = requireDatabase(env);
+      const now = new Date();
+      const decision = JSON.stringify((criteria || []).map((criterion) => ({
+        id: String(criterion?.id || ""),
+        decision: String(criterion?.decision || ""),
+        gapCodes: Array.isArray(criterion?.gapCodes) ? criterion.gapCodes.map(String).slice(0, 8) : []
+      })).slice(0, 12));
+      await db.prepare(`INSERT INTO written_answer_archive
+        (email, question_id, course_id, answer_text, decision_json, abstained, created_at, expires_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
+        .bind(email, questionId, courseId, answer, decision, abstained ? 1 : 0,
+          now.toISOString(), new Date(now.getTime() + retentionDays * 86400000).toISOString())
+        .run();
+    },
+
+    async purgeExpiredWrittenAnswers(env) {
+      const db = requireDatabase(env);
+      const result = await db.prepare("DELETE FROM written_answer_archive WHERE expires_at <= ?")
+        .bind(new Date().toISOString()).run();
+      return Number(result?.meta?.changes || 0);
+    },
+
+    async deleteWrittenAnswers(env, email) {
+      const db = requireDatabase(env);
+      const result = await db.prepare("DELETE FROM written_answer_archive WHERE email = ?").bind(email).run();
+      return Number(result?.meta?.changes || 0);
     }
   };
 }
@@ -729,6 +818,93 @@ async function manageProgress(request, env, store) {
   if (stateJson.length > 700000) throw new RequestError(413, "REQUEST_TOO_LARGE", "Progress data is too large.");
   const saved = await store.saveProgress(env, email, stateJson);
   return json({status: "saved", ...saved});
+}
+
+function writtenDailyLimit(env) {
+  const configured = Number.parseInt(String(env?.DUNGEON_HOSTED_WRITTEN_DAILY_LIMIT || "8"), 10);
+  return Number.isFinite(configured) ? Math.min(50, Math.max(1, configured)) : 8;
+}
+
+/* The cohort ceiling for one UTC day. Unlike the per-tester limit this does not scale
+ * with how many people are admitted, so it is the number that actually bounds spend.
+ *
+ * 140 is derived, not guessed. Workers Free allows 10,000 Neurons per day with no
+ * paid overage - past that, requests simply fail. One rubric check costs about 34
+ * Neurons on @cf/qwen/qwen3-30b-a3b-fp8 (1,400 input tokens at 4,625/M, 900 output
+ * at 30,475/M), or about 68 if its retry also fires. 140 x 68 = 9,520, so the cap
+ * holds even in the worst case where every check that day is retried. */
+function writtenCohortDailyLimit(env) {
+  const configured = Number.parseInt(String(env?.DUNGEON_HOSTED_WRITTEN_COHORT_DAILY_LIMIT || "140"), 10);
+  return Number.isFinite(configured) ? Math.min(5000, Math.max(1, configured)) : 140;
+}
+
+async function manageWrittenAuthority(request, env, store, writtenAuthority, operation) {
+  const email = await authenticateLearner(request, env, store);
+  if (!email) throw new RequestError(401, "LOGIN_REQUIRED", "Enter your approved email to continue.");
+  if (operation === "health") {
+    if (request.method.toUpperCase() !== "GET") return json({code: "METHOD_NOT_ALLOWED", message: "Use GET."}, 405);
+    return json(await writtenAuthority.health(env));
+  }
+  if (request.method.toUpperCase() !== "POST") return json({code: "METHOD_NOT_ALLOWED", message: "Use POST."}, 405);
+  requireSameOrigin(request);
+  const status = await writtenAuthority.health(env);
+  if (!status.available) throw new RequestError(503, "WRITTEN_AUTHORITY_UNAVAILABLE", status.reason || "Written checking is not available.");
+  if (typeof store.reserveWrittenCheck !== "function") {
+    throw new RequestError(503, "BACKEND_UNAVAILABLE", "Written-check metering is temporarily unavailable.");
+  }
+  const body = await readBoundedJson(request, 16 * 1024);
+  const usage = await store.reserveWrittenCheck(env, email, writtenDailyLimit(env));
+  /* Both ceilings are reserved before any model call, so a rejected request costs
+   * nothing but a database write. An older store without the cohort counter still
+   * works and is simply bounded by the per-tester limit alone. */
+  const budget = typeof store.reserveWrittenBudget === "function"
+    ? await store.reserveWrittenBudget(env, writtenCohortDailyLimit(env))
+    : {};
+  const result = operation === "grade"
+    ? await writtenAuthority.grade(env, body)
+    : await writtenAuthority.coach(env, body);
+  await archiveWrittenAnswer(env, store, email, body, result);
+  return json({...result, usage: {...usage, ...budget}});
+}
+
+function writtenRetentionDays(env) {
+  const configured = Number.parseInt(String(env?.DUNGEON_WRITTEN_RETENTION_DAYS || "92"), 10);
+  return Number.isFinite(configured) ? Math.min(365, Math.max(1, configured)) : 92;
+}
+
+/* The answer is kept so the rubric can be corrected against a human reading; the
+ * privacy notice states that purpose and the three-month window plainly.
+ *
+ * Two responses are never written. A distress response is answered with support
+ * before any marking runs, and storing it would contradict the notice's promise
+ * that it is "not sent to any AI provider, not marked, not stored". And a check the
+ * learner never received a result for has nothing to compare a human reading
+ * against.
+ *
+ * The archive is best-effort on purpose: the learner did the work and the check
+ * ran, so a database problem must not turn into a lost mark. */
+async function archiveWrittenAnswer(env, store, email, body, result) {
+  if (typeof store.archiveWrittenAnswer !== "function") return;
+  if (result?.kind === "written-support" || result?.supportOffered) return;
+  const questionId = String(body?.questionId || "");
+  const answer = String(body?.answer || "");
+  if (!questionId || answer.length < 20 || answer.length > 6000) return;
+  try {
+    await store.archiveWrittenAnswer(env, {
+      email,
+      questionId,
+      courseId: String(body?.courseId || result?.courseId || ""),
+      answer,
+      criteria: result?.criteria,
+      abstained: Boolean(result?.abstain),
+      retentionDays: writtenRetentionDays(env)
+    });
+  } catch (error) {
+    console.error(JSON.stringify({
+      event: "written_archive_failed",
+      error: error instanceof Error ? error.message : "Unknown error"
+    }));
+  }
 }
 
 const LOW_SAMPLE_ATTEMPTS = 10;
@@ -890,6 +1066,16 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
       console.log(JSON.stringify({event: "tester_lock_change", action: "unlock"}));
       return json(await responseBody(emails, {unlocked: targetEmail}));
     }
+    /* A tester asking for their written answers back, without withdrawing from the
+     * test. The privacy notice promises this happens on request and without their
+     * having to explain why, so it is a control the owner can act on rather than a
+     * SQL statement someone has to remember how to write correctly. */
+    if (body?.action === "delete-answers") {
+      if (typeof store.deleteWrittenAnswers !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Answer storage is temporarily unavailable.");
+      const deleted = await store.deleteWrittenAnswers(env, targetEmail);
+      console.log(JSON.stringify({event: "written_archive_deleted", deleted}));
+      return json(await responseBody(emails, {answersDeleted: deleted}));
+    }
     if (body?.action === "sign-out") {
       if (typeof store.signOutTester !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Progress storage is temporarily unavailable.");
       const cleared = await store.signOutTester(env, targetEmail);
@@ -902,7 +1088,7 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
       console.log(JSON.stringify({event: "tester_community_reminder", reminded: 1}));
       return json(await responseBody(emails, {reminded: [targetEmail]}));
     }
-    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use sign-out, sign-out-all, unlock, bump, or bump-unjoined.");
+    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use sign-out, sign-out-all, unlock, bump, bump-unjoined, or delete-answers.");
   }
 
   if (method === "DELETE") {
@@ -1000,7 +1186,11 @@ export function createWorker({
   fetchImpl = fetch,
   verifyAdmin = verifyOwner,
   embeddedAssets = null,
-  store = createD1Store()
+  store = createD1Store(),
+  writtenAuthority = {
+    health: hostedAuthorityHealth,
+    grade: gradeHostedAnswer
+  }
 } = {}) {
   return {
     async fetch(request, env) {
@@ -1009,11 +1199,22 @@ export function createWorker({
         const prefix = env?.DUNGEON_PREFIX || "/dungeon";
 
         if (url.pathname === prefix) return redirect(`${prefix}/${url.search}`);
+        // Deliberately above the session gate: a privacy notice nobody can read
+        // until they have signed in is not a notice.
+        if (url.pathname === `${prefix}/privacy` || url.pathname === `${prefix}/privacy.html`) {
+          return await serveAsset(request, env, "/app/privacy.html", embeddedAssets);
+        }
         if (url.pathname === `${prefix}/login.css`) return await serveAsset(request, env, "/app/login.css", embeddedAssets);
         if (url.pathname === `${prefix}/login.js`) return await serveAsset(request, env, "/app/login.js", embeddedAssets);
         if (url.pathname === `${prefix}/api/session`) return await manageSession(request, env, fetchImpl, store);
         if (url.pathname === `${prefix}/api/community`) return await manageCommunity(request, env, store);
         if (url.pathname === `${prefix}/api/progress`) return await manageProgress(request, env, store);
+        if (url.pathname === `${prefix}/api/written-authority/health`) {
+          return await manageWrittenAuthority(request, env, store, writtenAuthority, "health");
+        }
+        if (url.pathname === `${prefix}/api/written-authority/grade`) {
+          return await manageWrittenAuthority(request, env, store, writtenAuthority, "grade");
+        }
         if (url.pathname === `${prefix}/health`) {
           requireDatabase(env);
           return json({status: "ok", storage: "cloudflare-d1", access: "dashboard-allowlist"});
@@ -1060,9 +1261,31 @@ export function createWorker({
         }
         return json({code: "NOT_FOUND", message: "Not found."}, 404);
       } catch (error) {
-        if (error instanceof RequestError) return json({code: error.code, message: error.message}, error.status);
+        if (error instanceof RequestError || error instanceof WrittenAuthorityError) {
+          return json({code: error.code, message: error.message}, error.status);
+        }
         console.error(JSON.stringify({event: "worker_error", error: error instanceof Error ? error.message : "Unknown error"}));
         return json({code: "INTERNAL_ERROR", message: "The request could not be completed."}, 500);
+      }
+    },
+
+    /* Retention has to survive the product going quiet.
+     *
+     * Purging only when someone submits an answer would mean the three-month
+     * window silently stops running the moment the exam season ends and nobody
+     * opens Dungeon again - which is exactly when the stored answers are oldest
+     * and least justified. A daily trigger deletes on the expiry each row already
+     * carries, whether or not anyone is using the app. */
+    async scheduled(event, env) {
+      if (typeof store.purgeExpiredWrittenAnswers !== "function") return;
+      try {
+        const deleted = await store.purgeExpiredWrittenAnswers(env);
+        console.log(JSON.stringify({event: "written_archive_purged", deleted}));
+      } catch (error) {
+        console.error(JSON.stringify({
+          event: "written_archive_purge_failed",
+          error: error instanceof Error ? error.message : "Unknown error"
+        }));
       }
     }
   };

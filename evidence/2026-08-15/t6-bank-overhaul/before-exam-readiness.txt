@@ -1,0 +1,35 @@
+
+SPMS — Software Product Management for Startups
+  sat 22 August, 09:00–11:00 · 75 marks
+  [ok  ] Section A · mcq · 52 of 35
+  [ok  ] Section B · msq · 20 of 20
+         · shapes: {"3-of-5":12,"2-of-4":6,"2-of-5":2}
+
+BRGSA — Business Research and Growth Systems Architecture
+  sat 22 August, 13:00–15:00 · 80 marks
+  [ok  ] Section A · mcq · 76 of 20
+  [ok  ] Section B · case-cloze · 16 of 4
+  [ok  ] Section C · short-answer · 36 of 2
+
+IBM — Inclusive Business Model
+  sat 23 August, 09:00–11:00 · 100 marks
+  ! This paper is ten written answers on a caselet released two days beforehand. A mock cannot reproduce…
+  [ok  ] Section A · short-answer · 36 of 10
+
+SCLM — Supply Chain & Logistics Management
+  sat 23 August, 13:00–15:00 · 80 marks
+  [ok  ] Section A · mcq · 84 of 50
+  [FAIL] Section B · numeric · 4 of 6
+         × 2 more numeric needed (4 of 6). Worth 8 marks the mock cannot award.
+  [warn] Section C · match · 8 of 3
+         ~ 3 questions on every paper are forced to share one prompt ("Match each prompt to the precise explanation or action.") — 8 items carry it and the pool has only 5 spare. Vary the caselet, not just the options.
+  → 8 marks currently unawardable
+
+
+AUTHORING WORKLIST — soonest paper first
+
+    2 × numeric       SCLM Section B   (sat 23 August, 13:00–15:00)
+
+  2 items total.
+
+1 error(s), 1 warning(s).

@@ -44,6 +44,167 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 ## Issue → Cause → Fix
 
+- **I-CRAFT-CLOSED-BOTH-SURFACES (2026-08-15)** — Issue: learning integrity; closes both
+  I-NAME-MATCHING-BANK-WIDE and I-CRAFT-INSIDE-A-SET below, and F-06. Cause of the remaining
+  half: the absolutes gap was **house style, not meaning** — `bridge_cloze` needed nothing
+  because lecture-derived prose already carries absolutes 40.6% of the time, while `summary`
+  and `application` were systematically hedged, so "drop the absolutes and guess" beat chance
+  on families whose distractors were honest over-claims. Fix, measured by persona on both
+  surfaces: paper combined SPMS 34.5 → **16.3**, BRGSA 37.8 → **15.3**, SCLM 24.5 → **20.1**;
+  delivered run SPMS 50 → **19.2**, BRGSA 37.8 → **28.2**, SCLM 48.2 → **22.0**, IBM 67.3 →
+  **23.1**. Two levers only — 23 filler removals (9.6% of absolute-carrying distractors; the
+  load-bearing 90.4% untouched) and 76 correct answers restated at the course's real strength,
+  each universal lifted from that concept's own accepted `bridge`. **Manufacturing an absolute
+  and watering down a distractor were both refused.** The standing lesson is that verification
+  found five defects the gates could not: an "It" substitution firing on 11 of 64 summaries
+  traded the name cue for a **length** cue; **appending** universals pushed IBM's "pick the
+  longest" to **66%**, worse than the exploit being fixed, so rewrites must be *in place* and
+  length-neutral; labelling `case_cloze`'s decision blank buried the differing words behind one
+  36-character prefix and misattributed a decision to a framework name; two option-shape errors;
+  and unlabelling `explain` on a plausible hypothesis sent it to 61.9%. Bank validator finished
+  at **0 errors and 0 warnings**, clearing the standing IBM length warning as well. Evidence:
+  `evidence/2026-08-15/t6-bank-overhaul/verification.md`.
+
+- **I-NAME-MATCHING-BANK-WIDE (2026-08-15)** — Issue: learning integrity, and a correction to
+  I-CRAFT-INSIDE-A-SET below. Cause: the exploit was attributed to distractors borrowed from
+  other concepts, and the fix prescribed was `relevantWrong()` applied to the remaining families.
+  Measured over **every** option set in the built bank (1049, not the ~13 per run the craft tool
+  samples), that diagnosis is **wrong in its main claim**: `explain` and `apply` already use
+  authored **same-concept** distractors and still pay 66.0% and 36.2%. The rule is `argmax`, not
+  presence — **195 of 384** of their distractors do name the concept and are eliminated anyway
+  for naming it *less densely* than the correct answer. Cross-concept borrowing is real but
+  confined to `repair_cloze` and `bridge_cloze`. Per family: `term_cloze` **100.0**,
+  `repair_cloze` 81.9, `case_cloze` 70.8, `explain` 66.0, `bridge_cloze` 48.5, **`boss` 41.3**,
+  `apply` 36.2, `connect` **0.5**. **324 option sets — a third of the bank — pay 100%.**
+  `boss` is the largest family at 480 sets and had never been measured; it sat inside "other".
+  Fix: **closed in every generated family the same day, 324 → 28 sets at 100%.**
+  `tools/measure-name-matching.js --gate` is the standing check R3's on-topic-ness row never had
+  and now **exits 0**; `tests/name-matching-gate.test.mjs` asserts the gate itself. The direction
+  taken is `connect`'s — name the concept in *every* option — and **no authored word changed**, so
+  over-claims keep their "alone" and the standing rule above is not bent. The opposite direction
+  was killed on evidence before anything was edited: stripping each concept's name from its own
+  prose drives every family to 21.8–27.1% but produces "Lean this idea asks whether real people
+  will take a real action" and takes `connect` from 0.5% to 26.6%. `term_cloze` was **retired to
+  `contrast`** on an owner decision, because a label-selection item is 100% name-matchable by
+  construction. **Three defects came from verification rather than from the gates**, and each is a
+  standing lesson: an "It" substitution that fired on 11 of 64 summaries — all correct answers —
+  traded this cue for a **length** cue and earned SPMS a new validator warning; labelling
+  `case_cloze`'s decision blank printed **eight options each opening on the same 36-character
+  prefix** and misattributed a decision to a framework name, which a green gate could not see and
+  reading the screen could; and taking module siblings unconditionally failed the option-shape
+  guard twice. **Still open: IBM at 32.7 against a 32 limit, whose residue is absolutes (37.8),
+  not name-matching** — that is F-06 and needs the 64-string rewrite, which was in scope and was
+  not done. New `npm run review` prints every gate beside the real option text for exactly the
+  reason defect two exists. Evidence: `evidence/2026-08-15/t6-bank-overhaul/verification.md`.
+
+- **I-CRAFT-INSIDE-A-SET (2026-08-15)** — Issue: learning integrity. The mock's measured exploit is
+  "eliminate the absolutes"; a study set's is not, and nothing had looked. Cause: a mock spans
+  sixteen concepts, so "which option names the syllabus" is weak there — but a study set is one or
+  two concepts deep, and its `_repair_cloze` and `_bridge_cloze` distractors are *other concepts'*
+  principles, so exactly one option contains the set's own vocabulary. Measured with the new
+  `tools/measure-learn-craft.mjs` over the delivered runs: name-matching pays **53.8 / 44.9 / 46.4 /
+  59.6%** against 25% chance, and combined with absolutes reaches **67.3%** on IBM. The engine then
+  reads those answers as evidence of understanding. This is `relevantWrong()`'s defect (LAW-48)
+  surviving in the families it was never applied to: it fixed case questions in 2026-08-12 and the
+  cloze families kept borrowing distractors from elsewhere. Fix: **none yet, and that is stated
+  rather than implied** — it is distractor selection in the generated families, not content volume,
+  and it was outside a session that added 48 items. Evidence:
+  `evidence/2026-08-15/t6-harness-and-bank/verification.md`. Related and also open: 2 of 8 scored
+  questions in an SCLM run key on the concept's own *name*, which the run's orientation copy prints
+  four steps earlier ("Carry forward: Strategic fit. Now add Six supply-chain drivers").
+
+- **I-FEEDBACK-BREADTH (2026-08-15)** — Issue: the wrong-answer panel is the best teaching in the
+  product and repeats itself inside a single run. Cause: 161 per-option diagnoses across the four
+  set-1 runs draw on **55 distinct cues**, and the most common one covers 33 of them, so a learner
+  who misses four items in one run can meet the same sentence three times; the generated `_explain`
+  family's `why` is a template with the concept name slotted in. Correction to the record while
+  measuring it: F-25's "correct-answer feedback restates the correct answer, every time" is
+  **9 of 32** items, not universal — the `_repair_cloze` family and two `_explain` items — so it is
+  a family defect with a working majority, which is a much smaller thing to fix. Fix: not attempted.
+  Evidence: same file. Standing measurement is the persona harness key files, which now carry the
+  full post-commit surface per option.
+
+- **I-ISOLATED-WEAKNESS (2026-08-14)** — Issue: the weakness route treated every gap as an unrelated
+  item — eight concepts, one question each, no statement anywhere about whether any of them were
+  connected. Two weak ideas that the course tests together were repaired separately and never checked
+  against each other, and a genuinely isolated gap was presented identically, so the learner had no
+  way to tell the difference. Cause: no link structure was consulted, and none was readily available
+  — `data/graphs/` holds concept graphs for five *other* subjects and none for Term 6, and the
+  concept records carry a `bridge` sentence rather than links. Fix: derive links from the bank
+  itself, where an edge exists only if one authored surface tests both concepts, then pair weak
+  concepts **only when the partner is also weak** and close each pair with the surface that tests
+  both. Everything else is reported as standing on its own, in the run kicker and by omission from
+  any pair. The strict edge definition is the point: same-module or adjacent-lecture proximity would
+  have produced links with no surface to exercise, which is a claim the product could not then honour.
+  Measured, the graph is one module partner per concept plus two real cross-module edges in SCLM, so
+  isolation is the common case and had to be a first-class outcome rather than a fallback. Evidence:
+  `evidence/2026-08-14/t6-weakness-linking/verification.md`. Standing check:
+  `tools/browser-checks/weakness-linking.js`. Watch items: the run promised "Up to 8 questions" and
+  delivered 12 because the budget asked whether there was *any* room rather than whether the unit
+  fit; and the "Both together" label was first written into `.question-meta`, which is
+  `display: none`, so a `textContent` assertion passed on copy no learner could see — the second
+  instance of that failure in one session.
+
+- **I-LAYERING (2026-08-14)** — Issue: a run introduced concepts in an order nothing had chosen —
+  SPMS study set 1 taught `M01-L10` before `M01-L05`, in the run the homepage captions "in the order
+  the subject teaches it" — while the primer printed "Carry forward: `<previous>`. Now add `<this>`"
+  and the header said "builds on what you just did". The product was claiming a build the schedule
+  did not have. Cause: lecture position was not an input to scheduling anywhere.
+  `layeredQueue()` places a lesson immediately before the first surface citing it, so lesson order
+  is a by-product of question order; `selectQuestionsFromPool()` orders questions by never-attempted
+  → format variety → concept variety → least-recent → a hash of the question id. On a fresh profile
+  the first four keys tie, so the opening question of a run — and the first lesson a learner ever
+  meets — was picked by that hash. Deterministic, and arbitrary with respect to teaching. Fix:
+  selection is untouched (format spread, concept coverage and weak-first are all deliberate); the
+  selected questions are sorted by teaching rank afterwards, and `layeredQueue` now commits to the
+  run's whole lesson list up front and drains it in order, so lesson delivery is monotonic by
+  construction rather than following whichever surface happened to cite a lecture first. Measured
+  across all 40 sets in four subjects: **94 descents over 37 of 40 sets → 0**, with the pair count
+  identical at 253, which is the proof selection did not move. LAW-47 still clean.
+  `startPriorityPractice` is deliberately excluded — it is remediation ordered by need and says so
+  on screen. Evidence: `evidence/2026-08-14/t6-lesson-order-diagnosis/verification.md`. New standing
+  check: `tools/browser-checks/lesson-layering.js`. Watch item: copy that asserts a relationship
+  ("builds on what you just did") needs the relationship verified, not just rendered — it shipped
+  for months against an order that did not exist.
+
+- **I-CASE-READABILITY (2026-08-14)** — Issue: the first authored cases were faithful to the
+  transcript and read like minutes of it — `spms_jtbd_msq` ran three parallel "Asked why…, she
+  says…" clauses in one 557-character block, and the block sat in a column where the case, its
+  provenance chip, the vocabulary disclosure and the question all had the same visual rhythm, so
+  nothing grouped. Cause: three separate things. The prose was transcribed rather than written. The
+  render path set the whole case as one `textContent` block with no paragraph structure and no
+  measure cap, so lines ran past 100 characters on a wide card. And the two labels that would have
+  explained the structure were both suppressed — `.case-label` was screen-reader-only, and
+  `.task-prompt > span` was `display: none` globally, which hid the "Then decide" kicker that
+  `renderQuestion` had been computing correctly all along. Fix: cases rewritten as three-beat
+  scenarios (situation, what happens, what it costs) with the facts unchanged; `caseParagraphs()`
+  renders blank-line-separated beats as paragraphs on both the learn and exam surfaces; a visible
+  **THE CASE** eyebrow, a visible **THEN DECIDE** eyebrow, and a 1px rule so everything above it is
+  material and everything below is the ask — a divider rather than a nested card, which the design
+  rules reserve for controls and state changes. Measure capped at 62ch, verified at 71 characters
+  per line. Evidence:
+  `evidence/2026-08-14/t6-example-questions-show-their-example/verification.md`. Watch item: a
+  computed label that is then hidden by a global rule is invisible to every DOM check that asserts
+  on `textContent`; assert on the computed `display` too.
+
+- **I-INVISIBLE-EXAMPLE (2026-08-14)** — Issue: a question opened "In the drilling-machine example,
+  select every need the purchase actually serves" and no drilling machine appeared anywhere on the
+  page; its options then referred to "the certificate" and "more than a decade of study" as if they
+  had been introduced. Cause: `addAuthoredMultiSelect` had no `caselet` field, so the twenty
+  authored SPMS multiple-select items had no way to carry a case even when their stem named one —
+  the authoring leaned on the lesson delivered earlier in the run to supply the example. That is
+  memory rather than evidence on the page, and it fails outright in the examiner, where Section B is
+  these same twenty items sat cold with no lesson at all. One of the four (`SPMS-M07-L01`'s
+  ride-hailing MoSCoW list) was not in its lesson either, so it was answerable only from the
+  transcript. Fix: the builder passes `caselet` through and the four items that name an example now
+  display it, written from their own lecture's clean transcript and withholding the classification
+  the question asks for; stems point at the case rather than at the lecture. Options, `answers` and
+  `diagnoses` are unchanged. Audited across all 816 questions in two passes — deictic phrasing and
+  proper nouns — and the defect exists nowhere else in the bank. Evidence:
+  `evidence/2026-08-14/t6-example-questions-show-their-example/verification.md`. Watch item: fifteen
+  of the twenty MSQ stems still ask what "the lecture" said rather than what is true, which trains
+  recall of a session instead of the idea.
+
 - **I-EXPLOIT (2026-08-12)** — Issue: the examiner's results dashboard told candidates that ticking
   generously under negative marking "is rational on this shape", and it was right about the mock and
   wrong about the exam. Cause: all eight authored SPMS multiple-select items carry 3 correct options
@@ -546,6 +707,110 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   and the recommended-paper hero repeats the bank shortfall rather than being the one surface where
   the honest warning goes quiet. Laws: LAW-51, LAW-55, LAW-56. Evidence:
   `evidence/2026-08-13/t6-dual-facing-and-sittings/verification.md`.
+
+- **I-MEASUREMENT-FOUNDATION (2026-08-13)** — Issue: Strong could be earned from answer-shaped
+  recognition with no signal that a response was too fast to be independent retrieval, while the
+  product still had no measured item parameters. Cause: attempts recorded outcomes and confidence
+  but had no render/response timing boundary. Fix: an ephemeral monotonic response clock, coarse
+  duration bands, and a rapid-response Strong-eligibility gate. **Learning-integrity axis:** speed
+  never changes correctness, feedback, scheduling, or confidence and slowness is never penalised;
+  it only limits the product's claim. A later audit fixed the edge case where a rapid-correct latest
+  attempt could erase an already-earned Strong state; the latest eligible attempt now owns the
+  recency gate, while rapid wrong answers still affect the ordinary error rules. **Persistence/privacy axis:** raw milliseconds never enter the
+  profile or D1, historical attempts remain eligible, and restored complete responses are unknown
+  rather than falsely instant. The threshold remains a labelled hypothesis until real data can
+  calibrate it. Law: LAW-57. Evidence:
+  `evidence/2026-08-13/t6-measurement-foundation/verification.md`.
+
+- **I-LOCAL-WRITTEN-AUTHORITY (2026-08-13)** — Issue: source-traceable constructed responses still
+  ended in learner self-review, so Dungeon could expose a gap but could not proactively judge it or
+  route the next repair. Cause: treating every machine judgement as equally unsafe collapsed a
+  bounded owner-local practice decision into the same category as official grading and Strong
+  evidence. Fix: an owner-authorised local criterion authority with question-bound retrieval, one
+  compact structured judgement followed by deterministic citation, schema, English-script, and
+  literal answer-evidence validation, with abstention into the existing rubric path. A second call
+  to the same checkpoint had doubled latency without creating independent authority.
+  **Learning-integrity axis:** the accepted mark is final only for
+  Dungeon practice, remains unscored and Strong-ineligible, and an accepted gap schedules another
+  question; the examiner never calls it. **Persistence/privacy axis:** the server and model endpoint
+  are loopback-only, candidate answers are not written by the grader or calibration report, the
+  exact owner-approved model id must match before the local HTTP authority exists, and it never
+  serves a LAN client. **Truthful-interaction axis:** model id, evidence, criteria, authority
+  boundary, and abstention are visible; a fake-model pass is labelled plumbing evidence rather than
+  grading validation. **Accessibility axis:** the new result surface passes the existing responsive
+  audit at 1280×800 and 375×812, and genuine 32px controls found during the audit were raised to the
+  44px floor. **Real-model follow-through:** the exact owner-approved checkpoint now runs on the M4
+  Pro Mac through a private Windows→Mac SSH loopback forward. The first live pass exposed a truthful-
+  evidence defect—the model wrapped a literal quote in commentary—so the prompt and schema now
+  demand the shortest raw answer substring and the strict validator remains intact. A later owner
+  example exposed a separate item-authority mismatch: the landing-page case came from M01-L03 while
+  the generated short answer cited only M01-L01 and demanded an unrelated pre-declared-test reason.
+  Generated practical questions now ask for a judgement directly, carry both principle and applied
+  sources, and use two compact criteria (course understanding; judgement and case evidence). Course
+  evidence is prepared after an idle pause without sending partial candidate text; the answer is
+  sent only on Check. The one-pass latency and corrected example are re-measured in the newer
+  practical-written-answer evidence. The real accepted path and interruption path
+  passed at desktop and 375×812 with no horizontal overflow. Synthetic agreement was 26/36 criteria
+  with one disputable IBM label retained for owner review; it is not presented as calibration. The
+  same review fixed interruption recovery and a separate measurement regression where a rapid
+  correct retry could erase an already Strong state. Law: LAW-58. Evidence:
+  `evidence/2026-08-13/t6-local-written-authority/verification.md`.
+
+- **I-HOSTED-WRITTEN-AUTHORITY (2026-08-13)** — Issue: a local question-bound marker could not
+  serve the website without making the Mac a production dependency, and an early scaffold exposed
+  an arbitrary-question coach instead of Dungeon-owned written practice. Cause: internal retrieval
+  evaluation and the learner product had been conflated, while local model routing and public
+  inference had been treated as the same runtime. Fix: the learner path is now four authored prompts
+  with criterion marks only for server-owned rubric questions; the subject-wide analyzer remains
+  unlinked internal tooling with no public Worker route. The authored contract is implemented over
+  both the private LM Studio path and native Cloudflare Workers AI + Vectorize. **Learning-integrity
+  axis:** candidate text is excluded from retrieval, every course claim must survive an independent
+  source verifier, invented citations abstain, authored marks remain Strong-ineligible, and the
+  examiner has no route. Stray CJK/mojibake triggers one regeneration and then abstention under
+  LAW-60. **Persistence/privacy axis:** the
+  hosted Worker is session- and same-origin-bound, request-bounded, and limited to 20 checks per
+  tester per UTC day; D1 stores only the usage counter and the Worker never logs content. **Truthful-
+  interaction axis:** written practice remains usable through transparent rubric fallback while
+  machine checking stays unavailable until activation, exact model approval, and corpus approval
+  agree; local calibration cannot be claimed for the hosted
+  checkpoint. **Performance/cost axis:** native bindings avoid a laptop relay and the per-tester cap
+  creates a measurable ceiling before activation. Current evidence is automated and dry-run only;
+  transcript upload, actual hosted-model calibration, updated consent, remote D1 migration,
+  deployment, and real-Browser acceptance remain waiting. Law: LAW-59. Evidence:
+  `evidence/2026-08-13/t6-hosted-written-authority/verification.md`.
+
+- **I-PROACTIVE-WRITTEN-ADAPTATION (2026-08-13)** — Issue: Dungeon chose written prompts only by
+  least-recent use, its main recommendation ignored accepted criterion misses, and the only response
+  was a later concept question. The checker could comment, but the learning system did not remember
+  which writing move remained open or teach it before asking for transfer. The header also exposed an
+  empty subject select during a fixed-subject practice run. Cause: written authority had been wired
+  to feedback and concept re-attempts without a separate writing-evidence state or support surface.
+  Fix: accepted criterion outcomes now update a separate `writtenPractice` profile; a miss opens two
+  fresh confirmations, inserts a deterministic unscored repair, targets the next authored written
+  prompt, and promotes the open move into Dungeon's main **Next** recommendation. The run selects
+  unseen prompts with weak concepts first and removes the redundant subject select. **Learning-
+  integrity axis:** Qwen outcomes remain `scored:false`, never alter Strong, abstentions create no
+  written evidence, and merely seeing the repair closes nothing. **Persistence/privacy axis:** the
+  added summary stores criterion decisions, question ids, timestamps, and counters but no additional
+  learner prose. **Truthful-interaction axis:** Dungeon states why it chose the prompt, why it changed
+  the run, and how many confirmations remain; it reports an open writing move rather than a permanent
+  ability label. **Accessibility/layout axis:** the real Browser path has zero horizontal overflow,
+  no visible sub-44px target, and no subject control during practice. Law: LAW-58. Evidence:
+  `evidence/2026-08-13/t6-proactive-written-adaptation/verification.md`.
+
+- **I-WRITTEN-TRANSFER-AND-EXAMINER-FORENSICS (2026-08-13)** — Issue: written practice appeared in
+  subjects whose papers do not ask for prose, criterion misses could not distinguish omission from
+  misunderstanding, and Examiner stopped at vocabulary/rubric self-review. Fix: BRGSA/IBM receive
+  short and case writing for every concept; SPMS/SCLM do not. Every authored criterion owns bounded
+  gap codes which drive deterministic repair and repeated fresh transfer. After submission only,
+  Examiner runs a source-bound rubric pass plus an independently verified larger-budget coach, then
+  sends failed requirements into `examMisses` and the written corrective pool. **Learning integrity:**
+  mock success closes nothing, the machine score excludes prose, and all model judgements remain
+  practice guidance. **Privacy/persistence:** answers and narrative reviews stay page-lifetime; the
+  profile stores codes/counters only. **Performance:** the deep pass is deliberately slower and runs
+  sequentially after the clock stops. **Transport:** explicit UTF-8 plus a browser script gate closes
+  post-model mojibake. Evidence:
+  `evidence/2026-08-13/t6-written-transfer-and-examiner-forensics/verification.md`.
 
 ## Watch Items
 

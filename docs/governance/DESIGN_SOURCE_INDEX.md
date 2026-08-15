@@ -23,6 +23,11 @@ not make it authoritative.
      `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` owns sampled optional confidence, ethical
      confident-error repair, boss-step credit, constructed self-review, generic practice shapes,
      and the first-cohort assessment-envelope boundary.
+   - Measurement and machine-judgement direction (2026-08-13):
+     `docs/briefs/DUNGEON_MEASUREMENT_AND_JUDGEMENT.md` owns the move from self-report toward
+     banded response latency, the rapid-response Strong gate, the small-cohort claim boundary,
+     comparative criterion-level written-work direction, and the rule that a Mac local model is an
+     offline lab rather than production infrastructure.
    - Controlled tester launch (2026-08-11): expose only the active T6 learning assets, keep
      learner progress browser-local, publish privacy/security/tester guidance, create a private
      GitHub source repository, and operate tester discussion, feedback, and announcements through
@@ -458,6 +463,42 @@ one side.
   missing, and the confidence note — now sits on the concept row it describes.
 - Evidence: `evidence/2026-08-12/t6-homepage-four-questions/verification.md`. Pixel-level
   acceptance is still owed; the Browser pane was not compositing when this was verified.
+
+### C31 — Do not infer from speed versus use latency to guard a learning claim
+
+- The 2026-08-11 evidence brief prohibited inferring an unknown learner state from speed. That
+  remains correct: response speed is not confidence, ability, motivation, or answer correctness.
+- The owner-supplied 2026-08-13 measurement brief asks for a narrower use: detect responses too
+  rapid to serve as independent evidence for the claim **Strong**, while preserving the response
+  and every consequence of its correctness.
+- Resolution (2026-08-13): start an ephemeral monotonic timer at render and compute elapsed time
+  when the learner commits the response. Persist no raw time — only a coarse duration band and
+  derived flags. A rapid
+  correct answer stays correct, receives normal feedback, and can schedule normally, but is
+  excluded from Strong-eligible counts. A slow answer is never penalised. Historical attempts with
+  no timing remain eligible rather than being silently downgraded. Restored complete responses have
+  unknown timing because the true start moment cannot be reconstructed. The threshold is explicitly
+  provisional until item/format means exist, and it may gate only the claim, never the learner.
+
+### C32 — Qwen may own a local practice mark, while mastery and official grading remain separate
+
+- Earlier production work made constructed responses transparent self-review because a thin
+  browser keyword check could not validly judge reasoning (LAW-23). The owner has now explicitly
+  asked for course-grounded RAG with Qwen as the answer authority.
+- Resolution (2026-08-13): on an explicitly enabled loopback-only development origin, Qwen may
+  issue Dungeon's final criterion mark for written **practice** when two blinded passes agree and
+  every decision survives server-side schema, answer-quote, lecture-boundary and citation checks.
+  A missing criterion proactively schedules another surface. Any uncertainty or failure abstains
+  into the existing visible self-review path.
+- This does not change examiner marking, publish a model endpoint, transmit live tester answers,
+  claim an official course grade, or make constructed work Strong evidence. The saved local record
+  remains `scored:false`.
+- Owner resolution (2026-08-13): the exact installed LM Studio identifier
+  `qwen3.6-35b-a3b-claude-4.6-opus-reasoning-distilled` is approved for the local practice path. It
+  is reached from the authoritative Windows checkout through a private SSH loopback forward and is
+  never relabelled as an official base checkpoint. A real Browser 3/3 path and 12-case synthetic
+  smoke verify operation; academic quality remains waiting on the 48-answer owner-marked set.
+  Deterministic and synthetic fixtures do not establish marking validity.
 
 ## Conflict handling protocol
 
