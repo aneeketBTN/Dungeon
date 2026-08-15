@@ -3,7 +3,7 @@
  "subjectTitle": "Business Research, Growth Strategies and Analytics",
  "set": 1,
  "half": "learn",
- "queueDigest": "85cbbefc",
+ "queueDigest": "ff3339d8",
  "schedule": {
   "setId": 1,
   "title": "Prove demand before you build",
@@ -374,7 +374,7 @@
    "prompt": null,
    "options": [
     "Whether the engineering plan is technically feasible",
-    "Whether exposed prospects take a behavioural step toward the offer",
+    "Whether people who see the page take a real action toward the offer",
     "Whether respondents say the idea sounds good to them",
     "Whether the brand has assembled a complete marketing funnel behind the landing page"
    ],
@@ -674,23 +674,15 @@
   {
    "step": 12,
    "kind": "question",
-   "id": "brgsa_m1_evidence_bridge_cloze",
-   "type": "cloze",
+   "id": "brgsa_m1_evidence_short_answer",
+   "type": "short-answer",
    "concept": "Pre-sales commitment and evidence strength",
-   "caselet": "Two hundred people say they like the idea, thirty join a wait-list, and four accept a refundable deposit under stated terms. The founder wants to report the survey as the strongest demand signal.",
-   "stem": "Complete the causal explanation, not just the label.",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Pre-sales commitment and evidence strength in your own words, and what kind of decision should it change?",
    "prompt": null,
-   "blanks": [
-    {
-     "label": "Choose the causal explanation",
-     "options": [
-      "Pre-sales commitment and evidence strength: An early LTV rests on assumptions that must be revisited as cohorts mature, because the ratio they produce drives every scaling decision after it.",
-      "Pre-sales commitment and evidence strength: Each drop applies to whoever is left, so several individually reasonable steps can destroy an activation rate that no single step explains.",
-      "Pre-sales commitment and evidence strength: Free actions are easy to take without conviction, so only a signal the prospect paid something for predicts that they will pay again.",
-      "Pre-sales commitment and evidence strength: Early learning has to stay close to whoever can change the product, because a scale-stage system assumes the motion no longer needs changing."
-     ]
-    }
-   ],
+   "writtenMode": "short",
+   "rubricPointCount": 2,
+   "selfReviewOnly": true,
    "termsAvailable": [
     {
      "term": "pre-sales validation",

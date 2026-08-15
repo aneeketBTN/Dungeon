@@ -3,7 +3,7 @@
  "subjectTitle": "Inclusive Business Models",
  "set": 1,
  "half": "learn",
- "queueDigest": "e99f3a58",
+ "queueDigest": "e42c1230",
  "schedule": {
   "setId": 1,
   "title": "Inclusive business basics",
@@ -593,31 +593,27 @@
   {
    "step": 11,
    "kind": "question",
-   "id": "ibm_bop_case_answer",
+   "id": "ibm_inclusive_short_answer",
    "type": "short-answer",
-   "concept": "Bottom-of-the-pyramid design",
-   "caselet": "A packaged foods company sells a 2 kg fortified flour pack at ₹340, payable in a single transaction, through 400 urban supermarkets. It targets rural districts holding 90 million people and has reached 0.3% of them in two years. Field visits find median household cash arrives weekly rather than monthly, the nearest stocking retailer is 14 km away, and 2 kg exceeds what most families can store safely through the humid season. The country manager proposes doubling the advertising budget, citing the size of the untapped population.",
-   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "concept": "Inclusive business",
+   "caselet": null,
+   "stem": "In two to three sentences, how would you explain Inclusive business in your own words, and what kind of decision should it change?",
    "prompt": null,
-   "writtenMode": "case",
-   "rubricPointCount": 3,
+   "writtenMode": "short",
+   "rubricPointCount": 2,
    "selfReviewOnly": true,
    "termsAvailable": [
     {
-     "term": "bottom of the pyramid",
-     "plain": "The base of the economic pyramid — poor people regarded as a market."
+     "term": "inclusive business",
+     "plain": "An organisation whose primary objective is addressing a specific need of the poor, while staying financially sustainable."
     },
     {
-     "term": "market forces",
-     "plain": "Competition and profit-seeking, here proposed as tools for reaching the poor."
+     "term": "primary objective",
+     "plain": "The goal that wins when two goals conflict — the thing an organisation is actually structured for."
     },
     {
-     "term": "multinational",
-     "plain": "A large company operating across countries, historically competing only for the top of the pyramid."
-    },
-    {
-     "term": "sachet",
-     "plain": "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."
+     "term": "financially sustainable",
+     "plain": "Able to cover its own costs, so it can keep operating without running at a loss."
     }
    ]
   },

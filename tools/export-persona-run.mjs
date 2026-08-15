@@ -58,13 +58,13 @@ const PAPERS = {
   BRGSA: { title: "Business Research and Growth Systems Architecture", sat: "22 August, 13:00–15:00", total: 80, calculator: "basic", sections: [
     { id: "A", label: "Section A", type: "mcq", count: 20, marks: 2, rule: "One correct option. Two marks each. No negative marking." },
     { id: "B", label: "Section B", type: "case-cloze", count: 4, marks: 5, rule: "A short scenario, then a task. Both parts must be right for the marks. No partial credit." },
-    { id: "C", label: "Section C", type: "short-answer", count: 2, marks: 10, rule: "A complete structured response. Not machine-marked." }] },
+    { id: "C", label: "Section C", type: "short-answer", count: 2, marks: 10, prefer: ["integrated", "case", "short"], rule: "A complete structured response. Not machine-marked." }] },
   SCLM: { title: "Supply Chain & Logistics Management", sat: "23 August, 13:00–15:00", total: 80, calculator: "scientific", sections: [
     { id: "A", label: "Section A", type: "mcq", count: 50, marks: 1, rule: "One correct option. One mark each. No negative marking." },
     { id: "B", label: "Section B", type: "numeric", count: 6, marks: 4, rule: "Enter the final figure only. No marks for working." },
     { id: "C", label: "Section C", type: "match", count: 3, marks: 2, rule: "Match every pair. Two marks each. All or nothing." }] },
   IBM: { title: "Inclusive Business Model", sat: "23 August, 09:00–11:00", total: 100, calculator: null, sections: [
-    { id: "A", label: "Section A", type: "short-answer", count: 10, marks: 10, rule: "Ten written answers on a caselet released two days before the exam." }],
+    { id: "A", label: "Section A", type: "short-answer", count: 10, marks: 10, prefer: ["integrated", "case", "short"], rule: "Ten written answers on a caselet released two days before the exam." }],
     caveat: "A mock cannot reproduce this paper, because the case is the paper. This is timed writing practice against the frameworks." }
 };
 
@@ -110,6 +110,21 @@ function spreadByStem(questions) {
   return out;
 }
 
+/* Mirrored from app/t6.js alongside the rest of the paper builder; the digest check in
+   tools/browser-checks/export-run.js is what keeps this copy honest. */
+function examPrefer(questions, prefer) {
+  if (!prefer || !prefer.length) return questions;
+  const band = (question) => {
+    const index = prefer.indexOf(question.writtenMode);
+    return index < 0 ? prefer.length : index;
+  };
+  const reserved = (question) => (question.examOnly ? 0 : 1);
+  return questions.map((question, index) => ({ question, index }))
+    .sort((a, b) => band(a.question) - band(b.question) ||
+      reserved(a.question) - reserved(b.question) || a.index - b.index)
+    .map((entry) => entry.question);
+}
+
 function buildPaper(courseId, setIndex) {
   const course = courses[courseId];
   const spec = PAPERS[courseId];
@@ -117,7 +132,7 @@ function buildPaper(courseId, setIndex) {
   const items = [];
   const shortfalls = [];
   for (const section of spec.sections) {
-    const pool = examShuffle(examPool(course, section.type), seed + section.id.charCodeAt(0));
+    const pool = examPrefer(examShuffle(examPool(course, section.type), seed + section.id.charCodeAt(0)), section.prefer);
     let taken = pool.slice(0, section.count);
     if (taken.length < section.count) {
       shortfalls.push({ section: section.id, want: section.count, have: taken.length, type: section.type });

@@ -1,5 +1,59 @@
 # Changelog
 
+## 2026-08-15 — The five open items, and the four gates that judge them
+
+Evidence: `evidence/2026-08-15/t6-rehaul-completion/verification.md`.
+`VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)`, branch `feat/bank-rehaul-completion`,
+not merged. Picks up exactly what the entry below listed as not done.
+
+- **`check_exam_readiness` exits 0 for the first time.** SCLM Section B is **8 of 6**
+  numericals; the 8 marks it could not award are awardable. `SCLM-M03-L06` (Q model) authored
+  from the transcript with every glossary term grepped first and the lecture's own worked
+  example verified figure by figure.
+- **The second blocker had never been named.** `T6_EXAM_PATTERN.md` says the real SCLM paper
+  supplies standard normal tables; Dungeon supplied none. That is why *both* missing items were
+  z-based — without a table no z-based question is answerable, so none could be authored. Added
+  as a paper provision, computed via A&S 26.2.17 rather than stored as 310 literals, pinned by
+  `tests/normal-table.test.mjs`. Mounted twice: the examiner's paper hands it over, and a Learn
+  numeric declaring `reference: "standard-normal"` carries it inline.
+- **Four SCLM numericals**, each naming the `σ_d·L` instead of `σ_d√L` error as a near miss
+  with the figure it produces.
+- **The BRGSA integrated-scenario diagnosis is corrected.** They were not "never served":
+  `brgsa_case_false_win` reaches set 2, `ibm_case_hospital_growth` reaches IBM set 2. Three of
+  four never reach an offered set. The cause is composition — Section C is two **ten-mark**
+  slots drawing 2 from 36 written items of which 32 run three to five minutes. On the Learn
+  side they were unreachable by construction, because the rotation's fallback only fires for a
+  concept carrying neither a short nor a case prompt, and none exists. Fixed with a section
+  `prefer` order and an `integrated` slot whose concept-uniqueness rule is relaxed.
+- **`addIntegratedScenarios` no longer drops silently.** It throws, naming the unresolvable id.
+- **An examiner-only slice for BRGSA.** Six new reserved scenarios, hard-excluded from every
+  study pool and from written practice, and **additive** — nothing shared was withdrawn, which
+  is what makes the hard reservation defensible. Section C overlap **100% → 0%**. Four reserved
+  items put sets 1 and 2 on an identical pair, so six were authored.
+- **T1** (`measure-cold-learner.mjs`) — every course term in a correct answer must be
+  introduced earlier in the same run. Found `smoke_signal` resting on "prospects", defined in a
+  lecture the item does not cite: **LAW-47 gates on cited lectures and structurally cannot see
+  this.** 32/32 after the fix.
+- **T2** — `measure-learn-exam-coverage.js` now asserts the ladder instead of only measuring
+  it, and **refuses to score** the handoff half without the app's own `handoffs()` answer.
+  0 broken over 64 promises; reading `lesson.connects` would have reported 14 false ones.
+- **T4** (`measure-exam-transfer.mjs`) — overlap plus same-concept-different-surface. Could not
+  use "all ten sets": set 10's pool is the entire bank, so the first version reported 100%
+  whatever anybody authored. Split into ladder and anyRoute.
+- **T5** (`measure-persona-regression.mjs`) — what a learner is told when wrong. Failed
+  correctly: one sentence answered 55–100% of every wrong decision. `fallbackDiagnosis` was
+  discarding `targetRole`; four cues drawn from what the slot asks took top-cue share to
+  **27–36%**.
+- **Three defects came from building the probes, two of them mine.** An MCQ diagnosis read from
+  `perOption.answer` when the export writes `perOption.whole`; and a T5 gate whose floors
+  skipped every run and printed a pass over data it never judged.
+- **`ui-audit.js` caught the new table three times and was right twice.** `hiddenScroll` at 44%
+  on a phone was real: the eleven-column table is now two six-column halves that stack — 310
+  cells, no sideways scroll at any width. The one refinement (`cutRows` ignoring a child taller
+  than its container) was verified against a live fixture of the original palette defect.
+- `npm test` **87 → 100**. The runner gave up a finding of its own: two files listed in
+  `package.json` before they existed were silently skipped at exit 0.
+
 ## 2026-08-15 — Both craft exploits closed, and the bag leaves the Examiner
 
 Evidence: `evidence/2026-08-15/t6-bank-overhaul/verification.md`.

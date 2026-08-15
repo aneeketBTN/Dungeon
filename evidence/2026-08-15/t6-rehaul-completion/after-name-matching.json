@@ -1,0 +1,14 @@
+Name-matching payoff (CONTENT-RULES R3) — 1049 option sets, chance is 25%
+
+FAMILY          SETS   PAYOFF  LIMIT  100%-SETS
+other            118    29.8%    32%         13
+boss             480    29.6%    32%         10
+contrast          62      25%    32%          0
+bridge_cloze      62      25%    32%          0
+repair_cloze      62      25%    32%          0
+case_cloze       124      25%    32%          0
+explain           47      25%    32%          0
+apply             47      25%    32%          0
+connect           47     0.5%    10%          0
+
+23 option sets where the rule pays 100% (the correct answer is the only option naming the concept).

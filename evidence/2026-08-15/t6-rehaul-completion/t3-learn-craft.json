@@ -1,0 +1,85 @@
+{
+  "SPMS": {
+    "steps": 12,
+    "lessons": 2,
+    "primers": 2,
+    "scoredQuestions": 8,
+    "selectableParts": 13,
+    "craftCannotReach": [
+      {
+        "step": 10,
+        "id": "spms_jtbd_msq",
+        "type": "msq"
+      }
+    ],
+    "percentOfSelectableParts": {
+      "noAbsolutes": 19.2,
+      "topicMatch": 25,
+      "longest": 26.9,
+      "combined": 19.2,
+      "chance": 25
+    }
+  },
+  "BRGSA": {
+    "steps": 14,
+    "lessons": 4,
+    "primers": 2,
+    "scoredQuestions": 8,
+    "selectableParts": 12,
+    "craftCannotReach": [
+      {
+        "step": 12,
+        "id": "brgsa_m1_evidence_short_answer",
+        "type": "short-answer"
+      },
+      {
+        "step": 13,
+        "id": "brgsa_m1_demand_short_answer",
+        "type": "short-answer"
+      }
+    ],
+    "percentOfSelectableParts": {
+      "noAbsolutes": 28.5,
+      "topicMatch": 27.1,
+      "longest": 33.3,
+      "combined": 30.6,
+      "chance": 25
+    }
+  },
+  "SCLM": {
+    "steps": 12,
+    "lessons": 2,
+    "primers": 2,
+    "scoredQuestions": 8,
+    "selectableParts": 14,
+    "craftCannotReach": [],
+    "percentOfSelectableParts": {
+      "noAbsolutes": 20.2,
+      "topicMatch": 26.8,
+      "longest": 20.2,
+      "combined": 22,
+      "chance": 25
+    }
+  },
+  "IBM": {
+    "steps": 12,
+    "lessons": 2,
+    "primers": 2,
+    "scoredQuestions": 8,
+    "selectableParts": 13,
+    "craftCannotReach": [
+      {
+        "step": 11,
+        "id": "ibm_inclusive_short_answer",
+        "type": "short-answer"
+      }
+    ],
+    "percentOfSelectableParts": {
+      "noAbsolutes": 21.2,
+      "topicMatch": 26.9,
+      "longest": 16.7,
+      "combined": 23.1,
+      "chance": 25
+    }
+  }
+}

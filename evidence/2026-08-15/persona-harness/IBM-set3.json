@@ -2,7 +2,7 @@
  "subject": "IBM",
  "subjectTitle": "Inclusive Business Model",
  "set": 3,
- "digest": "afc89098",
+ "digest": "6b381f08",
  "instructions": {
   "sat": "23 August, 09:00–11:00",
   "minutes": 120,
@@ -25,51 +25,98 @@
    "number": 1,
    "section": "A",
    "marks": 10,
-   "id": "ibm_selco_short_answer",
+   "id": "ibm_case_rural_scale",
    "type": "short-answer",
-   "caselet": null,
-   "stem": "In two to three sentences, how would you explain SELCO affordability system in your own words, and what kind of decision should it change?",
+   "caselet": "A rural services company runs eight centres it owns and staffs directly, employing 640 people in district towns where few graduates migrate for work. Attrition runs at 8% against 45% in comparable city centres, and wage costs are about 40% below metro rates. It holds requests from 60 towns, has ₹4 crore of capital, and needs roughly ₹90 lakh per owned centre. Two pilots run by local entrepreneurs who funded their own fit-out reached break-even in seven months against eleven for owned centres, but one missed the group's training standard and a client audit flagged inconsistent quality across the network; the client's contract specifies a 2% error ceiling. Separately, the company cannot place many capable applicants because they hold no document proving prior work, and client-side supervisors will pay above the local rate only where a skill grade has been independently assessed rather than self-declared.",
+   "stem": "Write the growth plan. The board wants all 60 towns within two years, so be explicit about what is achievable and what has to be true for it to work.",
    "prompt": null,
-   "rubricPointCount": 2,
+   "rubricPointCount": 5,
    "termsAvailable": [
-    "kerosene",
-    "doorstep finance",
-    "doorstep servicing"
+    "business process outsourcing",
+    "franchisee",
+    "migration",
+    "diversification",
+    "center partner",
+    "smallholder",
+    "informal sector",
+    "social security",
+    "bargaining power"
    ]
   },
   {
    "number": 2,
    "section": "A",
    "marks": 10,
-   "id": "ibm_aravind_short_answer",
+   "id": "ibm_case_hospital_growth",
    "type": "short-answer",
-   "caselet": null,
-   "stem": "In two to three sentences, how would you explain Process specialisation in healthcare in your own words, and what kind of decision should it change?",
+   "caselet": "A hospital group runs six 200-bed tertiary facilities in three large cities, with cardiac and oncology units at 61% occupancy. Its records show 44% of admissions travel more than 90 km, most for deliveries, dialysis and routine surgery requiring no tertiary equipment; a normal delivery costs such a patient about ₹38,000 including travel and lost wages. A proposal would open twelve 40-bed centres in semi-urban towns handling primary and secondary care only, at roughly ₹11,000 per delivery. Separately, the group's four surgeons each spend about 70% of their working day on counselling, measurement and post-operative dressing, with a nine-week waiting list; 22 trained paramedical staff are assigned mostly to reception. The group's impact report states that patients treated at its facilities earn more two years later than those who were not, and the board is citing this to justify expansion.",
+   "stem": "Advise the board. Address the expansion proposal, the capacity problem inside the existing hospitals, and the evidence the report is resting on.",
    "prompt": null,
-   "rubricPointCount": 2,
+   "rubricPointCount": 5,
    "termsAvailable": [
+    "semi-urban",
+    "cross-subsidy",
     "cataract",
     "ophthalmologist",
-    "cross-subsidize"
+    "cross-subsidize",
+    "output",
+    "outcome",
+    "theory of change",
+    "control group",
+    "treatment group"
    ]
   },
   {
    "number": 3,
    "section": "A",
    "marks": 10,
-   "id": "ibm_vaatsalya_short_answer",
+   "id": "ibm_case_energy_offer",
    "type": "short-answer",
-   "caselet": null,
-   "stem": "In two to three sentences, how would you explain No-frills healthcare access in your own words, and what kind of decision should it change?",
+   "caselet": "A manufacturer has a solar lighting unit that works well and costs ₹9,000 outright. It is being offered in districts where street vendors spend about ₹15 a day on kerosene, roughly ₹450 a month, and where brighter light is estimated to raise daily takings by about ₹90 by extending trading hours. Sales are close to zero. Almost no vendor holds ₹9,000, though a rural bank will finance the unit at ₹10 a day over three years where repayment capacity can be shown. Two earlier solar programmes in these districts collapsed when units failed and no technician was available within 40 km, and vendors now say openly that they will not buy without a repair commitment. The manufacturer's proposed response is a 15% price cut funded from its CSR budget, presented internally as a temporary subsidy until volumes rise.",
+   "stem": "Advise the manufacturer. The CSR-funded price cut is already approved in principle, so say whether it should go ahead and what the alternative is.",
    "prompt": null,
-   "rubricPointCount": 2,
+   "rubricPointCount": 5,
    "termsAvailable": [
-    "semi-urban",
-    "cross-subsidy"
+    "kerosene",
+    "doorstep finance",
+    "doorstep servicing",
+    "bottom of the pyramid",
+    "market forces",
+    "multinational",
+    "sachet",
+    "social business",
+    "supply chain",
+    "value sharing",
+    "financially viable",
+    "public goods"
    ]
   },
   {
    "number": 4,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_case_lender_pressure",
+   "type": "short-answer",
+   "caselet": "A microfinance institution has grown disbursements 140% in two years and reports portfolio-at-risk of 1.2%. Field agents earn 60% of variable pay per additional loan disbursed, with nothing tied to repayment. A sample of 500 borrowers finds the median household servicing four concurrent microloans, 38% having used their most recent loan to repay an existing one, and total debt service at 71% of reported household income. In the institution's original districts, lending ran through self-formed groups of five with staged disbursement and weekly village meetings, and repayment held at 97% over eighteen months; in the new districts the group label was kept but the meetings and staged release were dropped to lower cost per loan. An impact fund is preparing to invest, expects a 9% return, and has asked what the institution measures beyond disbursement volume.",
+   "stem": "Write the assessment the impact fund's investment committee needs before it commits. State whether the institution should keep growing at its current rate.",
+   "prompt": null,
+   "rubricPointCount": 5,
+   "termsAvailable": [
+    "collateral",
+    "credit history",
+    "adverse selection",
+    "moral hazard",
+    "MFI",
+    "default",
+    "non-performing asset",
+    "impact investing",
+    "risk-adjusted",
+    "social stock exchange",
+    "ESG"
+   ]
+  },
+  {
+   "number": 5,
    "section": "A",
    "marks": 10,
    "id": "ibm_rural_bpo_case_answer",
@@ -85,87 +132,7 @@
    ]
   },
   {
-   "number": 5,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_grameen_short_answer",
-   "type": "short-answer",
-   "caselet": null,
-   "stem": "In two to three sentences, how would you explain Group-based microfinance in your own words, and what kind of decision should it change?",
-   "prompt": null,
-   "rubricPointCount": 2,
-   "termsAvailable": [
-    "collateral",
-    "credit history",
-    "adverse selection",
-    "moral hazard"
-   ]
-  },
-  {
    "number": 6,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_shared_value_short_answer",
-   "type": "short-answer",
-   "caselet": null,
-   "stem": "In two to three sentences, how would you explain Shared value in your own words, and what kind of decision should it change?",
-   "prompt": null,
-   "rubricPointCount": 2,
-   "termsAvailable": [
-    "value sharing",
-    "financially viable",
-    "public goods"
-   ]
-  },
-  {
-   "number": 7,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_waste_short_answer",
-   "type": "short-answer",
-   "caselet": null,
-   "stem": "In two to three sentences, how would you explain Inclusive waste enterprise in your own words, and what kind of decision should it change?",
-   "prompt": null,
-   "rubricPointCount": 2,
-   "termsAvailable": [
-    "waste picker",
-    "informal sector"
-   ]
-  },
-  {
-   "number": 8,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_responsible_lending_short_answer",
-   "type": "short-answer",
-   "caselet": null,
-   "stem": "In two to three sentences, how would you explain Responsible lending in your own words, and what kind of decision should it change?",
-   "prompt": null,
-   "rubricPointCount": 2,
-   "termsAvailable": [
-    "MFI",
-    "default",
-    "non-performing asset"
-   ]
-  },
-  {
-   "number": 9,
-   "section": "A",
-   "marks": 10,
-   "id": "ibm_inclusive_short_answer",
-   "type": "short-answer",
-   "caselet": null,
-   "stem": "In two to three sentences, how would you explain Inclusive business in your own words, and what kind of decision should it change?",
-   "prompt": null,
-   "rubricPointCount": 2,
-   "termsAvailable": [
-    "inclusive business",
-    "primary objective",
-    "financially sustainable"
-   ]
-  },
-  {
-   "number": 10,
    "section": "A",
    "marks": 10,
    "id": "ibm_shared_value_case_answer",
@@ -178,6 +145,70 @@
     "value sharing",
     "financially viable",
     "public goods"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_social_business_case_answer",
+   "type": "short-answer",
+   "caselet": "A food company creates a fortified snack for children in low-income districts, priced at ₹5 so the target households can actually buy it. The line covers its own costs and repays the investors' original capital, after which surplus is reinvested in distribution rather than paid out. Nutrition surveys show a measurable fall in deficiency among regular consumers. The group board asks why the line should not instead be run as CSR funded from group profit, or priced at ₹12 where the same product would earn a normal margin from wealthier urban buyers.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "social business",
+    "supply chain"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_grameen_case_answer",
+   "type": "short-answer",
+   "caselet": "A lender wants to reach 30 villages where 82% of households hold no bank-acceptable collateral and no formal credit record, and its two field officers cannot assess 4,000 households individually. A pilot in four villages lent to self-formed groups of five women, releasing funds to two members first and to the rest only after the first repayments arrived, with weekly meetings held in the village. Repayment reached 97% over eighteen months. Head office now proposes dropping the meetings and the staged release to cut cost per loan, keeping the group label.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "collateral",
+    "credit history",
+    "adverse selection",
+    "moral hazard"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_waste_case_answer",
+   "type": "short-answer",
+   "caselet": "Temples in one city send about 8 tonnes of flower waste a week to landfill, where it decomposes into a local waterway. A venture collects it free, converts it into incense and natural dyes, and employs 60 women from nearby low-income settlements at ₹11,000 a month against the ₹6,500 they earned in informal work. Retail buyers pay a premium for the provenance and current output sells out. Scaling to 20 tonnes needs a second site and either mechanised sorting, which would halve the workforce, or 60 more women hired and trained.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "waste picker",
+    "informal sector"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 10,
+   "id": "ibm_impact_investing_case_answer",
+   "type": "short-answer",
+   "caselet": "A fund raises ₹500 crore for affordable housing. It sets a target that 70% of units go to households below a stated income line, requires quarterly reporting on who actually occupies them, and expects a 9% return so the capital can be recycled into further projects. One developer in the pipeline offers 16% but will commit to only 25% of units below the income line, and proposes reporting sales value rather than buyer income. The investment committee is split, noting the fund's headline return currently sits below its target.",
+   "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+   "prompt": null,
+   "rubricPointCount": 3,
+   "termsAvailable": [
+    "impact investing",
+    "risk-adjusted",
+    "social stock exchange",
+    "ESG"
    ]
   }
  ]

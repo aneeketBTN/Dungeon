@@ -1,0 +1,132 @@
+{
+  "ok": true,
+  "lessons": {
+    "authored": 107,
+    "coverage": {
+      "BRGSA": {
+        "scheduledQuestions": 229,
+        "questionsFullyTaught": 229,
+        "questionsWithoutLesson": 0,
+        "lecturesCited": 44,
+        "lecturesWithLesson": 44
+      },
+      "IBM": {
+        "scheduledQuestions": 199,
+        "questionsFullyTaught": 199,
+        "questionsWithoutLesson": 0,
+        "lecturesCited": 16,
+        "lecturesWithLesson": 16
+      },
+      "SCLM": {
+        "scheduledQuestions": 204,
+        "questionsFullyTaught": 204,
+        "questionsWithoutLesson": 0,
+        "lecturesCited": 17,
+        "lecturesWithLesson": 17
+      },
+      "SPMS": {
+        "scheduledQuestions": 184,
+        "questionsFullyTaught": 184,
+        "questionsWithoutLesson": 0,
+        "lecturesCited": 16,
+        "lecturesWithLesson": 16
+      }
+    }
+  },
+  "totals": {
+    "BRGSA": {
+      "questions": 246,
+      "bosses": 40,
+      "constructedResponses": 42,
+      "excludedLegacyMcqs": 1,
+      "longestOptionScore": 0.29,
+      "longestOptionSample": 76,
+      "lengthRankShares": [
+        0.21,
+        0.24,
+        0.26,
+        0.29
+      ],
+      "lengthRankSpread": 0.04,
+      "answerSlotShares": {
+        "4": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ]
+      }
+    },
+    "IBM": {
+      "questions": 216,
+      "bosses": 40,
+      "constructedResponses": 36,
+      "excludedLegacyMcqs": 1,
+      "longestOptionScore": 0.23,
+      "longestOptionSample": 52,
+      "lengthRankShares": [
+        0.18,
+        0.21,
+        0.38,
+        0.23
+      ],
+      "lengthRankSpread": 0.13,
+      "answerSlotShares": {
+        "4": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ]
+      }
+    },
+    "SCLM": {
+      "questions": 220,
+      "bosses": 40,
+      "constructedResponses": 0,
+      "excludedLegacyMcqs": 0,
+      "longestOptionScore": 0.22,
+      "longestOptionSample": 84,
+      "lengthRankShares": [
+        0.18,
+        0.24,
+        0.36,
+        0.22
+      ],
+      "lengthRankSpread": 0.11,
+      "answerSlotShares": {
+        "4": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ]
+      }
+    },
+    "SPMS": {
+      "questions": 200,
+      "bosses": 40,
+      "constructedResponses": 0,
+      "excludedLegacyMcqs": 0,
+      "longestOptionScore": 0.21,
+      "longestOptionSample": 52,
+      "lengthRankShares": [
+        0.24,
+        0.22,
+        0.34,
+        0.21
+      ],
+      "lengthRankSpread": 0.09,
+      "answerSlotShares": {
+        "4": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ]
+      }
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

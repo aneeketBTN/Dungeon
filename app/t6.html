@@ -619,6 +619,8 @@
             <small id="exam-time-question">On this question 0:00</small>
           </div>
           <button class="exam-calc-toggle" id="exam-calc-toggle" type="button" hidden aria-expanded="false" aria-controls="exam-calculator">Calculator</button>
+          <!-- Supplied by the real paper (T6_EXAM_PATTERN.md), so supplied here. -->
+          <button class="exam-calc-toggle" id="exam-table-toggle" type="button" hidden aria-expanded="false" aria-controls="exam-normal-table">Normal table</button>
         </header>
 
         <div class="exam-body">
@@ -649,6 +651,7 @@
         <!-- Draggable would be nicer; a docked panel is what a 120-minute paper on a
              phone can actually afford. -->
         <div class="exam-calculator" id="exam-calculator" hidden role="group" aria-label="Calculator"></div>
+        <div class="exam-normal-table" id="exam-normal-table" hidden role="group" aria-label="Standard normal table"></div>
       </div>
 
       <!-- The result. Scored by the paper's own rules, not the learning system's. -->

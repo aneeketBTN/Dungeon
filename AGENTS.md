@@ -1,5 +1,59 @@
 # Dungeon
-> **Both craft exploits closed, measured by persona on both surfaces (2026-08-15; newest):**
+> **The five open items are closed, and the gates that judge them now exist (2026-08-15; newest):**
+> the previous session ended "no new items, no examiner-only slice, no SCLM-M03-L06 lesson,
+> T1/T2/T4/T5". All five are done and every gate exits 0. **`check_exam_readiness` exits 0 for
+> the first time** — SCLM Section B is **8 of 6** numericals, so the 8 marks it could not award
+> are awardable. The lesson was one blocker; the other had never been named: **the real paper
+> supplies standard normal tables and Dungeon supplied none**, which is why both missing items
+> were z-based — with no table no z-based question is answerable, so none could be authored. The
+> table is now a paper provision (`tables: ["standard-normal"]`), computed rather than stored as
+> 310 literals so there is one place to be wrong, and pinned by `tests/normal-table.test.mjs`
+> against every value a printed table agrees on. **BRGSA's integrated scenarios: the recorded
+> diagnosis was wrong.** They were not "never served" — `brgsa_case_false_win` reaches set 2 and
+> `ibm_case_hospital_growth` reaches IBM set 2; **three of four** never reach any offered set. And
+> the cause was composition, not content: Section C is two **ten-mark** slots drawing from a pool
+> of 36 of which **32 are three-to-five-minute per-concept prompts**, so four times in five a
+> ten-mark slot got a three-minute answer. On the Learn side they were unreachable *by
+> construction* — the rotation asked short/case/short/case and its fallback only fires when a
+> concept has neither, which never happens. So the one surface the examiner's Section C is made of
+> was the one surface Learn could not teach, which is exactly *"if Examiner feels foreign, that is
+> Learn's failure"*. Fixed by a section `prefer` order and an `integrated` slot in the rotation.
+> **The examiner-only slice is real for BRGSA**: six new reserved scenarios, hard-excluded from
+> Learn and **additive**, so §4.2's warning about starving a module does not apply — nothing shared
+> was withdrawn. Section C overlap **100% → 0%**, the paper 100% → 74.2%. Four reserved items were
+> not enough and it was measured, not assumed: two slots drawn twice from four put sets 1 and 2 on
+> an **identical pair**. **T1/T2/T4/T5 are built, gated, and each found something.** T1 (cold
+> learner) found a new defect class — `smoke_signal`'s answer used "prospects", defined in a
+> lecture the item does not cite, so **LAW-47 structurally cannot see it**. T2 refuses to score the
+> handoff half without the app's own answer rather than pass by default (0 broken over 64 promises;
+> reading `lesson.connects` would have reported 14 false ones). T4 could not use "all ten sets" at
+> all — **set 10's pool is the entire bank**, so the first version reported 100% whatever anybody
+> authored; split into ladder and anyRoute. T5 asks what a learner is told when wrong, and **failed
+> correctly**: one sentence answered 55–100% of every wrong decision. `fallbackDiagnosis` was
+> discarding `targetRole`, which it already had; four cues drawn from what the slot asks took the
+> top-cue share to **27–36%**, roughly halved on every subject. **Three defects came from building
+> the probes, two of them mine**: an MCQ diagnosis read from `perOption.answer` when the export
+> writes `perOption.whole`, and a T5 gate whose floors skipped every run and **printed a pass over
+> data it never judged** — this repository's signature failure, reproduced inside the tool written
+> to catch it. `npm test` **87 → 100**, and the runner itself gave up a finding: two test files
+> listed in `package.json` before they existed were **silently skipped** at exit 0.
+> `VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)` at
+> `evidence/2026-08-15/t6-rehaul-completion/verification.md`: LAW-47 **12 routes × 4 subjects, 0
+> violations**, 0 layering descents, `answerableFromTheConceptName: []`, **`paperDigestMatch: true`
+> on all four** (which is what proves the harness mirror still matches after `examPrefer`),
+> screenshots **16/16 and read**, and 0 overflow / clipped / circleFit / overlaps / cutRows /
+> hiddenScroll / barInset / ragged / sub-44px at 375 and 1280 with the new table open. **`ui-audit`
+> caught the table three times and was right twice** — the third, `hiddenScroll` at 44% on a phone,
+> was real, so the eleven-column table is now two six-column halves that stack: 310 cells, no
+> sideways scroll at any width. The one probe refinement (`cutRows` ignoring a child taller than its
+> container) was **verified against a live fixture** of the original palette defect and still fires.
+> **Not done: no examiner-only slice for SPMS, SCLM or IBM** (T4 reports all three at 100% overlap
+> and 0/16 concepts with a distinct surface — now the largest open hole), the 64 summary/application
+> strings, the fifteen SPMS "the lecture said" stems, BRGSA self-containment on the *existing* bank,
+> and no second reader on any new prose. All new content is
+> `WAITING_OWNER_CONTENT_ACCEPTANCE`. Not merged, not deployed.
+>
+> **Both craft exploits closed, measured by persona on both surfaces (2026-08-15):**
 > name-matching and "eliminate the absolutes" now pay at or under chance in every family.
 > **Paper** (mean sets 1–3): SPMS combined 34.5 → **16.3**, BRGSA 37.8 → **15.3**, SCLM 24.5 →
 > **20.1**. **Delivered study run**: SPMS 50 → **19.2**, BRGSA 37.8 → **28.2**, SCLM 48.2 →
@@ -510,32 +564,19 @@
 > Drive `getAnimations()` to the end and measure layout in fixed-width same-origin iframes. Pixel
 > acceptance remains owed.
 >
-> **The examiner is a product, and its dashboard is the point (2026-08-12):** the examiner
-> now has its own front door at `app/t6.html#exam-home-screen` — four papers, three seeded sets each,
-> openable with no learning state at all. A set's seed is subject + set index, never the clock, so a
-> paper survives a refresh and set 2 is genuinely a different draw from set 1. The shortfalls and
-> IBM's caveat are stated **on the card, before the clock**, not after. The results screen is now a
-> diagnostic: pacing against the paper's own per-question budget, *where knowledge breaks down* per
-> concept, the cost of speculative ticking, second thoughts and what they were worth, and — for
-> written work — course-vocabulary use against rubric points. Each breakdown row routes into a taught
-> single-concept run (`LESSON → primer → questions`, so LAW-47 holds). Attempt summaries persist and
-> a re-sit of the *same* set is compared, since two draws differ in difficulty as well as in study.
-> `VERIFIED(REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-12/t6-examiner-product-and-insights/verification.md`: `conceptAttempts` and
-> `totalAnswers` both still **0** after three submitted mocks, legend and palette agree in every
-> section, 0 overflow / 0 sub-44px tap targets / 0 off-scale radii at 375×812, 39/39 tests, palette
-> gate clean. **Two defects the examiner exposed, both bank-content and neither fixed here:**
-> `REDLINE` **LAW-53** — all eight SPMS MSQs are 3-correct-of-4, so ticking every option scores full
-> marks (verified `16/16` with nothing answered in Section A) while the paper's stated rule says the
-> opposite; the dashboard now reports this as a defect instead of endorsing it. And **16 of 50** SCLM
-> Section A questions share a character-identical caselet *and* stem, with the pool at 52 for a
-> section needing 50, so only clustering could be fixed (longest identical run is now 1). `WATCH`
-> **LAW-54** covers the legend that counted the whole paper above a one-section grid. Telemetry:
-> `tester-event.schema.json` is `1.1` with six examiner event types, banded-only fields, and a
-> **separate consent scope**, enforced in both directions; the app shapes and locally buffers events
-> behind a flag defaulting **off** and **there is no transmission path**. `profile.examAttempts`
-> syncs to D1 with the rest of the profile, which `docs/community/PRIVACY.md` now discloses. No
-> screenshots — the Browser pane was not compositing — so pixel acceptance is still owed.
+> **The examiner is a product, and its dashboard is the point (2026-08-12) — collapsed to its
+> outcome.** The examiner gained its own front door at `app/t6.html#exam-home-screen`: four papers,
+> three seeded sets each (seed = subject + set index, never the clock), openable with no learning
+> state, with shortfalls and IBM's caveat stated on the card *before* the clock. Results became a
+> diagnostic — pacing against the paper's own budget, where knowledge breaks down per concept, the
+> cost of speculative ticking — each row routing into a taught single-concept run. `conceptAttempts`
+> and `totalAnswers` stay **0** after three submitted mocks. It exposed two bank-content defects it
+> did not fix: `REDLINE` **LAW-53** (all eight SPMS MSQs are 3-of-4, so ticking everything scores
+> full marks) and 16 of 50 SCLM Section A questions sharing a character-identical caselet and stem.
+> `WATCH` **LAW-54**: a legend counting the whole paper above a one-section grid. Telemetry ships
+> behind a flag defaulting **off** with no transmission path. Full narration:
+> `docs/governance/CHANGELOG.md`; evidence:
+> `evidence/2026-08-12/t6-examiner-product-and-insights/verification.md`.
 >
 > **Two products, one bank (2026-08-12):** Dungeon is now **the learning system**
 > (learn by failing: teach before test, weak-first, feedback on every answer) and **the examiner**

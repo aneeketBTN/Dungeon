@@ -1568,6 +1568,28 @@ li .exam-chip { min-width: 26px; min-height: 26px; cursor: default; }
 .calc-key { min-height: 44px; color: var(--ink); background: var(--card-soft); border: 1px solid var(--line); border-radius: var(--r-control); font-weight: 800; cursor: pointer; }
 .calc-key:hover { background: var(--card-hover); border-color: var(--line-strong); }
 
+/* The standard normal table. Same docked treatment as the calculator, because it is
+   the same kind of object: a tool the paper hands over, on screen while you read.
+   Wider than a phone, so the table scrolls inside its own box and the page never does
+   — `ui-audit.js` counts horizontal page overflow as a defect and it is right to. */
+.exam-normal-table { position: fixed; right: 18px; bottom: 78px; z-index: 30; width: max-content; max-width: calc(100vw - 36px); max-height: 62vh; overflow-y: auto; padding: 12px; background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-panel); box-shadow: var(--shadow-deep); }
+.normal-table-note { margin: 0 0 8px; color: var(--muted); font-size: var(--t-small); line-height: 1.45; }
+/* Two halves: side by side where they fit, stacked on a phone. Neither ever needs a
+   sideways scroll, which is the whole reason the table is split — see buildNormalTable.
+   `flex-wrap` rather than a grid track: a grid cell narrower than a table's min-content
+   does not shrink the table, it overflows it, which at 1280 put six columns 28px past
+   the viewport edge. Letting each half take its natural width and wrap cannot do that. */
+.normal-table-split { display: flex; flex-wrap: wrap; gap: 10px; }
+.normal-table { border-collapse: collapse; font-size: var(--t-small); font-variant-numeric: tabular-nums; }
+.normal-table th, .normal-table td { padding: 3px 4px; border: 1px solid var(--line); text-align: right; white-space: nowrap; }
+.normal-table thead th { position: sticky; top: 0; z-index: 1; background: var(--card-soft); font-weight: 800; }
+.normal-table tbody th { background: var(--card-soft); font-weight: 800; }
+/* The Learn-side mount: same table, folded away until asked for, since most numerics
+   do not need it and an open table would push the answer box off a phone screen. */
+.numeric-reference { margin-top: 12px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--card-soft); }
+.numeric-reference > summary { min-height: 44px; display: flex; align-items: center; padding: 0 12px; color: var(--blue); font-size: var(--t-small); font-weight: 800; cursor: pointer; }
+.numeric-reference > div { padding: 0 12px 12px; }
+
 /* The result */
 .exam-result { display: grid; place-items: start center; padding: clamp(20px,5vw,52px) 17px; }
 .exam-result-card { width: min(820px,100%); padding: clamp(24px,4vw,40px); background: var(--card); border: 1px solid var(--line); border-radius: var(--r-panel); box-shadow: var(--shadow); }
@@ -1641,6 +1663,7 @@ li .exam-chip { min-width: 26px; min-height: 26px; cursor: default; }
   .exam-actions-left, .exam-actions-right { flex: 1 1 100%; }
   .exam-actions-right { justify-content: flex-end; }
   .exam-calculator { right: 12px; left: 12px; width: auto; bottom: 104px; }
+  .exam-normal-table { right: 12px; left: 12px; width: auto; max-width: none; bottom: 104px; max-height: 54vh; }
   .calc-row { grid-template-columns: repeat(4,1fr); }
 }
 

@@ -382,6 +382,14 @@
     var edge = el.getBoundingClientRect().bottom;
     var straddling = Array.prototype.slice.call(el.children).filter(function (kid) {
       var r = kid.getBoundingClientRect();
+      /* A child taller than the container can never be shown whole at any scroll
+         position, so the edge crossing it is a document being scrolled rather than a
+         row being drawn in half. This detector exists for the palette — many equal
+         chip rows, the container height landing mid-chip — and a single long child is
+         not that. Without this it fires on any scrollable panel holding one block,
+         which would make the correct treatment of long content look like a defect.
+         Verified still to fire on the original 46vh palette shape. */
+      if (r.height > el.clientHeight + 1) return false;
       /* Straddling by more than a hairline, and by less than its whole height — a child
          entirely below the fold is scrolled-away, not cut. */
       return r.top < edge - 1 && r.bottom > edge + 1;

@@ -44,6 +44,57 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 ## Issue → Cause → Fix
 
+- **I-ANSWER-VOCABULARY-OUTSIDE-CITED-LECTURES (2026-08-15)** — Issue: learning integrity. A
+  scored item's correct answer used a course term defined in a lecture the item does **not**
+  cite. `smoke_signal` cites `BRGSA-M01-L02` and its answer read "exposed **prospects** take a
+  behavioural step"; "prospect" is glossary vocabulary from `BRGSA-M01-L04`, delivered three
+  steps later. Cause: LAW-47 gates each surface on its own `sourceIds`, so it can guarantee the
+  *cited* lectures are taught and is structurally blind to vocabulary borrowed from an uncited
+  one. Fix: reworded to "people who see the page" — the distinction under test, a measured
+  action against a stated opinion, is unchanged. Found by the new **T1**
+  (`tools/measure-cold-learner.mjs`), which is now the standing check: 32/32 scored items in
+  four delivered runs, every course term introduced earlier in its own run.
+
+- **I-ONE-SENTENCE-ANSWERS-EVERY-MISTAKE (2026-08-15)** — Issue: learning integrity; the
+  standing "feedback breadth" finding, now measured per run and gated. A learner who makes four
+  different mistakes and is told the same thing four times has been taught once and charged four
+  times. Measured by the new **T5** (`tools/measure-persona-regression.mjs`): the single cue
+  *"Return to the governing idea and check the option against it directly before selecting."*
+  answered **55–100%** of every wrong decision in every subject's set-1 run. Cause:
+  `fallbackDiagnosis` fires for any option with no provenance and no authored diagnosis, and it
+  was **discarding `targetRole`** — the facet the slot is asking for, already computed at the
+  call site. `targetRoleFor` also misses on options `attributeTo` has rewritten, so a
+  `ROLE_BY_PERSPECTIVE` fallback was added over a field every question carries. Fix: four cues
+  drawn from what the slot asks (principle / decision / reason / which idea governs). Top-cue
+  share BRGSA 54.5 → **30.0**, IBM 66.7 → **33.3**, SCLM 55.6 → **33.3**, SPMS 63.6 → **36.4**.
+  No cue was invented; the information was already there and being thrown away.
+
+- **I-TEN-MARK-SLOT-THREE-MINUTE-ANSWER (2026-08-15)** — Issue: exam fidelity. BRGSA Section C
+  is two ten-mark structured responses and drew 2 from a pool of 36 written items of which
+  **32 are three-to-five-minute per-concept prompts**, so four times in five a ten-mark slot was
+  filled by a three-minute answer, and three of the four scenarios authored for that slot
+  reached no set the product offers. Cause: a section declared a *type* (`short-answer`) and
+  nothing about the *length* the slot is worth. Fix: sections carry a `prefer` order over
+  `writtenMode`. Correction to the standing record: the scenarios were **not** "never served" —
+  `brgsa_case_false_win` reaches set 2 and `ibm_case_hospital_growth` reaches IBM set 2.
+
+- **I-LEARN-CANNOT-TEACH-THE-EXAMINERS-SURFACE (2026-08-15)** — Issue: learning integrity, and
+  the owner's own test — *"if Examiner feels foreign, that's Learn's failure"*.
+  `startWrittenPractice` rotated `short/case/short/case`, and its fallback fires only when no
+  unchosen concept has a prompt in the requested mode. Every concept in these subjects carries
+  both, so the fallback never fired and an integrated scenario was **unreachable by
+  construction** — the one surface the examiner's Section C is made of was the one surface Learn
+  could not teach. Fix: the last slot asks for `integrated`, and relaxes the one-concept-per-
+  prompt rule before giving the slot up, because a scenario spans four concepts and is filed
+  under the first.
+
+- **I-SUITE-PASSES-OVER-TESTS-THAT-DO-NOT-EXIST (2026-08-15)** — Issue: gate truthfulness. Two
+  test files were listed in `package.json` before they were written, and `npm test` exited **0**
+  — `node --test` silently skipped the missing paths, although a lone missing file exits 1. A
+  suite that passes over tests that do not exist reads exactly like a suite that passes. The
+  files now exist; the behaviour is recorded here because the next person to stage a test name
+  ahead of the file will get a green run and no warning.
+
 - **I-CRAFT-CLOSED-BOTH-SURFACES (2026-08-15)** — Issue: learning integrity; closes both
   I-NAME-MATCHING-BANK-WIDE and I-CRAFT-INSIDE-A-SET below, and F-06. Cause of the remaining
   half: the absolutes gap was **house style, not meaning** — `bridge_cloze` needed nothing

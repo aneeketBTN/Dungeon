@@ -2,13 +2,13 @@
  "subject": "SCLM",
  "subjectTitle": "Supply Chain & Logistics Management",
  "set": 3,
- "digest": "3c903060",
+ "digest": "d7844598",
  "instructions": {
   "sat": "23 August, 13:00–15:00",
   "minutes": 120,
   "calculator": "scientific",
   "marksOnTheRealPaper": 80,
-  "marksAvailableHere": 72,
+  "marksAvailableHere": 80,
   "sections": [
    {
     "id": "A",
@@ -29,14 +29,7 @@
     "rule": "Match every pair. Two marks each. All or nothing."
    }
   ],
-  "shortfalls": [
-   {
-    "section": "B",
-    "want": 6,
-    "have": 4,
-    "type": "numeric"
-   }
-  ],
+  "shortfalls": [],
   "caveat": null
  },
  "paper": [
@@ -1212,18 +1205,25 @@
    "number": 52,
    "section": "B",
    "marks": 4,
-   "id": "sclm_eoq_numeric",
+   "id": "sclm_newsvendor_numeric_2",
    "type": "numeric",
-   "caselet": "A distributor expects steady annual demand of 12,000 units. Each order placed costs ₹600 regardless of its size. Holding one unit for a year costs ₹40.",
-   "stem": "A distributor expects steady annual demand of 12,000 units. Each order placed costs ₹600 regardless of its size. Holding one unit for a year costs ₹40.",
-   "prompt": "What order quantity minimises the total of ordering and holding cost?",
-   "unit": "units",
+   "caselet": "A distributor watches inventory continuously and places an order whenever inventory position falls to 495 units. Daily demand is normally distributed with a mean of 50 units and a standard deviation of 15 units. The replenishment lead time is a constant 9 days. Nobody can say what service level this policy was chosen to deliver.",
+   "stem": "A distributor watches inventory continuously and places an order whenever inventory position falls to 495 units. Daily demand is normally distributed with a mean of 50 units and a standard deviation of 15 units. The replenishment lead time is a constant 9 days. Nobody can say what service level this policy was chosen to deliver.",
+   "prompt": "What cycle service level does the current reorder point actually achieve?",
+   "unit": "%",
    "termsAvailable": [
-    "annual demand",
-    "ordering cost",
-    "holding cost",
-    "total cost",
-    "cycle inventory"
+    "single period",
+    "underage",
+    "overage",
+    "salvage",
+    "critical ratio",
+    "expected payoff",
+    "inventory position",
+    "reorder point",
+    "safety stock",
+    "protection period",
+    "cycle service level",
+    "continuous review"
    ]
   },
   {
@@ -1248,6 +1248,30 @@
    "number": 54,
    "section": "B",
    "marks": 4,
+   "id": "sclm_eoq_numeric_3",
+   "type": "numeric",
+   "caselet": "A spare-parts depot reviews inventory continuously. Weekly demand is normally distributed with a mean of 40 units and a standard deviation of 12 units. The replenishment lead time is a constant 4 weeks, and the depot wants a 95% cycle service level.",
+   "stem": "A spare-parts depot reviews inventory continuously. Weekly demand is normally distributed with a mean of 40 units and a standard deviation of 12 units. The replenishment lead time is a constant 4 weeks, and the depot wants a 95% cycle service level.",
+   "prompt": "What reorder point achieves that service level?",
+   "unit": "units",
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory",
+    "inventory position",
+    "reorder point",
+    "safety stock",
+    "protection period",
+    "cycle service level",
+    "continuous review"
+   ]
+  },
+  {
+   "number": 55,
+   "section": "B",
+   "marks": 4,
    "id": "sclm_newsvendor_numeric",
    "type": "numeric",
    "caselet": "A seasonal item sells for ₹900 and costs ₹500 to buy. There is one buying opportunity, and anything unsold at the end of the season clears at ₹200.",
@@ -1264,7 +1288,25 @@
    ]
   },
   {
-   "number": 55,
+   "number": 56,
+   "section": "B",
+   "marks": 4,
+   "id": "sclm_eoq_numeric",
+   "type": "numeric",
+   "caselet": "A distributor expects steady annual demand of 12,000 units. Each order placed costs ₹600 regardless of its size. Holding one unit for a year costs ₹40.",
+   "stem": "A distributor expects steady annual demand of 12,000 units. Each order placed costs ₹600 regardless of its size. Holding one unit for a year costs ₹40.",
+   "prompt": "What order quantity minimises the total of ordering and holding cost?",
+   "unit": "units",
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory"
+   ]
+  },
+  {
+   "number": 57,
    "section": "C",
    "marks": 2,
    "id": "sclm_m2_match",
@@ -1296,7 +1338,7 @@
    ]
   },
   {
-   "number": 56,
+   "number": 58,
    "section": "C",
    "marks": 2,
    "id": "sclm_m3_match",
@@ -1331,7 +1373,7 @@
    ]
   },
   {
-   "number": 57,
+   "number": 59,
    "section": "C",
    "marks": 2,
    "id": "sclm_m4_match",

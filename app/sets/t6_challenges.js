@@ -369,12 +369,30 @@
     };
   }
 
-  function fallbackDiagnosis(self) {
+  /* The fallback fires when an option is not authored, not a known confusion, and has
+   * no provenance — so it cannot say WHY this particular option is wrong. It can still
+   * say what the slot was asking for, and until now it threw that away.
+   *
+   * Measured by T5 (tools/measure-persona-regression.mjs): this one sentence answered
+   * 55-100% of every wrong decision in a set-1 run on all four subjects. A learner who
+   * makes four different mistakes and is told the same thing four times has been
+   * taught once. `targetRole` is already computed at the call site for facetMix, so
+   * the four cues below are information the function had and discarded, not variety
+   * manufactured to move a number. */
+  var FALLBACK_CUE = {
+    summary: "The slot is asking what the idea claims is true. Check this option against the definition clause by clause — a statement that sounds right about the topic is not the same as the claim this idea makes.",
+    application: "The slot is asking what the idea tells you to do. Check that this option is an action, and that it is the action this idea licenses rather than generally sensible practice.",
+    bridge: "The slot is asking why the idea changes the outcome. Check that this option gives a reason, not a restatement of what the idea is.",
+    name: "The slot is asking which idea governs. Match the situation's symptom to the idea that explains it, rather than to the idea whose vocabulary the option borrows."
+  };
+
+  function fallbackDiagnosis(self, targetRole) {
     return {
       tag: "Departed from " + self.name,
       label: "Answered from a different rule",
       why: "This choice does not follow from " + self.name + ", which is the idea this question is testing.",
-      cue: "Return to the governing idea and check the option against it directly before selecting."
+      cue: FALLBACK_CUE[targetRole] ||
+        "Return to the governing idea and check the option against it directly before selecting."
     };
   }
 
@@ -389,7 +407,7 @@
     if (owner && targetRole && owner.role !== targetRole) return facetMixDiagnosis(owner, self, targetRole);
     if ((self.applicationWrong || []).indexOf(option) >= 0) return selfErrorDiagnosis(option, self, "application");
     if ((self.confusions || []).indexOf(option) >= 0) return selfErrorDiagnosis(option, self, "summary");
-    return fallbackDiagnosis(self);
+    return fallbackDiagnosis(self, targetRole);
   }
 
   // The correct option's own provenance tells us which facet the slot is asking
@@ -399,8 +417,35 @@
     return (provenance[String(options[answer]).trim()] || {}).role || null;
   }
 
-  function diagnoseGroup(options, answer, self, provenance, hints, authored, questionId) {
-    var targetRole = targetRoleFor(options, answer, provenance);
+  /* What the question asks for, when provenance cannot say.
+   *
+   * `targetRoleFor` looks the correct answer up by exact text, and misses on two
+   * whole classes: authored options that were never built from a concept field, and
+   * generated ones that `attributeTo` has since rewritten into "Concept: claim" for
+   * the name-matching fix. On those it returns null, which used to mean every
+   * unrecognised distractor got the same sentence — measured by T5 at 55-100% of all
+   * wrong decisions in a set-1 run.
+   *
+   * `perspective` is set on every question at build time and says what the item is
+   * for, so it answers the same question less precisely and never misses. It is a
+   * fallback, not a replacement: provenance is exact where it fires. */
+  var ROLE_BY_PERSPECTIVE = {
+    explain: "summary",
+    recognise: "summary",
+    apply: "application",
+    decide: "application",
+    diagnose: "application",
+    connect: "bridge",
+    distinguish: "name",
+    generate: "application"
+  };
+
+  function askedRole(question, fromProvenance) {
+    return fromProvenance || ROLE_BY_PERSPECTIVE[question.perspective] || null;
+  }
+
+  function diagnoseGroup(options, answer, self, provenance, hints, authored, questionId, defaultRole) {
+    var targetRole = targetRoleFor(options, answer, provenance) || defaultRole || null;
     return options.map(function (option, index) {
       if (index === answer) return null;
       return diagnoseOption(option, self, provenance, hints, authored, questionId, index, targetRole);
@@ -417,7 +462,7 @@
       // own diagnosis for every choice it could wrongly receive.
       question.rows.forEach(function (row) {
         var rowSelf = dataById[row.conceptId] || self;
-        var rowRole = targetRoleFor(question.choices, row.answer, provenance);
+        var rowRole = askedRole(question, targetRoleFor(question.choices, row.answer, provenance));
         row.diagnoses = question.choices.map(function (choice, index) {
           if (index === row.answer) return null;
           return diagnoseOption(choice, rowSelf, provenance, hints, authored, question.id, index, rowRole);
@@ -431,7 +476,7 @@
     if (question.type === "boss") {
       question.steps.forEach(function (step) {
         var stepSelf = dataById[(step.conceptIds || [])[0]] || self;
-        step.diagnoses = diagnoseGroup(step.options, step.answer, stepSelf, provenance, step.diagnosisHints || hints, authored, question.id);
+        step.diagnoses = diagnoseGroup(step.options, step.answer, stepSelf, provenance, step.diagnosisHints || hints, authored, question.id, askedRole(question, null));
       });
       question.misconceptions = question.steps.map(function (step) {
         return (step.diagnoses.filter(Boolean)[0] || {}).tag || "broken-reasoning-step";
@@ -440,7 +485,7 @@
     }
     if (question.type === "cloze" || question.type === "case-cloze") {
       question.blanks.forEach(function (blank) {
-        blank.diagnoses = diagnoseGroup(blank.options, blank.answer, self, provenance, hints, authored, question.id);
+        blank.diagnoses = diagnoseGroup(blank.options, blank.answer, self, provenance, hints, authored, question.id, askedRole(question, null));
       });
       question.misconceptions = question.blanks.map(function (blank) {
         return (blank.diagnoses.filter(Boolean)[0] || {}).tag || "wrong-blank";
@@ -460,7 +505,7 @@
     if (question.type === "msq") {
       var answerSet = question.answers || [];
       var existing = question.diagnoses || [];
-      var role = targetRoleFor(question.options, answerSet[0], provenance);
+      var role = askedRole(question, targetRoleFor(question.options, answerSet[0], provenance));
       question.diagnoses = question.options.map(function (option, index) {
         if (answerSet.indexOf(index) >= 0) return null;
         if (existing[index] && (existing[index].why || existing[index].label)) return existing[index];
@@ -477,7 +522,7 @@
        * provenance, so an authored diagnosis is kept and only a gap is filled.
        * Generated questions carry none, so for them this is a no-op. */
       var authoredHere = question.diagnoses || [];
-      var generated = diagnoseGroup(question.options, question.answer, self, provenance, hints, authored, question.id);
+      var generated = diagnoseGroup(question.options, question.answer, self, provenance, hints, authored, question.id, askedRole(question, null));
       question.diagnoses = generated.map(function (diagnosis, index) {
         if (index === question.answer) return null;
         var own = authoredHere[index];
@@ -1190,7 +1235,96 @@
         cue: "The critical ratio is a probability. Anything outside 0 to 1 is the wrong construction."}
      ],
      explanation: "Underage is Cu = P − C = 900 − 500 = ₹400. Overage is C − salvage = 500 − 200 = ₹300. The critical ratio is Cu ÷ (Cu + Co) = 400 ÷ 700 = 0.571, so you order at roughly the 57th percentile of demand.",
-     link: "The ratio sets how far up the demand distribution to order, which is where the supplied normal table is used."}
+     link: "The ratio sets how far up the demand distribution to order, which is where the supplied normal table is used."},
+
+    /* Safety stock and the reorder point — SCLM-M03-L06, the lecture that unblocked
+     * the last two numericals on this paper.
+     *
+     * Section B sat at 4 of 6 for months and the missing two were both z-based, which
+     * was not a coincidence: the app supplied no standard normal table, so no question
+     * needing one could be answered. The table is now a paper provision (see
+     * `tables` on the SCLM spec), and these four follow.
+     *
+     * `sourceIds` carries two lectures each. The reorder-point items reuse the EOQ
+     * machinery for how much to order and add the when — which is the lecture's own
+     * framing — and the service-level items extend newsvendor's z. LAW-47 gates on
+     * `sourceIds`, so declaring both is what stops one being scheduled before the
+     * lecture teaching the half it actually tests.
+     *
+     * Figures are fresh, per the note above. The error that costs the most marks here
+     * is scaling the standard deviation by L instead of √L, so every item carries that
+     * specific wrong figure as a named near miss rather than a generic "wrong". */
+    {concept: "sclm_eoq", source: "SCLM-M03-L06", sourceIds: ["SCLM-M03-L03", "SCLM-M03-L06"],
+     node: "Reorder point with safety stock", reference: "standard-normal",
+     stem: "A spare-parts depot reviews inventory continuously. Weekly demand is normally distributed with a mean of 40 units and a standard deviation of 12 units. The replenishment lead time is a constant 4 weeks, and the depot wants a 95% cycle service level.",
+     prompt: "What reorder point achieves that service level?", unit: "units", answer: 199.6, tolerance: 1,
+     nearMisses: [
+       {value: 239.2, tolerance: 2, tag: "Scaled the deviation by the lead time", label: "Multiplied the standard deviation by L instead of √L",
+        why: "This choice assumed σ over four weeks is 12 × 4 = 48. Variances add over independent weeks, not standard deviations, so σ_DLT = 12 × √4 = 24. Using L instead of √L doubles the buffer here and overstocks the depot permanently.",
+        cue: "Add variances, then take the root. The lead-time deviation is always σ_d√L and is therefore smaller than σ_d·L."},
+       {value: 179.8, tolerance: 2, tag: "Used the weekly deviation", label: "Buffered one week instead of the lead time",
+        why: "This choice assumed the 12 in the stem is the deviation to buffer against. It is the weekly figure; the exposure is the whole 4-week lead time, so the deviation has to be converted first: 12 × √4 = 24.",
+        cue: "The deviation the stem gives you is almost never the one the formula wants. Convert to the protection period before multiplying by z."},
+       {value: 160, tolerance: 1, tag: "Left out the safety stock", label: "Covered average demand and nothing more",
+        why: "This choice assumed the reorder point is mean demand during lead time. That is exactly the level at which you stock out about half the time, because demand exceeds its own mean half the time. The buffer is the whole point of the model.",
+        cue: "A reorder point equal to μ_DLT is a 50% service level whatever the stem asked for."}
+     ],
+     explanation: "Mean demand during lead time is 40 × 4 = 160. The deviation over that period is σ_d√L = 12 × √4 = 24. A 95% cycle service level reads z = 1.65 off the table, so safety stock is 1.65 × 24 = 39.6 and ROP = 160 + 39.6 = 199.6 units.",
+     link: "The buffer protects the lead time only, because that is the stretch you cannot react during once the order is placed."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L06", sourceIds: ["SCLM-M03-L05", "SCLM-M03-L06"],
+     node: "Service level of a policy in force", reference: "standard-normal",
+     stem: "A distributor watches inventory continuously and places an order whenever inventory position falls to 495 units. Daily demand is normally distributed with a mean of 50 units and a standard deviation of 15 units. The replenishment lead time is a constant 9 days. Nobody can say what service level this policy was chosen to deliver.",
+     prompt: "What cycle service level does the current reorder point actually achieve?", unit: "%", answer: 84.1, tolerance: 0.5,
+     nearMisses: [
+       {value: 15.9, tolerance: 0.5, tag: "Reported the stockout probability", label: "Gave the risk instead of the service level",
+        why: "This choice read the area to the right of z. The cycle service level is the probability of NOT stocking out, which is the area to the left — the figure the table prints. 1 − 0.8413 = 0.1587 is the complement, so the policy stocks out about 16% of cycles.",
+        cue: "The table gives Φ(z), the left tail, and that is already the service level. Subtracting from 1 turns a good answer into its opposite."},
+       {value: 99.9, tolerance: 0.5, tag: "Used the daily deviation", label: "Compared against one day's variability",
+        why: "This choice assumed σ = 15. The reorder point covers nine days of exposure, so the comparison has to use σ_DLT = 15 × √9 = 45. With 15 the z comes out at 3.0 and the policy looks far safer than it is.",
+        cue: "A z above 3 from ordinary figures almost always means the deviation was never converted to the lead time."},
+       {value: 63.1, tolerance: 0.5, tag: "Scaled the deviation by the lead time", label: "Multiplied the deviation by L instead of √L",
+        why: "This choice used σ_DLT = 15 × 9 = 135. Variances add over independent days, so the deviation grows with √L: 15 × √9 = 45. Inflating it to 135 drags z down to about 0.33 and makes a reasonable policy look careless.",
+        cue: "√L, never L. It is the same slip whichever direction you are working in."}
+     ],
+     explanation: "Mean demand during lead time is 50 × 9 = 450 and σ_DLT = 15 × √9 = 45. The policy holds 495 − 450 = 45 units of safety stock, so z = 45 ÷ 45 = 1.00. The table gives Φ(1.00) = 0.8413, so the reorder point in force is buying a 84.1% cycle service level.",
+     link: "Reading a policy backwards is the same relation as setting one, and it is how you find out what a reorder point inherited from somebody else is really worth."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L06", sourceIds: ["SCLM-M03-L05", "SCLM-M03-L06"],
+     node: "Cost of a higher service level", reference: "standard-normal",
+     stem: "A distributor of transformer spares holds safety stock for a 90% cycle service level. Weekly demand is normally distributed with a mean of 60 units and a standard deviation of 20 units, and the replenishment lead time is a constant 4 weeks. A contract penalty has made the firm decide to run at 99% instead.",
+     prompt: "By how many units must the safety stock rise?", unit: "units", answer: 42, tolerance: 2,
+     nearMisses: [
+       {value: 93.2, tolerance: 2, tag: "Gave the new buffer, not the increase", label: "Answered a different question",
+        why: "This choice computed the safety stock at 99% — 2.33 × 40 = 93.2 — and stopped. The firm already holds 1.28 × 40 = 51.2, so the rise is the difference between the two, not the new level.",
+        cue: "When a stem asks by how much something changes, the answer is a difference. Compute both levels and subtract."},
+       {value: 84, tolerance: 2, tag: "Scaled the deviation by the lead time", label: "Multiplied the standard deviation by L instead of √L",
+        why: "This choice used σ_DLT = 20 × 4 = 80. Variances add over independent weeks, so σ_DLT = 20 × √4 = 40, and the increment is (2.33 − 1.28) × 40.",
+        cue: "The lead-time deviation is σ_d√L. With L = 4 the difference between 40 and 80 is the whole error."},
+       {value: 21, tolerance: 1, tag: "Never converted the deviation", label: "Buffered one week instead of four",
+        why: "This choice used the weekly deviation of 20 directly. The exposure is the four-week lead time, so the deviation to buffer is 20 × √4 = 40 and every figure built on it doubles.",
+        cue: "Convert σ to the protection period first. Every later step inherits that number."}
+     ],
+     explanation: "σ_DLT = 20 × √4 = 40. The table gives z = 1.28 at 90% and z = 2.33 at 99%, so the safety stock moves from 1.28 × 40 = 51.2 to 2.33 × 40 = 93.2 — a rise of 42 units. Nine points of service level cost 82% more buffer, which is why service level is a commercial decision and not a default.",
+     link: "The buffer rises faster than the service level does, so the last few points of protection are the expensive ones."},
+
+    {concept: "sclm_eoq", source: "SCLM-M03-L06", sourceIds: ["SCLM-M03-L03", "SCLM-M03-L06"],
+     node: "Inventory position",
+     stem: "A depot operates a continuous review policy with a reorder point of 700 units. The shelf holds 480 units. Two purchase orders of 125 units each were placed last week and are still in transit. Customers are owed 90 units, which they have agreed to receive late rather than cancel.",
+     prompt: "What figure should be compared against the reorder point?", unit: "units", answer: 640, tolerance: 1,
+     nearMisses: [
+       {value: 480, tolerance: 1, tag: "Used on-hand stock only", label: "Ignored the stock already on its way",
+        why: "This choice compared the shelf against the reorder point. On-hand keeps falling while an order is in transit, so a depot watching only the shelf reorders against a delivery it has already paid for — the double-ordering the inventory position exists to prevent.",
+        cue: "If the answer equals what is physically in the building, the pipeline has been left out."},
+       {value: 730, tolerance: 1, tag: "Ignored the backorders", label: "Counted stock that is already promised away",
+        why: "This choice took on-hand plus on-order and stopped. The 90 units owed to customers are committed: they will leave the moment they can, so they cannot also be available to meet new demand. Backorders are subtracted.",
+        cue: "Anything already promised to a customer is not yours to count."},
+       {value: 820, tolerance: 1, tag: "Added the backorders", label: "Treated demand owed as stock held",
+        why: "This choice added the 90 units instead of subtracting them. A backorder is unfilled demand — a claim against inventory, not a source of it — so it moves the position down, and getting the sign wrong here overstates cover by twice the backlog.",
+        cue: "Check the direction: backorders make you worse off, so they cannot raise the figure."}
+     ],
+     explanation: "Inventory position is on-hand, plus what is on order and not yet arrived, minus backorders: 480 + (2 × 125) − 90 = 640 units. That sits 60 below the reorder point of 700, so an order is due now. The comparison is always against inventory position, never against the shelf.",
+     link: "Comparing the shelf against a reorder point is the most common way a continuous review policy orders twice for the same shortfall."}
   ];
 
   function addAuthoredNumeric(course) {
@@ -1207,8 +1341,13 @@
         supportingConceptIds: [],
         module: concept.module,
         source: item.source,
-        sourceIds: [item.source],
+        /* Every lecture the question actually needs, not just its home one. LAW-47
+           gates each surface on its own `sourceIds`, so a safety-stock item that
+           reuses the EOQ machinery has to declare both — otherwise it can be
+           scheduled before the lecture that teaches the half it is really testing. */
+        sourceIds: unique(item.sourceIds || [item.source]),
         node: item.node,
+        reference: item.reference || null,
         pattern: "Enter the final figure",
         perspective: "apply",
         type: "numeric",
@@ -2888,10 +3027,19 @@
   function addIntegratedScenarios(course) {
     var scenarios = (window.T6_INTEGRATED || {})[course.id] || [];
     scenarios.forEach(function (scenario) {
+      /* Was a silent `return` on any unresolvable conceptId, which is how authored
+       * content ships and is never served — the failure mode §5 of the overhaul brief
+       * names first. A scenario that cannot resolve its concepts is a defect in the
+       * bank, so it stops the build and says which id it could not find. */
+      var missing = scenario.conceptIds.filter(function (id) {
+        return !course.concepts.some(function (concept) { return concept.id === id; });
+      });
+      if (missing.length) {
+        throw new Error("Integrated scenario " + scenario.id + " (" + course.id + ") names concept id(s) that do not exist: " + missing.join(", "));
+      }
       var concepts = scenario.conceptIds.map(function (id) {
         return course.concepts.filter(function (concept) { return concept.id === id; })[0];
-      }).filter(Boolean);
-      if (concepts.length !== scenario.conceptIds.length) return;
+      });
       var primary = concepts[0];
       addQuestion(course, {
         id: scenario.id,
@@ -2912,6 +3060,11 @@
         estimatedMinutes: 12,
         selfReviewOnly: true,
         writtenMode: "integrated",
+        /* The examiner-only slice. `examReservedIds` is a late tiebreaker and depends
+           on Learn having slack; this is the hard reservation, and it is only safe
+           because these items are additional to a Learn surface set that is already
+           complete without them. Nothing shared is excluded — see §4.2 of the brief. */
+        examOnly: !!scenario.examOnly,
         caselet: scenario.caselet,
         stem: scenario.task,
         rubric: scenario.rubric.map(function (criterion) {
@@ -3076,7 +3229,10 @@
 
   function configureRuns(course) {
     var questions = Object.keys(course.questions).map(function (id) { return course.questions[id]; });
-    var activeQuestions = questions.filter(function (question) { return !question.optionShapeRisk && !question.primerOnly; });
+    /* `examOnly` leaves here and nowhere else: this is the one place study-set pools
+       are built, so excluding it once keeps every Learn route out of the reserved
+       slice without a second filter drifting from this one. */
+    var activeQuestions = questions.filter(function (question) { return !question.optionShapeRisk && !question.primerOnly && !question.examOnly; });
     var bossIds = activeQuestions.filter(function (question) { return question.boss; }).map(function (question) { return question.id; });
     course.runs.forEach(function (run) {
       if (run.module >= 1 && run.module <= 8) {

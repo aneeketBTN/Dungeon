@@ -1,0 +1,176 @@
+{
+  "SPMS": {
+    "conceptsInCourse": 16,
+    "conceptsOnPaper": 16,
+    "paperQuestions": 55,
+    "availableMarks": 75,
+    "afterSet1": {
+      "taught": 2,
+      "marks": 8,
+      "pct": 10.7
+    },
+    "ladder": [
+      "set 1: 2 concepts taught → 8/75 marks (10.7%)",
+      "set 2: 4 concepts taught → 17/75 marks (22.7%)",
+      "set 3: 6 concepts taught → 24/75 marks (32%)",
+      "set 4: 8 concepts taught → 34/75 marks (45.3%)",
+      "set 5: 10 concepts taught → 42/75 marks (56%)",
+      "set 6: 12 concepts taught → 53/75 marks (70.7%)",
+      "set 7: 14 concepts taught → 65/75 marks (86.7%)",
+      "set 8: 16 concepts taught → 75/75 marks (100%)"
+    ],
+    "sets": [
+      "set 1 (module 1): 2 concepts, 8 questions",
+      "set 2 (module 2): 2 concepts, 8 questions",
+      "set 3 (module 3): 2 concepts, 8 questions",
+      "set 4 (module 4): 2 concepts, 8 questions",
+      "set 5 (module 5): 2 concepts, 8 questions",
+      "set 6 (module 6): 2 concepts, 8 questions",
+      "set 7 (module 7): 2 concepts, 8 questions",
+      "set 8 (module 8): 2 concepts, 8 questions",
+      "set 9 (module 9): 16 concepts, 12 questions",
+      "set 10 (module 10): 16 concepts, 12 questions"
+    ],
+    "t2": {
+      "laddered": 8,
+      "reachesWholePaper": true,
+      "failures": []
+    }
+  },
+  "BRGSA": {
+    "conceptsInCourse": 16,
+    "conceptsOnPaper": 14,
+    "paperQuestions": 26,
+    "availableMarks": 80,
+    "afterSet1": {
+      "taught": 2,
+      "marks": 11,
+      "pct": 13.8
+    },
+    "ladder": [
+      "set 1: 2 concepts taught → 11/80 marks (13.8%)",
+      "set 2: 5 concepts taught → 22/80 marks (27.5%)",
+      "set 3: 9 concepts taught → 45/80 marks (56.3%)",
+      "set 4: 10 concepts taught → 57/80 marks (71.3%)",
+      "set 5: 12 concepts taught → 72/80 marks (90%)",
+      "set 6: 14 concepts taught → 74/80 marks (92.5%)",
+      "set 7: 16 concepts taught → 80/80 marks (100%)",
+      "set 8: 16 concepts taught → 80/80 marks (100%)"
+    ],
+    "sets": [
+      "set 1 (module 1): 2 concepts, 8 questions",
+      "set 2 (module 2): 4 concepts, 8 questions",
+      "set 3 (module 3): 4 concepts, 8 questions",
+      "set 4 (module 4): 2 concepts, 8 questions",
+      "set 5 (module 5): 2 concepts, 8 questions",
+      "set 6 (module 6): 4 concepts, 8 questions",
+      "set 7 (module 7): 3 concepts, 8 questions",
+      "set 8 (module 8): 2 concepts, 8 questions",
+      "set 9 (module 9): 16 concepts, 12 questions",
+      "set 10 (module 10): 16 concepts, 12 questions"
+    ],
+    "t2": {
+      "laddered": 8,
+      "reachesWholePaper": true,
+      "failures": []
+    }
+  },
+  "SCLM": {
+    "conceptsInCourse": 16,
+    "conceptsOnPaper": 16,
+    "paperQuestions": 59,
+    "availableMarks": 80,
+    "afterSet1": {
+      "taught": 2,
+      "marks": 5,
+      "pct": 6.3
+    },
+    "ladder": [
+      "set 1: 2 concepts taught → 5/80 marks (6.3%)",
+      "set 2: 4 concepts taught → 14/80 marks (17.5%)",
+      "set 3: 6 concepts taught → 44/80 marks (55%)",
+      "set 4: 8 concepts taught → 54/80 marks (67.5%)",
+      "set 5: 10 concepts taught → 60/80 marks (75%)",
+      "set 6: 12 concepts taught → 67/80 marks (83.8%)",
+      "set 7: 14 concepts taught → 75/80 marks (93.8%)",
+      "set 8: 16 concepts taught → 80/80 marks (100%)"
+    ],
+    "sets": [
+      "set 1 (module 1): 2 concepts, 8 questions",
+      "set 2 (module 2): 2 concepts, 8 questions",
+      "set 3 (module 3): 3 concepts, 8 questions",
+      "set 4 (module 4): 2 concepts, 8 questions",
+      "set 5 (module 5): 2 concepts, 8 questions",
+      "set 6 (module 6): 2 concepts, 8 questions",
+      "set 7 (module 7): 2 concepts, 8 questions",
+      "set 8 (module 8): 2 concepts, 8 questions",
+      "set 9 (module 9): 16 concepts, 12 questions",
+      "set 10 (module 10): 16 concepts, 12 questions"
+    ],
+    "t2": {
+      "laddered": 8,
+      "reachesWholePaper": true,
+      "failures": []
+    }
+  },
+  "IBM": {
+    "conceptsInCourse": 16,
+    "conceptsOnPaper": 9,
+    "paperQuestions": 10,
+    "availableMarks": 100,
+    "afterSet1": {
+      "taught": 2,
+      "marks": 10,
+      "pct": 10
+    },
+    "ladder": [
+      "set 1: 2 concepts taught → 10/100 marks (10%)",
+      "set 2: 5 concepts taught → 10/100 marks (10%)",
+      "set 3: 8 concepts taught → 50/100 marks (50%)",
+      "set 4: 11 concepts taught → 70/100 marks (70%)",
+      "set 5: 14 concepts taught → 90/100 marks (90%)",
+      "set 6: 15 concepts taught → 90/100 marks (90%)",
+      "set 7: 16 concepts taught → 100/100 marks (100%)",
+      "set 8: 16 concepts taught → 100/100 marks (100%)"
+    ],
+    "sets": [
+      "set 1 (module 1): 2 concepts, 8 questions",
+      "set 2 (module 2): 3 concepts, 8 questions",
+      "set 3 (module 3): 3 concepts, 8 questions",
+      "set 4 (module 4): 3 concepts, 8 questions",
+      "set 5 (module 5): 4 concepts, 8 questions",
+      "set 6 (module 6): 2 concepts, 8 questions",
+      "set 7 (module 7): 2 concepts, 8 questions",
+      "set 8 (module 8): 2 concepts, 8 questions",
+      "set 9 (module 9): 16 concepts, 12 questions",
+      "set 10 (module 10): 16 concepts, 12 questions"
+    ],
+    "t2": {
+      "laddered": 8,
+      "reachesWholePaper": true,
+      "failures": []
+    }
+  },
+  "handoffPromises": {
+    "SPMS": {
+      "state": "pass",
+      "checked": 16,
+      "broken": []
+    },
+    "BRGSA": {
+      "state": "pass",
+      "checked": 16,
+      "broken": []
+    },
+    "SCLM": {
+      "state": "pass",
+      "checked": 16,
+      "broken": []
+    },
+    "IBM": {
+      "state": "pass",
+      "checked": 16,
+      "broken": []
+    }
+  }
+}

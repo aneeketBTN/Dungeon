@@ -33,6 +33,17 @@ gets added or a row gets added here saying it cannot be detected and must be loo
       `ragged`, `cutRows`, `hiddenScroll`, `barInset`.
 - [ ] `node tools/screenshot.mjs --port <p>` — 16/16, **and then open them.** Three
       defects in this file were found by looking at a picture after the numbers were green.
+- [ ] **When the probe reports your new component, read the detector before you touch it —
+      and when you do touch it, re-introduce the original defect as a fixture and confirm it
+      still fires.** The standard normal table (2026-08-15) tripped three detectors and only
+      one of the three responses was the same. `overflow` was right by design and the
+      container simply had not used the existing `[data-scroll]` hook. `cutRows` was firing
+      on a single 836px child that can never be shown whole at any scroll position, which is
+      a document being scrolled and not a row drawn in half — refined, then **verified
+      against a live 12×51px-in-100px fixture reproducing the original palette defect**,
+      which still fires. `hiddenScroll` at 44% hidden on a phone was simply **correct**, and
+      the fix was to the page: eleven columns became two six-column halves that stack. A
+      probe you weaken without a fixture is a probe you have blinded.
 
 ## C. Layout
 

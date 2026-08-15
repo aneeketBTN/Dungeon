@@ -2687,6 +2687,642 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "brgsa_exam_marketplace_leak": {
+    "id": "brgsa_exam_marketplace_leak",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m4_constraint",
+    "stem": "Write the case you would put to this team before the quarterly budget is committed. Say where the money should go and why, and be specific about which number is the one that matters.",
+    "caselet": "A marketplace connecting small firms with freelance designers reports 46,000 monthly visitors, up from 19,000 a year ago. Of those visitors, 5,980 register, 1,140 post a first brief, and 391 complete a first hire. The team's own benchmarks put visitor-to-registration at 12%, registration-to-brief at 55% and brief-to-hire at 35%. Two channels supply the traffic. Paid search costs ₹2,700 per registration and those users complete a first hire 4% of the time; designers inviting their own existing clients costs nothing and those users complete a first hire 31% of the time, but the invitation flow is buried three screens inside the designer dashboard and 6% of designers have ever used it. The quarterly plan allocates 80% of the budget to paid search on the grounds that it is the larger source of registrations. The company's weekly dashboard shows visitors, registrations and gross merchandise value; no line has an owner, a threshold, or a stated action if it moves.",
+    "sourceIds": [
+      "BRGSA-M04-L04",
+      "BRGSA-M05-L05",
+      "BRGSA-M05-L01",
+      "BRGSA-M08-L03"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Locates the single binding constraint by comparing each stage against its own benchmark rather than by the size of the numeric fall, distinguishes the two channels by the quality of the users they deliver rather than by volume, and identifies a dashboard that reports without triggering any decision."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — registration-to-brief at 1,140 of 5,980 against a 55% benchmark, the 4% versus 31% first-hire rates, ₹2,700 per paid registration against zero, or 6% of designers having ever found the invitation flow."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Explains the causal chain rather than listing findings: the constraint sits between registration and first brief, the cheaper channel already clears it far better, and spending 80% on the weaker one multiplies traffic through the stage that cannot carry it."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the paid-search allocation should be cut, that the buried invitation flow should be surfaced first, and that registration-to-brief is the metric the quarter should be run against."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would justify paid search — its first-hire rate closing on the invited cohort's, or the referral channel saturating — or states the risk of leaning on a channel capped by the number of designers."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "brgsa_exam_paid_intent": {
+    "id": "brgsa_exam_paid_intent",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m1_demand",
+    "stem": "Write the review this team needs. Name each failure precisely, and say what should happen to the proposal for a larger survey.",
+    "caselet": "An exam-preparation company surveyed 600 students about a proposed ₹4,000 revision course. 71% said they would buy it, and the product was built over four months on that basis. A landing page with a stated price and a payment button has since drawn 3,100 visitors and 22 purchases. The team then tested two page designs to fix the conversion rate. Variant A ran on weekday traffic, variant B over a weekend when a competitor's discount campaign was live. The pre-calculated sample was 4,000 sessions per variant; the test was called at 1,300 sessions each because the difference looked settled, and the 2.4-point gap it reported has not appeared since. A second experiment on the checkout flow was declared a failure at 900 sessions per variant against a required 5,000, and that change was abandoned; a later engineering estimate suggested it would have been worth about ₹90 lakh annually if the effect had been real. The team is now proposing another survey, this time with 2,000 students.",
+    "sourceIds": [
+      "BRGSA-M01-L01",
+      "BRGSA-M01-L04",
+      "BRGSA-M02-L01",
+      "BRGSA-M02-L03"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Separates stated intention from demonstrated willingness to pay, identifies the confound and the early stop in the first test, names the abandoned checkout change as a decision error of the opposite kind from the false positive, and places each on the evidence spectrum."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — 71% of 600 against 22 purchases from 3,100 visitors, the 1,300 sessions against a planned 4,000, the weekday-versus-competitor-campaign split, or 900 against a required 5,000 on a change worth about ₹90 lakh."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects the failures rather than listing them: survey evidence that cost nothing to give produced unwarranted confidence, which made an early favourable reading feel like confirmation, while an underpowered test was allowed to kill a change that was never actually measured."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the larger survey should not be run, names the behavioural test that should replace it, and requires both experiments to be re-run to their declared samples with the confound removed."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would make survey work useful — sequencing it before a behavioural test rather than instead of one — or states the cost of the discipline in time and traffic."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "brgsa_exam_studio_subscription": {
+    "id": "brgsa_exam_studio_subscription",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m3_cohort",
+    "stem": "Write the assessment the founder should read before signing the leases. Address the capacity argument directly and say what should happen to the pricing structure.",
+    "caselet": "A chain of fitness studios sells one ₹2,400 monthly membership with no tier above it and no annual option. Monthly recurring revenue is up 9% year on year and classes run at 88% capacity, so the founder is preparing to open two more studios. Of ₹62 lakh of monthly recurring revenue held by members twelve months ago, ₹47 lakh remains: ₹1 lakh of expansion against ₹16 lakh of cancellations. The gap is covered by new joiners. Retention read by joining cohort has fallen every quarter for six quarters, from 44% still active at month six to 29%. Blended acquisition cost has risen from ₹3,100 to ₹5,800 per member. Members who attend at least eight classes in their first month cancel at roughly a quarter the rate of those who attend fewer, and 38% of new members reach eight. A survey of leavers most often cites classes being full at the times they can attend. The founder's plan cites the 88% capacity figure as evidence that demand exceeds supply.",
+    "sourceIds": [
+      "BRGSA-M03-L01",
+      "BRGSA-M03-L04",
+      "BRGSA-M06-L05",
+      "BRGSA-M07-L01"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Computes or recognises net revenue retention on the existing base, reads retention by cohort at equal age rather than in aggregate, identifies the flat single plan as a structure that permits no expansion, and locates the churn cause in the leaver evidence rather than assuming it."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — ₹47 lakh remaining of ₹62 lakh, or roughly 76% NRR, the cohort fall from 44% to 29%, acquisition cost from ₹3,100 to ₹5,800, the 38% reaching eight classes, or the leaver reason."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them rather than listing: headline growth is new joiners masking a shrinking base, the flat plan means no retained member can add revenue, and 88% capacity is the cause of the churn rather than evidence of demand."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the expansion should be held or re-scoped, that the pricing structure needs a tier or commitment option, and that capacity at the times members actually attend should be fixed first."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would make the two new studios defensible — NRR above 100%, cohort curves flattening, first-month attendance rising — or states the cost and competitive risk of delaying."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "brgsa_exam_roadmap_call": {
+    "id": "brgsa_exam_roadmap_call",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m4_customers",
+    "stem": "Write the recommendation for how this quarter's six slots should be decided, and what should be in them. Deal with the chief executive's proposal explicitly.",
+    "caselet": "A fleet-tracking company has capacity for six engineering projects this quarter and forty candidate ideas. The chief executive is pressing for a public API, which is highly visible, carries an eight-week estimate, has been requested by two prospects and no existing customer, and has no identified effect on any current metric. A second candidate, a two-week change collapsing a six-step vehicle-onboarding flow to two steps, is supported by session recordings of nineteen customers abandoning at step four; the company's own data shows fleets that finish onboarding within seven days renew at three times the rate of those that do not, and 41% currently finish inside seven days. A third would rebuild the marketing-to-sales handoff, where 210 qualified leads produced 96 accepted, the definition of the remaining 114 has never been agreed between the two teams, and first contact averages six days. Nobody at the company has spoken to a churned customer in eleven months; the head of product declined a proposed round of interviews as anecdotal. Ideas are currently ranked in a spreadsheet by a single enthusiasm score contributed by whoever proposed them.",
+    "sourceIds": [
+      "BRGSA-M04-L02",
+      "BRGSA-M06-L01",
+      "BRGSA-M07-L04",
+      "BRGSA-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Replaces the single enthusiasm score with a scoring approach separating impact, evidence quality and effort, identifies the seven-day onboarding completion as the habit the product should be built around, names the undefined handoff as the pipeline leak, and treats direct customer contact as primary evidence rather than anecdote."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — six slots against forty ideas, eight weeks and two prospects for the API against two weeks and nineteen recorded abandonments, the three-times renewal for onboarding inside seven days against 41% achieving it, or 210 leads against 96 accepted with six days to first contact."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: a single enthusiasm score cannot separate a visible idea from an effective one, which is why the eight-week item with no evidence outranks a two-week item with recorded behaviour behind it and a known effect on renewal."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the API should not take a slot this quarter on the evidence available, names the onboarding change and the handoff repair as the first two, and requires churned-customer interviews to run rather than be deferred."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would earn the API a slot — evidence tying it to retention or to a named deal — or states the organisational cost of overruling the chief executive and of holding a visible commitment."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "brgsa_exam_price_experiment": {
+    "id": "brgsa_exam_price_experiment",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m1_demand",
+    "stem": "Write the recommendation on the discount and on which three ideas should be built. Say plainly what the signup figure did and did not demonstrate.",
+    "caselet": "A direct-to-consumer coffee brand sells a ₹1,150 monthly subscription. To arrest a decline it ran a 30% launch discount for first-time subscribers. Signups rose 240% during the eight-week offer and the growth lead has proposed making the discount permanent, citing contribution margin that stayed positive throughout. The cohort numbers were not in that proposal. Discounted subscribers cancel at 58% by month three against 21% for full-price subscribers, and 4% ever accept the price increase at renewal. Blended acquisition cost is ₹1,900. Full-price subscribers contribute about ₹430 a month against ₹180 for discounted ones. Separately the team has a backlog of eleven ideas and capacity for three: the permanent discount, a ₹1,900 twin-bag tier that 340 customers have asked for by email, and a packaging redesign the founder favours which no customer has mentioned and which would take nine weeks. There is no tier above the single plan today.",
+    "sourceIds": [
+      "BRGSA-M01-L01",
+      "BRGSA-M03-L04",
+      "BRGSA-M07-L01",
+      "BRGSA-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Distinguishes demand for the product from demand for a discount, reads retention and payback by cohort rather than on blended contribution, identifies the absence of any tier above the single plan as the structural gap, and scores the backlog on evidence and effort rather than on preference."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — 58% versus 21% month-three cancellation, 4% accepting the renewal price, ₹430 against ₹180 monthly contribution, ₹1,900 acquisition cost, or 340 emailed requests against nine weeks for an unrequested redesign."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: the discount bought people whose willingness to pay was never tested, so they leave before repaying a ₹1,900 acquisition cost, and permanence would convert a temporary distortion into the business's whole economics."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that the discount should not be made permanent, names the twin-bag tier as the strongest of the three by evidence and effort, and defers the packaging redesign."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would justify a standing discount — a discounted cohort repaying acquisition cost, or the tier lifting average contribution — or states the short-term signup fall that ending it will cause."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "brgsa_exam_delivery_app": {
+    "id": "brgsa_exam_delivery_app",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_m2_error",
+    "stem": "Write the assessment of this expansion. Address the voucher proposal and the abandoned streak feature, and say what should be tested next.",
+    "caselet": "A grocery-delivery app works in one city, where 34% of users order weekly and unprompted word of mouth supplies 61% of new users at no acquisition cost. It launched in four more cities on the strength of that. In the new cities, 7% order weekly, word of mouth supplies 9%, and acquisition runs at ₹740 per user through discount vouchers. The single operational difference is delivery time: 24 minutes in the original city against 71 minutes in the others, where the app has no dark store and picks from partner supermarkets. A test of a daily-streak reward, modelled on a language-learning app, ran across the new cities for five weeks and showed no effect; the sample was 600 users per arm against a required 7,000, and the feature has been abandoned. Nobody has tested reducing delivery time. Groceries are bought about once a week by these users, and the original city's ordering pattern is concentrated on Saturday mornings. The team is proposing to raise voucher spend in the four cities to buy the word-of-mouth flywheel it saw at home.",
+    "sourceIds": [
+      "BRGSA-M02-L03",
+      "BRGSA-M04-L04",
+      "BRGSA-M05-L01",
+      "BRGSA-M06-L01"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Identifies delivery time as the binding constraint on the new cities' outcome, recognises the streak result as an underpowered test that established nothing rather than a negative finding, judges the streak mechanic against the product's natural usage frequency, and distinguishes word of mouth as an effect of the experience from a channel that can be bought."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the numbers",
+        "description": "Cites specific figures — 24 against 71 minutes, 34% against 7% weekly ordering, 61% against 9% word of mouth, ₹740 per acquired user, or 600 per arm against a required 7,000."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects them: word of mouth in the original city is a consequence of a 24-minute delivery, so vouchers buy arrivals into an experience that does not generate referral, and the untested constraint is the one thing separating the two outcomes."
+      },
+      {
+        "id": "decision",
+        "label": "The decision",
+        "description": "States that voucher spend should not be raised, names delivery time as the variable to test first, and requires the streak result to be treated as unmeasured rather than as a failure."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would justify the spend — delivery time closing and weekly ordering rising — or states the cost of dark stores and the risk of holding position in four cities while competitors move."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
   "ibm_inclusive_short_answer": {
     "id": "ibm_inclusive_short_answer",
     "courseId": "IBM",
@@ -2705,7 +3341,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Treat it as an inclusive business because serving an underserved need is the primary purpose and the model is designed to sustain itself."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Treat it as inclusive because serving an underserved need is the primary purpose and the model always sustains itself."
       }
     ],
     "writtenGaps": [
@@ -2761,7 +3397,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Treat it as an inclusive business because serving an underserved need is the primary purpose and the model is designed to sustain itself."
+        "description": "Treat it as inclusive because serving an underserved need is the primary purpose and the model always sustains itself."
       },
       {
         "id": "case_evidence",
@@ -2846,7 +3482,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Redesign affordability, access, and service around the market's constraints before treating population size as demand."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Redesign affordability, access and service around the constraints, because population size is never demand by itself."
       }
     ],
     "writtenGaps": [
@@ -2902,7 +3538,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Redesign affordability, access, and service around the market's constraints before treating population size as demand."
+        "description": "Redesign affordability, access and service around the constraints, because population size is never demand by itself."
       },
       {
         "id": "case_evidence",
@@ -2987,7 +3623,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Locate a focused, quality-controlled facility nearer the underserved population and design its costs around essential care."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Locate a quality-controlled facility nearer the population, cutting only costs that leave essential care intact."
       }
     ],
     "writtenGaps": [
@@ -3043,7 +3679,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Locate a focused, quality-controlled facility nearer the underserved population and design its costs around essential care."
+        "description": "Locate a quality-controlled facility nearer the population, cutting only costs that leave essential care intact."
       },
       {
         "id": "case_evidence",
@@ -3269,7 +3905,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Use carefully formed groups, staged lending, and local monitoring to make community knowledge part of risk assessment."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Use formed groups, staged lending and local monitoring, which works only while repayment capacity stays real."
       }
     ],
     "writtenGaps": [
@@ -3325,7 +3961,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Use carefully formed groups, staged lending, and local monitoring to make community knowledge part of risk assessment."
+        "description": "Use formed groups, staged lending and local monitoring, which works only while repayment capacity stays real."
       },
       {
         "id": "case_evidence",
@@ -3410,7 +4046,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Pause new lending, assess total obligations and cash flow, and correct incentives that reward volume over borrower capacity."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Pause lending, assess total obligations and cash flow, and never let volume incentives outrun borrower capacity."
       }
     ],
     "writtenGaps": [
@@ -3466,7 +4102,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Pause new lending, assess total obligations and cash flow, and correct incentives that reward volume over borrower capacity."
+        "description": "Pause lending, assess total obligations and cash flow, and never let volume incentives outrun borrower capacity."
       },
       {
         "id": "case_evidence",
@@ -3692,7 +4328,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Use a controlled partner model with local credibility, training, certification, and shared operating standards."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Use a controlled partner model with local credibility and standards every partner must meet."
       }
     ],
     "writtenGaps": [
@@ -3748,7 +4384,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Use a controlled partner model with local credibility, training, certification, and shared operating standards."
+        "description": "Use a controlled partner model with local credibility and standards every partner must meet."
       },
       {
         "id": "case_evidence",
@@ -3974,7 +4610,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Bundle a suitable light with third-party finance and dependable service, linking repayment to the customer's savings or added income."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Bundle the light with finance and dependable service, since removing any one of those links makes it unusable."
       }
     ],
     "writtenGaps": [
@@ -4030,7 +4666,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Bundle a suitable light with third-party finance and dependable service, linking repayment to the customer's savings or added income."
+        "description": "Bundle the light with finance and dependable service, since removing any one of those links makes it unusable."
       },
       {
         "id": "case_evidence",
@@ -4115,7 +4751,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Build trusted worker records, skills, job-market connections, and links to financial or insurance institutions together."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Build worker records, skills and institutional links together, because access opens only when all of them arrive at once."
       }
     ],
     "writtenGaps": [
@@ -4171,7 +4807,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Build trusted worker records, skills, job-market connections, and links to financial or insurance institutions together."
+        "description": "Build worker records, skills and institutional links together, because access opens only when all of them arrive at once."
       },
       {
         "id": "case_evidence",
@@ -4256,7 +4892,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Track pollution reduction, product economics, and whether workers gain fair, durable livelihood opportunities."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Track pollution reduction, product economics and worker livelihoods, which count as shared value only when all three hold."
       }
     ],
     "writtenGaps": [
@@ -4312,7 +4948,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Track pollution reduction, product economics, and whether workers gain fair, durable livelihood opportunities."
+        "description": "Track pollution reduction, product economics and worker livelihoods, which count as shared value only when all three hold."
       },
       {
         "id": "case_evidence",
@@ -4397,7 +5033,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Aggregate through a farmer-owned organisation, build traceability and market links, and invest in value-adding capability."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Aggregate through a farmer-owned organisation and build market links, because scale never becomes income without them."
       }
     ],
     "writtenGaps": [
@@ -4453,7 +5089,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Aggregate through a farmer-owned organisation, build traceability and market links, and invest in value-adding capability."
+        "description": "Aggregate through a farmer-owned organisation and build market links, because scale never becomes income without them."
       },
       {
         "id": "case_evidence",
@@ -4538,7 +5174,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Judge it by whether the social goal drives the model and financial discipline keeps it operating without turning profit maximisation into the purpose."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Judge whether the social goal drives the model and discipline keeps it running, never letting profit become the purpose."
       }
     ],
     "writtenGaps": [
@@ -4594,7 +5230,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Judge it by whether the social goal drives the model and financial discipline keeps it operating without turning profit maximisation into the purpose."
+        "description": "Judge whether the social goal drives the model and discipline keeps it running, never letting profit become the purpose."
       },
       {
         "id": "case_evidence",
@@ -4679,7 +5315,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Classify it as impact investing because intent, measurement, and financial return are designed together."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Classify it as impact investing because intent, measurement and return are all designed together."
       }
     ],
     "writtenGaps": [
@@ -4735,7 +5371,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Classify it as impact investing because intent, measurement, and financial return are designed together."
+        "description": "Classify it as impact investing because intent, measurement and return are all designed together."
       },
       {
         "id": "case_evidence",

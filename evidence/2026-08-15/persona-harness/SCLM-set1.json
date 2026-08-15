@@ -2,13 +2,13 @@
  "subject": "SCLM",
  "subjectTitle": "Supply Chain & Logistics Management",
  "set": 1,
- "digest": "c8fa92c3",
+ "digest": "8e886bc0",
  "instructions": {
   "sat": "23 August, 13:00–15:00",
   "minutes": 120,
   "calculator": "scientific",
   "marksOnTheRealPaper": 80,
-  "marksAvailableHere": 72,
+  "marksAvailableHere": 80,
   "sections": [
    {
     "id": "A",
@@ -29,14 +29,7 @@
     "rule": "Match every pair. Two marks each. All or nothing."
    }
   ],
-  "shortfalls": [
-   {
-    "section": "B",
-    "want": 6,
-    "have": 4,
-    "type": "numeric"
-   }
-  ],
+  "shortfalls": [],
   "caveat": null
  },
  "paper": [
@@ -1213,15 +1206,25 @@
    "number": 51,
    "section": "B",
    "marks": 4,
-   "id": "sclm_smoothing_numeric",
+   "id": "sclm_newsvendor_numeric_3",
    "type": "numeric",
-   "caselet": "A regional warehouse forecast 1,200 units for last month. Actual demand came in at 1,320 units. The smoothing constant in use is 0.2.",
-   "stem": "A regional warehouse forecast 1,200 units for last month. Actual demand came in at 1,320 units. The smoothing constant in use is 0.2.",
-   "prompt": "What is the forecast for this month?",
+   "caselet": "A distributor of transformer spares holds safety stock for a 90% cycle service level. Weekly demand is normally distributed with a mean of 60 units and a standard deviation of 20 units, and the replenishment lead time is a constant 4 weeks. A contract penalty has made the firm decide to run at 99% instead.",
+   "stem": "A distributor of transformer spares holds safety stock for a 90% cycle service level. Weekly demand is normally distributed with a mean of 60 units and a standard deviation of 20 units, and the replenishment lead time is a constant 4 weeks. A contract penalty has made the firm decide to run at 99% instead.",
+   "prompt": "By how many units must the safety stock rise?",
    "unit": "units",
    "termsAvailable": [
-    "smoothing constant",
-    "forecast error"
+    "single period",
+    "underage",
+    "overage",
+    "salvage",
+    "critical ratio",
+    "expected payoff",
+    "inventory position",
+    "reorder point",
+    "safety stock",
+    "protection period",
+    "cycle service level",
+    "continuous review"
    ]
   },
   {
@@ -1265,6 +1268,30 @@
    "number": 54,
    "section": "B",
    "marks": 4,
+   "id": "sclm_eoq_numeric_3",
+   "type": "numeric",
+   "caselet": "A spare-parts depot reviews inventory continuously. Weekly demand is normally distributed with a mean of 40 units and a standard deviation of 12 units. The replenishment lead time is a constant 4 weeks, and the depot wants a 95% cycle service level.",
+   "stem": "A spare-parts depot reviews inventory continuously. Weekly demand is normally distributed with a mean of 40 units and a standard deviation of 12 units. The replenishment lead time is a constant 4 weeks, and the depot wants a 95% cycle service level.",
+   "prompt": "What reorder point achieves that service level?",
+   "unit": "units",
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory",
+    "inventory position",
+    "reorder point",
+    "safety stock",
+    "protection period",
+    "cycle service level",
+    "continuous review"
+   ]
+  },
+  {
+   "number": 55,
+   "section": "B",
+   "marks": 4,
    "id": "sclm_eoq_numeric",
    "type": "numeric",
    "caselet": "A distributor expects steady annual demand of 12,000 units. Each order placed costs ₹600 regardless of its size. Holding one unit for a year costs ₹40.",
@@ -1280,7 +1307,31 @@
    ]
   },
   {
-   "number": 55,
+   "number": 56,
+   "section": "B",
+   "marks": 4,
+   "id": "sclm_eoq_numeric_4",
+   "type": "numeric",
+   "caselet": "A depot operates a continuous review policy with a reorder point of 700 units. The shelf holds 480 units. Two purchase orders of 125 units each were placed last week and are still in transit. Customers are owed 90 units, which they have agreed to receive late rather than cancel.",
+   "stem": "A depot operates a continuous review policy with a reorder point of 700 units. The shelf holds 480 units. Two purchase orders of 125 units each were placed last week and are still in transit. Customers are owed 90 units, which they have agreed to receive late rather than cancel.",
+   "prompt": "What figure should be compared against the reorder point?",
+   "unit": "units",
+   "termsAvailable": [
+    "annual demand",
+    "ordering cost",
+    "holding cost",
+    "total cost",
+    "cycle inventory",
+    "inventory position",
+    "reorder point",
+    "safety stock",
+    "protection period",
+    "cycle service level",
+    "continuous review"
+   ]
+  },
+  {
+   "number": 57,
    "section": "C",
    "marks": 2,
    "id": "sclm_m2_match",
@@ -1312,7 +1363,7 @@
    ]
   },
   {
-   "number": 56,
+   "number": 58,
    "section": "C",
    "marks": 2,
    "id": "sclm_m4_match",
@@ -1348,7 +1399,7 @@
    ]
   },
   {
-   "number": 57,
+   "number": 59,
    "section": "C",
    "marks": 2,
    "id": "sclm_m7_match",

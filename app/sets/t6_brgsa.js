@@ -36,7 +36,13 @@ window.T6_COURSE = {
     smoke_signal: {
       id: "smoke_signal", module: 1, source: "BRGSA-M01-L02", node: "Smoke tests", pattern: "Application MCQ",
       stem: "A startup publishes a credible landing page with a real ‘Join waitlist’ action before the product exists. What is it primarily testing?",
-      options: ["Whether the engineering plan is technically feasible", "Whether exposed prospects take a behavioural step toward the offer", "Whether respondents say the idea sounds good to them", "Whether the brand has assembled a complete marketing funnel behind the landing page"], answer: 1,
+      /* Was "Whether exposed prospects take a behavioural step toward the offer".
+         "Prospect" is course vocabulary defined in BRGSA-M01-L04's glossary, and this
+         item cites M01-L02 — so LAW-47, which gates on the lectures a surface cites,
+         could not see that a learner reaching this at step 5 of set 1 had not met the
+         word. Found by T1 (tools/measure-cold-learner.mjs). The distinction under test
+         is unchanged: a measured action against a stated opinion. */
+      options: ["Whether the engineering plan is technically feasible", "Whether people who see the page take a real action toward the offer", "Whether respondents say the idea sounds good to them", "Whether the brand has assembled a complete marketing funnel behind the landing page"], answer: 1,
       explanation: "A smoke test is a fake door: the product is not yet behind it, but the measured click or signup is a behavioural demand signal.",
       link: "A smoke test observes behaviour at a fake door; it does not pretend the product already exists.", repairId: "mock_commit"
     },

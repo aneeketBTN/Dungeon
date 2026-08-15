@@ -1098,6 +1098,51 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   measurement, which is the reason `tools/screenshot.mjs` now exists and the reason it does not
   replace `ui-audit.js`.
 
+### LAW-66 🔴 — A correct answer may only use vocabulary the run has taught, and citation is not the test
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15, the first run of T1 (`tools/measure-cold-learner.mjs`). `smoke_signal`'s
+  correct answer read *"Whether exposed **prospects** take a behavioural step toward the offer"*.
+  "Prospect" is glossary vocabulary from `BRGSA-M01-L04`; the item cites `BRGSA-M01-L02` and is
+  delivered at step 5, three lessons before L04. Evidence:
+  `evidence/2026-08-15/t6-rehaul-completion/verification.md`.
+- **Why:** LAW-47 gates each surface on its own `sourceIds`, and it does that correctly — every
+  lecture the item **cites** is taught first. It cannot see a word borrowed from a lecture the item
+  does not cite, because nothing links the two. So an item can pass LAW-47, pass the bank validator,
+  pass the vocabulary gate, and still hand a learner an answer written in a word the run has not
+  said. The failure is silent in both directions: the learner cannot tell whether they misunderstood
+  the idea or just the word, and no gate reports anything.
+- **Law:** A scored item's correct answer may use a course term only if that term has been
+  introduced **earlier in the delivered run** — by a lesson's glossary or prose, a primer's revealed
+  rule, or an earlier caselet, stem or option. The item's own caselet counts, because it is on
+  screen. Its *citations* do not settle this and never did.
+- **Verify:** `node tools/measure-cold-learner.mjs --gate` over real delivered runs from
+  `tools/browser-checks/export-run.js` + `tools/export-learn-run.mjs`. Report per item, never as an
+  average. The unit is a glossary term or concept name — LAW-49's definition of course vocabulary —
+  and **not** every non-stopword: the first draft compared all content words and buried two real
+  findings under a few hundred reports of "sustainable" and "meaningful". Ordinary English is not
+  what a learner lacks on day one.
+
+### LAW-67 🔴 — A gate whose floor cannot be reached by its own sample size reports a pass over nothing
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-15, building T5 (`tools/measure-persona-regression.mjs`). The gate required 8
+  distinct diagnosis cues and skipped any run with fewer than 10 wrong decisions. A set-1 run offers
+  about nine scored decisions, so **every run was skipped and the gate printed a pass** — over data
+  it had never judged, while the content underneath it was at its worst (one cue answering 55–100%
+  of every wrong decision). Evidence: `evidence/2026-08-15/t6-rehaul-completion/verification.md`.
+- **Why:** This is the repository's signature failure — a clean report from a probe blind to the
+  defect class reads exactly like a clean screen (LAW-64) — reproduced *inside the tool written to
+  catch it*. A skip and a pass are different facts and a gate that prints the second when it means
+  the first is worse than no gate, because it retires the question.
+- **Law:** A gate's thresholds must be reachable at the sample size it will actually see, and a
+  skipped subject must never be reported as a passing one. Scale a floor to what the run asked
+  (`max(3, wrongDecisions / 3)`) rather than fixing it, and make the checks that hold at any n —
+  "was a cue offered at all" — **unconditional**. When a check genuinely cannot run, say `not-run`
+  and **fail the gate**, as T2 does for the handoff half it cannot answer without the app.
+- **Verify:** After writing any gate, run it against the smallest input it will meet in practice and
+  confirm the pass line names a non-zero number of things judged. If it cannot, the floor is wrong.
+
 ### LAW-65 🔴 — A blind file is blind by assertion, and the hole in a diagnosis array is an answer key
 
 - **Tier/Status:** REDLINE · ACTIVE
