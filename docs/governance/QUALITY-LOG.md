@@ -44,6 +44,120 @@ question correctness, readability, state truthfulness, accessibility, or real pl
 
 ## Issue → Cause → Fix
 
+- **I-THREE-HANDMADE-GRAPHS (2026-08-20)** — Issue: visual quality, responsiveness and
+  accessibility. The dashboard's three graphs only resembled charts: one was a hand-authored SVG
+  stretched with `preserveAspectRatio="none"`, one was a canvas painter, and one assembled its own
+  SVG paths in application code. The first pass changed the drawing but kept that root defect, and
+  the owner correctly rejected it: a shadcn-looking handmade SVG is still not a shadcn chart. Fix:
+  all three now run through one self-hosted shadcn/Recharts island — two `AreaChart`s and one
+  `RadarChart` — with responsive containers, grids, axes/tooltips where meaningful, accessible
+  layers, reduced motion and Lucide route marks. At 375px every graph stays inside the viewport and
+  the document does not scroll sideways; at both tested widths the console is clean and no canvas
+  or legacy graph path remains.
+
+- **I-IBM-ASSESSMENT-TAXONOMY (2026-08-20)** — Issue: learning and exam fidelity. IBM's 73
+  uncovered ideas could not honestly be widened by treating every syllabus noun as another MCQ,
+  because the paper is written and the real case is unreleased; treating everything as a written
+  framework would be equally false. Fix: the owner supplied the missing taxonomy and it is now
+  data, not convention — 20 new foundational layers generate subjective + MCQ practice, 29 named
+  frameworks/models generate subjective practice only, and 20 bounded concepts generate MCQ
+  practice only. Existing sixteen records remain mixed layers. The generator, scheduler, validator
+  and a bank-wide regression test all read the same `conceptKind`/`assessmentMode`. Generic
+  lesson-grounded caselets practise transfer but never claim to reproduce the examination case.
+  Result: IBM 17/90 → 90/90, 16 → 85 concepts, 220 → 936 questions, 40 → 167 constructed
+  responses, and zero isolated concepts.
+- **I-MASTERY-COUNT-LOOKED-LIKE-COVERAGE (2026-08-20)** — Issue: metric truthfulness. The subject
+  rail displayed `0/69 Strong`, while the coverage report said SPMS was 116/116; the owner
+  reasonably read 69, 29, 16 and 36 as conflicting coverage totals. Cause: the pill named the
+  evidence state but not its denominator — concept records — and IBM's open page still carried the
+  pre-expansion 16 until reload. Fix: the pill now says `0/69 concepts Strong`, its accessible name
+  already says the same, and Browser verification after rebuild shows SPMS 69, BRGSA 29, IBM 85,
+  SCLM 36 beside IBM's separate `85 concepts · 100% of the syllabus` line. Mastery counts and
+  phrase coverage are both truthful, but they must not rely on a learner inferring which population
+  each number describes.
+- **I-GENERATED-LINK-ENTERED-EXAM-CASE-PRIORITY (2026-08-20)** — Issue: exam fidelity. The first
+  written framework link used `writtenMode: "integrated"`, increasing IBM's integrated pool from
+  four authored whole scenarios to 37 generated two-idea prompts and breaking the assertion that
+  its ten-mark section leads with every whole scenario. Cause: “integrated” was used as a synonym
+  for “linked”, although it is a scheduling class with exam priority. Fix: generated framework
+  links are linked `case` responses with `supportingConceptIds`; `integrated` remains reserved for
+  authored whole scenarios. All four original scenarios again lead every seeded IBM paper, while
+  each written-only framework still has short, case and linked subjective practice.
+- **I-ADDIN-CONTRACT-HALF-TAUGHT (2026-08-19)** — Issue: learning integrity, truthful measurement.
+  The new add-in mechanism (a lecture folded into a neighbour's lesson, owner direction) was
+  implemented in `lesson()` and taught to `check_lesson_file.mjs`, and the first add-in written
+  against it failed the **bank validator** with two errors: no worked example, no handoff. Cause:
+  **two gates judge lesson shape independently** and only one had been told the contract, so a
+  correct add-in looked malformed to the other. Fix: `tools/validate_t6_bank.js` now recognises
+  `addInOf` and applies the lighter contract — no `worked`, no `connects`, minimum one glossary
+  term — while still enforcing everything that keeps the teaching checkable, including its LAW-49
+  vocabulary scoring. **The lesson worth keeping:** a schema change is not done when the schema
+  accepts it; it is done when every gate that judges that shape agrees. This one was found by
+  running the gate rather than by reasoning about it, which is the entire argument for the gate
+  order in the authoring protocol.
+- **I-ADDIN-PROBE-FALSE-NEGATIVE (2026-08-19)** — Issue: truthful measurement. The browser check
+  reported the add-in's "Also covered here" label as not rendering; it was present, visible and
+  correct. Cause: `.lesson-read-label` is styled `text-transform: uppercase` and `innerText`
+  returns *rendered* text, so a mixed-case string search could never match — the same family as
+  `LAW-73`, where the instrument rather than the code was wrong. Fix: settled by reading the DOM
+  and the computed style instead of trusting the string search, and the check is now
+  case-insensitive. Recorded because a probe that reports a defect that is not there costs exactly
+  what a probe that misses one does — this repository has now done both.
+- **I-M05-FALSE-HANDOFF (2026-08-19)** — Issue: learning integrity. `SPMS-M05-L06`'s `connects`
+  promised *"That closes the market-facing module. The next turns inward, to how requirements are
+  gathered and written"* while two lectures — Product Launch Part 2 and Customer Experience — still
+  followed it inside module 5, so a learner reading the module in order was told it had ended
+  two lessons early. Cause: the handoff was true when written, because L06 was then the last
+  *authored* lesson in the module; inserting anything after it falsifies the promise, which is the
+  most reliable defect this authoring work produces. Fix: caught **before writing** by the standing
+  step that checks the `connects` above every insertion point, and repaired as prescribed — the
+  promise was **moved** to `SPMS-M05-L08`, the module's real last lecture, rather than reworded, and
+  L06 now hands off to the launch plan that actually follows it. **Nineteen-plus handoff repairs
+  recorded; this is the first caught before the cost rather than after.**
+- **I-COMPOSITE-LESSONS-REWRITTEN (2026-08-19)** — Issue: learning integrity. **Closed the same
+  day it was raised.** Two lessons taught their neighbours' material instead of their own:
+  `SPMS-M05-L06` taught launch-as-process, UX-versus-CX and advantage while its own lecture
+  (*Product Launch Part 1*) is the assess → objectives → customers → positioning framework; and
+  `SPMS-M02-L07` taught MVPs, loops and pivots while its own lecture is *Metrics for Learning
+  Loop*. Cause: each was authored when it was the only lesson standing in for its whole area, so it
+  was written to cover the ground rather than the lecture. **Neither flagged, and structurally
+  could not** — `check-lesson-lecture-match` finds a lesson written from *another* lecture, never
+  one written from half its own. Both rewritten against their own transcripts, and the improvement
+  is measured rather than asserted: `M05-L06`'s own-lecture match went **0.263 → 0.530** with its
+  margin against the best rival moving **+0.052 → −0.262**, and `M02-L07` now reads own 0.447
+  against 0.153. **Two corrections came out of the fix.** (1) The stated reason for deferring —
+  that these were cited and scheduled — was **false**; both are uncited, so the rewrite touched
+  neither scored coverage nor LAW-47 nor the scheduler. (2) The coverage ratchet **did** fire, as
+  the real risk always was: `Competitive advantage` fell out of module 5 and was taught back in
+  `SPMS-M05-L08`, whose lecture actually makes the claim — no alias, no lowered floor.
+  **The generalisable finding:** a composite becomes rewritable only once its borrowed halves have
+  homes. These two were unfixable before the same session authored `M05-L07`, `M05-L08`, `M02-L05`
+  and `M02-L06`.
+- **I-UNRUN-GATE (2026-08-19)** — Issue: learning integrity, truthful measurement. The gate that
+  keeps the standing brief's fourth promise honest — `check-taught-not-tested`, the mirror of
+  LAW-47 — had a complete test file that had **never run**. `tests/taught-not-tested.test.mjs`
+  passed 5/5 when invoked by hand and was missing from `package.json`'s `test` script, so every
+  green `npm test` in the ledgers was green over a population that excluded it. Cause: `npm test`
+  enumerates its files as a JSON string rather than discovering them, and a path the runner never
+  sees is indistinguishable from a test that passed. The same list had drifted the other way on
+  2026-08-15 (two paths listed before the files existed; skipped at exit 0). Fix: wired it, added
+  `npm run check:tested`, and built `tests/test-runner-completeness.test.mjs` — set equality
+  between the directory and the runner list in both directions, over a floored population so an
+  empty glob cannot pass vacuously, demonstrated failing in both directions before being trusted.
+  `npm test` 120 → 128. Logged as LAW-77. **The measurement lesson worth keeping:** the passing
+  count is itself a check, and nobody had been reading it — the number moved by five when the file
+  was wired, which is exactly how much had been invisible.
+- **I-AUTHORING-DOCS-UNALIGNED (2026-08-19)** — Issue: learning integrity, governance. The
+  authoring system enforced *teach before test* and nothing bound an author in the direction the
+  fourth promise runs. `CONTENT-RULES.md` had ten rules, all about whether a question is fair, and
+  none about whether the course is covered; the lesson protocol's gate step named neither ratchet
+  that fires on lesson **edits**, though rewording had dropped syllabus terms four times in one
+  session. Cause: gates were built faster than the documents that route authors to them — the
+  tools existed, the instructions pointed elsewhere. Fix: **R11** ("what is taught must eventually
+  be tested") with its triage-before-authoring rule and the owner-decision boundary on widening
+  the concept spine; the protocol's Step 4 now names `check:syllabus` and `check:taught` with the
+  teach-it-back-never-alias rule; `DUNGEON_VISION_TO_BUILD.md` Phase 1 marked done rather than
+  proposed.
 - **I-THEME-HALF-SWITCHED (2026-08-15)** — Issue: visual coherence, accessibility. Pressing the
   theme toggle repainted most of the screen and left every button on the previous theme's fill —
   34 of the 35 visible elements carrying a background transition. On the login page the same fault
@@ -903,6 +1017,122 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   LAW-19, LAW-36, LAW-46. Evidence:
   `evidence/2026-08-12/t6-homepage-four-questions/verification.md`.
 
+- **I53 (2026-08-18)** — Issue: 33 new SCLM lessons were inside every automated gate and still
+  outside the house style, and the way that was settled matters more than the fix. `ui-audit`'s
+  `density` detector fired on ten paragraphs and all ten were mine — but the detector alone proves
+  nothing here, since 81 lessons shipped before today already exceed its 260-character threshold.
+  The test that decided it was the **existing distribution**: across 634 paragraphs shipped before
+  today the median is 454 characters, the 99th percentile 673, and exactly one exceeds 700. Nine of
+  my 99 paragraphs did, and eight of the file's top eleven were mine. Cause: the pre-commit check
+  measured `worked.because` characters and total explainer **words**, both of which passed
+  (235–298 words against a ~300 gate) — the imbalance was *within* each lesson, one long paragraph
+  and two short ones, which a total cannot see. Fix: trimmed in two passes to a maximum of 695, and
+  the density list is again a mix of new and pre-existing prose. Learning-integrity axis: a
+  readability threshold set by a detector is a guess, while the distribution of what already
+  shipped is a measurement — and where they disagree the distribution wins in both directions
+  (do not chase the threshold to zero either; below about 260 the field stops being reasoning).
+  This is the same defect as the IBM-M02 batch's over-long `worked.because` fields, one level down.
+  Evidence: `evidence/2026-08-18/t6-sclm-subject-complete/verification.md` §D3.
+
+- **I54 (2026-08-18)** — Issue: `SCLM-M02-L03`'s shipped lesson does not teach `SCLM-M02-L03`'s
+  lecture. The lesson is titled "Forecasting methods and error metrics" and teaches
+  qualitative-versus-quantitative method families, the multiplicative seasonal model, and
+  MAD/MSE/MAPE. Measured against the transcripts: `MAD` and `MAPE` occur in **L04**'s lecture
+  (*Demand Components and Forecast Accuracy*) and **not once** in L03's. L03 actually teaches the
+  four features common to all forecasts, the seven elements of a good forecast, and the six-step
+  forecasting process — which is taught nowhere in the file. Cause: the lesson file carries a
+  pre-existing L04-before-L03 inversion in this module, consistent with both lessons having been
+  written from L04's transcript in the order it was read. Consequence is bounded: both lectures are
+  uncited, so the lessons are read-only, no scored path is affected, and LAW-47 still passes — this
+  is content mapping, not gating. **Fixed on owner instruction** — see the resolution below. Learning-integrity axis:
+  a lesson labelled with a lecture id is a claim about which lecture it teaches, and nothing in the
+  gate suite tests that claim — the id is checked against the manifest, the glossary against the
+  transcripts, but never the body against its own lecture. Found only by reading the lecture while
+  checking a handoff. Evidence:
+  `evidence/2026-08-18/t6-sclm-subject-complete/verification.md` §R1.
+
+  **Fixed same day, and it was worse than reported.** Rewriting L03 meant reading L04, which showed
+  the drift ran further: **L04's opening paragraph taught L02's push/pull material**, and its other
+  two covered only the demand components — so the *forecast accuracy* half of a lecture titled
+  "Demand Components and Forecast Accuracy" was taught by no lesson at all. The whole module-2
+  opening sat one lecture off. Both lessons are now written against their own transcripts: L03
+  teaches the four features of every forecast, the seven elements of a good one and the six-step
+  process; L04 teaches the five demand patterns and the accuracy machinery — Et = At − Ft, mean
+  error as bias, MAD, MSE, MAPE — with the lecture's own eight-day dark-store example. A third gap
+  surfaced on the way: L05's lesson never stated the qualitative/quantitative split its lecture
+  opens on, and now does. The pre-existing L04-before-L03 file inversion was removed at the same
+  time, since both blocks were being replaced and that inversion is the most plausible cause — the
+  two lessons read as having been written from L04's transcript in the order it was read. **The
+  coverage gate caught the one thing the rewrite dropped**: `Systematic component` had lived only in
+  the old L04 glossary, SCLM fell to 99% against a 100% floor the moment it went, and the fix was to
+  teach the idea in prose where the lecture makes it rather than to alias it, per this repository's
+  own rule that a floor is a ratchet. Learning-integrity axis, restated: **no gate checks a lesson's
+  body against its own lecture** — the id is checked against the manifest and the glossary against
+  the transcripts, and both of those passed for years on a lesson teaching the wrong material. Only
+  reading the lecture finds it. Evidence:
+  `evidence/2026-08-18/t6-sclm-subject-complete/verification.md` §R1.
+
+- **I55 (2026-08-18)** — Issue: the defect class found in I54 had no gate, so it was found by
+  reading and could only ever be found by reading. Fix: `tools/check-lesson-lecture-match.mjs`
+  scores each lesson's distinctive vocabulary against its own lecture and against every other
+  lecture in the subject, and flags a lesson that some other lecture explains better. Learning-
+  integrity axis: **a lesson labelled with a lecture id is a claim, and until now nothing tested
+  it** — the id was checked against the manifest, the glossary against the transcripts, delivery
+  order by LAW-47, and coverage at subject level, and a lesson teaching the wrong lecture satisfies
+  all four. Three construction traps are recorded in `LAW-75` and are the reason the tool works at
+  all: consulting the course notes launders every miss into a pass because a revision sheet cannot
+  resolve to a lecture (the known-bad lesson scored 0.178 own support, and 0.871 once notes could
+  excuse it — above the median of the correctly-mapped file); raw coverage rewards lecture length,
+  so a 48,000-character guest session was named as the rival for six of sixteen first-run flags
+  until each lecture was corrected by its own background rate; and computing that background from
+  the two-lesson fixture let the fixture's own defect become its baseline. **The gate reported PASS
+  on its own regression case twice during construction**, and the fixture caught it both times —
+  which is the argument for keeping `tests/fixtures/mismapped-lessons.js` committed. What it found:
+  11 shipped lessons flagged, of which four are confirmed misfiled by reading the lecture titles,
+  and **SCLM module 1 is shifted by one** across at least L05 and L08, the same shape as the
+  module-2 defect. A structural finding underneath: `SPMS-M01-L01` is a 685-character "Key
+  Takeaways Module 1" card rather than a lecture, unique among 283 lectures in four subjects.
+  Scope stated in the tool: it finds lessons written from *another* lecture and cannot find one
+  written from half of its own, so a PASS means "nothing looks misfiled", never "everything is
+  covered". Evidence: `evidence/2026-08-18/t6-lesson-lecture-match-gate/verification.md`.
+
+- **I56 (2026-08-18)** — Issue: eleven of the twelve lessons I55's gate flagged were genuinely
+  teaching another lecture, and clearing them exposed three things a single-lesson fix would have
+  missed. Fix: nine rewritten against their own transcripts, two lectures authored that had no
+  lesson at all (`SPMS-M01-L09`, `SPMS-M07-L05`), and one left by owner decision.
+  **Learning-integrity axis, three findings.** (1) *The displaced content has to go somewhere, and
+  where is not a matter of taste* — every rewrite was preceded by finding the lecture that actually
+  introduces the vocabulary, through a first-appearance check mirroring the bank validator's own
+  `firstUse()`. Blue ocean belongs to `SPMS-M05-L02` (11 uses, one lecture); the pricing-pyramid
+  levels to `SPMS-M04-L02`; `decision phases` to the lecture literally titled that. Nine terms fell
+  out during rewriting and every one was taught back at its own lecture — **no alias was added and
+  no floor lowered**, which is the rule that keeps the coverage floor meaning something.
+  (2) *Four of those coverage misses were phrase-match failures caused by rewording, not by dropped
+  teaching.* `measure-syllabus-coverage` requires a named idea to appear as its name, contiguously,
+  so writing "Product against project" where the syllabus says "Product vs project" reads as
+  untaught although the distinction is taught in full. The tool is right to be strict — its own
+  header records RICE matching "price" — so the fix is to use the course's own form, which the
+  lectures and revision sheets use anyway. **A coverage regression is as often a naming drift as a
+  teaching hole, and the two are indistinguishable from the gate output alone.**
+  (3) *The gate's stated blind spot was occupied.* `SPMS-M01-L07` teaches its own lecture (C06
+  Discovery) **and** pre-teaches C07's validation phase, which is exactly the half-its-own case
+  I55 recorded the tool cannot see; it never flagged. Found by reading the lectures, which remains
+  the only thing that finds this class. Its paragraph now hands off instead of pre-teaching.
+  **Truthful-interaction axis:** seven `connects` promises were false — all falsified by the
+  misfiling rather than the rewrite — bringing the recorded total to nineteen and confirming the
+  handoff as the most reliable defect in this work. Five were found only by re-reading the whole
+  module chain rather than the lesson above each edit, and one was self-inflicted: a
+  prefix-anchored string replacement left the old tail behind, so a lesson carried a duplicated
+  sentence until the chain was read back.
+  **Two standing vocabulary warnings cleared:** `value equation` and `startup stages` were glossary
+  headings on `SPMS-M01-L08` and occur in neither the transcripts nor the notes. Both concepts
+  survive in prose; neither is a heading now.
+  **What stayed open:** `SPMS-M01-L01`'s id names a 685-character takeaways card. The source is not
+  missing a lecture — the module file and the mega transcript independently hold exactly ten module
+  1 sections — and its content is real, from the module 1 detailed notes. The owner chose to leave
+  it, so the gate's one remaining flag is expected rather than outstanding. Evidence:
+  `evidence/2026-08-18/t6-misfiled-lessons-cleared/verification.md`.
+
 - **I-TWO-PRODUCTS (2026-08-13)** — Issue: the examiner had become a second product with no way to
   move between the two sides except a button on one dashboard, which made it read as a mode of the
   learning system rather than a place of its own. Cause: it grew out of the learning system, so
@@ -1027,6 +1257,70 @@ question correctness, readability, state truthfulness, accessibility, or real pl
   sequentially after the clock stops. **Transport:** explicit UTF-8 plus a browser script gate closes
   post-model mojibake. Evidence:
   `evidence/2026-08-13/t6-written-transfer-and-examiner-forensics/verification.md`.
+
+- **I-TEACHING-PLAN-CONTRADICTED-THE-LEDGER (2026-08-18)** — Issue: `docs/briefs/
+  TEACHING_LAYER_AUTHORING_PLAN.md` §0 stated "there is no browse or library view" and that lessons
+  for uncited lectures are "never shown to a learner", and made that the framing of the whole 130-
+  lecture backlog. **It contradicted I50, logged five days earlier**, which shipped exactly such a
+  view — the `Read the lessons` dashboard tab, rendering every authored lesson in full and labelling
+  the uncited ones *Read-only*. `tools/check_lesson_file.mjs` carried the same claim in its header
+  comment and its warning string ("so they are never delivered"), written for I49 on 2026-08-12 and
+  falsified by I50 the same day; nobody updated it, so it told every author since that this work was
+  dead. Cause: a brief written to be self-contained became a second source of truth and drifted from
+  the ledger inside a week, then propagated into a session's working assumptions. Found only because
+  protocol Step 5.3 asks the author to read a new lesson as a learner would — an instruction the
+  plan's own premise said could not be carried out. Re-measured in the running app: the disclosure
+  renders 106,661 characters over 39 IBM lessons, all 7 new titles present, coverage line reading
+  "16 taught in practice · 23 readable here only". Fix: corrected the plan §0/§6, the protocol §0 and
+  subject table, and the tool's comment and warning — which now says "never scheduled into a run
+  (they remain readable in the lesson index)". **Truthful-reporting axis:** the repository was
+  telling authors their work was invisible while shipping it to a reader. The owner's 2026-08-17
+  decision to author these anyway was taken on worse information than the repository already held;
+  it stands a fortiori, but should be revisited knowing the work is read. Evidence:
+  `evidence/2026-08-18/t6-teaching-layer-ibm-m02/verification.md`.
+
+- **I-LESSON-PROSE-DRIFTED-FROM-HOUSE-STYLE (2026-08-18)** — Issue: all seven newly authored
+  IBM-M02 `worked.because` fields were longer than **every one** of the 157 lessons already shipped
+  — existing range 62–521 characters, median 274; the new ones 618–763, occupying the top seven
+  slots in the file. The protocol's standard is prose "indistinguishable from the ones already
+  shipped", so this is a real drift introduced by the author, invisible to every content gate
+  (`check_lesson_file.mjs` only warns outside 120–320 **words** for `explainer`, and says nothing
+  about `worked`). Found by `ui-audit`'s `density` detector firing on four paragraphs, all of them
+  mine. Cause: writing to the field's description ("this is the longest field") without measuring
+  what the existing lessons actually do. Fix: all seven rewritten to 460–508, keeping each argument
+  and dropping restatements; the longest `because` in the file is again a pre-existing lesson.
+  **The detector alone did not settle it** — 81 of the 157 existing lessons already exceed its
+  260-character threshold, so the test applied was the existing distribution, not the generic floor,
+  and the threshold was deliberately not chased to zero because under 260 the field stops being
+  reasoning and becomes a restatement. The plan now records the distribution and the method.
+  Evidence: `evidence/2026-08-18/t6-teaching-layer-ibm-m02/verification.md`.
+
+- **I-SUBJECT-RAIL-HID-HALF-ITS-SUBJECTS (2026-08-18)** — Issue: on a phone the subject switcher
+  was a horizontal swipe rail showing **355px of 768px, 54% hidden**, which meant SPMS visible,
+  BRGSA cut at the edge and **IBM and SCLM entirely off-screen** — two of four subjects invisible on
+  the control that exists to choose between four subjects. Cause: a rail was chosen for a list that
+  is four, fixed and known at build time, on the reasoning that the scrollbar could be hidden
+  because an edge fade carries the affordance. Fix: fall back to the two-column grid the `<=900px`
+  rule already defines, so the phone layout is 2×2 — **54% → 0% hidden**, all four visible at 320
+  and 375, desktop unchanged. **Accessibility/visual axis:** the cost is **+106px** on a ~6,700px
+  phone dashboard and is stated in the CSS comment rather than hidden; card heights are identical at
+  320, so the earlier defect where SPMS laid out differently because it alone carries a
+  negative-marking flag has not returned. Found by `ui-audit`'s `hiddenScroll`, reported in an
+  earlier session and deliberately left as out-of-scope until the owner asked for it. Evidence:
+  `evidence/2026-08-18/t6-subject-rail-screenshots-ibm-m04-m06/verification.md`.
+
+- **I-SCREENSHOT-METHOD-KEPT-BEING-REDISCOVERED (2026-08-18)** — Issue: sessions repeatedly
+  concluded screenshots were impossible here, filed "no screenshots — the pane was not compositing"
+  as a standing gap, and re-derived the workaround from scratch. Cause: **not capability but
+  discoverability.** `tools/screenshot.mjs` has worked since 2026-08-15, and the knowledge sat in a
+  Key Files row, a *closed* Known Gaps checkbox and the tool's own header — none of which is where a
+  session looks at the moment it wants a picture. Raised by the owner, who noticed the rediscovery
+  happening again. Fix: `docs/governance/SCREENSHOTS.md`, one page carrying the command, why the
+  pane cannot work, the frozen-timeline probe, and what a picture still cannot tell you — pointed at
+  from `AGENTS.md`'s required-reading order and Key Files table, `UI-CHECKLIST.md`, the authoring
+  protocol's browser step, and `CLAUDE.md`. **Truthful-reporting axis:** the repeated "pixel
+  acceptance owed" line had become inaccurate — the capability existed and was not being used. 16
+  shots, 16 ok, and read rather than counted. Law: LAW-73.
 
 ## Watch Items
 

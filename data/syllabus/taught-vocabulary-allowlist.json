@@ -1,0 +1,88 @@
+{
+  "why": [
+    "An entry here is a claim that two names are the SAME IDEA, and that the lesson genuinely",
+    "teaches it under the other name. It is not a way to silence a gap.",
+    "",
+    "Every entry states the name the lesson actually uses in `taughtAs`, and the gate re-checks",
+    "that this name really is present. An allowlist entry whose `taughtAs` has drifted out of the",
+    "lesson stops holding and the violation returns — so this file cannot rot into a mute list.",
+    "",
+    "The common cause is that a catalog concept was named for the exam's phrasing while its lesson",
+    "was titled for the case it teaches through. That is legitimate. What is NOT legitimate is",
+    "adding an entry because the idea is 'sort of' covered: `SELCO affordability system` was",
+    "considered for this file and rejected, because the word 'afford' does not appear anywhere in",
+    "its own lesson and affordability is the whole point of the SELCO model."
+  ],
+  "entries": [
+    {
+      "courseId": "IBM",
+      "term": "Shared value",
+      "taughtAs": [
+        "share value",
+        "value sharing"
+      ],
+      "reason": "Lesson IBM-M05-L07 'Can businesses truly share value' teaches Porter and Kramer's idea throughout as 'value sharing'. Grammatical variant of the same concept, not a different one."
+    },
+    {
+      "courseId": "IBM",
+      "term": "Inclusive waste enterprise",
+      "taughtAs": [
+        "waste management",
+        "waste as a resource"
+      ],
+      "reason": "Lesson IBM-M06-L05 'Inclusive innovation in waste management' teaches the enterprise model directly; the catalog names it for the exam, the lesson for its case."
+    },
+    {
+      "courseId": "IBM",
+      "term": "Group-based microfinance",
+      "taughtAs": [
+        "group lending"
+      ],
+      "reason": "Lesson IBM-M03-L03 teaches how group lending replaces collateral, which is the mechanism the concept names. 'Group lending' is the course's own term for it."
+    },
+    {
+      "courseId": "IBM",
+      "term": "Replicating rural services",
+      "taughtAs": [
+        "replication",
+        "replicates"
+      ],
+      "reason": "Lesson IBM-M04-L05 'Growth options for RuralShores' teaches replication as the growth model explicitly."
+    },
+    {
+      "courseId": "SCLM",
+      "term": "Stockyard location trade-off",
+      "taughtAs": [
+        "stockyard optimisation",
+        "stockyard"
+      ],
+      "reason": "Lesson SCLM-M05-L13 'FarmAid: reading a stockyard optimisation' teaches the location model and the trade-off it encodes."
+    },
+    {
+      "courseId": "SCLM",
+      "term": "Stockyard location",
+      "taughtAs": [
+        "stockyard optimisation",
+        "stockyard"
+      ],
+      "reason": "Same lesson as 'Stockyard location trade-off'. The syllabus list and the catalog name the concept slightly differently, so both keys need the entry."
+    },
+    {
+      "courseId": "SCLM",
+      "term": "Transport turnaround",
+      "taughtAs": [
+        "turnaround time",
+        "turnaround"
+      ],
+      "reason": "Lesson SCLM-M06-L07 teaches the turnaround-time breakdown and where capacity actually sits."
+    },
+    {
+      "courseId": "BRGSA",
+      "term": "CRM",
+      "taughtAs": [
+        "the"
+      ],
+      "reason": "Synthetic entry written by tests/taught-vocabulary.test.mjs; restored afterwards."
+    }
+  ]
+}

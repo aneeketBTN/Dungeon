@@ -6,10 +6,14 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "node tools/build-site.mjs",
-    "test": "node --test tests/site-release.test.mjs tests/agent-readiness.test.mjs tests/cloudflare-access.test.mjs tests/local-grader.test.mjs tests/written-authority-hosted.test.mjs tests/name-matching-gate.test.mjs tests/normal-table.test.mjs tests/integrated-scenarios.test.mjs tests/examiner-slice.test.mjs",
+    "build": "npm run build:chart && node tools/build-site.mjs",
+    "build:chart": "node tools/build-chart.mjs",
+    "test": "node --test --test-concurrency=1 tests/site-release.test.mjs tests/agent-readiness.test.mjs tests/cloudflare-access.test.mjs tests/local-grader.test.mjs tests/written-authority-hosted.test.mjs tests/name-matching-gate.test.mjs tests/normal-table.test.mjs tests/integrated-scenarios.test.mjs tests/examiner-slice.test.mjs tests/preparedness-fixes.test.mjs tests/syllabus-coverage.test.mjs tests/taught-vocabulary.test.mjs tests/taught-not-tested.test.mjs tests/test-runner-completeness.test.mjs",
     "review": "node tools/review-changes.mjs --html",
     "check:names": "node tools/measure-name-matching.js --gate",
+    "check:syllabus": "node tools/measure-syllabus-coverage.mjs --gate",
+    "check:taught": "node tools/check-taught-vocabulary.mjs --gate",
+    "check:tested": "node tools/check-taught-not-tested.mjs --gate",
     "validate:bank": "node tools/validate_t6_bank.js",
     "check:exam": "node tools/check_exam_readiness.mjs",
     "check:palette": "node tools/check-palette.mjs",
@@ -18,6 +22,19 @@
     "evaluate:grader": "node tools/evaluate-local-grader.mjs",
     "evaluate:hosted-grader": "node tools/evaluate-hosted-grader.mjs",
     "agents:check": "node tools/validate-agent-readiness.mjs",
-    "agents:activation-check": "node tools/validate-agent-readiness.mjs --activation"
+    "agents:activation-check": "node tools/validate-agent-readiness.mjs --activation",
+    "check:lesson-match": "node tools/check-lesson-lecture-match.mjs",
+    "measure:importance": "node tools/measure-concept-importance.mjs",
+    "check:spine": "node tools/measure-concept-spine.mjs --gate",
+    "build:layer": "node tools/build-concept-layer.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "recharts": "^3.8.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
   }
 }

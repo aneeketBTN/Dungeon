@@ -83,14 +83,40 @@ function examPrefer(questions, prefer) {
     .map((entry) => entry.question);
 }
 
+function takeExamSection(pool, count, modeCounts) {
+  if (!modeCounts) return pool.slice(0, count);
+  const taken = [];
+  const used = new Set();
+  for (const [mode, wanted] of Object.entries(modeCounts)) {
+    let remaining = wanted;
+    for (const question of pool) {
+      if (remaining <= 0 || taken.length >= count || used.has(question.id)) continue;
+      if (question.writtenMode !== mode) continue;
+      taken.push(question);
+      used.add(question.id);
+      remaining -= 1;
+    }
+  }
+  for (const question of pool) {
+    if (taken.length >= count || used.has(question.id)) continue;
+    taken.push(question);
+    used.add(question.id);
+  }
+  return taken;
+}
+
 const PREFER = ["integrated", "case", "short"];
 const SET_COUNT = 3;
 
-function sectionDraw(course, courseId, sectionId, type, count, prefer) {
+function sectionDraw(course, courseId, sectionId, type, count, prefer, modeCounts) {
   const pool = Object.keys(course.questions).map((id) => course.questions[id])
     .filter((question) => (question.type || "mcq") === type);
   return Array.from({ length: SET_COUNT }, (_, set) =>
-    examPrefer(examShuffle(pool, examSeed(courseId, set) + sectionId.charCodeAt(0)), prefer).slice(0, count));
+    takeExamSection(
+      examPrefer(examShuffle(pool, examSeed(courseId, set) + sectionId.charCodeAt(0)), prefer),
+      count,
+      modeCounts
+    ));
 }
 
 test("every authored integrated scenario resolves into the bank it was written for", () => {
@@ -148,16 +174,67 @@ test("the three seeded BRGSA Section C draws are genuinely different papers", ()
     `three sets must be three draws, got ${JSON.stringify(draws)}`);
 });
 
-test("IBM's ten-mark section leads with every integrated scenario it has", () => {
+test("IBM keeps full-case depth while rotating the expanded written bank", () => {
   const win = loadBank();
-  const draws = sectionDraw(win.T6_COURSES.IBM, "IBM", "A", "short-answer", 10, PREFER);
-  const available = Object.values(win.T6_COURSES.IBM.questions)
-    .filter((question) => question.writtenMode === "integrated").length;
+  const course = win.T6_COURSES.IBM;
+  const draws = sectionDraw(course, "IBM", "A", "short-answer", 10, PREFER,
+    { integrated: 4, case: 6 });
+  const rotated = new Set();
+  const concepts = new Set();
   draws.forEach((taken, set) => {
     const integrated = taken.filter((question) => question.writtenMode === "integrated").length;
-    assert.equal(integrated, available,
-      `IBM set ${set + 1} drew ${integrated} of ${available} integrated scenarios`);
+    const cases = taken.filter((question) => question.writtenMode === "case").length;
+    assert.equal(integrated, 4, `IBM set ${set + 1} must carry four whole cases`);
+    assert.equal(cases, 6, `IBM set ${set + 1} must rotate six focused case responses`);
+    assert.ok(taken.filter((question) => question.writtenMode === "integrated")
+      .every((question) => question.examOnly),
+    `IBM set ${set + 1} must spend its integrated slice on examiner-only cases first`);
+    taken.filter((question) => question.writtenMode === "case")
+      .forEach((question) => rotated.add(question.id));
+    taken.forEach((question) => {
+      concepts.add(question.conceptId);
+      Array.from(question.supportingConceptIds || []).forEach((id) => concepts.add(id));
+    });
   });
+  assert.equal(rotated.size, 18,
+    "the six expanded-bank slots must be different on all three IBM mocks");
+  assert.ok(concepts.size >= 30,
+    `three IBM mocks must now reach at least 30 concepts, got ${concepts.size}`);
+});
+
+test("IBM assessment surfaces follow the authored idea taxonomy", () => {
+  const win = loadBank();
+  const course = win.T6_COURSES.IBM;
+  const expectedMode = { layer: "mixed", framework: "written", concept: "objective" };
+  assert.equal(course.concepts.length, 85,
+    "the original 16 IBM layer records plus 69 newly classified records must remain present");
+
+  for (const concept of course.concepts) {
+    assert.equal(concept.assessmentMode, expectedMode[concept.conceptKind],
+      `${concept.id} maps ${concept.conceptKind} to the wrong assessment mode`);
+    const active = Object.values(course.questions).filter((question) => {
+      const carries = question.conceptId === concept.id || Array.from(question.supportingConceptIds || []).includes(concept.id);
+      return carries && !question.primerOnly && !question.optionShapeRisk && !question.examOnly;
+    });
+    const written = active.filter((question) => question.type === "short-answer");
+    const objective = active.filter((question) => question.type !== "short-answer");
+
+    if (concept.conceptKind === "layer") {
+      assert.ok(written.length, `${concept.id} is a layer concept without written practice`);
+      assert.ok(objective.length, `${concept.id} is a layer concept without MCQ/objective practice`);
+    } else if (concept.conceptKind === "framework") {
+      assert.equal(objective.length, 0, `${concept.id} is a framework leaking into MCQ/objective practice`);
+      const modes = new Set(written.map((question) => question.writtenMode));
+      for (const mode of ["short", "case"]) {
+        assert.ok(modes.has(mode), `${concept.id} framework is missing ${mode} written practice`);
+      }
+      assert.ok(written.some((question) => Array.from(question.supportingConceptIds || []).length),
+        `${concept.id} framework has no linked written practice`);
+    } else {
+      assert.equal(written.length, 0, `${concept.id} is an atomic concept leaking into written practice`);
+      assert.ok(objective.some((question) => question.boss), `${concept.id} has no linked boss coverage`);
+    }
+  }
 });
 
 test("Learn can reach an integrated scenario at all", () => {
@@ -181,8 +258,11 @@ test("the persona harness's paper builder still matches the app's", () => {
   const harness = fs.readFileSync(path.join(root, "tools", "export-persona-run.mjs"), "utf8");
   for (const [label, source] of [["app/t6.js", app], ["export-persona-run.mjs", harness]]) {
     assert.match(source, /function examPrefer\(/, `${label} must define examPrefer`);
+    assert.match(source, /function takeExamSection\(/, `${label} must define the authored format-mix selector`);
     assert.match(source, /examOnly \? 0 : 1/, `${label} must rank reserved items ahead of shared ones`);
     assert.match(source, /prefer: \["integrated", "case", "short"\]/,
       `${label} must declare the preference on its ten-mark sections`);
+    assert.match(source, /modeCounts:\s*\{\s*integrated:\s*4,\s*case:\s*6\s*\}/,
+      `${label} must keep four whole IBM cases while rotating six expanded-bank case responses`);
   }
 });

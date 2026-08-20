@@ -193,9 +193,17 @@ function scoreSet(subject, setNumber) {
   };
 }
 
+function availableSets(subject) {
+  const pattern = new RegExp(`^${subject}-set(\\d+)\\.json$`);
+  return fs.readdirSync(dir).map((name) => {
+    const match = pattern.exec(name);
+    return match ? Number(match[1]) : null;
+  }).filter((value) => value != null).sort((a, b) => a - b);
+}
+
 const report = {};
 for (const subject of ["SPMS", "BRGSA", "SCLM", "IBM"]) {
-  const sets = [1, 2, 3].map((n) => scoreSet(subject, n)).filter(Boolean);
+  const sets = availableSets(subject).map((n) => scoreSet(subject, n)).filter(Boolean);
   if (!sets.length) continue;
   const scored = sets.filter((s) => s.percentOfMcqMarks);
   const mean = {};
@@ -239,5 +247,5 @@ if (process.argv.includes("--gate")) {
     for (const line of over) console.error(`  × ${line}`);
     process.exit(1);
   }
-  console.error("\nT3 passed: every mechanical rule at or under its limit, mean of sets 1-3.");
+  console.error("\nT3 passed: every mechanical rule at or under its limit, mean of each subject's complete coverage cycle.");
 }

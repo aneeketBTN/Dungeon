@@ -947,6 +947,7 @@ test("health and release routes stay under the Dungeon prefix", async () => {
   const worker = workerWithGroup();
   const health = await worker.fetch(request("/dungeon/health"), baseEnv);
   assert.equal(health.status, 200);
+  assert.match(health.headers.get("content-security-policy"), /style-src-attr 'unsafe-inline'/);
   assert.equal((await health.json()).access, "dashboard-allowlist");
   const outside = await worker.fetch(request("/health"), baseEnv);
   assert.equal(outside.status, 404);

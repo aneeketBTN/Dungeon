@@ -1,0 +1,216 @@
+{
+  "courseId": "SCLM",
+  "title": "Supply Chain and Logistics Management",
+  "source": "course revision sheets, modules 1-8; CLA quiz modules 1-8",
+  "modules": {
+    "1": [
+      "Supply chain",
+      "Product flow",
+      "Information flow",
+      "Funds flow",
+      "Supply chain surplus",
+      "Single source of revenue",
+      "Strategic fit",
+      "Implied demand uncertainty",
+      "Cost-responsiveness frontier",
+      "Efficient supply chain",
+      "Responsive supply chain",
+      "Decision phases",
+      "Supply chain design",
+      "Supply chain planning",
+      "Supply chain operations",
+      "Cycle view",
+      "Replenishment cycle",
+      {
+        "term": "Push and pull",
+        "aliases": [
+          "push process",
+          "pull process"
+        ]
+      },
+      {
+        "term": "Logistical drivers",
+        "aliases": [
+          "facilities",
+          "transportation"
+        ]
+      },
+      {
+        "term": "Cross-functional drivers",
+        "aliases": [
+          "sourcing",
+          "pricing"
+        ]
+      },
+      {
+        "term": "Return on assets",
+        "aliases": [
+          "ROA"
+        ]
+      },
+      {
+        "term": "Return on equity",
+        "aliases": [
+          "ROE"
+        ]
+      },
+      "Asset turnover",
+      {
+        "term": "Cash-to-cash cycle",
+        "aliases": [
+          "C2C"
+        ]
+      },
+      {
+        "term": "Days inventory outstanding",
+        "aliases": [
+          "DIO"
+        ]
+      },
+      {
+        "term": "Days sales outstanding",
+        "aliases": [
+          "DSO"
+        ]
+      },
+      {
+        "term": "Days payable outstanding",
+        "aliases": [
+          "DPO"
+        ]
+      },
+      "Little's Law"
+    ],
+    "2": [
+      "Forecasting",
+      "Collaborative forecasting",
+      "Systematic component",
+      "Random variation",
+      {"term": "Qualitative forecasting", "aliases": ["qualitative methods"]},
+      "Quantitative forecasting",
+      "Time series",
+      "Trend",
+      "Seasonality",
+      "cyclical",
+      "Multiplicative model",
+      "Exponential smoothing",
+      "Forecast error",
+      {
+        "term": "Mean absolute deviation",
+        "aliases": [
+          "MAD"
+        ]
+      },
+      {
+        "term": "Mean absolute percentage error",
+        "aliases": [
+          "MAPE"
+        ]
+      },
+      "Bias",
+      {
+        "term": "Sales and operations planning",
+        "aliases": [
+          "S&OP"
+        ]
+      },
+      "Aggregate planning"
+    ],
+    "3": [
+      "Inventory functions",
+      "Cycle inventory",
+      "Safety stock",
+      "Reorder point",
+      "ABC classification",
+      "Inventory turnover",
+      "Days of inventory",
+      {
+        "term": "Economic order quantity",
+        "aliases": [
+          "EOQ"
+        ]
+      },
+      "Newsvendor",
+      "Service level"
+    ],
+    "4": [
+      {
+        "term": "Total cost of ownership",
+        "aliases": [
+          "TCO"
+        ]
+      },
+      "Sourcing portfolio",
+      "Aggregation",
+      "Risk-sharing contracts",
+      "Bullwhip effect",
+      "Coordination"
+    ],
+    "5": [
+      "Logistics",
+      "Supply chain re-engineering",
+      "Shipper decision horizons",
+      "Network design",
+      {
+        "term": "Stockyard location",
+        "aliases": [
+          "stockyard optimisation",
+          "stockyard"
+        ]
+      },
+      "Macro ecosystem actors"
+    ],
+    "6": [
+      "Cold storage",
+      {
+        "term": "Own your wagon",
+        "aliases": [
+          "OYW"
+        ]
+      },
+      {
+        "term": "Engine on load",
+        "aliases": [
+          "EOL"
+        ]
+      },
+      "Systemic bottlenecks",
+      "wagon turnaround time"
+    ],
+    "7": [
+      "Multimodal transport",
+      "Landlord port model",
+      {
+        "term": "Public private partnership",
+        "aliases": [
+          "PPP"
+        ]
+      },
+      "PM Gati Shakti",
+      {
+        "term": "Unified Logistics Interface Platform",
+        "aliases": [
+          "ULIP"
+        ]
+      },
+      {
+        "term": "Dedicated freight corridors",
+        "aliases": [
+          "DFC"
+        ]
+      }
+    ],
+    "8": [
+      {
+        "term": "LEADS index",
+        "aliases": [
+          "LEADS"
+        ]
+      },
+      "Postponement",
+      "Kitting",
+      "Cross-docking",
+      "Throughput"
+    ]
+  }
+}

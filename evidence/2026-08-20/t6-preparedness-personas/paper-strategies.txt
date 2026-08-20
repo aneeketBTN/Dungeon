@@ -1,0 +1,21 @@
+{
+  "measuredSets": {
+    "SPMS": [1, 2, 3],
+    "BRGSA": [1, 2, 3, 4],
+    "SCLM": [1, 2, 3],
+    "IBM": [1, 2, 3, 4, 5, 6, 7]
+  },
+  "meanPercentOfMcqMarks": {
+    "SPMS": { "longest": 25.2, "secondLongest": 28.1, "fixedB": 24.8, "onTopic": 19.8, "noAbsolutes": 28.3, "ethical": 25.4, "combined": 24.9, "combinedWithLength": 14.8, "chance": 25 },
+    "BRGSA": { "longest": 25.1, "secondLongest": 19.1, "fixedB": 26.3, "onTopic": 25, "noAbsolutes": 24.4, "ethical": 25.8, "combined": 25, "combinedWithLength": 24.7, "chance": 25 },
+    "SCLM": { "longest": 25, "secondLongest": 15.8, "fixedB": 29.3, "onTopic": 19.5, "noAbsolutes": 27.7, "ethical": 25.2, "combined": 23.4, "combinedWithLength": 16.8, "chance": 25 },
+    "IBM": null
+  },
+  "limits": { "longest": 30, "secondLongest": 30, "onTopic": 32, "noAbsolutes": 30, "ethical": 35, "combined": 32, "combinedWithLength": 32 },
+  "gate": "PASS",
+  "notes": [
+    "The mean now includes every set in each subject's complete coverage cycle.",
+    "IBM has no objective section, so option-craft metrics do not apply.",
+    "fixedB is reported but deliberately not gated because answer slots are flat across the full bank and a seeded paper is a sample."
+  ]
+}

@@ -26,7 +26,10 @@ const CONTENT_SECURITY_POLICY = [
   "img-src 'self' data:",
   "object-src 'none'",
   "script-src 'self'",
-  "style-src 'self'"
+  "style-src 'self'",
+  // Recharts' ResponsiveContainer owns its measured dimensions with inline style
+  // attributes. Scripts and stylesheets remain self-hosted.
+  "style-src-attr 'unsafe-inline'"
 ].join("; ");
 
 export class RequestError extends Error {
@@ -1167,6 +1170,7 @@ function learnerAssetPath(pathname, prefix) {
     [`${prefix}/`, "/app/t6.html"],
     [`${prefix}/t6.html`, "/app/t6.html"],
     [`${prefix}/t6.css`, "/app/t6.css"],
+    [`${prefix}/t6-chart.js`, "/app/t6-chart.js"],
     [`${prefix}/t6.js`, "/app/t6.js"],
     [`${prefix}/release-manifest.json`, "/release-manifest.json"],
     [`${prefix}/robots.txt`, "/app/robots.txt"]

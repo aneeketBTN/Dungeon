@@ -13,6 +13,10 @@ const SECURITY_HEADERS = {
     "object-src 'none'",
     "script-src 'self'",
     "style-src 'self'",
+    /* Recharts sizes its responsive wrappers with style attributes. Scripts and
+       stylesheets remain self-hosted; only those element-level dimensions are
+       permitted inline. */
+    "style-src-attr 'unsafe-inline'",
     "upgrade-insecure-requests"
   ].join("; "),
   "Cross-Origin-Opener-Policy": "same-origin",

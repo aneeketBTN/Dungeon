@@ -1,0 +1,152 @@
+{
+  "courseId": "IBM",
+  "title": "Inclusive Business Models",
+  "source": "course revision sheets, modules 1-8",
+  "modules": {
+    "1": [
+      "Inclusive business",
+      "Disparity gap",
+      "Demographic bottleneck",
+      "Grameen Bank",
+      "Rejection of aid",
+      {
+        "term": "Bottom of the pyramid",
+        "aliases": [
+          "BOP",
+          "base of the pyramid"
+        ]
+      },
+      "Single-serve revolution",
+      "Cross-subsidisation",
+      "Illusion of profit",
+      "Budget diversion",
+      "Diageo value chain",
+      "Zone of conflict",
+      "Profit versus social good"
+    ],
+    "2": [
+      "Inverted pyramid",
+      "Market failure",
+      "total cost of healthcare",
+      "Poverty dynamics",
+      "Decentralised model",
+      "Asset-light model",
+      "Standardisation",
+      "assembly line",
+      "Volume output",
+      "Aravind Eye Hospital",
+      "Aurolab",
+      "Vaatsalya",
+      "Pay-per-use equipment",
+      "Telemedicine",
+      "Micro-insurance",
+      "Low-cost private schools",
+      "Demand-side perception"
+    ],
+    "3": [
+      "Formal banking failure",
+      "Poverty penalty",
+      "Group-based microfinance",
+      {
+        "term": "Self-help group bank linkage",
+        "aliases": [
+          "SHG-bank linkage",
+          "SHG"
+        ]
+      },
+      "Mission dilution",
+      "Andhra Pradesh crisis",
+      "Regulatory overhaul",
+      "Responsible lending",
+      "Smallholder bottlenecks",
+      "Family farm advantage",
+      "Open-source innovation",
+      "Social mobilisation"
+    ],
+    "4": [
+      "Rural BPO",
+      "Reverse migration",
+      "Socio-cultural barriers",
+      "CSR trap",
+      "Decentralised footprint",
+      "Co-opetition",
+      "Multilingual IT Routing",
+      "Impact sourcing",
+      "Policy ripple effect",
+      "Scaling ceiling",
+      "Career aspiration bottleneck",
+      "Automation threat",
+      {
+        "term": "Replicating rural services",
+        "aliases": [
+          "replication",
+          "replicates"
+        ]
+      }
+    ],
+    "5": [
+      {
+        "term": "Shared value",
+        "aliases": [
+          "share value",
+          "value sharing"
+        ]
+      },
+      "Income disparity",
+      "Backward integration",
+      "Perishability bottleneck",
+      "Energy poverty",
+      "Empathy-driven credit",
+      "BOP scale paradox",
+      "SELCO",
+      "Customisation",
+      "affordability"
+    ],
+    "6": [
+      "LabourNet",
+      "Informal sector",
+      "Urban-centric paradox",
+      "Retention and pricing failure",
+      "Workforce solutions pivot",
+      "Source segregation",
+      {
+        "term": "Waste picker franchisee",
+        "aliases": [
+          "WPF"
+        ]
+      },
+      "Plastic volatility",
+      "Floral upcycling",
+      "Inclusive waste enterprise"
+    ],
+    "7": [
+      {
+        "term": "Farmer producer organisation",
+        "aliases": [
+          "FPO"
+        ]
+      },
+      "Social business",
+      "aggregation",
+      "Market linkage",
+      "governance",
+      "Social plastics",
+      "Credit access"
+    ],
+    "8": [
+      "Impact investing",
+      "Impact measurement",
+      {
+        "term": "GIIN criteria",
+        "aliases": [
+          "GIIN"
+        ]
+      },
+      "Ted London framework",
+      "Randomised controlled trial",
+      "Over-measurement risk",
+      "Carbon markets",
+      "Blended finance"
+    ]
+  }
+}

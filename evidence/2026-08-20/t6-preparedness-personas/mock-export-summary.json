@@ -1,0 +1,22 @@
+{
+  "outDir": "evidence/2026-08-20/t6-preparedness-personas/persona-harness",
+  "files": [
+    { "subject": "SPMS", "set": 1, "setsInCycle": 3, "questions": 55, "marksAvailable": 75, "digest": "e8bd0c4c", "shortfalls": 0, "newConcepts": 35, "coverageAfter": 35, "coverageTarget": 69, "candidateBytes": 60647 },
+    { "subject": "SPMS", "set": 2, "setsInCycle": 3, "questions": 55, "marksAvailable": 75, "digest": "fc7dd298", "shortfalls": 0, "newConcepts": 26, "coverageAfter": 61, "coverageTarget": 69, "candidateBytes": 61034 },
+    { "subject": "SPMS", "set": 3, "setsInCycle": 3, "questions": 55, "marksAvailable": 75, "digest": "42035058", "shortfalls": 0, "newConcepts": 8, "coverageAfter": 69, "coverageTarget": 69, "candidateBytes": 60871 },
+    { "subject": "BRGSA", "set": 1, "setsInCycle": 4, "questions": 26, "marksAvailable": 80, "digest": "b40db880", "shortfalls": 0, "newConcepts": 19, "coverageAfter": 19, "coverageTarget": 29, "candidateBytes": 29006 },
+    { "subject": "BRGSA", "set": 2, "setsInCycle": 4, "questions": 26, "marksAvailable": 80, "digest": "b4d55f78", "shortfalls": 0, "newConcepts": 4, "coverageAfter": 23, "coverageTarget": 29, "candidateBytes": 29572 },
+    { "subject": "BRGSA", "set": 3, "setsInCycle": 4, "questions": 26, "marksAvailable": 80, "digest": "4efbdc20", "shortfalls": 0, "newConcepts": 4, "coverageAfter": 27, "coverageTarget": 29, "candidateBytes": 29023 },
+    { "subject": "BRGSA", "set": 4, "setsInCycle": 4, "questions": 26, "marksAvailable": 80, "digest": "fc3abed4", "shortfalls": 0, "newConcepts": 2, "coverageAfter": 29, "coverageTarget": 29, "candidateBytes": 29011 },
+    { "subject": "SCLM", "set": 1, "setsInCycle": 3, "questions": 59, "marksAvailable": 80, "digest": "99f34438", "shortfalls": 0, "newConcepts": 36, "coverageAfter": 36, "coverageTarget": 36, "candidateBytes": 67875 },
+    { "subject": "SCLM", "set": 2, "setsInCycle": 3, "questions": 59, "marksAvailable": 80, "digest": "d3732290", "shortfalls": 0, "newConcepts": 0, "coverageAfter": 36, "coverageTarget": 36, "candidateBytes": 68318 },
+    { "subject": "SCLM", "set": 3, "setsInCycle": 3, "questions": 59, "marksAvailable": 80, "digest": "ff98a628", "shortfalls": 0, "newConcepts": 0, "coverageAfter": 36, "coverageTarget": 36, "candidateBytes": 66469 },
+    { "subject": "IBM", "set": 1, "setsInCycle": 7, "questions": 10, "marksAvailable": 100, "digest": "c5710341", "shortfalls": 0, "newConcepts": 25, "coverageAfter": 25, "coverageTarget": 65, "candidateBytes": 15912 },
+    { "subject": "IBM", "set": 2, "setsInCycle": 7, "questions": 10, "marksAvailable": 100, "digest": "d99f9218", "shortfalls": 0, "newConcepts": 12, "coverageAfter": 37, "coverageTarget": 65, "candidateBytes": 14823 },
+    { "subject": "IBM", "set": 3, "setsInCycle": 7, "questions": 10, "marksAvailable": 100, "digest": "e97ed54e", "shortfalls": 0, "newConcepts": 8, "coverageAfter": 45, "coverageTarget": 65, "candidateBytes": 14847 },
+    { "subject": "IBM", "set": 4, "setsInCycle": 7, "questions": 10, "marksAvailable": 100, "digest": "78efa598", "shortfalls": 0, "newConcepts": 6, "coverageAfter": 51, "coverageTarget": 65, "candidateBytes": 13258 },
+    { "subject": "IBM", "set": 5, "setsInCycle": 7, "questions": 10, "marksAvailable": 100, "digest": "407a9870", "shortfalls": 0, "newConcepts": 5, "coverageAfter": 56, "coverageTarget": 65, "candidateBytes": 13886 },
+    { "subject": "IBM", "set": 6, "setsInCycle": 7, "questions": 10, "marksAvailable": 100, "digest": "459279d8", "shortfalls": 0, "newConcepts": 6, "coverageAfter": 62, "coverageTarget": 65, "candidateBytes": 13316 },
+    { "subject": "IBM", "set": 7, "setsInCycle": 7, "questions": 10, "marksAvailable": 100, "digest": "2652c6d0", "shortfalls": 0, "newConcepts": 3, "coverageAfter": 65, "coverageTarget": 65, "candidateBytes": 12947 }
+  ]
+}

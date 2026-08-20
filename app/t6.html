@@ -237,8 +237,8 @@
             <div class="focus-goal">
               <p class="eyebrow" id="momentum-scope">Selected subject</p>
               <div class="momentum-figure"><b id="momentum-value">0 / 16</b><span class="momentum-delta" id="momentum-delta"></span><small class="momentum-unit">concepts Strong</small></div>
-              <svg id="hero-trend" class="hero-trend" viewBox="0 0 320 88" preserveAspectRatio="none" role="img" aria-label="Distance travelled towards every concept Strong" aria-describedby="momentum-message"></svg>
-              <p class="route-legend"><span>Start</span><span>All Strong <span class="info" tabindex="0" role="note" data-tip="Strong means repeated evidence across question types plus an applied check. The marker moves with demonstrated evidence, never with time spent, and says nothing about your exam score." aria-label="Strong means repeated evidence across question types plus an applied check. The marker moves with demonstrated evidence, never with time spent, and says nothing about your exam score.">i</span></span></p>
+              <div id="hero-trend" class="hero-trend" role="img" aria-label="Distance travelled towards every concept Strong" aria-describedby="momentum-message"></div>
+              <p class="route-legend"><span>Start</span><span>All Strong <span class="info" tabindex="0" role="note" data-tip="Strong means repeated evidence across question types plus an applied check. The position on the chart moves with demonstrated evidence, never with time spent, and says nothing about your exam score." aria-label="Strong means repeated evidence across question types plus an applied check. The position on the chart moves with demonstrated evidence, never with time spent, and says nothing about your exam score.">i</span></span></p>
               <p id="momentum-message">Every concept in this subject is still ahead of you.</p>
             </div>
           </div>
@@ -312,7 +312,7 @@
             <!-- Both lines are written by renderSetList against the subject's own
                  ladder; the text here is the pre-render fallback only. -->
             <h3 id="sets-title">The subject, step by step</h3>
-            <p class="block-note" id="sets-note">Each step teaches two concepts and rests on the ones before it.</p>
+            <p class="block-note" id="sets-note">Each step gathers one module's concepts and rests on the ones before it.</p>
             <div class="set-list" id="set-list" role="group" aria-labelledby="sets-title"></div>
           </div>
         </section>
@@ -335,13 +335,13 @@
             <section class="mastery-matrix" aria-labelledby="mastery-matrix-title">
               <div class="summary-heading"><h3 id="mastery-matrix-title">Across all four subjects</h3><span>Four subjects + connections</span></div>
               <div class="radar-layout">
-                <canvas id="mastery-radar" role="img" aria-describedby="mastery-radar-copy"></canvas>
+                <div id="mastery-radar" class="mastery-radar" role="img" aria-describedby="mastery-radar-copy"></div>
                 <div><ul class="mastery-values" id="mastery-values" aria-label="Mastery matrix values"></ul><p id="mastery-radar-copy"></p></div>
               </div>
             </section>
             <section class="trend-card" aria-labelledby="trend-title">
               <div class="trend-heading"><h3 id="trend-title">This subject, block by block</h3><b id="trend-current">0%</b></div>
-              <svg id="progress-trend" class="progress-trend" role="img" aria-labelledby="trend-title" aria-describedby="trend-description" viewBox="0 0 760 220" preserveAspectRatio="none"></svg>
+              <div id="progress-trend" class="progress-trend" role="img" aria-labelledby="trend-title" aria-describedby="trend-description"></div>
               <p id="trend-description">Complete a practice block to create the first evidence point.</p>
             </section>
           </div>
@@ -434,7 +434,7 @@
           <ol id="topic-list"></ol>
           <!-- The note is written by updatePracticeProgress from what is actually
                queued: a re-attempt is not always a miss. -->
-          <div class="due-box"><small>Re-attempts due</small><b id="due-count">0</b><p id="due-note">Answers that need a second look are queued here.</p></div>
+          <div class="due-box"><small>Checks queued</small><b id="due-count">0</b><p id="due-note">Nothing queued yet. Repairs and confirmation checks will be named separately.</p></div>
         </aside>
 
         <article class="question-card" id="question-card">
@@ -541,14 +541,15 @@
           <div>
             <p class="eyebrow">Dungeon, the examiner</p>
             <h1 id="exam-home-title">Sit a mock.</h1>
-            <p class="exam-home-lede">Four papers, three sets each, under the real rules: the real
-              counts, the real marks, two hours, and no help until you submit. Each set is a
-              different draw, so a second sitting is a second paper.</p>
+            <p class="exam-home-lede">Four papers, with coverage-sized set cycles under the real
+              rules: the real counts, the real marks, two hours, and no help until you submit.
+              Each later set prioritises paper-relevant concepts the earlier sets did not reach,
+              and the cycle stops once every one has appeared.</p>
           </div>
         </header>
 
         <!-- One recommended paper, above everything. A candidate opening this wants to
-             be told what to sit, not to compare twelve options — the list is still
+             be told what to sit, not to compare every set and diagnostic — the list is still
              below for when they want to choose. -->
         <section class="exam-pick" id="exam-pick" aria-labelledby="exam-pick-title" hidden>
           <p class="eyebrow">Sit this next</p>
@@ -570,7 +571,7 @@
         <div class="exam-papers" id="exam-papers"></div>
 
         <!-- The same floating offer the learning system makes, for the same reason:
-             the list of twelve sets runs well past the recommendation, and a candidate
+             the coverage cycles run well past the recommendation, and a candidate
              reading the bottom of it should not have to scroll back to act. It clicks
              the hero's button, so there is still only one thing deciding which paper
              is next. -->
@@ -584,7 +585,7 @@
     <!-- Dungeon, the examiner.
          =========================================================================
          A separate product from the learning system, and deliberately hostile to it:
-         no primers, no lessons, no feedback, no weak-first ordering, no evidence
+         no primers, no lessons, no feedback during a paper, no evidence
          written while the clock runs. The learning system sequences to teach; this
          one spreads the paper out the way the real one will, because acclimatising
          to an exam means meeting a question you were not prepared for. The paper
@@ -744,6 +745,18 @@
     <div><button class="button secondary" id="cancel-reset" type="button">Keep progress</button><button class="button danger" id="confirm-reset" type="button">Reset progress</button></div>
   </dialog>
 
+  <dialog class="reset-dialog" id="exam-submit-dialog" aria-labelledby="exam-submit-title">
+    <h2 id="exam-submit-title">Submit this paper?</h2>
+    <p id="exam-submit-copy">Submit the paper?</p>
+    <div><button class="button secondary" id="cancel-exam-submit" type="button">Keep working</button><button class="button danger" id="confirm-exam-submit" type="button">Submit paper</button></div>
+  </dialog>
+
+  <dialog class="reset-dialog" id="exam-leave-dialog" aria-labelledby="exam-leave-title">
+    <h2 id="exam-leave-title">Leave this paper?</h2>
+    <p>Leaving ends this attempt and discards its unsaved result.</p>
+    <div><button class="button secondary" id="cancel-exam-leave" type="button">Keep working</button><button class="button danger" id="confirm-exam-leave" type="button">Leave paper</button></div>
+  </dialog>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="sets/t6_lessons.js"></script>
@@ -753,6 +766,11 @@
   <!-- Before t6_challenges.js, which reads T6_INTEGRATED while building the bank. -->
   <script src="sets/t6_integrated.js"></script>
   <script src="sets/t6_challenges.js"></script>
+  <!-- Generated by tools/measure-syllabus-coverage.mjs --emit. Counts only, no course text. -->
+  <script src="sets/t6_coverage.js"></script>
+  <!-- One React island for the official shadcn/Recharts charts. The rest of Dungeon
+       deliberately remains framework-free. Built by npm run build:chart. -->
+  <script src="t6-chart.js"></script>
   <script src="t6.js"></script>
 </body>
 </html>

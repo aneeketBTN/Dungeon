@@ -1,0 +1,1361 @@
+{
+ "subject": "SPMS",
+ "subjectTitle": "Software Product Management for Startups",
+ "set": 3,
+ "digest": "42035058",
+ "instructions": {
+  "sat": "22 August, 09:00–11:00",
+  "minutes": 120,
+  "calculator": null,
+  "marksOnTheRealPaper": 75,
+  "marksAvailableHere": 75,
+  "sections": [
+   {
+    "id": "A",
+    "count": 35,
+    "marks": 1,
+    "rule": "One correct option. One mark each. No negative marking."
+   },
+   {
+    "id": "B",
+    "count": 20,
+    "marks": 2,
+    "rule": "Multiple correct options. +1 for each right option, −1 for each wrong one, and a question cannot score below zero."
+   }
+  ],
+  "shortfalls": [],
+  "caveat": null,
+  "coverageCycle": {
+   "sets": 3,
+   "newConceptsThisSet": 8,
+   "conceptsReachedAfterThisSet": 69,
+   "paperRelevantConcepts": 69
+  }
+ },
+ "paper": [
+  {
+   "number": 1,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_value_pricing_cla1",
+   "type": "mcq",
+   "caselet": "A tool cuts a mid-size insurer's claims-handling time by 12,000 staff-hours a year, worth about ₹2.4 crore. Building and running it costs the vendor ₹40 lakh a year. The vendor proposes a price of ₹52 lakh, reached by adding a 30% margin to cost.",
+   "stem": "What is the most defensible criticism of the pricing?",
+   "prompt": null,
+   "options": [
+    "The price is too high, because ₹52 lakh is more than the ₹40 lakh the product actually costs to deliver",
+    "The 30% margin is too thin for software, and a higher percentage on the same base would fix it",
+    "The price is anchored to what the vendor spends rather than to the ₹2.4 crore the customer gains",
+    "Nothing is wrong, since a price that covers cost and leaves a margin is a sustainable price"
+   ],
+   "termsAvailable": [
+    "value-based pricing",
+    "cost-based pricing",
+    "value creation",
+    "economic value",
+    "price structure",
+    "price-value communication",
+    "pricing policy",
+    "price level",
+    "value pyramid"
+   ]
+  },
+  {
+   "number": 2,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_priority_cla1",
+   "type": "mcq",
+   "caselet": "A release has capacity for six items. A regulator has mandated an audit log for the same date. Every one of the eleven candidate items has been marked Must have by the stakeholder who proposed it, and no item is marked Won't have.",
+   "stem": "What is the most defensible criticism of this prioritisation?",
+   "prompt": null,
+   "options": [
+    "The regulator's audit log should be ranked alongside the others, since a scoring method treats all items alike",
+    "Marking everything Must have removes the method's only output, and refusing to name any Won't have is what allows it",
+    "The problem is that eleven items is too many to score, and the list should be cut before prioritising",
+    "Nothing is wrong, since the stakeholders are closest to their own items and know their true importance"
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "RICE",
+    "reach",
+    "impact",
+    "confidence",
+    "effort",
+    "weighted RICE",
+    "release planning"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_requirements_cla1",
+   "type": "mcq",
+   "caselet": "A specification reads: \"The system shall export a payroll file. The export shall complete within 30 seconds for 5,000 employees. The export shall be available to users with the finance role only.\"",
+   "stem": "How should these three statements be classified?",
+   "prompt": null,
+   "options": [
+    "One functional requirement, one quality requirement, and one design decision that is not among the requirements",
+    "Three quality requirements, because none of them is functional and all constrain the finished system",
+    "One functional requirement and two quality requirements constraining how well it must be done",
+    "Three functional requirements, since each describes something the system must do rather than a quality it must have"
+   ],
+   "termsAvailable": [
+    "requirement",
+    "functional requirement",
+    "non-functional requirement",
+    "requirements engineering"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_positioning_cla1",
+   "type": "mcq",
+   "caselet": "A team writes: \"A cloud-native, event-driven ingestion pipeline with pluggable transformation stages and horizontal autoscaling.\" It is used on the website homepage, in the sales deck, and in the engineering backlog.",
+   "stem": "What is the most defensible criticism?",
+   "prompt": null,
+   "options": [
+    "The statement is too technical, and rewriting it in simpler words for all three uses would resolve it",
+    "There is nothing wrong: a single consistent description across all channels is what alignment means",
+    "It should be shortened, because a homepage cannot carry a sentence of that length effectively",
+    "One statement is doing two different jobs, and it is written for the team rather than the buyer"
+   ],
+   "termsAvailable": [
+    "product definition",
+    "product positioning",
+    "product vision",
+    "transaction friction"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_privacy_cla1",
+   "type": "mcq",
+   "caselet": "A fitness product plans to collect location traces continuously so that a route-suggestion feature can be built later. There is no route feature yet. Users are asked to accept a privacy policy at signup that mentions location among fourteen other categories, and the data will be processed by a vendor outside the company.",
+   "stem": "What is the most defensible criticism?",
+   "prompt": null,
+   "options": [
+    "The plan is acceptable, since the user has accepted a policy that does mention location collection, and consent given at signup covers whatever is later built from the data",
+    "The privacy policy needs to be shorter, so that users can reasonably read all fifteen categories before accepting, after which the collection described in it becomes properly consented",
+    "Data is being collected for a purpose that does not yet exist, under a consent that does not identify it, and passed to a vendor whose handling has not been established",
+    "Location data should never be collected by a fitness product under any circumstances, since the category is sensitive enough that no purpose could justify holding it"
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics",
+    "vanity metric",
+    "actionable metric",
+    "AARRR",
+    "HEART framework",
+    "north star metric"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_chasm_cla1",
+   "type": "mcq",
+   "caselet": "A workflow tool has 300 enthusiastic customers, mostly small technical teams who tolerate rough edges and configure it themselves. Growth has stalled. Interviews with larger non-technical buyers find they want references from firms like their own, a guaranteed uptime figure, and someone to set it up for them.",
+   "stem": "What should the team do?",
+   "prompt": null,
+   "options": [
+    "Pick one narrow segment of those buyers and build the complete offer that segment needs, references included",
+    "Keep improving the product for the existing 300, since they are the customers who actually understand it",
+    "Market to the whole non-technical buyer population at once so the reference base builds as fast as possible",
+    "Raise the price so the product reads as enterprise-grade, which is what the larger buyers are looking for"
+   ],
+   "termsAvailable": [
+    "beachhead market",
+    "spray and pray",
+    "early adopters",
+    "social proof"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_buyer_journey_cla1",
+   "type": "mcq",
+   "caselet": "A first outbound email opens with a feature comparison table against three named competitors and a customer testimonial, and closes by asking the recipient to book a demo. Open rates are healthy; replies are close to zero.",
+   "stem": "What is the most defensible diagnosis?",
+   "prompt": null,
+   "options": [
+    "The message answers questions a buyer only asks later, and never establishes the problem it solves",
+    "The channel is wrong, since outbound email no longer produces replies from any buyer segment",
+    "The email is too long, and cutting it to three sentences would raise the reply rate",
+    "The competitor comparison is the error, because naming rivals gives them free attention"
+   ],
+   "termsAvailable": [
+    "red ocean",
+    "blue ocean strategy",
+    "value innovation",
+    "alternatives",
+    "market alternatives",
+    "direct competition",
+    "substitutes",
+    "inertia"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_jtbd_cla1",
+   "type": "mcq",
+   "caselet": "A commuter buys a coffee from the same stall every weekday at 07:40. Asked why, he says the queue is short so he is not late, the cup gives him something to hold on a crowded platform, and arriving at his desk with it makes him feel the day has started properly.",
+   "stem": "What is this purchase actually serving?",
+   "prompt": null,
+   "options": [
+    "A habit formed by repetition, since the same purchase made at the same time each weekday has become automatic behaviour requiring no decision",
+    "A caffeine requirement, which is what any coffee purchase fundamentally comes down to in the end",
+    "Getting to work on time, having something to do while waiting, and starting the day feeling ready",
+    "Price sensitivity, because a stall is cheaper than the cafe and cost is what decides a daily purchase"
+   ],
+   "termsAvailable": [
+    "Jobs to Be Done",
+    "functional need",
+    "social need",
+    "customer value"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_launch_execution_apply",
+   "type": "mcq",
+   "caselet": "A product launches to strong coverage and a spike in sign-ups. Six weeks later, activation is low and the team has moved on to the next release.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Executing and reviewing a launch: Treat the launch as successful on the coverage and sign-up spike, since those were the opening goals and attention on announcement day is sufficient evidence that the market has adopted the product.",
+    "Executing and reviewing a launch: Attribute the low activation to the product and reopen the roadmap, without examining what the launch left unfinished.",
+    "Executing and reviewing a launch: Plan a second launch to generate another spike, because more attention will convert the users who did not activate after the first one without any separate acceleration work.",
+    "Executing and reviewing a launch: Return to the accelerate and review stages, because the launch created attention and the work of converting it was never done."
+   ],
+   "termsAvailable": [
+    "launch plan",
+    "customer advisory board",
+    "fear, uncertainty, doubt",
+    "progressive modernization",
+    "tribal knowledge"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_product_thinking_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Product thinking?",
+   "prompt": null,
+   "options": [
+    "Product thinking: Sustainability here means environmental impact alone, so the social and economic questions belong to other functions.",
+    "Product thinking: A product that delights its first users has satisfied product thinking, because value to the customer is the dimension the other four exist to serve.",
+    "Product thinking: Product thinking is a sequence, so scalability is addressed only once value is settled and responsibility only once the product is profitable, which is why the five dimensions never have to be traded against one another.",
+    "Product thinking: Product thinking judges a product on five dimensions at once — value to the customer, scalability, sustainability, responsibility, and profitability or impact — and the work is managing the trade-offs between them."
+   ],
+   "termsAvailable": [
+    "product thinking",
+    "adoption and retention",
+    "scalability",
+    "sustainability",
+    "responsibility",
+    "dark patterns"
+   ]
+  },
+  {
+   "number": 11,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_ecosystem_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Business ecosystem roles is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Business ecosystem roles to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Business ecosystem roles has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "An ecosystem is a shared field, so a role that takes more value than it creates eventually removes the partners the role depended on.",
+    "Business ecosystem roles improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "Business ecosystem roles works in exactly the same way independently of the people, the constraints, and the decisions that surround it."
+   ],
+   "termsAvailable": [
+    "business ecosystem",
+    "keystone player",
+    "dominator",
+    "niche player"
+   ]
+  },
+  {
+   "number": 12,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_cx_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Customer experience as the advantage?",
+   "prompt": null,
+   "options": [
+    "Customer experience as the advantage: Channel partners and third-party services sit outside customer experience, since the company cannot be judged on what another firm does.",
+    "Customer experience as the advantage: Customer experience is the sum of every interaction across the life cycle and the whole company owns it, whereas user experience is the product interaction a design team owns.",
+    "Customer experience as the advantage: Customer experience and user experience are the same thing, so a well-designed interface is a complete answer to both and improving one necessarily improves the other by the same amount.",
+    "Customer experience as the advantage: Customer experience begins at purchase, because a person who has not bought anything has had no interaction to experience."
+   ],
+   "termsAvailable": [
+    "customer experience",
+    "net promoter score",
+    "CSAT",
+    "churn",
+    "predictive customer success"
+   ]
+  },
+  {
+   "number": 13,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_ecosystem_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Business ecosystem roles?",
+   "prompt": null,
+   "options": [
+    "Business ecosystem roles: A business ecosystem is a set of firms that compete and collaborate at once, and the roles inside it are dominators, keystone players and niche players.",
+    "Business ecosystem roles: A dominator is the healthiest role for an ecosystem to have at its centre, since a controlling hub removes the coordination cost that partners would otherwise carry between themselves and each other.",
+    "Business ecosystem roles: Niche players are firms too small to matter to the ecosystem, so their behaviour is a consequence of the platform's decisions rather than a role in its own right.",
+    "Business ecosystem roles: Ecosystem members either compete or collaborate, never both, which is what makes an ecosystem different from a market."
+   ],
+   "termsAvailable": [
+    "business ecosystem",
+    "keystone player",
+    "dominator",
+    "niche player"
+   ]
+  },
+  {
+   "number": 14,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_release_planning_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Release planning is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Release planning to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Release planning has settled the choice, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision.",
+    "Release planning works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "A release is a promise to a customer about a date and a set of capabilities, so contents and timing are one decision rather than two.",
+    "Release planning improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on."
+   ],
+   "termsAvailable": [
+    "release planning",
+    "release notes",
+    "powerboat",
+    "cruise ship"
+   ]
+  },
+  {
+   "number": 15,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_agile_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Agile values and principles?",
+   "prompt": null,
+   "options": [
+    "Agile values and principles: Agile discards process, tools, documentation and planning, which is why an agile team produces nothing written and works without any plan at all beyond the current sprint.",
+    "Agile values and principles: Agile suits every context equally, so the question of where its sweet spot lies does not arise.",
+    "Agile values and principles: Agile means delivering on time and within budget more reliably, since those were the measures the traditional approach struggled with.",
+    "Agile values and principles: Agile values individuals and interactions over process and tools, working software over documentation, customer collaboration over contract negotiation, and responding to change over following a plan."
+   ],
+   "termsAvailable": [
+    "waterfall",
+    "Agile Manifesto",
+    "working software",
+    "sprint planning",
+    "retrospectives",
+    "scrum master"
+   ]
+  },
+  {
+   "number": 16,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_customer_journey_connect",
+   "type": "mcq",
+   "caselet": "A student can state what The customer journey is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects The customer journey to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Everything after the sale decides whether the promise was kept, so the journey is where the product's claim is settled rather than made.",
+    "The customer journey improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "Once The customer journey has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "The customer journey works in exactly the same way independently of the people, the constraints, and the decisions that surround it."
+   ],
+   "termsAvailable": [
+    "post-purchase dissonance",
+    "time to first value",
+    "usage analytics",
+    "customer advocacy",
+    "referral program"
+   ]
+  },
+  {
+   "number": 17,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_launch_execution_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Executing and reviewing a launch is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Executing and reviewing a launch to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Executing and reviewing a launch has settled the choice, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision.",
+    "Attention decays quickly, so what a launch is worth depends on what happens in the weeks after the day everybody was watching.",
+    "Executing and reviewing a launch works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "Executing and reviewing a launch improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all."
+   ],
+   "termsAvailable": [
+    "launch plan",
+    "customer advisory board",
+    "fear, uncertainty, doubt",
+    "progressive modernization",
+    "tribal knowledge"
+   ]
+  },
+  {
+   "number": 18,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_elicitation_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Requirements elicitation is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Requirements elicitation to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Requirements elicitation works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "A request is evidence of a need rather than a statement of one.",
+    "Requirements elicitation improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Once Requirements elicitation has settled the choice, later evidence should not be allowed to reopen or change the decision."
+   ],
+   "termsAvailable": [
+    "user group",
+    "personas",
+    "channel partners",
+    "table stakes",
+    "competitive analysis",
+    "market research"
+   ]
+  },
+  {
+   "number": 19,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_plm_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Product lifecycle management?",
+   "prompt": null,
+   "options": [
+    "Product lifecycle management: Every product spends a similar time in each stage, so the lifecycle gives a usable schedule as well as a sequence.",
+    "Product lifecycle management: Decline means the product has failed, since a product that was doing its job would not lose relevance.",
+    "Product lifecycle management: Product lifecycle management runs conception, market introduction, growth, maturity, decline and withdrawal, and what product management should be spending on changes at every stage.",
+    "Product lifecycle management: Investment stays weighted toward research and development throughout, so market introduction is funded the same way conception was, and reaching the mainstream is a consequence of the product rather than of the spending."
+   ],
+   "termsAvailable": [
+    "product lifecycle management",
+    "conception",
+    "maturity",
+    "decline",
+    "sunset"
+   ]
+  },
+  {
+   "number": 20,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_orchestration_apply",
+   "type": "mcq",
+   "caselet": "A sales team commits contractually to a capability without checking which release carries it. Delivery finds out when the customer asks for it.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Orchestration with sales and fulfilment: Leave the commitment with sales and add the capability to the next release, since the customer has been promised it and orchestration means making every functional commitment work after it is signed.",
+    "Orchestration with sales and fulfilment: Orchestrate the commitment against the release plan before it is contracted, since the coordination is what product management is there to supply.",
+    "Orchestration with sales and fulfilment: Restrict sales from making commitments at all, so coordination between sales planning, operational sales and fulfilment is unnecessary and no one needs to own the gaps between them.",
+    "Orchestration with sales and fulfilment: Handle it as a delivery escalation each time, treating the coordination as an exception rather than a standing activity."
+   ],
+   "termsAvailable": [
+    "orchestration",
+    "customer relationship management",
+    "knowledge management",
+    "operational fulfilment",
+    "product readiness"
+   ]
+  },
+  {
+   "number": 21,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_revenue_models_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Software revenue models is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Software revenue models to the wider subject?",
+   "prompt": null,
+   "options": [
+    "How often a customer pays decides how often the product must be worth paying for.",
+    "Software revenue models works independently of the people, the constraints, and the decisions around it.",
+    "Once Software revenue models has settled the choice, later evidence should not change the decision.",
+    "Software revenue models improves one local measure, so effects elsewhere in the system stop mattering."
+   ],
+   "termsAvailable": [
+    "revenue model",
+    "one-time charge",
+    "subscription",
+    "transaction revenue model",
+    "ad revenue",
+    "freemium"
+   ]
+  },
+  {
+   "number": 22,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_launch_execution_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Executing and reviewing a launch?",
+   "prompt": null,
+   "options": [
+    "Executing and reviewing a launch: Review is a retrospective for the team, which is why it changes nothing about the product or the market approach that follows the launch.",
+    "Executing and reviewing a launch: The announcement opens the launch rather than closing it: prepare, accelerate and review are the stages that decide whether the attention it created turns into adoption.",
+    "Executing and reviewing a launch: The launch ends on announcement day, so the metrics that matter are the ones collected in the first week of coverage and attention.",
+    "Executing and reviewing a launch: Acceleration means increasing marketing spend, since attention is what a launch produces and more of it is always better."
+   ],
+   "termsAvailable": [
+    "launch plan",
+    "customer advisory board",
+    "fear, uncertainty, doubt",
+    "progressive modernization",
+    "tribal knowledge"
+   ]
+  },
+  {
+   "number": 23,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_market_analysis_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Analysts, the magic quadrant and the hype cycle?",
+   "prompt": null,
+   "options": [
+    "Analysts, the magic quadrant and the hype cycle: Analyst placements are objective measurements, since they are produced by firms whose business depends on being accurate.",
+    "Analysts, the magic quadrant and the hype cycle: A magic quadrant and a hype cycle plot the same thing, so a vendor high on the quadrant is by that fact at a mature point of the cycle.",
+    "Analysts, the magic quadrant and the hype cycle: A niche player position on a quadrant means the analyst judged the vendor's product to be weak, rather than describing the breadth of market it serves.",
+    "Analysts, the magic quadrant and the hype cycle: Industry analysts shape enterprise buying: a magic quadrant places vendors as leaders, challengers, visionaries or niche players, while the hype cycle places a technology's maturity rather than any vendor."
+   ],
+   "termsAvailable": [
+    "magic quadrant",
+    "hype cycle",
+    "innovation trigger",
+    "trough of disillusionment",
+    "plateau of productivity",
+    "perspective planning"
+   ]
+  },
+  {
+   "number": 24,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_market_analysis_apply",
+   "type": "mcq",
+   "caselet": "A technology the company sells into is entering the trough that follows a peak of inflated expectations. The company itself has just been placed among the leaders on a quadrant for that category.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Analysts, the magic quadrant and the hype cycle: Treat the trough as evidence the quadrant placement is wrong, because a leader in a falling category cannot really be leading.",
+    "Analysts, the magic quadrant and the hype cycle: Treat the leader placement as evidence the category is still rising, since the analyst would not rank a declining market.",
+    "Analysts, the magic quadrant and the hype cycle: Read the two separately: the quadrant places the vendor against rivals and the hype cycle places the category, so a strong position sits inside a cooling market.",
+    "Analysts, the magic quadrant and the hype cycle: Ignore both, since analyst opinion is a view rather than a measurement and neither should change a plan."
+   ],
+   "termsAvailable": [
+    "magic quadrant",
+    "hype cycle",
+    "innovation trigger",
+    "trough of disillusionment",
+    "plateau of productivity",
+    "perspective planning"
+   ]
+  },
+  {
+   "number": 25,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_agile_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Agile values and principles is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Agile values and principles to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Agile values and principles has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Each agile value ranks two goods rather than rejecting one, so a team that dropped the second item entirely has misread the sentence.",
+    "Agile values and principles works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "Agile values and principles improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on."
+   ],
+   "termsAvailable": [
+    "waterfall",
+    "Agile Manifesto",
+    "working software",
+    "sprint planning",
+    "retrospectives",
+    "scrum master"
+   ]
+  },
+  {
+   "number": 26,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_market_analysis_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Analysts, the magic quadrant and the hype cycle is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Analysts, the magic quadrant and the hype cycle to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Analysts, the magic quadrant and the hype cycle improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Analysts, the magic quadrant and the hype cycle works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "One chart is about who is winning and the other about whether the race is worth running, and a product decision usually needs both.",
+    "Once Analysts, the magic quadrant and the hype cycle has settled the choice, later evidence should not be allowed to reopen or change the decision."
+   ],
+   "termsAvailable": [
+    "magic quadrant",
+    "hype cycle",
+    "innovation trigger",
+    "trough of disillusionment",
+    "plateau of productivity",
+    "perspective planning"
+   ]
+  },
+  {
+   "number": 27,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_agile_apply",
+   "type": "mcq",
+   "caselet": "A team ships working increments every two weeks and collects feedback each time. It has stopped writing any specification, and new joiners cannot tell why past decisions were made.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Agile values and principles: Add documentation only for external audiences, since the team itself already knows the reasoning.",
+    "Agile values and principles: Restore enough documentation to carry the reasoning, since the value ranks working software above documents rather than in place of them.",
+    "Agile values and principles: Keep the practice as it is, because agile values working software over documentation and the software is working, so preserving the reasoning for new joiners would only restore a lower-ranked good.",
+    "Agile values and principles: Return to full specification ahead of each increment, treating the documentation gap as evidence that iterative delivery was wrong and that every future decision should be fixed before work begins."
+   ],
+   "termsAvailable": [
+    "waterfall",
+    "Agile Manifesto",
+    "working software",
+    "sprint planning",
+    "retrospectives",
+    "scrum master"
+   ]
+  },
+  {
+   "number": 28,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_ecosystem_apply",
+   "type": "mcq",
+   "caselet": "A platform owner sets terms unilaterally, takes the most profitable adjacencies for itself, and leaves its partners with narrowing margins. Partners begin building for a rival platform.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Business ecosystem roles: Read it as a keystone player creating value for the ecosystem, since a strong hub is what holds partners together and taking the profitable adjacencies is the reward for supplying that coordination.",
+    "Business ecosystem roles: Treat the partner departures as unrelated commercial decisions, because each partner selected its own platform independently and the common terms imposed by the hub therefore explain none of them.",
+    "Business ecosystem roles: Add more partners to replace the departing ones, without changing the terms that caused them to leave.",
+    "Business ecosystem roles: Read the behaviour as a dominator's rather than a keystone player's, and expect the ecosystem to shed the partners it depends on."
+   ],
+   "termsAvailable": [
+    "business ecosystem",
+    "keystone player",
+    "dominator",
+    "niche player"
+   ]
+  },
+  {
+   "number": 29,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_orchestration_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Orchestration with sales and fulfilment is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Orchestration with sales and fulfilment to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Orchestration with sales and fulfilment improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "Every function can be good at its own work and still leave the gaps between them unowned, which is exactly what orchestration covers.",
+    "Orchestration with sales and fulfilment works in exactly the same way regardless of the people involved, the constraints in force, and the decisions being taken around it at the time.",
+    "Once Orchestration with sales and fulfilment has settled the choice, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision."
+   ],
+   "termsAvailable": [
+    "orchestration",
+    "customer relationship management",
+    "knowledge management",
+    "operational fulfilment",
+    "product readiness"
+   ]
+  },
+  {
+   "number": 30,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_customer_journey_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains The customer journey?",
+   "prompt": null,
+   "options": [
+    "The customer journey: The journey ends at purchase, so everything after the sale belongs to support rather than to the value the product promised.",
+    "The customer journey: After the sale the customer journey runs onboarding, adoption, retention and advocacy, and product marketing's job shifts from persuading a buyer to making the outcome actually arrive.",
+    "The customer journey: Advocacy is bought with incentives, so referral rewards rather than delivered outcomes are what produce customers who recommend a product.",
+    "The customer journey: Adoption and retention measure the same thing, since a customer still paying is by definition a customer using the product."
+   ],
+   "termsAvailable": [
+    "post-purchase dissonance",
+    "time to first value",
+    "usage analytics",
+    "customer advocacy",
+    "referral program"
+   ]
+  },
+  {
+   "number": 31,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_elicitation_apply",
+   "type": "mcq",
+   "caselet": "A large customer asks for an extra column on a report. Their underlying difficulty is that they cannot tell which orders are at risk of missing a delivery date.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Requirements elicitation: Collect the same request from more customers before acting, treating frequency rather than the underlying need as what makes a requirement real.",
+    "Requirements elicitation: Record the need behind the request and let the solution stay open, since the column is one answer to a problem that may have better ones.",
+    "Requirements elicitation: Decline the request because the stated solution is not the best one available.",
+    "Requirements elicitation: Build the column as specified, since the customer knows their own workflow and asked precisely."
+   ],
+   "termsAvailable": [
+    "user group",
+    "personas",
+    "channel partners",
+    "table stakes",
+    "competitive analysis",
+    "market research"
+   ]
+  },
+  {
+   "number": 32,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_orchestration_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Orchestration with sales and fulfilment?",
+   "prompt": null,
+   "options": [
+    "Orchestration with sales and fulfilment: Only operational fulfilment needs orchestrating, because that is where the sales cycle completes and the money is collected.",
+    "Orchestration with sales and fulfilment: Orchestration is only needed where a function is missing, so an organisation with mature sales, marketing and delivery teams needs no coordination between them and product management can stay out of all four activities.",
+    "Orchestration with sales and fulfilment: Orchestration means product management performing the sales role, since coordination requires doing the work rather than joining it up.",
+    "Orchestration with sales and fulfilment: Orchestration is product management coordinating across sales planning, customer relationship management, operational sales and operational fulfilment, because mature functions still need someone joining them up."
+   ],
+   "termsAvailable": [
+    "orchestration",
+    "customer relationship management",
+    "knowledge management",
+    "operational fulfilment",
+    "product readiness"
+   ]
+  },
+  {
+   "number": 33,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_traceability_apply",
+   "type": "mcq",
+   "caselet": "A team cannot explain which user need a database field supports or which test proves the related requirement works.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Requirements traceability: Create links from the originating need to the product requirement, implementation item, and verification evidence.",
+    "Requirements traceability: Keep each artifact in a separate, unlinked document, because the need, implementation and test belong to different teams whose own records are sufficient evidence of completion.",
+    "Requirements traceability: Approve the database field because something like it already exists in code, without linking it to a user need or to the verification evidence that would show it works.",
+    "Requirements traceability: Delete the original customer source once development starts, since the written product requirement has replaced it and preserves everything the team will later need to understand."
+   ],
+   "termsAvailable": [
+    "customer requirements",
+    "product requirements",
+    "project requirements",
+    "requirements elicitation",
+    "traceability",
+    "good requirement"
+   ]
+  },
+  {
+   "number": 34,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_sourcing_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Sourcing strategy?",
+   "prompt": null,
+   "options": [
+    "Sourcing strategy: Outsourcing and buying a component are the same decision, so a firm that has settled its make-versus-buy question has also settled who does the work.",
+    "Sourcing strategy: A sourcing strategy decides what a team builds and what it buys or outsources, across talent, make-versus-buy, infrastructure and data — and keeps in-house whatever carries the competitive advantage.",
+    "Sourcing strategy: Sourcing is a cost decision, so the cheapest available option is correct for every component whatever it contributes to the product's differentiation.",
+    "Sourcing strategy: A component available off the shelf should always be bought, since building what somebody already sells is wasted effort in any circumstance."
+   ],
+   "termsAvailable": [
+    "sourcing strategy",
+    "build versus buy",
+    "COTS",
+    "open source",
+    "copyleft",
+    "tech debt"
+   ]
+  },
+  {
+   "number": 35,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_product_platform_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Product platform?",
+   "prompt": null,
+   "options": [
+    "Product platform: A product platform is a marketing grouping like any other, so products said to share a platform are simply the ones a company chooses to sell under one brand.",
+    "Product platform: A product platform is a foundational set of shared technologies, components and services enabling multiple related products to be developed, not a product itself.",
+    "Product platform: A product platform is the flagship product at the centre of a range, with the smaller offerings around it positioned as accessories that extend what it already does.",
+    "Product platform: A product platform is the thing the customer actually buys, and the products developed over it are best understood as its internal components or optional modules."
+   ],
+   "termsAvailable": [
+    "product family",
+    "product platform",
+    "innovation platform",
+    "transaction platform",
+    "product line"
+   ]
+  },
+  {
+   "number": 36,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_traceability_msq_exam",
+   "type": "msq",
+   "caselet": "A hospital group tells a software vendor: \"Our nurses waste time at shift handover and patients are at risk when something is missed.\" The vendor's product team decides the product will carry a structured handover record. The delivery team breaks that into a template editor for one release and an audit trail for the next.",
+   "stem": "Select every statement that classifies this chain correctly.",
+   "prompt": null,
+   "options": [
+    "The hospital's statement is a project requirement, since it came from the party paying for the work",
+    "The hospital's statement is a customer requirement: a business need, not a specification",
+    "The structured handover record is the product requirement",
+    "The template editor and the audit trail are project requirements for particular releases",
+    "Standardising means building exactly what this hospital described, for this hospital"
+   ],
+   "termsAvailable": [
+    "customer requirements",
+    "product requirements",
+    "project requirements",
+    "requirements elicitation",
+    "traceability",
+    "good requirement"
+   ]
+  },
+  {
+   "number": 37,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_tamsam_msq_exam",
+   "type": "msq",
+   "caselet": "A company sells compliance software to licensed pharmacies. There are 900,000 licensed pharmacies worldwide. Its product is certified only under Indian regulation, which covers 90,000 of them. Of those, 62,000 already run a competing system on multi-year contracts, and the firm's sales capacity can reach about 4,000 pharmacies in the coming year.",
+   "stem": "Select every statement that sizes this market correctly.",
+   "prompt": null,
+   "options": [
+    "Regulatory certification is what narrows the total to a serviceable 90,000",
+    "The 62,000 on competing contracts should be counted in the serviceable market as switchable demand",
+    "The obtainable figure should be the 90,000 serviceable pharmacies, since sales capacity can be hired",
+    "About 4,000 is the obtainable share, because reach and competition bound it",
+    "The 900,000 figure is the total addressable market"
+   ],
+   "termsAvailable": [
+    "Total Addressable Market",
+    "Serviceable Available Market",
+    "Serviceable Obtainable Market",
+    "Earlyvangelists"
+   ]
+  },
+  {
+   "number": 38,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_roadmap_msq_exam",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is true of a product roadmap.",
+   "prompt": null,
+   "options": [
+    "It sequences development, release and evolution against a time axis",
+    "It follows from a product strategy, which it turns into releases",
+    "It is the inventory of every capability the product will eventually contain",
+    "Once published it should be held fixed, since changing it undermines the commitments made from it",
+    "What has been deliberately left out is part of the decision it records"
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  },
+  {
+   "number": 39,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_alternatives_msq_exam",
+   "type": "msq",
+   "caselet": "A team building an expense-reporting tool lists two rival products in its competitive review. Interviews find that of forty finance teams, twenty-six use a spreadsheet template, nine ask an assistant to compile receipts by hand, and five have decided the problem is not worth solving and simply absorb the errors.",
+   "stem": "The review already lists the two rival products. Select every further alternative this case shows the product is really competing against.",
+   "prompt": null,
+   "options": [
+    "The other finance software these teams already pay for that does not touch expenses",
+    "The spreadsheet template twenty-six teams currently rely on",
+    "The two rival products, which should be counted again as the primary competition",
+    "The decision by five teams to do nothing about the problem",
+    "The manual compilation nine teams pay an assistant to do"
+   ],
+   "termsAvailable": [
+    "red ocean",
+    "blue ocean strategy",
+    "value innovation",
+    "alternatives",
+    "market alternatives",
+    "direct competition",
+    "substitutes",
+    "inertia"
+   ]
+  },
+  {
+   "number": 40,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_unit_economics_msq_exam",
+   "type": "msq",
+   "caselet": "A subscription business earns ₹1,800 of gross profit per customer per year. It spends ₹5,400 to acquire one. Customers stay an average of four years. The finance lead reports that the business is profitable per customer and proposes raising acquisition spend.",
+   "stem": "Select every statement this case supports.",
+   "prompt": null,
+   "options": [
+    "Because lifetime value exceeds acquisition cost, raising spend carries no additional risk",
+    "Acquisition cost is recovered in the third year of the relationship",
+    "Profitability per customer is established as soon as the first year's gross profit is earned",
+    "A payback measured in years is a cash-flow risk the profitability statement does not show",
+    "Lifetime gross profit of about ₹7,200 exceeds the ₹5,400 acquisition cost"
+   ],
+   "termsAvailable": [
+    "payback period",
+    "churn rate",
+    "gross margin",
+    "unit economics",
+    "customer acquisition cost",
+    "business model validation",
+    "customer relationship model"
+   ]
+  },
+  {
+   "number": 41,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_lean_canvas_msq_exam",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is true of what a Lean Canvas is for.",
+   "prompt": null,
+   "options": [
+    "It replaces the Business Model Canvas boxes that suit an established company with ones a startup needs",
+    "A box left empty is a failure of the exercise and should be filled before the canvas is used",
+    "Its value is that a wrong box is cheap to discover and cheap to change",
+    "It is a document to be completed once and then held stable for the investor conversation",
+    "It records the assumptions a business rests on so they can be tested"
+   ],
+   "termsAvailable": [
+    "product definition",
+    "product positioning",
+    "product vision",
+    "transaction friction"
+   ]
+  },
+  {
+   "number": 42,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_metrics_msq_exam",
+   "type": "msq",
+   "caselet": "A six-month-old product reports to its board each month on registered accounts, page views, and press mentions. All three rise steadily. Weekly active use has been flat since month two, and no one has been asked to act on any of the three reported numbers.",
+   "stem": "Select every criticism this reporting fairly attracts.",
+   "prompt": null,
+   "options": [
+    "The measure that would show whether the product is working is the one not being reported",
+    "The reporting is appropriate, since a board is entitled to see growth figures at this stage",
+    "No number carries an owner or a threshold, so none of them can require a decision",
+    "Registered accounts is the right headline measure, because it is the figure that has grown most",
+    "The reported measures rise whatever happens, so they cannot separate progress from activity"
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics",
+    "vanity metric",
+    "actionable metric",
+    "AARRR",
+    "HEART framework",
+    "north star metric"
+   ]
+  },
+  {
+   "number": 43,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_dfv_msq_exam",
+   "type": "msq",
+   "caselet": "A logistics startup has built a route-planning tool. Drivers who trialled it completed their rounds sooner and asked to keep it. The engineering team ships updates weekly on existing map infrastructure. The company charges ₹400 per driver per month; the support and mapping licence cost per driver is ₹430, and neither falls with volume.",
+   "stem": "Select every statement this case supports.",
+   "prompt": null,
+   "options": [
+    "The idea fails on viability, because each additional driver deepens the loss",
+    "The idea is proven overall, since two of the three checks are clearly passed",
+    "Viability can be assumed from the drivers' enthusiasm, because demand sets price",
+    "Feasibility holds: it is being built and shipped with technology that exists now",
+    "Desirability holds: the people who used it wanted to carry on using it"
+   ],
+   "termsAvailable": [
+    "desirability",
+    "feasibility",
+    "viability",
+    "design thinking"
+   ]
+  },
+  {
+   "number": 44,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_chasm_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every strategy that helps a product cross from its early market to the mainstream.",
+   "prompt": null,
+   "options": [
+    "Raise the price at launch so mainstream buyers read it as quality",
+    "Focus on a narrow beachhead market rather than spray and pray",
+    "Address the early market and the mainstream at the same time to build volume faster",
+    "Build trust through uptime, security, support, compliance, and social proof",
+    "Simplify onboarding and the interface for mainstream users"
+   ],
+   "termsAvailable": [
+    "beachhead market",
+    "spray and pray",
+    "early adopters",
+    "social proof"
+   ]
+  },
+  {
+   "number": 45,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_metrics_msq_types",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every metric correctly paired with what it measures.",
+   "prompt": null,
+   "options": [
+    "Average revenue per user — revenue divided across the user base",
+    "Gross margin — profitability measured after all below-the-line costs",
+    "Customer lifetime value — what a customer is worth across the whole relationship, not one transaction",
+    "Net promoter score — the startup-appropriate replacement for reducing uncertainty"
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics",
+    "vanity metric",
+    "actionable metric",
+    "AARRR",
+    "HEART framework",
+    "north star metric"
+   ]
+  },
+  {
+   "number": 46,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_dfv_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is true of testing an idea for desirability, feasibility and viability.",
+   "prompt": null,
+   "options": [
+    "Viability is settled once a working prototype exists",
+    "Desirability is validated with design skills and empathy for the customer",
+    "Feasibility asks whether the product can be built with the technology available today",
+    "A product that is desirable and feasible but not viable is unsustainable",
+    "Feasibility is confirmed by customer interviews showing people want the product"
+   ],
+   "termsAvailable": [
+    "desirability",
+    "feasibility",
+    "viability",
+    "design thinking"
+   ]
+  },
+  {
+   "number": 47,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_metrics_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that explains why metrics carry more weight in a startup than in a mature company.",
+   "prompt": null,
+   "options": [
+    "They exist to report performance to investors on a fixed reporting cycle",
+    "They exist to reduce uncertainty as far as it can be reduced",
+    "The fundamental difference from a mature company is the level of uncertainty",
+    "A startup should report performance first and take up risk management once the business matures",
+    "Top line, bottom line, and net promoter score assume a steadier state than an early product has"
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics",
+    "vanity metric",
+    "actionable metric",
+    "AARRR",
+    "HEART framework",
+    "north star metric"
+   ]
+  },
+  {
+   "number": 48,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_buyer_journey_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every failure that follows from communicating value badly.",
+   "prompt": null,
+   "options": [
+    "Using the wrong channels to carry the message",
+    "Pricing the product below the nearest competitor",
+    "Communicating too late, after the decision has already been taken",
+    "Publishing the product vision before the product definition"
+   ],
+   "termsAvailable": [
+    "value communication",
+    "buyer's journey",
+    "customer journey",
+    "value messaging"
+   ]
+  },
+  {
+   "number": 49,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_priority_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is true of how MoSCoW is used.",
+   "prompt": null,
+   "options": [
+    "Won't have is part of the method, and stating it is what makes scope control real",
+    "It works as a filtering criterion, closer to a triage than to a ranking",
+    "It ranks every item against every other to produce one ordered list",
+    "Moscow refers to the capital city, where the technique was first formalised"
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "RICE",
+    "reach",
+    "impact",
+    "confidence",
+    "effort",
+    "weighted RICE",
+    "release planning"
+   ]
+  },
+  {
+   "number": 50,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_requirements_msq_definition",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that correctly defines a requirement.",
+   "prompt": null,
+   "options": [
+    "It is any feature already present in the product",
+    "It describes a future capability, which is why requirements are elicited before anything is built",
+    "Requirements are classified by which team will end up building them",
+    "It is a wish or need for a future product capability, or a condition required by standards, contracts, or regulations",
+    "It is only a capability a customer has explicitly asked for"
+   ],
+   "termsAvailable": [
+    "requirement",
+    "functional requirement",
+    "non-functional requirement",
+    "requirements engineering"
+   ]
+  },
+  {
+   "number": 51,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_requirements_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "A customer says the product must send a message, and must deliver it within 200 milliseconds. Select every statement that classifies this correctly.",
+   "prompt": null,
+   "options": [
+    "Sending the message is a functional requirement — an action the product performs",
+    "The 200-millisecond bound is functional, because it describes what the product does",
+    "Both halves are non-functional, because the customer stated them in one sentence",
+    "The 200-millisecond bound is non-functional — a quality, confirmed by measurement under load"
+   ],
+   "termsAvailable": [
+    "requirement",
+    "functional requirement",
+    "non-functional requirement",
+    "requirements engineering"
+   ]
+  },
+  {
+   "number": 52,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_privacy_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is correct about these data-protection regimes.",
+   "prompt": null,
+   "options": [
+    "GDPR was enacted in May 2018 and became a model for Switzerland, Canada, and Australia",
+    "GDPR protects any personal data irrespective of its sensitivity",
+    "Data protection by design means the customer must request that their data be protected",
+    "US data protection is a single federal regime covering every category of data alike",
+    "US data protection leaves employee data outside its data protection regulations"
+   ],
+   "termsAvailable": [
+    "GDPR",
+    "CCPA",
+    "DPDP",
+    "right to be forgotten",
+    "data protection by design",
+    "data fiduciary"
+   ]
+  },
+  {
+   "number": 53,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_alternatives_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select everything that genuinely competes for this customer's decision.",
+   "prompt": null,
+   "options": [
+    "Manual alternatives such as spreadsheets, consultants, or internal tools",
+    "Rival products in the same category",
+    "Only the firms the startup has publicly named as competitors",
+    "An alternative counts only once the customer has formally evaluated it",
+    "The customer deciding to carry on doing nothing"
+   ],
+   "termsAvailable": [
+    "red ocean",
+    "blue ocean strategy",
+    "value innovation",
+    "alternatives",
+    "market alternatives",
+    "direct competition",
+    "substitutes",
+    "inertia"
+   ]
+  },
+  {
+   "number": 54,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_value_pricing_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is true of cost-based pricing.",
+   "prompt": null,
+   "options": [
+    "It is the fallback for when you do not know how the product will be deployed, or what it does to the customer's business",
+    "It prices your own inputs rather than the customer's outcome",
+    "It is the method to prefer once the product has a measurable economic value peg",
+    "Billing by engineer hours at $50 or $200 an hour is the familiar software-services case",
+    "It is what the lecture recommends for software products in particular"
+   ],
+   "termsAvailable": [
+    "value-based pricing",
+    "cost-based pricing",
+    "value creation",
+    "economic value",
+    "price structure",
+    "price-value communication",
+    "pricing policy",
+    "price level",
+    "value pyramid"
+   ]
+  },
+  {
+   "number": 55,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_roadmap_msq_sequence",
+   "type": "msq",
+   "caselet": "WhatsApp started in 2009, into a market that already had Skype, Yahoo Messenger, ICQ and plenty more.\n\nIt launched on iPhone. Android followed around the middle of 2011 — and the team already knew that a large share of the people it wanted were on Android, in Asia.\n\nThe rest arrived on its own schedule: message history search around 2011, chat backup after 2012. The company was acquired in 2014 still without end-to-end encryption.",
+   "stem": "Select every statement that reads this release history the way the course does.",
+   "prompt": null,
+   "options": [
+    "A roadmap is a smart sequence for developing, releasing, and evolving a solution",
+    "Launching on iPhone first shows the team did not know where its users were",
+    "The Android delay was a resourcing accident rather than a decision",
+    "A roadmap is a set of releases with no strategic horizon behind it",
+    "The team launched on iPhone knowing a big chunk of its potential users were on Android in Asia"
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  }
+ ]
+}

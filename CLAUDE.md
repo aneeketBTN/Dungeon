@@ -6,6 +6,13 @@ then follow its required source order, ledgers, evidence gates, and open/close r
 Do not duplicate current status, Key Files, gaps, or operating rules here. `AGENTS.md` is the
 source of truth so Codex and Claude-based sessions share one administration system.
 
+**Screenshots:** the Browser pane's screenshot tool cannot work in this repo — an undisplayed pane
+composites no frames, and no retry, reload, resize or tab-select changes that. Use
+`node tools/screenshot.mjs --port <port>` and read `docs/governance/SCREENSHOTS.md` first. That page
+also carries the trap worth more than the picture: a non-compositing pane freezes
+`document.timeline` at 0, so **every CSS transition reads as its start value** and a correct rule
+looks broken. Three sessions have re-derived this; two filed the artefact as a CSS bug.
+
 ## Learning-engine startup
 
 For an explicitly requested in-chat engine session:

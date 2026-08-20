@@ -1,0 +1,674 @@
+{
+ "subject": "BRGSA",
+ "subjectTitle": "Business Research and Growth Systems Architecture",
+ "set": 1,
+ "digest": "b40db880",
+ "instructions": {
+  "sat": "22 August, 13:00–15:00",
+  "minutes": 120,
+  "calculator": "basic",
+  "marksOnTheRealPaper": 80,
+  "marksAvailableHere": 80,
+  "sections": [
+   {
+    "id": "A",
+    "count": 20,
+    "marks": 2,
+    "rule": "One correct option. Two marks each. No negative marking."
+   },
+   {
+    "id": "B",
+    "count": 4,
+    "marks": 5,
+    "rule": "A short scenario, then a task. Both parts must be right for the marks. No partial credit."
+   },
+   {
+    "id": "C",
+    "count": 2,
+    "marks": 10,
+    "rule": "A complete structured response. Not machine-marked."
+   }
+  ],
+  "shortfalls": [],
+  "caveat": null,
+  "coverageCycle": {
+   "sets": 4,
+   "newConceptsThisSet": 19,
+   "conceptsReachedAfterThisSet": 19,
+   "paperRelevantConcepts": 29
+  }
+ },
+ "paper": [
+  {
+   "number": 1,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m3_cohort_cla2",
+   "type": "mcq",
+   "caselet": "A subscription product reports that overall month-3 retention has held at 38% for a year, and the team is treating the product as stable. Split by signup month, the January cohort retained 47% at month three, April 39%, July 33% and October 28%. Monthly signups have roughly tripled over the same year.",
+   "stem": "What is the most defensible reading?",
+   "prompt": null,
+   "options": [
+    "The October cohort is simply too young to judge, so the fall is an artefact of measuring groups at different ages",
+    "Signups tripling is the finding, and the retention split is a consequence of serving a larger and more varied market than before",
+    "Each new cohort is retaining worse than the one before it, and rising signup volume is holding the blended figure flat",
+    "Retention is stable, since the aggregate figure has not moved across a full year of trading and that is the measure of the product"
+   ],
+   "termsAvailable": [
+    "cohort",
+    "aggregate data",
+    "starting event"
+   ]
+  },
+  {
+   "number": 2,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m6_churn_cla2",
+   "type": "mcq",
+   "caselet": "A B2B tool loses 4% of accounts a month. Exit interviews with 30 leavers find 19 never completed the initial data import, 7 left when their internal champion changed job, and 4 said a competitor was cheaper. The team is preparing a discount offer for accounts showing low usage.",
+   "stem": "What should the team do instead?",
+   "prompt": null,
+   "options": [
+    "Proceed with the discount, because price is the only cause a company can act on directly and quickly",
+    "Fix the import and build a second contact inside each account, since price explains four of thirty departures",
+    "Survey the remaining accounts before acting, since thirty interviews is too small a base for any decision",
+    "Accept 4% as the market rate for this category and concentrate the effort on winning replacement accounts"
+   ],
+   "termsAvailable": [
+    "network effect",
+    "two-sided",
+    "cold start",
+    "moat"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 2,
+   "id": "val_definition",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "What makes lean validation different from simply doing more market research?",
+   "prompt": null,
+   "options": [
+    "It replaces customer evidence with the founder's own judgment about the problem",
+    "It estimates the total addressable market from desk research before speaking to any real buyers",
+    "It always turns the demand assumption into a test whose threshold is set before any build",
+    "It begins only after the product is complete and ready to put in front of customers"
+   ],
+   "termsAvailable": [
+    "lean validation",
+    "build trap",
+    "demand",
+    "landing page"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 2,
+   "id": "smoke_signal",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "A startup publishes a credible landing page with a real ‘Join waitlist’ action before the product exists. What is it primarily testing?",
+   "prompt": null,
+   "options": [
+    "Whether the engineering plan is technically feasible",
+    "Whether people who see the page take a real action toward the offer",
+    "Whether respondents say the idea sounds good to them",
+    "Whether the brand has assembled a complete marketing funnel behind the landing page"
+   ],
+   "termsAvailable": [
+    "smoke test",
+    "fake door",
+    "signal",
+    "pre-order"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 2,
+   "id": "type_two",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "A useful pricing change genuinely improves conversion, but an underpowered test concludes that nothing changed. Which error is this?",
+   "prompt": null,
+   "options": [
+    "A Type I error, a false positive",
+    "No error because the result was not significant",
+    "Survivorship bias alone, with no testing error involved",
+    "A Type II error, a false negative"
+   ],
+   "termsAvailable": [
+    "Type I error",
+    "Type II error",
+    "false positive",
+    "false negative",
+    "significance level"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 2,
+   "id": "activation_metric",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Which activation metric is fully formed?",
+   "prompt": null,
+   "options": [
+    "Percentage of verified free signups who receive their first automated follow-up within 7 days",
+    "The users who said that they liked the onboarding experience when they were asked about it",
+    "A running total of 4,000 activated users counted across the whole product since launch day",
+    "The total number of follow-up emails that the system has ever sent to anyone"
+   ],
+   "termsAvailable": [
+    "activation event",
+    "denominator",
+    "activation rate",
+    "guardrail"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 2,
+   "id": "sample_logic",
+   "type": "mcq",
+   "caselet": "Variant B leads after 18 visitors per arm. The pre-set sample target is 1,000 per arm.",
+   "stem": "What is the sound next action?",
+   "prompt": null,
+   "options": [
+    "Stop the test and ship Variant B before the current lead disappears",
+    "Run the test to completion at the pre-calculated sample size",
+    "Delete Variant A from the final written report",
+    "Double-count repeat visitors so the required sample is reached sooner than the traffic allows"
+   ],
+   "termsAvailable": [
+    "sample size",
+    "variant",
+    "baseline conversion rate",
+    "MDE",
+    "alpha"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 2,
+   "id": "growth_discipline",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Which description best distinguishes growth from marketing and product?",
+   "prompt": null,
+   "options": [
+    "Growth is really just another name for the paid advertising budget and its management",
+    "Growth only ships product features and hands them to marketing",
+    "Growth owns the whole system connecting acquisition, product value, retention and revenue, never one channel",
+    "Growth reports the total follower count and impressions to the leadership team each month"
+   ],
+   "termsAvailable": [
+    "experiment",
+    "activation",
+    "overlap"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 2,
+   "id": "payback_period",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Two channels have the same CAC. Channel A recovers it in 6 months; Channel B in 18 months, with similar retention risk. Why is A easier to scale?",
+   "prompt": null,
+   "options": [
+    "It carries no acquisition cost of its own to recover",
+    "Payback period never affects how quickly a company is able to grow at all",
+    "It guarantees a higher lifetime value per customer, since money returned sooner must mean the customer is worth more",
+    "Capital returns sooner and can be reinvested with less cash exposure"
+   ],
+   "termsAvailable": [
+    "payback period",
+    "breakeven",
+    "gross profit"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 2,
+   "id": "primary_constraint",
+   "type": "mcq",
+   "caselet": "Traffic is healthy, signup conversion is healthy, but only 12% of new accounts complete the first value event. The team proposes buying more ads.",
+   "stem": "What should the growth diagnosis prioritize?",
+   "prompt": null,
+   "options": [
+    "More top-of-funnel traffic volume",
+    "A lower sample-size target",
+    "Activation—the narrowest current constraint",
+    "A full company rebrand exercise"
+   ],
+   "termsAvailable": [
+    "constraint",
+    "step conversion",
+    "activation constraint"
+   ]
+  },
+  {
+   "number": 11,
+   "section": "A",
+   "marks": 2,
+   "id": "lifecycle_fit",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "A team sends the same weekly email to every user, regardless of their stage. What is missing?",
+   "prompt": null,
+   "options": [
+    "A substantially larger top-of-funnel for the whole team to work with each month",
+    "Lifecycle engagement always matched to the user's current state and next value action",
+    "A greater overall volume of email being sent",
+    "A referral discount offered to every single existing user on the mailing list"
+   ],
+   "termsAvailable": [
+    "state change",
+    "resurrect",
+    "calendar-based"
+   ]
+  },
+  {
+   "number": 12,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m4_constraint_cla1",
+   "type": "mcq",
+   "caselet": "A funnel runs 10,000 visitors, 1,200 signups, 400 activations and 30 paying customers.",
+   "stem": "Where is the constraint?",
+   "prompt": null,
+   "options": [
+    "Activation to paid, at 7.5%, which is the lowest conversion rate of the three stages shown.",
+    "Signup to activation at 33%, since only the slowest stage sets the pace and effort on any other adds nothing.",
+    "Nowhere yet, because a funnel with four stages needs a much longer observation window before any constraint in it can fairly be named.",
+    "Visitor to signup, where 8,800 people are lost — by far the largest fall anywhere in the funnel."
+   ],
+   "termsAvailable": [
+    "constraint",
+    "step conversion",
+    "activation constraint"
+   ]
+  },
+  {
+   "number": 13,
+   "section": "A",
+   "marks": 2,
+   "id": "mock_full_case",
+   "type": "mcq",
+   "caselet": "A D2C brand validates demand with paid pre-orders. Its first cohort activates through a 21-day routine, repurchase predicts retention, and acquisition is profitable. The team now has ten experiment ideas but capacity for two.",
+   "stem": "Which sequence best protects the evidence chain?",
+   "prompt": null,
+   "options": [
+    "Choose the two ideas with the highest reach scores and run them",
+    "Run all ten with smaller samples each",
+    "Optimise for the total follower count across all channels instead",
+    "Name the current constraint, score ideas against it with evidence/capacity, pre-register decisions, then reallocate after results"
+   ],
+   "termsAvailable": [
+    "growth workbook",
+    "AARRR",
+    "growth operating system",
+    "master loop"
+   ]
+  },
+  {
+   "number": 14,
+   "section": "A",
+   "marks": 2,
+   "id": "decision_rule",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Which rule is strongest before an activation experiment begins?",
+   "prompt": null,
+   "options": [
+    "Ship the change if the founder likes the way the chart looks at the end",
+    "If the result looks promising once it lands, then the team will sit down and discuss scaling it up",
+    "After the sample bound, scale at ≥45%, kill at <35%, otherwise iterate; use the named activation metric",
+    "Choose the decision threshold only after seeing how the control group actually performed during the whole test period"
+   ],
+   "termsAvailable": [
+    "scale threshold",
+    "kill threshold",
+    "successful kill"
+   ]
+  },
+  {
+   "number": 15,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m2_design_cla1",
+   "type": "mcq",
+   "caselet": "A team wants to test whether a new call-to-action improves signups. One member proposes stating the hypothesis as \"the new wording feels more natural to users\".",
+   "stem": "What is wrong with that as a hypothesis?",
+   "prompt": null,
+   "options": [
+    "It should predict a larger effect, because a small improvement is not worth the cost of running a test at all.",
+    "It names the wrong metric, since signups are what the team cares about rather than how the wording feels.",
+    "It is not falsifiable: every experiment starts from a stated no-difference position that a specific, measurable claim can argue against.",
+    "It fails to say which variant is the control, without which the two groups cannot be compared."
+   ],
+   "termsAvailable": [
+    "null hypothesis",
+    "alternative hypothesis",
+    "reject the null",
+    "falsifiable"
+   ]
+  },
+  {
+   "number": 16,
+   "section": "A",
+   "marks": 2,
+   "id": "mock_chain_order",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Which order best represents the course's defensible growth chain?",
+   "prompt": null,
+   "options": [
+    "Scale spend → validate demand → retain users → choose a metric → monetize → operate the whole system",
+    "Validate demand → run trustworthy experiments → read cohorts/economics → fix constraint → activate/retain → monetize → operate",
+    "Acquire users → count signups → add pricing tiers → survey customers → scale the spend",
+    "Build the product fully → choose a channel → define the customer → then measure the results at the end"
+   ],
+   "termsAvailable": [
+    "growth workbook",
+    "AARRR",
+    "growth operating system",
+    "master loop"
+   ]
+  },
+  {
+   "number": 17,
+   "section": "A",
+   "marks": 2,
+   "id": "cac_scope",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "A team spends ₹3,00,000 on a channel and acquires 120 paying customers attributable to it. What is channel CAC?",
+   "prompt": null,
+   "options": [
+    "₹2,500",
+    "₹25,000",
+    "₹3,600",
+    "₹250"
+   ],
+   "termsAvailable": [
+    "blended CAC",
+    "channel CAC",
+    "cohort-adjusted"
+   ]
+  },
+  {
+   "number": 18,
+   "section": "A",
+   "marks": 2,
+   "id": "pricing_structure",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Why does the course call pricing a structure rather than just a number?",
+   "prompt": null,
+   "options": [
+    "Because the published price should never be allowed to change afterwards",
+    "Because a lower headline number is always better for winning new customers more quickly",
+    "Because only the finance team is permitted to set it in the first place",
+    "Because tiers, units, limits and packaging shape every part of customer behaviour and the expansion path"
+   ],
+   "termsAvailable": [
+    "pricing structure",
+    "tiered",
+    "seat",
+    "free tier"
+   ]
+  },
+  {
+   "number": 19,
+   "section": "A",
+   "marks": 2,
+   "id": "referral_network",
+   "type": "mcq",
+   "caselet": null,
+   "stem": "Which statement correctly separates referral from a network effect?",
+   "prompt": null,
+   "options": [
+    "They are exactly the same thing whenever users invite their friends to join the product themselves",
+    "Referral always improves the product's value for the users who already have it installed on their devices",
+    "Referral acquires another user; a network effect makes the product more valuable as relevant users join",
+    "Network effects always require some form of paid incentive before they will begin to work properly at all"
+   ],
+   "termsAvailable": [
+    "network effect",
+    "two-sided",
+    "cold start",
+    "moat"
+   ]
+  },
+  {
+   "number": 20,
+   "section": "A",
+   "marks": 2,
+   "id": "brgsa_m1_evidence_cla1",
+   "type": "mcq",
+   "caselet": "A team reports 200 positive survey responses, 30 wait-list signups and 4 refundable deposits taken under stated terms. The founder wants to lead the investor update with the 200.",
+   "stem": "How should the three signals be weighted?",
+   "prompt": null,
+   "options": [
+    "By what each cost the person to give, which makes the four deposits the primary evidence and the survey background.",
+    "By volume, since 200 responses is a far larger sample than four deposits and is therefore the more reliable number to lead with.",
+    "Equally, because each is a genuine expression of interest and discarding any of them throws away information.",
+    "By recency, taking whichever signal was collected most recently as the best guide to current demand."
+   ],
+   "termsAvailable": [
+    "pre-sales validation",
+    "commitment spectrum",
+    "letter of intent",
+    "prospect"
+   ]
+  },
+  {
+   "number": 21,
+   "section": "B",
+   "marks": 5,
+   "id": "brgsa_revenue_architecture_case_cloze",
+   "type": "case-cloze",
+   "caselet": "A self-service motion wins many small accounts, and the same team is now asked to close a few enterprise deals with long cycles, many stakeholders and different proof requirements.",
+   "stem": "Fill both parts of the recommendation so the action and framework agree.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the decision",
+     "options": [
+      "Keep one motion and one team for every segment, because a company should avoid confusing the market with different ways to buy the same product. (Revenue architecture)",
+      "Choose the motion from deal value and volume, then staff enterprise and self-service work as different jobs when their cycles and proof requirements diverge. (Revenue architecture)",
+      "Force the enterprise segment through self-service, since product-led growth always scales more cheaply than involving people in a complex deal. (Revenue architecture)",
+      "Put the small-account team on enterprise without changing its pipeline, proof or cycle, treating the higher target as the only material difference. (Revenue architecture)"
+     ]
+    },
+    {
+     "label": "Choose the framework",
+     "options": [
+      "Revenue architecture: Revenue crosses several team handoffs, and each needs an entry criterion, an owner, the context that must travel with it and a response-time SLA; payback measures how long acquisition cash stays tied up before gross profit returns it.",
+      "Revenue architecture: Pricing is a structure rather than a number: tiers, units, limits and packaging decide how customers enter, upgrade and expand, and NRR measures whether the existing base grows without counting new customers.",
+      "Revenue architecture: Revenue architecture chooses product-led growth for high-volume, lower-value transactions and sales-led growth for lower-volume, higher-value deals, with the cycle and team matched to the motion.",
+      "Revenue architecture: The scaling threshold is a payback period below twelve months for a typical funded company: acquisition cash returns as gross profit within a year and can be recycled before growth consumes more capital than it returns."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    "product-led growth",
+    "sales led growth"
+   ]
+  },
+  {
+   "number": 22,
+   "section": "B",
+   "marks": 5,
+   "id": "brgsa_m5_channel_case_cloze",
+   "type": "case-cloze",
+   "caselet": "A channel reaches the intended buyer precisely but takes fourteen months to produce revenue, and the company has three months of runway.",
+   "stem": "Fill both parts of the recommendation so the action and framework agree.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the decision",
+     "options": [
+      "All B2B products require television advertising in order to reach the relevant decision-makers at scale. (Channel fit)",
+      "The high view count is proof enough that the channel is working exactly as intended. (Channel fit)",
+      "The product clearly cannot have found product-market fit yet, because a working product would perform in any channel. (Channel fit)",
+      "Score candidate channels against the product's economics and timing constraints before spending, and reject one that fails any single dimension. (Channel fit)"
+     ]
+    },
+    {
+     "label": "Choose the framework",
+     "options": [
+      "Channel fit: Activation is the first observable moment a user experiences the promised value, and every step standing between signup and that moment sheds a share of the users still remaining.",
+      "Channel fit: Lean validation asks whether real people will take a real action on a real offer before the product is built; the build trap spends the full cost to learn the same thing afterwards.",
+      "Channel fit: The AHA moment is the first countable event where the product's promised value actually happens, and time to AHA is the elapsed path from first use to that event that onboarding should compress.",
+      "Channel fit: Every channel has fixed properties — targeting, control, input cost, output quality, time to result and economics — and it fits only when those match the product's buyer and unit economics."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    "average contract value",
+    "ACV",
+    "channel market fit"
+   ]
+  },
+  {
+   "number": 23,
+   "section": "B",
+   "marks": 5,
+   "id": "brgsa_landing_validation_case_cloze",
+   "type": "case-cloze",
+   "caselet": "A page converts 40% of friends and followers but only 8% of cold visitors selected to match the intended customer.",
+   "stem": "Fill both parts of the recommendation so the action and framework agree.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the decision",
+     "options": [
+      "Average the two rates, treating warm and cold traffic as equally valid samples of the same market. (Landing page validation)",
+      "Use the cold targeted rate and discard the warm-network result, because a conversion percentage has no evidential meaning without the audience behind it. (Landing page validation)",
+      "Report the 40% rate as proof of demand, because the larger conversion is the result the page was designed to produce and the identity of the visitors cannot weaken it. (Landing page validation)",
+      "Keep buying broad untargeted traffic until the rate rises, since more visitors correct an audience mismatch on their own. (Landing page validation)"
+     ]
+    },
+    {
+     "label": "Choose the framework",
+     "options": [
+      "Landing page validation: Demand signals sit on a commitment spectrum: social engagement is the easiest to produce and the least meaningful, while a payment or signed commitment is a different category of evidence altogether.",
+      "Landing page validation: Landing page validation reads a conversion rate together with the traffic that produced it, because cold targeted visitors supply a demand signal and a warm network supplies a politeness signal.",
+      "Landing page validation: Lean validation asks whether real people will take a real action on a real offer before the product is built; the build trap spends the full cost to learn the same thing afterwards.",
+      "Landing page validation: MVP validation under low resources combines behavioural interest, a costly commitment and a repeatable route to the same customer before building the minimum version that performs the core job."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    "validation landing page",
+    "signup rate",
+    "warm network",
+    "false positive",
+    "bounce rate"
+   ]
+  },
+  {
+   "number": 24,
+   "section": "B",
+   "marks": 5,
+   "id": "brgsa_growth_readiness_case_cloze",
+   "type": "case-cloze",
+   "caselet": "A seed-stage SaaS brief lists registrations and revenue but does not identify an ICP, retention by cohort, the AARRR stage leaking most or the assumptions behind LTV.",
+   "stem": "Fill both parts of the recommendation so the action and framework agree.",
+   "prompt": null,
+   "blanks": [
+    {
+     "label": "Choose the decision",
+     "options": [
+      "State a scale decision without its invalidating conditions, so whoever reads the brief later receives an unambiguous direction rather than uncertainty. (Growth readiness brief)",
+      "Add the brand snapshot, primary and secondary ICPs, one AARRR metric per stage, the quantified constraint, unit economics and the known unknowns that could reverse the readiness call. (Growth readiness brief)",
+      "Turn the existing numbers into a longer narrative and remove the missing fields, because a brief should present only conclusions that make the company look ready to grow. (Growth readiness brief)",
+      "Add every metric the company tracks, treating completeness of the dashboard as more useful than one decision-bearing number at each AARRR stage. (Growth readiness brief)"
+     ]
+    },
+    {
+     "label": "Choose the framework",
+     "options": [
+      "Growth readiness brief: CAC carries no decision meaning without an estimate of the value it buys, so LTV is estimated early from observed lifespan, margin and revenue rather than waited for.",
+      "Growth readiness brief: Lean validation asks whether real people will take a real action on a real offer before the product is built; the build trap spends the full cost to learn the same thing afterwards.",
+      "Growth readiness brief: A growth readiness brief begins with a brand snapshot, maps one metric at each AARRR stage, names the primary constraint and records known unknowns so another operator can act without mistaking guesses for evidence.",
+      "Growth readiness brief: A cohort groups users by when they entered so retention can be compared at equal age, which aggregate totals cannot do because they mix new arrivals with survivors."
+     ]
+    }
+   ],
+   "termsAvailable": [
+    "primary ICP",
+    "secondary ICP",
+    "known unknowns"
+   ]
+  },
+  {
+   "number": 25,
+   "section": "C",
+   "marks": 10,
+   "id": "brgsa_exam_price_experiment",
+   "type": "short-answer",
+   "caselet": "A direct-to-consumer coffee brand sells a ₹1,150 monthly subscription. To arrest a decline it ran a 30% launch discount for first-time subscribers. Signups rose 240% during the eight-week offer and the growth lead has proposed making the discount permanent, citing contribution margin that stayed positive throughout. The cohort numbers were not in that proposal. Discounted subscribers cancel at 58% by month three against 21% for full-price subscribers, and 4% ever accept the price increase at renewal. Blended acquisition cost is ₹1,900. Full-price subscribers contribute about ₹430 a month against ₹180 for discounted ones. Separately the team has a backlog of eleven ideas and capacity for three: the permanent discount, a ₹1,900 twin-bag tier that 340 customers have asked for by email, and a packaging redesign the founder favours which no customer has mentioned and which would take nine weeks. There is no tier above the single plan today.",
+   "stem": "Write the recommendation on the discount and on which three ideas should be built. Say plainly what the signup figure did and did not demonstrate.",
+   "prompt": null,
+   "rubricPointCount": 5,
+   "termsAvailable": [
+    "lean validation",
+    "build trap",
+    "demand",
+    "landing page",
+    "LTV",
+    "ARPU",
+    "gross margin",
+    "lifespan",
+    "pricing structure",
+    "tiered",
+    "seat",
+    "free tier",
+    "ICE score",
+    "primary constraint",
+    "confidence score",
+    "ease score"
+   ]
+  },
+  {
+   "number": 26,
+   "section": "C",
+   "marks": 10,
+   "id": "brgsa_exam_delivery_app",
+   "type": "short-answer",
+   "caselet": "A grocery-delivery app works in one city, where 34% of users order weekly and unprompted word of mouth supplies 61% of new users at no acquisition cost. It launched in four more cities on the strength of that. In the new cities, 7% order weekly, word of mouth supplies 9%, and acquisition runs at ₹740 per user through discount vouchers. The single operational difference is delivery time: 24 minutes in the original city against 71 minutes in the others, where the app has no dark store and picks from partner supermarkets. A test of a daily-streak reward, modelled on a language-learning app, ran across the new cities for five weeks and showed no effect; the sample was 600 users per arm against a required 7,000, and the feature has been abandoned. Nobody has tested reducing delivery time. Groceries are bought about once a week by these users, and the original city's ordering pattern is concentrated on Saturday mornings. The team is proposing to raise voucher spend in the four cities to buy the word-of-mouth flywheel it saw at home.",
+   "stem": "Write the assessment of this expansion. Address the voucher proposal and the abandoned streak feature, and say what should be tested next.",
+   "prompt": null,
+   "rubricPointCount": 5,
+   "termsAvailable": [
+    "Type I error",
+    "Type II error",
+    "false positive",
+    "false negative",
+    "significance level",
+    "constraint",
+    "step conversion",
+    "activation constraint",
+    "average contract value",
+    "ACV",
+    "channel market fit",
+    "variable reward",
+    "internal triggers",
+    "external triggers"
+   ]
+  }
+ ]
+}

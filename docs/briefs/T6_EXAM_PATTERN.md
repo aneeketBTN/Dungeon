@@ -61,32 +61,29 @@ working**.
 
 ## What this means for the product
 
-### Two required formats do not exist in the app
+### Every required section can now be filled
 
 The app supports MCQ, MSQ, numeric entry, cloze, case-cloze, match, short-answer, and three-step
-boss. SPMS's full MSQ section is now fillable. SCLM still has only four of the six numericals the
-paper requires.
+boss. The current bank can fill every published section: SPMS has 28 MSQs for 20 slots, and SCLM
+has eight tolerance-graded numericals for six slots plus 28 match questions for three slots.
 
-| Missing format | Paper | Marks | Share of that paper |
-| --- | --- | ---: | ---: |
-| Numerical, tolerance-graded | SCLM Sec B | 8 unavailable | **10%** |
-
-The remaining format gap is two SCLM numericals; `npm run check:exam` keeps this as a failing worklist.
+`npm run check:exam` now has no volume worklist. Its remaining SCLM finding is a quality warning:
+the generated match family repeats one visible task line across the three-question section.
 
 ### Objective-question coverage is not uniformly valuable
 
 | Paper | Objective marks | Written marks | Bank alignment |
 | --- | ---: | ---: | --- |
-| SPMS | 75 (all) | 0 | MCQ and all 20 MSQs covered |
-| SCLM | 56 (A + C) | 24 (numerical) | MCQ and match covered; 4 of 6 numericals available |
-| BRGSA | 40 | 40 | MCQ/cases covered; 32 authored short and case written prompts |
-| **IBM** | **0** | **100** | **32 framework/case written prompts; released caselet remains unknowable** |
+| SPMS | 75 (all) | 0 | 219 MCQs and 28 MSQs; both sections fill |
+| SCLM | 56 (A + C) | 24 (numerical) | 160 MCQs, 28 matches and 8 numericals; all sections fill |
+| BRGSA | 40 | 40 | 78 MCQs, 29 case-clozes and 68 written prompts |
+| **IBM** | **0** | **100** | **167 framework/case written prompts; released caselet remains unknowable** |
 
 **IBM is the reversal.** Its paper is ten written answers on a caselet released two days prior.
 Authoring MCQs for its uncited lectures would add zero marks. What helps is framework fluency and
-structured written answers against an unseen case, so every reachable concept now has both a short
-framework explanation and a full case response. The mock still states that it cannot reproduce the
-caselet released two days before the real paper.
+structured written answers against an unseen case. Layer and framework records carry the written
+surfaces appropriate to them; bounded concepts remain objective-only by the adopted idea taxonomy.
+The mock still states that it cannot reproduce the caselet released two days before the real paper.
 
 ### Two alignment defects to check in the existing bank
 
@@ -94,9 +91,9 @@ caselet released two days before the real paper.
    that require remembering a Clairo or Zoko number are training a skill the exam explicitly does
    not test. Teaching *with* those numbers is fine; *testing* recall of them is not.
 2. **SCLM numerical weight.** Section B is 24 marks of computation, and standard normal tables being
-   supplied points at safety stock, service levels, and newsvendor. Only 3 of SCLM's 16 cited
-   lectures currently carry arithmetic — exponential smoothing (M02-L06), EOQ (M03-L03), and
-   newsvendor (M03-L05).
+   supplied points at safety stock, service levels, and newsvendor. The eight available numericals
+   fill the paper but still cluster around four lectures: exponential smoothing (M02-L06), EOQ
+   (M03-L03), newsvendor (M03-L05), and the worked numerical session (M03-L06).
 
 ### Behaviour the app should now teach
 

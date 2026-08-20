@@ -1,0 +1,1355 @@
+{
+ "subject": "SPMS",
+ "subjectTitle": "Software Product Management for Startups",
+ "set": 2,
+ "digest": "fc7dd298",
+ "instructions": {
+  "sat": "22 August, 09:00–11:00",
+  "minutes": 120,
+  "calculator": null,
+  "marksOnTheRealPaper": 75,
+  "marksAvailableHere": 75,
+  "sections": [
+   {
+    "id": "A",
+    "count": 35,
+    "marks": 1,
+    "rule": "One correct option. One mark each. No negative marking."
+   },
+   {
+    "id": "B",
+    "count": 20,
+    "marks": 2,
+    "rule": "Multiple correct options. +1 for each right option, −1 for each wrong one, and a question cannot score below zero."
+   }
+  ],
+  "shortfalls": [],
+  "caveat": null,
+  "coverageCycle": {
+   "sets": 3,
+   "newConceptsThisSet": 26,
+   "conceptsReachedAfterThisSet": 61,
+   "paperRelevantConcepts": 69
+  }
+ },
+ "paper": [
+  {
+   "number": 1,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_privacy_cla1",
+   "type": "mcq",
+   "caselet": "A fitness product plans to collect location traces continuously so that a route-suggestion feature can be built later. There is no route feature yet. Users are asked to accept a privacy policy at signup that mentions location among fourteen other categories, and the data will be processed by a vendor outside the company.",
+   "stem": "What is the most defensible criticism?",
+   "prompt": null,
+   "options": [
+    "The plan is acceptable, since the user has accepted a policy that does mention location collection, and consent given at signup covers whatever is later built from the data",
+    "The privacy policy needs to be shorter, so that users can reasonably read all fifteen categories before accepting, after which the collection described in it becomes properly consented",
+    "Data is being collected for a purpose that does not yet exist, under a consent that does not identify it, and passed to a vendor whose handling has not been established",
+    "Location data should never be collected by a fitness product under any circumstances, since the category is sensitive enough that no purpose could justify holding it"
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics",
+    "vanity metric",
+    "actionable metric",
+    "AARRR",
+    "HEART framework",
+    "north star metric"
+   ]
+  },
+  {
+   "number": 2,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_priority_cla1",
+   "type": "mcq",
+   "caselet": "A release has capacity for six items. A regulator has mandated an audit log for the same date. Every one of the eleven candidate items has been marked Must have by the stakeholder who proposed it, and no item is marked Won't have.",
+   "stem": "What is the most defensible criticism of this prioritisation?",
+   "prompt": null,
+   "options": [
+    "The regulator's audit log should be ranked alongside the others, since a scoring method treats all items alike",
+    "Marking everything Must have removes the method's only output, and refusing to name any Won't have is what allows it",
+    "The problem is that eleven items is too many to score, and the list should be cut before prioritising",
+    "Nothing is wrong, since the stakeholders are closest to their own items and know their true importance"
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "RICE",
+    "reach",
+    "impact",
+    "confidence",
+    "effort",
+    "weighted RICE",
+    "release planning"
+   ]
+  },
+  {
+   "number": 3,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_chasm_cla1",
+   "type": "mcq",
+   "caselet": "A workflow tool has 300 enthusiastic customers, mostly small technical teams who tolerate rough edges and configure it themselves. Growth has stalled. Interviews with larger non-technical buyers find they want references from firms like their own, a guaranteed uptime figure, and someone to set it up for them.",
+   "stem": "What should the team do?",
+   "prompt": null,
+   "options": [
+    "Pick one narrow segment of those buyers and build the complete offer that segment needs, references included",
+    "Keep improving the product for the existing 300, since they are the customers who actually understand it",
+    "Market to the whole non-technical buyer population at once so the reference base builds as fast as possible",
+    "Raise the price so the product reads as enterprise-grade, which is what the larger buyers are looking for"
+   ],
+   "termsAvailable": [
+    "beachhead market",
+    "spray and pray",
+    "early adopters",
+    "social proof"
+   ]
+  },
+  {
+   "number": 4,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_jtbd_cla1",
+   "type": "mcq",
+   "caselet": "A commuter buys a coffee from the same stall every weekday at 07:40. Asked why, he says the queue is short so he is not late, the cup gives him something to hold on a crowded platform, and arriving at his desk with it makes him feel the day has started properly.",
+   "stem": "What is this purchase actually serving?",
+   "prompt": null,
+   "options": [
+    "A habit formed by repetition, since the same purchase made at the same time each weekday has become automatic behaviour requiring no decision",
+    "A caffeine requirement, which is what any coffee purchase fundamentally comes down to in the end",
+    "Getting to work on time, having something to do while waiting, and starting the day feeling ready",
+    "Price sensitivity, because a stall is cheaper than the cafe and cost is what decides a daily purchase"
+   ],
+   "termsAvailable": [
+    "Jobs to Be Done",
+    "functional need",
+    "social need",
+    "customer value"
+   ]
+  },
+  {
+   "number": 5,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_positioning_cla1",
+   "type": "mcq",
+   "caselet": "A team writes: \"A cloud-native, event-driven ingestion pipeline with pluggable transformation stages and horizontal autoscaling.\" It is used on the website homepage, in the sales deck, and in the engineering backlog.",
+   "stem": "What is the most defensible criticism?",
+   "prompt": null,
+   "options": [
+    "The statement is too technical, and rewriting it in simpler words for all three uses would resolve it",
+    "There is nothing wrong: a single consistent description across all channels is what alignment means",
+    "It should be shortened, because a homepage cannot carry a sentence of that length effectively",
+    "One statement is doing two different jobs, and it is written for the team rather than the buyer"
+   ],
+   "termsAvailable": [
+    "product definition",
+    "product positioning",
+    "product vision",
+    "transaction friction"
+   ]
+  },
+  {
+   "number": 6,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_requirements_cla1",
+   "type": "mcq",
+   "caselet": "A specification reads: \"The system shall export a payroll file. The export shall complete within 30 seconds for 5,000 employees. The export shall be available to users with the finance role only.\"",
+   "stem": "How should these three statements be classified?",
+   "prompt": null,
+   "options": [
+    "One functional requirement, one quality requirement, and one design decision that is not among the requirements",
+    "Three quality requirements, because none of them is functional and all constrain the finished system",
+    "One functional requirement and two quality requirements constraining how well it must be done",
+    "Three functional requirements, since each describes something the system must do rather than a quality it must have"
+   ],
+   "termsAvailable": [
+    "requirement",
+    "functional requirement",
+    "non-functional requirement",
+    "requirements engineering"
+   ]
+  },
+  {
+   "number": 7,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_value_pricing_cla1",
+   "type": "mcq",
+   "caselet": "A tool cuts a mid-size insurer's claims-handling time by 12,000 staff-hours a year, worth about ₹2.4 crore. Building and running it costs the vendor ₹40 lakh a year. The vendor proposes a price of ₹52 lakh, reached by adding a 30% margin to cost.",
+   "stem": "What is the most defensible criticism of the pricing?",
+   "prompt": null,
+   "options": [
+    "The price is too high, because ₹52 lakh is more than the ₹40 lakh the product actually costs to deliver",
+    "The 30% margin is too thin for software, and a higher percentage on the same base would fix it",
+    "The price is anchored to what the vendor spends rather than to the ₹2.4 crore the customer gains",
+    "Nothing is wrong, since a price that covers cost and leaves a margin is a sustainable price"
+   ],
+   "termsAvailable": [
+    "value-based pricing",
+    "cost-based pricing",
+    "value creation",
+    "economic value",
+    "price structure",
+    "price-value communication",
+    "pricing policy",
+    "price level",
+    "value pyramid"
+   ]
+  },
+  {
+   "number": 8,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_buyer_journey_cla1",
+   "type": "mcq",
+   "caselet": "A first outbound email opens with a feature comparison table against three named competitors and a customer testimonial, and closes by asking the recipient to book a demo. Open rates are healthy; replies are close to zero.",
+   "stem": "What is the most defensible diagnosis?",
+   "prompt": null,
+   "options": [
+    "The message answers questions a buyer only asks later, and never establishes the problem it solves",
+    "The channel is wrong, since outbound email no longer produces replies from any buyer segment",
+    "The email is too long, and cutting it to three sentences would raise the reply rate",
+    "The competitor comparison is the error, because naming rivals gives them free attention"
+   ],
+   "termsAvailable": [
+    "red ocean",
+    "blue ocean strategy",
+    "value innovation",
+    "alternatives",
+    "market alternatives",
+    "direct competition",
+    "substitutes",
+    "inertia"
+   ]
+  },
+  {
+   "number": 9,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_pricing_objectives_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Pricing as a business lever is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Pricing as a business lever to the wider subject?",
+   "prompt": null,
+   "options": [
+    "The same product supports several prices, so which one is right depends entirely on what the business is trying to do with it.",
+    "Pricing as a business lever improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "Once Pricing as a business lever has settled the choice, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision.",
+    "Pricing as a business lever works independently of the people, the constraints, and the decisions around it."
+   ],
+   "termsAvailable": [
+    "entrenchment",
+    "switching costs",
+    "saturation",
+    "liquidity",
+    "goodwill"
+   ]
+  },
+  {
+   "number": 10,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_gtm_apply",
+   "type": "mcq",
+   "caselet": "A collaboration tool spreads because each user invites colleagues to a shared workspace. The team is planning an enterprise sales force to accelerate adoption.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Go to market: Replace the invitation mechanic with the sales force, since a direct conversation converts more reliably than a shared link.",
+    "Go to market: Add the sales force across the whole market, because more routes to the customer must produce more customers.",
+    "Go to market: Treat the spreading as marketing's result and leave the product unchanged, on the view that adoption mechanics sit outside what the product team owns.",
+    "Go to market: Build the route around the invitation that is already working, and add sales only where it reaches buyers the invitations cannot."
+   ],
+   "termsAvailable": [
+    "go-to-market",
+    "workflow integration",
+    "account-based marketing",
+    "land and expand",
+    "habit formation",
+    "customer acquisition cost"
+   ]
+  },
+  {
+   "number": 11,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_product_family_apply",
+   "type": "mcq",
+   "caselet": "A company markets its search, maps, storage and meeting products under one brand, and a new engineer assumes they must therefore share a technical foundation.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Product family: Treat the family as a single product with several modules, on the grounds that customers meet all of it through one brand.",
+    "Product family: Read the family as a marketing decision, because its members may share no technology at all and are held together by the brand.",
+    "Product family: Plan a shared technical foundation across the family, since products marketed together are normally expected to be built together too.",
+    "Product family: Retire the whole family when one member is withdrawn, because a family is sold as one thing and so stands or falls as one thing."
+   ],
+   "termsAvailable": [
+    "product family",
+    "product platform",
+    "innovation platform",
+    "transaction platform",
+    "product line"
+   ]
+  },
+  {
+   "number": 12,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_service_strategy_apply",
+   "type": "mcq",
+   "caselet": "A platform's adoption stalls after purchase. Customers have bought it, and few have configured it far enough to get value from it.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Service strategy: Treat implementation and training as part of the whole product, because adoption rather than purchase is what the offer has failed to reach.",
+    "Service strategy: Add product features until configuration becomes unnecessary, since a product that needs implementation help is unfinished and the adoption problem therefore belongs entirely inside the feature backlog.",
+    "Service strategy: Discount the licence to increase purchases, because a larger installed base will create enough successful adopters to offset the customers who never complete configuration or training.",
+    "Service strategy: Hand the problem to a services partner and leave the product strategy unchanged, because implementation is the partner's business and adoption after purchase no longer belongs to the vendor."
+   ],
+   "termsAvailable": [
+    "professional services",
+    "help desk",
+    "data migration",
+    "system integration",
+    "whole product"
+   ]
+  },
+  {
+   "number": 13,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_heartbeat_apply",
+   "type": "mcq",
+   "caselet": "An enterprise vendor has shipped on the same date each year for a decade. Customers plan their upgrade programmes around it. A large feature will not be ready in time.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Release heartbeat and change control: Let the engineering team decide alone, because readiness is a technical judgement.",
+    "Release heartbeat and change control: Move the date so the feature ships complete, since the release is worth more with it than without and customers can simply revise the upgrade programmes they built around the established heartbeat.",
+    "Release heartbeat and change control: Ship the feature partly finished to protect both, treating a reduced scope as the compromise the heartbeat calls for.",
+    "Release heartbeat and change control: Hold the date and move the feature, because the predictable heartbeat is part of what customers have organised themselves around."
+   ],
+   "termsAvailable": [
+    "heartbeat principle",
+    "upward compatibility",
+    "downward compatibility",
+    "change control board",
+    "selection criteria",
+    "planned obsolescence"
+   ]
+  },
+  {
+   "number": 14,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_team_roles_apply",
+   "type": "mcq",
+   "caselet": "A food delivery team needs faster checkout to lift conversion. Someone must decide that this is the priority, and someone must turn it into sprint stories with acceptance criteria.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Product manager and product owner: Leave the split to the team to settle case by case, so neither role has to be defined in advance.",
+    "Product manager and product owner: Give both to the product manager, because whoever sets the goal should specify how it is met.",
+    "Product manager and product owner: Give both to the product owner, since they are closest to the team that will build it.",
+    "Product manager and product owner: Give the conversion goal to the product manager and the stories and sprint priorities to the product owner, since the two questions are what and how."
+   ],
+   "termsAvailable": [
+    "product manager",
+    "product owner",
+    "backlog",
+    "user stories",
+    "business outcomes"
+   ]
+  },
+  {
+   "number": 15,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_psf_pmf_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Problem-solution fit and product-market fit?",
+   "prompt": null,
+   "options": [
+    "Problem-solution fit and product-market fit: Problem-solution fit proves a real problem and a valued solution for early users at MVP stage on qualitative learning; product-market fit proves scalable, repeated demand in a large market on quantitative traction.",
+    "Problem-solution fit and product-market fit: Product-market fit is established by customer curiosity, while problem-solution fit requires the customer pull that only a growing market produces.",
+    "Problem-solution fit and product-market fit: Product-market fit can be reached before problem-solution fit, since a large market is easier to demonstrate than a single well-understood problem.",
+    "Problem-solution fit and product-market fit: The two are the same milestone reached at different times, so a team with problem-solution fit has product-market fit as soon as it has told more people about the product."
+   ],
+   "termsAvailable": [
+    "problem-solution fit",
+    "product-market fit",
+    "organic referral",
+    "acquisition friction"
+   ]
+  },
+  {
+   "number": 16,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_embedded_product_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Embedded product?",
+   "prompt": null,
+   "options": [
+    "Embedded product: Embedded software controls a machine, running on limited resources under specific device conditions, so its job is to make a physical device work rather than to be the value.",
+    "Embedded product: Embedded software is any software at all that a company ships inside hardware it manufactures itself, whatever that software happens to have been written to do for its user.",
+    "Embedded product: Embedded software runs with the same resources and operating conditions as a desktop application, so it can be specified, built and updated in exactly the same way.",
+    "Embedded product: Embedded software is a standalone product in its own right, because running it on its own already delivers the whole benefit the customer is paying money for."
+   ],
+   "termsAvailable": [
+    "marginal cost",
+    "iteration speed",
+    "telemetric data",
+    "irreversibility",
+    "embedded software",
+    "software intensive product",
+    "primary value"
+   ]
+  },
+  {
+   "number": 17,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_bmc_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Business model canvas is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Business model canvas to the wider subject?",
+   "prompt": null,
+   "options": [
+    "The canvas is one artefact rather than nine, because a change to any block moves the cost or the revenue on the other side of it.",
+    "Once Business model canvas has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Business model canvas works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "Business model canvas improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on."
+   ],
+   "termsAvailable": [
+    "business model canvas",
+    "customer segments",
+    "key activities",
+    "cost structure",
+    "revenue streams"
+   ]
+  },
+  {
+   "number": 18,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_startup_types_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Startup types and attributes is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Startup types and attributes to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Startup types and attributes improves one local measure, so effects elsewhere in the system stop mattering.",
+    "Once Startup types and attributes has settled the choice, later evidence should not change the decision.",
+    "Startup types and attributes works independently of the people, the constraints, and the decisions around it.",
+    "Where a startup's money comes from decides which of resources, time and freedom it is short of."
+   ],
+   "termsAvailable": [
+    "business model",
+    "extreme uncertainty",
+    "frugal innovation",
+    "funded startup",
+    "patient capital",
+    "corporate venture",
+    "pivot"
+   ]
+  },
+  {
+   "number": 19,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_vpc_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Value proposition canvas is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Value proposition canvas to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Value proposition canvas has settled the choice, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision.",
+    "Value proposition canvas works independently of the people, the constraints, and the decisions around it.",
+    "The canvas is worth using only in the direction that can disconfirm you: jobs first, then whether the offer meets them.",
+    "Value proposition canvas improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on."
+   ],
+   "termsAvailable": [
+    "value proposition canvas",
+    "value map",
+    "pain reliever",
+    "gain creator",
+    "value gap"
+   ]
+  },
+  {
+   "number": 20,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_product_thinking_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Product thinking?",
+   "prompt": null,
+   "options": [
+    "Product thinking: Sustainability here means environmental impact alone, so the social and economic questions belong to other functions.",
+    "Product thinking: A product that delights its first users has satisfied product thinking, because value to the customer is the dimension the other four exist to serve.",
+    "Product thinking: Product thinking is a sequence, so scalability is addressed only once value is settled and responsibility only once the product is profitable, which is why the five dimensions never have to be traded against one another.",
+    "Product thinking: Product thinking judges a product on five dimensions at once — value to the customer, scalability, sustainability, responsibility, and profitability or impact — and the work is managing the trade-offs between them."
+   ],
+   "termsAvailable": [
+    "product thinking",
+    "adoption and retention",
+    "scalability",
+    "sustainability",
+    "responsibility",
+    "dark patterns"
+   ]
+  },
+  {
+   "number": 21,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_kano_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Kano model and cost-value?",
+   "prompt": null,
+   "options": [
+    "Kano model and cost-value: A delighter stays a delighter, so a feature that excited customers when it launched carries the same satisfaction years later once every rival offers it, and the classification therefore needs no revisiting.",
+    "Kano model and cost-value: The Kano model sorts features into must-be, performance, delighter and indifferent, and cost-value prioritisation ranks them quantitatively — with time as a third axis, because a delayed feature changes category.",
+    "Kano model and cost-value: Must-be features raise satisfaction the most, because they are the ones customers notice first when they are present.",
+    "Kano model and cost-value: Cost-value and the Kano model rank the same way, since a high-value feature is by definition one that delights."
+   ],
+   "termsAvailable": [
+    "Kano model",
+    "must-be",
+    "delighter",
+    "indifferent",
+    "reverse",
+    "cost-value prioritisation"
+   ]
+  },
+  {
+   "number": 22,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_product_family_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Product family?",
+   "prompt": null,
+   "options": [
+    "Product family: Every member of a product family performs broadly the same function, since a common brand across the set implies a common purpose behind all of them.",
+    "Product family: A product family is a set of products built on one shared technology base, and that shared foundation is what makes them a family rather than unrelated offerings.",
+    "Product family: A product family is the range of variants of a single product, each of them aimed at a different market, device or price point within the same category.",
+    "Product family: A product family is a set of diverse but connected products under one strong brand, held together by consistent branding, the trust it carries and cross-selling."
+   ],
+   "termsAvailable": [
+    "product family",
+    "product platform",
+    "innovation platform",
+    "transaction platform",
+    "product line"
+   ]
+  },
+  {
+   "number": 23,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_startup_forecasting_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Forecasting without a past is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Forecasting without a past to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Forecasting without a past has settled the choice, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision.",
+    "Forecasting without a past improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "With no past to extrapolate, a forecast is a belief that has to be updated rather than a projection that can be finished.",
+    "Forecasting without a past works in exactly the same way independently of the people, the constraints, and the decisions that surround it."
+   ],
+   "termsAvailable": [
+    "financial management",
+    "forecasting",
+    "superforecasting",
+    "probabilistic"
+   ]
+  },
+  {
+   "number": 24,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_price_diagnostic_apply",
+   "type": "mcq",
+   "caselet": "One firm prices by device and identity; another prices behaviour and segment, with tiers for students, families and casual listeners.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Reading a price backwards: Average the two structures into a middle position, treating the gap between them as a safe range to sit inside without choosing either firm's view of value.",
+    "Reading a price backwards: Diagnose two different beliefs about what customers are buying, and expect their product and roadmap decisions to differ accordingly.",
+    "Reading a price backwards: Conclude that one of the two firms has priced incorrectly, since the same category cannot support two structures without one of them misunderstanding what customers are actually buying.",
+    "Reading a price backwards: Copy whichever structure earns more today, without asking which belief about the customer it rests on or whether the copying firm's product and segment support that belief."
+   ],
+   "termsAvailable": [
+    "pricing pyramid",
+    "subsidized pricing",
+    "tiered package pricing",
+    "usage-based pricing",
+    "behavioral pricing",
+    "diagnostic tool"
+   ]
+  },
+  {
+   "number": 25,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_affordable_market_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Building for a market that cannot pay?",
+   "prompt": null,
+   "options": [
+    "Building for a market that cannot pay: Technology should be added once the model is proven, since a manual process is cheaper to run while the numbers are small.",
+    "Building for a market that cannot pay: The organisation should build every component itself, because a mission-driven product cannot rely on anything it does not control.",
+    "Building for a market that cannot pay: Where the beneficiary cannot pay, the product must still be built to scale — technology from day one, built only where it is needed, and an intermediary that absorbs the coordination.",
+    "Building for a market that cannot pay: A product for people who cannot pay does not need to scale, because impact is counted in individual outcomes rather than in reach."
+   ],
+   "termsAvailable": [
+    "aggregating platform",
+    "underserved",
+    "lead measures",
+    "lag measures",
+    "teacherness",
+    "digital public infrastructure"
+   ]
+  },
+  {
+   "number": 26,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_validation_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Validation and problem-solution fit is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Validation and problem-solution fit to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Discovery proves the problem exists; validation proves this solution moves the people who have it, which is the only claim a core product can support.",
+    "Once Validation and problem-solution fit has settled the choice, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision.",
+    "Validation and problem-solution fit works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "Validation and problem-solution fit improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on."
+   ],
+   "termsAvailable": [
+    "core product",
+    "early adopters",
+    "validated learning",
+    "behavioural change",
+    "problem solution fit"
+   ]
+  },
+  {
+   "number": 27,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_vision_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Product vision and company vision is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Product vision and company vision to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Product vision and company vision improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "Product vision and company vision works in exactly the same way independently of the people, the constraints, and the decisions that surround it.",
+    "Once Product vision and company vision has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "One statement holds a portfolio together over decades; the other tells one team what it is building and why, so they answer to different audiences."
+   ],
+   "termsAvailable": [
+    "company vision",
+    "product vision",
+    "product definition",
+    "positioning",
+    "go to market"
+   ]
+  },
+  {
+   "number": 28,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_launch_planning_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Planning a launch is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Planning a launch to the wider subject?",
+   "prompt": null,
+   "options": [
+    "A launch commits the whole company at once, so what has to be true beforehand is a wider list than the marketing plan.",
+    "Once Planning a launch has settled the choice, later evidence should not be allowed to reopen it, because a decision that keeps moving is not really a decision.",
+    "Planning a launch improves one local measure, so whatever happens elsewhere in the connected system can be treated as somebody else's problem to solve later on.",
+    "Planning a launch works in exactly the same way independently of the people, the constraints, and the decisions that surround it."
+   ],
+   "termsAvailable": [
+    "product launch",
+    "positioning",
+    "obstacles",
+    "anchor customer",
+    "qualified leads",
+    "BrainKraft"
+   ]
+  },
+  {
+   "number": 29,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_tailorability_apply",
+   "type": "mcq",
+   "caselet": "A banking product must work under the rules of more than a hundred countries, which differ on when interest is applied and how amounts are displayed.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Tailorability: Handle the variation as configuration wherever the product already supports the parameter, and reserve custom work for what it genuinely cannot express.",
+    "Tailorability: Build a separate version for every country, since each set of rules differs and a dedicated code branch will fit every local combination exactly without needing a shared configurable product.",
+    "Tailorability: Ship one fixed behaviour and let local teams work around it, because preserving a single code path is more important than supporting the rules under which each customer must operate.",
+    "Tailorability: Expose every internal value as a parameter, so that any future rule can be met without a release."
+   ],
+   "termsAvailable": [
+    "tailorability",
+    "configuration",
+    "composition",
+    "customization",
+    "non-invasive",
+    "marketplace apps"
+   ]
+  },
+  {
+   "number": 30,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_learning_loops_connect",
+   "type": "mcq",
+   "caselet": "A student can state what Learning loops is, and now has to say why it changes the next decision.",
+   "stem": "Which explanation best connects Learning loops to the wider subject?",
+   "prompt": null,
+   "options": [
+    "Once Learning loops has settled the choice, later evidence should not be allowed to reopen or change the decision.",
+    "Learning loops improves one local measure, so whatever happens elsewhere in the connected system no longer matters here at all.",
+    "Each loop buys information rather than product, so its worth is what it rules out, not how much of the build it completed.",
+    "Learning loops works in exactly the same way independently of the people, the constraints, and the decisions that surround it."
+   ],
+   "termsAvailable": [
+    "learning loop",
+    "validated learning",
+    "minimum viable product",
+    "early evangelist",
+    "persevere",
+    "pivot"
+   ]
+  },
+  {
+   "number": 31,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_growth_strategies_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Growth strategies?",
+   "prompt": null,
+   "options": [
+    "Growth strategies: One growth strategy suits every market, since acquisition is acquisition and the cheapest route should be chosen whatever the product and buyer look like.",
+    "Growth strategies: Product-led growth carries the highest customer acquisition cost of the four, because building a self-service experience good enough to sell itself is more expensive than employing a sales team to do it.",
+    "Growth strategies: The four growth strategies are sales-led, marketing-led, product-led and ecosystem-led, and each rests on a different asset: relationships, brand, the product experience, or the partner network.",
+    "Growth strategies: Ecosystem-led growth is marketing-led growth run through partners, so the growth driver is still the brand campaign and the partners simply extend its reach."
+   ],
+   "termsAvailable": [
+    "sales-led growth",
+    "marketing-led growth",
+    "product-led growth",
+    "ecosystem-led growth"
+   ]
+  },
+  {
+   "number": 32,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_product_planning_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Product planning approaches?",
+   "prompt": null,
+   "options": [
+    "Product planning approaches: Requirements-driven planning and data-driven planning are the same approach, since a stated customer requirement is itself a piece of data and both end in a prioritised list of features to build.",
+    "Product planning approaches: Product planning is the same activity as product strategy, so a team with a clear vision has already planned the product.",
+    "Product planning approaches: Product planning decides what to build, when, why and for whom, and its three approaches are requirements-driven planning, data-driven planning and market-driven planning.",
+    "Product planning approaches: Data-driven planning suits regulated industries best, because a regulator wants evidence and usage data is the strongest evidence available."
+   ],
+   "termsAvailable": [
+    "product planning",
+    "requirements-driven planning",
+    "data-driven planning",
+    "commodity features"
+   ]
+  },
+  {
+   "number": 33,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_requirement_lifecycle_apply",
+   "type": "mcq",
+   "caselet": "A requirement has been approved after triage. Its detail is not written, no release is chosen, and a sales lead is quoting a delivery date to a customer.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "The requirement lifecycle: Confirm the date, since approval is the decision that commits the company to building the requirement and the missing specification can be completed after the customer has received the promise.",
+    "The requirement lifecycle: Move the requirement straight to selected so the date becomes real, skipping specification and release selection because those states only document a commitment already made by triage.",
+    "The requirement lifecycle: Hold the date: the requirement is approved rather than specified or selected, and release planning begins only once selection has happened.",
+    "The requirement lifecycle: Reject the requirement because it cannot be dated, treating an unschedulable item as one that should not be carried."
+   ],
+   "termsAvailable": [
+    "atomic",
+    "requirement repository",
+    "triage",
+    "elicitation",
+    "deselection"
+   ]
+  },
+  {
+   "number": 34,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_delivery_models_apply",
+   "type": "mcq",
+   "caselet": "A bank needs the software on dedicated infrastructure it does not want to operate, with configuration specific to its own regulatory position.",
+   "stem": "What is the best interpretation or next step?",
+   "prompt": null,
+   "options": [
+    "Software delivery models: Offer whichever model is cheapest to operate, treating the delivery model as an internal cost decision.",
+    "Software delivery models: Offer managed services: dedicated infrastructure maintained by the vendor, which is what separates it from multi-tenant SaaS.",
+    "Software delivery models: Offer SaaS, since the customer's requirement is that the vendor rather than its own IT team runs the software.",
+    "Software delivery models: Offer on-premise, because dedicated infrastructure is what on-premise means."
+   ],
+   "termsAvailable": [
+    "on-premise",
+    "software as a service",
+    "managed services",
+    "multi-tenancy",
+    "perpetual license",
+    "recurring revenue"
+   ]
+  },
+  {
+   "number": 35,
+   "section": "A",
+   "marks": 1,
+   "id": "spms_metrics_loop_explain",
+   "type": "mcq",
+   "caselet": "",
+   "stem": "Which statement best explains Vanity and actionable metrics?",
+   "prompt": null,
+   "options": [
+    "Vanity and actionable metrics: Vanity metrics are numbers that feel good without changing a decision; actionable metrics are those a team can act on and extrapolate to a segment and a market.",
+    "Vanity and actionable metrics: A metric that cannot be extrapolated to another market is still actionable, so long as it describes the current users correctly and can be tracked over time without gaps.",
+    "Vanity and actionable metrics: App downloads are an actionable metric, because a download is a real user choosing the product and the count rises only when someone acts.",
+    "Vanity and actionable metrics: A metric is actionable whenever it is measured accurately and reported often, since precision and frequency are what make a number usable rather than what the number would change."
+   ],
+   "termsAvailable": [
+    "vanity metric",
+    "causality",
+    "predictive power",
+    "active users",
+    "outcome"
+   ]
+  },
+  {
+   "number": 36,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_roadmap_msq_exam",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is true of a product roadmap.",
+   "prompt": null,
+   "options": [
+    "It sequences development, release and evolution against a time axis",
+    "It follows from a product strategy, which it turns into releases",
+    "It is the inventory of every capability the product will eventually contain",
+    "Once published it should be held fixed, since changing it undermines the commitments made from it",
+    "What has been deliberately left out is part of the decision it records"
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  },
+  {
+   "number": 37,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_unit_economics_msq_exam",
+   "type": "msq",
+   "caselet": "A subscription business earns ₹1,800 of gross profit per customer per year. It spends ₹5,400 to acquire one. Customers stay an average of four years. The finance lead reports that the business is profitable per customer and proposes raising acquisition spend.",
+   "stem": "Select every statement this case supports.",
+   "prompt": null,
+   "options": [
+    "Because lifetime value exceeds acquisition cost, raising spend carries no additional risk",
+    "Acquisition cost is recovered in the third year of the relationship",
+    "Profitability per customer is established as soon as the first year's gross profit is earned",
+    "A payback measured in years is a cash-flow risk the profitability statement does not show",
+    "Lifetime gross profit of about ₹7,200 exceeds the ₹5,400 acquisition cost"
+   ],
+   "termsAvailable": [
+    "payback period",
+    "churn rate",
+    "gross margin",
+    "unit economics",
+    "customer acquisition cost",
+    "business model validation",
+    "customer relationship model"
+   ]
+  },
+  {
+   "number": 38,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_dfv_msq_exam",
+   "type": "msq",
+   "caselet": "A logistics startup has built a route-planning tool. Drivers who trialled it completed their rounds sooner and asked to keep it. The engineering team ships updates weekly on existing map infrastructure. The company charges ₹400 per driver per month; the support and mapping licence cost per driver is ₹430, and neither falls with volume.",
+   "stem": "Select every statement this case supports.",
+   "prompt": null,
+   "options": [
+    "The idea fails on viability, because each additional driver deepens the loss",
+    "The idea is proven overall, since two of the three checks are clearly passed",
+    "Viability can be assumed from the drivers' enthusiasm, because demand sets price",
+    "Feasibility holds: it is being built and shipped with technology that exists now",
+    "Desirability holds: the people who used it wanted to carry on using it"
+   ],
+   "termsAvailable": [
+    "desirability",
+    "feasibility",
+    "viability",
+    "design thinking"
+   ]
+  },
+  {
+   "number": 39,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_tamsam_msq_exam",
+   "type": "msq",
+   "caselet": "A company sells compliance software to licensed pharmacies. There are 900,000 licensed pharmacies worldwide. Its product is certified only under Indian regulation, which covers 90,000 of them. Of those, 62,000 already run a competing system on multi-year contracts, and the firm's sales capacity can reach about 4,000 pharmacies in the coming year.",
+   "stem": "Select every statement that sizes this market correctly.",
+   "prompt": null,
+   "options": [
+    "Regulatory certification is what narrows the total to a serviceable 90,000",
+    "The 62,000 on competing contracts should be counted in the serviceable market as switchable demand",
+    "The obtainable figure should be the 90,000 serviceable pharmacies, since sales capacity can be hired",
+    "About 4,000 is the obtainable share, because reach and competition bound it",
+    "The 900,000 figure is the total addressable market"
+   ],
+   "termsAvailable": [
+    "Total Addressable Market",
+    "Serviceable Available Market",
+    "Serviceable Obtainable Market",
+    "Earlyvangelists"
+   ]
+  },
+  {
+   "number": 40,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_traceability_msq_exam",
+   "type": "msq",
+   "caselet": "A hospital group tells a software vendor: \"Our nurses waste time at shift handover and patients are at risk when something is missed.\" The vendor's product team decides the product will carry a structured handover record. The delivery team breaks that into a template editor for one release and an audit trail for the next.",
+   "stem": "Select every statement that classifies this chain correctly.",
+   "prompt": null,
+   "options": [
+    "The hospital's statement is a project requirement, since it came from the party paying for the work",
+    "The hospital's statement is a customer requirement: a business need, not a specification",
+    "The structured handover record is the product requirement",
+    "The template editor and the audit trail are project requirements for particular releases",
+    "Standardising means building exactly what this hospital described, for this hospital"
+   ],
+   "termsAvailable": [
+    "customer requirements",
+    "product requirements",
+    "project requirements",
+    "requirements elicitation",
+    "traceability",
+    "good requirement"
+   ]
+  },
+  {
+   "number": 41,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_lean_canvas_msq_exam",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is true of what a Lean Canvas is for.",
+   "prompt": null,
+   "options": [
+    "It replaces the Business Model Canvas boxes that suit an established company with ones a startup needs",
+    "A box left empty is a failure of the exercise and should be filled before the canvas is used",
+    "Its value is that a wrong box is cheap to discover and cheap to change",
+    "It is a document to be completed once and then held stable for the investor conversation",
+    "It records the assumptions a business rests on so they can be tested"
+   ],
+   "termsAvailable": [
+    "product definition",
+    "product positioning",
+    "product vision",
+    "transaction friction"
+   ]
+  },
+  {
+   "number": 42,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_alternatives_msq_exam",
+   "type": "msq",
+   "caselet": "A team building an expense-reporting tool lists two rival products in its competitive review. Interviews find that of forty finance teams, twenty-six use a spreadsheet template, nine ask an assistant to compile receipts by hand, and five have decided the problem is not worth solving and simply absorb the errors.",
+   "stem": "The review already lists the two rival products. Select every further alternative this case shows the product is really competing against.",
+   "prompt": null,
+   "options": [
+    "The other finance software these teams already pay for that does not touch expenses",
+    "The spreadsheet template twenty-six teams currently rely on",
+    "The two rival products, which should be counted again as the primary competition",
+    "The decision by five teams to do nothing about the problem",
+    "The manual compilation nine teams pay an assistant to do"
+   ],
+   "termsAvailable": [
+    "red ocean",
+    "blue ocean strategy",
+    "value innovation",
+    "alternatives",
+    "market alternatives",
+    "direct competition",
+    "substitutes",
+    "inertia"
+   ]
+  },
+  {
+   "number": 43,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_metrics_msq_exam",
+   "type": "msq",
+   "caselet": "A six-month-old product reports to its board each month on registered accounts, page views, and press mentions. All three rise steadily. Weekly active use has been flat since month two, and no one has been asked to act on any of the three reported numbers.",
+   "stem": "Select every criticism this reporting fairly attracts.",
+   "prompt": null,
+   "options": [
+    "The measure that would show whether the product is working is the one not being reported",
+    "The reporting is appropriate, since a board is entitled to see growth figures at this stage",
+    "No number carries an owner or a threshold, so none of them can require a decision",
+    "Registered accounts is the right headline measure, because it is the figure that has grown most",
+    "The reported measures rise whatever happens, so they cannot separate progress from activity"
+   ],
+   "termsAvailable": [
+    "average revenue per user",
+    "customer lifetime value",
+    "gross margin",
+    "product metrics",
+    "vanity metric",
+    "actionable metric",
+    "AARRR",
+    "HEART framework",
+    "north star metric"
+   ]
+  },
+  {
+   "number": 44,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_lean_canvas_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every box that appears on the Lean Canvas but not on the Business Model Canvas.",
+   "prompt": null,
+   "options": [
+    "Channels",
+    "Customer segments",
+    "Problem",
+    "Unfair advantage",
+    "Solution"
+   ],
+   "termsAvailable": [
+    "Lean Canvas",
+    "Business Model Canvas",
+    "unique value proposition",
+    "unfair advantage",
+    "key metrics"
+   ]
+  },
+  {
+   "number": 45,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_buyer_journey_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every failure that follows from communicating value badly.",
+   "prompt": null,
+   "options": [
+    "Using the wrong channels to carry the message",
+    "Pricing the product below the nearest competitor",
+    "Communicating too late, after the decision has already been taken",
+    "Publishing the product vision before the product definition"
+   ],
+   "termsAvailable": [
+    "value communication",
+    "buyer's journey",
+    "customer journey",
+    "value messaging"
+   ]
+  },
+  {
+   "number": 46,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_traceability_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that correctly traces a customer need into a project requirement.",
+   "prompt": null,
+   "options": [
+    "Project requirements are written by the customer and passed to engineering unchanged",
+    "Customer requirements arrive already standardised, because customers state system requirements",
+    "Customer requirements describe business needs and aspirations rather than system specifications",
+    "Project requirements break a product requirement down for a release across smaller teams",
+    "Standardising generalises one customer's stated need so more customers of that nature are served by one product"
+   ],
+   "termsAvailable": [
+    "customer requirements",
+    "product requirements",
+    "project requirements",
+    "requirements elicitation",
+    "traceability",
+    "good requirement"
+   ]
+  },
+  {
+   "number": 47,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_positioning_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that correctly separates what a product definition is from what positioning is.",
+   "prompt": null,
+   "options": [
+    "Positioning is written first, and the product vision is derived from it afterwards",
+    "Product positioning is how the product impacts users, and why they should use it",
+    "Product definition is what the product does, and is largely internal — the team and its partners build against it",
+    "Definition and positioning are two names for the same customer-facing statement"
+   ],
+   "termsAvailable": [
+    "product definition",
+    "product positioning",
+    "product vision",
+    "transaction friction"
+   ]
+  },
+  {
+   "number": 48,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_roadmap_msq_sequence",
+   "type": "msq",
+   "caselet": "WhatsApp started in 2009, into a market that already had Skype, Yahoo Messenger, ICQ and plenty more.\n\nIt launched on iPhone. Android followed around the middle of 2011 — and the team already knew that a large share of the people it wanted were on Android, in Asia.\n\nThe rest arrived on its own schedule: message history search around 2011, chat backup after 2012. The company was acquired in 2014 still without end-to-end encryption.",
+   "stem": "Select every statement that reads this release history the way the course does.",
+   "prompt": null,
+   "options": [
+    "A roadmap is a smart sequence for developing, releasing, and evolving a solution",
+    "Launching on iPhone first shows the team did not know where its users were",
+    "The Android delay was a resourcing accident rather than a decision",
+    "A roadmap is a set of releases with no strategic horizon behind it",
+    "The team launched on iPhone knowing a big chunk of its potential users were on Android in Asia"
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  },
+  {
+   "number": 49,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_priority_msq_buckets",
+   "type": "msq",
+   "caselet": "A ride-hailing product has three months before its first release, and everyone wants something in it — customers, investors, the sales team.\n\nThe team writes down what it could build. Booking a ride. Taking payment. GPS tracking. Driver ratings, so a rider can choose between two drivers. Multi-stop planning, so they can drop someone off on the way. In-car entertainment that follows whoever is driving.\n\nSix candidates, one release, and MoSCoW to sort them: must have, should have, could have, won't have.",
+   "stem": "Select every capability that belongs in must have for this release.",
+   "prompt": null,
+   "options": [
+    "Booking a ride",
+    "Driver ratings that help a customer choose between drivers",
+    "Payments",
+    "GPS",
+    "Multi-stop route planning"
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "RICE",
+    "reach",
+    "impact",
+    "confidence",
+    "effort",
+    "weighted RICE",
+    "release planning"
+   ]
+  },
+  {
+   "number": 50,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_unit_economics_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every business type correctly paired with the unit its economics should be measured on.",
+   "prompt": null,
+   "options": [
+    "The unit is whichever one makes the economics look strongest to investors",
+    "Marketplace — one customer lifetime",
+    "SaaS — one customer or account",
+    "E-commerce — one order",
+    "Ride-sharing — one ride"
+   ],
+   "termsAvailable": [
+    "payback period",
+    "churn rate",
+    "gross margin",
+    "unit economics",
+    "customer acquisition cost",
+    "business model validation",
+    "customer relationship model"
+   ]
+  },
+  {
+   "number": 51,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_tamsam_msq",
+   "type": "msq",
+   "caselet": "Zerodha is an online investment platform. In principle anyone, anywhere, who wants to buy exchange traded securities or mutual funds could use it.\n\nIn practice not everyone can. Cross-border investing carries its own regulatory framework, which leaves the platform serving online retail investors in India.\n\nAnd not all of those are available either. Twenty to forty lakh of them already have a broker — Kotak Securities, ICICI Direct, HDFC Securities. What is genuinely open is the cost-conscious investor who would rather save the brokerage and do their own research.",
+   "stem": "Select every statement that sizes this market correctly.",
+   "prompt": null,
+   "options": [
+    "Regulation on cross-border investing narrows SAM to online retail investors in India",
+    "SOM is the figure to quote as the market when raising funds",
+    "TAM is every retail investor who could use the product, worldwide",
+    "SOM narrows further because incumbent brokerages already serve those investors",
+    "TAM is calculated last, by scaling the achievable share back up"
+   ],
+   "termsAvailable": [
+    "Total Addressable Market",
+    "Serviceable Available Market",
+    "Serviceable Obtainable Market",
+    "Earlyvangelists"
+   ]
+  },
+  {
+   "number": 52,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_chasm_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every strategy that helps a product cross from its early market to the mainstream.",
+   "prompt": null,
+   "options": [
+    "Raise the price at launch so mainstream buyers read it as quality",
+    "Focus on a narrow beachhead market rather than spray and pray",
+    "Address the early market and the mainstream at the same time to build volume faster",
+    "Build trust through uptime, security, support, compliance, and social proof",
+    "Simplify onboarding and the interface for mainstream users"
+   ],
+   "termsAvailable": [
+    "beachhead market",
+    "spray and pray",
+    "early adopters",
+    "social proof"
+   ]
+  },
+  {
+   "number": 53,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_jtbd_msq",
+   "type": "msq",
+   "caselet": "A doctor has just finished her residency. She walks into a hardware shop and asks for a drilling bit and a drilling machine.\n\nAsk her what she is hanging, and it turns out to be photos — one photo, really: her MD certificate. Ask why it has to go up on the wall, and the answer moves again. Her patients see it. New ones especially, she says, want to know they are with a qualified doctor. Ten years of her life went into earning it, and she is proud of it.\n\nWhat she is buying is a drill bit, a frame, and a hole in the wall.",
+   "stem": "Select every need this purchase actually serves.",
+   "prompt": null,
+   "options": [
+    "Habitual — the purchase repeats often enough that no decision is taken",
+    "Financial — the drill costs less than hiring someone to do it",
+    "Functional — the certificate has to go onto the wall",
+    "Emotional — pride in more than a decade of study",
+    "Social — new patients gain confidence they are seeing a qualified doctor"
+   ],
+   "termsAvailable": [
+    "Jobs to Be Done",
+    "functional need",
+    "social need",
+    "customer value"
+   ]
+  },
+  {
+   "number": 54,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_priority_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is true of how MoSCoW is used.",
+   "prompt": null,
+   "options": [
+    "Won't have is part of the method, and stating it is what makes scope control real",
+    "It works as a filtering criterion, closer to a triage than to a ranking",
+    "It ranks every item against every other to produce one ordered list",
+    "Moscow refers to the capital city, where the technique was first formalised"
+   ],
+   "termsAvailable": [
+    "must have",
+    "should have",
+    "could have",
+    "won't have",
+    "RICE",
+    "reach",
+    "impact",
+    "confidence",
+    "effort",
+    "weighted RICE",
+    "release planning"
+   ]
+  },
+  {
+   "number": 55,
+   "section": "B",
+   "marks": 2,
+   "id": "spms_roadmap_msq",
+   "type": "msq",
+   "caselet": null,
+   "stem": "Select every statement that is true of a product roadmap.",
+   "prompt": null,
+   "options": [
+    "It fixes the next three to six months and deliberately goes no further",
+    "What has been deliberately deferred is as much a part of it as what has been scheduled",
+    "It translates product strategy into a series of releases on a time axis",
+    "It lists the features to build without ordering them, leaving sequence to the team"
+   ],
+   "termsAvailable": [
+    "roadmap",
+    "product strategy",
+    "time axis",
+    "prioritization"
+   ]
+  }
+ ]
+}

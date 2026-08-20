@@ -48,6 +48,8 @@
   var KEY = "term6.revision.v2";
   var COURSE = window.__EXPORT_SUBJECT || "SPMS";
   var SET_INDEX = Number(window.__EXPORT_SET || 0);
+  var MIRROR_ROOT = window.__EXPORT_MIRROR_ROOT ||
+    "/evidence/2026-08-20/t6-preparedness-personas/persona-harness";
 
   var courses = window.T6_COURSES || {};
   var course = courses[COURSE];
@@ -244,7 +246,7 @@
          exactly once. */
       try {
         var request = new XMLHttpRequest();
-        request.open("GET", "/evidence/2026-08-15/persona-harness/" + COURSE + "-set" + (SET_INDEX + 1) + ".json?t=" + String(Date.now()), false);
+        request.open("GET", MIRROR_ROOT + "/" + COURSE + "-set" + (SET_INDEX + 1) + ".json?t=" + String(Date.now()), false);
         request.send();
         if (request.status === 200) {
           var mirror = JSON.parse(request.responseText);

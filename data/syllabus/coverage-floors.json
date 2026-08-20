@@ -1,0 +1,86 @@
+{
+  "measured": "2026-08-17",
+  "tool": "tools/measure-syllabus-coverage.mjs",
+  "why": [
+    "Coverage ratchets upward. These are the values measured when the gate was written,",
+    "not targets. --gate fails if any subject drops below its floor, so authoring can only",
+    "add. Raise a floor when new teaching lands; never lower one to make a run green.",
+    "If a term reads as untaught because the lesson uses a different name for the same idea,",
+    "add an alias in the subject's .terms.json — that is the fix, not a lower floor."
+  ],
+  "matching": [
+    "Phrase-contiguous and whole-word. Three measurement bugs were found and fixed while",
+    "this baseline was being taken, each of which inflated coverage:",
+    "  1. substring matching put RICE inside 'price', SAM inside 'same', SOM inside 'some';",
+    "  2. scattered-token matching let the alias 'reach impact confidence effort' match four",
+    "     unrelated sentences, so the bank's largest untaught idea read as taught;",
+    "  3. dropping interior function words turned 'Jobs to Be Done' into 'jobs done',",
+    "     reporting a lesson TITLE as untaught.",
+    "Reported coverage moved 63% -> 61% -> 36% -> 39% across those fixes. The floors below",
+    "are the post-fix numbers, verified against ten hand-checked controls."
+  ],
+  "raised": [
+    "2026-08-17: SPMS 36 -> 39 after RICE, traceability and the vanity/actionable metric contrast",
+    "were authored into SPMS-M07-L01, SPMS-M06-L08 and SPMS-M08-L03 (fix A3). This is what raising",
+    "a floor is for: the number moved because teaching landed, not because matching got looser.",
+    "",
+    "2026-08-17: SPMS 39 -> 50 (fix C2a). Module 1 went 3/17 -> 17/17 with six new lessons —",
+    "SPMS-M01-L01 to L04, L06 to L08 — covering the four elements of a product, physical versus",
+    "software, the four kinds of software product, family/platform/line, the SPM definition and its",
+    "eras, startup discovery and validation, and product thinking. Authored from the course's own",
+    "module 1 notes, which are handwritten and were read visually rather than OCR'd."
+  ],
+  "raised2": [
+    "2026-08-17: BRGSA 78 -> 100. No new lessons were needed. All 15 remaining terms were ideas the",
+    "50 existing lessons already taught under different names, so the fix was to make the prose use",
+    "the course's own labels — golden rule, master loop, growth operating system, scaling threshold,",
+    "revenue architecture, traction levers, cohort retention table, voluntary versus involuntary",
+    "churn, brand snapshot, low-resource validation, A/B testing, statistical significance — plus",
+    "four aliases where the difference was pure phrasing. That a well-authored subject could sit at",
+    "78% purely on vocabulary is the finding: the gate measures whether a learner meets the words",
+    "the exam will use, and BRGSA was teaching the ideas in its own words instead of the course's."
+  ],
+  "raised3": [
+    "2026-08-17: SPMS 50 -> 63. Modules 2 and 3 taken to 100% with eight new lessons —",
+    "SPMS-M02-L01/L02/L03/L07/L08 (value pyramid, value proposition canvas, what a market is,",
+    "MVPs and learning loops, the two fits) and SPMS-M03-L01/L03/L08 (product vs company vision,",
+    "the four growth motions, delivery models and tailorability). SPMS M1-M3 are now complete;",
+    "M4-M8 remain."
+  ],
+  "floors": {
+    "BRGSA": 100,
+    "SCLM": 100,
+    "SPMS": 100,
+    "IBM": 100
+  },
+  "raised4": [
+    "2026-08-17: SPMS 63 -> 100. Modules 4-8 completed with 13 further lessons: the pricing",
+    "pyramid, the Spotify tiering rule, revenue models and funding stages, business ecosystems,",
+    "blue ocean and value innovation, launches and CX, product planning approaches, the requirement",
+    "lifecycle and heartbeat principle, the Kano model, roadmaps and PLM stages, team roles and",
+    "Agile, metric frameworks, and responsible product management. All four SPMS lessons that",
+    "remained were then closed by alias where the idea was already taught under another name."
+  ],
+  "raised5": [
+    "2026-08-17: SCLM 32 -> 100. Twelve new lessons authored from the course's handwritten",
+    "module 1-2 notebook (read visually) plus the revision sheets: what a supply chain is and its",
+    "three flows, supply chain surplus, decision phases and the cycle/push-pull views, efficient vs",
+    "responsive chains, ROA/C2C/Little's Law, forecast composition, methods and error metrics,",
+    "inventory functions and ABC, total cost of ownership and aggregation, risk-sharing contracts,",
+    "logistics horizons, rail innovations and systemic bottlenecks, modes and national reforms,",
+    "and postponement/kitting/cross-docking. A learner is now told what a supply chain is before",
+    "being asked to reason about one, which was the audit's sharpest single finding."
+  ],
+  "raised6": [
+    "2026-08-17: IBM 19 -> 100, and all four subjects now sit at 100%.",
+    "IBM needed almost no new lessons. Its 24 lessons already covered the module content; what they",
+    "lacked was the course's own labels for it, which is exactly what this gate measures. 72 glossary",
+    "entries were authored onto the 20 lessons that own those ideas — the glossary field is defined as",
+    "'every term the lecture introduces', so that is where they belong rather than a workaround —",
+    "plus three aliases where the lesson uses the course's other name (share value, replication).",
+    "",
+    "Final: 360 of 360 named ideas taught. 42 new lessons authored this session across SPMS and SCLM,",
+    "and ~90 vocabulary fixes across BRGSA and IBM. Floors are now all 100, so any subject that drops",
+    "below full coverage fails the gate."
+  ]
+}

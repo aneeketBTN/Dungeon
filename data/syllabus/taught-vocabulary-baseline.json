@@ -1,0 +1,47 @@
+{
+  "measured": "2026-08-17",
+  "tool": "tools/check-taught-vocabulary.mjs",
+  "what": [
+    "The known backlog of ideas a scored question tests and no lesson teaches, recorded the day",
+    "the gate was written. --gate fails on anything NEW, and also fails if an entry here has been",
+    "fixed and left behind, so the list can only shrink.",
+    "",
+    "This is a backlog, not a permission. Every entry is a learner meeting a term in a graded",
+    "question that Learn never explained — the exact failure the product exists to prevent.",
+    "",
+    "17 terms across 111 questions when the gate was written. The three largest were on the SPMS",
+    "paper sat 22 August — Traceability (14 questions), RICE (13) and Vanity metrics (8) — all three",
+    "on the course's own module revision sheets, so they were on-syllabus questions with no teaching",
+    "behind them rather than off-syllabus questions.",
+    "",
+    "2026-08-17: those three were authored into SPMS-M06-L08, SPMS-M07-L01 and SPMS-M08-L03 and",
+    "removed from this list.",
+    "",
+    "2026-08-17 (C2a): 'Marginal cost' cleared too — SPMS-M01-L02 now teaches the physical/software",
+    "split it belongs to. It was not a target of that work; the gate reported the baseline stale and",
+    "the entry was removed, which is the ratchet doing its job. 13 terms over 70 questions remain.",
+    "",
+    "2026-08-17 (C-phase): SPMS, SCLM and BRGSA reached 100% syllabus coverage. That cleared 'Supply chain design', 'Price structure' and 'Payback period' from this backlog as a side effect — none was a target; the gate reported the baseline stale each time and the entries were removed.",
+    "2026-08-17 (IBM to 100%): 'CSR', 'Affordability system' and 'Market linkage' cleared as a side effect of the module vocabulary work. Backlog then: BRGSA 4, IBM 1, SPMS 1.",
+    "2026-08-20: 'CRM' cleared as a side effect of the concept-spine authoring. Backlog now: BRGSA 3, IBM 1, SPMS 1."
+  ],
+  "howToClear": [
+    "Author the idea into the lesson that owns the concept, then delete the term from this file.",
+    "Do NOT clear an entry by adding an alias to taught-vocabulary-allowlist.json unless the idea",
+    "is genuinely taught under that other name — the allowlist re-checks its own claim, and using",
+    "it to mute a real gap is the thing this whole gate exists to catch."
+  ],
+  "accepted": {
+    "BRGSA": [
+      "MRR",
+      "PLG",
+      "SLG"
+    ],
+    "IBM": [
+      "CFO"
+    ],
+    "SPMS": [
+      "NPS"
+    ]
+  }
+}

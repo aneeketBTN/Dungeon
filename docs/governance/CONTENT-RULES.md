@@ -277,6 +277,64 @@ problem and needs more items, not different scheduling.
 
 ---
 
+## R11 — What is taught must eventually be tested
+
+The mirror of LAW-47, and the direction the standing brief's fourth promise runs in:
+*"If Examiner feels foreign — that's Dungeon Learn's failure."* The lessons and bank now
+both reach all 359 named syllabus ideas. That closes phrase coverage, not equal depth:
+one mention still passes this gate, and 219 concept records stand in for 359 ideas.
+
+**Banned:** a bank change that lowers any subject's tested-coverage figure. The gate is
+a **ratchet baseline, not a quality threshold**. All four floors are now 100%, so any
+drop is a regression and authoring can only restore or deepen coverage.
+
+**Before authoring toward the gap, triage.** A miss is as often naming drift as a real
+hole (`landing page` vs *Landing page validation*). Run `--triage` first; a wording fix
+is an edit to an existing item, not a new question.
+
+**The depth scope remains, with IBM's assessment taxonomy superseding its uniform-format
+assumption — owner decisions 2026-08-19 and 2026-08-20.** Objective-bearing ideas still
+seek repeated, linked surfaces rather than one recognition item. IBM is governed by R12:
+surface form follows whether the idea is a layer, framework or bounded concept. Two
+constraints follow, and both bind an author:
+
+- **A concept is not finished when it has surfaces — it is finished when it links.** Its
+  lecture `source` supplies teaching order, and some question must carry it beside a
+  neighbour through `supportingConceptIds` so `groupWeaknesses()` can use the edge.
+  Depth exists to connect ideas, not to add volume.
+- **Author in importance order, and do not invent the order yourself.** The current
+  importance measurement is contribution to the course through module reach, with exam
+  marks reported separately. Re-run it rather than trusting a copied ranking.
+
+**Gate:** `npm run check:tested` (`tools/check-taught-not-tested.mjs --gate`); floors in
+`data/syllabus/tested-floors.json`; asserted in both directions by
+`tests/taught-not-tested.test.mjs`, which runs in `npm test`. A PASS means nothing
+regressed, never that every idea has equal depth.
+
+---
+
+## R12 — IBM assessment form follows idea kind
+
+IBM's paper is written and its real case is unreleased, but the course still contains
+foundational ideas, named frameworks and bounded distinctions. Treating those as one
+question type trains the wrong skill.
+
+- `conceptKind: "layer"` → `assessmentMode: "mixed"`: subjective + MCQ/objective.
+- `conceptKind: "framework"` → `assessmentMode: "written"`: short, case and linked
+  written practice; no objective surface and no boss.
+- `conceptKind: "concept"` → `assessmentMode: "objective"`: MCQ/objective families and
+  boss linkage; no short answer.
+
+Generic lesson-grounded caselets may teach transfer. They must not name, predict or imply
+the unreleased examination case. Generated framework links use `writtenMode: "case"`;
+`"integrated"` is reserved for whole authored scenarios that receive exam priority.
+
+**Gate:** `tools/validate_t6_bank.js`; the bank-wide contract test in
+`tests/integrated-scenarios.test.mjs`; the mode-specific Learn-reach floor in
+`tests/examiner-slice.test.mjs` (LAW-79).
+
+---
+
 ## When adding questions from the CLAs
 
 `docs/course-material/` (gitignored) holds the real course assessments — SCLM 72

@@ -1,0 +1,160 @@
+{
+  "courseId": "BRGSA",
+  "title": "Business Research, Growth Strategies and Analytics",
+  "source": "course revision sheets, modules 1-8; CLA quiz modules 1-8",
+  "modules": {
+    "1": [
+      "Lean validation",
+      "Build trap",
+      "Smoke test",
+      "Fake door",
+      "Landing page validation",
+      "Pre-sales validation",
+      "Commitment strength",
+      "Survey bias",
+      {
+        "term": "validation under low resources",
+        "aliases": [
+          "low-resource validation"
+        ]
+      },
+      "MVP validation"
+    ],
+    "2": [
+      "A/B testing",
+      "Null hypothesis",
+      "Statistical significance",
+      "Sample size",
+      "Type I error",
+      "Type II error",
+      {
+        "term": "Test modes",
+        "aliases": [
+          "test mode"
+        ]
+      },
+      {
+        "term": "Evidence-based decision rule",
+        "aliases": [
+          "decision rules",
+          "pre-registered"
+        ]
+      }
+    ],
+    "3": [
+      "Cohort analysis",
+      "Retention curve",
+      {
+        "term": "Customer acquisition cost",
+        "aliases": [
+          "CAC"
+        ]
+      },
+      {
+        "term": "Lifetime value",
+        "aliases": [
+          "LTV"
+        ]
+      },
+      "Unit economics",
+      "Growth readiness brief",
+      {
+        "term": "Ideal customer profile",
+        "aliases": [
+          "ICP"
+        ]
+      },
+      "Brand snapshot",
+      {
+        "term": "AARRR",
+        "aliases": [
+          "pirate metrics"
+        ]
+      },
+      "Primary constraint",
+      "Scale iterate or pivot"
+    ],
+    "4": [
+      "Zero-budget traction",
+      "Traction levers",
+      {
+        "term": "ICE prioritisation",
+        "aliases": [
+          "ICE framework",
+          "ICE"
+        ]
+      },
+      "Founder-led traction",
+      "Early customer acquisition",
+      {
+        "term": "Marketing versus product versus growth",
+        "aliases": [
+          "marketing, product, and growth"
+        ]
+      }
+    ],
+    "5": [
+      "Channel-market fit",
+      "B2B outbound",
+      "B2C organic loops",
+      "AHA moment",
+      "Time to AHA",
+      "Activation",
+      "Onboarding friction",
+      "Activation metric design"
+    ],
+    "6": [
+      "Habit loops",
+      "Lifecycle engagement",
+      "Churn diagnostics",
+      {
+        "term": "Retention curve shapes",
+        "aliases": [
+          "reading retention curves",
+          "retention curve"
+        ]
+      },
+      "Voluntary versus involuntary churn",
+      "Cohort retention table",
+      "Referral mechanics",
+      "Network effects"
+    ],
+    "7": [
+      "Pricing models",
+      "Revenue expansion",
+      {
+        "term": "Net revenue retention",
+        "aliases": [
+          "NRR"
+        ]
+      },
+      "Sales integration",
+      "B2B pipeline",
+      "Payback period",
+      {
+        "term": "Product-led growth",
+        "aliases": [
+          "PLG"
+        ]
+      },
+      {
+        "term": "Sales-led growth",
+        "aliases": [
+          "SLG"
+        ]
+      },
+      "Scaling threshold",
+      "Revenue architecture"
+    ],
+    "8": [
+      "Growth backlog",
+      "Decision rules",
+      "Vanity metrics",
+      "Resource allocation",
+      "90-day growth roadmap",
+      "Growth operating system",
+      "Golden rule",
+      "Master loop"
+    ]
+  }
+}

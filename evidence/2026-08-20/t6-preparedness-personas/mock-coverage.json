@@ -1,0 +1,56 @@
+[
+  {
+    "subject": "SPMS",
+    "bankConcepts": 69,
+    "paperRelevantConcepts": 69,
+    "registeredLessons": 84,
+    "sets": [
+      { "set": 1, "questions": 55, "concepts": 35, "modules": 8, "lessons": 32, "formats": { "mcq": 35, "msq": 20 } },
+      { "set": 2, "questions": 55, "concepts": 42, "modules": 8, "lessons": 41, "formats": { "mcq": 35, "msq": 20 } },
+      { "set": 3, "questions": 55, "concepts": 30, "modules": 8, "lessons": 29, "formats": { "mcq": 35, "msq": 20 } }
+    ],
+    "acrossCycle": { "sets": 3, "questionSlots": 165, "uniqueQuestions": 112, "concepts": 69, "conceptPct": 100, "lessons": 65, "lessonPct": 77.4 }
+  },
+  {
+    "subject": "BRGSA",
+    "bankConcepts": 29,
+    "paperRelevantConcepts": 29,
+    "registeredLessons": 50,
+    "sets": [
+      { "set": 1, "questions": 26, "concepts": 19, "modules": 8, "lessons": 24, "formats": { "mcq": 20, "case-cloze": 4, "short-answer": 2 } },
+      { "set": 2, "questions": 26, "concepts": 16, "modules": 8, "lessons": 21, "formats": { "mcq": 20, "case-cloze": 4, "short-answer": 2 } },
+      { "set": 3, "questions": 26, "concepts": 18, "modules": 8, "lessons": 26, "formats": { "mcq": 20, "case-cloze": 4, "short-answer": 2 } },
+      { "set": 4, "questions": 26, "concepts": 17, "modules": 8, "lessons": 24, "formats": { "mcq": 20, "case-cloze": 4, "short-answer": 2 } }
+    ],
+    "acrossCycle": { "sets": 4, "questionSlots": 104, "uniqueQuestions": 73, "concepts": 29, "conceptPct": 100, "lessons": 44, "lessonPct": 88 }
+  },
+  {
+    "subject": "IBM",
+    "bankConcepts": 85,
+    "paperRelevantConcepts": 65,
+    "objectiveOnlyLearnConcepts": 20,
+    "registeredLessons": 78,
+    "sets": [
+      { "set": 1, "questions": 10, "concepts": 25, "modules": 8, "lessons": 19, "formats": { "short-answer": 10 } },
+      { "set": 2, "questions": 10, "concepts": 28, "modules": 8, "lessons": 16, "formats": { "short-answer": 10 } },
+      { "set": 3, "questions": 10, "concepts": 24, "modules": 8, "lessons": 20, "formats": { "short-answer": 10 } },
+      { "set": 4, "questions": 10, "concepts": 23, "modules": 8, "lessons": 17, "formats": { "short-answer": 10 } },
+      { "set": 5, "questions": 10, "concepts": 22, "modules": 8, "lessons": 17, "formats": { "short-answer": 10 } },
+      { "set": 6, "questions": 10, "concepts": 22, "modules": 8, "lessons": 18, "formats": { "short-answer": 10 } },
+      { "set": 7, "questions": 10, "concepts": 22, "modules": 8, "lessons": 20, "formats": { "short-answer": 10 } }
+    ],
+    "acrossCycle": { "sets": 7, "questionSlots": 70, "uniqueQuestions": 45, "concepts": 65, "conceptPct": 100, "lessons": 27, "lessonPct": 34.6 }
+  },
+  {
+    "subject": "SCLM",
+    "bankConcepts": 36,
+    "paperRelevantConcepts": 36,
+    "registeredLessons": 71,
+    "sets": [
+      { "set": 1, "questions": 59, "concepts": 36, "modules": 8, "lessons": 37, "formats": { "mcq": 50, "numeric": 6, "match": 3 } },
+      { "set": 2, "questions": 59, "concepts": 29, "modules": 8, "lessons": 30, "formats": { "mcq": 50, "numeric": 6, "match": 3 } },
+      { "set": 3, "questions": 59, "concepts": 32, "modules": 8, "lessons": 33, "formats": { "mcq": 50, "numeric": 6, "match": 3 } }
+    ],
+    "acrossCycle": { "sets": 3, "questionSlots": 177, "uniqueQuestions": 110, "concepts": 36, "conceptPct": 100, "lessons": 37, "lessonPct": 52.1 }
+  }
+]

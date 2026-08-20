@@ -199,8 +199,12 @@ test("the slice is additive: no shared item was hard-excluded from Learn", () =>
       const surfaces = reachable.filter((question) =>
         question.conceptId === concept.id ||
         (question.supportingConceptIds || []).indexOf(concept.id) >= 0);
-      assert.ok(surfaces.length >= 10,
-        `${courseId}/${concept.id} has only ${surfaces.length} Learn-reachable surfaces once the slice is removed`);
+      /* Written-only frameworks deliberately have three independent active
+         families rather than ten objective variants; applying the objective floor
+         here would force frameworks back into MCQs and break IBM's authored mode. */
+      const floor = concept.assessmentMode === "written" ? 3 : 10;
+      assert.ok(surfaces.length >= floor,
+        `${courseId}/${concept.id} has only ${surfaces.length} Learn-reachable surfaces once the slice is removed (needs ${floor})`);
       assert.ok(surfaces.some((question) => pooled.has(question.id)),
         `${courseId}/${concept.id} has no surface in any study-set pool`);
     }

@@ -46,6 +46,15 @@ not make it authoritative.
      explicit membership acknowledgement. The page records those actions but never claims it can
      independently verify WhatsApp membership; the owner can record in-app bumps and manually send
      the copied reminder before removing a non-participating tester.
+   - IBM testing taxonomy (2026-08-20, superseding the earlier pause): implement every remaining
+     course-grounded idea without pretending to know the unreleased exam case. Foundational layer
+     ideas receive subjective + MCQ practice; named frameworks/models receive subjective practice
+     only; bounded concepts and distinctions receive MCQ practice only. Generic lesson-grounded
+     caselets are practice, never a claim about the examination case.
+   - Dashboard chart system (2026-08-20): owner direction replaces every handmade data graph with
+     the actual shadcn chart component structure and Recharts primitives. Official area and radar
+     registries define the implementation reference; Dungeon supplies its own data, tokens and
+     content. Icon SVGs are not data graphs and remain ordinary components.
 
 2. **Project operating system**
    - `AGENTS.md`
@@ -116,6 +125,8 @@ not make it authoritative.
 | Prototype interaction | `app/rogue.*` | current Hall/run/results behavior |
 | T6 exam fallback | `docs/briefs/T6_REVISION_FALLBACK.md`; `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`; `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md`; owner-supplied T6 AI-ready pack | four-subject dashboard, evidence-based progress, adaptive repetition, mixed formats, confidence, constructed response, first-cohort boundary |
 | Controlled tester release | current owner direction; `docs/briefs/TESTER_ACCESS_AND_ADMIN.md`; `docs/community/TESTER_GUIDE.md`; `docs/community/PRIVACY.md`; `SECURITY.md`; `docs/community/COMMUNITY_PLAYBOOK.md` | hosting boundary, identity access, source publication, feedback, moderation, announcements, incident intake |
+| Teaching layer | `docs/authoring/LESSON-AUTHORING-PROTOCOL.md`; `docs/briefs/TEACHING_LAYER_AUTHORING_PLAN.md`; `docs/briefs/MISFILED_LESSONS_WORK_ORDER.md` | lesson authoring contract, per-subject backlog, and the misfiled-lesson record |
+| Vision-to-build route | `docs/briefs/DUNGEON_VISION_TO_BUILD.md` (proposed 2026-08-18, owner decisions open) | measures the four standing promises against the build; owns the taught-vs-tested finding and the phased route to close it |
 | Legacy practice portal | `legacy/prototypes/index.html` and other mock pages | content inventory and old navigation |
 
 ## Conflict register

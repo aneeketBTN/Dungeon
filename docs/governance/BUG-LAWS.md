@@ -1210,6 +1210,270 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
   an empty list is an object and therefore truthy. It reported zero dead shadows on a page
   where all sixteen were dead. Guard on `.length`.
 
+### LAW-80 🟡 — Chart-shaped drawings are not a chart system
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-20, replacing the dashboard graphs after the owner rejected a first pass that
+  visually imitated shadcn's area chart while still drawing its SVG by hand. The site also carried
+  a canvas radar and a second custom SVG path generator, so each graph owned different geometry,
+  scaling, motion and accessibility behaviour.
+- **Why:** A responsive graph is not a picture that happens to stretch. Its coordinate system,
+  axes, curves, grids, marks, hit-testing, tooltip position and accessible layer are one layout
+  problem. `preserveAspectRatio="none"` made the old route fill its box by deforming its shapes,
+  and every custom implementation duplicated a thinner, incompatible subset of chart behaviour.
+- **Law:** When the product has selected a chart system, use its actual primitives for every data
+  graph. Application code supplies data and labels; the chart library owns geometry. Share one
+  container, tooltip grammar, responsive contract, reduced-motion rule and accessibility layer.
+  Icon SVGs remain icons and do not need chart machinery.
+- **Verify:** inventory every graph host; require an actual chart primitive beneath each one, and
+  fail if a canvas or the retired path classes/functions return. Measure every surface at desktop
+  and phone widths, including empty and single-point data. A graph passes only when it remains
+  legible without horizontal scroll and exposes a non-colour textual or accessible description.
+
+### LAW-79 🔴 — A shared surface floor must follow assessment mode, not the word “concept”
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-20, widening IBM under the owner-defined taxonomy. The generator and bank
+  validator correctly gave named frameworks written-only practice, but
+  `tests/examiner-slice.test.mjs` still required every concept to retain ten Learn-reachable
+  surfaces — the objective-concept floor — and rejected `ibm_single_serve` with four independent
+  written surfaces. The test was asking the implementation to violate the product decision.
+- **Why:** A common identifier does not imply a common assessment form. Applying one volume floor
+  across objective and written records either manufactures MCQs for frameworks or pads written
+  practice until a structural count looks familiar. The green path then measures conformity to an
+  obsolete shape rather than enough evidence for the authored mode.
+- **Comply:** Author `conceptKind` and `assessmentMode` explicitly, map them in one place, and key
+  generation, scheduling, validation and test floors to that mode. Objective/mixed records retain
+  the ≥10 active-surface and boss contract; written-only frameworks require independent short,
+  case and linked written families and must appear on no objective surface.
+- **Verify:** `tests/integrated-scenarios.test.mjs` walks all IBM records and proves layer → both
+  forms, framework → written only with a link, concept → objective only with a boss.
+  `tests/examiner-slice.test.mjs` applies the matching Learn-reachable floor. Run the bank validator
+  and `npm test`; do not make a failing mode-specific check green by adding the prohibited format.
+
+### LAW-78 🟡 — A threshold copied out of a calibration is a snapshot, not a rule
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-19, completing SPMS module 6. The Step 4c composite sweep in
+  `docs/authoring/LESSON-AUTHORING-PROTOCOL.md` shipped as a literal query,
+  `awk '$1>0 && $1<0.10 && $3<0.35'`, with a comment saying where `0.35` came from: p25 of
+  own-lecture support. It was p25 **when it was written**. By this session p25 had moved to
+  **0.460** across 267 lessons, having risen with every authoring batch, so a query written to
+  select the weakest quarter was selecting roughly the weakest twentieth and calling the result
+  clean. Found alongside a second flaw in the same line: `SPMS-M06-L01` had taken its whole third
+  paragraph and its entire worked example from `SPMS-M06-L02`'s lecture, and scored a margin of
+  **−0.011** — it was fractionally *ahead* of the lecture it had borrowed from, so the `$1>0`
+  floor skipped it too. Evidence:
+  `evidence/2026-08-19/t6-spms-m06-complete/verification.md`.
+- **Why:** Both halves of that query encoded a fact about a population that has been growing ever
+  since (`LAW-76` is the same root cause seen from the other end: there, scores move under you;
+  here, the *bar* you compared them against stopped meaning what it meant). A percentile is a
+  property of a distribution, not a constant, and pasting one into a script converts a measurement
+  into a magic number that no longer has an owner. The failure is silent by construction — an
+  under-selecting query returns fewer rows, and fewer rows read as good news.
+- **Law:** Never hardcode a value derived from a distribution into the query that uses it.
+  **Recompute it in the same run**, or print it beside the result so a stale value is visible.
+  Where a literal is unavoidable, write the command that regenerates it *above* the literal and
+  state the date and population it was taken from. When a detector's yield drops, suspect the
+  threshold before concluding the defects are gone.
+- **Verify:**
+  ```bash
+  node tools/check-lesson-lecture-match.mjs "<transcripts>" --calibrate   # read p25 FIRST
+  node tools/check-lesson-lecture-match.mjs "<transcripts>" --dump > /tmp/dump.txt
+  awk -F'\t' '$1>-0.06 && $3<0.46' /tmp/dump.txt                          # substitute the p25 you just read
+  ```
+  The protocol now orders `--calibrate` before `--dump` for this reason, and marks the literal as
+  a value to substitute rather than trust.
+- **Note:** the margin floor is the more interesting half and generalises past this gate. **A
+  composite converges toward a *tie* with the neighbour it borrowed from, not toward a loss** —
+  half its vocabulary is its own and half is the neighbour's, so the two scores meet. Being
+  narrowly ahead of the lecture you plagiarised is the signature, not the exoneration. Any
+  detector whose flag rule is "a rival beats it" will miss the case where the rival has merely
+  caught up.
+
+### LAW-77 🔴 — The runner names its tests, so a test it was never told about is silence, not a pass
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-19, aligning the authoring system to the vision brief.
+  `tests/taught-not-tested.test.mjs` was on disk, complete, and passed 5/5 when run by hand — and
+  was **absent from `package.json`'s `test` script**, so it had never run once. The gate it
+  asserts is the mirror of LAW-47, the one that keeps the standing brief's fourth promise honest,
+  and it was unguarded for its whole existence. The same list had drifted the *other* way on
+  2026-08-15: two paths were listed before the files existed, `node --test` skipped both and
+  exited 0. Neither drift ever produced a failure; both were found by hand while counting.
+- **Why:** `npm test` does not discover tests. It enumerates them, one path at a time, in a JSON
+  string — and a path the runner never sees produces exactly the same output as a test that
+  passed. This is LAW-67's shape (a gate reporting a pass over what it never judged) relocated
+  into the runner itself, which makes it worse: it silently voids *any* check anyone adds,
+  including the ones written to catch other silent failures. Writing the test is the visible work
+  and is not the step that gets forgotten; wiring it is.
+- **Law:** A test file and its runner entry are **one change**. Never add `tests/*.test.mjs`
+  without adding its path to `scripts.test` in the same commit, and never remove a path without
+  removing or relocating the file. When the count of passing tests moves for a reason you did not
+  intend, find out which file entered or left the list before accepting the number.
+- **Verify:** `tests/test-runner-completeness.test.mjs` is the standing backstop — it asserts set
+  equality in both directions over a floored population, so an empty or misdirected glob fails
+  rather than passing vacuously (the LAW-67 correction applied to the backstop itself). It was
+  demonstrated failing in both directions before being trusted:
+  ```bash
+  npm test                       # the count is the check: it must move when you add a test
+  node --test tests/test-runner-completeness.test.mjs
+  ```
+- **Note:** this does not assert that a listed test can fail. A vacuous test still passes here —
+  see LAW-75 and LAW-67 for that half.
+
+### LAW-76 🟡 — A corpus-relative score moves lessons you did not touch, so a new flag is not automatically your regression
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-18, clearing `docs/briefs/MISFILED_LESSONS_WORK_ORDER.md`. After rewriting
+  seven SPMS module 1 lessons, `check-lesson-lecture-match` flagged **`SPMS-M04-L01`**, which was
+  not in the handover queue and had not been edited. Measured against the pre-batch file it had
+  scored `+0.0944`; afterwards it read `+0.100`, against a `MARGIN_MIN` of `0.10`. Adding one lesson
+  and rewriting six changed the document frequencies the gate's lift is computed from, and a
+  borderline case crossed the line. Evidence:
+  `evidence/2026-08-18/t6-misfiled-lessons-cleared/verification.md`.
+- **Why:** The gate scores a lesson's *distinctive* vocabulary — distinctiveness is defined against
+  the rest of the subject's lessons, so the corpus is an input to every score in it. Editing any
+  part of the corpus re-scores all of it. That makes the usual reflex wrong in both directions: a
+  new flag is not proof you broke something, and it is not noise to be dismissed either. Both
+  readings skip the only step that settles it.
+- **Law:** When a corpus-relative gate produces a flag you did not expect, **diff the score against
+  the previous file before attributing it.** If the lesson was untouched and the margin moved by a
+  hair, it is a pre-existing borderline case the shift revealed — and it still has to be diagnosed
+  on its merits, not waved through as an artefact. `SPMS-M04-L01` turned out to be a genuine
+  misfile: every level of the pricing pyramid its lesson taught first occurs in `M04-L02`'s lecture.
+- **Verify:** keep the pre-batch file, then compare the single lesson rather than the whole gate:
+  ```bash
+  node tools/check-lesson-lecture-match.mjs "<transcripts>" --explain <LECTURE-ID>
+  ```
+  Run it against the backup and against the current tree; the `margin` field is the number to
+  compare. A margin that moved by ~0.005 is the corpus shifting; one that moved by 0.1 is you.
+- **Note:** the same property means the gate should be re-run after **every** batch rather than
+  once at the end. Clearing eleven flags moved the scores of everything else in those subjects.
+### LAW-75 🔴 — A detector calibrated on the population it is policing sets its bar where the existing defects already are
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-18, building `tools/check-lesson-lecture-match.mjs` to catch lessons that
+  teach the wrong lecture. The instinct — right everywhere else in this repository — was to
+  calibrate against the 243 shipped lessons, the same method that settled explainer paragraph
+  length and `worked.because` earlier the same day. It fails here, and the failure is not subtle:
+  the shipped corpus **contains eleven undiagnosed instances of the very defect**, four of them
+  since confirmed by reading. A threshold drawn through that distribution sits at whatever the
+  existing mistakes reach, which is exactly the level that cannot see them. Evidence:
+  `evidence/2026-08-18/t6-lesson-lecture-match-gate/verification.md`.
+- **Why:** Calibrating on a distribution assumes the distribution is of *correct* work — that is
+  what makes "the shipped range" meaningful as a standard. The assumption is safe for a style
+  measure, where the shipped lessons genuinely define the house style. It is circular for a defect
+  detector, because the population is the thing under suspicion. The stronger the contamination,
+  the more permissive the derived threshold, so the method degrades exactly when it is most needed.
+  Two further traps in the same build had the same shape: consulting the course notes, which cannot
+  resolve to a lecture, launders every miss into a pass (0.178 → 0.871, above the median of the
+  correctly-mapped file); and computing a background rate from a two-lesson fixture lets the
+  fixture's own defect become the baseline it is measured against.
+- **Law:** Calibrate a **defect detector** on confirmed defects, and a **style measure** on the
+  shipped distribution. Never the reverse. A detector needs at least one case established
+  independently — by reading the source, not by scoring it — and that case is the calibration
+  sample. Keep it as a committed fixture so the threshold can be re-derived rather than inherited.
+- **Verify:** the fixture must FAIL the gate. Run it and see the flag:
+  `node tools/check-lesson-lecture-match.mjs "<transcripts>" --lessons tests/fixtures/mismapped-lessons.js`
+  A gate that has never been demonstrated failing is a gate nobody has tested — this one reported
+  PASS on its own regression case twice during construction, and each time it was the fixture and
+  not the reasoning that caught it.
+- **Note:** state what the detector cannot see, next to what it can. This one finds lessons written
+  from *another* lecture and cannot find a lesson written from half of its own; the second fixture
+  case scores −0.079 and correctly does not flag. A PASS that is read as "all lessons cover their
+  lectures" is worse than no gate, because it retires the suspicion that would have found the rest.
+
+### LAW-74 🔴 — A text-mode write rewrites every line ending in the file, and this tree's bytes are the shipped bytes
+
+- **Tier/Status:** REDLINE · ACTIVE
+- **Origin:** 2026-08-18, SCLM teaching-layer authoring. Two `connects` repairs were applied with a
+  three-line Python script using `io.open(path, 'w')`. On Windows that is text mode, so every `\n`
+  became `\r\n` and **all 6,448 lines** of `app/sets/t6_lessons.js` were rewritten — a two-line
+  intent producing a whole-file byte change. Nothing reported it. It surfaced minutes later only
+  because the next insertion looked for a `\n`-anchored string and could not find it. Evidence:
+  `evidence/2026-08-18/t6-sclm-subject-complete/verification.md` §D2.
+- **Why:** `.gitattributes` already carries the reason, written after `core.autocrlf` caused the
+  same class of problem: this repository is LF-native **because `tools/build-site.mjs` copies files
+  straight from the working tree into `dist/client`**, so a line-ending conversion changes the bytes
+  the Worker serves and every asset hash with them. Git's `* text=auto eol=lf` normalises what is
+  *committed*; it does nothing about what is *built*. So the danger window is exactly a session that
+  edits and then builds without committing — which is every authoring session here. `git diff` also
+  hides it: it normalises before comparing, so the diff looks like the two lines you meant and the
+  6,446 you did not are invisible.
+- **Law:** Never write a tracked file in a language's text mode. In Python use
+  `io.open(path, 'w', newline='')` or write bytes; in this repo, prefer Node's `fs.writeFileSync`,
+  which does not translate. This applies to any file the build copies verbatim, which is everything
+  under `app/`.
+- **Verify:** after any scripted edit to a tracked file, count them —
+  `node -e "console.log((require('fs').readFileSync(P,'utf8').match(/\r\n/g)||[]).length)"` — and
+  expect `0`. Do not use `git diff --stat` for this; it normalises and will report clean.
+- **Note:** the giveaway that something whole-file had happened was a *string search failing*, not a
+  diff or a gate. Every content gate in this repository passed over the CRLF file, because they all
+  parse the JavaScript rather than compare bytes.
+
+### LAW-73 🟡 — A pane that composites no frames freezes the clock, so every transition reads as its start value
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-18, `.rail-scroll`'s edge fade. `getComputedStyle(el, '::after').opacity`
+  returned `0` where the matching rule sets `1`. The finding survived a full audit before it was
+  caught: the element matched `[data-scroll="start"]`, the rule existed, it had the winning
+  specificity, it carried no `!important`, and a **recursive** walk of every stylesheet including
+  media queries found nothing overriding it. `getAnimations()` then showed the opacity transition
+  `playState: "running"` with `currentTime: 0`, and `document.timeline.currentTime` stayed at `0`
+  across a 500ms wait while `performance.now()` advanced 511ms. Evidence:
+  `evidence/2026-08-18/t6-subject-rail-screenshots-ibm-m04-m06/verification.md` §D2.
+- **Why:** An undisplayed Browser pane composites no frames, so the document timeline never starts.
+  Every CSS transition is therefore pinned at its start value permanently, and waiting longer cannot
+  help. There is nothing on the element to distinguish "transition has not run" from "rule does not
+  apply", so the reading looks exactly like a specificity or cascade bug and invites a fix to code
+  that is already correct. **Two apparent CSS bugs in an earlier session were this artefact**; this
+  was the third and the closest, because it survived every cascade check before the clock was
+  questioned.
+- **Law:** Before believing any reading of an animated or transitioned property taken in the pane,
+  establish that the clock is running. Geometry, text, colour and layout do not depend on the
+  timeline and stay trustworthy — which is why `ui-audit.js` remains valid there — but anything that
+  animates does not. Never conclude a CSS rule is broken from a pane reading alone.
+- **Verify:** read `document.timeline.currentTime`, wait, read it again; if it has not advanced
+  while `performance.now()` has, the clock is frozen. Take the finding to
+  `node tools/screenshot.mjs --port <port>` instead, which drives headless Chrome and composites.
+  `docs/governance/SCREENSHOTS.md` carries the probe and the procedure.
+- **Note:** do **not** reach for `transition: none` to get ground truth. That forces the very
+  recalculation that repairs the symptom, so it reports success whether or not the code is right —
+  the mistake already recorded against the theme-switch work in `LAW-68`. And the first probe
+  written to investigate this had the non-recursive stylesheet walk from `LAW-71`: it collected only
+  top-level rules and would have missed a media-query override had one existed.
+
+### LAW-72 🟡 — A self-contained brief is a second source of truth, and it drifts from the ledger
+
+- **Tier/Status:** WATCH · ACTIVE
+- **Origin:** 2026-08-18. `docs/briefs/TEACHING_LAYER_AUTHORING_PLAN.md` §0, written 2026-08-17,
+  stated "there is no browse or library view" and built its entire framing of a 130-lecture backlog
+  on lessons that "reach nobody". `QUALITY-LOG.md` **I50**, logged 2026-08-12, records shipping
+  exactly that view — the `Read the lessons` tab, rendering every authored lesson in full and
+  labelling uncited ones *Read-only*. The brief contradicted the ledger **five days after** it. The
+  same claim sat in `tools/check_lesson_file.mjs`'s header comment and its warning string, written
+  for I49 on 2026-08-12 and falsified by I50 the same day, so the tool told every author since that
+  the work was dead. Evidence:
+  `evidence/2026-08-18/t6-teaching-layer-ibm-m02/verification.md` §D1.
+- **Why:** These briefs are written to let a fresh session skip the ledgers — that is their stated
+  purpose and their real value. The cost is that every factual claim inside one is a **copy**, and a
+  copy has no mechanism keeping it true. Worse than a stale comment beside code: a comment is read
+  next to the thing it describes, while a brief is read *instead of* the thing. A session that
+  believes it will reason from it all the way to the end, as this one did. LAW-47's meta-trap ("a
+  comment asserting an invariant is not the invariant") is the same failure one level down.
+- **Law:** A brief may own the **queue, the decisions, and the traps**. It may not be the authority
+  on what the code does. Where it must state a fact about the app to be usable, that sentence
+  carries the check that establishes it, so the next reader can re-run it in one command instead of
+  believing it. When a brief and a ledger disagree, the ledger wins and the brief is corrected in
+  the same session — and check whether a tool repeats the same claim, because the one here did.
+- **Verify:** Before acting on a brief's factual claim about behaviour, execute it. For "nothing
+  consumes X", `grep` every consumer rather than trusting an enumeration: the plan named two
+  consumers of `window.T6_LESSONS` and there were three. The instruction that caught this was
+  protocol Step 5.3, "read a new lesson as a learner would" — a step the brief's own premise implied
+  was impossible, which is the shape to watch for. **A procedure step you cannot carry out is
+  evidence about the premise, not a step to skip.**
+
 ### LAW-66 🔴 — A correct answer may only use vocabulary the run has taught, and citation is not the test
 
 - **Tier/Status:** REDLINE · ACTIVE
@@ -1369,3 +1633,11 @@ REDLINEs constrain HOW, never WHETHER. Merge near-duplicates; do not hoard rules
 - **Verify:** `awk 'BEGIN{a=0} /^    (explainer|glossary): \[/{a=1;s=NR;next} a && /^    \},$/{print
   "BAD close "NR" (opened "s")"; a=0; next} a && /^    \],$/{a=0}' app/sets/t6_lessons.js` prints
   nothing, then `node tools/validate_t6_bank.js "<pack>"` reports zero errors.
+- **Recurred 2026-08-18, six blocks at once, and the catch came from a length check.** The SCLM-M02
+  batch closed six `explainer` arrays with `},`. It was found **before insertion** because the
+  pre-commit house-style script parses the explainer to count its words, and the counts came back at
+  467–561 against a ~250 budget — the regex had run past the mis-closed array into the glossary. **A
+  length measurement is also a structure measurement.** That script now checks the closer directly
+  rather than inferring it from an implausible word count, because inference only works while the
+  two happen to disagree loudly. Fourth recorded recurrence (2026-08-12 ×8, `SPMS-M05-L04`, and
+  this).

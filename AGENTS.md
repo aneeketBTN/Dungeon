@@ -1,892 +1,432 @@
 # Dungeon
-> **The theme toggle was a button that did nothing, and it took three measurements to say so
-> (2026-08-15; newest):** the session opened on a one-line question — is light/dark working? — and
-> the honest answer was three defects at three depths. **`app/theme.js` had no route.** It is in
-> the build allowlist and in `t6.html`'s `<head>`, so it shipped and every signed-in learner
-> requested it, and `learnerAssetPath()` never mapped a URL to it, so every request fell through to
-> the router's closing 404. `window.T6Theme` was undefined **on the live domain**, which makes
-> `t6.js`'s `if (!button || !window.T6Theme) return;` a no-op — and it stayed invisible because
-> `light-dark()` needs no JavaScript, so the app kept following the operating system and only
-> looked broken to someone who pressed the button. The discriminator is **401 against 404**: a
-> gated asset says `LOGIN_REQUIRED`, so only `NOT_FOUND` means nothing reaches the file. Now a
-> test that resolves every shipped page's local `src`/`href` against the URL that page is served
-> at; deleting the route fails it and names all three pages. **The build allowlist proves a file is
-> deployed and never proved a URL reaches it** (`LAW-69`). **A transitioned property does not
-> follow a `light-dark()` re-resolution** — it keeps the old theme's value until something forces a
-> recalculation, still wrong two seconds later — so **34 of the 35** visible elements with a
-> background transition kept the previous fill across a switch: every button on the dashboard.
-> A five-probe control shows `all`, `background` and `background-color` all freeze and only *no*
-> transition follows, so it is the animated property, not a shorthand quirk (`LAW-68`). **Two of
-> the session's own measurements were wrong and are logged as such**: a synchronous read after
-> `set()` returns the old value because no frame has elapsed, and injecting `transition: none` to
-> get ground truth **forces the very recalculation that repairs the defect**, which is how the
-> first sweep reported "0 of 513 stuck" on a screen with 34 — this repository's signature failure,
-> reproduced once more in the probe written to find the thing. **The door to the product ignored
-> the theme entirely**: `login.css` pinned `color-scheme: light` and none of `login.html`,
-> `privacy.html` or `admin.html` loaded `theme.js`, so the *first screen anyone sees* met a
-> dark-phone learner with a full white page and threw anyone who had chosen dark back to light on
-> sign-out. Palette now paired on t6.css's contract — **16 one-theme literals tokenised, none
-> left**, dark branch lifted from t6.css rather than invented, **every light value byte-identical**
-> so the light theme did not move. The literal that mattered was `.brand-mark { color: white }`
-> over an `--ink` fill, invisible the moment `--ink` gains a dark branch. **51 text-bearing
-> elements per theme with every hidden panel revealed: 0 below AA**, worst 4.73:1 light and 5.97:1
-> dark; the two dark failures found first (1.22:1, 2.21:1) *were* the freeze and cleared when it
-> was fixed, not by touching a colour. `ui-audit` clean on all detectors at 375 and 1280 in both
-> themes, `npm test` **103 → 104**, palette gate clean, build unchanged at 18 assets. Evidence:
-> `evidence/2026-08-15/t6-theme-switch/verification.md`. **Not done: `app/admin.css`**, still
-> pinned to light with 38 one-theme literals, owner-scoped out as an internal tool; no second
-> reader. Not merged, not deployed.
->
-> **The content is accepted, and measuring the promises broke four of them (2026-08-15):**
-> `WAITING_OWNER_CONTENT_ACCEPTANCE` is **cleared** — the owner accepted the whole standing block
-> in chat (792 surfaces, 64 primers, 64 rubrics/exemplars, 106 lessons, the 48 CLA items, the 44
-> reserved items, the SPMS caselets and rewritten stems, the BRGSA concept records, the ~76
-> restated answers). It clears the gate that blocked `DONE`; it is **not** faculty review and
-> creates no subject-matter authority. Two R3 defects were repaired *before* the gate closed
-> rather than accepted and then corrected. **The persona suite's learn half had been measured on
-> an order that no longer existed** — the committed queue skeletons predated three bank commits,
-> so re-exporting through the real app moved SPMS, BRGSA and SCLM (IBM unchanged), and a control
-> run proves **every movement is the schedule, none is the bank**. BRGSA now delivers
-> `case_validate`: the integrated slot in a real queue for the first time. **Four defects, none
-> reachable by an existing gate.** *A mock miss did not re-teach a lesson already read* —
-> `lessonNeedsReteach` read `conceptAttempts` and `recordExamMisses` writes only `examMisses`, by
-> design, so the paper could never reach the latch: `lessonAt: -1` under a kicker reading "Taught
-> first, then tested again", and first contact worked, which is the **same shape this latch was
-> fixed for once already**. Fixed, with the RECOVERED rule applied symmetrically so one bad paper
-> does not re-teach for ever, and the cause established by **control** rather than by reading the
-> code. *A concept that fell from Strong was character-for-character identical to one never
-> learned* — the difference lived behind the "Why" disclosure as counts the reader had to
-> interpret; `conceptPeakStatus` replays the rule (never a stored high-water mark) and the row now
-> says **"was Strong"** in words, not colour. *`ui-audit`'s type check had never been able to
-> fail*: floor hard-coded at 12 against a declared `--t-micro: 11`, so it listed **111 compliant
-> elements**, truncated at ten, and buried the **seven** that actually broke the rule — SVG axis
-> labels at 10px, the only type in the product under its own scale. Floor now read from the token;
-> **0 at 375 and 1280**. *Two reserved items answered to their own heading* — `sclm_drivers_cla3`
-> and `spms_requirements_cla1`, both contradicting the R3 rule in their own header comment,
-> repaired in `connect`'s direction; **25 → 23** sets paying 100%. Two new probes:
-> `tools/browser-checks/exam-repair.js` and `regression-reporting.js`. `npm test` **103/103**,
-> validator **0 errors 0 warnings**, LAW-47 **12 routes × 4 subjects, 0 violations** (re-run
-> because the re-teach change adds lessons to queues that had none), layering **40 sets / 255
-> pairs / 0 descents**, paper digests unchanged. Evidence:
-> `evidence/2026-08-15/t6-persona-rerun/verification.md` and
-> `evidence/2026-08-15/t6-promise-suite/verification.md`. Not merged, not deployed.
->
-> **Every subject now has a reserved examiner slice, and "pick the second-longest" is closed
-> (2026-08-15; newest):** the four items the block below left open are done. **44 reserved
-> items across all four subjects**, and every concept on every paper has a distinct examiner
-> surface — **16/16 × 4**, from **0/16 on three of them** — with overlap 100% → **60–80%**.
-> **SPMS Section B had no slack whatever**: 20 drawn from a pool of 20, so its "three seeded
-> sets" were one set printed three times across 40 of that paper's 75 marks, on the only
-> negatively marked section in the term. Pool now 28. **The standing IBM option-length
-> warning was mis-scoped and much larger than recorded.** "Pick the second-longest" paid
-> **32.9–38.5% on all four subjects** and IBM was not the worst; it exists because the
-> defence against "pick the longest" created it — `comparableWrong` selects distractors
-> *closest in length to the answer*, which beat `longest` (20.7–29.5%, at or under chance)
-> and clustered the four lengths so the answer sits one rank down. **Defeating one shape cue
-> manufactured its neighbour and nothing was watching that rank.** The validator's
-> `lengthRankShares` could not see it either: it counts an exact sort position a candidate
-> cannot execute where lengths tie, and resolving ties by guessing moves the figure by up to
-> ten points. **A structural fix was tested and rejected on measurement** — three
-> `comparableWrong` variants produced *byte-identical* numbers, because the mcq families
-> carry exactly three authored distractors and selection has no freedom at all. 23
-> distractors were made more specific instead: **38.5 → 26.9, 32.9 → 22.4, 32.9 → 27.0,
-> 35.9 → 28.2**, `longest` unmoved, `lengthRankSpread` roughly halved, and **the length
-> warning cleared**. `secondLongest` and `combinedWithLength` are now gated; `fixedB` is
-> reported and deliberately **not** gated, because slots are dealt flat by construction
-> (0.25 × 4 on every subject) and a 50-of-100 draw carries ±6 points, so gating it measures
-> the draw. **A reserved item's bias is never diluted** — it is on *every* paper, so two new
-> BRGSA mcqs moved `combinedWithLength` from 24% to 33.6% while the pool sat at 26%, all
-> three seeds reading ~33; one item's fix took it to 28.6%, and a new test caught **nine**
-> such items including seven I had just written. **LAW-53 returned the moment I authored**:
-> four of eight new multi-selects came out 3-of-4 and one 4-of-4, which on this section's
-> +1/−1 scoring means ticking everything scores full marks — nothing failed, it was caught by
-> printing shapes by hand, and it is now a test. **LAW-67 recurred in the tool written to
-> catch it**: `--gate` was consumed as the harness directory, so T3 printed a pass over an
-> empty report. **14 of 20 SPMS multiple-select stems** asked what "the lecture" said (the
-> brief records fifteen); all rewritten, and `spms_roadmap_msq`'s WhatsApp release date is
-> no longer a *correct* option among framework claims. **BRGSA self-containment is audited
-> for the first time since the pattern promised it: 0 items need a brand figure the page
-> does not carry, 0 name a case they do not show** — after three probe narrowings, since the
-> first draft would have reported 25 non-defects (computation is not recall; a brand that is
-> the concept's own name is a label). `VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)`
-> at `evidence/2026-08-15/t6-rehaul-completion/verification.md`: twelve gates exit 0, LAW-47
-> **12 routes × 4 subjects, 0 violations**, 0 layering descents, `paperDigestMatch: true`,
-> screenshots **16/16 and read**, and ui-audit clean on all nine detectors at 375 and 1280
-> with the new multi-selects on screen. **Still open: no second reader on any of it** (44
-> reserved items, 14 rewritten stems, ~60 adjusted distractors), BRGSA Sections A and B still
-> at 98.3%/100% overlap, SCLM's match-prompt warning, and the 64 summary/application strings.
-> All new content `WAITING_OWNER_CONTENT_ACCEPTANCE`. Not merged, not deployed.
->
-> **The five open items are closed, and the gates that judge them now exist (2026-08-15):**
-> the previous session ended "no new items, no examiner-only slice, no SCLM-M03-L06 lesson,
-> T1/T2/T4/T5". All five are done and every gate exits 0. **`check_exam_readiness` exits 0 for
-> the first time** — SCLM Section B is **8 of 6** numericals, so the 8 marks it could not award
-> are awardable. The lesson was one blocker; the other had never been named: **the real paper
-> supplies standard normal tables and Dungeon supplied none**, which is why both missing items
-> were z-based — with no table no z-based question is answerable, so none could be authored. The
-> table is now a paper provision (`tables: ["standard-normal"]`), computed rather than stored as
-> 310 literals so there is one place to be wrong, and pinned by `tests/normal-table.test.mjs`
-> against every value a printed table agrees on. **BRGSA's integrated scenarios: the recorded
-> diagnosis was wrong.** They were not "never served" — `brgsa_case_false_win` reaches set 2 and
-> `ibm_case_hospital_growth` reaches IBM set 2; **three of four** never reach any offered set. And
-> the cause was composition, not content: Section C is two **ten-mark** slots drawing from a pool
-> of 36 of which **32 are three-to-five-minute per-concept prompts**, so four times in five a
-> ten-mark slot got a three-minute answer. On the Learn side they were unreachable *by
-> construction* — the rotation asked short/case/short/case and its fallback only fires when a
-> concept has neither, which never happens. So the one surface the examiner's Section C is made of
-> was the one surface Learn could not teach, which is exactly *"if Examiner feels foreign, that is
-> Learn's failure"*. Fixed by a section `prefer` order and an `integrated` slot in the rotation.
-> **The examiner-only slice is real for BRGSA**: six new reserved scenarios, hard-excluded from
-> Learn and **additive**, so §4.2's warning about starving a module does not apply — nothing shared
-> was withdrawn. Section C overlap **100% → 0%**, the paper 100% → 74.2%. Four reserved items were
-> not enough and it was measured, not assumed: two slots drawn twice from four put sets 1 and 2 on
-> an **identical pair**. **T1/T2/T4/T5 are built, gated, and each found something.** T1 (cold
-> learner) found a new defect class — `smoke_signal`'s answer used "prospects", defined in a
-> lecture the item does not cite, so **LAW-47 structurally cannot see it**. T2 refuses to score the
-> handoff half without the app's own answer rather than pass by default (0 broken over 64 promises;
-> reading `lesson.connects` would have reported 14 false ones). T4 could not use "all ten sets" at
-> all — **set 10's pool is the entire bank**, so the first version reported 100% whatever anybody
-> authored; split into ladder and anyRoute. T5 asks what a learner is told when wrong, and **failed
-> correctly**: one sentence answered 55–100% of every wrong decision. `fallbackDiagnosis` was
-> discarding `targetRole`, which it already had; four cues drawn from what the slot asks took the
-> top-cue share to **27–36%**, roughly halved on every subject. **Three defects came from building
-> the probes, two of them mine**: an MCQ diagnosis read from `perOption.answer` when the export
-> writes `perOption.whole`, and a T5 gate whose floors skipped every run and **printed a pass over
-> data it never judged** — this repository's signature failure, reproduced inside the tool written
-> to catch it. `npm test` **87 → 100**, and the runner itself gave up a finding: two test files
-> listed in `package.json` before they existed were **silently skipped** at exit 0.
-> `VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)` at
-> `evidence/2026-08-15/t6-rehaul-completion/verification.md`: LAW-47 **12 routes × 4 subjects, 0
-> violations**, 0 layering descents, `answerableFromTheConceptName: []`, **`paperDigestMatch: true`
-> on all four** (which is what proves the harness mirror still matches after `examPrefer`),
-> screenshots **16/16 and read**, and 0 overflow / clipped / circleFit / overlaps / cutRows /
-> hiddenScroll / barInset / ragged / sub-44px at 375 and 1280 with the new table open. **`ui-audit`
-> caught the table three times and was right twice** — the third, `hiddenScroll` at 44% on a phone,
-> was real, so the eleven-column table is now two six-column halves that stack: 310 cells, no
-> sideways scroll at any width. The one probe refinement (`cutRows` ignoring a child taller than its
-> container) was **verified against a live fixture** of the original palette defect and still fires.
-> **Not done: no examiner-only slice for SPMS, SCLM or IBM** (T4 reports all three at 100% overlap
-> and 0/16 concepts with a distinct surface — now the largest open hole), the 64 summary/application
-> strings, the fifteen SPMS "the lecture said" stems, BRGSA self-containment on the *existing* bank,
-> and no second reader on any new prose. All new content is
-> `WAITING_OWNER_CONTENT_ACCEPTANCE`. Not merged, not deployed.
->
-> **Both craft exploits closed, measured by persona on both surfaces (2026-08-15):**
-> name-matching and "eliminate the absolutes" now pay at or under chance in every family.
-> **Paper** (mean sets 1–3): SPMS combined 34.5 → **16.3**, BRGSA 37.8 → **15.3**, SCLM 24.5 →
-> **20.1**. **Delivered study run**: SPMS 50 → **19.2**, BRGSA 37.8 → **28.2**, SCLM 48.2 →
-> **22.0**, **IBM 67.3 → 23.1**. Name-matching: **324 → 23** option sets paying 100%.
-> F-06: `apply` 45.8 → **20.0**, `explain` 43.1 → **16.5**, `boss` 33.1 → **23.6**, `authored`
-> 31.4 → **23.7**. Both `--gate`s exit 0 and the bank validator is **0 errors and 0 warnings**
-> — the standing IBM length warning cleared too.
-> **The absolutes fix used two honest levers and refused a third.** 23 filler removals
-> (`simply` is an intensifier, and `\ball\b`/`\bany\b` were matching "at all" and "in any way",
-> which are not quantifiers — only **9.6%** of absolute-carrying distractors; the other 90.4%
-> are load-bearing and were left alone), plus **76 correct answers restated at the course's
-> real strength**, every added universal lifted from that concept's own accepted `bridge`.
-> Nothing was manufactured and no distractor was watered down. `bridge_cloze` needed nothing
-> because lecture-derived prose already carries absolutes 40.6% of the time; `summary` and
-> `application` were hedged by *house style*, which is the artefact the tool exists to isolate.
-> **Five defects came from verification rather than from the gates**, and each is a standing
-> lesson: an "It" substitution firing on 11 of 64 summaries traded the name cue for a **length**
-> cue; labelling `case_cloze`'s decision blank printed eight options behind one 36-character
-> prefix and misattributed a *decision* to a framework name (fixed as a **trailing** tag, since
-> the rule matches a substring anywhere); **appending** universals pushed IBM's "pick the
-> longest" to **66%**, worse than the exploit being fixed, so all 76 rewrites were redone *in
-> place* and IBM's rank-3 share went 0.50 → **0.38**; two option-shape errors on
-> `sclm_smoothing`; and unlabelling `explain` on the plausible theory that the rewrites had
-> evened its density sent it to **61.9%** — the label is load-bearing and stays.
-> **Three owner-reported UI defects fixed the same session.** The **bag is gone from the
-> Examiner** (a Learn tool; the paper carries its own Calculator and countdown), which ends a
-> defect class rather than relocating it — the bag was docked into the paper's corner because
-> it covered Submit, and docking then covered all but 18px of the theme toggle. The **two
-> header bars now align** (`.app-header` used `clamp(16px,3vw,40px)`, `.exam-bar`
-> `clamp(12px,2.5vw,22px)`, so the logo began at x=38.4 and "Section A" beneath it at x=22; the
-> 76px/82px reservations existed only for the docked launcher). And the **palette no longer
-> cuts a row in half** — `max-height: 46vh` is an arbitrary slice that landed mid-chip on
-> SCLM's 50-question section, now `calc(round(down, 46vh + 7px, 51px) - 7px)`, a whole eight
-> rows, **0 chips cut** at 375 and 1280. **Three further mobile defects, all measured on a
-> live paper at 375:** the exam was top-heavy at **141px of chrome** (66px header over a
-> 75px bar) with `.exam-sections` showing a **108px viewport over 266px** — Sections B and C
-> gone with their question counts — so the header now hides during a running paper as it
-> already did mid-question on the practice screen, and the freed row buys the tabs full
-> width (**343/343**); moving those tabs onto their own row then sent the **clock from the
-> trailing edge to the leading one**, because flex packs to the start; and the state chips
-> read as distorted squares. On the chips, a percentage radius fixed the *scaling* and not
-> the *look*, so they are now **regular shapes** — square vs circle for marked-for-review,
-> underline vs none for answered — which keeps all five readable without colour.
-> `check-palette.mjs`'s shape assertion covers the four `.dot` mastery states, **not** these
-> chips, so it was never what held the tab silhouettes in place.
-> **`ui-audit.js` gained three detectors and the repo gained
-> `docs/governance/UI-CHECKLIST.md`**, because all three UI reports were found by eye on a
-> screen the probe had just called clean: `hiddenScroll`, `cutRows` and `barInset`, each
-> reintroduced as a live fixture and confirmed to fire *and* to go quiet on restore. That
-> discipline immediately caught a factual error of my own — the mobile `100px` was **not**
-> cutting a chip, its spare pixels fall in a gap — which is corrected in the ledgers.
-> `VERIFIED(REAL_BROWSER + HEADLESS_CHROME + AUTOMATED)` at
-> `evidence/2026-08-15/t6-bank-overhaul/verification.md`: **83/83**, LAW-47 0 violations, 0
-> layering descents, `answerableFromTheConceptName: []`, `paperDigestMatch: true`,
-> **screenshots 16/16 and read**, and 0 overflow / clipped / overlaps / ragged at 375 and 1280
-> across practice **and** exam. **New `npm run review`** prints every gate beside the real
-> option text. **Not done: no new items, no examiner-only slice, no SCLM-M03-L06 lesson,
-> T1/T2/T4/T5.** 76 rewritten answers are `WAITING_OWNER_CONTENT_ACCEPTANCE`. Not merged or
-> deployed.
->
-> **The bank stops answering to its own heading (2026-08-15; the first half of the fix above):** name-matching —
-> "keep the options that name the thing this set is called, then guess" — is closed in every
-> generated family. **324 → 28** option sets pay 100%. Per family: `term_cloze` 100.0 → **retired**,
-> `repair_cloze` 81.9 → **25.0**, `case_cloze` 70.8 → **25.0**, `explain` 66.0 → **25.0**,
-> `bridge_cloze` 48.5 → **25.0**, `boss` 41.3 → **31.2**, `apply` 36.2 → **25.0**, `connect`
-> **0.5 → 0.5** (untouched — it was already right and is the pattern the rest now follow).
-> Learn-side through the real app: SPMS 53.8 → **25.0**, BRGSA 44.9 → **26.9**, SCLM 46.4 →
-> **26.8**, IBM 59.6 → **32.7**. **IBM is still over the 32 limit and its residue is absolutes
-> (37.8), not name-matching** — that is F-06 and it needs the concept-string rewrite, which was
-> *not* done. `npm run review` exits non-zero on it rather than hiding it.
-> **`term_cloze` was retired to `contrast` on an owner decision**: a label-selection item is 100%
-> name-matchable *by construction*, because exactly one option can be the concept's name. Deleting
-> it was not available — the bank floor is 792 items and every concept needs ≥10 surfaces and ≥8
-> families — so `contrast` replaces it, keeping the job and making it answerable only by reading.
-> **The fix is `connect`'s direction and the opposite was measured and rejected:** stripping each
-> concept's name from its own prose reaches the same numbers and produces "Lean this idea asks
-> whether real people will take a real action", and takes `connect` from 0.5% to 26.6%. Nothing
-> shipped changes an authored word — the label is added, the prose untouched, over-claims keep
-> their "alone". **Three defects came from verification, not from the gates:** an "It" substitution
-> that fired on 11 of 64 summaries, all correct answers, traded the name cue for a **length** cue
-> and earned SPMS a new validator warning (`lengthRankShares` are now byte-identical to baseline);
-> labelling `case_cloze`'s decision blank printed **eight options each opening on the same
-> 36-character prefix** and misattributed a decision to a framework name, fixed as a *trailing* tag
-> since the rule matches a substring anywhere; and taking module siblings unconditionally failed
-> the shape guard twice on `sclm_smoothing`, fixed via `relevantWrong()` (LAW-48).
-> `VERIFIED(REAL_BROWSER + AUTOMATED)` at `evidence/2026-08-15/t6-bank-overhaul/verification.md`:
-> **83/83**, bank `ok` 0 errors, name-matching gate **exit 0**, LAW-47 0 violations, 0 layering
-> descents over 40 sets / 257 pairs, `primer-prediction` now reports
-> **`answerableFromTheConceptName: []`**, `paperDigestMatch: true`, and 0 overflow / clipped /
-> circleFit / overlaps / ragged at 375 and 1280 with new options on screen. The failsafes fired:
-> `export-learn-run.mjs` refused a stale skeleton **naming the ids** rather than emitting
-> `unknown`. **New `npm run review`** prints every gate plus the real option text, because a green
-> gate says nothing about whether the sentences read well. **Not done: the 64 summary/application
-> strings, so F-06 is untouched; no new items; no examiner-only slice; no SCLM-M03-L06 lesson;
-> T1/T2/T4/T5/T6; screenshots still owed.** Not merged or deployed.
->
-> **A third of the bank answers to its own heading, and the prescribed fix was wrong (2026-08-15;
-> the audit that preceded the fix above):** name-matching had been measured at 45–60% over the ~13 selectable parts of one set-1
-> run per subject — enough to know it leaks, not enough to know where. Measured over **every option
-> set in the built bank (1049)**, `tools/measure-name-matching.js` puts **324 of them — a third of
-> the bank — at a 100% payoff**, meaning the correct answer is the only option naming the concept.
-> Per family: `term_cloze` **100.0**, `repair_cloze` 81.9, `case_cloze` 70.8, `explain` 66.0,
-> `bridge_cloze` 48.5, **`boss` 41.3**, `apply` 36.2, `connect` **0.5**. **`boss` is the largest
-> family in the bank at 480 option sets and had never been measured** — the craft tool samples about
-> twelve boss steps in one run, and the earlier per-family cut folded boss into "other".
-> **The standing diagnosis did not survive the measurement.** It attributed the exploit to
-> distractors borrowed from other concepts and prescribed `relevantWrong()` everywhere; but
-> `explain` and `apply` already use authored **same-concept** distractors and still leak 66.0% and
-> 36.2%. The rule is `argmax`, not presence — **195 of 384** of their distractors do name the
-> concept and lose anyway for naming it *less densely* than the correct answer. Cross-concept
-> borrowing is real but confined to `repair_cloze` and `bridge_cloze`. **`connect` at 0.5% is the
-> worked example**: it names the concept in *every* option, and that is the direction that fixes
-> this without touching prose. The mirror fix was simulated before anything was edited and
-> **rejected** — stripping each concept's name from its own prose drives every family to 21.8–27.1%
-> but produces "Lean this idea asks whether real people will take a real action", "a payment or
-> signed it is a different category" and "starts from the this idea position", and it takes
-> `connect` from 0.5% to **26.6%**. Moving a metric by destroying the sentence is the mirror of
-> watering down a distractor. **`term_cloze` and `case_cloze`'s framework blank are unfixable as
-> items** — they ask for the concept's own name among four concept names, so the payoff is 100% by
-> construction and no distractor choice changes it; retiring or rewriting them changes scheduled
-> coverage and is an **owner call**. R3's on-topic-ness row said "Gate: none yet" since it was
-> written; `--gate` now exits non-zero above 32% per family (10% for `connect`), and
-> `tests/name-matching-gate.test.mjs` asserts the gate itself — every bank file the app loads,
-> `t6_brgsa.js` before `t6_catalog.js`, all four subjects, `connect` held at ≤10%, and the exit code
-> agreeing with the report in both directions. **78/78 → 83/83.** `VERIFIED(AUTOMATED)` at
-> `evidence/2026-08-15/t6-bank-overhaul/verification.md`. **No bank content was edited and nothing
-> learner-visible changed**, so no rehaul, no new items, no examiner-only slice, no rewrite of the
-> 64 summary/application strings, and no SCLM-M03-L06 lesson — a half-applied distractor rule leaves
-> the measurement describing neither bank. Two probe defects were caught before they became
-> findings: reading `.coverage` instead of `.lessons.coverage`, and loading the catalog without
-> `t6_brgsa.js`, which yields 48 concepts instead of 64 and made BRGSA report 100% on `explain`
-> while showing "0 of 96 distractors missing the name" — **BRGSA carries no `confusions` and no
-> `applicationWrong` fields at all**. Not merged or deployed.
->
-> **A learn run you can read, and the CLAs measured before they were used (2026-08-15):**
-> the persona harness's learn half had been refusing to run rather than emit wrong data. Three
-> faults were stacked: it wrote `{selectedCourse}` into storage **after load**, and the app reads
-> its profile from storage exactly once at load; it called `window.__dungeonSelectSubject`, which
-> does not exist; so it clicked whichever set list was on screen and looked those ids up in a
-> different subject's bank, where every step resolved to `unknown`. It now **drives the real
-> subject rail** — find the card by its `.course-code`, click it, assert the app moved, open the
-> set, assert the run that started is the one asked for — and an id the bank does not carry is a
-> fatal error naming the id. The order comes from the app as a ~1 KB skeleton and
-> `tools/export-learn-run.mjs` hydrates it into a 21–24 KB candidate run plus its key, so **no
-> scheduling rule is re-implemented in Node**; the paper guard now compares digests *in the page*
-> and is **4 / 4 MATCH**. `REDLINE` **LAW-65**: the per-option feedback sat on the *candidate* side
-> under a comment saying it did not, and a diagnosis array has a hole at the correct option — **216
-> of 216** MCQs have `diagnoses[answer] === null` — so it was an answer key. Blindness is now
-> asserted by a walk over the candidate object. Two probe defects were caught before they became
-> findings: the glossary field is `plain`, not `definition`, and the LAW-63 assertion fired on all
-> eight primers and was **wrong every time** (a primer's rule is the concept summary, so it is
-> legitimately a later question's correct option — that is teach-before-test, not a leak).
-> **48 new items from the owner's CLAs** — SCLM 32, BRGSA 16 — authored into `t6_challenges.js`
-> rather than a new file, because `t6_integrated.js` was added as one and was missing from four
-> load lists at once. **The premise was measured first and did not survive:** the course's own
-> papers put an absolute in the correct answer **3.0%** (SCLM) and **7.5%** (BRGSA) of the time,
-> *less* often than the 12% bank being fixed, so copying their phrasing would have widened the gap;
-> the rule applied instead is to state a claim universally only where the lecture's own claim is.
-> The same measurement found something larger: **"pick the longest option" pays 53.7% and 86.7% on
-> the real papers** against 11–32% here, so the most gameable property of this course's assessment
-> is one the product already fixed. **F-08:** SCLM Section A's pool went 52 → 84 against a 50-question
-> section — from two spare to thirty-four, an examiner-reserved slice for the first time. **F-06:
-> closed on SCLM, not on BRGSA, and the reason is stated** — mean of sets 1–3, SCLM 36.0 → **29.5**
-> (its own paper pays 32.6) with all rules combined at **24.5**, while BRGSA sits at 36.6 because
-> its section draws 20 from 76 so only about four are new, and SPMS is untouched at 41.2.
-> `run-persona-strategies.mjs` now reports the **mean of sets 1–3**, because one seed cannot tell a
-> bank change from a draw. New `tools/measure-learn-craft.mjs` reports the exploit the mock cannot
-> see: **inside a study set, name-matching the concept pays 45–60%**, reaching 67.3% on IBM.
-> `VERIFIED(REAL_BROWSER + AUTOMATED)` at `evidence/2026-08-15/t6-harness-and-bank/verification.md`:
-> 78/78, bank `ok` with 0 errors, palette clean, LAW-47 clean over 12 routes in each of SPMS, SCLM
-> and BRGSA, 0 layering descents, reteach 3/3, and 0 overflow/clipped/circleFit/overlaps/sub-44px at
-> 375 and 1280 with a new item on screen — which also caught a **LAW-64 recurrence**: the exam
-> legend's chip carries a 44px tap floor inside a 26px grid track and painted 9×17px across its own
-> label on five rows at every desktop width, on a screen the previous sweep never visited. F-25 is
-> corrected to 9 of 32 rather than universal. New content is `WAITING_OWNER_CONTENT_ACCEPTANCE`;
-> not merged or deployed.
->
-> **The ladder was in the bank and not in the product (2026-08-15):** the owner asked for a
-> step-by-step system where concepts layer, testing feels connected, mistakes bring back the lessons
-> you need, and the Examiner tests what has been taught — *"If Examiner feels foreign, that's Dungeon
-> Learn's failure."* Measuring first changed the job. `tools/measure-learn-exam-coverage.js` walks
-> each subject's sets in order: **sets 1–8 are modules 1–8, two concepts each, and finishing them in
-> order carries a learner from a tenth of their paper to all of it** — SPMS 10.7% → 100%, BRGSA 8.8%,
-> SCLM 9.7%, IBM 10%. Every concept's source lecture has a lesson. So the three students' F-16 ("the
-> recommended set teaches a fraction of what its mock examines") is **not a content gap; it is the
-> expected state after one step of eight, which the product never said.** Ten identical cards under
-> "You do not have to complete all ten", no position, nothing separating the eight that build the
-> subject from the two that revisit it. Fixed by saying what the bank already knew: `courseLadder()`
-> gives every set a step number, what it adds, and what it rests on; `examReadiness()` states on the
-> paper card, the hero and the pre-clock cover how much of *this* paper Learn has taught — "2 of the
-> 16 concepts this paper draws on — about 10% of this set's 72 marks" — with **Teach me that first**
-> crossing back into the next rung, because a readiness figure with no route out of it is just a
-> discouraging number. `lessonsRead` was a **one-way latch**, so a lecture met once was never taught
-> again *including by the routes that exist for nothing else* — `conceptRepairIds` is commented
-> "taught first", `startExamRepair` prints it on screen, and both were true only for first contact.
-> Re-teaching is now driven by evidence and scoped hard (remediation only; only on errors recorded
-> *after* the read; only while the gap is open, so wrong-then-right is left alone). F-19's ordering
-> half was already fixed — 40 sets, 253 pairs, **0 descents** — but the **promise** half was never in
-> scope and the layering check cannot see it: `tools/measure-lesson-handoffs.js` finds **12 of
-> BRGSA's 15 handoffs and 2 of IBM's** promising "the next lecture" across a skip, agreeing with the
-> blind student findings on all four subjects including SCLM being clean. Fixed in code rather than
-> by rewriting fourteen sentences, because different routes deliver different subsets so **no fixed
-> sentence is true of every run**. Also closed: F-34 (the hero read a stale four-item seed list while
-> the card read the real count — one set, three numbers, one screen), F-19a ("Module 1 · lesson 5" on
-> the first lesson sent a careful reader hunting for four he never missed), F-31 (a re-attempt
-> counter that was honest under a caption that was not — a *correct* answer schedules one), and F-33
-> (**course vocabulary scored 3/3 on the one lecture Learn delivered and under a third across the
-> nine it did not — it measures delivery almost perfectly and was billing it to the student**).
-> `VERIFIED(REAL_BROWSER + AUTOMATED)` at `evidence/2026-08-15/t6-ladder-and-readiness/verification.md`:
-> 78/78, bank `ok`, palette clean, LAW-47 re-run **because this change adds lessons to queues that had
-> none** (12 routes, 0 violations), layering 0 descents, new `reteach-on-failure.js` 3/3, and 0
-> overflow / clipped / overlaps / sub-44px at 375 and 1280 over dashboard, examiner home and lesson.
-> **The verification also caught a defect in itself:** the first `reteach-on-failure.js` staged its
-> fixture over an empty key, `loadProfile` normalised it away on the reload, and it reported the
-> re-teach broken while the app was doing it correctly — a red report from a broken probe reads
-> exactly like a broken app, so it now refuses to run without a profile to stage onto. **Untouched and
-> still the biggest holes:** F-02 (BRGSA Section B renders four unanswerable questions and bills them
-> to the student), F-05 (the fake stem, 12–16 marks a paper) and F-08 (Learn items reprinted verbatim
-> in mocks). Pixel acceptance still owed; not merged or deployed.
->
-> **Text that did not fit its box, and the probe that could not see it (2026-08-14):** the
-> owner sent a screenshot of the results ring printing "16 scored questions" across its own stroke,
-> with a standing instruction that overlapping and mis-sized text cannot happen and readability on
-> desktop and mobile is paramount. `tools/browser-checks/ui-audit.js` had reported that screen clean
-> twice in the same session — correctly, for what it measured: viewport edge, tap size, corner radii,
-> paragraph length, font floor, row raggedness, and **nothing about whether content fits its
-> container**. So the probe was extended before anything was fixed, and it found two more defects
-> behind the reported one. `REDLINE` **LAW-64**. Three detectors: `clipped` (text runs painted
-> outside the box laying them out), `circleFit` (text in a round container against the **chord** at
-> the height it sits — a circle is narrower than its box everywhere but the middle), `overlaps`.
-> `clipped` measures **glyph runs** through `Range.getClientRects()`, never `scrollWidth`, which on an
-> inline box describes its containing block — the first version buried two real defects under forty
-> false ones. Fixed: the ring caption moved **out** of the circle (it needed 118px where the circle is
-> 110px wide at that height); the **mastery key**, whose row was `grid-template-columns: auto
-> minmax(0,1fr)` around *three* children, so at 375px the columns resolved to 274px and 28.7px, "Needs
-> practice" wrapped inside 28.7px and ran **19px past the panel** with its description on the row
-> below — now a hanging indent; and three tap targets under the floor, including the Tele-MANAS crisis
-> link at 35×16. Swept at **320, 375 and 1280** over every screen in fixed-width same-origin iframes:
-> **0 findings**. The lesson worth keeping is that a clean report from a probe blind to the defect
-> class reads exactly like a clean screen.
->
-> **Three levels instead of four dials (2026-08-14):** "Build your own practice" opens on
-> three cards named for the stretch of marks each is built for — `0 → 60` cover everything once,
-> `60 → 80` test each idea properly, `80 → 100` only the hardest surfaces — and the four dials that
-> used to be the front door are unchanged, still connected, and folded into a disclosure. **A preset
-> is exactly a set of the dials and the lit card is read back from them**, never stored beside them,
-> so pressing a chip afterwards lands on "Custom mix" rather than leaving a card describing a run the
-> queue will not deliver. Two dials are new and both were things the presets had to turn: **How
-> hard** exposes the `difficulty` every scheduled question has carried since the bank was built and
-> which nothing on the learn side could ever ask for, and **How long → Every concept** is a coverage
-> rule whose target is the subject's concept count. `0 → 60` selects its own questions —
-> `selectQuestionsFromPool` ranks format spread above concept spread, so asking it for sixteen from a
-> sixteen-concept subject returns *about* one each — and `sweepSelection` hands its picks to
-> `orderForDelivery`, the ordering rule factored out so both routes sequence a run identically and
-> LAW-47 holds by construction. The time claim is now made against the **queue**: a first `0 → 60` is
-> 16 questions and 32 lessons and primers, and counting only questions understated it by every lesson
-> in the subject. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-14/t6-practice-presets/verification.md`: each card's printed sentence asserted
-> against the real queue — 16/16 concepts, 3 bosses, 5 formats, no question outside its band — LAW-47
-> clean across all three presets, 78/78, 0 overflow and 0 sub-44px targets at both viewports. Pixel
-> acceptance still owed; the pane was not compositing.
->
-> **The primer predicts instead of printing its own answer (2026-08-14; same session):** the owner
-> reported "a primer is just tapping the same mcq as the question verbatim", and the measurement was
-> worse — `renderPrimerPanel` printed `Know this: <primerFact>` directly above options whose correct
-> entry was that same string, **64 of 64**, with distractors borrowed from other concepts so the item
-> stayed topic-matchable even with the panel covered. First contact with every idea in the course was
-> spent matching a string. `REDLINE` **LAW-63**, written narrowly on purpose: teaching a principle
-> before a later scored question is LAW-47 doing its job, and the indefensible thing is **one surface
-> holding both the question and its answer**. Fixed as **predict, then reveal** (owner's choice of
-> three shapes): the panel carries the concept's caselet and withholds the rule, the learner writes
-> what they think it shows, and the principle arrives afterwards as the answer to their own
-> prediction with their words quoted above it. No key, no marking, no evidence — **being wrong is the
-> mechanism**, which is why it can ask for reasoning at first contact where a keyed question could
-> only ask for recall of something never taught. A keyed two-step was rejected on measurement, not
-> taste: every same-concept string is already spoken for (`confusions` → `_explain`,
-> `applicationWrong` → `_apply`, `bridge` → `_connect`), so it would pre-answer a scored question,
-> and **BRGSA carries no same-concept near-misses at all**. `recordPrimerAttempt` no longer moves the
-> support ladder — it was reading whether somebody could match a string — so the ladder is now driven
-> entirely by `updatePrimerFromChallenge`, the concept's scored questions. The bank gate now
-> **forbids** options on a primer. `tools/browser-checks/primer-prediction.js` is the standing check:
-> `ok: true`, 16/16 primers. **Reported and not fixed:** `_term_cloze` and `_case_cloze`'s framework
-> blank answer with the concept's own *name*, which the layering copy must print — **32 scheduled
-> questions per subject, 128 in all**. Outside LAW-63, reported separately, and an owner call because
-> the fix changes scheduled coverage. Also fixed: `teach-before-test.js` reported clean over three
-> routes instead of twelve when a saved run resumed into the practice screen, so an unreached route
-> now makes the result not-ok.
->
-> **Weaknesses are linked or explicitly alone (2026-08-14):** the weakness route used to be
-> eight unrelated repairs. It now pairs two weak concepts **when the bank genuinely connects them**,
-> closes the pair with the surface that tests both, and reports every other gap as standing on its
-> own. "Close enough" is defined by the bank rather than by proximity: an edge exists only where one
-> authored surface tests both concepts, because a link with no surface behind it is a claim the
-> product cannot honour. There is no Term 6 concept graph to lean on — `data/graphs/` holds BEHECON,
-> GER, MACRO, NABM and NPD — so this was measured from the question set: **each concept has exactly
-> one partner, its module sibling** (a `_match` question plus five boss steps), and SCLM adds two
-> real cross-module edges through `sclm_syn_inventory`. Nothing else, so **isolation is the common
-> case and is a first-class outcome, not a fallback**. A weakness pairs only when its partner is
-> *also* weak — a link to something already Strong is not a shared gap. Pairing is greedy in priority
-> order so the weakest concept chooses first, and inside a pair the earlier lecture still leads. Run
-> length went 8 → 10 because a pair costs three items. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-14/t6-weakness-linking/verification.md`: three seeded fixtures — all-paired,
-> all-isolated, mixed — plus `tools/browser-checks/weakness-linking.js` asserting no invented link,
-> every claimed pair actually checked, and isolated never folded into a pair. Two defects it caught:
-> the run delivered 12 items against a stated cap of 10, and the "Both together" label was first
-> written into `.question-meta`, which is `display: none`. Layering and LAW-47 re-run clean; 78/78.
->
-> **Concepts are layered (2026-08-14):** a run now walks the course's own teaching order, so
-> each lesson builds on the one before it. It did not before — lecture position was not an input to
-> scheduling anywhere. `layeredQueue()` places a lesson immediately before the first surface citing
-> it, so lesson order was a by-product of question order; and `selectQuestionsFromPool()` ordered
-> questions by never-attempted → format variety → concept variety → least-recent → a **hash of the
-> question id**. On a fresh profile the first four keys tie, so the opening question of a run — and
-> the first lesson a learner ever met — was picked by that hash. Meanwhile the primer had been
-> printing *"Carry forward: `<previous>`. Now add `<this>`"* and the header *"builds on what you just
-> did"* against a sequence nothing had sequenced. **Selection is untouched** — format spread, concept
-> coverage and weak-first all stay — and only delivery changed: selected questions are sorted by
-> teaching rank, and `layeredQueue` commits to the run's whole lesson list up front and drains it in
-> order, so lesson delivery is monotonic by construction and LAW-47 holds a fortiori.
-> `VERIFIED(REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-14/t6-lesson-order-diagnosis/verification.md`: across all 40 sets in four
-> subjects, **94 descents over 37 of 40 sets → 0**, with the consecutive-pair count identical at 253
-> before and after — the proof selection did not move. BRGSA set 9 runs 18 lessons from M01-L01 to
-> M08-L01 with zero backward steps. Official LAW-47 check clean, 78/78, palette and build clean.
-> `startPriorityPractice` is deliberately excluded: it is remediation ordered by need and says so on
-> screen. The measurement also cost a `WATCH` law — **LAW-62**: rendering a lesson marks it read *in
-> memory*, so a probe opening several sets in one page load contaminates itself, and the first
-> version of this measurement reported 53 LAW-47 violations that did not exist. Tester-visible and
-> not merged.
->
-> **Questions that name an example now show it (2026-08-14):** a stem read "In the
-> drilling-machine example, select every need the purchase actually serves" and no drilling machine
-> appeared anywhere on the page. All 816 questions were audited in two passes — sixteen deictic
-> phrasings, then a proper-noun sweep over every stem shipping no caselet — and the defect is
-> confined to SPMS Section B's twenty authored multiple-select items: `addAuthoredMultiSelect` had no
-> `caselet` field, so none of them could carry a case even when the stem named one. **Four do name
-> one** (drilling machine, Zerodha, ride-hailing MoSCoW, WhatsApp) and all four now display it,
-> written from their own lecture's clean transcript and withholding the classification the question
-> asks for. The authoring had been leaning on teach-before-test to supply the example, which is not
-> what LAW-47 guarantees: `SPMS-M07-L01`'s lesson does not contain the bucket assignment its question
-> asks for, and **the examiner delivers no lesson at all** — Section B is these same twenty items sat
-> cold. Options, `answers` and `diagnoses` are byte-identical, so marking, per-option diagnoses and
-> the LAW-53 shape spread are untouched. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-14/t6-example-questions-show-their-example/verification.md`: all four render on
-> the examiner (targeted through the seeded palette) and the drilling-machine item reached through a
-> real concept run on the learn surface, 0 horizontal overflow and 0 sub-44px targets at 375×812,
-> `check:exam SPMS` clean, 78/78. Logged as `REDLINE` LAW-61. **Reported and deliberately not
-> changed:** fifteen of the twenty MSQ stems still ask what *"the lecture"* said rather than what is
-> true, which trains recall of a session instead of the idea. New prose stays
-> `WAITING_OWNER_CONTENT_ACCEPTANCE`; not merged or deployed.
->
-> **Hosted written checking is deployable and unmeasured (2026-08-14):** the hosted marker no
-> longer needs a vector index. Retrieval never reads the candidate answer, so each question's course
-> evidence is a constant; it is now frozen at build time — 380 chunks over all 64 questions, 511 KiB,
-> zero lecture-boundary violations, 155.92 KiB gzipped against a 3 MiB free ceiling. Vectorize and the
-> embedding model are gone from the request path, course transcripts stay out of any hosted store, and
-> creating the index and uploading 3,470 chunks is no longer an owner action. `COURSE_RAG` was a
-> binding to an index that never existed and would have failed every deploy; it is removed.
-> `DUNGEON_HOSTED_WRITTEN_CORPUS` is now the pack's own content digest, so approval cannot drift from
-> the text the marker quotes. Two gaps between promise and code were closed: the hosted runtime
-> imported the distress helpers and never called them, so the privacy notice's "not sent to any AI
-> provider, not marked, not stored" was unkept on the runtime testers use; and the written-answer
-> retention the agreement asks consent for did not exist. Answers now carry a per-row 92-day expiry
-> deleted by a daily cron, revocation deletes them explicitly, and the owner has a per-tester
-> "Delete answers" control. `VERIFIED(AUTOMATED)` at
-> `evidence/2026-08-14/t6-frozen-evidence-and-answer-retention/verification.md`. Automated suite:
-> 78/78. **Marking quality is the open question, not infrastructure:** IBM exemplars reach full marks
-> 22/32 (short-form 14/16) for 63/80 of available marks; BRGSA reaches 13/32 for 45/80, and five of
-> the eight questions flagged for concept-label/exemplar mismatch are in that failure list. Zero false
-> awards across 64 content-free answers in every run. The hosted checkpoint has never been run.
-> Activation remains off; `WAITING_OWNER_CALIBRATION + WAITING_OWNER_CONTENT_ACCEPTANCE`.
->
-> **Written transfer throughout Learn; forensic review after Examiner (2026-08-13):** prose
-> practice now follows the published paper rather than appearing in every subject. BRGSA and IBM
-> each carry **32 authored prompts** — one short framework explanation and one full case response
-> for every concept — while SPMS and SCLM keep their applied work in the objective, MSQ, numerical,
-> and matching formats their papers actually use. Each written rubric owns a bounded taxonomy of
-> missing versus misunderstood gaps. Qwen must select those server-owned codes; only accepted codes
-> enter `writtenPractice.gaps`. Dungeon then shows the exact repair, schedules another written
-> surface on the concept later in the run, and keeps recommending fresh wording/cases until two
-> accepted transfer confirmations close the gap. **Examiner uses the slower counterpart only after
-> submission:** one source-bound rubric judgement plus a separately generated and verified deep
-> coach. The mock score is already frozen; misses open lesson-plan targets and `examMisses`, while
-> successes never close a gap or create mastery. Candidate prose and deep-review prose are not
-> added to the saved profile. The real path also caught a citation-envelope mismatch: accepted
-> point-level citations are now canonicalised into the top-level source list before browser
-> validation. The real browser/local-model path also caught Windows decoding UTF-8
-> punctuation through the system code page; `server.py` now fixes the subprocess and response
-> charset, with a second browser-side script guard. `VERIFIED(REAL_BROWSER + REAL_LOCAL_MODEL +
-> AUTOMATED)` at `evidence/2026-08-13/t6-written-transfer-and-examiner-forensics/verification.md`.
-> Automated suite: 63/63. Academic authority remains `WAITING_LOCAL_MODEL_CALIBRATION`; hosted
-> activation remains off.
->
-> **Dungeon now owns written repair (2026-08-13; newest):** authored written practice no longer
-> means “pick the four least recently seen prompts and let Qwen comment.” Accepted criterion
-> judgements build a **separate written-practice profile** for course understanding and judgement +
-> evidence; it never enters `conceptAttempts` and never creates Strong. A miss opens two fresh
-> confirmations, inserts a deterministic unscored repair immediately, labels the next authored case
-> as the transfer check, and keeps the existing different-family concept question later in the run.
-> The weakest open writing move can now become the homepage's one **Next** recommendation, with the
-> remaining confirmations stated; otherwise Dungeon starts with untested prompts and weak concepts.
-> During any practice run the header subject select is gone—the run already owns its subject—which
-> also closes the blank restored-dropdown defect. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-13/t6-proactive-written-adaptation/verification.md`: recommendation → accepted
-> miss → inserted teaching → fresh transfer prompt, 0 horizontal overflow, 0 visible sub-44px
-> targets, subject control hidden, 62/62 tests. The model is still practice-only and local quality
-> remains `WAITING_LOCAL_MODEL_CALIBRATION`; hosted corpus, consent, calibration, and deployment wait.
->
-> **Practical written answers corrected and accelerated (2026-08-13; newest):** the reported
-> landing-page answer was reasonable; the item contract was not. Its case and defensible decision
-> came from BRGSA M01-L03 while the generated written item declared only M01-L01 and demanded an
-> unrelated pre-declared-test reason. All generated practical prompts now ask what should be done
-> and why the case supports it, cite both principle and applied lectures, and use two transparent
-> criteria — course understanding; judgement and case evidence. Per-answer marking is one compact
-> Qwen judgement followed by deterministic schema, English-script, declared-citation, and literal-
-> answer-evidence checks; a second call to the same checkpoint is calibration/audit, not independent
-> authority. After 900 ms idle, local Dungeon prepares question-only evidence and sends no partial
-> draft; the answer leaves the browser only on Check. The exact owner response now returns 2/2 in
-> 24.937s (old path: 46.9s and abstain), with evidence prepared in 497ms. The translucent bag is
-> docked in reserved header space during practice, so saved drag coordinates cannot cover learning
-> copy. `VERIFIED(REAL_BROWSER + REAL_MAC_MODEL + AUTOMATED)` at
-> `evidence/2026-08-13/t6-practical-written-answer/verification.md`: 62/62 tests, real-transcript
-> bank/lesson gates, palette and release build pass; 375×812 has zero horizontal overflow and no
-> bag/question intersection. Calibration, owner content acceptance, hosted corpus/consent, PR,
-> merge, and deployment remain waiting.
->
-> **Authored written practice, compact authority, clean model prose (2026-08-13; newest):** the
-> learner product is **Practise written answers**, not an open question/answer box. Dungeon selects
-> four authored short-answer prompts, preserves teach-before-test, owns each rubric and lecture
-> boundary, and lets Qwen check the learner's application criterion by criterion. The subject-wide
-> analyzer remains unlinked local evaluation tooling and has no public Worker route. Learner-facing
-> evidence is now a compact subject/module tag such as `BRGSA M1`; exact lecture/chunk citations
-> remain inside the validated authority result. A real Mac-checkpoint retry confirmed that the stray
-> CJK/mojibake seen in earlier Qwen prose no longer survives: model-authored English is instructed to
-> use plain ASCII punctuation, validated for unexpected scripts, regenerated once, then safely
-> withheld if corruption recurs (LAW-60). Evidence:
-> `evidence/2026-08-13/t6-hosted-written-authority/verification.md`. Hosted AI activation remains
-> `WAITING_HOSTED_CORPUS + WAITING_OWNER_CALIBRATION + WAITING_OWNER_CONSENT + WAITING_OWNER_DEPLOY`.
->
-> **Local written-response authority (2026-08-13; branch):** the owner authorised Qwen to issue
-> Dungeon's final criterion mark for **local practice writing**, not an official IIMB grade and not
-> Strong evidence. `tools/local-grader.mjs` loads the real bank, retrieves only from the question's
-> declared lectures, runs one compact structured judgement through loopback LM Studio, and accepts it
-> only when schema, script, citations and awarded answer text validate. Every other outcome abstains
-> into the existing rubric/exemplar self-review. An accepted missing criterion proactively places a
-> different question later. `tools/server.py` exposes the route only when explicitly enabled, only
-> to loopback and same origin, one request at a time; production, LAN clients and the timed examiner
-> have no model path. `VERIFIED(REAL_BROWSER + REAL_MAC_MODEL + AUTOMATED)` on
-> `codex/measurement-foundation` at
-> `evidence/2026-08-13/t6-local-written-authority/verification.md`: 50 tests, deterministic boundary
-> coverage, and a real Browser run through the exact owner-approved Mac checkpoint
-> `qwen3.6-35b-a3b-claude-4.6-opus-reasoning-distilled` over a private Windows→Mac SSH loopback
-> forward. Real BRGSA and SCLM exemplars returned accepted source-cited 3/3 marks; the live waiting
-> state is explicit and responsive. A 12-case, four-subject synthetic smoke recorded 72.22%
-> criterion agreement, 66.67% exact cases, 2.78% apparent false awards, 25% abstention, safe 0/3 on
-> all injection-shaped cases, and 43.25s mean latency. This is operating evidence, **not academic
-> calibration**. `WAITING_LOCAL_MODEL_CALIBRATION` remains until the same exact checkpoint passes an
-> owner-marked 48-answer multi-subject set. The server enforces exact configured/approved model-id
-> equality before local HTTP authority exists. The high-effort audit also fixed a measurement defect: a later rapid-correct
-> answer no longer demotes an already Strong concept; it adds no Strong evidence and erases none.
->
-> **Two sides of one coin (2026-08-13; newest):** the crossing between the learning system and the
-> examiner is a slim two-panel band at the top of both home pages — Learn left, Examiner right, one
-> object split down the middle. The side you are on is filled in its own colour (`--ink`, which
-> flips with the theme, and saffron) and is inert and `aria-current`; the other side is the whole
-> panel as a button. It replaced the dashboard's dark mock invite and the examiner's return button.
-> The header switch is now its shorthand: it folds away while a coin is on screen and unfolds as one
-> scrolls off, animating width rather than opacity, and it is withheld entirely while a paper is
-> running. The header itself lost its sparkline — "Term 6 progress", a percentage, and
-> `N blocks practised`. **The bag is tools only and floats:** the focus timer and the examiner's
-> calculator (both keypads, switchable, persisted), in a rounded card above the corner with no
-> scrim, left where you put it. The resume bar rises and fades instead of blinking, via
-> `allow-discrete` + `@starting-style`. Same evidence file as below, second half. **Screenshots
-> exist for these surfaces** — the pane began compositing mid-session and the coin was reviewed in
-> all four theme/side combinations, which immediately caught a dark-mode defect no DOM check would
-> have (`--deep` is near-black in both themes, so the filled side vanished on a dark page). Saved
-> artefacts are still owed. **Measurement foundation (2026-08-13; branch):**
-> `codex/measurement-foundation` adds an ephemeral response clock, saves only a coarse duration
-> band plus `rapidGuess` / `strongEligible`, and makes an explicitly rapid answer keep its result
-> without supplying Strong evidence. Slowness is never penalised, historical attempts remain
-> eligible, and a restored complete response has unknown timing. `VERIFIED(REAL_BROWSER +
-> AUTOMATED)` at `evidence/2026-08-13/t6-measurement-foundation/verification.md`; not merged or
-> deployed, and its provisional 10%-of-expected threshold remains a real-data calibration target.
->
-> **One switch between two products (2026-08-13):** the header carries a Learn / Exam
-> segmented control, and moving between the two sides runs through `document.startViewTransition` —
-> the old page leaves the way you came from, the new one arrives from the side you pressed, and the
-> header is held still by its own `view-transition-name` because furniture on both sides should not
-> travel. Direction, duration, and the reduced-motion form (the browser's cross-fade, shortened, with
-> the travel dropped) are in `app/t6.css` beside the switch; the script only decides *when* a move is
-> a crossing. **Which side you are on is derived from the screen, never stored:** `showScreen` sets
-> `data-mode` and both `aria-pressed` values from a table of the examiner's screen ids, so routes
-> written long before the switch cannot disagree with it. It is a `role="group"` of two pressed
-> buttons rather than a tablist, since the examiner side is two screens deep and the tab contract
-> would be a lie. The examiner's home now leads with **one recommended paper** — a paper you have
-> never met before a second set of one you have, in seat order, then your weakest paper, with IBM
-> last because its self-marked percentage is not the same kind of number and would otherwise win
-> "weakest" forever. Post-mock repair arrives in **sittings of four concepts**, stamped so the next
-> sitting moves on, and the **bag** holds a timestamp-driven 25/5 focus timer and eight pieces of
-> guidance. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-13/t6-dual-facing-and-sittings/verification.md`: thumb centred within 0.4px of
-> both labels at 375 and 1280, 9.9:1 on the saffron half, 0 overflow from 320 to 1600, 0 sub-44px
-> targets of ours, 39/39 tests, palette gate clean. Two defects were found by that verification and
-> fixed — a skipped transition rejected `ready` unhandled, and a fast double-press landed on the
-> wrong side. **Still no screenshots, and the cause is now measured rather than assumed:** an
-> undisplayed Browser pane composites no frames, so `document.timeline.currentTime` is pinned at 0
-> and every CSS transition reads as its start value — which twice looked exactly like a CSS bug.
-> Drive `getAnimations()` to the end and measure layout in fixed-width same-origin iframes. Pixel
-> acceptance remains owed.
->
-> **The examiner is a product, and its dashboard is the point (2026-08-12) — collapsed to its
-> outcome.** The examiner gained its own front door at `app/t6.html#exam-home-screen`: four papers,
-> three seeded sets each (seed = subject + set index, never the clock), openable with no learning
-> state, with shortfalls and IBM's caveat stated on the card *before* the clock. Results became a
-> diagnostic — pacing against the paper's own budget, where knowledge breaks down per concept, the
-> cost of speculative ticking — each row routing into a taught single-concept run. `conceptAttempts`
-> and `totalAnswers` stay **0** after three submitted mocks. It exposed two bank-content defects it
-> did not fix: `REDLINE` **LAW-53** (all eight SPMS MSQs are 3-of-4, so ticking everything scores
-> full marks) and 16 of 50 SCLM Section A questions sharing a character-identical caselet and stem.
-> `WATCH` **LAW-54**: a legend counting the whole paper above a one-section grid. Telemetry ships
-> behind a flag defaulting **off** with no transmission path. Full narration:
-> `docs/governance/CHANGELOG.md`; evidence:
-> `evidence/2026-08-12/t6-examiner-product-and-insights/verification.md`.
->
-> **Two products, one bank (2026-08-12):** Dungeon is now **the learning system**
-> (learn by failing: teach before test, weak-first, feedback on every answer) and **the examiner**
-> (`app/t6.html#exam-screen`), a mocks platform that deliberately does none of that. The examiner
-> builds a paper strictly from `docs/briefs/T6_EXAM_PATTERN.md` — sections, counts, per-question
-> marks, 120 minutes, negative marking, calculator — and spreads questions randomly rather than
-> pedagogically, with a seeded shuffle so a reload does not reshuffle the paper. It ships the exam
-> furniture a candidate expects: section tabs, countdown with a per-question timer, a five-state
-> question palette (answered / not answered / not visited / marked / answered-and-marked, each with
-> its own **shape** as well as colour), mark-for-review, clear response, and submit with auto-submit
-> at zero. Scoring is the paper's own: SPMS Section B is +1 per right option, −1 per wrong, floored
-> at zero **and capped at the question's marks**; match is all-or-nothing because the paper states no
-> partial credit; written answers are excluded from the machine total and returned for self-review.
-> **Where the bank cannot fill a section the brief says so before the clock starts** and scores out
-> of what is actually there — SPMS Section B has 8 of 20 MSQs, SCLM Section B 4 of 6 numericals — and
-> IBM carries a caveat that its paper is ten written answers on an unseen caselet, so a mock cannot
-> reproduce it. **The two products are linked in one direction only:** concepts missed under exam
-> conditions are stored in `profile.examMisses` and become a curated revision route
-> ("Fix what the mock exposed"), taught before being tested again. Mock answers deliberately never
-> touch `conceptAttempts` — a timed, unassisted, uncoached paper is not the condition the evidence
-> model is calibrated on, so misses **prioritise and never score**. `VERIFIED(REAL_BROWSER)`:
-> `conceptAttempts` and `totalAnswers` both stay 0 after a submitted mock.
->
-> **Design system, dark mode, and the mobile pass (2026-08-12):** every colour in `app/t6.css` is a
-> token and every token a `light-dark()` pair — 85 hex values, 46 `white` keywords, and 32 rgba
-> literals are now **zero** below `:root`. The theme switch is one `color-scheme` change, so native
-> controls follow. `--ink` was split from `--deep` (it was both text and the hero's fill). The
-> palette is measured by `tools/check-palette.mjs`, which found that the *existing* state hues
-> cannot carry state without colour — green/amber/red sit within 1.2:1 in grayscale and 0.05 OKLab
-> apart under deuteranopia — so the four evidence states are now four silhouettes with hues
-> unchanged. All seven `title`-based hover explanations were unreachable by keyboard and touch and
-> are now one real tooltip (**LAW-51**). A documented four-step corner scale had drifted back to
-> nineteen literal radii (**LAW-52**). On mobile the submit button sat 370px below the fold and is
-> now sticky, with the global header hidden mid-question. Evidence:
-> `evidence/2026-08-12/t6-dark-mode-and-mobile/verification.md`. Learners can now move device
-> themselves: `releaseOtherDevice` ends the other session and claims this one, progress intact,
-> still one active browser, and a country lock is not bypassable by it.
->
-> **Teaching layer — the 0→80 path (2026-08-12) — collapsed to its outcome.** The app could measure a
-> learner but could not teach one. `app/sets/t6_lessons.js` added 106 authored lecture-grain lessons
-> (BRGSA 50 of 50 lectures; IBM, SCLM and SPMS each 16 of 16 *cited* lectures) and teach-before-test
-> became a scheduling invariant in `layeredQueue()` — **LAW-47**, verified over 595 queue items with
-> zero violations, 724 of 724 scheduled questions fully taught. `relevantWrong()` restored reasoning
-> to applied questions (**LAW-48**) and a transcript-backed vocabulary gate caught three real
-> authoring errors (**LAW-49**). The lesson worth keeping: first contact with every idea had been a
-> scored item in vocabulary nothing had introduced, and one shipped answer used a phrase appearing **0
-> times** in 50 BRGSA transcripts. Lectures no question cites remain unauthored by design. Full
-> narration: `docs/governance/CHANGELOG.md`; evidence:
-> `evidence/2026-08-12/t6-teaching-layer/verification.md` and
-> `evidence/2026-08-12/t6-teaching-layer-complete/verification.md`. Lesson prose stays
-> `WAITING_OWNER_CONTENT_ACCEPTANCE`. **Deployed (2026-08-12):** `reorg/structure` merged to `main`
-> as `a8f90bc` carrying the complete teaching layer to the live cohort; PR #1 (`3c69d1e`) had shipped
-> only the restructure and the first 80 lessons. These are tester-visible and **owe a change
-> announcement** — draft at `outputs/ANNOUNCEMENT-2026-08-12-lessons.md` (untracked). Confirm the
-> deployed version in Workers → Deployments; a push to `main` starts a build, it does not prove one
-> finished.
->
-> **Workspace restructure (2026-08-12) — collapsed to its outcome.** The directory layout this file
-> documents is the result: `app/` ships, `tools/` builds, `legacy/` references, `cloudflare/` deploys
-> and must not move. Two latent hazards fixed in passing are still worth knowing: `core.autocrlf=true`
-> was rewriting LF files to CRLF, and path-anchored ignore rules stop matching once their directory
-> moves. Full narration: `docs/governance/CHANGELOG.md`; evidence:
-> `evidence/2026-08-12/workspace-restructure/verification.md`.
->
-> **Diagnosis revision (2026-08-12):** Every distractor a scheduled question can present now
-> states the specific gap choosing it reveals. `VERIFIED(REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-12/t6-option-diagnoses/verification.md`: 2,943 diagnoses across the active bank
-> with zero generic fallbacks, derived from generator provenance for 92.3% of slots and hand-authored
-> in `app/sets/t6_diagnoses.js` for the remaining 78 texts. The wrong-answer panel was rebuilt as
-> verdict → what this choice assumed → catch it earlier → what governs this question → the complete
-> answer (no longer collapsed) → why it connects. `tools/validate_t6_bank.js` now fails the build when
-> a scheduled distractor lacks a diagnosis, so questions drafted later inherit the contract in
-> `docs/briefs/T6_LEARNING_EVIDENCE_AND_ITEM_PEDIGREE.md`. Two defects were repaired: a raw
-> `selected-belief:` tag reaching learner copy in the concept inspector (LAW-43) and a per-option
-> value indexed by part rather than by option (LAW-44). The authored diagnoses are new content and
-> stay `WAITING_OWNER_CONTENT_ACCEPTANCE`. `GET /dungeon/admin/access-check` was added as an
-> unauthenticated, secret-free Access self-check for the reported Control Room login loop; it
-> diagnoses the loop but does not fix it, since the cause is in Access application configuration.
-> **Deployed (2026-08-12):** commit `0cc2c6d` is live as Worker version `c602c4b3` at 100% traffic
-> with a 0% error rate, carrying the diagnosis revision and the UI alignment pass below. The earlier
-> claim that production served `475837f` was stale: `809fced` deployed as `4e9a3287` roughly an hour
-> before this release, so the dynamic homepage, practice builder, matching board, and the enforced
-> agreement version have all been live since then and the `WAITING_OWNER_DEPLOY` gate is closed.
-> Verify deployment state in Workers → Deployments rather than from this file.
->
-> **UI alignment pass (2026-08-12) and the Access login loop (2026-08-12) — collapsed.** The layout
-> pass established that irregularity is *measured* with an injected probe per screen and per
-> viewport rather than eyeballed, which is the practice `tools/browser-checks/ui-audit.js` now
-> carries; it left the boss, case-cloze, constructed-response and results screens unaudited, and
-> **that gap is still how LAW-64 keeps recurring** — a sweep is only as wide as the screens it
-> visits. The Access bounce was an identity-provider configuration on the `Dungeon Owner Dashboard`
-> application, not Worker code; owner action outstanding is confirming sign-in on the live domain.
-> Full narration: `docs/governance/CHANGELOG.md`; evidence:
-> `evidence/2026-08-12/t6-ui-alignment-pass/verification.md`.
->
-> **Open, not yet acted on:** a bank-volume audit found only 32.5% of taught lectures carry any
-> question (IBM 20.5%, SCLM 22.5%, SPMS 19%, BRGSA 88%) — 191 of 283 lectures have none. Match
-> choices also span 13–179 characters, which layout cannot reconcile; both belong to the bank work.
->
-> **Current status (2026-08-11; supersedes older status notes):** The active plain-language Term 6
-> dashboard for BRGSA, IBM, SCLM, and SPMS is `VERIFIED` in a real Browser at
-> `evidence/2026-08-11/t6-evidence-challenges/verification.md`, with the latest question hierarchy,
-> neutral unanswered-state, and scoped subject-action refinement verified at
-> `evidence/2026-08-11/t6-unified-prompt-hierarchy/verification.md`. Applied questions use one
-> aligned warm-white surface: hierarchy, spacing, and restrained dividers connect the case, task,
-> and response steps; only controls and feedback introduce nested boundaries. It carries an
-> evidence-over-time graph with one module visible at a time, confidence-aware and inspectable
-> four-state progress, weak-first varied re-attempts, and a
-> 792-surface source-traceable bank: 728 scored challenges plus 64 support-only primers. Active
-> scheduling has 565 scored items after excluding 163 older MCQs
-> whose answer length could cue correctness; every concept retains at least eleven active surfaces,
-> five formats, seven independent families, and module boss coverage. Case, cloze, match, MCQ,
-> short-answer, and three-step boss paths are responsive and keyboard-operable, with local
-> save/resume/reset. Time-horizon plans distinguish
-> same-day current evidence from delayed retrieval. The report-backed confidence, boss-step,
-> constructed-response, priority, and practice-path revision is verified at
-> `evidence/2026-08-11/t6-research-integration/verification.md`; the privacy-scoped release boundary
-> remains verified at `evidence/2026-08-11/tester-launch/verification.md`.
-> The adaptive-primer revision is `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED + REMOTE_D1)` at
-> `evidence/2026-08-11/t6-adaptive-primer-community/verification.md`: a one-click run introduces
-> only the next new concept, the support fades after easy or harder success, misses restore applied
-> and misconception layers, and primers never create mastery evidence. A dynamic homepage,
-> mix-and-match practice builder, enforced agreement version, and matching board are
-> `VERIFIED(REAL_BROWSER + AUTOMATED)` at `evidence/2026-08-11/t6-dynamic-homepage/verification.md`
-> and `WAITING_OWNER_DEPLOY`. Subjects sit at the top as a fast switcher; the hero pairs the
-> subject-local next action with a live evidence trendline and a computed momentum sentence; the
-> header shows a Term 6 sparkline instead of a `0 of 64` counter; an inline builder configures
-> shape/focus/length/feedback with every unusable option disabled and explained; a factual
-> distance-travelled strip, the mastery matrix, Term 6 totals, and the staged panels form one
-> continuous scroll. Long-form matching uses a resizable board: statements side by side, one slot
-> each, and a docked tray of label tablets placed by click, drag, or keyboard. (This paragraph used to
-> claim production still served commit `475837f`; that was stale and is corrected in the
-> **Deployed (2026-08-12)** note above — `0cc2c6d` is live as Worker version `c602c4b3`, so this
-> revision has shipped.) Every tester-visible change ships with a change announcement; the format is in
-> `docs/community/COMMUNITY_PLAYBOOK.md`.
-> Student-facing game/proprietary vocabulary and diagnostic question metadata are removed from the
-> learning view. Sixty-four constructed-response surfaces use transparent self-review without
-> automatic correctness or Strong credit. Exact final-paper structure is **known as of 2026-08-12**
-> and recorded in `docs/briefs/T6_EXAM_PATTERN.md`, which closed
-> `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`; structure may be stated as fact, but question content,
-> difficulty, topic weighting, a likely score, and pass probability remain unclaimable. Owner/faculty
-> content acceptance remains open, so the route is not `DONE` or an exam-score prediction. The privacy-scoped release wrapper, worker health route,
-> security/no-index/private-cache headers, release tests, owner control room, and community
-> operating documents are verified at
-> `evidence/2026-08-11/tester-access-admin/verification.md`; the owner-JWT-verified Cloudflare group
-> controller at `evidence/2026-08-11/tester-dashboard-access-management/verification.md`. Exact
-> `https://aneeketdas.com/dungeon/` routing, direct Worker static assets, the more-specific owner
-> admin application, anonymous learner/bank/admin denial, the least-privilege group secret, and
-> rapid-request rate limiting are `VERIFIED(CLOUDFLARE_API + ANONYMOUS_EDGE)` at
-> `evidence/2026-08-11/cloudflare-protected-domain/verification.md`. The private Sites version 5
-> remains an owner-only backup and is no longer an origin dependency. The owner Control Room is
-> `VERIFIED(BROWSER)` on the exact domain: health is Healthy, Access is Connected, and the release
-> is Allowlisted. The Control Room allowlist is the
-> only admission check: an approved email enters immediately with an opaque server-side session, an
-> unapproved email receives one fixed private `Ask Aneeket to add you in.` denial that never
-> discloses the allowlist, and a first approved login is held at a one-time agreement step that
-> records version, acceptance time, and minimal WhatsApp invite-open/join-acknowledgement/reminder
-> timestamps. Progress is stored per email in Cloudflare D1 with the
-> browser copy kept as an offline fallback. One active browser per email is enforced, and a country
-> change locks the account for owner review. Onboarding also requires joining the private WhatsApp
-> tester group; the invite is disclosed only after approved-email admission, the join tick stays
-> disabled until the invite opens, and membership then remains an explicit self-attestation because
-> WhatsApp exposes no membership proof to the page. Admission, denial, the agreement gate, and the
-> 390-pixel agreement layout are
-> `VERIFIED(LIVE_EDGE + REAL_BROWSER + AUTOMATED)` at
-> `evidence/2026-08-11/learner-backend-and-agreement/verification.md`. The Control Room adds cohort
-> paste-onboarding, a `Clear lock` recovery that forgives a country lock without deleting progress,
-> per-tester and bulk **force sign-out** that ends browser sessions so a tester must sign in again
-> while keeping approval and every byte of progress — unlike `Revoke`, which cascades and deletes
-> their saved work — with live session counts shown on each row so the control has something visible
-> to act on,
-> per-tester state chips, two panels computed from real saved progress (Participation and Where
-> testers struggle), and per-person or bulk `Bump` actions for missing group acknowledgements; a bump
-> records an in-app reminder and copies a firm manual message, but never claims to send it or
-> removes access automatically. D1 migration `0004_community_acknowledgement.sql` is applied, and the
-> full live onboarding path has been exercised end to end with a temporary address.
-> `aneeketBTN/Dungeon` (private) is connected to Workers Builds, so a push to `main` builds and
-> deploys. The first external cohort is active with eight approved tester addresses at the latest
-> Control Room read; that read also showed six testers holding the superseded agreement version,
-> which the enforcement fix above addresses. GitHub and the private
-> WhatsApp tester group are active. The Learning Signal Auditor, Question Bank Steward, and Tester
-> Cohort Steward are `PREPARED_NOT_ACTIVATED`: schedules registered and verified `PAUSED`,
-> repository declarations disabled, activation preflight intentionally failing, no run history, and
-> no tester data touched. Evidence:
-> `evidence/2026-08-11/tester-agent-readiness/verification.md`. The earlier
-> cinematic/Ari/economy product slice remains at `legacy/rogue/rogue.html` as an `IMPLEMENTED` legacy
-> reference and still lacks complete real-Browser route acceptance.
->
-> Static HTML/CSS/JavaScript prototypes in `app/`; procedural learning engine and state in root
-> JSON/Markdown structures; a shared learner backend in Cloudflare D1; current phase: observe the
-> active cohort without over-reading small samples,
-> continue owner/faculty content acceptance, and calibrate the learning model from genuine use.
+
+## Current Status (2026-08-20)
+
+**Product.** Dungeon is two surfaces over one bank — **Learn** (layered study sets, primers,
+lessons, re-teach on evidenced mistakes) and **Examiner** (timed mocks on the real Batch 1 paper
+pattern, `docs/briefs/T6_EXAM_PATTERN.md`) — across four subjects (SPMS, BRGSA, SCLM, IBM), **219
+concept records and 2,827 questions**. A real tester cohort is live and **a push to `main` deploys** (see
+Collaborators). Every claim in this section has its full story in
+`docs/governance/CHANGELOG.md`, newest first; the ledger below names the entries.
+
+**Teaching layer — COMPLETE (2026-08-19).** **283 registered teaching entries over the 283-lecture
+course: every lecture in all four subjects has a lesson.** BRGSA 50/50, IBM 78/78, SCLM 71/71,
+SPMS 84/84, each reported `COMPLETE` by `check_lesson_file`. That is 282 lessons plus one
+**add-in** — a lecture folded into a neighbour's lesson rather than padded out or left untaught
+(owner direction 2026-08-19; the mechanism is in `lesson()` and every gate understands it).
+**Every one of the 283 entries is now scheduled into its module's ordinary Learn run**: readable-only
+entries are 0 in every subject, and both the lesson gate and bank validator fail if one returns.
+This closes teaching delivery, not equal testing depth. Every named idea is reached by a question,
+but a mention is a lower bar than a dedicated concept record or repeated transfer practice (see
+Known Gaps).
+
+**Testing-layer coverage — COMPLETE at the phrase gate (2026-08-20).** `check:tested` now reports
+**359/359 named syllabus ideas (100%)**: BRGSA 69/69, IBM 90/90, SCLM 84/84, SPMS 116/116. The bank
+holds BRGSA 29 concepts / 417 questions, IBM 85 / 936, SCLM 36 / 516, SPMS 69 / 958; every one of
+the 219 concepts has a derived link. This is coverage, **not** the adopted one-record-per-idea depth
+target. The IBM direction changed on 2026-08-20 and supersedes its historical descoping: its
+73-idea queue became **69 new records plus four honest wording repairs**. The new IBM records are
+classified by what they are: **20 foundational layer ideas** generate written + MCQ practice,
+**29 named frameworks/models** generate written practice only, and **20 bounded concepts** generate
+MCQ practice only. The original sixteen records remain layer concepts, so IBM totals 36 layer / 29
+framework / 20 concept records, **167 constructed responses**, and no isolated concept. Generic
+course-grounded caselets teach transfer; nothing claims to reproduce the unreleased exam case.
+
+**Mock coverage — COMPLETE at the paper-relevant record level (2026-08-20).** Numbered mocks are
+deterministic coverage cycles rather than three unrelated draws. SPMS closes in **3 sets at 69/69**
+records, BRGSA in **4 at 29/29**, IBM in **7 at 65/65 written-relevant** layer/framework records and
+SCLM in **3 at 36/36**. Every one of the seventeen papers preserves the real paper shape, fills its
+sections and spans all eight modules. IBM's twenty objective-only records deliberately stay in
+Learn rather than being forced into its all-written paper. A separate **Weakest links** diagnostic
+uses current Learn evidence to target weak or untested records; it is excluded from the common
+coverage cycle and like-for-like re-sit comparisons because its contents are dynamic.
+
+**Gates, last full run 2026-08-20 — all green:** `check_lesson_file` 283/283 scheduled / 0 errors /
+0 readable-only warnings; bank validator 0 errors (**pass the transcript path** — the silent-skip signature is
+`lessons.coverage: {}` *and* 0 warnings, and the field is nested, not top level); syllabus,
+taught-vocabulary, taught-not-tested, spine, naming, palette and craft gates PASS; `npm test`
+**139/139**; build 20 assets; exam readiness 0 errors / 0 warnings. Local Browser verification shows
+the rail at SPMS 69 / BRGSA 29 / IBM 85 / SCLM 36,
+labels the pills as **concepts Strong**, and shows IBM as 85 concepts / 100% of the syllabus.
+All three dashboard graphs are now real shadcn/Recharts components (two area, one radar), responsive
+at 1280 and 375 with no horizontal overflow; screenshot sweep 16/16 and dashboard optical sweep
+4/4. No handmade graph canvas or path generator remains.
+**Expected-state exception:** the
+lesson–lecture match gate `FAIL`s naming `SPMS-M01-L01` and nothing else, by owner decision —
+anything *else* in that output is new.
+
+**Waiting.** `WAITING_OWNER_CONTENT_ACCEPTANCE` is **cleared** — the owner accepted all 105
+outstanding surfaces in chat on 2026-08-19. That is a release decision, not a completed review:
+the per-lesson reading set out in decision 1 did not happen, and acceptance is still not faculty
+review. Current branch work is not merged, not deployed.
+
+## Session Ledger — full stories in `docs/governance/CHANGELOG.md`
+
+Each line is a pointer, not the record: the CHANGELOG entry of the same date and title carries
+the numbers, the defects found, and the evidence paths. Do not re-derive a claim from a line
+here — read the entry.
+
+- **2026-08-20 — Mock sets become coverage cycles, and Learn can issue a weakest-links paper**
+  (the fixed three-set ceiling is replaced by the shortest deterministic cycle that reaches every
+  paper-relevant record: SPMS **3 / 69/69**, BRGSA **4 / 29/29**, IBM **7 / 65/65** written-relevant,
+  SCLM **3 / 36/36**. All seventeen papers fill, span eight modules, preserve real formats and pass
+  complete-cycle craft checks. IBM's 20 objective-only records stay honestly in Learn. Every subject
+  also has a dynamic Weakest links paper selected only from current Learn evidence and excluded from
+  common coverage/re-sit comparisons. `npm test` 139/139; build 20; structural gates green. Evidence:
+  `evidence/2026-08-20/t6-preparedness-personas/verification.md`.)
+- **2026-08-20 — The preparedness defects are fixed, and the whole teaching layer now enters Learn**
+  (the three-persona audit's actionable findings are remediated. All **283/283** registered lecture
+  entries are scheduled in module runs, readable-only 101 -> **0**; honest estimates include lesson
+  reading; early Learn carries IBM writing, BRGSA case/written work, SPMS MSQ and available SCLM
+  numeric work. Content contradictions and neighbouring feedback are repaired; exact failed-concept
+  repair, confidence capture and accessible in-page paper dialogs are live. SCLM match prompts rotate;
+  exam readiness is 0/0. Mock selection keeps eight modules while taking longest-option payoff to
+  SPMS 25.2%, BRGSA 25.0%, SCLM 25.0%. The then-current three-set sample reached 75.4% / 62.1% /
+  36.5% / 100%; the coverage-cycle entry above closes that remaining gap. `npm test` now 139/139;
+  build 20;
+  structural gates green. Evidence: `evidence/2026-08-20/t6-preparedness-personas/verification.md`.)
+- **2026-08-20 — Every dashboard graph is now a shadcn/Recharts component** (all three graph
+  surfaces replaced: momentum and evidence history use actual gradient `AreaChart`s; the evidence
+  matrix uses an actual `RadarChart`. One self-hosted React island owns responsive geometry,
+  grids, tooltips, accessibility and reduced motion. Lucide flag/person/door marks replace the
+  radio-like route dots. At 1280 and 375: three accessible chart surfaces, zero overflow, zero
+  canvas/legacy graph paths, zero console errors. `npm test` 130/130; review/palette/build green;
+  screenshots 16/16 plus optical 4/4. Evidence:
+  `evidence/2026-08-20/t6-shadcn-charts/verification.md`.)
+- **2026-08-20 — The mocks rotate the expanded bank, and no persona feels whole-subject ready**
+  (three existing personalities, isolated browser state, all four subjects, plus all 12 blind mock
+  exports. None felt ready after the sampled recommended path. IBM's eight-of-ten legacy scenario
+  lock is replaced by four deep whole cases + six rotating focused cases: across three mocks unique
+  questions 14 -> **22**, concept reach 22/85 -> **31/85** (31/65 written-relevant), all 18 focused
+  slots unique, pair overlap 8 -> **4**. Across-three concept reach: SPMS 76.8%, BRGSA 62.1%, IBM
+  36.5%, SCLM 100%; every individual paper spans eight modules, while 101 lessons stay readable-only.
+  Lazy is defeated by the real formats, Joe exposes unrecorded guesses, Diligent exposes IBM/BRGSA
+  feedback contradictions. Chart route repaired; fixture-mutating tests serialised. `npm test`
+  130/130, build 20, gates green, expected lesson-match exception unchanged. Evidence:
+  `evidence/2026-08-20/t6-preparedness-personas/verification.md`.)
+- **2026-08-20 — The whole syllabus is now reached, and IBM's idea type determines its assessment**
+  (owner direction superseded the 2026-08-19 IBM descoping. The 73 IBM misses became **69 new
+  records plus four wording repairs** on existing layers: 20 new layer / 29 framework / 20 atomic
+  concept. Layer → written + MCQ, framework → written-only, concept → MCQ-only, enforced in both
+  generator and validator and regression-tested over all 85 IBM records. IBM 16 → **85 concepts**,
+  220 → **936 questions**, constructed responses 40 → **167**, phrase coverage 17/90 → **90/90**;
+  all four subjects and the whole 359-idea course now read 100%. Framework linkage uses written
+  case responses rather than objective bosses and does not enter the special integrated exam-case
+  priority. All 219 concepts linked, IBM isolated 0, correct-length rank spread 0.03. The UI now
+  says `concepts Strong`, because 69/29/85/36 is mastery-record count, not coverage percentage.
+  `npm test` 129/129, review/build/gates green, expected match exception unchanged. Evidence:
+  `evidence/2026-08-20/t6-ibm-classified-coverage/verification.md`.)
+- **2026-08-19 — The spine is widened for the first time, and the craft gates caught what the
+  structural ones passed** (Steps 0 and 2 of the spine plan. **`pair.slice(0, 2)` generalised** —
+  match and boss now chain consecutive pairs; verified as a **no-op at two concepts per module**
+  first (identical 920 questions, same edges, ids untouched), then as a fix: the probe that used to
+  orphan **`spms_jtbd`** now leaves isolated 0. **The first attempt chained only the match and the
+  bank validator rejected it** — every concept needs boss coverage and ≥10 scheduled surfaces.
+  **Six concept records authored into SPMS module 1** (the L02/L03 taxonomy cluster) — 2 → **8**
+  concepts, SPMS 16 → **22**, questions 216 → **300**, edges 8 → **14**, tested coverage **30% →
+  34%** with the floor raised. **No questions written by hand**: six records generated 84 surfaces,
+  and six syllabus ideas went from untested to tested — the argument for widening the spine before
+  authoring questions singly. **Every structural gate passed a defective draft**: the correct answer
+  was longest in **6 of 6** explain questions, 77.8% against 25% chance, SPMS `longestOptionScore`
+  **0.23 → 0.38**. Two in-place repairs (trim summaries toward distractors; then make one distractor
+  per set longer than the answer) took it to **33.3%, parity with existing concepts**, and the
+  subject to **0.29 — level with BRGSA but above its own 0.23 baseline, reported not hidden**.
+  Module 1's boss now tests its opening two concepts rather than DFV/JTBD: ids unchanged, content
+  changed. Evidence: `evidence/2026-08-19/t6-spine-first-widening/verification.md`.)
+- **2026-08-19 — The concept layer exists, and the spine was never modelled**
+  (owner direction: *"every concept is surfaced, but importance is how much this concept
+  contributes to the entire course as a whole … I just need proper layer."* **Importance is now
+  contribution to the COURSE — module reach**, not raw repetition and not exam marks; mark share
+  still scales but is reported separately. **The finding: today's 64 concepts are module-local by
+  construction** — chosen two per module, so only **2 of 16** SPMS and **1 of 16** SCLM concepts
+  reach six modules, and `Startup`, `Business model`, `Supply chain` **are not concepts at all**.
+  That is why nothing can express one idea resting on another. `npm run build:layer` emits position,
+  role and parent for every idea: **324 placed, 35 unmatched, 76 roots**. Every idea is surfaced —
+  role sets place in the layer, never whether it is tested. **Parents make cross-module links fall
+  out of the structure**, answering the SPMS zero-links problem. Three measured corrections: spine
+  by **rank not threshold** (a threshold put 40 of 115 SPMS ideas in the spine); parents found in a
+  **1,200-char window not a lecture** (identical to the foundational-tie failure); and ranking by
+  **how often the course states two ideas together**, not syllabus proximity. **~3/4 of parents read
+  defensibly and the rest do not** — emitted as data for an owner pass, not written into the
+  catalogue.)
+- **2026-08-19 — The concept spine is specified, and two of its three blockers are code**
+  (`docs/briefs/CONCEPT_SPINE_BUILD_PLAN.md` plus `tools/measure-concept-spine.mjs` /
+  `npm run check:spine`. **Two corrections to the adopted vision doc**: `chain` is the module-title
+  array, not a per-concept position — ordering comes from `source` via `conceptTeachingRank()`; and
+  `linkedConceptIds` is a **derived function, not a field** — what you author is a question carrying
+  `supportingConceptIds`. **The cost is reframed**: a concept record of ~6 sentences *generates*
+  ~10–16 surfaces, so Phase 2's unit is **~295 records**, not ~3,000 hand-written questions.
+  **Blocker 1:** `pair.slice(0, 2)` in `t6_challenges.js` — the module match and five boss steps are
+  the only generated surfaces carrying links, so a third concept in a module is born isolated. Shown
+  by probe: the gate went PASS → **FAIL, exit 1**, and **the orphan was `spms_jtbd`, a shipped
+  concept, not the one added** — insert position silently strips links. **Blocker 2:** cross-module
+  edges come only from written case prompts (`addIntegratedScenarios`, BRGSA/IBM only), so
+  **SPMS has 0** and `groupWeaknesses()` can never pair across modules there — promise 1 is
+  structurally unavailable in the subject with the most objective marks. Fix is an authored
+  cross-module `synthesis` MCQ; `sclm_syn_inventory` is the only worked example in the repo.
+  **Blocker 3:** runs 9/10 split concepts by index parity. Measured: 64 concepts, 920 questions,
+  14.4 each; edges BRGSA 49/IBM 35/SCLM 10/SPMS 8.)
+- **2026-08-19 — The teaching layer is complete: 283 lectures, 283 taught**
+  (five lessons finishing SPMS module 4, including `M04-L10`, the **48,232-character Sriraman guest
+  session, the longest lecture in the course**; then `M04-L04` and `M04-L09` rewritten. Entries
+  278 → **283**, SPMS 79 → **84/84**, backlog → **0**. **Every lecture in all four subjects now has
+  a lesson.** It closes authoring, **not testing** — 184 entries stay readable-only. **Module 4 held
+  the last two composites and both had *positive* margins**, so the original sweep query would have
+  caught either; both had sat unread in its output all session. `M04-L09` borrowed from **three**
+  lectures and named two of them in its own title (0.181 → **0.456**); `M04-L04` took two of three
+  paragraphs from `M04-L01`, where `Spotify` appears 28 times against **0** in its own transcript
+  (0.204 → **0.467**). **A limit of the gate:** `L04`'s flagged rival was `L03`, not `L01` where the
+  text came from — **the rival names where vocabulary overlaps, not the source.** **Nine for nine:
+  every confirmed composite borrowed from a lecture that had no lesson when it was written** — the
+  backlog produced the defect rather than merely blocking its repair. Seven terms rehomed; three
+  (`funding stages`, `superforecasting`, `churn rate`) occur **nowhere in SPMS** and pass via module
+  notes. Invented `liquidity pricing` removed — vocabulary warnings 9 → **8**. Evidence:
+  `evidence/2026-08-19/t6-teaching-layer-complete/verification.md`.)
+- **2026-08-19 — SPMS module 8 is complete, and the worst composite in the corpus is repaired**
+  (six lessons: `M08-L02`, `L04`, `L06`, `L07`, `L09`, `L10`, then `M08-L08` rewritten. Entries
+  272 → **278**, SPMS 73 → **79/84**, backlog → **5**; **every SPMS module complete except M4**.
+  **The composite named itself**: `M08-L08`'s title was "Market analysis *and responsible product
+  management*" and `L10` **is** Responsible Product Management. Own lift **0.203 → 0.519**, margin
+  **−0.074 → −0.475** — the largest of five composite repairs, starting at about p05. **Third margin
+  floor in one day proved too tight**, so the Step 4c sweep now **leads on own support** and treats
+  margin as corroboration; two structural exceptions documented (a "Part 2" lecture, and a
+  **synthesis lecture** that spans the subject). Four tracked terms rehomed in the same edit — and
+  **`data fiduciary` was never `L08`'s: its home is `M08-L05`, 6 occurrences there and 0 in L08**.
+  **`AI bias` occurs 0 times anywhere in SPMS** — a syllabus-sheet phrase passing via module notes.
+  **A mojibake defect I introduced passed every automated gate and the browser caught it instantly**
+  — a Python `unicode_escape` round-trip mangled 8 em-dashes; the gates parse the JavaScript, not
+  the output. Second Step-5-only defect in one session. Evidence:
+  `evidence/2026-08-19/t6-spms-m08-complete/verification.md`.)
+- **2026-08-19 — SPMS module 7 is complete, and two handoffs promised a lecture nobody had written**
+  (five lessons, ~79k of transcript: `M07-L03`, `L07`, `L09`, `L12`, `L13`. Entries 267 → **272**,
+  SPMS 68 → **73/84**, backlog → **11**; **six SPMS modules complete**, leaving M4 ×5 and M8 ×6.
+  **`M07-L01` and `L02` both promised the roadmap at `L04` and skipped the unauthored `L03`** —
+  seventh and eighth false handoffs, and **a new variant**: module 6's was false because the lesson
+  was a *composite*, this pair because the next lecture *did not exist yet*. Each author wrote a
+  handoff to the next lesson **in the file** rather than the next lecture **in the course**, which
+  is self-reinforcing — an unauthored lecture is invisible in the file, so every neighbouring
+  handoff skips it. **Read the module's lecture list, not the lesson file, before writing a
+  `connects`.** Two of five land just under p25 and both are "Part 2" lectures sharing vocabulary
+  with their Part 1 — structural, and the margins (rivals at 0.069 and 0.104) settle it. Zero
+  untouched lessons moved ≥0.02, second batch running. `Verification versus validation` is a
+  tracked *module 6* term whose home lecture is `M07-L03`. Evidence:
+  `evidence/2026-08-19/t6-spms-m07-complete/verification.md`.)
+- **2026-08-19 — IBM is descoped, and the testing queue is much smaller than the headline**
+  (owner direction: *"we can forget IBM for now."* Recorded because it changes the measured queue,
+  not just its order. IBM carried **73 of the 233** missing ideas and **24 of the 51** genuine
+  zeros — the largest block in every column, and the paper where an objective question earns
+  nothing. Without it: **269 ideas, 109 reached (41%), 35 drift, 98 partial, 27 absent**. The real
+  objective-bearing queue is **27 genuine zeros**, and coverage starts at 41% rather than 35%.
+  `--written` stays in the importance tool for when IBM returns; nothing was deleted.)
+- **2026-08-19 — SPMS module 6 is complete, and the sweep query could not have found its composite**
+  (five lessons completing the cheapest remaining module, ~66k of transcript: `M06-L02`, `L03`,
+  `L04`, `L06`, `L07`. Entries 262 → **267**, SPMS 63 → **68/84**, backlog → **16**; **modules 1, 2,
+  3, 5 and 6 complete**. **`SPMS-M06-L01` was a composite the documented Step 4c query could not
+  catch, for two independent reasons** — its margin was **−0.011**, so `$1>0` skipped it, and the
+  `0.35` threshold was a stale p25 that is now **0.460**. The general form: **a composite converges
+  toward a *tie* with the lecture it borrowed from, not a loss**, so being narrowly ahead is the
+  signature rather than the exoneration. Repaired 0.165 → **0.369** own lift. **LAW-78**: a
+  threshold copied out of a calibration is a snapshot, not a rule. Sixth false handoff, and this one
+  was false *because* the lesson was a composite — a broken `connects` is a composite's fingerprint.
+  All five new lessons clear p25; **zero untouched lessons moved ≥0.02**, a first. Evidence:
+  `evidence/2026-08-19/t6-spms-m06-complete/verification.md`.)
+- **2026-08-19 — The testing layer has a measured queue and an importance ranking to order it**
+  (planning and tooling, no content authored. `--triage` splits the mirror gate's 233 misses into
+  **39 drift / 143 partial / 51 absent** — so *coverage* is a far smaller job than *depth*, and the
+  vision doc's ~2,000–4,000 questions is the price of the latter. `tools/measure-concept-importance.mjs`
+  implements **owner direction of 2026-08-19** — repetition, foundational tie, numerical, multi-step,
+  the last two carrying half the weight. **Its sharpest output is a refusal: IBM's paper has zero
+  objective marks and the lowest coverage at 19%**, so gap-ranking would have poured the biggest MCQ
+  batch into the paper where an MCQ earns nothing; **`--written`** exists to order IBM's actual work.
+  **A first cut was corrected by the direction**: it had set 16 ubiquitous terms aside as "background
+  vocabulary", which mistook ubiquity for importance and then over-corrected into dismissal — they
+  are the subject's **foundational** concepts, they rank, and they are the yardstick for everything
+  else. **Two components were measured, found degenerate and changed** — lecture-granularity
+  foundational tie put 78% of ideas at a flat 100 (fixed by an 800-char window), and "step"
+  vocabulary runs at 9–15 per thousand words in *every* lecture because that is how people talk
+  (deleted). `RICE` matched 126 SPMS sentences via the word **price** — whole words only.
+  Measurement not gate (`LAW-75`); exits 0. The weighting is a reading of the direction rather than a
+  measurement, so **an owner pass is still wanted**. `docs/briefs/TESTING_LAYER_BUILD_PLAN.md`.)
+- **2026-08-19 — SPMS modules 2 and 3 complete, and three defects the gates caught in my own work**
+  (four lessons chosen to *complete modules* rather than shrink the backlog fastest: `M02-L12`
+  Kittlaus, `M03-L03` go-to-market, `M03-L05` business model canvas, `M03-L09` service strategy.
+  Entries 258 → **262**, SPMS 59 → **63/84**, backlog → **21**; **modules 1, 2, 3 and 5 complete**.
+  **A forward-reference the gate caught and I did not** — `key partners` is first used four lectures
+  later, and I counted occurrences without checking position, which is exactly the `firstUse()`
+  check the protocol demands. **Literal `**` markdown in an explainer** would have rendered as
+  asterisks to a learner: no content gate looks for it, since they parse the JS not the output —
+  only the browser check finds it. **An over-length explainer took two trims** (311 → 301 → 298).
+  Evidence: `evidence/2026-08-19/t6-spms-m02-m03-complete/verification.md`.)
+- **2026-08-19 — Module 6 unblocked: every composite the sweep found is now repaired** (`M06-L10`
+  and `L11` authored, **then** composite `M06-L09` rewritten — **0.130 → 0.481**, margin **+0.035 →
+  −0.311**. Entries 256 → **258**, SPMS 57 → **59/84**, backlog → **25**. Re-running the detector
+  shows **none of the three composites still leans**: `M07-L08` 0.113 → 0.395, `M03-L08` 0.115 →
+  0.589, `M06-L09` 0.130 → 0.481. **The sweep's own diagnosis was partly wrong, usefully:**
+  `M06-L09`'s first paragraph came from its *own* lecture, so the rewrite expanded rather than
+  replaced. **`Requirement lifecycle` occurs 0× in the whole course** — carried in prose, not as a
+  glossary heading, like `Team roles`. Coverage held at 116/116; second batch running ahead of the
+  ratchet. **Nine candidates remain unread and span all four subjects**, so the pattern may not be
+  SPMS-only; the list also **shifted between runs** (`LAW-76`) — diff a pre-batch dump before
+  treating a new entry as a new defect. Evidence:
+  `evidence/2026-08-19/t6-spms-m06-unblock/verification.md`.)
+- **2026-08-19 — Content accepted, and module 3 unblocked** (**`WAITING_OWNER_CONTENT_ACCEPTANCE`
+  cleared** — owner accepted all 105 surfaces in chat; not faculty review. **Recorded with its
+  discrepancy visible:** decision 1 the same day said every lesson gets read and that did not
+  happen, so this is a *release decision, not a completed review*, and the reading is now optional
+  rather than blocking. Module 3 unblocked on the module 7 template: `M03-L07` and `M03-L10`
+  authored, **then** composite `M03-L08` rewritten — own-lecture support **0.115 → 0.589**, margin
+  **+0.024 → −0.482**. Entries 254 → **256**, SPMS 55 → **57/84**, backlog → **27**. **Two tracked
+  terms rehomed *before* stripping**, so the ratchet never fired — first batch that got ahead of it.
+  Sixth source trap: the course spells it `customization`, British form 0×. Fifth false handoff,
+  promise moved not rewritten. **Three probe artefacts in one session** — all instrument, not code.
+  Evidence: `evidence/2026-08-19/t6-spms-m03-unblock/verification.md`.)
+- **2026-08-19 — Module 7 unblocked: two lessons authored, and the corpus's worst composite
+  repaired** (the forced order executed deliberately: author `SPMS-M07-L10` and `L11`, **then**
+  rewrite `SPMS-M07-L08`. Its own-lecture support went **0.113 → 0.395**, margin **+0.048 →
+  −0.243** — third-lowest of 252 to above the median; the new pair land at 0.500 and 0.482.
+  Entries 252 → **254**, SPMS 53 → **55/84**, backlog → **29**. **UI/UX and DevOps were displaced
+  with no home and that was fine** — checked against the syllabus terms first, neither is tracked.
+  **`Team roles` was held up by the old lesson's title** and occurs **0 times** in the course, so it
+  moved into `L10`'s prose, deliberately not a glossary heading. Fourth false handoff repaired. One
+  770-char paragraph fixed by **rebalancing, not cutting**. Evidence:
+  `evidence/2026-08-19/t6-spms-m07-unblock/verification.md`.)
+- **2026-08-19 — The composite sweep: three more found, and the backlog is what unblocks them**
+  (measurement only, no prose changed. The query needed no new code — `--dump` plus two conditions
+  together: **leaning** (rival beats own by *under* the 0.10 flag threshold) **and weak own
+  support** (below p25 = 0.348). Both are needed; 18 lean, 8 also match their own lecture weakly.
+  Confirmed: `SPMS-M07-L08` (third-lowest own support of all 252), `SPMS-M03-L08`, `SPMS-M06-L09` —
+  all three titled after two or three lectures. **`SPMS-M02-L03` cleared by reading**, so the list
+  is a queue, not a verdict; four candidates unread. **Forced order, and it reframes the backlog:**
+  a composite is only rewritable once the lectures it borrowed from have lessons, and **all six home
+  lectures are unauthored** (`M07-L10`/`L11`, `M03-L07`/`L10`, `M06-L10`/`L11`) — so none can be
+  repaired yet. Cheapest unblock is module 7, ~24k of transcript, freeing the worst composite.
+  Recipe is protocol Step 4c, deliberately **not** a gate (`LAW-75`). Evidence:
+  `evidence/2026-08-19/t6-composite-sweep/verification.md`.)
+- **2026-08-19 — The two composite lessons are rewritten, and the reason for deferring them was
+  false** (`SPMS-M05-L06` and `SPMS-M02-L07` now teach their own lectures; own-lecture match
+  **0.263 → 0.530** and margin **+0.052 → −0.262** on the first, **0.447 vs 0.153** on the second.
+  **Correction: both were recorded as "cited and scheduled" and are neither** — uncited, so the
+  rewrite touched no scored coverage, no LAW-47, no scheduling; corrected in place across four
+  files. The real risk was the coverage ratchet and it **fired** — `Competitive advantage` dropped,
+  SPMS 99% against a 100% floor, taught back in `M05-L08` where its lecture makes the claim, no
+  alias and no lowered floor. **A composite is only rewritable once its borrowed halves have
+  homes** — these were unfixable before the same session authored the four lessons that carry them.
+  Fifth source trap: the framework is spelled `BrainKraft` *and* `Braincraft`. Evidence:
+  `evidence/2026-08-19/t6-composites-rewritten/verification.md`. **Open: nothing has swept the
+  other 62 same-era lessons** for the defect — the signature is a positive margin *under* the 0.10
+  flag threshold, and the gate does not report near-misses.)
+- **2026-08-19 — Lessons become processes, and a lecture can now be folded into its neighbour**
+  (owner direction: process-shaped, **small** explainer, synergistic. **Add-ins** are a real
+  mechanism — `lesson()` registers them into `T6_LESSONS`, the one map the app, the scheduler,
+  LAW-47 and every gate read, so a folded-in lecture counts as taught everywhere at once; a
+  gate-invisible pointer was rejected as the "optional work" trap in a new hat. Lighter contract,
+  but its own prose and glossary so the match gate still scores it. **Both shape-judging gates had
+  to be taught it and the bank validator caught the omission.** Three lessons + the first add-in:
+  entries 248 → **252**, SPMS 49 → **53/84**, backlog → **31**. `L05`/`L06` were assessed as a
+  fold-in pair and **refused** — different skills. Explainers **256 words** vs 277–296 before.
+  **Two more false handoffs, pointing at each other**, repaired. Evidence:
+  `evidence/2026-08-19/t6-spms-m02-addins/verification.md`. Found here and **rewritten the same
+  day**: `M02-L07`'s lesson was a composite, same class as `M05-L06` — see the entry above.)
+- **2026-08-19 — SPMS module 5 is complete, and the handoff above the insertion point was already
+  false** (three lessons: `SPMS-M05-L05`, `L07`, `L08`; file 245 → **248**, SPMS 46 → **49/84**,
+  backlog 38 → **35**. First batch under the new policy. `L06`'s `connects` claimed to close the
+  module with two lectures still to follow — **found before writing** by checking the insertion
+  point, and the promise was **moved to `L08`**, not rewritten. Fourth source trap refused: the
+  lecture says "modes", `moat` is 0× in M05 but 1× M02 / 3× M03, so it is prior vocabulary used in
+  prose and **not** glossed. My own `L08` paragraph was **712 chars — the file's longest** — and
+  trimmed before commit. Evidence:
+  `evidence/2026-08-19/t6-spms-m05-complete/verification.md`. Found here and **rewritten the same
+  day**: `M05-L06`'s lesson was a composite teaching half of `L08`'s lecture and little of its own —
+  the class the match gate cannot see. It was recorded here as *cited*, which was **wrong**; it is
+  uncited. See the entry above.)
+- **2026-08-19 — The four decisions are answered: the whole course, at depth, every lesson read**
+  (`DUNGEON_VISION_TO_BUILD.md` **ADOPTED**. Per-lesson acceptance, sampling rejected; the thin
+  concept tiers rejected — every syllabus idea a concept at 8–14 surfaces, **finished only when it
+  links**; scope is the entire course with **importance ordering it** and driving mock rotation;
+  **uncited lectures are no longer optional** — a policy reversal in the authoring protocol's §0.
+  ~2,000–4,000 new questions, stated up front. **Next move: the importance ranking.** Web-sourced
+  material gets a provenance rule, and the mechanism does not exist yet — flag gaps, do not fill
+  them.)
+- **2026-08-19 — The mirror gate existed and never ran, and now the runner cannot lose a test
+  again** (`tests/taught-not-tested.test.mjs` was on disk, passed 5/5 by hand, and was absent from
+  `npm test`'s file list — **LAW-77**, the runner names its tests rather than discovering them, so
+  a missing one is silence. Wired, plus `npm run check:tested`; then
+  `tests/test-runner-completeness.test.mjs` asserts set equality between the list and the
+  directory in both directions, demonstrated failing in both. `npm test` 120 → **128**).
+  Authoring docs aligned both directions: **CONTENT-RULES R11** binds question authors to the
+  tested-coverage ratchet, the lesson protocol's Step 4 names the `check:syllabus`/`check:taught`
+  ratchets, and `DUNGEON_VISION_TO_BUILD.md` Phase 1 is marked done. Same session, earlier:
+  `AGENTS.md` halved (story block → this ledger), two contradictory Known Gaps entries repaired,
+  `docs/briefs/SYSTEMS_IMPROVEMENT_PLAN.md` written.
+- **2026-08-18 — The misfiled-lesson queue is cleared** (10 flagged → 1 expected-state;
+  nine rewritten against their own transcripts, `SPMS-M04-L01` found outside the queue; lessons
+  243 → 245). Traps kept in `docs/briefs/MISFILED_LESSONS_WORK_ORDER.md`. **LAW-76**: the
+  corpus is an input to every match score — diff before assuming blame, re-run after every
+  batch.
+- **2026-08-18 — SCLM is the second complete subject, 71/71** (33 lessons). **LAW-74**: a
+  Windows text write flipped the lesson file to CRLF, and the build ships working-tree bytes.
+- **2026-08-18 — IBM is the first complete subject, 78/78** (32 lessons; broken `connects`
+  handoffs confirmed as the most reliable defect in authoring work — check the `connects`
+  above every insertion point).
+- **2026-08-18 — SCLM modules 1, 4 and 8** (six complete modules across two subjects; expect
+  roughly one transcript-typo term per module — check occurrence counts before assuming a term
+  is missing from the course rather than misspelled in it).
+- **2026-08-18 — The subject rail, screenshots written down, and IBM modules 4 and 6** (phone
+  rail hid two of four subjects, now the grid; **LAW-73**: a non-compositing pane freezes
+  `document.timeline` so every CSS transition reads as its start value;
+  `docs/governance/SCREENSHOTS.md` created).
+- **2026-08-18 — IBM module 2 finished, and the brief that contradicted the ledger**
+  (**LAW-72**: a self-contained brief is a second source of truth and drifts — it is read
+  *instead of* the code; the authoring plan's §0 contradicted QUALITY-LOG I50).
+- **2026-08-15 — The theme toggle, the route it never had** (`theme.js` shipped but no route
+  mapped a URL to it — **LAW-69**: the build allowlist proves a file is deployed, never that a
+  URL reaches it; **LAW-68**: a transitioned property does not follow a `light-dark()`
+  re-resolution; login/privacy pages now themed; `app/admin.css` scoped out by owner).
+- **2026-08-15 — Content accepted, and the four things measuring the promises found** (owner
+  accepted the standing block in chat — not faculty review; the re-teach latch read a field
+  never written; "was Strong" is now words, not colour; `ui-audit`'s type floor could never
+  fail; two R3 items repaired before acceptance).
+- **2026-08-15 — A reserved slice on every paper** (44 reserved items across all four
+  subjects; "pick the second-longest" closed — the defence against "pick the longest" had
+  manufactured it; a reserved item's bias is never diluted, it is on every paper).
+- **2026-08-15 — The five open items, and the four gates that judge them** (T1/T2/T4/T5 built
+  and each found something; the standard-normal table is a paper provision; BRGSA integrated
+  slot reachable; two probe defects were the probes' own).
+- **2026-08-15 — Both craft exploits closed, and the bag leaves the Examiner** (absolutes and
+  name-matching at or under chance in every family; `docs/governance/UI-CHECKLIST.md` created;
+  `npm run review` prints every gate beside the real option text).
+- **2026-08-15 — The bank stops answering to its own heading** (324 → 28 option sets paying
+  100%; `term_cloze` retired to `contrast` on owner decision; the mirror fix — stripping each
+  concept's name from its own prose — is rejected and **must not be retried**).
+- **2026-08-15 — A third of the bank answers to its own heading** (measured over all 1049
+  option sets; the standing `relevantWrong()` diagnosis did not survive measurement; the
+  name-matching gate now exits non-zero above 32% per family).
+- **2026-08-15 — A learn run you can read, and the CLAs measured before they were used** (the
+  harness drives the real subject rail; **LAW-65**: a diagnosis array with a hole at the
+  correct option is an answer key; 48 CLA-derived items authored; the real papers' own largest
+  exploit is "pick the longest", which the product had already fixed).
+- **2026-08-15 — The ladder was in the bank and not in the product** (`courseLadder()` gives
+  every set a step number, `examReadiness()` states paper coverage with a route out;
+  evidence-driven re-teach replaced the one-way `lessonsRead` latch).
+- **2026-08-14 — seven entries, one session arc:** text-fit probe; three levels replace four
+  dials in the practice builder; the primer predicts instead of printing its answer;
+  weaknesses practised linked or explicitly alone; **concepts layered** (94 descents over 37
+  of 40 sets → 0, `lesson-layering.js` is the standing check); questions that name an example
+  now show it (LAW-61); hosted written checking deployable and unmeasured.
+- **2026-08-13 — the written-answer arc:** written transfer across Learn plus post-submit
+  Examiner forensics; Dungeon-owned written diagnosis and repair; local Qwen
+  criterion authority for practice only (cannot create Strong; hosted calibration still owed);
+  the Learn/Exam switch; SPMS Section B completed and un-broken (LAW-53: multi-select shapes
+  must not pay full marks for ticking everything).
+- **2026-08-12 — the Examiner becomes a product:** mocks platform beside the learning system
+  with a breakdown dashboard; design system, dark mode, mobile pass; **teaching layer 0→80
+  complete** (724/724 scheduled questions taught); lossless workspace restructure;
+  option-level diagnoses and a wrong-answer panel that explains itself; commit `0cc2c6d`
+  deployed as Worker version `c602c4b3`.
+- **2026-08-11 — foundation:** protected Cloudflare domain; approved-email admission with the
+  one-time agreement gate; shared learner backend in D1; owner Control Room (force sign-out,
+  lock recovery, participation panels); tester agents `PREPARED_NOT_ACTIVATED`; first external
+  cohort active.
 
 ## Start Here — Required Order
 
@@ -897,6 +437,12 @@
 5. If the task affects UI, art, motion, accessibility, learning integrity, persistence, or
    performance, skim `docs/governance/QUALITY-LOG.md`.
 6. Check Known Gaps and active `WAITING_*` gates before beginning dependent work.
+7. **Need a screenshot? Read `docs/governance/SCREENSHOTS.md` first, not the Browser pane's
+   screenshot tool, which cannot work here.** One command: `node tools/screenshot.mjs --port <port>`.
+   The pane composites no frames unless a human is looking at it, which also **freezes
+   `document.timeline` at 0 and makes every CSS transition read as its start value** — three
+   sessions have re-derived this, and the artefact has been filed as a CSS bug twice and
+   nearly a third time (`LAW-73`).
 
 ## Collaborators — Read Before Your First Push
 
@@ -1077,9 +623,17 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `docs/briefs/T6_RESEARCH_REVIEW_IMPLEMENTATION.md` | Owner-supplied first-cohort research review mapped to confidence, construction, practice-shape, accessibility, and evidence decisions. | 2026-08-11 |
 | `docs/briefs/DUNGEON_MEASUREMENT_AND_JUDGEMENT.md` | Measurement direction, small-cohort claims, local Qwen criterion-authority contract, two-machine architecture, calibration gate, and remaining owner decisions. | 2026-08-13 |
 | `docs/briefs/TESTER_ACCESS_AND_ADMIN.md` | Admission, private group-invite disclosure, community acknowledgements/bumps, owner operations, and remaining boundaries. | 2026-08-11 |
-| `docs/governance/BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. | 2026-08-11 |
-| `docs/governance/QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-11 |
-| `docs/governance/CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-11 |
+| `docs/governance/BUG-LAWS.md` | Living REDLINE/WATCH bug-prevention rules and exact comply/verify paths. Newest is `LAW-76` on corpus-relative gates. | 2026-08-18 |
+| `tools/check-lesson-lecture-match.mjs` | Does each lesson teach the lecture its id names? Scores a lesson's distinctive vocabulary against its own lecture and every other lecture in the subject, and flags one that a rival explains better. The only gate on that claim; needs the transcript path. Its scope limit is in its header — it finds misfiled lessons, not half-written ones. **Its scores are corpus-relative, so editing one lesson re-scores the rest (`LAW-76`), and a `FAIL` naming `SPMS-M01-L01` alone is the expected state.** | 2026-08-18 |
+| `tools/measure-concept-importance.mjs` | Ranks every syllabus idea against owner direction of 2026-08-19 — **repetition, tie to a foundational concept, numerical, multi-step**, the last two carrying half the weight. `npm run measure:importance`; `--why "<term>"` explains one, `--course`/`--module` narrow, `--json` for machines. **A measurement, not a gate** (`LAW-75`); exits 0 always. Three things to know: **IBM scores 0 throughout because its paper has no objective section** — use **`--written`** to order IBM and BRGSA's written work; the 16 `[foundational]` terms rank on their own repetition *and* are the yardstick for everything else's tie score; and an owner-authored `"importance"` on a term entry always beats the derivation. Two components were measured, found degenerate and changed — see its header before adding a fifth. | 2026-08-19 |
+| `tools/measure-concept-spine.mjs` | The shape everything else hangs off: concepts, surfaces per concept, link edges, cross-module edges, isolated concepts. `npm run check:spine`. **Links are derived, never authored** — an edge exists only where one surface names two concepts via `conceptId` + `supportingConceptIds`. `--gate` asserts a structural invariant (every concept reachable by `groupWeaknesses()`), not a calibrated threshold, so it does not repeat `LAW-75`; demonstrated failing and passing. Two findings it exists for: **`pair.slice(0, 2)` means a third concept in a module is born unlinked — and orphans whichever existing concept sorts third**, and **SPMS has zero cross-module links**. | 2026-08-19 |
+| `tools/build-concept-layer.mjs` | **The layer**: every syllabus idea's position (first lecture), role (`spine` root or `supplementary`) and parent (the higher-contribution idea it elaborates). `npm run build:layer`. Importance here is **contribution to the course** — module reach — per owner direction 2026-08-19, not exam marks. 324 placed, 35 unmatched, 76 roots. **It proposes and does not decide**: about three-quarters of parents read defensibly, so an authored `"tier"` on the term entry always wins. Two traps in its header: a spine set by *threshold* put 40 of 115 SPMS ideas in it, and co-occurrence at *lecture* granularity parents everything to everything. | 2026-08-19 |
+| `tools/measure-syllabus-coverage.mjs` | Do the LESSONS reach every named syllabus idea? Phrase-contiguous ratchet over `data/syllabus/<SUBJ>.terms.json`; currently 359/359 and floored — rewording can drop a term, teach it back rather than alias. `npm run check:syllabus`; in `npm test`. | 2026-08-18 |
+| `tools/check-taught-vocabulary.mjs` | Does a lesson TEACH what its questions ask, not just cite the lecture? Closes the LAW-47 citation-vs-content hole (RICE: 20 questions, 0 teaching lessons, all gates green). `npm run check:taught`; in `npm test`. | 2026-08-18 |
+| `tools/check-taught-not-tested.mjs` | The mirror of LAW-47: does the BANK ever name each taught syllabus idea? All four ratchet floors are now 100%; `--triage` splits any future miss into naming drift vs genuine holes. Binds question authors via CONTENT-RULES R11. `npm run check:tested`; in `npm test`. | 2026-08-20 |
+| `tests/test-runner-completeness.test.mjs` | Asserts set equality between `tests/*.test.mjs` and the paths `package.json`'s `test` script names, both directions, over a floored population. Exists because `npm test` **names** its tests rather than discovering them, and the list has drifted both ways without ever failing (`LAW-77`). Add a test file *and* its path, or this fails. | 2026-08-19 |
+| `docs/governance/QUALITY-LOG.md` | Experience-quality practices, issue/cause/fix history, and watch items. | 2026-08-18 |
+| `docs/governance/CHANGELOG.md` | Newest-first, append-only history of sessions that changed the workspace. | 2026-08-18 |
 | `docs/design/ART_DIRECTION.md` | Creative thesis and canonical world/art identity. | 2026-07-16 |
 | `docs/design/ART_DIRECTION_SYSTEM.md` | Proposed product-wide art, UI, character, asset, and motion system. | 2026-07-16 |
 | `docs/design/GAME_UX_LOOP.md` | Proposed broad-product player flow; retained as legacy direction while the T6 fallback owns the active exam-season path. | 2026-08-10 |
@@ -1134,8 +688,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `app/sets/t6_catalog.js` | Four-course catalogue, 64 dashboard concepts, three-perspective surfaces, and 156 IBM/SCLM/SPMS questions. | 2026-08-10 |
 | `app/sets/t6_challenges.js` | Mixed-format augmentation, 64 adaptive primers, bosses/constructed responses, scored pools, relevance-first distractor selection, case-lecture provenance, the option-diagnosis pass (an authored MCQ diagnosis now survives it, as an MSQ one already did), and the authored SPMS multiple-select, SCLM numeric, and **48 course-assessment `_cla` items** (SCLM 32, BRGSA 16). The multi-select builder carries `caselet` (LAW-61). New families live here rather than in a new file on purpose — `t6_integrated.js` was added as one and was missing from four load lists at once. | 2026-08-15 |
 | `app/sets/t6_diagnoses.js` | 78 authored option diagnoses for distractors with no machine-knowable provenance, plus the authoring rules. | 2026-08-12 |
-| `docs/authoring/LESSON-AUTHORING-PROTOCOL.md` | Handoff procedure for the teaching layer: sources, lesson contract, batch procedure, gates, the four traps already paid for, and per-subject definition of done. Read before authoring any lesson. | 2026-08-12 |
-| `app/sets/t6_lessons.js` | Teaching layer: 106 authored lecture-grain lessons (objective, explainer, worked example, glossary, handoff) that must be delivered before anything about that lecture is scored. All four subjects complete on cited lectures; 724 of 724 scheduled questions taught. | 2026-08-12 |
+| `docs/authoring/LESSON-AUTHORING-PROTOCOL.md` | Handoff procedure for the teaching layer: sources, lesson contract, batch procedure, gates, the traps already paid for, and per-subject definition of done. IBM and SCLM are complete; SPMS is the whole remaining backlog. Read before authoring any lesson. | 2026-08-18 |
+| `app/sets/t6_lessons.js` | Teaching layer: **262** registered entries (objective, explainer, worked example, glossary, handoff) that must be delivered before anything about that lecture is scored. **`lesson()` also expands `addIns`** — a lecture folded into a neighbour's lesson — into real entries here, which is why every gate and the scheduler see them; the lighter add-in contract is in the authoring protocol. All four subjects complete on cited lectures; 724 of 724 scheduled questions taught. **BRGSA, IBM and SCLM are complete on every lecture**; **21 SPMS lectures remain** (modules 1, 2, 3 and 5 complete), readable-but-unscheduled until the concept spine widens — **no longer optional** (owner decision 2026-08-19). Not sorted by lecture order — see the authoring plan before assuming a neighbour. | 2026-08-19 |
 | `tools/lib/clean_transcripts.js` | The one loader for the external lecture source. Reads the clean transcripts (position in the module file is a lecture's identity, not its recording code) and still accepts the old AI-Ready Pack layout; `sourceKind` says which was read. | 2026-08-12 |
 | `tools/build_t6_lessons.mjs` | Extracts lesson candidates from the external lecture source — objectives, glossary terms with first-use, worked-example lines, provenance — into `work/t6_lessons/`. Extraction only; prose is authored. | 2026-08-12 |
 | `tools/check_lesson_file.mjs` | Authoring-time gate: reports every structural defect in one pass (bracket class, record shape, prose limits) and, given the pack, prints the exact next batch of lectures to author. Run between batches, before the bank validator. | 2026-08-12 |
@@ -1153,6 +707,7 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `tools/run-persona-strategies.mjs` | The reported exploits stated as code and scored against the key, over **sets 1–3 with the mean as the headline** — one seed cannot tell a bank change from a draw. Ties resolve to the expected value of a random pick among survivors. The standing F-06 / F-07 gate. | 2026-08-15 |
 | `tools/measure-learn-craft.mjs` | The same idea inside a **study set**, over every selectable part (cloze blank, match row, boss step, mcq). Companion to the above, not comparable with it. Reports the exploit a mock cannot see: name-matching the concept pays 45–60%. | 2026-08-15 |
 | `tools/measure-name-matching.js` | **R3's on-topic-ness gate**, the one that said "none yet". Scores "keep the options naming the concept" over **every option set in the built bank** (1049), per family and per subject, with `measure-learn-craft.mjs`'s exact rule so the numbers are comparable. `--gate` exits non-zero above 32% per family, 10% for `connect`. Currently **exits 0**: 28 sets pay 100%, down from 324. | 2026-08-15 |
+| `docs/governance/SCREENSHOTS.md` | **Read before trying to screenshot anything.** The Browser pane's screenshot cannot work here and no retry, reload, resize or tab-select fixes it — an undisplayed pane composites no frames. `node tools/screenshot.mjs --port <port>` goes round it via headless Chrome. Carries the trap that costs more than the picture: a non-compositing pane freezes `document.timeline` at 0, so every CSS transition reads as its start value and correct rules look broken, plus the one-liner that detects it. | 2026-08-18 |
 | `docs/governance/UI-CHECKLIST.md` | **Run before calling any UI change done.** Every row names a defect that shipped, most of them past a green `ui-audit.js`. Carries the checks that still need a person — reproduce at the reported size, measure before fixing, look at the screenshots, and ask whether the fix created its own defect elsewhere. | 2026-08-15 |
 | `tools/review-changes.mjs` · `npm run review` | **One command to check a bank change.** Runs the real gates as subprocesses (so it cannot drift from them) and writes a readable page of the actual option text per family. Exists because a green gate says nothing about whether the sentences still read well — it was reading the screen that caught eight options opening on the same 36-character prefix. | 2026-08-15 |
 | `tests/name-matching-gate.test.mjs` | Asserts the gate itself — every bank file `app/t6.html` loads, `t6_brgsa.js` **before** `t6_catalog.js` (the wrong order silently yields 48 concepts instead of 64), all four subjects reached, `connect` held at ≤10%, and `--gate`'s exit code agreeing with its report in both directions. | 2026-08-15 |
@@ -1235,6 +790,10 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
     — always with the path. `npm run validate:bank` passes **no** argument, so it returns `ok: true`
     with an empty `"coverage": {}` having skipped every lecture check and the LAW-49 vocabulary gate.
     Treat that script as a schema-only check, never as bank verification.
+  - Does each lesson teach its own lecture?
+    `node tools/check-lesson-lecture-match.mjs "<Term 6 Clean Transcripts>" --gate` — the only
+    gate on that claim, and the one no other gate covers. Eleven pre-existing lessons currently
+    flag (Known Gaps), so expect a FAIL until those are triaged; `--subject SPMS` narrows it.
   - Teach-before-test (LAW-47): evaluate `tools/browser-checks/teach-before-test.js` in the page and
     expect `violations: []`. Automated gates do not cover scheduling.
   - Python server syntax on macOS: `python3 -m py_compile tools/server.py`
@@ -1255,7 +814,8 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 
 ### Close — Required After Any Workspace Change
 
-1. Rewrite the Current Status paragraph.
+1. Rewrite the Current Status section, and add one Session Ledger line pointing at your
+   CHANGELOG entry — never a new story block (see Metadata budget note).
 2. Update touched Key Files descriptions and Verified dates.
 3. Fix Directory Map and Known Gaps.
 4. Add a newest-first `docs/governance/CHANGELOG.md` entry with evidence paths.
@@ -1281,6 +841,92 @@ after the version is live, since a push to `main` deploys.
 
 ## Known Gaps
 
+- [x] **Screenshots are documented — closed 2026-08-18.** The capability had existed since
+  2026-08-15 and sessions kept concluding it was impossible, because the knowledge lived only in a
+  Key Files row, a closed checkbox and a tool header. `docs/governance/SCREENSHOTS.md` is now the
+  one page, reachable from the required-reading order, Key Files, `UI-CHECKLIST.md`, the authoring
+  protocol and `CLAUDE.md`. `node tools/screenshot.mjs --port <port>`; 16/16 on the latest run.
+- [x] **The seven `IBM-M02` lessons are content-accepted — 2026-08-18.** Owner approval in chat.
+  This clears `WAITING_OWNER_CONTENT_ACCEPTANCE` for that batch only; it is not faculty review and
+  creates no subject-matter authority.
+- [x] **The mirror-coverage gap is closed — 2026-08-20.** Lessons and questions both reach
+  **359/359 named syllabus ideas**: BRGSA 69/69, IBM 90/90, SCLM 84/84, SPMS 116/116, with every
+  tested floor ratcheted to 100%. The bank widened from 64 to **219 concepts** and from 920 to
+  **2,827 questions** without adding syllabus aliases or lowering a floor. IBM's 73 misses became
+  69 classified records plus four wording repairs: layer → subjective + MCQ, framework →
+  subjective-only, atomic concept → MCQ-only. The unreleased IBM exam case was not invented.
+  Evidence: `evidence/2026-08-20/t6-ibm-classified-coverage/verification.md`.
+- [ ] **Coverage is not the adopted depth target.** The 219 concept records still stand in for 359
+  named ideas. All 283 teaching entries are scheduled, but the mirror gate only proves a question
+  names each idea; it does not prove one record per idea, equal 8–14-surface depth, faculty-reviewed
+  accuracy, or enough cross-module transfer. Continue Stream D from
+  `docs/briefs/CONCEPT_SPINE_BUILD_PLAN.md`, ordered by the measured importance report rather than
+  by whichever phrase is easiest to add.
+- [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — the 105 surfaces are ACCEPTED, owner approval in chat
+  2026-08-19.** Covers everything outstanding: the 79 lessons already waiting, the 16 rewritten or
+  authored while clearing the misfiled queue, and the SPMS module 5, module 2 and module 7 batches
+  (including the add-in and the three composite rewrites). It clears the gate that blocked `DONE`.
+  **It is not faculty review and creates no subject-matter authority** — the standing accuracy
+  caveats are unchanged.
+  **Recorded honestly, because it does not match the protocol this repository wrote down eight
+  hours earlier.** Owner decision 1 of 2026-08-19 was *every lesson per module needs a reading*,
+  with sampling explicitly offered and rejected; that reading did not happen before this approval.
+  So the acceptance is a **release decision, not a completed review**, and the per-lesson reading is
+  now a quality activity the owner may still want rather than a gate anything is blocked on. The
+  resumable per-lesson checklist described under decision 1 is therefore **not built and no longer
+  blocking** — build it if and when the reading is actually wanted.
+- [x] **The misfiled-lesson queue is cleared — closed 2026-08-18.** The gate flagged **10** at the
+  start of the session and flags **1** at the end. Nine were rewritten against their own
+  transcripts, `SPMS-M01-L01` was left by owner decision, and `SPMS-M04-L01` — never in the queue —
+  was found and fixed after the corpus shift exposed it. `SPMS-M01-L09` and `SPMS-M07-L05` were
+  authored to receive displaced content. Record and the traps worth keeping:
+  `docs/briefs/MISFILED_LESSONS_WORK_ORDER.md`. QUALITY-LOG **I56**; evidence
+  `evidence/2026-08-18/t6-misfiled-lessons-cleared/verification.md`. **The general hole stays
+  open** — the gate finds a lesson written from *another* lecture and cannot find one written from
+  half of its own, and `SPMS-M01-L07` was exactly that case and never flagged.
+- [x] **`SPMS-M01-L01` is resolved — owner decision, 2026-08-18.** Its `lectureId` names a
+  685-character "Key Takeaways Module 1" card, unique among 283 lectures. Option 3 was checked
+  first and answered **no**: the source is not missing a first lecture — `SPMS_M01_SUM_TRANSCRIPT`
+  and `SPMS_MEGA_TRANSCRIPT` independently hold exactly ten module 1 sections, agreeing on order
+  and titles — and the lesson's content is real course material from the module 1 detailed notes.
+  The owner chose to leave the lesson in place and record the finding, so **a `FAIL` naming
+  `SPMS-M01-L01` and nothing else is the expected state of the match gate**; anything else in that
+  output is new. SPMS authoring is no longer blocked: `SPMS-M01-L09` is authored.
+- [x] **The two mis-mapped forecasting lessons are rewritten — closed 2026-08-18.** `SCLM-M02-L03`
+  taught L04's error metrics, and L04 in turn opened on L02's push/pull material while teaching
+  none of its own lecture's accuracy half — the module-2 opening sat one lecture off. Both are now
+  written against their own transcripts, `SCLM-M02-L05` gained the qualitative/quantitative split
+  its lecture opens on, and the pre-existing L04-before-L03 file inversion was removed. Coverage
+  caught `Systematic component` falling out and it was taught back rather than aliased.
+  QUALITY-LOG **I54**. **The general hole stays open:** no gate checks a lesson body against its
+  own lecture — only reading the lecture finds this class of defect.
+- [x] **The teaching-layer backlog is CLOSED — 2026-08-19. Every lecture in the course has a
+  lesson**: BRGSA 50/50, IBM 78/78, SCLM 71/71, SPMS 84/84, 283 entries over 283 lectures. Re-run
+  `check_lesson_file "<transcripts>"` to confirm rather than trusting this line. **What it does not
+  close is equal testing depth** — delivery is now 283/283 scheduled, while record depth and
+  repeated transfer remain Phase 2 (`docs/briefs/TESTING_LAYER_BUILD_PLAN.md`), and content is
+  owner-accepted rather than faculty-reviewed. Evidence:
+  `evidence/2026-08-19/t6-teaching-layer-complete/verification.md`. The other outlier to plan
+  around is the Sriraman guest session (`SPMS-M04-L10`) at 48,232 characters, the longest lecture in
+  the course. **Some of these are add-ins rather than lessons** — read the lecture before assuming
+  it needs a full lesson, and see the protocol's add-in section for the test.
+  **This backlog is not only coverage work: it unblocks composite repairs.** A composite cannot be
+  rewritten until its borrowed halves have homes. **Module 7 is done** — `M07-L10`+`L11` authored
+  and `SPMS-M07-L08` repaired (0.113 → 0.395); **module 3 likewise** — `M03-L07`+`L10` authored and
+  `SPMS-M03-L08` repaired (0.115 → 0.589); **module 6 likewise** — `M06-L10`+`L11` authored and
+  `SPMS-M06-L09` repaired (0.130 → 0.481); and **module 6 is now complete** — `M06-L02`, `L03`,
+  `L04`, `L06`, `L07` authored and `SPMS-M06-L01` repaired (0.165 → 0.369). **All three composites
+  the sweep found are repaired and none still leans** — but **the sweep query itself was wrong and
+  is corrected** (`LAW-78`): its `>0` margin floor could not see `SPMS-M06-L01`, which was ahead of
+  the lecture it plagiarised by 0.011, and its `0.35` was a stale p25 now measuring 0.460. The
+  widened query returns ~28 unread candidates across all four subjects, not nine — run the
+  corrected Step 4c sweep in the authoring protocol before assuming SPMS is the only affected
+  subject, and read `--calibrate` before trusting any literal in it. See
+  `docs/briefs/TEACHING_LAYER_AUTHORING_PLAN.md`, and trust its live query over its §7 table.
+  **These are no longer optional** (owner decision 2026-08-19): uncited is unfinished course
+  content, not a category. Authoring still does not move *scored* coverage on its own — that needs
+  the concept spine — and **retagging an existing question at an unscheduled lesson to fake it
+  breaks the ladder, LAW-47 and the readiness figures silently.**
 - [ ] **`app/admin.css` still ignores the theme, by owner decision.** It pins `color-scheme: light` and carries 38 one-theme literals, and `admin.html` does not load `theme.js`, so the owner dashboard stays light whatever the device is set to. Scoped out when the login/privacy fix was approved on the grounds that it is an internal tool with one user. The route gate added for LAW-69 does not fail on it — `admin.html` references nothing that lacks a route — so this will not resurface on its own. Pairing it is the same shape as the `login.css` work: tokens to `light-dark()` pairs, literals out, `theme.js` in the head, and the `data-theme-switching` rule.
 - [x] **`WAITING_OWNER_CONTENT_ACCEPTANCE` — 48 course-assessment items — ACCEPTED 2026-08-15.**
   SCLM 32 (two per concept: definition, scenario, numeric, judgement) and BRGSA 16 (one per
@@ -1326,7 +972,14 @@ after the version is live, since a push to `main` deploys.
   `startPriorityPractice` is deliberately excluded — it is remediation ordered by need and says so.
   Evidence: `evidence/2026-08-14/t6-lesson-order-diagnosis/verification.md`. Tester-visible and not
   merged; the announcement draft is `outputs/ANNOUNCEMENT-2026-08-14-layered-concepts.md`.
-- [ ] **Fifteen of the twenty SPMS multiple-select stems ask what "the lecture" said, not what is
+- [x] **The SPMS multiple-select stems are rewritten — verified 2026-08-18.** All **28** SPMS `msq`
+  items now ask what is *true* ("Select every statement that is true of...", "Select every
+  alternative this case shows..."), and a scan of all 916 questions in all four banks finds
+  **zero** stems referencing "the lecture" or "the session". The named residual is gone too:
+  `spms_roadmap_msq` no longer carries the WhatsApp iPhone/Android date as a correct option — its
+  correct pair is now the deferral point and the strategy-to-releases translation. Original
+  finding, kept because the reasoning is the standard: **fifteen of the twenty SPMS
+  multiple-select stems asked what "the lecture" said, not what is
   true.** "as the lecture presents them", "every failure the lecture names", "on the lecture's
   definition", "how the lecture uses MoSCoW". No caselet fixes these — they name no example, so they
   are outside LAW-61 — but a stem that asks a candidate to recall a session trains recognition of
@@ -1438,21 +1091,27 @@ after the version is live, since a push to `main` deploys.
 - [x] **SCLM's z-based method is confirmed taught — 2026-08-13.** It is `SCLM-M03-L06` ("Q Model"):
   z value, standard normal tables, safety stock, cycle service level, and a full worked continuous-
   review example. The earlier uncertainty is resolved; the formula may be used.
-- [ ] **The last two SCLM numericals are blocked on one lesson.** `SCLM-M03-L06` carries the method
+- [x] **The last two SCLM numericals are unblocked — re-measured 2026-08-18.** The blocker was that
+  `SCLM-M03-L06` had no lesson; it has had one since SCLM was completed 71/71 the same day
+  (*Safety stock and the reorder point*, glossing reorder point, safety stock, protection period
+  and cycle service level). **The two items themselves are still unauthored** — this is now
+  ordinary bank work, not a blocked dependency. `SCLM-M03-L06` carries the method
   and the worked example — daily demand ~N(60, 7), lead time 6 days, K = ₹10, h = ₹0.5/unit/year,
   current Q = 1,200 and ROP = 360 — which yields the two missing items directly: the reorder point
   for a 95% cycle service level (`360 + 1.645 × 7 × √6 ≈ 388`) and the service level the current
-  policy actually achieves (ROP equals mean lead-time demand, so z = 0 and it is 50%). **But
-  `SCLM-M03-L06` has no lesson**, and a scored question citing an untaught lecture breaks LAW-47.
-  Author that lesson first via `docs/authoring/LESSON-AUTHORING-PROTOCOL.md`, then the two items.
+  policy actually achieves (ROP equals mean lead-time demand, so z = 0 and it is 50%).
+  (This entry used to close on "but `SCLM-M03-L06` has no lesson — author it first"; that tail
+  predated the 71/71 completion and contradicted the re-measurement above, and is removed.)
 - [~] **SCLM numeric entry built; 4 of 6 items authored.** `VERIFIED(REAL_BROWSER)`: a typed figure
   is graded against a per-question tolerance, comma and ₹ formatting is parsed, and the verdict states
   the entry against the accepted band. A wrong figure matching a known wrong method names that method
   (`nearMisses`) instead of reporting a bare "wrong". Items cover exponential smoothing, EOQ quantity,
   EOQ total cost, and the newsvendor critical ratio. **Two more are needed** to match Section B's six,
-  and the obvious candidates are safety stock and service level — the paper supplies standard normal
-  tables, which points there — but *it is not yet confirmed that SCLM teaches the z-based formula*.
-  Verify that against the transcripts before authoring, rather than assuming the standard form.
+  and the candidates are safety stock and service level. The z-based method **is confirmed taught**
+  (`SCLM-M03-L06`, closed entry above), the lesson exists, and the paper supplies standard normal
+  tables — the only remaining work is authoring the two items; the unblocked entry above carries
+  the exact figures. (This entry used to say the z-based formula was unconfirmed; that predated
+  the 2026-08-13 confirmation and contradicted the two entries above it.)
 - [x] **`REDLINE` LAW-53: SPMS Section B is free marks — superseded 2026-08-14.** This entry was a
   stale duplicate of the closed item above, which it directly contradicted: it still described eight
   MSQs at 3-of-4 scoring `16/16` on a speculative tick. That was fixed on 2026-08-13 and re-confirmed
@@ -1491,9 +1150,9 @@ after the version is live, since a push to `main` deploys.
   taught, verified in a real browser at
   `evidence/2026-08-12/t6-teaching-layer-complete/verification.md`. What remains is *acceptance*,
   not coverage. Do not quote coverage numbers from this file; run
-  `node tools/check_lesson_file.mjs "<transcripts>"`. Note that 177 uncited lectures across IBM,
-  SCLM, and SPMS have no lesson and no question citing them — authoring those is optional work that
-  moves no coverage, and lessons for them are never delivered.
+  `node tools/check_lesson_file.mjs "<transcripts>"`. **The "uncited lectures are optional" note
+  that used to close this entry is reversed by owner decision (2026-08-19)** — if it is in the
+  course it gets taught; and uncited lessons are readable in the lesson index, never invisible.
 - [ ] **Homepage four-question restructure is on a branch and not merged.**
   `redesign/homepage-four-questions` reorders the dashboard into what am I doing / where can I
   start / how am I doing / additional resources, and removes the duplicate entry points that had
@@ -1505,15 +1164,24 @@ after the version is live, since a push to `main` deploys.
   owed before it merges:** a pixel-level pass (the Browser pane was not compositing, so there are
   no screenshots) and a contrast measurement of the goal chart's new dark-surface colours. It is
   tester-visible, so it also owes the change announcement drafted with it.
-- [ ] The vocabulary gate cannot match a singular glossary term against a plural-only occurrence:
-  it builds `\b<term>\b`, so `public private partnership` was reported absent although
-  `public private partnerships` appears three times. It reports this as *invented vocabulary*, which
-  is a false accusation rather than a missed check. Use the course's own form; treat that warning as
-  a prompt to grep before deleting a term.
-- [ ] IBM's option lengths still cue the answer: sorting each question's options by length puts the
-  correct one at rank 3 of 4 in **45%** of 68 sampled questions against a 25% baseline, so "pick the
-  second-longest" is a working strategy. The validator reports this as a warning, not an error. Vary
-  how many distractors run longer than the correct answer rather than lengthening a fixed number.
+- [x] **The vocabulary gate's plural blind spot is fixed — verified 2026-08-18.** It used to build a
+  bare `\b<term>\b`, so `public private partnership` was reported as invented although
+  `public private partnerships` occurs three times. `wordPattern()` in `tools/validate_t6_bank.js`
+  now stems each word and appends an optional plural, so the tolerance runs **both** ways — a
+  singular heading matches a plural source and the reverse. Re-measured: `public private
+  partnership` resolves to `SCLM-M05-L07` (4 uses over 3 lectures) and the validator emits no
+  warning for it. The tolerance is deliberately only a plural, not a general suffix, so `market`
+  still does not match `marketing`.
+- [x] **The option-length cue is repaired across all four subjects — re-measured 2026-08-18.** IBM's
+  correct answer used to land at rank 3 of 4 in 45% of sampled questions, so "pick the
+  second-longest" worked. The validator now reports `lengthRankSpread` of **0.05 / 0.07 / 0.07 /
+  0.05** for BRGSA / IBM / SCLM / SPMS against a `RANK_SPREAD_LIMIT` of 0.15, and
+  `longestOptionScore` of 0.29 / 0.23 / 0.18 / 0.23 against chance at 0.25 — no warning fires on
+  any subject. **A measurement note worth keeping:** a naive sort that gives the correct answer
+  rank 1 whenever it *ties* for longest reports 37–46% and looks alarming. `longestOptionScore()`
+  splits credit across tied ranks, which is why padding a distractor to match cannot launder the
+  number — and why the naive version overstates. Trust the validator's figure, not a hand-rolled
+  sort.
 - [ ] Authored question copy still contains vocabulary the course does not use — "pre-registered
   stopping rule" (0 occurrences in BRGSA; the course says *decision rule*) and "18 visitors per arm"
   on a lecture that says *per variant*. The glossary covers `arm`; the rest is content backlog under
@@ -1613,9 +1281,11 @@ after the version is live, since a push to `main` deploys.
   owner/faculty acceptance; low for exact exam-paper structure
 - Budget: keep this file below 32 KiB and preferably below ~4,000 tokens. Move history to
   `docs/governance/CHANGELOG.md` and detail to linked ledgers/briefs.
-  **Still over budget and known to be so.** On 2026-08-15 the workspace-restructure, UI-alignment
-  and Access-login paragraphs were collapsed to their durable outcomes plus links, as the previous
-  note asked, and one new paragraph was added. **Net, the block is barely smaller** — collapsing
-  three and adding one is not a strategy, it is a stall. The next session should cut the
-  2026-08-12 block to a single paragraph before writing anything new, and should treat "one
-  paragraph per session, forever" as the actual defect.
+  **2026-08-18: the story block is compressed.** The ~1,100-line status blockquote (≈92 KiB on
+  its own) is now a Current Status section plus a one-line-per-session ledger; every collapsed
+  block was first confirmed to have a full CHANGELOG entry of the same date and title, so the
+  histories are pointed at, not deleted. File 184 KiB → ~90 KiB. **Still over the 32 KiB target
+  and known to be so** — the remaining bulk is Known Gaps, which holds many closed `[x]` entries
+  kept as markers. The standing rule that prevents the regression: **new sessions add a ledger
+  line and a CHANGELOG entry, never a new story block here.** Closed gaps older than the current
+  work may be trimmed to one line each once their story is confirmed in the CHANGELOG.

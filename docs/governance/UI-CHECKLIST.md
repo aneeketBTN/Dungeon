@@ -6,6 +6,12 @@ Run this before calling any UI change done. Every row exists because the defect 
 Read with `docs/governance/BUG-LAWS.md` (LAW-51, LAW-52, LAW-64) — this is the checklist,
 the laws are the reasoning.
 
+**To take the screenshots this checklist keeps asking for, read `docs/governance/SCREENSHOTS.md`.**
+The Browser pane's screenshot does not work here; `node tools/screenshot.mjs --port <port>` does.
+And before trusting *any* transition reading taken in the pane, check the timeline is not frozen —
+a pane that composites no frames pins `document.timeline` at 0, so every transition reads as its
+start value and a correct rule looks broken. That doc carries the one-line probe.
+
 **The rule that produced this file:** a clean report from a probe blind to the defect class
 reads exactly like a clean screen. Every time a defect is found by eye, either a detector
 gets added or a row gets added here saying it cannot be detected and must be looked at.
@@ -90,6 +96,12 @@ gets added or a row gets added here saying it cannot be detected and must be loo
       A number that only happens to look right is a number the next change breaks.
 
 ## D. Shape, size and type
+
+- [ ] **Is every data graph an actual component from the selected chart system?** LAW-80. A
+      hand-authored SVG that copies a library example is still a separate geometry and
+      accessibility implementation. Check the DOM for the library's chart surface at desktop and
+      phone widths, then check empty and single-point data. Icons and decorative SVGs are not data
+      graphs and stay outside this rule.
 
 - [ ] **Is an absolute radius applied to a component rendered at more than one size?**
       *Shipped: `--r-panel` at 10px on a chip class rendered at 44px, 26px and 22px — 23%

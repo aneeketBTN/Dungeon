@@ -45,8 +45,42 @@
 
   var lessons = {};
 
+  /*
+   * ADD-INS — a lecture taught inside the lesson for a lecture it belongs with.
+   *
+   * Owner decision 2026-08-19: content is shaped as a process a learner can follow,
+   * and a lecture that does not warrant a standalone lesson is folded into a
+   * neighbouring one rather than padded out to lesson size or left untaught.
+   *
+   * An add-in is registered as a REAL entry in this map, because the map is the one
+   * thing every consumer reads: the app's scheduler and its LAW-47 teach-before-test
+   * walk, check_lesson_file, both coverage gates, and the lesson-lecture match gate.
+   * Registering it here means a covered lecture is taught everywhere at once. The
+   * alternative — a pointer the gates cannot see — reads as an unauthored lecture for
+   * ever, which is the "optional work" trap in a new costume.
+   *
+   * It carries its OWN prose and glossary rather than aliasing its host's, so the
+   * match gate scores it against its own lecture and the claim stays falsifiable.
+   * The contract is lighter by design: objective, a short explainer, glossary. The
+   * worked example and the handoff belong to the host lesson, which is the unit a
+   * learner actually reads.
+   */
   function lesson(entry) {
     lessons[entry.lectureId] = entry;
+    (entry.addIns || []).forEach(function (addIn) {
+      lessons[addIn.lectureId] = {
+        lectureId: addIn.lectureId,
+        courseId: entry.courseId,
+        module: addIn.module,
+        order: addIn.order,
+        title: addIn.title,
+        objective: addIn.objective,
+        explainer: addIn.explainer,
+        glossary: addIn.glossary || [],
+        addInOf: entry.lectureId,
+        addInHostTitle: entry.title
+      };
+    });
   }
 
   /* ------------------------------------------------------------------
@@ -207,7 +241,7 @@
       {term: "validation experiment", plain: "A planned test with a stated signal and a decision attached to the result."},
       {term: "functional MVP", plain: "An MVP that actually works, as opposed to a smoke test where nothing is built."}
     ],
-    connects: "Module 1 asked whether anyone wants it. Module 2 asks whether a measured difference is real."
+    connects: "That is low-resource validation: the whole module run on the cheapest evidence that still decides the question. Module 1 asked whether anyone wants it. Module 2 asks whether a measured difference is real."
   });
 
   /* ------------------------------------------------------------------
@@ -365,7 +399,7 @@
       {term: "lift", plain: "The measured difference between variants."},
       {term: "arm", plain: "One side of the test — the same thing as a variant. “1,400 per arm” means 1,400 users in each version."}
     ],
-    connects: "Module 2 made a single result trustworthy. Module 3 asks whether growth over time is real."
+    connects: "A/B testing is the name for this whole workflow, and statistical significance is the bar it clears. Module 2 made a single result trustworthy. Module 3 asks whether growth over time is real."
   });
 
   /* ------------------------------------------------------------------
@@ -394,7 +428,7 @@
       {term: "aggregate data", plain: "Everything summed into one number across the whole user base."},
       {term: "starting event", plain: "The thing that defines a cohort — usually the month someone signed up."}
     ],
-    connects: "Cohorts give you a curve per group. The next lecture is how to read the shape of that curve."
+    connects: "Laid out month by month, that is the cohort retention table. The next lecture is how to read the shape of each curve in it."
   });
 
   lesson({
@@ -520,7 +554,7 @@
       {term: "secondary ICP", plain: "A second viable segment, named separately so it does not blur the primary one."},
       {term: "known unknowns", plain: "Things you have not measured and know you have not — stated, so nobody mistakes a guess for a finding."}
     ],
-    connects: "Module 3 read whether growth is real. Module 4 asks who owns growth and where the constraint sits."
+    connects: "The brief opens with a brand snapshot and the ideal customer profile, so whoever reads it knows who is being grown before they read a number. Module 3 read whether growth is real. Module 4 asks who owns growth and where the constraint sits."
   });
 
   /* ------------------------------------------------------------------
@@ -649,7 +683,7 @@
       {term: "cornerstone", plain: "A substantial piece of content built to keep attracting search traffic for years."},
       {term: "creator seeding", plain: "Getting the product into the hands of people who already have the audience you want."}
     ],
-    connects: "The module ends by turning all of this into a concrete plan for the first customers."
+    connects: "These are the traction levers, and the point is to pick the one that fits rather than to run all six. The module ends by turning all of this into a concrete plan for the first customers."
   });
 
   lesson({
@@ -1011,7 +1045,7 @@
       {term: "cliff", plain: "A sharp churn drop at one specific point, pointing at a single event."},
       {term: "net revenue retention", plain: "Revenue kept from existing customers including expansion — can exceed 100%."}
     ],
-    connects: "Module 6 kept users. Module 7 is about what they pay you."
+    connects: "That split is voluntary versus involuntary churn, and it matters because only one of the two is a verdict on the product. Module 6 kept users. Module 7 is about what they pay you."
   });
 
   /* ------------------------------------------------------------------
@@ -1041,7 +1075,7 @@
       {term: "seat", plain: "Pricing per user, so revenue grows as the customer's team grows."},
       {term: "free tier", plain: "A permanently free level used to acquire users who may later convert."}
     ],
-    connects: "A good structure makes existing customers worth more over time. The next lecture is how that is engineered."
+    connects: "Pricing is the first floor of the module's revenue architecture: pricing, expansion, sales integration, and payback assembled into one engine rather than four tactics. A good structure makes existing customers worth more over time. The next lecture is how that is engineered."
   });
 
   lesson({
@@ -1144,7 +1178,7 @@
       {term: "breakeven", plain: "The point at which a customer has returned their acquisition cost."},
       {term: "gross profit", plain: "Revenue minus the direct cost of serving the customer — what actually pays back CAC."}
     ],
-    connects: "The module closes with a practitioner on choosing between product-led and sales-led growth."
+    connects: "That number is the scaling threshold, and the course puts it at twelve months: below it, scaling generates cash; above it, scaling burns cash and the economics have to be fixed first. The module closes with a practitioner on choosing between product-led and sales-led growth."
   });
 
   lesson({
@@ -1245,7 +1279,7 @@
       {term: "kill threshold", plain: "The result below which the experiment is not worth maintaining."},
       {term: "successful kill", plain: "Ending an experiment cheaply and returning its capacity — an outcome, not a failure."}
     ],
-    connects: "A pre-registered threshold is only as good as the metric it is written against."
+    connects: "The course states this as the golden rule: decide the action before running the experiment, not after, because that is what removes the bias. A pre-registered threshold is only as good as the metric it is written against."
   });
 
   lesson({
@@ -1332,8 +1366,8 @@
     title: "Integrating the full growth engine",
     objective: "Map the module's six disciplines onto the AARRR loop as a single stack.",
     explainer: [
-      "The final lecture assembles the module: six disciplines — ICE scoring, the backlog, decision rules, validated metrics, capacity allocation, and the roadmap — producing six artifacts that live in one growth workbook. The claim is that they are one system rather than six techniques, because each one's output is the next one's input.",
-      "The system also plugs back into everything earlier in the course. The experimentation engine sits across the AARRR loop rather than beside it: the constraint that ICE scores impact against comes from the funnel diagnosis in the acquisition and activation modules, and the metrics that survive the business outcome test are the retention, referral, and revenue numbers built in the modules before this one.",
+      "The final lecture assembles the module into what the course calls a growth operating system: ICE scoring, the experiment backlog, decision rules, real metrics, resource allocation, roadmaps, and the system view, producing artifacts that live in one growth workbook. The claim is that they are one system rather than seven techniques, because each one's output is the next one's input. The goal it names is repeatable, scalable, compounding growth rather than a run of unconnected tactics.",
+      "The system also plugs back into everything earlier in the course. The experimentation engine sits across the AARRR loop rather than beside it: the constraint that ICE scores impact against comes from the funnel diagnosis in the acquisition and activation modules, and the metrics that survive the business outcome test are the retention, referral, and revenue numbers built in the modules before this one. Stated as a loop, this is the master loop — today's output becomes tomorrow's input. Dropbox is the worked case: users refer, friends join, those friends activate and become referrers themselves, and the loop feeds itself rather than requiring fresh spend each cycle.",
       "This is why the capstone is graded on coherence rather than on any single artifact. A well-scored backlog aimed at the wrong constraint, or a roadmap whose decision dates are written against vanity metrics, fails as a system even when each piece looks competent on its own."
     ],
     worked: {
@@ -1343,7 +1377,9 @@
     },
     glossary: [
       {term: "growth workbook", plain: "The single workbook holding all six artifacts as one connected system."},
-      {term: "AARRR", plain: "The acquisition-to-revenue loop the six disciplines sit across."}
+      {term: "AARRR", plain: "The acquisition-to-revenue loop the six disciplines sit across."},
+      {term: "growth operating system", plain: "ICE, backlog, decision rules, real metrics, allocation, roadmaps and system view, run as one thing."},
+      {term: "master loop", plain: "Today's output becomes tomorrow's input, so growth compounds instead of restarting."}
     ],
     connects: "BRGSA is complete: diagnose the constraint, build the motion, keep the customer, price the revenue, and run the engine that decides what to do next."
   });
@@ -1381,6 +1417,9 @@
     glossary: [
       {term: "GDP per capita", plain: "GDP divided by the number of people — each person's average share of the economy."},
       {term: "growth rate", plain: "The annual percentage a figure rises by, which compounds over decades."}
+,
+      {term: "disparity gap", plain: "Billionaires rose 102 to 358 in five years while the bottom half holds 15% of income."},
+      {term: "budget diversion", plain: "Public money pulled away from health, education and energy for the rural majority."}
     ],
     connects: "Growth happened. The next lecture asks who it reached."
   });
@@ -1406,6 +1445,8 @@
       {term: "demographic dividend", plain: "The advantage available while the working age population outnumbers dependants — conditional on jobs existing."},
       {term: "working age", plain: "The population old enough to work and not yet retired."},
       {term: "GST", plain: "The indirect tax charged at the same rate whoever buys the item, rich or poor."}
+,
+      {term: "demographic bottleneck", plain: "10-12 million join the workforce each year against 5-6 million jobs created."}
     ],
     connects: "If growth alone will not reach these people, some other kind of organisation has to. The next lecture defines it."
   });
@@ -1431,6 +1472,8 @@
       {term: "inclusive business", plain: "An organisation whose primary objective is addressing a specific need of the poor, while staying financially sustainable."},
       {term: "primary objective", plain: "The goal that wins when two goals conflict — the thing an organisation is actually structured for."},
       {term: "financially sustainable", plain: "Able to cover its own costs, so it can keep operating without running at a loss."}
+,
+      {term: "illusion of profit", plain: "Karnani's charge that micro-transactions yield margins too thin to be a real market."}
     ],
     connects: "Several kinds of organisation claim this territory. The next lecture sorts them."
   });
@@ -1482,6 +1525,8 @@
       {term: "not-for-profit sector", plain: "Organisations working for social benefit without profit as the objective — often with long chains and diffuse accountability."},
       {term: "for-profit sector", plain: "Commercial organisations, whose distribution capability and accountability this argument wants to borrow."},
       {term: "accountability", plain: "A single identifiable party answerable for whether the thing actually arrived."}
+,
+      {term: "rejection of aid", plain: "Yunus's position that grants strip dignity, create dependency and invite corruption."}
     ],
     connects: "That argument needed economists willing to make it. The next lecture introduces them."
   });
@@ -1533,6 +1578,9 @@
       {term: "market forces", plain: "Competition and profit-seeking, here proposed as tools for reaching the poor."},
       {term: "multinational", plain: "A large company operating across countries, historically competing only for the top of the pyramid."},
       {term: "sachet", plain: "A single-serve pack that fits a daily cash flow instead of demanding a lump sum."}
+,
+      {term: "single-serve revolution", plain: "One-rupee sachets solving a daily cash-flow problem without cutting unit price."},
+      {term: "cross-subsidisation", plain: "Paying patients funding free treatment for those who cannot pay, as at Aravind."}
     ],
     connects: "The next lecture takes a company that did all of this, and asks what it cost."
   });
@@ -1560,6 +1608,8 @@
       {term: "tax break", plain: "A government tax reduction used to encourage activity it considers valuable."},
       {term: "illicit", plain: "Produced outside the legal system, and so outside its hygiene controls."},
       {term: "unintended consequences", plain: "Effects a strategy produces without intending them — here, recruiting drinkers while displacing illicit ones."}
+,
+      {term: "Diageo value chain", plain: "Sourcing local sorghum so a commercial supply chain carries the social result."}
     ],
     connects: "One case raises the doubt. The next lecture is the systematic version of it."
   });
@@ -1621,6 +1671,101 @@
    * delivered. See docs/authoring/LESSON-AUTHORING-PROTOCOL.md §0.
    * ------------------------------------------------------------------ */
 
+  /* ------------------------------------------------------------------
+   * IBM Module 2 — the healthcare arc, authored 2026-08-17.
+   *
+   * These lectures are NOT cited by any scored question, so under the delivery
+   * rule in LESSON-AUTHORING-PROTOCOL.md §0 they reach no learner today. They are
+   * authored on the owner's explicit decision that the module should read as a
+   * continuous course rather than as two isolated case studies with thirteen gaps
+   * between them — which is the one reason §0 permits. Recorded here so nobody
+   * later mistakes them for the accident §0 warns about.
+   *
+   * Every figure and glossary term below was grep-verified against
+   * IBM_M02_SUM_TRANSCRIPT.txt before it was written. That check is what caught
+   * "total cost of care" — the phrase the earlier L04 lesson used, which appears
+   * in the transcript zero times against four for "total cost of healthcare".
+   * ---------------------------------------------------------------- */
+
+  lesson({
+    lectureId: "IBM-M02-L01",
+    courseId: "IBM",
+    module: 2,
+    order: 1,
+    title: "What inclusive healthcare has to cover",
+    objective: "Say why free treatment alone is not inclusive healthcare, and list what the total cost of healthcare actually contains.",
+    explainer: [
+      "Healthcare is the module's first domain, anchored on Vaatsalya Hospitals. Four questions frame the sector. Is there capacity — doctors, nurses, hospitals — for 1.4 billion people? Is there reach, across a geography that makes remote places hard to serve? Is treatment affordable enough that a poor person acts on it? And what state are the associated services in: diagnostics, medicines, emergency response? Inclusive healthcare has to answer all four, not only affordability.",
+      "The numbers show the size of the gap. The World Health Organization sets one physician for every thousand people; India runs about 0.6. Against a global average near 26 hospital beds per thousand, India has about 1. Around 26% of Indians have improved sanitation, and poor sanitation manufactures the infections that fill the wards. Approximately 1.7 million children die before the age of five. The course notes these figures have improved markedly — the gap, not the direction, is the problem.",
+      "Hence the total cost of healthcare rather than the price of treatment. Someone unwell cannot travel alone, so a caregiver comes too and both lose a day's earnings. Add the fare, the tests the doctor orders, the medicines after them. Free treatment removes one line and leaves the rest standing. That is why the course says health in India is a privilege rather than a right: the promise exists, and cost still sorts who receives it."
+    ],
+    worked: {
+      setup: "A district hospital announces free consultation, and uptake among the poorest villages barely moves.",
+      move: "Add up the total cost of healthcare rather than the price of the consultation.",
+      because: "The consultation was never the binding cost. Two people travel, because someone unwell cannot go alone, and both lose a day's earnings. Add the fare, the tests the doctor orders, and the medicines. Removing the consultation fee removes the smallest line on the bill, so the household's arithmetic is unchanged and so is its decision. Every element has to be worked on for a model to be inclusive, which is the standard the rest of the module measures its cases against."
+    },
+    glossary: [
+      {term: "total cost of healthcare", plain: "Everything a patient spends to get well — travel, tests, medicines, and the earnings the patient and caregiver both lose — not the treatment price alone."},
+      {term: "caregiver", plain: "The person who has to accompany a patient too unwell to travel alone, whose lost day's income is part of the cost."},
+      {term: "improved sanitation", plain: "Access reaching about 26% of Indians; where it is missing, infection rates rise and demand on healthcare rises with them."}
+    ],
+    connects: "That is the demand side. The next session shows how the supply is arranged, and why it sits in exactly the wrong place."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L02",
+    courseId: "IBM",
+    module: 2,
+    order: 2,
+    title: "The inverted pyramid of Indian healthcare",
+    objective: "Separate primary, secondary and tertiary care, and explain why market forces put the supply where the demand is not.",
+    explainer: [
+      "Healthcare divides by what the patient needs. Primary care is treatment without hospitalisation — the physician examines, tests, prescribes. Secondary care needs hospitalisation for minor procedures, perhaps a couple of days, and costs more. Tertiary care means long hospitalisation for serious ailments and surgery, with pre-operative and post-operative periods, and the heaviest demand on beds and staff. Demand forms a pyramid: primary much the largest, tertiary the smallest.",
+      "Supply is arranged the other way up. The good hospitals are urban, and the famous names concentrate on tertiary care, while more than 60% of the population lives in villages. Doctors live where the hospitals are. So minimum supply sits in primary care and rural India, exactly where most people are, and maximum supply sits in tertiary care in the cities. That is the inverted pyramid.",
+      "The course explains it as economics, not neglect. Scarcity raises price, and market forces push supply wherever price is highest — city, tertiary, private. The market clears, but at a very high price point, and that is what produces the inversion. Since it will not self-correct, others step in: government with free hospitals, rural internships and Janaushadhi stores; not-for-profits and CSR-funded hospitals. The course's judgement is that all of it together is still not enough."
+    ],
+    worked: {
+      setup: "A state adds tertiary capacity in its capital and rural health outcomes do not improve.",
+      move: "Read the addition against the inverted pyramid rather than against total capacity.",
+      because: "Capacity went where supply was already highest and demand lowest, so the mismatch widened rather than closed. The demand pyramid is broadest at primary care and in the villages; the supply pyramid is broadest at tertiary care and in the cities. Adding to the narrow end of demand cannot reach the broad end. Market forces produced that placement — the price is highest there — so relying on the market to correct it produces more of the same."
+    },
+    glossary: [
+      {term: "primary care", plain: "Treatment with no hospitalisation — examine, test, prescribe. The largest share of demand."},
+      {term: "secondary care", plain: "Hospitalisation for minor procedures, a couple of days in a bed, costing more than primary."},
+      {term: "tertiary care", plain: "Long hospitalisation for serious ailments and surgery, the heaviest demand on beds and staff."},
+      {term: "inverted pyramid", plain: "Demand is broadest at primary care and rural; supply is broadest at tertiary care and urban."},
+      {term: "demand supply mismatch", plain: "Supply sitting where demand is thinnest, so price rises and access falls."},
+      {term: "market clearing", plain: "The market does settle — but at a very high price point, which is what pushes supply to the cities."},
+      {term: "Janaushadhi", plain: "Government stores cutting medicine prices, one of the levers used against the mismatch."}
+    ],
+    connects: "The next session follows a study of how households actually fall into poverty, which puts a figure on why health shocks matter so much."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L03",
+    courseId: "IBM",
+    module: 2,
+    order: 3,
+    title: "Krishna's study: how families actually fall into poverty",
+    objective: "Describe how the stages of progress study measured poverty, and name the single biggest cause it found of families falling into it.",
+    explainer: [
+      "Professor Anirudh Krishna's hypothesis was that poverty is not a static state but a dynamic process — people fall into it, and people climb out. To study that he first needed a way to measure it that did not depend on income or calorie lines. He used observable living conditions: a household without enough food, unable to afford even minor house repair, carrying heavy debt, and not properly clothed. Meeting all four meant poor. Owning a television, a tractor, land, a two-wheeler, a goat or cattle indicated the household was not.",
+      "The method was to classify households, then return. He worked across 12 villages in 3 districts of Andhra Pradesh, drawing a sample of 348 from more than 5,000 households, and revisited them over a 25 year period. That produces four groups: poor then and poor now, poor then but out now, not poor then but poor now, and comfortable throughout. The two groups that moved are the ones the study is about.",
+      "The finding is stark. Healthcare expenditure was the single biggest reason families who had not been poor became poor. The causes interlock — treatment is paid for by borrowing, borrowing carries interest, and interest grinds the household down. Replications elsewhere in India and abroad found the same, so this is not an Indian peculiarity. Marriage expenses and funeral expenses also appear high, which reads as carelessness until you see it as buying social capital."
+    ],
+    worked: {
+      setup: "A household comfortably above the line one year is destitute the next, after a single hospital admission.",
+      move: "Read it through Krishna's dynamic view rather than as bad luck.",
+      because: "The household was at the margin, and healthcare expenditure is the largest single cause of the fall — not because one bill is enormous, but because it is met by borrowing and the interest never stops. This is why the module treats inclusive healthcare as development policy rather than charity: the same event that ruins a family is the one an inclusive model is designed to make survivable."
+    },
+    glossary: [
+      {term: "stages of progress", plain: "Krishna's method — classify households by observable conditions, then return years later to see who moved and why."},
+      {term: "healthcare expenditure", plain: "The single biggest cause the study found of families who were not poor becoming poor."},
+      {term: "social capital", plain: "The network of neighbours and relatives a poor household relies on for loans and help, which spending on weddings and funerals is buying."}
+    ],
+    connects: "That is the cost the model has to survive. The anchor case is a hospital chain built around exactly that problem."
+  });
+
   lesson({
     lectureId: "IBM-M02-L04",
     courseId: "IBM",
@@ -1641,8 +1786,105 @@
     glossary: [
       {term: "semi-urban", plain: "Towns between city and village, where doctors and associated services are scarce."},
       {term: "cross-subsidy", plain: "Using surplus from one group of patients to fund care for another."}
+,
+      {term: "inverted pyramid", plain: "Most people are rural while doctors and hospitals concentrate in urban tertiary care."},
+      {term: "market failure", plain: "Scarcity drives fees up while public and NGO clinics lack scale or retention."},
+      {term: "total cost of healthcare", plain: "Treatment plus diagnostics plus travel plus lost wages of patient and caregiver."},
+      {term: "poverty dynamics", plain: "Krishna's finding that poverty is dynamic and health shocks are the main way in."},
+      {term: "decentralised model", plain: "Small hospitals sited rural and semi-urban, cutting travel and lost wages."},
+      {term: "asset-light model", plain: "Rented facilities, 30-40 beds, stripped-down services, no kickbacks."},
+      {term: "standardisation", plain: "Fixing the service so it can be delivered the same way at every site."},
+      {term: "assembly line", plain: "Aravind's paraskilling: trained paramedics take pre- and post-operative work."},
+      {term: "Aurolab", plain: "Aravind's in-house lens plant, cutting cost from $200 to $5."},
+      {term: "telemedicine", plain: "Remote diagnosis over an ISRO link, removing the patient's journey."},
+      {term: "micro-insurance", plain: "Pooled premiums such as the Yashaswini farmer scheme."},
+      {term: "low-cost private schools", plain: "Serving about half the market where trust in public schooling has gone."}
     ],
     connects: "The next case takes the same tension and industrialises the answer."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L05",
+    courseId: "IBM",
+    module: 2,
+    order: 5,
+    title: "Staffing a rural hospital: the three incentives",
+    objective: "Explain how Vaatsalya attracted doctors to remote locations, and separate financial, social and moral incentives.",
+    explainer: [
+      "Vaatsalya's first problem was attracting qualified doctors to relatively remote locations, against the demand supply mismatch that pulls good doctors towards city hospitals. Their hypothesis was that some doctors had originally come from those villages and small towns, had succeeded through competitive exams, and were still young — and that the emotional connection to where they grew up, where family and childhood friends remain, might bring them back.",
+      "Connection alone was not expected to be enough. Vaatsalya paid a little more than these doctors would have earned in the cities, and offered greater positions of responsibility. A young doctor in a large city hospital sits at the bottom of the professional hierarchy; the only doctor in a small-town hospital takes the decisions, and can see the size of the impact. Without them the community has no good healthcare, whereas in a city they are one among many and the service happens regardless.",
+      "The course generalises this into three incentives that explain why anyone does anything. Financial incentive is money, resting on the Homo economicus assumption that people maximise their own benefit. Social incentive is belonging and recognition from the people who matter to you. Moral incentive is the ingrained sense of right — the calling pursued without external reward, which the course associates with self-actualization, and which many doctors carry strongly. Vaatsalya deliberately played on all three at once."
+    ],
+    worked: {
+      setup: "A rural hospital offers above-city salaries and still cannot keep doctors for more than a year.",
+      move: "Check which of the three incentives the offer actually reaches.",
+      because: "Money is one lever and the weakest one alone. The offer says nothing about the social incentive — recognition from a community the doctor belongs to — or the moral incentive of being the reason care exists there at all. Vaatsalya's design hired doctors with a prior connection to the place, so all three incentives pointed the same way. An offer built only on salary competes with the cities on the one dimension where the cities win."
+    },
+    glossary: [
+      {term: "financial incentive", plain: "Money — the Homo economicus lever, and the one the cities will always outbid on."},
+      {term: "social incentive", plain: "Belonging and recognition from people who matter to you: family, friends, the community you came from."},
+      {term: "moral incentive", plain: "The ingrained sense of the right thing, pursued without external reward — hardest to create, strongest when present."},
+      {term: "Homo economicus", plain: "The assumption that people always maximise their own benefit, which the course treats as incomplete rather than wrong."},
+      {term: "self-actualization", plain: "Doing the work because it is the purpose, not the payment — the state moral incentive draws on."}
+    ],
+    connects: "Staffing solved, the next question is what the model does about the price of treatment itself."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L06",
+    courseId: "IBM",
+    module: 2,
+    order: 6,
+    title: "Cutting the price without losing the trust",
+    objective: "List the levers Vaatsalya used to cut cost, and explain why information asymmetry makes trust the binding constraint.",
+    explainer: [
+      "The second challenge was cost, against patients whose paying capacity is very low. Vaatsalya applied an 80/20: identify the most common ailments in those locations — gynecology, pediatrics, general medicine, general surgery — cover 70 to 80% of the need, and refer the rest onward. They rented facilities rather than buying land, and standardised on 30 or 40 beds, so staffing and inventory stopped being worked out afresh for every site.",
+      "They dropped what added expense without adding much value: no ambulances, no cafeteria. But they did build somewhere a poor family could heat food and draw water, because the person accompanying a patient still has to eat. They also refused referral fees — the cut a diagnostics provider pays a doctor for sending tests their way — because every rupee of that lands on the patient's bill.",
+      "The third dimension was trust, and the course is careful that it is not decoration. You can judge whether a house was cleaned or a haircut was good; you cannot judge whether an injection will cure you. The doctor knows more about your health than you do. That is information asymmetry, and where it exists, trust has to stand in for judgement. Vaatsalya built it through transparency in billing, and by treating the local unqualified practitioners — quacks, in common language — as complementors rather than rivals."
+    ],
+    worked: {
+      setup: "A low-cost hospital opens nearby with real doctors and honest prices, and the villages keep going to the unqualified local practitioner.",
+      move: "Work with the practitioner as a complementor rather than competing them out.",
+      because: "The practitioner already holds what the hospital lacks. Under information asymmetry the patient cannot assess clinical quality, so they fall back on trust — and the local doctor treated their father, their grandmother, and knows the family's history. Competing on credentials argues against the one thing the patient can actually judge. Vaatsalya instead trained them, left their income intact, and agreed when a case should be referred up, which converts the ecosystem's trust into the hospital's first point of contact."
+    },
+    glossary: [
+      {term: "80/20", plain: "Treat the 70-80% of ailments that are common and cheap to handle; refer the expensive remainder onward."},
+      {term: "referral fees", plain: "The cut a testing or imaging provider pays a doctor for the prescription — removed here, because it lands on the patient's bill."},
+      {term: "transparency in billing", plain: "Showing the patient exactly what each line is for, which is how trust gets built rather than asserted."},
+      {term: "complementors", plain: "Local practitioners treated as the first point of contact rather than as rivals, keeping their income and their community standing."},
+      {term: "information asymmetry", plain: "The doctor knows far more about your health than you can. Where you cannot judge the service, you must trust the provider."}
+    ],
+    connects: "That is the model working. The next session is honest about where it stopped."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L07",
+    courseId: "IBM",
+    module: 2,
+    order: 7,
+    title: "Where the Vaatsalya model stopped",
+    objective: "Name the three limits the model ran into, and the collaboration structure used to work around them.",
+    explainer: [
+      "The limits came out of the design itself. Treating the common 70 to 80% meant some ailments stayed out — dialysis above all, which cannot be delivered at a low price point given the cost of material and service. Needing a steady flow of walk-in patients meant a certain population density was required, so the chain could move from big cities to semi-urban locations but not to genuinely rural ones. And because it charged at all, the bottom thirty percent of the local economic strata could not use it; they could only take treatment that was free.",
+      "Two answers followed. A hub-and-spoke model kept the main hospital semi-urban with outposts of perhaps a single doctor further out. And collaboration: government grants for services that were uneconomic alone, and grants from donors. The course flags a structure that recurs throughout the syllabus — a for-profit inclusive arm serving those who can pay, beside a foundation that takes donations and funds those who cannot.",
+      "It still hit a ceiling. Doctors recruited young began weighing Gadag against Bangalore once their children reached school age, so the human-resource strategy that had attracted them started to fail. Large hospitals opened satellite hospitals in smaller towns and patients migrated to the bigger names. The course does not present Vaatsalya as a clean success: failure is embedded in it, and that is the point."
+    ],
+    worked: {
+      setup: "An inclusive hospital chain with a working model and good margins stops opening new sites.",
+      move: "Look for the ceiling in the design, not in the execution.",
+      because: "Each strength carried its own limit. The 80/20 that made treatment cheap excluded dialysis. The population density that guaranteed footfall excluded the truly rural. Charging at all excluded the bottom thirty percent. None of those is a mistake — they are what made the model viable — but together they bound how far it could reach. Add doctors leaving as their families grew, and satellite hospitals from larger chains taking the patients, and the ceiling is structural rather than a failure of effort."
+    },
+    glossary: [
+      /* "hub-and-spoke model" is deliberately NOT glossed here. This lecture is where the
+       * arrangement is described, but the transcript spells it "hub-andspoke" — a typo — and
+       * the course's clean spelling first appears in L11. Glossing it here would define a
+       * heading ahead of the course's own usage, so the explainer describes the arrangement
+       * and L11 owns the term. */
+      {term: "population density", plain: "The footfall a paying model needs, which is why it stops at semi-urban rather than rural."},
+      {term: "foundation", plain: "The not-for-profit arm beside the business, able to take donations and grants and fund patients the business cannot."},
+      {term: "satellite hospitals", plain: "Small sites opened by large chains in smaller towns, which pulled patients away on the strength of the bigger name."}
+    ],
+    connects: "Vaatsalya could not scale far. The next two cases did, in very different ways."
   });
 
   lesson({
@@ -1666,8 +1908,323 @@
       {term: "cataract", plain: "The clouding of the eye's lens that Aravind's core surgery treats."},
       {term: "ophthalmologist", plain: "An eye surgeon — the unit whose annual surgery count carries this model."},
       {term: "cross-subsidize", plain: "To fund one patient's care from the surplus generated by another's payment."}
+,
+      {term: "volume output", plain: "A surgeon at 1,200-2,400 operations a year against a national average near 220."},
+      {term: "pay-per-use equipment", plain: "Replacing capital spend by guaranteeing the supplier high machine utilisation."},
+      {term: "demand-side perception", plain: "Banerjee and Duflo's point that returns felt uncertain and delayed suppress demand."}
     ],
     connects: "Healthcare shows the model working. Finance is where it was invented, and where it broke."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L09",
+    courseId: "IBM",
+    module: 2,
+    order: 9,
+    title: "Why volume is the engine, not the by-product",
+    objective: "Explain how fixed costs make volume the cost lever, and name the three principles that feed each other in the Aravind model.",
+    explainer: [
+      "Costs split two ways. Fixed costs do not move with the number of patients — a building, a large piece of equipment, and arguably the doctors' salaries, which are paid whoever walks in. Variable costs, such as consumables and food, do move. Costing adds the variable cost to a share of the fixed cost, and that share is set by how many patients come through. So wherever fixed costs dominate, more volume means a lower cost per patient.",
+      "Hospitals are heavy in fixed costs, which is why Aravind worked so hard at keeping a constant supply of patients. It was not only to keep surgeons operating; it was to spread those fixed costs over more units so the per-patient figure fell. Cross-subsidy fed the same engine — roughly two-thirds of patients were treated free or at a nominal fee, and that is what produced the volume the economics needed.",
+      "Three levers, each feeding the others. Paraskilling kept the scarcest resource, the doctor, on the specialised step while trained staff took the rest. Volume delivered economies of scale. Cross-subsidy attracted the volume. Aravind also replaced the imported intraocular lens, at almost 200 dollars, with one manufactured in India at close to 5 — an innovation funded by a foundation, the not-for-profit arm that recurs beside these for-profit models."
+    ],
+    worked: {
+      setup: "Two eye hospitals report the same cost per surgery, and one is far cheaper per patient overall.",
+      move: "Ask how many patients each one spreads its fixed costs across.",
+      because: "The surgery cost is largely variable; the building, the equipment and the salaries are not. A hospital running at low volume charges each patient a large slice of those fixed costs, and a hospital running at high volume charges a small one. That is why volume is the engine rather than a happy result — and why cross-subsidy, which looks like it gives revenue away, actually buys the throughput that makes the whole structure cheaper."
+    },
+    glossary: [
+      {term: "economies of scale", plain: "More patients spreading the same fixed costs, so the per-unit cost falls."},
+      {term: "fixed costs", plain: "Costs that do not change with patient numbers — building, equipment, and the salaries paid whoever comes."},
+      {term: "variable costs", plain: "Costs that move with volume, such as consumables and food."},
+      {term: "paraskilling", plain: "Trained non-doctors taking the complementary work so the scarce specialist does only the specialised step."},
+      {term: "cross-subsidy", plain: "Paying patients funding free or nominal-fee treatment for others — which also supplies the volume."},
+      {term: "intraocular lens", plain: "The post-cataract lens, imported at almost $200 until Aravind manufactured it in India for close to $5."}
+    ],
+    connects: "The third case takes the same principles into a surgery that refuses to standardise."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L10",
+    courseId: "IBM",
+    module: 2,
+    order: 10,
+    title: "Narayana Heart: cardiac care as an economics problem",
+    objective: "Contrast Narayana with Aravind, and name the mechanisms it used to make an unstandardisable surgery affordable.",
+    explainer: [
+      "Narayana Hrudayalaya — Narayana Heart — was started by Dr Devi Shetty around cardiac care, and like Aravind it runs on cross-subsidy. But cataract surgery standardises and cardiac surgery does not: it varies from patient to patient, and the surgeon often cannot know the situation until the patient is open. So the assembly-line logic Dr V relied on does not transfer. Shetty frames the gap as economics rather than medical science — less than 10% of the world's population can afford a cardiac surgery.",
+      "The cost mechanisms are distinctive. Narayana largely avoids capital expenditure on medical equipment, paying suppliers on capacity utilization instead — a slice of each X-ray rather than crores upfront. High throughput makes that worthwhile for a Siemens or a GE, which is Prahalad's argument in practice: multinationals can earn in bottom-of-pyramid markets by reorienting the model. They also rent, keep administration lean, and let manufacturers stress-test machines in exchange for state-of-the-art technology.",
+      "Cross-subsidy is run by daily financial planning — each day's surplus decides how many patients can be subsidised the next, in partial steps rather than all or nothing. Reach comes from a telemedicine network built with ISRO, decentralized cardiac care units that screen in towns and villages, and family physicians taught to transmit ECG results. With the state government they run the Yashaswini insurance scheme. The course calls the whole of this ecosystem development."
+    ],
+    worked: {
+      setup: "A hospital serving poor patients needs an imaging machine whose purchase price it cannot justify.",
+      move: "Offer the supplier a share of utilisation instead of a purchase price.",
+      because: "The hospital's constraint is capital; the supplier's interest is total return, not the moment of sale. At high patient throughput a per-use share earns the supplier more than one upfront payment, while the hospital converts a fixed cost it cannot carry into a variable one it can. This is the bottom-of-pyramid argument working in the supply chain rather than the sales pitch — the same equipment, a reoriented model, and both sides better off."
+    },
+    glossary: [
+      {term: "capacity utilization", plain: "Paying the equipment supplier a share of each use rather than a purchase price, turning capital cost into variable cost."},
+      {term: "daily financial planning", plain: "Reading the day's surplus to decide how many patients can be cross-subsidised tomorrow, and by how much."},
+      {term: "decentralized cardiac care", plain: "Mobile units screening in towns and villages, so only patients who need surgery travel."},
+      {term: "Yashaswini", plain: "The insurance scheme run with the state government, where public trust is what makes people buy the policy."},
+      {term: "ecosystem development", plain: "Making the government, suppliers and other hospitals around you inclusive too — not just your own hospital."}
+    ],
+    connects: "Three models, three different answers. The next session puts them side by side."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L11",
+    courseId: "IBM",
+    module: 2,
+    order: 11,
+    title: "Three healthcare models, three A's",
+    objective: "Compare the three models on cross-subsidy, para-skilling and scale, and name the problem each one started from.",
+    explainer: [
+      "Only Narayana and Aravind use cross-subsidy; Vaatsalya does not, and the reason is structural. Cross-subsidy needs the rich and the poor arriving at the same facility, which happens in a centralized model in a city or town. Vaatsalya is decentralized across smaller, semi-urban locations and never sees enough well-off patients. Its advantage is a different one: it cuts the total cost of healthcare — travel, finding out about the hospital, the attendant's forgone day — while the other two cut the treatment cost dramatically.",
+      "Para-skilling splits the same way. Aravind uses it most and Narayana slightly less, but Vaatsalya barely at all, because it runs primary and secondary care where a patient simply meets a doctor; inserting a para-skilled step would raise its cost rather than lower it. Cost reduction is common to all three and still takes different forms. Narayana and Aravind pull footfall into one place for economies of scale over heavy fixed cost. Vaatsalya scales by building many small hospitals.",
+      "Each began from a different problem. Vaatsalya from accessibility, Aravind from availability — a capacity problem, a demand-supply mismatch between surgeons and patients — and Narayana Heart from affordability, since less than 10% of the world can afford a cardiac surgery. Each then had to solve the other two: Vaatsalya did an 80/20 on services, Aravind added cross-subsidy, and both larger hospitals built outreach. An inclusive model has to tick all three."
+    ],
+    worked: {
+      setup: "A rural hospital chain is asked why it does not cross-subsidise poor patients the way the big city hospitals do.",
+      move: "Check whether the model is centralized or decentralized before treating the absence as a failure.",
+      because: "Cross-subsidy is not a policy choice but a consequence of who walks through the door. It needs full-paying and free patients at one facility in the numbers required, which happens where a large hospital sits in a city or town. A decentralized chain in semi-urban locations has no well-off population to draw a surplus from, so the lever is unavailable rather than neglected. What it has instead is proximity, which attacks the total cost of healthcare rather than the price on the bill."
+    },
+    glossary: [
+      {term: "hub and spoke", plain: "A semi-urban main hospital with smaller outposts further out — the arrangement Vaatsalya built to sit close to patients."},
+      {term: "centralized model", plain: "One large facility in a city or town. It is what makes both cross-subsidy and economies of scale possible."},
+      {term: "decentralized model", plain: "Many small facilities close to patients, scaling by adding sites rather than by adding footfall to one."},
+      {term: "accessibility", plain: "Vaatsalya's starting problem — the cost and trouble of reaching a proper hospital at all."},
+      {term: "availability", plain: "Aravind's starting problem — too few surgeons and too little capacity against the demand."},
+      {term: "affordability", plain: "Narayana Heart's starting problem — less than 10% of the world can pay for a cardiac surgery."},
+      {term: "essential services", plain: "The 80/20 subset a model without cross-subsidy can deliver economically. Dialysis was left out on cost."}
+    ],
+    connects: "Healthcare is done. The module now turns to education, starting with the state it is in."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L12",
+    courseId: "IBM",
+    module: 2,
+    order: 12,
+    title: "What the education numbers actually say",
+    objective: "State the gap between India's education policy and its spending, and explain why even the recommended spend would not close it.",
+    explainer: [
+      "Policy has not been the missing piece. The 1986 education policy made primary education mandatory at a national parity level and envisaged 6% of India's GDP going to education. Sarva Shiksha Abhiyan in 2001 set out to put every 6 to 14 year old in school by 2010, at least to class 8, complemented by a midday meal scheme that mattered most to children from economically impoverished families. Elementary education became a fundamental right in 2002, and the Right to Compulsory and Free Education followed in 2008.",
+      "Spending tells another story: 2.9 to 3% of GDP for twenty or thirty years. About 280 million people are illiterate, near 37% of the world's total, with 20% of males against 58% of females. Only 73% of those who start grade 1 reach grade 5. A million teacher positions are unfilled, salaries arrive late, and teachers carry administrative work including election duty, so many supplement their income elsewhere and absenteeism runs high.",
+      "Even 6% would not close it. The pay commission fixes teacher salaries, so multiplying the country's children by a reasonable student-teacher ratio and by that salary already outruns the target — which is why education here runs on partnership between government, private and not-for-profit providers. The causes of dropout can meanwhile be very small: the lack of a covered toilet is one reason the girl child stops attending, and covered toilets do not cost much."
+    ],
+    worked: {
+      setup: "DJ Halli, one of Bangalore's largest slums — 50,000 residents, 10,000 school-going children, and a government rule setting the minimum space a school needs.",
+      move: "Count how many children the rule allows to be schooled in that area before judging it by its intention.",
+      because: "The minimum-space regulation was set with the best of intentions, so that a school operates properly. But it is a rule about area, applied to a place whose defining feature is density. Follow it and only a few schools fit, accommodating about 2,000 of the 10,000 children; the remaining 8,000 get no education or are served by private parties the rule never anticipated. A well-meant standard can become the binding constraint on the outcome it was written to protect."
+    },
+    glossary: [
+      {term: "Sarva Shiksha Abhiyan", plain: "The 2001 policy for elementary education — every 6 to 14 year old in school by 2010, at least to class 8."},
+      {term: "midday meal", plain: "Meals provided at school, which matter most to children from economically impoverished families."},
+      {term: "pay commission", plain: "The body that fixes salaries, including teachers'. It is why the education budget cannot set its own wage bill."},
+      {term: "student-teacher ratio", plain: "Children per teacher. Assume a reasonable one and it decides how many teachers the country must pay for."},
+      {term: "teacher absenteeism", plain: "Teachers on the rolls but not in the classroom — high enough that parents prefer private schools they can barely afford."}
+    ],
+    connects: "That is the supply side. The next session asks who is filling the gap, and whether the market will."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L13",
+    courseId: "IBM",
+    module: 2,
+    order: 13,
+    title: "Why the market skips the market it is largest in",
+    objective: "Explain why a very large bottom-of-the-pyramid education market attracts so few private providers, and what that leaves for a social enterprise.",
+    explainer: [
+      "Start with the scale. India has roughly 250 to 300 million school-going children and about 1.5 million schools, 85% of them in rural India and 75% run by the government. Given the conditions in those schools, the private share of enrolment has climbed to almost 50%. In India that word covers a very wide economic range: some 92 million children attend half a million low-cost private schools, some run out of somebody's home, charging fees sometimes below the parents' minimum daily wage.",
+      "Demand will keep rising, because migration from villages to cities continues, cities cannot expand government schools, and public perception of government teaching is poor. Quality is mixed. Schools good enough to charge high fees are out of reach of the poor, though islands of excellence exist — the private unaided schools studied in Hyderabad charge low fees, offer scholarships, and still get children into the mainstream system and the employment market.",
+      "So why does the private sector not serve the bottom of the pyramid market Professor C.K. Prahalad described? Because it is geographically fragmented, and beside the poor sits a middle-class segment that can pay more. An entrepreneur positions where the paying capacity is. The same logic makes the coaching market the most profitable segment, since students travel to a Delhi or a Bangalore and concentrate there. Scarcity pushes entrepreneurs to the profitable end, exactly as it did in healthcare."
+    ],
+    worked: {
+      setup: "An entrepreneur has capital and wants to open schools. The poor are by far the larger unserved market.",
+      move: "Ask where the same effort earns more, not where the need is greater.",
+      because: "A school for the poor has to sit in small towns and villages, because that is where the children are, so it is spread thin across a fragmented geography and priced against families who can pay very little. A middle-class school draws a dense city catchment at higher fees, and a coaching centre draws students who travel for a competitive exam. Market forces answer scarcity by moving towards profit, so the underserved stay underserved — which is the space a social enterprise exists to occupy."
+    },
+    glossary: [
+      {term: "low-cost private schools", plain: "Half a million of them, teaching about 92 million children, at fees sometimes below a parent's daily wage."},
+      {term: "private unaided schools", plain: "The Hyderabad studies' islands of excellence — low fees, scholarships, and children who reach the mainstream."},
+      {term: "bottom of the pyramid", plain: "Prahalad's underserved low-income market, reachable if a firm reconfigures its offering rather than discounts it."},
+      {term: "coaching market", plain: "The most profitable education segment, because exam aspirants concentrate in a few big cities."},
+      {term: "geographically fragmented", plain: "Demand spread thinly across villages and small towns, which is what makes serving it unprofitable."},
+      {term: "social enterprise", plain: "An organisation aiming at large-scale social impact while staying financially viable, rather than at maximum profit."}
+    ],
+    connects: "The market will not serve this segment on price alone. The next session asks whether the families themselves are asking for it."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L14",
+    courseId: "IBM",
+    module: 2,
+    order: 14,
+    title: "The demand side: why families ration education",
+    objective: "Explain why educating poor children is a demand-side problem as well as a supply-side one, and what that adds to an inclusive education model.",
+    explainer: [
+      "Everything so far has been supply — not enough schools, not enough teachers. There is a demand side too, and it opens with a question about spending. Research finds that when poor households have money they are likely to spend it on televisions, clothes and gold coins rather than on fertilizers, livestock or insurance. The lecture refuses the easy reading. Entertainment and possession carry real utility, this is what everybody does, and the poor are not reckless spenders.",
+      "That is the debate C.K. Prahalad was having with Aneel Karnani. Karnani's position is that rich and poor are equally good and equally bad at deciding; the difference is that a poor household has no buffer, so a wrong choice costs it far more. Set beside it is other research showing that impoverished parents attend hard to their children's education, because they hope the next generation escapes the poverty trap.",
+      "Poor Economics found something harder. Parents treat education as risky, almost a lottery, so they pick the child they judge brightest and concentrate resources there — leaving the others out on a judgement nobody can make that early. Teachers in the same schools do it too, sometimes clouded by caste, class and ethnicity. Both rations come from scarcity rather than malice, and both are demand-side facts a builder has to plan for."
+    ],
+    worked: {
+      setup: "A social entrepreneur opens schools at a price poor families can pay, and enrolment comes in well below the number of children nearby.",
+      move: "Treat information and persuasion as part of the model rather than as marketing added afterwards.",
+      because: "The supply-side reading says build more classrooms. But if parents believe the return on education is a lottery, they will back one child and keep the others earning or at home, and an affordable classroom does not touch that belief. So the model has to carry dissemination — that education is worth it for every child, not the brightest. Teachers ration attention on the same premise. Neither ration is cruelty; both follow from resources too small to spread."
+    },
+    glossary: [
+      {term: "demand side", plain: "Whether families want and seek the education on offer — as opposed to whether schools and teachers exist."},
+      {term: "supply side", plain: "The shortage of schools, teachers and infrastructure. Necessary to fix, and on its own not sufficient."},
+      {term: "Poor Economics", plain: "Banerjee and Duflo's studies of decision-making under poverty, including how families ration schooling between their children."},
+      {term: "poverty trap", plain: "The condition parents hope education lifts the next generation out of, which is why they invest despite the uncertainty."},
+      {term: "return on investment", plain: "What the spender expects back. Education's is long-delayed and uncertain, which is what makes it feel like a gamble."}
+    ],
+    connects: "Both sides of the problem are now on the table. The next session is the module's education case, and how one model answered them."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L15",
+    courseId: "IBM",
+    module: 2,
+    order: 15,
+    title: "Gyanshala: separating design from delivery",
+    objective: "Explain how splitting curriculum design from classroom teaching lowers the cost of education, and why the model only becomes viable at scale.",
+    explainer: [
+      "Dr Pankaj Jain founded Gyanshala in Ahmedabad in 1999, drawing on Dr Kurien's Amul and on a spell with Muhammad Yunus's Grameen Bank. The target was children already out of school, typically grades one to three, brought up to speed in reading, writing and computing so they could enter mainstream schools. Three subjects only — language, mathematics and environmental sciences — and a focus on learning outcomes rather than on uniforms, bags or water bottles.",
+      "The innovation is a split. In a traditional school the same teacher designs the curriculum and teaches it. Gyanshala gave design to a trained team, down to what is taught in the first five minutes of a sixty-minute class and what follows in the next ten, and gave delivery to junior teachers recruited from the local community — often young women with class 10th or class 12th education, trained, supplied with the material, and supervised by visiting field staff.",
+      "It is Dr V's split applied to teaching: the routine component separated from the non-routine, and each paid at its own rate. At 331 room schools serving 8,000 children from households earning 2,000 to 6,000 rupees, cost ran about $3 per student per month against roughly 30 rupees in fees, so donors covered the gap. But design is a fixed cost. Spread it across thousands of schools instead of hundreds and the model becomes viable."
+    ],
+    worked: {
+      setup: "A school network wants to deliver at half the cost per child without hiring worse experts.",
+      move: "Split the job into the part that needs expertise and the part that can be scripted, then pay each at its own rate.",
+      because: "Designing a curriculum is non-routine: it needs training in how children learn. Delivering it, once the process is laid down minute by minute, is routine — it can be taught to a class 10th pass recruited locally. So the expensive people do only what needs their expertise, and their output is reused in every school. That is why Gyanshala spends more on design than a private school and less on everything else. It is also why scale is not optional: that fixed cost only falls as it divides across thousands."
+    },
+    glossary: [
+      {term: "design team", plain: "The trained experts who decide what is taught and how, once, for every school in the network."},
+      {term: "routine component", plain: "The part of a job that can be laid down as a process and delivered by someone trained into it."},
+      {term: "non-routine component", plain: "The part that needs expertise and judgement, so it is done by the expensive people and reused."},
+      {term: "junior teacher", plain: "The class 10th or 12th pass recruited locally to deliver the designed lesson, trained and supervised rather than qualified."},
+      {term: "room schools", plain: "A rented room in a house, running for three or four hours close to where very young children live."},
+      {term: "cost-quality trade-off", plain: "What a low price gives up. Here, teachers following a rule book with no room to improvise, and a curriculum fixed at three subjects."}
+    ],
+    connects: "That is the module's education case. The next session widens to models that do not use a classroom at all."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L16",
+    courseId: "IBM",
+    module: 2,
+    order: 16,
+    title: "Three more models, and the skills-versus-education choice",
+    objective: "Contrast Mantra for Change, Dream a Dream and Barefoot College, and weigh skills training against education for a family that cannot afford both.",
+    explainer: [
+      "None of the next three models looks like Gyanshala. Mantra for Change, in Bangalore, works on the demand side of quality: it teaches parents what they may demand of a school and involves them in its decisions, on the view that education is too important to leave to an under-resourced teacher alone. Dream a Dream takes children who have already fallen out of mainstream education and builds life skills through sports, games and cultural activities rather than classes.",
+      "Barefoot College, founded by Bunker Roy in the Tilonia region of Rajasthan, holds that anyone can become a skilled professional without a formal degree. Six months of training, mostly for women from impoverished backgrounds, produces solar engineers, doctors, architects and people who manage groundwater systems, who go back to their villages and earn a livelihood there. The aim is to demystify high technology to the poor, on Gandhian principles of self-reliant villages, treating indigenous knowledge as an asset.",
+      "That raises the module's question: skills or education? Skills build immediate livelihood with a clear return on investment and short-run certainty. But they lock a person into one trajectory, and the opportunity can dry up — driving work that exists today may not exist tomorrow, and nobody at that level can forecast it. Education takes long to convert into income and its returns are uncertain, but it gives choices, and it combines knowledge, skills, values and attitude."
+    ],
+    worked: {
+      setup: "A family with money for one thing chooses between six months of solar-engineer training and ten more years of school.",
+      move: "Ask which risk the household can actually carry, rather than which option is better in the abstract.",
+      because: "Skills pay in the short run and the return is visible — six months, then a livelihood maintaining panels in the village. Education pays in the long run and its return is uncertain, which is the lottery framing that makes poor parents ration schooling. For a household with no buffer, certain income now outweighs a larger uncertain income later, so the choice is reasonable even where it is costly. The cost arrives later, as a locked trajectory and an opportunity that can disappear."
+    },
+    glossary: [
+      /* "self-determination" is deliberately NOT glossed. This lecture is where the idea is
+       * stated — education "gives us the power of self-determination" — but the transcript
+       * runs it together as "selfdetermination", its only occurrence in the module, so
+       * normalisation cannot match the clean spelling. Glossing the typo would put a
+       * misspelling in front of a learner and glossing the clean form would define a heading
+       * the course never spells. The explainer carries the idea as "it gives choices" instead.
+       * Same shape as the hub-and-spoke typo at L07; do not re-add it without checking. */
+      {term: "Barefoot College", plain: "Bunker Roy's Tilonia model — six months of training makes a villager a solar engineer, with no formal degree."},
+      {term: "Mantra for Change", plain: "Educates parents on what to demand of a school, on the view that the whole community owns a child's education."},
+      {term: "Dream a Dream", plain: "Works with children already outside mainstream education, through sport and culture rather than a classroom."},
+      {term: "life skills", plain: "Team-building, collaboration and self-management — what Dream a Dream teaches where formal education no longer fits."},
+      {term: "self-reliant villages", plain: "The Gandhian principle under Barefoot College: train people where they live so they need no outside expert."},
+      {term: "indigenous knowledge", plain: "The traditional knowledge already held locally, treated as something to build on rather than replace."}
+    ],
+    connects: "Skills, community and classrooms. The last session of the module sets education beside healthcare and asks what carries across."
+  });
+
+  lesson({
+    lectureId: "IBM-M02-L17",
+    courseId: "IBM",
+    module: 2,
+    order: 17,
+    title: "Why cross-subsidy does not transfer to a classroom",
+    objective: "Explain why cross-subsidy works in a hospital and fails in a school, and name what does carry across from inclusive healthcare to inclusive education.",
+    explainer: [
+      "Cross-subsidy looks as though it should transfer. A teacher already teaching 30 full fee-paying students could take an additional 5 children free, because classroom costs are largely fixed — the infrastructure and the teacher's salary — so the marginal cost of five more is close to nothing beyond some reading material. On paper it is the Aravind argument moved into a school, and at first glance it seems to work.",
+      "It fails because education does not stop in the class. Children go home to very different conditions — food, sleep, quiet, help with homework, a computer — and return the next day differently prepared. That gap is environment, not intelligence. The teacher then faces a dilemma: pitch at the well-prepared and the others cannot follow, pitch at the others and the well-prepared become disenchanted. Healthcare is one-on-one, so a poor patient's treatment costs the next patient nothing. A classroom is one-to-many.",
+      "What does carry across: para skilling, with Gyanshala's para-teachers answering Aravind's para-skilled staff; cost reduction through standardization; and cutting the total cost, which for a young child means putting the school close to home. What does not is cross-subsidy — and, more deeply, the pull. Health returns are tangible and immediate. Education's are long-term and uncertain, so there is no natural pull, and even free education carries an opportunity cost."
+    ],
+    worked: {
+      setup: "A school proposes admitting five children free into a class of thirty full-paying students, funded the way Aravind funds its free surgeries.",
+      move: "Ask whether the service is delivered one-on-one or one-to-many before assuming the surplus transfers.",
+      because: "In a hospital the subsidised and the paying patient are treated separately, so a free cataract surgery takes nothing from whoever is operated on next. In a classroom the service is one-to-many, and the five children arrive with a different night behind them, through no fault of their own. The teacher must pitch somewhere, and either choice costs the other group. So the marginal-cost arithmetic is right and the model still fails, because what is shared is not money but a teacher's attention."
+    },
+    glossary: [
+      {term: "marginal cost", plain: "What one more student adds. In a classroom of fixed costs it is very low, which is why cross-subsidy looks possible."},
+      {term: "one-to-many", plain: "A service delivered to a group at once, so what you do for one learner lands on all of them."},
+      {term: "one-on-one", plain: "A service delivered to a patient at a time, which is what lets a hospital subsidise without affecting anyone else."},
+      {term: "para-teachers", plain: "Gyanshala's trained non-specialist teachers — the education counterpart of Aravind's para-skilled staff."},
+      {term: "natural pull", plain: "Demand that arrives on its own because the return is felt immediately. Healthcare has it and education does not."},
+      {term: "Right to Education Act", plain: "The policy reaching for economic diversity in one classroom, which struggles for the reasons this session sets out."}
+    ],
+    connects: "Healthcare and education are done. The next module takes the same problem into finance, where Grameen Bank made the first inclusive model."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L01",
+    courseId: "IBM",
+    module: 3,
+    order: 1,
+    title: "Why the poor need credit, and why banks will not give it",
+    objective: "Explain why so many poor people must become entrepreneurs, and what microfinance has to cover beyond lending.",
+    explainer: [
+      "India does not generate enough jobs for the number of young people it has, and most of the population lives in villages that generate very few. So a great many people become entrepreneurs not out of ambition but for want of any other option — distress entrepreneurs, running a small trading shop, a roadside eatery, a pushcart of vegetables, some animal rearing. Every one of those needs investment before any income arrives: the pushcart vendor has to buy the vegetables first thing in the morning.",
+      "That raises the questions this module is about. Who provides that money, at what rate, and over what payback period, so that repayment matches the way the income actually arrives? Lending dominates the field, which is why it is called microlending, but the poor need protection as well: crop insurance against failed rain, hailstorm or infestation, insurance on animals and on health, and pension plans for the point at which physical labour is no longer possible.",
+      "Muhammad Yunus, an economist, met women near where he taught who wove baskets. They had to buy raw material before they could weave, had no money to do it, and borrowed from a money lender who then took a substantial share of the proceeds. Collectively 42 people had borrowed about 27 US dollars, and they were permanently indebted — some across generations — because they did not follow the arithmetic and had nowhere else to go. The banks, he found, simply would not lend to them."
+    ],
+    worked: {
+      setup: "A vegetable seller earns a small margin every day and can never accumulate enough to buy the next morning's stock outright.",
+      move: "Look at when the money is needed against when it arrives, rather than at how much is earned.",
+      because: "The business is profitable; that is not in question. The problem is sequence. The investment has to happen before the income, every single morning, and there is no buffer to bridge the gap. That is why credit is the binding constraint for a distress entrepreneur rather than skill or effort, and it is why the repayment schedule matters as much as the rate: weekly repayment suits someone earning daily and ruins someone whose income arrives once, at harvest."
+    },
+    glossary: [
+      {term: "distress entrepreneurs", plain: "People running a micro business because no job exists, not because they chose enterprise."},
+      {term: "microlending", plain: "Small loans to the poor. It dominates microfinance, which is why the two words get used interchangeably."},
+      {term: "crop insurance", plain: "Cover against failed rain, hailstorm or infestation — one event can otherwise remove an entire year's income."},
+      {term: "indebtedness", plain: "The state the basket weavers were in: borrowing again each season because the last loan took the margin, sometimes across generations."}
+    ],
+    connects: "The banks refused. The next session is exactly why."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L02",
+    courseId: "IBM",
+    module: 3,
+    order: 2,
+    title: "Adverse selection, moral hazard, and the poverty penalty",
+    objective: "Name the three reasons formal credit fails the poor, and explain why an informal lender can do what a bank cannot.",
+    explainer: [
+      "A bank assesses a borrower's risk profile from credit history, and secures the loan against collateral it can sell if repayment fails. A poor borrower has neither. Two problems follow, both from information asymmetry. Adverse selection is the first: lacking information, the lender assumes the worst case. It is the same logic as a health insurer who knows nothing of your lifestyle pricing you as though you smoke and never exercise, so that the genuinely healthy pay a premium built for someone else.",
+      "Moral hazard is the second. With no collateral to fall back on, the lender assumes the borrower may behave recklessly once the money is in hand, so it either refuses or charges a very high rate. The third problem is arithmetic rather than information. Transaction costs are broadly fixed per loan — same staff, same premises, same assessment — while income is a percentage of the sum lent. Five per cent of a million rupees is substantial; on a 500-rupee loan the transaction cost exceeds the interest entirely.",
+      "The money lender solves the information problem another way, through intimate knowledge: visiting homes, spending time, lending only to people already known well. Interlinked transactions do the rest — borrow from your employer, or from the trader who buys your output, and the lender holds something you cannot afford to lose. But it is informal, so rates run high, terms can be unfair, and what you are charged depends on community and family. The result is the poverty penalty: the poor pay more."
+    ],
+    worked: {
+      setup: "A bank turns down a 500-rupee loan to a borrower whose business is demonstrably profitable.",
+      move: "Compare the bank's cost of making that loan with the interest it can earn, before reading the refusal as prejudice.",
+      because: "Transaction costs are largely fixed per loan — the same staff, premises and assessment — so they do not shrink as the amount does, while interest income shrinks in proportion. At five per cent a million rupees covers all of it comfortably and five hundred rupees does not cover the paperwork. So the refusal is arithmetic before it is anything else, sitting on top of adverse selection and moral hazard. Any model that lends to the poor has to attack that fixed cost."
+    },
+    glossary: [
+      {term: "adverse selection", plain: "Assuming the worst about a borrower you have no information on, so the good ones are priced as though they were bad."},
+      {term: "moral hazard", plain: "The fear that with nothing pledged, the borrower behaves recklessly once the money is theirs."},
+      {term: "collateral", plain: "An asset the lender can sell if repayment fails. Its absence is what makes the poor unlendable to a bank."},
+      {term: "transaction costs", plain: "The largely fixed cost of making a loan at all. On a small enough loan it exceeds the interest earned."},
+      {term: "interlinked transactions", plain: "Borrowing from your employer or from the trader who buys your crop, so the lender holds something else you need."},
+      {term: "poverty penalty", plain: "Being charged more for the same thing because you are poor and buy in small amounts — credit, energy, even soap."}
+    ],
+    connects: "Those are the obstacles. The next session is the model built to get round them."
   });
 
   lesson({
@@ -1692,8 +2249,44 @@
       {term: "credit history", plain: "A record of past repayment, absent for someone no lender has served."},
       {term: "adverse selection", plain: "Being unable to tell good borrowers from bad before lending."},
       {term: "moral hazard", plain: "Being unable to influence how a borrower behaves after the loan is made."}
+,
+      {term: "poverty penalty", plain: "The poor pay more: moneylenders charge usurious rates on interlinked transactions."},
+      {term: "group-based microfinance", plain: "Five-member self-selected peer groups replacing collateral with social capital."},
+      {term: "self-help group bank linkage", plain: "NGO-mediated groups saving six months, then borrowing against that corpus."},
+      {term: "mission dilution", plain: "Commercial capital pushing rates to 24-50% and the mission out of shape."},
+      {term: "smallholder bottlenecks", plain: "Small plots, thin credit and weak market access limiting what a farmer can do."},
+      {term: "family farm advantage", plain: "Household labour and local knowledge that a large operation cannot buy."},
+      {term: "open-source innovation", plain: "IDE's approach of publishing designs so others can make and sell them."},
+      {term: "social mobilisation", plain: "Organising people first so a financial product has something to attach to."}
     ],
     connects: "The model worked well enough to attract everyone. The next lecture is what happened then."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L04",
+    courseId: "IBM",
+    module: 3,
+    order: 4,
+    title: "Grameen II, self-help groups, and the boom that followed",
+    objective: "Explain what flexibility Grameen II added and why, and how Indian microfinance diverged from the original model.",
+    explainer: [
+      "The original model held transaction costs down by standardising everything — the amount lent, the rate charged. Then floods and cyclones hit Bangladesh in 1998 and many borrowers could not repay for reasons wholly outside their control, and Grameen concluded the model needed give. Grameen II handed field staff discretion over loan duration and the size of the weekly instalment, matched to the borrower's cash flow, and allowed rescheduling where difficulty was genuine. Savings products, pension funds and loan insurance followed.",
+      "Underneath the credit sat social transformation. Financial literacy was packaged around the loan, and field agents were clear that loans were for self-employment, income or an asset, never consumption. Groups governed themselves and elected leaders, which built social capital and taught democratic decision-making, and because Grameen lent to women it shifted their standing inside their own families. The 16 decisions codified the rest: children in school, small families, no dowry, clean drinking water, vegetables planted.",
+      "India diverged. Its MFIs were not banks and could not take deposits, mostly structured as non-banking finance companies, so they borrowed in order to lend and their rates had to cover that plus operating costs. India's own innovation was self-help groups linked to banks, where women save together, an NGO trains them, and the corpus persuades a regional rural bank to lend at around 8% — sound, and hard to scale, since borrowing is a multiple of savings that are by definition small."
+    ],
+    worked: {
+      setup: "One standard weekly repayment schedule is offered to a pushcart vendor and to a farmer.",
+      move: "Set the instalment against the way each borrower's income actually arrives, not against the calendar.",
+      because: "Standardisation is what made the transaction cost low enough to lend such small amounts at all, so it was not a mistake to start there. But a weekly schedule that suits daily earnings is punishing for someone paid once at harvest, and that borrower defaults on timing rather than on capacity. Grameen II's answer was discretion at field level over duration and instalment size, plus rescheduling for genuine difficulty. It gives up some of the standardisation gain, and 1998 showed what the alternative costs."
+    },
+    glossary: [
+      {term: "Grameen II", plain: "The flexible successor model: field discretion over duration and instalment, rescheduling, savings, pensions and loan insurance."},
+      {term: "16 decisions", plain: "Grameen's codified guidelines for members — schooling, small families, no dowry, clean water — delivered alongside the loan."},
+      {term: "self-help groups", plain: "Women saving together, trained by an NGO, whose accumulated corpus persuades a bank to lend to the group."},
+      {term: "non-banking finance companies", plain: "The structure most Indian MFIs took. It cannot take deposits, so the lender must borrow before it can lend."},
+      {term: "social capital", plain: "The self-governing, leader-electing habit the groups built, which outlives any individual loan."}
+    ],
+    connects: "The industry grew very fast on borrowed money. The next session is what that cost."
   });
 
   lesson({
@@ -1717,8 +2310,305 @@
       {term: "MFI", plain: "Microfinance institute — a lender serving poor borrowers."},
       {term: "default", plain: "Failure to repay, which the interest rate has to price in when collateral is absent."},
       {term: "non-performing asset", plain: "A loan that has stopped being repaid and is no longer earning for the lender."}
+,
+      {term: "formal banking failure", plain: "No collateral or credit history, so adverse selection and moral hazard bite."},
+      {term: "regulatory overhaul", plain: "After the 2010 Andhra collapse: multi-borrowing caps and humane recovery rules."}
     ],
-    connects: "Lending is one route to livelihood. The next module builds livelihoods directly, through work."
+    connects: "That is the warning. The next session is the state's answer, and a social enterprise's."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L06",
+    courseId: "IBM",
+    module: 3,
+    order: 6,
+    title: "The JAM Trinity, and a platform built to cut the interest rate",
+    objective: "Explain how the state widened formal credit after the MFI collapse, and what Rang De set out to reduce.",
+    explainer: [
+      "The collapse left one lesson: if you build for the poor and the social mission becomes secondary to making money, the consequences fall on them. Alongside it the state moved. Pradhan Mantri's Jan Dhan Yojana opened 550 million bank accounts over ten to fifteen years, 60% rural and about half for women, and the banking correspondence model carried it the last mile — local agents with digital devices doing doorstep banking, which also created jobs and, being digital, cut the corruption that dogged welfare payments.",
+      "Aadhaar supplied identity and mobile penetration supplied the device, and the three together are the JAM Trinity. Government sources put rural dependence on informal credit down to about 20%. Other sources disagree sharply: many PMJDY accounts are inoperative, roughly 50% of credit to the poor still comes from informal sources, 60% of that from money lenders, and the unorganized lending market is around 100 billion US dollars. The gap between an account existing and an account being usable is the thing to notice.",
+      "Rang De was founded in 2008 by Ram and Smita, inspired by Grameen and by Kiva, as an internet-based peer-to-peer micro-lending platform. Their target was the interest rate itself. Technology cuts the transaction cost of reaching and assessing borrowers; lenders are individuals or corporates accepting a low return because the point is impact, which cuts the borrowing cost; and grassroot not-for-profits act as field partners, evaluating borrowers for a modest incentive. Three costs, attacked separately."
+    ],
+    worked: {
+      setup: "A government reports that formal credit now reaches most of rural India, and money lenders are still busy.",
+      move: "Ask whether the accounts opened are actually being used before reading the coverage figure as access.",
+      because: "Opening an account is a one-time act that a target can capture; using one requires money to put in it and enough financial knowledge to operate it. Many PMJDY accounts are inoperative for exactly that reason, which is why one source can say informal credit has fallen to 20% of rural borrowing while another puts informal sources at half of all credit to the poor. Both measure something real. Reach is not access, and an unorganized lending market near 100 billion US dollars is what the difference looks like."
+    },
+    glossary: [
+      {term: "PMJDY", plain: "Pradhan Mantri's Jan Dhan Yojana — the drive that opened 550 million bank accounts, 60% of them rural."},
+      {term: "banking correspondence model", plain: "Local agents carrying digital devices door to door, so banking reaches places a branch never would."},
+      {term: "JAM Trinity", plain: "Jan Dhan, Aadhaar and mobile together: an account, an identity and a device, which is what makes the account usable."},
+      {term: "field partners", plain: "Grassroot not-for-profits that identify and evaluate Rang De's borrowers, cheaply, because they already work with them."},
+      {term: "peer-to-peer", plain: "Lenders and borrowers connected directly through a platform, so the size of either no longer has to match the other."}
+    ],
+    connects: "That is the design. The next session is what it charged, and what it refused to do."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L07",
+    courseId: "IBM",
+    module: 3,
+    order: 7,
+    title: "8.5%, and the discipline that kept it there",
+    objective: "Account for how Rang De's rate is built, and name the choices that protected its mission as it grew.",
+    explainer: [
+      "The average rate to the borrower was about 8.5%, and it decomposes: 5% to the field partners, 2% back to the lender, and 1 to 1.5% kept by Rang De for its own expenses. Set that against Grameen's rate, and against the 24 to 50% Indian MFIs were charging. The field partners are the load-bearing part, chosen slowly for commitment to the poor rather than appetite for the fee, and that selection is not easy and comes only with experience.",
+      "The lender side was built deliberately too. Social investors put in small sums, and Rang De invited them to visit the businesses they had funded; many became volunteers, then evangelists who fundraised, recruited friends and opened doors to their employers' CSR funds. This is Yunus's point about the selfless side sitting beside Homo economicus, made operational. Technology carried the rest: dashboards tracking repayment and field partner performance, and loan approval falling from 20 days to 7.",
+      "Two disciplines protected the mission. Rang De lent where others did not — 88% of its loans in areas where MFI penetration was 1 to 2%, and half its borrowers first-time — so it was not refinancing someone already overleveraged. And it evolved: direct lending to farmer producer companies and self-help groups when no field agent was needed, financial literacy required of women before a loan, and a move from standardized to customized loan products, as Grameen had made before it."
+    ],
+    worked: {
+      setup: "A lending platform could grow much faster by serving districts where microfinance is already well established.",
+      move: "Check whether a new borrower is genuinely unserved, or is refinancing an existing loan.",
+      because: "Lending into a saturated district is easy growth: the borrowers are identified, the habits exist, and the numbers move quickly. It is also how the collapse happened, because a borrower repaying one lender with another lender's money looks like a performing loan until everything unwinds at once. Rang De's 88% figure and its half-first-time borrowers are that risk being priced out deliberately. The cost is slower scale, which is precisely the trade the module keeps returning to."
+    },
+    glossary: [
+      {term: "social investors", plain: "People lending small sums for impact rather than return — the reason Rang De's cost of funds could stay near 2%."},
+      {term: "evangelists", plain: "Volunteers who moved past their own money to fundraise, recruit and open CSR doors."},
+      {term: "Homo economicus", plain: "The purely self-interested actor. Yunus's argument is that a selfless side sits beside it, and Rang De's lenders are the evidence."},
+      {term: "overleveraged", plain: "Already carrying more debt than the income can serve. Lending to such a borrower hides the problem instead of solving it."},
+      {term: "customized loan products", plain: "Terms fitted to how the borrower's income actually arrives, which Grameen and Rang De both moved to after starting standardised."}
+    ],
+    connects: "That is the model working. The next session asks how far it can reach, and what microfinance has actually achieved."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L08",
+    courseId: "IBM",
+    module: 3,
+    order: 8,
+    title: "Reach against richness, and what microfinance actually achieved",
+    objective: "Explain the limit a platform hits in converting visitors into lenders, and state honestly what microfinance has and has not done.",
+    explainer: [
+      "Rang De reaches investors through its platform, which cuts cost and widens reach. Its conversion of website visitors into investors runs about 7 to 8%, which by any commercial benchmark is very good — and it was not enough to make Rang De financially viable, which is why corporate donors, CSR and philanthropy still matter. The obstacle is the reach versus richness trade-off: a platform carries reach superbly and carries tacit knowledge badly.",
+      "Consider what is being asked. Lending at a low rate for social good is a personal, emotional decision, and the person who visits you in the flesh can generate empathy, apply a little pressure and offer a smile of gratitude when you sign. None of that survives an impersonal interface. Whether a platform can convert that decision at scale is left open by the course, and it is a real limit on technology rather than a defect in Rang De.",
+      "On impact the evidence is mixed, and the course says so. Microfinance has not been shown to remove poverty directly. It has unleashed entrepreneurship by supplying regular cash flow, enabled income diversification, focused on women and so reduced the disguised unemployment that is high among them, and given borrowers an alternative that checks the money lender's usurious rates. The standing lessons are transparency and moderation in profits and salaries, humane loan recovery, and no multiple borrowing."
+    ],
+    worked: {
+      setup: "A platform converts 7 to 8% of its visitors into lenders and still cannot cover its costs.",
+      move: "Ask what the decision requires that the medium cannot carry, before spending more on traffic.",
+      because: "A 7 to 8% conversion is well above commercial average, so the funnel is not the problem and more visitors will not fix it. What is being asked for is money lent at low return to a stranger, which is an emotional decision built on trust and tacit knowledge — the things a platform transmits worst even as it transmits reach best. That is why Rang De's answer was volunteers who had visited the businesses: people who could carry the richness the interface could not."
+    },
+    glossary: [
+      {term: "reach versus richness", plain: "Technology spreads information widely and carries tacit, trust-laden information poorly. Both matter here, and they pull apart."},
+      {term: "tacit knowledge", plain: "What is known but hard to state or transmit — exactly what a person visiting in the flesh conveys and a web page does not."},
+      {term: "income diversification", plain: "A borrower adding a second source, such as dairy animals beside vegetables. One of microfinance's clearer gains."},
+      {term: "multiple borrowing", plain: "Taking a new loan while already carrying others. Preventing it is the lender's due diligence, not the borrower's restraint."}
+    ],
+    connects: "Credit is one input. The next session moves to the other one smallholders lack."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L09",
+    courseId: "IBM",
+    module: 3,
+    order: 9,
+    title: "The smallholder trap, and the lever IDE chose",
+    objective: "Name the constraints that keep smallholder farming poor, and explain why low-cost irrigation was the intervention point.",
+    explainer: [
+      "Indian agriculture carries several constraints at once. Low farm productivity, largely from dependence on the monsoon without reliable irrigation. Small landholdings, so a smallholder cannot use technology that needs a minimum efficient scale — you cannot put a tractor on a tiny plot. Low bargaining power, which compromises credit, inputs and selling alike and means a poverty penalty is paid. Inadequate information about what to sow, which fertilizer to use and where to sell. Supply chain inefficiency. And heavy disguised unemployment.",
+      "The scale is worth stating. 98% of all farms in China, 96% in Bangladesh, 87% in Ethiopia and 80% of farms in India are smaller than 5 acres, and three-quarters of the world's agricultural poverty has its roots in such farms. Nepal, where IDE worked, is landlocked and mountainous with poverty rising as the terrain does, about 25% of the population surviving under US 50 cents a day, and 85% of the population dependent on agriculture.",
+      "The trap is in what they grow. Rice, wheat and corn earn so little per acre that even large farms in developed countries rarely clear $200 per acre, which is attractive only across thousands of acres. Smallholders could earn far more from high-value labour-intensive crops such as off-season vegetables, but that needs cheap small-farm irrigation, good seed and market access. Their one real advantage is that the family works the land, so no agency costs arise."
+    ],
+    worked: {
+      setup: "A smallholder with one acre grows paddy every year and stays poor.",
+      move: "Compare earnings per acre for that crop against what the land could carry, before assuming the problem is yield.",
+      because: "Grains earn so little per acre that even large mechanised farms in developed countries rarely clear $200 an acre, so the model only works across thousands of acres and cannot work across one. High-value labour-intensive crops pay far better, and the smallholder actually has an edge there, because the family works the land and no agency costs arise. What is missing is cheap irrigation, seed and a market — and the information that the choice exists at all."
+    },
+    glossary: [
+      {term: "smallholder", plain: "A farmer with a very small landholding. Four fifths of India's farms are under 5 acres."},
+      {term: "minimum efficient scale", plain: "The size below which a technology cannot pay for itself — which is why a tractor is useless on a tiny plot."},
+      {term: "agency costs", plain: "What it costs to monitor hired labour. A family farming its own land avoids them, which is the smallholder's one advantage."},
+      {term: "off-season vegetables", plain: "High-value labour-intensive crops that pay far better per acre than grain, given irrigation and a market."},
+      {term: "treadle pumps", plain: "One of IDE's low-cost irrigation tools, for lifting water where there is no other access to it."}
+    ],
+    connects: "That is the lever. The next session is the market IDE had to build to deliver it."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L10",
+    courseId: "IBM",
+    module: 3,
+    order: 10,
+    title: "Building a supplier market that stays affordable and profitable",
+    objective: "Explain why IDE researched equipment nobody else would, and how it held suppliers between overcharging and giving up.",
+    explainer: [
+      "Smallholders are an unattractive segment, so almost no research or design goes into tools built for them. That is precisely where IDE chose to work. As an international not-for-profit with experience on farms across the world, it could do agricultural research for smallholder productivity because the work is scarce and because commercial firms will not fund it against such low affordability. The returns are low and uncertain and the gestation long, so the design has to be prototyped and engineered for production with care.",
+      "IDE did not patent any of it, keeping the technology open source, because a patent makes the equipment expensive and a not-for-profit has no need of the licence fee. Nor did it manufacture. It identified entrepreneurs and trained them to make the equipment, which created a real dilemma: how many? Distribute to many and competition should give the farmer a good price, but too much competition in a nascent market can leave no entrepreneur willing to sell the thing at all.",
+      "So IDE held a balance — enough suppliers that farmers are not overcharged, few enough that suppliers stay profitable. It worked with them on the production process and on design improvements, which made them dependent on IDE for knowledge, and that dependence let IDE advise on pricing and act as a regulator without any formal authority. Alongside it advised farmers on crop selection, on irrigation choice, on crop diversification, and in some cases on fish ponds as a second income."
+    ],
+    worked: {
+      setup: "A not-for-profit has designed a low-cost pump and must decide how many manufacturers to license.",
+      move: "Set the number by what keeps suppliers profitable, not by what maximises competition.",
+      because: "Competition is the obvious way to protect the farmer's price, and past a point it destroys the thing being protected: if margins fall far enough in a nascent market, the entrepreneurs simply stop selling the equipment and the farmer has no pump at any price. Too few suppliers and they overcharge. IDE held the middle, and gained a second lever from it — because suppliers depended on it for design and process improvements, its advice on price carried weight it was never granted formally."
+    },
+    glossary: [
+      {term: "open source", plain: "Publishing the design rather than patenting it, so the equipment stays cheap and others can build on it."},
+      {term: "orchestrator", plain: "What IDE became: not a maker or a seller, but the party arranging a system in which each player can survive."},
+      {term: "crop diversification", plain: "Adding a second crop or activity so income does not rest on one harvest."},
+      {term: "fish ponds", plain: "One diversification IDE advised — an additional income stream without much additional effort."}
+    ],
+    connects: "Equipment alone was not enough. The next session is how far IDE had to reach."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L11",
+    courseId: "IBM",
+    module: 3,
+    order: 11,
+    title: "Aggregate at both ends, leave the middle alone",
+    objective: "Explain why IDE aggregated upstream and downstream but not in production, and say what an ecosystem developer does.",
+    explainer: [
+      "Selling equipment turned out not to be enough, so IDE moved in both directions. Upstream it worked with the suppliers of fertilizers and seeds, and on credit and infrastructure, so farmers got better deals. Downstream it connected them to markets: collection centers, traders, exporters, distributors and logistics providers, with training in post-harvest technology. All of it follows from one property — smallholders are small and dispersed, so they have no bargaining power and pay a poverty penalty at both ends.",
+      "So IDE aggregated at both ends and deliberately left the middle alone. Aggregating buyers of seed and fertilizer lifts their bargaining power, lets the supplier estimate demand, and gives the supplier scale economies. Aggregating sellers makes the group worth a logistics provider's or a customer's attention. Production stayed decentralized and autonomous, with customization and diversification encouraged, because the smallholder's one advantage is low cost and centralising it would destroy exactly that.",
+      "IDE also worked on social mobilization and with government. Operating in project mode for three or five years, it needed communities that could govern themselves after it left, so it pressed for voice and representation from the underprivileged in the marketing and planning committees, and saw more women and lower caste over time. With government it was a bridging mechanism — training farmers, taking bank officials on site visits, helping write loan applications, encouraging group applications — absorbing the transaction costs that make lending to the poor unattractive."
+    ],
+    worked: {
+      setup: "A development organisation could run the farms it supports as one centralised operation.",
+      move: "Aggregate where bargaining power is needed, and leave production disaggregated.",
+      because: "The smallholder's disadvantage is being small in front of a supplier or a buyer, which is a bargaining problem and is solved by presenting a group rather than an individual — that also lets the supplier forecast demand and earn scale economies. But the smallholder's one advantage is that the family works the land, so costs stay low and no agency costs arise. Centralise production and you destroy the advantage while solving a problem that only ever existed at the two ends."
+    },
+    glossary: [
+      {term: "upstream", plain: "The input side — seed, fertilizer, equipment, credit. Aggregating here is about getting a better deal."},
+      {term: "downstream", plain: "The market side — collection centres, traders, exporters, logistics. Aggregating here is about being worth serving."},
+      {term: "ecosystem developer", plain: "A party that makes every player in a system viable rather than optimising its own position in it."},
+      {term: "institutional voids", plain: "Missing markets, credit and infrastructure. They are why someone has to play enabler before anything else works."},
+      {term: "social mobilization", plain: "Building a community's own governance so the change survives the project that started it."}
+    ],
+    connects: "That is the role. The last session asks whether it should have been a business at all."
+  });
+
+  lesson({
+    lectureId: "IBM-M03-L12",
+    courseId: "IBM",
+    module: 3,
+    order: 12,
+    title: "What a not-for-profit can do that a business cannot",
+    objective: "State how IDE Nepal could be made financially sustainable, and name what the donor-dependent model buys that a business could not.",
+    explainer: [
+      "IDE believes in markets — it made suppliers, farmers and downstream players financially viable — and is itself donor dependent, a not-for-profit development organisation. Could it be a business? Straightforwardly, and IDE India already is a for-profit. Sell the equipment, since farmers' productivity and income rise from using it, and add a financing system. Charge for advisory services. Or take a small service fee for connecting farmers to government schemes, which is exactly what Seva Setu does in India.",
+      "The harder question is whether you should. A donor-driven model reaches the poorest of the poor. Vaatsalya could not, precisely because it had to stay financially viable, so the bottom of the local strata could only take treatment that was free. IDE has no such constraint and can serve regardless of ability to pay. It can also invest where there is no market-linked benefit at all — research and development on equipment for the poor — which an inclusive business's surplus would never stretch to.",
+      "Being a not-for-profit is also what let IDE keep its innovation open source to hold prices down, and what let it spend time on community governance, which nobody is ever going to pay for. And it carries social legitimacy with government, which may hesitate over a for-profit on the reasoning that private profit goes to private people. There is an incentive difference too: a commercial supplier gains from the community staying dependent, and IDE's entire purpose was the opposite."
+    ],
+    worked: {
+      setup: "A funder asks why a development organisation does not convert itself into a self-sustaining business.",
+      move: "List what the organisation currently does that no revenue line would ever pay for.",
+      because: "The conversion is easy to describe: sell the equipment, charge for advice, take a fee for linking farmers to government schemes as Seva Setu does. What disappears is everything without a payer — research and development on equipment the poor can afford, open sourcing that innovation rather than licensing it, and time spent building community governance. There is also an incentive problem, since a commercial supplier gains from continued dependence while IDE existed to leave communities standing alone."
+    },
+    glossary: [
+      {term: "donor-dependent", plain: "Funded by grants rather than revenue. It costs discipline and buys reach to people no business can serve."},
+      {term: "social legitimacy", plain: "Why a government will work with a not-for-profit where it hesitates over a firm whose profit goes to private hands."},
+      {term: "project mode", plain: "Working in three- or five-year funded blocks, which is why leaving a self-governing community behind is the goal."},
+      {term: "advisory services", plain: "One of the revenue lines that could make IDE Nepal self-sustaining, alongside equipment sales and scheme-linkage fees."}
+    ],
+    connects: "Module 4 turns from farms to jobs, and to a company that took the work to the villages."
+  });
+
+  lesson({
+    lectureId: "IBM-M04-L01",
+    courseId: "IBM",
+    module: 4,
+    order: 1,
+    title: "The employment problem RuralShores was built for",
+    objective: "Name the labour-market conditions that make rural non-farm work the target, and explain what disguised unemployment hides.",
+    explainer: [
+      "The 2024 labour data sets the problem up. India's workforce rose to about 607 million, an increase of 43 million on the year before, and employment in agriculture rose by 68 million over five years — mostly in rural India and mostly among women, while manufacturing's share of workers fell over the decade. Agricultural labour productivity and rural real incomes both declined, and net sown area fell despite more mechanization. Read together it suggests distress pushing people back into farming because urban work is not there.",
+      "Youth unemployment, for people between 15 and 29 years, comes from the periodic labour force survey: urban male 12 to 16%, urban female 24 to 25%, rural male 11 to 13%, rural female 14 to 17%. Urban unemployment runs higher than rural and young urban women are worst hit, so the old flow from village to city runs backwards. But agriculture cannot absorb them either — about 65% of Indians live in villages while the sector contributes only 16 to 17% of GDP.",
+      "The rural figures also understate the problem, because much of it is disguised. Around that sit the other social costs: migrant labourers' hard lives in the cities, women who cannot travel so the work goes to the men of the family, and a resulting view that educating girls is pointless because no livelihood follows. RuralShores was set up against all of these, plus one commercial problem — the cost of retention in urban BPOs."
+    ],
+    worked: {
+      setup: "A district reports about 12% rural unemployment, which reads as tolerable.",
+      move: "Ask how many of the people counted as employed are doing work that needs fewer hands than it has.",
+      because: "Disguised unemployment never enters the count. A family with three sons and a plot one of them could farm shows three employed people, so the statistic is satisfied while two add nothing. That is why the course says the reality is much worse than the figure looks. It also explains why the answer is non-agricultural work rather than more farming: the sector already holds more labour than it needs, which is what 65% of the population against 16 to 17% of GDP describes."
+    },
+    glossary: [
+      {term: "disguised unemployment", plain: "Work that needs one person being done by several, so everyone counts as employed and the figure understates the problem."},
+      {term: "reverse migration", plain: "People moving back from cities to villages because urban work has run out — the opposite of the usual flow."},
+      {term: "non-agricultural opportunities", plain: "Village work that is not farming, needed because agriculture cannot create enough employment."},
+      {term: "periodic labour force survey", plain: "The survey the youth unemployment figures come from, split by urban and rural, male and female."},
+      {term: "migrant labourers", plain: "Villagers who moved to the cities for want of local work, and meet difficult conditions there."}
+    ],
+    connects: "That is the problem. The next session is the business RuralShores chose to solve it with."
+  });
+
+  lesson({
+    lectureId: "IBM-M04-L02",
+    courseId: "IBM",
+    module: 4,
+    order: 2,
+    title: "What a BPO is, and why the urban one leaks people",
+    objective: "Define outsourcing and IT-enabled services in the course's terms, and explain why urban attrition made a rural model attractive.",
+    explainer: [
+      "Start with the value chain: sourcing, production, logistics, retailing, marketing, servicing. A firm doing all of it itself is vertically integrated, which is how organisations traditionally worked. Then specialists appeared who could take individual activities, and tying up with another organisation to run part of the chain is outsourcing. Nike does not manufacture its shoes. Apple does not make iPhones — Foxconn in Taiwan does, and so do some Indian companies. Banks outsource cheque processing; telecom firms outsource telecalling.",
+      "Where communication technology lets the work be delivered remotely, it becomes IT-enabled services: a New York bank reconciling through Philippines, a UK telecom company answering plan questions from Bangalore. Business process outsourcing is the wider term and IT-enabled services is the technology-mediated part of it. That is the business RuralShores was already in.",
+      "The urban model runs thousands of people in big cities such as Bangalore or Gurgaon, with heavy competition between providers and thin margins, so salaries stay low. High attrition follows, with little job satisfaction or loyalty: a marginally better offer moves someone, because the work is the same at the next provider. HR is permanently rehiring and cannot pay its way out. Murali's idea was to move the operation to rural India, where few competing BPOs exist. Four years in, 17 centers and close to 2,000 rural youth."
+    ],
+    worked: {
+      setup: "An urban BPO in Gurgaon keeps losing staff to a competitor offering slightly more money.",
+      move: "Look at what an employee gives up by leaving rather than at what they gain.",
+      because: "They give up almost nothing. The work is identical at the next provider, the pay was held low by thin margins and heavy competition, and there is no loyalty to spend. So a small difference is enough to move someone, and the firm cannot outbid it without breaking the margins that set the salary in the first place. That makes it structural rather than a management failure, which is why the answer was to change where the centre sits rather than how it is run."
+    },
+    glossary: [
+      {term: "value chain", plain: "Sourcing, production, logistics, retailing, marketing and servicing — everything between raw material and a serviced product."},
+      {term: "vertically integrated", plain: "One organisation performing every activity in its own value chain."},
+      {term: "outsourcing", plain: "Handing an activity in your value chain to a specialist organisation instead of doing it yourself."},
+      {term: "IT-enabled services", plain: "The part of outsourcing that communication technology lets you deliver from anywhere."},
+      {term: "attrition", plain: "Staff leaving. The urban BPO's structural problem, because the work and the pay are the same next door."}
+    ],
+    connects: "Moving the centre solves attrition. The next session is everything that move broke."
+  });
+
+  lesson({
+    lectureId: "IBM-M04-L03",
+    courseId: "IBM",
+    module: 4,
+    order: 3,
+    title: "What breaks when you move a BPO to a village",
+    objective: "List the constraints a rural BPO has to design around, and explain why each answer is a change of model rather than more effort.",
+    explainer: [
+      "Infrastructure first. A BPO runs close to 24 by 7 and has to answer immediately, so electricity and telecommunication cannot drop even for a few minutes — and rural infrastructure is not dependable. RuralShores built both connections and then built redundancy into each. To hold cost down they rented buildings rather than buying, the principle already met at Vaatsalya: do not acquire assets early, particularly when you do not yet know how long the business will work.",
+      "Staff were easy to find and hard to prepare, in two distinct ways. Professionalism was not assumed — one day nobody came in at all, because there was a marriage in the village and no one knew the office had to be told in advance. And domain knowledge was missing: someone who has never held a credit card cannot quickly work out a credit-card customer's problem. Training therefore ran well past what an urban BPO would provide.",
+      "Then the model itself had to change shape. Centres had to be small and numerous, because one large centre draws staff from a distance and defeats the point of being near home — Vaatsalya again. English was not available, so early clients were Indian companies operating across states, served in the local language. Night shifts did not suit the culture, especially for women. And the business had to be won: clients offered donations and CSR rather than contracts."
+    ],
+    worked: {
+      setup: "A prospective client praises RuralShores, offers CSR funding, and sends its actual work to an urban provider.",
+      move: "Refuse the donation framing and go after the certifications that answer the real objection.",
+      because: "The client's doubt is operational rather than charitable: will the data stay confidential, will responsiveness hold, what happens when the power or the network goes down. Sympathy answers none of that, and taking the CSR money confirms the framing that this is a good cause rather than a supplier. Third-party certification speaks to the objection in the client's own terms. Murali's point was that the work had to be integrated into these companies' business processes, which a donation explicitly is not."
+    },
+    glossary: [
+      {term: "redundancy", plain: "A second electricity and telecommunication connection, because a BPO cannot be down even for minutes."},
+      {term: "professionalism", plain: "Office conventions that are not obvious to someone new to them — hours, and telling the office before taking leave."},
+      {term: "vernacular", plain: "The local language. Early clients were chosen so staff could work in it rather than in English."},
+      {term: "night shifts", plain: "Standard in urban BPOs serving other time zones, and not acceptable in the villages, especially for women."},
+      {term: "certifications", plain: "Third-party assurance of quality and confidentiality, needed because a rural address raised doubts a sales pitch could not settle."},
+      {term: "CSR", plain: "Corporate social responsibility money. Offered readily, and refused, because it leaves you outside the client's business."}
+    ],
+    connects: "Those are the constraints. The last session of the module asks how far the model actually reached."
+  });
+
+  lesson({
+    lectureId: "IBM-M04-L06",
+    courseId: "IBM",
+    module: 4,
+    order: 6,
+    title: "Where rural BPO plateaued, and what impact sourcing means",
+    objective: "State what RuralShores reached after 18 years, and define impact sourcing as something other than a donation.",
+    explainer: [
+      "Eighteen years in, RuralShores has 15 centers across 9 Indian states, employing 3,500 young people, with about 25 clients and 45 processes. The plan had been 50 centers. Seven years earlier it ran 17 centers across 10 states employing 2,500 people, with the same 25 clients — so the number of centres actually fell while some of them grew. Some closed for lack of business, and sometimes the location had been the wrong choice.",
+      "The ceiling is not RuralShores' alone. Against a 2014 target of about 50,000 seats, rural BPO in 2024 runs about 44,000 seats over 227 units across 93 towns; in 2019 there were 246 centres employing 55,000 people. The sector contracted. It did create rural livelihood, diversify income and draw investment to rural locations, but scaling stayed the problem, and talent was part of it: urban India remained aspirational, and after four or five years the work stopped looking like a career.",
+      "The module closes on impact sourcing — sourcing products and services from underprivileged communities. It is explicitly not charity: it integrates the poor into the value chain so the customer gets value, which is close to Porter and Kramer on value sharing. The Paris Olympics worked with Muhammad Yunus and the Grameen Foundation to prefer small and economically underprivileged suppliers, other things equal. AI agents and tele robots are left as an open question over the whole business."
+    ],
+    worked: {
+      setup: "A company can buy the same service, at the same price, from a large supplier or from one employing underprivileged workers.",
+      move: "Treat the choice as sourcing rather than as giving.",
+      because: "That is the rule the Paris Olympics applied with the Grameen Foundation: other things remaining equal, prefer the less privileged supplier. Nothing is donated and no quality is conceded, because the condition is that the offers are genuinely comparable. It matters because donation and CSR leave the recipient outside the buyer's value chain — exactly what RuralShores was repeatedly offered and repeatedly refused. Integrating them instead is what makes the income durable."
+    },
+    glossary: [
+      {term: "impact sourcing", plain: "Buying products and services from underprivileged communities as a supplier decision, not as charity."},
+      {term: "value sharing", plain: "Porter and Kramer's idea that a firm can create value for itself and for society in the same act."},
+      {term: "tele robots", plain: "Automated callers. With AI agents, the open question over the future of this whole industry."},
+      {term: "plateauing", plain: "The natural ceiling both RuralShores and the sector hit — centres and seats falling rather than growing."}
+    ],
+    connects: "Work is one route out of poverty. The next module goes to the farm income that work was competing with."
   });
 
   lesson({
@@ -1742,6 +2632,17 @@
       {term: "business process outsourcing", plain: "Contracting out back-office processes — normally city-based, here deliberately not."},
       {term: "franchisee", plain: "A third party running a centre under the network's model, so reach does not require owning every site."},
       {term: "migration", plain: "Leaving home for work, which siting the job in the village avoids."}
+,
+      {term: "reverse migration", plain: "Failed urban job searches pushing youth back into low-yield farming."},
+      {term: "socio-cultural barriers", plain: "Safety and family restrictions that keep young women out of distant work."},
+      {term: "CSR trap", plain: "Taking charity instead of commercial integration, and depending on it to survive."},
+      {term: "decentralised footprint", plain: "100-200 seat centres in towns under 40,000, hiring within 10-15km."},
+      {term: "co-opetition", plain: "Sub-contracting low-margin volume from urban BPOs instead of competing with them."},
+      {term: "Multilingual IT Routing", plain: "Dynamic cross-state call routing, such as Haryana work handled from Punjab."},
+      {term: "scaling ceiling", plain: "The limit a decentralised model meets when each new site must be built from nothing."},
+      {term: "career aspiration bottleneck", plain: "Rural staff seeing no ladder above the entry role, so good people leave."},
+      {term: "automation threat", plain: "The existential risk that the back-office tasks being sliced out get automated."},
+      {term: "impact sourcing", plain: "Hiring deliberately from disadvantaged communities as the operating model, not as charity."}
     ],
     connects: "The model works at 17 centres. The next lecture asks what it should do next."
   });
@@ -1767,8 +2668,164 @@
       {term: "diversification", plain: "Expanding into new services or products rather than extending the existing model."},
       {term: "center partner", plain: "The shared-ownership arrangement that lets the network add centres without funding each one."},
       {term: "smallholder", plain: "A small farmer — included in supply chains as a supplier, which is a different relationship from employment."}
+,
+      {term: "policy ripple effect", plain: "A private model shifting what the state believes is possible, and then funds."}
     ],
     connects: "Module 5 asks the harder question: can a for-profit business genuinely share the value it creates?"
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L01",
+    courseId: "IBM",
+    module: 5,
+    order: 1,
+    title: "Why so little of the price reaches the farmer",
+    objective: "Explain why a smallholder's share of the consumer price is so low, and name the three causes the course gives.",
+    explainer: [
+      "A Reserve Bank of India study measured how much of the final consumer price actually reaches the farmer: about 30 to 35% for vegetables and between 30 and 40% for fruits, a little above 50% for milk and eggs, and 65 to 75% for pulses. So on a hundred-rupee kilo of fruit the grower receives thirty to forty rupees. Anecdotally it runs worse: an orange retailing at 60 to 70 rupees a kilo in Karnataka can leave the grower under ten.",
+      "Three causes. Supply chain inefficiency, because the fruit must physically travel hundreds of kilometres and, with little refrigeration and poor handling, a great deal of it spoils. Intermediation, because the produce passes from farmer to larger farmer to wholesaler to retailer and every stage wants a margin, so one fruit's profit is split many ways. And inadequate information: a grower cannot control the day a papaya ripens, does not know where the demand is, and may arrive where several others have arrived at once.",
+      "The smallholder is worst placed on all three, with small volume, little bargaining power, and no access to information or to the resources that would help. The consequence is exit. Lychee growers in Bihar are leaving the crop because it does not pay and becoming construction labourers, and orange growers in Karnataka are doing the same. So the question the module opens with is how to make the chain efficient, cut wastage, and raise what the farmer earns."
+    ],
+    worked: {
+      setup: "Two farmers harvest the same crop on the same day and both take it to the same market.",
+      move: "Ask what either of them could have known about demand before choosing when and where to sell.",
+      because: "Neither controls the ripening date and neither has any way of learning where demand sits that day, so both arrive at the same place at the same time, local supply spikes, and the price falls for both. Nothing is wrong with the crop. That is why the course lists information beside logistics and intermediation: the first two waste value that was already created, while the third stops it being created in the right place at the right time."
+    },
+    glossary: [
+      {term: "smallholder farmer", plain: "A grower with small produce, little bargaining power and no access to market information — worst placed on every cause listed here."},
+      {term: "intermediaries", plain: "The chain of buyers between farm and shop. Each takes a margin, so the same fruit's profit is divided many times over."},
+      {term: "wastage", plain: "Produce lost to poor handling, absent refrigeration and long journeys, before anyone can sell it."},
+      {term: "bargaining power", plain: "What a seller can hold out for. A small harvest and no alternative buyer leaves almost none."}
+    ],
+    connects: "That is the problem. The next session is the corporation that decided to solve it."
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L02",
+    courseId: "IBM",
+    module: 5,
+    order: 2,
+    title: "Why Reliance entered, and why it started with bananas",
+    objective: "State what Reliance Retail wanted from an inclusive supply chain, and why banana was the right first experiment.",
+    explainer: [
+      "Reliance Industries is one of the largest and most valuable conglomerates in India and in the world, with a very large retail operation, and it saw business potential in sourcing agricultural produce itself rather than buying it in. The reasoning was that improving the efficiency of the supply chain would deliver the fruit cheaper and at better quality while raising what farmers earn, and that building the chain would create employment along the way.",
+      "The plan began as dedicated supply chains for the fruit and vegetables sold through Reliance Retail's own outlets. It widened once they were sourcing at volume from villages: they decided to supply other retailers too, in both the organized and unorganized sectors. That is worth noticing, because it makes a firm a supplier to its own competitors, and it is how one company's practice can move an entire industry rather than only its own margins.",
+      "Banana was chosen for the experiment, and it was genuinely an experiment — Reliance had never sourced fruit from farmers before, only received it from third parties. Banana has demand all round the year, which matters commercially, because a commodity with uncertain demand is hard to source and hard to plan, with spikes at festival season. India also produces about 25% of the global production of bananas, so success would open exports as well."
+    ],
+    worked: {
+      setup: "A retailer wants to test whether it can source directly from farmers, and must pick one product to start with.",
+      move: "Choose the commodity with the steadiest year-round demand rather than the highest margin.",
+      because: "The experiment is about whether the chain can be built, not about winning on one crop. A product whose demand swings makes every other variable unreadable: a shortfall could be the sourcing model failing or simply a bad season, and the volumes farmers are being asked to plan around cannot be stated. Steady demand holds that constant so the experiment measures what it is meant to. India growing about a quarter of the world's bananas then makes the upside large if the answer is yes."
+    },
+    glossary: [
+      {term: "Reliance Retail", plain: "The retail arm that sells the fruit, and the reason sourcing directly counts as backward integration rather than charity."},
+      {term: "dedicated supply chains", plain: "Chains built for one firm's own outlets — later widened to supply other retailers, competitors included."},
+      {term: "banana republics", plain: "The phrase that comes from banana being among the most heavily exported commodities in the world."}
+    ],
+    connects: "That is the choice of ground. The next session is the system Reliance had to work against."
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L03",
+    courseId: "IBM",
+    module: 5,
+    order: 3,
+    title: "The mandi system, and the five problems Reliance attacked",
+    objective: "Explain how a rule meant to protect farmers became exploitative, and name the five problems the intervention targeted.",
+    explainer: [
+      "Five problems. Inefficient practices at farm level, giving wastage and low yield. Heavy intermediation, where every additional pair of hands damages the fruit and dissipates value, and where many of the intermediaries were exploitative. Unhygienic ripening methods. And poor output quality, which meant low price realization — Reliance's view being that better bananas could be sold to consumers at a higher price, which is what pays for the rest.",
+      "To see why the system produced that, look at how fruit was traditionally sold. To protect small farmers, buying and selling is heavily regulated: produce must go to licensed traders at designated markets called mandis, on the theory that traders bidding against one another would lift the price. In practice they agreed among themselves not to, which is cartelization. The traders were also money lenders, so their income came from interest on the farmer's debt rather than from the quality of the fruit, and the cycle held.",
+      "Then some states changed the law so retailers could buy directly from farmers. The mandi remained an option, and now corporate buyers came to the farm as well, sparing the farmer transport and handling charges. But corporates prefer large farmers, because sourcing small quantities from very many smallholders carries high transaction costs — the problem already met in micro lending. Since 80 to 90% of India's farmers are small, most were still left with the mandis."
+    ],
+    worked: {
+      setup: "A regulation requires produce to be sold only to licensed traders at a designated market, in order to protect farmers.",
+      move: "Check whether those traders compete or coordinate before crediting the rule with any protection.",
+      because: "The protection depends entirely on competitive bidding between the licensed traders. Remove that assumption and the identical rule becomes a captive market, because the traders agree not to raise their price and the farmer has nowhere else to take the crop. It got worse because those traders were also the moneylenders, so their return came from the farmer's debt rather than from the fruit — which removed any reason to help the farmer grow better fruit."
+    },
+    glossary: [
+      {term: "mandis", plain: "The designated markets where produce had to be sold to licensed traders. Meant as protection, and captured."},
+      {term: "licensed traders", plain: "The only permitted buyers at a mandi, who were also moneylenders to the same farmers."},
+      {term: "cartelization", plain: "Buyers agreeing among themselves not to bid the price up, which turns a protective rule into a captive market."},
+      {term: "transaction costs", plain: "The cost of doing many small deals rather than a few large ones. It is why corporates prefer large farmers."}
+    ],
+    connects: "The law opened a door. The next session is what Reliance built through it."
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L04",
+    courseId: "IBM",
+    module: 5,
+    order: 4,
+    title: "Hundikaris, sleeves and ethylene: value created at the farm",
+    objective: "Explain what a hundikari does differently from a mandi trader, and name the farm-level changes introduced without compulsion.",
+    explainer: [
+      "Reliance's answer to the transaction-cost problem was to create its own intermediary. The hundikaris were people from the local community who bridged the smallholder and the corporation: they knew the language and the context — which farmers, which soil, what water access — so they could tell Reliance who could grow what. They carried best practice back to farmers, organised farm labour at harvest, aggregated supply against demand, forecast production, judged quality, paid the farmers and sometimes arranged transport.",
+      "What separates them from a mandi trader is the incentive rather than the role. Because the hundikaris worked for Reliance, their interest was better quality, less wastage and a more efficient chain, which is exactly Reliance's interest, and which raises grower income as a by-product. The course is explicit about what this case is: a for-profit company solving a poor community's problem in order to raise its own profitability, and one that would not do anything reducing it.",
+      "At the farm the changes were concrete. High-yielding banana tissue came from Reliance Life Sciences and protective sleeves from the polymer division, shielding the fruit from pests and excess sunlight. Bananas were taken off the stem with wires rather than by hand to limit damage. Warehouse, distribution and ripening centres were placed close together to cut loading steps. Trees were uprooted after 3 crop cycles, made palatable by finding a buyer for the fibre. And ripening moved from carcinogenic carbides to ethylene gas."
+    ],
+    worked: {
+      setup: "A corporation wants thousands of smallholders to adopt an unfamiliar practice, and can supervise none of them.",
+      move: "Run the practice yourself on a demonstration plot and let the result do the arguing.",
+      because: "Reliance enforced none of it. Advice came through experts and through hundikaris who were often farmers themselves, and the choice stayed with the grower throughout. That is not softness, it is what makes adoption hold when you have no enforcement mechanism and no contract. A demonstration plot turns a claim into evidence the farmer can walk over and inspect, and qualified agriculturalists drawn from the local community handle the fact that practice has to be customised per agro-climatic zone."
+    },
+    glossary: [
+      {term: "hundikaris", plain: "Local intermediaries created by Reliance, paid to want quality and low wastage rather than a trading margin."},
+      {term: "sleeves", plain: "Covers for the banana looms, made by Reliance's polymer division, protecting the fruit from pests and excess sunlight."},
+      {term: "ethylene gas", plain: "The non-carcinogenic ripening method that replaced carbides, done in a controlled centre over one to two days."},
+      {term: "demonstration plots", plain: "Land where Reliance followed its own advice, so farmers could judge the result before adopting anything."},
+      {term: "agro-climatic zones", plain: "Areas differing in rainfall and soil, which is why advice has to be customised rather than issued once."}
+    ],
+    connects: "Those are the mechanisms. The next session asks what they actually moved."
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L05",
+    courseId: "IBM",
+    module: 5,
+    order: 5,
+    title: "What the intervention actually moved",
+    objective: "State the measured impact of the Reliance intervention, and name the three conditions that made it work.",
+    explainer: [
+      "The numbers first. The farmer's share of consumer price rose from 28 to 42%, against a Reserve Bank of India average of 30 to 35% — bananas had started below even that. Wastage in the chain fell from 30% to 15% through better handling and longer shelf life. The initiative created livelihood for 2,000 farmers, 500 daily labourers, 150 intermediaries and about 100 distributors. Consumers got better fruit and paid more for it, which is what funded the rest.",
+      "Reliance also supplied competitors, so better practice spread beyond its own chain — the ecosystem developer role again. Three conditions made it work, and the first is alignment: this was backward integration into Reliance's own retail business rather than charity, so it could justify real money and real talent and expect a solid return on it. Nobody had to argue for the budget on moral grounds.",
+      "The second is local partners at grassroot level — hundikaris, agriculturalists and experts drawn from the community — together with a genuine willingness to learn from farmers, whose knowledge is real but travels by word of mouth and never gets formalised. The third is a light touch model: advice rather than compulsion, no contract binding anyone to sell, farmers choosing Reliance because it paid best and was transparent about quality and weight, and no attempt to disrupt village socioeconomic conditions."
+    ],
+    worked: {
+      setup: "A corporation could lock its farmers into exclusive supply contracts, and chooses not to.",
+      move: "Ask what the absence of a contract buys that a contract could not.",
+      because: "Under the mandi system the farmer's experience of a powerful counterparty was exploitation, so a binding contract would read as more of the same and would meet resistance on every practice being recommended alongside it. Leaving the farmer free to sell elsewhere makes it a repeated choice instead, and the farmers said they chose Reliance because it paid best and measured quality and weight transparently. That is a stronger hold than a contract."
+    },
+    glossary: [
+      {term: "light touch model", plain: "Advice without compulsion and no binding contract, so every season the farmer chooses again."},
+      {term: "backward integration", plain: "A retailer moving up its own supply chain. It is why this could be funded as business rather than as charity."},
+      {term: "ecosystem developer", plain: "Improving the industry around you, not only your own chain — here by supplying competitors and spreading practice."}
+    ],
+    connects: "That is the upside. The next session is the cost that appears in nobody's impact figures."
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L06",
+    courseId: "IBM",
+    module: 5,
+    order: 6,
+    title: "The intermediaries who lost, and who gains from efficiency",
+    objective: "Name the unintended consequences of modernising a rural supply chain, and say whose problem the course thinks they are.",
+    explainer: [
+      "Reliance removed a set of intermediaries and installed its own. Fewer of them, certainly — one hundikari where a farmer had previously passed through several — but the displaced ones lost their livelihoods. And not all intermediaries are exploitative. They exist because they perform real functions: aggregating demand, aggregating supply, carrying information. The rural problem is that there are too many and that many are exploitative, which is not the same claim as all of them being useless.",
+      "Should that trouble Reliance? The course says no. It is a commercial enterprise, it will pursue efficiency, and cutting intermediation is one of the main ways to find it. But in a country where so much of the population depends on the agricultural value chain, displacement becomes a policy-level problem, and those displaced are often not educated or skilled enough to move easily into other work. There is a second watch item too: a created intermediary can itself turn exploitative, which is why Reliance had norms and selection criteria for who could be a hundikari.",
+      "Malcolm Harper's study, around 2011 to 2012, put figures to it. Roughly 1 million traditional retailing jobs lost every year for ten years from the modernization of retail, with only about one-fifth recreated in new-format retailing. The losers skew female and less educated; the winners are more often male, better educated, and paid double or more. Small producers can genuinely gain, and the middlemen and middle women largely do not."
+    ],
+    worked: {
+      setup: "An intervention raises farmer income and halves wastage, and the impact report stops there.",
+      move: "Ask who was displaced, and count them beside the people who gained.",
+      because: "The gains are easy to attribute and easy to measure — share of price, wastage, livelihoods created — while the losses fall outside the firm's boundary, so nothing in its accounts records them. Harper's figures suggest one new job for every five lost, the loss landing on women and the less educated. None of that makes the intervention wrong, and a commercial firm cannot be asked to fix it. It does mean who captures the surplus is asked separately."
+    },
+    glossary: [
+      {term: "Malcolm Harper", plain: "The researcher whose study put numbers on the job losses from modernising retail, and on who wins and loses."},
+      {term: "modernization of retail", plain: "Organising what was informal. It raises efficiency and destroys about five traditional jobs for each one it creates."},
+      {term: "unintended consequences", plain: "Effects outside the firm's boundary that its own impact figures never capture, which is why they must be asked for separately."}
+    ],
+    connects: "That closes the Reliance case. The next session asks whether a business can genuinely share value."
   });
 
   lesson({
@@ -1792,8 +2849,66 @@
       {term: "value sharing", plain: "Porter and Kramer's idea that a company can create economic and social value at once."},
       {term: "financially viable", plain: "Not making losses — the constraint an impact-first organisation works within rather than the goal it pursues."},
       {term: "public goods", plain: "Benefits that accrue broadly rather than to the buyer alone."}
+,
+      {term: "income disparity", plain: "Farmers taking under ₹10/kg for oranges retailing at ₹60-70."},
+      {term: "backward integration", plain: "Reliance's banana strategy: local Hundikaris, saplings, sleeves, controlled ripening."},
+      {term: "perishability bottleneck", plain: "Why agri-tech pivots to grains and dairy — fruit and vegetables will not wait."},
+      {term: "energy poverty", plain: "81 million households un-electrified in 2011, and unreliable grid power beyond that."},
+      {term: "BOP scale paradox", plain: "Dispersed populations make distribution and education cost more per customer, not less."},
+      {term: "customisation", plain: "Fitting the solution to the household rather than shipping one standard product."}
     ],
-    connects: "The next case shows an entrepreneur who took the constraint seriously and designed around it."
+    connects: "The next session tests the same idea against a wave of technology startups."
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L08",
+    courseId: "IBM",
+    module: 5,
+    order: 8,
+    title: "Why agri-tech retreated from perishables",
+    objective: "Explain why technology platforms pulled back from fruit and vegetables, and what that says about the Reliance model.",
+    explainer: [
+      "WayCool, DeHaat and Ninjacart all set out to use technology to link farmers directly to the end consumer, so growers earn more and consumers get better quality. WayCool was at one point valued at US dollar 700 million, carried a strong investor list, connected 50,000 farmers to retailers and restaurants, reported revenue of 1,600 crores in financial year 2024, and was widely expected to become India's first agri-tech unicorn.",
+      "Then it ran into perishables. Fruit and vegetables carry seasonal variation in production and heavy wastage in the chain — precisely the problems the rest of this module has been watching Reliance solve, with a fruit chosen for year-round demand, intermediaries who could match supply to demand, and handling changes that took wastage from 30% to 15%. It is possible the agri-tech firms simply did not have the resources, or the insight, to make that scale of investment.",
+      "There was also a difference of pace. Reliance began with a single fruit as an experiment and widened slowly, learning as it went. Investor pressure pushed the technology companies to do many things at once across many crops. Most of them ended up shifting their portfolio away from perishables and towards grains, spices and dairy, which are easier to source, store and transport and last far longer. Which makes what Reliance managed look harder rather than easier."
+    ],
+    worked: {
+      setup: "A funded agri-tech platform must choose between grains and fresh produce for its next expansion.",
+      move: "Match the ambition to the shelf life rather than to the size of the market.",
+      because: "Perishables are where the farmer's loss is largest and so where the impact would be greatest, which is exactly why they attract the pitch. They are also where seasonal variation and wastage punish every weakness in the chain at once, and a young company under pressure to grow across many crops has no slack to absorb that. Reliance succeeded by narrowing — one fruit, chosen for steady demand, with handling and intermediaries rebuilt around it — and by going slowly enough to learn. Grains forgive what fruit does not."
+    },
+    glossary: [
+      {term: "perishables", plain: "Fruit and vegetables. Seasonal in production and lossy in transit, which is why platforms retreated from them."},
+      {term: "agri-tech unicorn", plain: "What WayCool was expected to become. The expectation is what forced breadth before the chain could carry it."},
+      {term: "WayCool", plain: "The agri-tech firm that connected 50,000 farmers and then found perishables harder than the technology suggested."}
+    ],
+    connects: "That closes agriculture. The next session moves to a different deprivation."
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L09",
+    courseId: "IBM",
+    module: 5,
+    order: 9,
+    title: "Energy poverty, and what \"electrified\" actually means",
+    objective: "Define energy poverty on the course's three dimensions, and explain what a village being declared electrified does and does not mean.",
+    explainer: [
+      "Energy poverty has three dimensions in this course: whether a person consumes little energy, whether the sources they use are polluting, and whether excessive time goes into collecting the fuel. Any household without electricity qualifies on at least two, because the alternatives — biomass, kerosene — are polluting, and gathering biomass takes hours that could have been spent otherwise.",
+      "The 2011 census counted 81 million households living without electricity, 75 million of them in rural India, which at an average family size of four to four and a half is roughly 45% of the rural and about 7% of the urban population. Rural India leans heavily on traditional biomass: wood, charcoal, crop residue. Burning it fills the kitchen with smoke and black soot, and over years that causes real health damage, most of all to the women who spend the greater part of the day in it.",
+      "On 28th April 2018 the government declared every village in India electrified, the last being Lisang village in Manipur — 100% rural electrification. The definition repays reading. A village counts as electrified if 10% of its households can access power along with public institutions such as the school and health centre, so 90% may still have none. Hamlets and kutcha houses are outside the count. And it means the grid reaches the village, not that electricity flows through it."
+    ],
+    worked: {
+      setup: "A district reports 100% electrification, and households there still cook and read by kerosene.",
+      move: "Read the definition behind the statistic before treating it as a description of households.",
+      because: "The measure is about the grid arriving, not about power flowing, and its threshold is 10% of households plus the public institutions. A village where nine homes in ten have no connection satisfies it completely. Hamlets and kutcha houses are excluded altogether, and distribution-company finances mean many connected villages get power for only part of the day. The statistic is true and the inference from it is wrong."
+    },
+    glossary: [
+      {term: "energy poverty", plain: "Low consumption, polluting sources, or excessive time spent collecting fuel — any one of the three counts."},
+      {term: "biomass", plain: "Wood, charcoal and crop residue. Free to gather, costly in smoke, black soot and the health of whoever cooks."},
+      {term: "rural electrification", plain: "Declared complete in 2018, on a definition satisfied when 10% of a village's households can access power."},
+      {term: "kutcha", plain: "Houses excluded from the electrification count altogether, which is part of why the figure overstates reach."}
+    ],
+    connects: "That is the need. The next session is the business built to meet it."
   });
 
   lesson({
@@ -1817,8 +2932,92 @@
       {term: "kerosene", plain: "The fuel the vendor was already buying daily — the cost the solar light had to beat."},
       {term: "doorstep finance", plain: "Credit arranged where the customer is, without which an up-front price blocks the sale."},
       {term: "doorstep servicing", plain: "Maintenance delivered locally, so the product keeps working after it is sold."}
+,
+      {term: "empathy-driven credit", plain: "SELCO refusing to lend directly, and lobbying banks to treat solar as income-generating."},
+      {term: "affordability", plain: "Customised setup, doorstep financing and doorstep service, working as one thing."}
+    ],
+    connects: "That is the model in operation. The next session asks why it is so rare, and what customising costs."
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L11",
+    courseId: "IBM",
+    module: 5,
+    order: 11,
+    title: "Why BOP ventures struggle, and what customisation costs",
+    objective: "Explain why serving the bottom of the pyramid rarely breaks even, and state the trade-off customisation creates.",
+    explainer: [
+      "Prahalad's promise was that you could sell to the bottom of the pyramid and still make money, and in practice it has proved very hard. In conventional business the cost curve rises more slowly than the revenue curve, because production carries economies of scale. In dispersed markets it does not: selling in one village does not carry to the next, and fresh investment in distribution, outlets and infrastructure is needed each time, so cost rises alongside revenue and profitability arrives much later. BOP ventures need penetration rates around 30% to break even.",
+      "Which is why serious attempts failed — P&G's Pur water purification powder, a soya-fortified snack food from another large firm. There are successes: water for the poor in Manila, low-cost housing from CEMEX in Mexico, and Grameen Bank. From them come principles. Leverage existing retail and distribution rather than building your own, bundle products through one channel, involve the local labour force, and piggyback on demand pull rather than paying to create demand. But Manila and CEMEX both had implicit or explicit subsidies, and SELCO had none.",
+      "SELCO chose customised solar lighting over a standard product, because customisation addresses the real need and the context: renting for four hours, outright sale, credit matched to whether the customer earns daily or seasonally, and lights sized to how many rooms are actually used at once. Harish Hande's distinction is between need and desire — commercial business creates desire, and a poor customer has no way to recover from a wrong purchase."
+    ],
+    worked: {
+      setup: "A social enterprise can standardise its product and cut cost, or customise it and serve the need precisely.",
+      move: "Ask whether customers' situations genuinely differ in ways that change what the product has to do.",
+      because: "Henry Ford's lesson is that standardization buys scale and scale buys low cost. Aravind could apply it because nearly every patient arrived with the same problem; cardiac surgery cannot, so Narayana costs far more per case. Energy sits closer to the second: a daily-earning vendor and a seasonal farmer need different payment schedules, and a two-room house needs different lighting from a four-room one. Every unit of customisation costs scale, so the work is finding the balance rather than picking a side."
+    },
+    glossary: [
+      {term: "penetration rates", plain: "The share of customers in a geography a BOP venture must reach before revenue passes cost — around 30%."},
+      {term: "demand pull", plain: "Demand that already exists, so you need not pay to create it. Piggybacking on it is one of the few reliable BOP savings."},
+      {term: "customization", plain: "Fitting the product to the customer's real situation. It addresses need, and it costs scale."},
+      {term: "standardization", plain: "One design for everyone. It buys economies of scale and risks missing the need the customer actually has."}
+    ],
+    connects: "That is the model. The last session of the module is the leader who built it."
+  });
+
+  lesson({
+    lectureId: "IBM-M05-L12",
+    courseId: "IBM",
+    module: 5,
+    order: 12,
+    title: "Patient capital, right-sized selling, and a bankable community",
+    objective: "Map SELCO onto Prahalad's four BOP principles, and explain what patient capital and right-sized selling each protect.",
+    explainer: [
+      "Prahalad held that BOP markets must be conceived and structured differently from tier I markets, on four principles: create buying power, shaping aspirations, growing healthy markets, and improving access. SELCO did all four. Buying power came through credit, and Harish refused to lend himself — that would create a conflict of interest among his salespeople — and refused to tie to micro-lending firms, linking customers to regional rural banks instead. He also tied the light to income generation, so the repayment is more than covered by the extra earnings it produces.",
+      "Aspirations were shaped by education: telling a customer who wants three lights that one light and three holders will do. Healthy markets came through customisation, and access through doorstep service, because customers' incomes depended on the light working. Behind it sat personal intent, competence and immersion — an energy engineer with a PhD who spent years in rural Karnataka, Sri Lanka and the Dominican Republic, and who held, against the view of the time, that the poor will pay for something genuinely useful.",
+      "Two choices protect the mission. Investors: SELCO sought patient capital, converting philanthropists into investors so the discipline of an investment applied without pressure for quick valuation, because impact investors are not always patient and the micro-lending collapse came from chasing scale. And incentives: salespeople were rewarded for selling smaller systems, since a customer who can afford five lights, or who needs no credit at all, is probably not the customer SELCO exists for."
+    ],
+    worked: {
+      setup: "An investor offers growth capital on the condition of rapid scale.",
+      move: "Check whether the investor's timeline can survive the business's before taking the money.",
+      because: "Pressure to scale is what broke micro-lending: the industry chased numbers without understanding what the customer actually needed. Harish's answer was patient capital, bringing philanthropists in as investors so the money carried the discipline of an investment while the timeline stayed long and the focus stayed on impact. The point is not that impact investors are wrong, but that impact and patience are separate properties and a venture needs both — because you cannot create the impact if you are not still there."
+    },
+    glossary: [
+      {term: "patient capital", plain: "Money that wants impact and can wait for it — here, philanthropists brought in as investors rather than donors."},
+      {term: "impact investors", plain: "Investors focused on social impact who may still demand high returns and quick valuation, so impact does not imply patience."},
+      {term: "mission drift", plain: "What Harish refused to trade scale for. The reason he would question growth rather than assume it."},
+      {term: "bankable", plain: "What a customer becomes once the paid-off solar light is an asset, so the bank will lend without SELCO in the middle."},
+      {term: "SELCO Foundation", plain: "The not-for-profit arm for pre-commercial work — research and development the for-profit could never fund from surplus."}
     ],
     connects: "Module 6 turns to skills and waste — livelihoods built where no market was serving anyone."
+  });
+
+  lesson({
+    lectureId: "IBM-M06-L01",
+    courseId: "IBM",
+    module: 6,
+    order: 1,
+    title: "Who the informal workforce is, and why nobody speaks for them",
+    objective: "Distinguish the unorganized sector from informal labour, and explain why neither the state nor a trade union covers these workers.",
+    explainer: [
+      "The course uses three overlapping terms, and they are not the same thing. The unorganized sector is a definition about firms: unincorporated private enterprises owned by individuals or households, run on a proprietary or partnership basis, with less than 10 total workers. Informal labour is a definition about people: no permanent employment, no social security, so no provident fund or gratuity, and short engagements that can run three months or a single day. An organized firm can therefore carry informal labour — the casual labourers a contractor supplies for construction, housekeeping or cleaning are not its employees at all.",
+      "The scale is the surprising part. India has something between 100 to 140 million migratory labourers, and roughly 90 to 92% of the whole labour pool is informal. The NCEUS study in 2009 found 79% of these workers consuming rupees 20 a day or less, typically with 3 years of education or fewer, disproportionately from the scheduled castes, scheduled tribes, other backward communities and Muslims. Workplaces are cramped, poorly ventilated and humid, and 81 to 87% of women workers earn less than minimum wages.",
+      "A legal wage floor does not hold when supply far exceeds demand: bargaining power is close to zero, and someone paid below the minimum will not complain, because it is that day's only income. The state struggles too, since a migrant's entitlements stay in the state they left — a ration card addressed in West Bengal buys nothing in Tamil Nadu — and governments often read these workers as a security question instead."
+    ],
+    worked: {
+      setup: "A large factory has a recognised union, a wage agreement, and a hundred contract workers cleaning it for less than minimum wage.",
+      move: "Ask who the union is constituted to represent before asking why it has not acted.",
+      because: "A trade union is a democratically elected association of that organisation's blue-collar workers, and its bargaining power comes from representing them at the table. Contract workers are not employees — a contractor supplies them — so they sit outside it, and a union may read them as competitors taking work from its own members. The group with the least bargaining power is therefore the group with no representative, and the state cannot fill the gap because the entitlements stayed behind."
+    },
+    glossary: [
+      {term: "unorganized sector", plain: "A definition about firms: unincorporated, household or individually owned, with less than 10 total workers."},
+      {term: "informal labourers", plain: "A definition about people: no permanent employment, no social security, and very short engagements."},
+      {term: "casual labourers", plain: "Workers a contractor supplies to an organisation, so they are informal even inside a formal employer."},
+      {term: "social security", plain: "Provident fund, gratuity and the commitment of long-term employment. Its absence is what makes labour informal."},
+      {term: "bargaining power", plain: "What a worker can hold out for. Near zero where many people compete for few jobs, which is why the minimum wage does not bind."},
+      {term: "NCEUS", plain: "The 2009 commission whose study measured this workforce and concluded that reducing inequality means focusing on it."}
+    ],
+    connects: "That is the workforce. The next session is one organisation's attempt to serve it."
   });
 
   lesson({
@@ -1842,8 +3041,69 @@
       {term: "informal sector", plain: "Undocumented, unorganized work — the majority of India's migratory labour."},
       {term: "social security", plain: "Insurance and protections that informal work leaves a worker outside of."},
       {term: "bargaining power", plain: "The leverage an individual worker lacks and an organised group can build."}
+,
+      {term: "retention and pricing failure", plain: "Workers disassociating once banked, while employers refused any price premium."},
+      {term: "workforce solutions pivot", plain: "The move to in-situ workplace training, staffing, payroll and apprenticeships."},
+      {term: "plastic volatility", plain: "Recycled plastic prices swinging with oil, so picker income swings with it."},
+      {term: "floral upcycling", plain: "Turning temple flower waste into a saleable product rather than landfill."}
     ],
-    connects: "The next lecture finds value in something everyone else was throwing away."
+    connects: "Good intentions did not make it pay. The next session works through why, and what finally changed."
+  });
+
+  lesson({
+    lectureId: "IBM-M06-L03",
+    courseId: "IBM",
+    module: 6,
+    order: 3,
+    title: "Four explanations for LabourNet's struggle, and the one it answered",
+    objective: "Weigh maturity, diversity, leadership and business-model explanations for a social enterprise's losses, and say what changed when LabourNet narrowed.",
+    explainer: [
+      "Four candidate diagnoses, and they are not equally actionable. It could be a maturity problem: trial, error and mistakes characterise any early-stage venture, social enterprises carry a long gestation period, and LabourNet was an innovator with no model to copy. It could be a diversity problem: construction, individual customers, plumbing, housekeeping and beautician services at once is a lot of business dimensions for a small young organisation, and what works in one does not transfer.",
+      "Diversity runs into the variety and scale trade-off. Scale wants standardisation, and LabourNet could not charge a premium, so it had to reach scale to become viable — which variety works against. Third, it could be leadership: hard to attract and retain domain specialists on uncompetitive salaries, repeated leadership transitions changing the objectives, and funders with growing influence imposing their own control systems. Fourth, it could be the business model, if this is simply a domain of market failure where you create value and can never capture it.",
+      "Two comparisons sharpen the question. Babajob built a LinkedIn for informal labour that worked on feature phones, registered 8 million job seekers, connected them across 20 cities, reported a 21% average salary increase, charged employers rather than seekers, and was acquired by Quikr in 2017 — but it could not tell poor users from better-off ones, which is mission creep. Unnati does similar work as a not-for-profit and so never faces the viability question at all."
+    ],
+    worked: {
+      setup: "A social enterprise offers training, placement, identity, bank linkage and insurance to informal workers, and loses money across all of it.",
+      move: "Ask which of those services a market will actually pay for, then narrow to it without giving up the mission.",
+      because: "Markets do not pay for identity creation or for linking someone to a bank, however valuable both are. A Haryana government subsidy kept LabourNet going, which saves the day without proving the model. Narrowing to training aimed at the need that can be priced — income — and the innovation that made it scale was delivering the training in situ, at the workplace, because no employer would release these workers to attend a centre."
+    },
+    glossary: [
+      {term: "maturity problem", plain: "The diagnosis that says nothing is wrong except youth — early ventures learn by trial, error and mistakes."},
+      {term: "gestation period", plain: "How long a social enterprise takes to make money. Long enough that patience is part of the business plan."},
+      {term: "variety and scale", plain: "The trade-off between offering many things and doing one thing at volume. Scale wants standardisation."},
+      {term: "market failure", plain: "A domain where you create value but cannot capture it, so only grants or philanthropy can fund the work."},
+      {term: "mission creep", plain: "Serving whoever the model attracts rather than the people it was built for — Babajob could not separate the two."},
+      {term: "decentralized training", plain: "Training taken to the workplace instead of a centre, which is what let LabourNet scale to viability."}
+    ],
+    connects: "LabourNet narrowed to survive. The next session finds value in something everyone else was throwing away."
+  });
+
+  lesson({
+    lectureId: "IBM-M06-L04",
+    courseId: "IBM",
+    module: 6,
+    order: 4,
+    title: "Hasiru Dala: a price that changes behaviour, a franchise that changes status",
+    objective: "Explain how source segregation was priced into existence, and why the waste pickers were made franchisees rather than employees.",
+    explainer: [
+      "Urban India holds about 400 million residents across 8,000 towns and cities and generates 62 million tons of municipal solid waste a year. Only 43 million tons are collected, only 12 million properly treated, and about 31 million dumped haphazardly in landfill. Recovering just 15% could give viable employment to around 500,000 people. The waste pickers already doing the recycling are a hidden workforce: under 100 rupees a day, a 33% infant mortality rate, life expectancy near 40 years, and hostility from both society and law enforcement.",
+      "Hasiru Dala — the Green Brigade — began as a not-for-profit and won the waste pickers an identity, lobbying until BBMP issued official cards signed by the city commissioner, which let them open bank accounts, take educational loans and reach health insurance; about 1,800 families benefited. The Mandur landfill crisis was the tipping point, and BBMP's 2014 mandate made bulk waste generators responsible for their own waste. Hasiru Dala Innovations was incorporated in November 2015 as a private limited company, because a for-profit can raise risk capital and a not-for-profit cannot.",
+      "Then two mechanisms. Pricing made segregation happen. And the waste pickers were not employed: four of them form a waste picker franchisee owning a truck, servicing about 1,500 households, earning a fixed monthly fee plus performance incentives plus everything they make selling dry recyclables."
+    ],
+    worked: {
+      setup: "A waste operator needs thousands of households to separate wet waste from dry, and asking them has not worked.",
+      move: "Price the unsegregated option highest and let the monthly bill do the teaching.",
+      because: "Mixed waste is worth nothing — organic matter degrades fast in a tropical climate — so the entire value of the business depends on separation happening at the source, before collection, inside kitchens no rule can reach. A tariff reaches them: Rs 5 a kilo for rejects against Rs 3 for wet and Re 1 for dry means the household that sorts visibly pays less every month. Average bills landed near 170 rupees and about 90% segregated at source."
+    },
+    glossary: [
+      {term: "source segregation", plain: "Separating wet from dry where the waste is produced. Without it everything is mixed waste and worth nothing."},
+      {term: "bulk waste generators", plain: "Large households and institutions made responsible for their own waste by BBMP's 2014 mandate — the opening."},
+      {term: "polluter pays", plain: "The pricing principle, with pay as you throw: a fixed monthly fee plus a rate that punishes not sorting."},
+      {term: "waste picker franchisee", plain: "Four waste pickers running a truck as a business, not as staff — fixed fee, incentives, and the recyclables revenue."},
+      {term: "social plastics", plain: "Recycled plastic sold at a fixed premium through fair trade, insulating waste pickers from global price swings."},
+      {term: "ecosystem builder", plain: "Plastics for Change, aggregating and certifying so brands like Unilever can buy from thousands of small collectors."}
+    ],
+    connects: "That is one model in detail. The next session sets it beside the wider field."
   });
 
   lesson({
@@ -1866,8 +3126,95 @@
     glossary: [
       {term: "waste picker", plain: "Someone who collects and sorts discarded material informally, usually unrecognised."},
       {term: "informal sector", plain: "Undocumented work — where waste pickers operate before being organised."}
+,
+      {term: "urban-centric paradox", plain: "Most people are rural, producing 17-18% of GDP, so distress migration follows."},
+      {term: "source segregation", plain: "Separating wet from dry at the point of disposal — the step everything else needs."},
+      {term: "waste picker franchisee", plain: "Pickers running their own collection territory as a business, not as labour."},
+      {term: "inclusive waste enterprise", plain: "Treating waste as a resource so livelihood and disposal are solved together."}
     ],
     connects: "Module 7 moves from urban waste to farms, and from individuals to collectives."
+  });
+
+  lesson({
+    lectureId: "IBM-M07-L01",
+    courseId: "IBM",
+    module: 7,
+    order: 1,
+    title: "Sarkar, Samaj, Bazaar: the three forces behind an FPO",
+    objective: "Explain the three-force framework for lasting social impact, and name what the state's role in agriculture actually is.",
+    explainer: [
+      "Farmer producer organizations are owned by farmers, managed by farmers, and run for the benefit of farmers, and since most Indian farmers sit low on the economic scale the model is inclusive by construction. The framing, borrowed from Rohini Nilekani, is that social impact is only sustained when three forces come together: Samaj the community, Sarkar the government, Bazaar the market. None of them moves change alone. Amul is the worked example — government set it up, the community runs it, and it sells through private retail and now exports.",
+      "Sarkar's primary role is to act as a buffer against forces the farmer cannot control, and the forces are becoming less predictable. The Watershed Development Program builds water resilience at taluk level. Soil health work addresses organic carbon and fertility. Weather forecasting matters because patterns now fluctuate and the ability to react depends entirely on information reaching the farmer in time. Karnataka has the country's largest drought-affected area and is among its largest horticulture producers, which is a good return on very little.",
+      "The chronic constraint is capacity. Frontline agriculture staff to farmers runs about 10,000 is to 1 in Karnataka, so one-to-one hand-holding is never going to happen and technology has to carry the load. Land is fixed too: the area under agriculture and horticulture has not grown in three decades, fragmentation is unchanged, and 85% of our land holdings belong to farmers classified small and marginal, on under 5 acres."
+    ],
+    worked: {
+      setup: "A state wants to raise farm output and starts by planning to expand the area under cultivation.",
+      move: "Check whether that land exists before building the plan on it.",
+      because: "Area under agriculture and horticulture has been essentially fixed for three decades and fragmentation has not changed, with 85% of holdings belonging to small and marginal farmers on under five acres. So output has to come from more calories per acre rather than more acres. That reframes the state's job as resilience and productivity, and with frontline staff at roughly 10,000 farmers to one, it has to arrive through technology."
+    },
+    glossary: [
+      {term: "Sarkar", plain: "The government. Its role here is to buffer the farmer against drought, flood and price shocks that no individual can absorb."},
+      {term: "Samaj", plain: "The community. It is what actually runs a cooperative or an FPO once the structure exists."},
+      {term: "Bazaar", plain: "The market. Where the produce is finally sold, and the force most often left at the periphery of a scheme."},
+      {term: "Watershed Development Program", plain: "Water resilience built at taluk level, for a state with the country's largest drought-affected area."},
+      {term: "organic carbon", plain: "The measure of living soil. Prioritising yield alone has left roughly 60% of Indian soils low on it."},
+      {term: "small and marginal", plain: "Farmers holding under 5 acres — 85% of land holdings, and the profile any intervention has to fit."}
+    ],
+    connects: "That is the state's half. The next session is the community's, and the market's."
+  });
+
+  lesson({
+    lectureId: "IBM-M07-L02",
+    courseId: "IBM",
+    module: 7,
+    order: 2,
+    title: "The Other Half, and where the market linkage breaks",
+    objective: "Explain why FPO leadership under-represents women, and name what actually stops a corporate order converting.",
+    explainer: [
+      "FPOs were envisaged as the next stage of the cooperative movement. Cooperatives sit under the Cooperative Act; farmer producer organizations sit under the Companies Act, with a board of directors, an appointed CEO, AGMs and filings — market-ready by design. Women form a very large part of the agricultural workforce and manage day-to-day operations, and yet fewer than 10% of farmer producer companies have women CEOs. Monappa calls that chapter The Other Half: work at half your capacity and you get half the result.",
+      "The capability is not in doubt. Nine out of ten successful self-help groups are run by women, and Kudumbashree in Kerala is the standing example; nothing in the data says women cannot run the corporate stage, and perception and opportunity explain the gap. Youth is the second gap — the rural workforce fell about 7% and the youth share fell at twice that rate, because the cities and the gig economy are where the work is. The reframing offered is farmer to agripreneur, because income does not follow yield automatically.",
+      "Market linkage is the hardest part of all. A corporate buyer asks four things: FSSAI registration, whether the brand is trademarked, whether the premises would pass an audit, and what the minimum order quantity is. Then comes credit. The buyer expects two to three weeks of it; the farmer expects paying at the farm gate as the local trader pays. A truckload of chili or turmeric runs 10 to 20 lakh against an average FPO shareholding just under 5 lakh."
+    ],
+    worked: {
+      setup: "An FPO signs letters of intent with a large buyer at a buyer-seller meet, and almost none of it becomes business.",
+      move: "Ask who finances the gap between paying the farmer and being paid by the buyer.",
+      because: "The buyer expects two to three weeks of credit, because it is a company dealing with a company. The farmer expects payment at the gate, because that is what the local trader does and because a full season's earnings are leaving the farm. Someone has to carry the difference, and a truckload of a high-value crop is 10 to 20 lakh against an average shareholding under 5 lakh. The order is not lost on quality or price. It is lost on working capital nobody in the chain holds."
+    },
+    glossary: [
+      {term: "Companies Act", plain: "What an FPO is registered under, unlike a cooperative — hence a board, a CEO, AGMs and filings."},
+      {term: "agripreneur", plain: "The shift from producing a crop to capturing its value through processing and market linkage."},
+      {term: "minimum order quantity", plain: "The volume a business buyer will not go below, typically a full truckload. The first thing a small producer fails."},
+      {term: "buyer-seller meet", plain: "The event where producers meet corporate buyers. It generates letters of intent far more reliably than orders."},
+      {term: "disintermediate", plain: "Removing the trader who takes a large share of the margin between farm gate and shelf — the original reason FPOs exist."}
+    ],
+    connects: "Credit and branding are the binding constraints. The next session asks what technology changes."
+  });
+
+  lesson({
+    lectureId: "IBM-M07-L03",
+    courseId: "IBM",
+    module: 7,
+    order: 3,
+    title: "Agri Stack, price forecasting, and advice that reaches a farmer",
+    objective: "Explain what farmer-level data makes possible, and how a price forecast changes a decision after the crop is already grown.",
+    explainer: [
+      "Agri Stack is digital public infrastructure for agriculture, and close to 1 crore farmer unique IDs now exist — an Aadhaar-equivalent for farmers, mapping landholding, the schemes taken, the yields and the production at individual level. With that layer in place, models can produce crop and weather advisories customised to the individual rather than to a region. Bharat Vistar is the voice-enabled, AI-driven advisory built on it, already launched in Maharashtra and with Amul, and six states are following.",
+      "Voice matters more than it first appears. Farmers have mobiles and apps, and where a service offers both a digital interface and a voice one, 95% of enquiries arrive by voice, in the regional dialect. Before this, a weather advisory meant one number, a scheme status another, seed and fertilizer availability a third, each staffed by operators with the limits that implies. One platform pulling those sources together, in the form factor people actually use, is the change.",
+      "The second application is price forecasting. Work with a team at the Indian Institute of Science on tomato, the most volatile crop there is, produces a usable forecast 30 to 45 days ahead. The crop is already in the ground, so the forecast cannot change what was planted. It changes what is done with it: if the price will fall below 5 rupees a kilo, the mandi does not cover the logistics, and solar drying turns the same crop into sun-dried tomatoes or powder instead."
+    ],
+    worked: {
+      setup: "A forecast says tomatoes will sell below 5 rupees a kilo in a month, and the crop is already in the ground.",
+      move: "Use the forecast to decide what happens to the harvest, not what gets planted.",
+      because: "The planting decision is made and cannot be revisited, so a forecast that only informed planting would arrive uselessly late. What it can still change is disposal: at that price the mandi does not cover the cost of getting there, so going to market loses money that staying home does not. Pair the forecast with a low-cost technology such as solar drying and the same crop routes to a different buyer entirely. Information is worth only what the decision it reaches can still alter."
+    },
+    glossary: [
+      {term: "Agri Stack", plain: "Digital public infrastructure for agriculture — the data layer that makes individual-level advisory possible at all."},
+      {term: "farmer unique IDs", plain: "Close to a crore of them, mapping each farmer's land, schemes, yields and production."},
+      {term: "Bharat Vistar", plain: "The voice-enabled AI advisory built on that data, replacing a different helpline for every question."},
+      {term: "price forecasting", plain: "A 30 to 45 day price view. It cannot change what was planted, and it can change what happens to the harvest."},
+      {term: "solar drying", plain: "The low-cost technology that turns a crop not worth taking to the mandi into sun-dried produce or powder."}
+    ],
+    connects: "That is the toolkit. The next session follows one FPO's journey through it."
   });
 
   lesson({
@@ -1889,8 +3236,12 @@
     },
     glossary: [
       {term: "FPO", plain: "Farmer Producer Organisation — smallholders aggregated into one member-owned entity."},
-      {term: "aggregation", plain: "Combining many small producers so they can act, buy, and sell as one."},
+      {term: "aggregation", plain: "Combining many small producers so they can act, buy and sell as one, at a scale buyers will deal with."},
       {term: "bargaining power", plain: "The leverage a group has with input sellers and buyers that an individual does not."}
+,
+      {term: "market linkage", plain: "Connecting produce to a buyer directly, cutting the middlemen taking the margin."},
+      {term: "governance", plain: "Boards, audits and paid managers, without which an FPO stalls at its first size."},
+      {term: "credit access", plain: "Formal borrowing an aggregated group can obtain that no member could alone."}
     ],
     connects: "The next lecture names the category these organisations belong to, and its strictest form."
   });
@@ -1915,6 +3266,87 @@
     glossary: [
       {term: "social business", plain: "A business whose purpose is the social outcome, covering its costs rather than maximising profit."},
       {term: "supply chain", plain: "The sequence of suppliers — where including the economically underprivileged is one dimension of a social business."}
+,
+      {term: "social plastics", plain: "Plastics for Change paying a fair, guaranteed price to make picker income predictable."}
+    ],
+    connects: "That is the concept. The next sessions are a public enterprise doing it in practice."
+  });
+
+  lesson({
+    lectureId: "IBM-M07-L06",
+    courseId: "IBM",
+    module: 7,
+    order: 6,
+    title: "GNFC: why a fertilizer company started collecting seeds",
+    objective: "Explain why urea is coated with neem oil, and why GNFC sourced that oil itself rather than buying it.",
+    explainer: [
+      "GNFC is a public sector chemical and fertilizer company with a turnover of Rs 61 billion in 2017-18, and its primary product is urea. Government subsidises urea so that farmers can afford it, which creates a problem of its own: because the subsidised price is so low, close to 30 to 40% of it was being diverted to chemical plants. India produced enough urea for its own needs and still had to import at much higher prices to cover the leak.",
+      "Then scientists found that coating urea with neem oil makes diversion impossible — coated, it can only be used as fertilizer — and improves the fertilizer as well. It reduces pests, improves soil health, and slows nitrate formation, which raises efficiency and cuts environmental damage. The government duly mandated neem coating for all urea production. Most producers would simply buy the oil, and small suppliers had appeared in the market to sell it.",
+      "Dr Rajiv Gupta, GNFC's managing director, went the other way. He was unhappy with the quality of market neem oil, and he could see a social business in owning the whole chain: collect the fruit, extract the oil, coat the urea. Colleagues objected that extraction was not GNFC's core competency. But the advantages were real — an existing distribution network into the very villages the seed comes from, and relationships with distributors and retailers who could host village-level collection centers run by rural entrepreneurs."
+    ],
+    worked: {
+      setup: "A fertilizer company is ordered to coat all its urea with neem oil, and could simply buy the oil.",
+      move: "Ask whether sourcing it yourself would run on infrastructure you already own, before accepting that it is outside your competency.",
+      because: "Extraction genuinely is not a fertilizer company's core competency, which is why the objection was raised and why most producers bought instead. But GNFC already distributed fertilizer into the same villages the seed comes from, and already had the distributor and retailer relationships that could host collection centres, so the network runs in reverse without being built. That is what makes it related diversification rather than a new business, and why the same move would suit a firm without that footprint poorly."
+    },
+    glossary: [
+      {term: "urea", plain: "GNFC's primary product, subsidised so farmers can afford it, and diverted to chemical plants precisely because it is cheap."},
+      {term: "neem oil", plain: "Coating urea with it blocks diversion and improves the fertilizer — fewer pests, better soil health, slower nitrate formation."},
+      {term: "related diversification", plain: "A new activity that runs on the infrastructure and relationships the business already has."},
+      {term: "village-level collection centers", plain: "Seed collection points run by rural entrepreneurs, hosted by the distributors GNFC already sold fertilizer through."},
+      {term: "social business", plain: "A venture run for impact rather than profit maximisation — what Dr Gupta saw in owning the neem chain."}
+    ],
+    connects: "That is the design. The next session is what it paid the people at the bottom of it."
+  });
+
+  lesson({
+    lectureId: "IBM-M07-L07",
+    courseId: "IBM",
+    module: 7,
+    order: 7,
+    title: "What the neem initiative paid, and why relatedness mattered",
+    objective: "State the income impact on seed collectors, and name the four factors behind the initiative's success.",
+    explainer: [
+      "The figures first. Collectors gained up to 7,000 rupees a year, earned inside a 45-day window during the lean season, against an annual income of 12,000 rupees — about a thousand a month, which is the lowest level of poverty. GNFC paid Rs 6 to 7 per kilogram where private players paid perhaps 1 or 2, and the transparency of it drew more people in. Aggregating entrepreneurs earned around 36,000 a year with roughly 15,000 more from this.",
+      "Most collectors were impoverished landless women, so the income accrued to them, and with earnings came voice and standing. Some went further: Laxmi Ben became a micro entrepreneur by aggregating collected seed and passing it up the chain. Village economies got a boost, and migration pressure probably eased. It is the same pattern as Reliance and the banana farmers — a corporation with real processes paying a fair price becomes the attractive buyer without trying to be.",
+      "Four factors explain the success. Relatedness to the main line, since better neem oil directly improves GNFC's own urea. Direct attention from senior management, which unlocks resources a new venture cannot predict it will need. Existing resources and infrastructure, with barely any new recruitment. And a deep connection to the rural community, who were already customers and became suppliers. The wider lesson: development work related to your main business survives, and unrelated work stays employee volunteering."
+    ],
+    worked: {
+      setup: "A software firm wants a social initiative and is choosing between building houses and training underprivileged coders.",
+      move: "Pick the one that runs on skills and infrastructure the business already has.",
+      because: "GNFC's sourcing worked because it was related — same staff, same supply chain, same villages, and an output that improved its own product — so nobody had to keep asking why the company was doing it. Building houses can be a fine experience and remains employee volunteering, because it uses none of the firm's competence and integrates with nothing, so it survives only while enthusiasm does. Training coders uses skills that already exist, which is what makes it sustainable rather than occasional."
+    },
+    glossary: [
+      {term: "landless women", plain: "The traditional neem seed collectors, and the people the income actually reached — with standing following the earnings."},
+      {term: "micro entrepreneur", plain: "What a collector like Laxmi Ben became by aggregating seed for the next stage rather than only gathering it."},
+      {term: "employee volunteering", plain: "Unrelated good works. Refreshing, and dependent on enthusiasm, because nothing in the business integrates with them."},
+      {term: "forward integration", plain: "Moving downstream into products — here, turning surplus neem oil into soaps, incense sticks and repellents."}
+    ],
+    connects: "Surplus oil became soaps and repellents. The next session asks whether that was wise."
+  });
+
+  lesson({
+    lectureId: "IBM-M07-L08",
+    courseId: "IBM",
+    module: 7,
+    order: 8,
+    title: "The FMCG question, and four models compared",
+    objective: "Name the risks in GNFC's move into consumer goods, and compare the four organisations on inclusivity, financial viability and scalability.",
+    explainer: [
+      "The consumer-goods business is doubtful on its own terms. Sourcing, extraction and manufacture all carried internal subsidies from GNFC — labour, material, infrastructure — and it is not clear those were ever priced into the soap. Selling FMCG means competing with Dabur, Unilever and Patanjali, building brands, retail and marketing, none of which is GNFC's forte. It is also leader-dependent: a public sector managing director serves a limited term, and the next one may read soap as a distraction.",
+      "Two further risks. Collectors are employed only 30 to 45 days a year, so a better opportunity elsewhere could disrupt supply and with it everything built on top of it. And most FMCG companies outsource manufacturing precisely to reduce complexity, while GNFC runs the entire chain from seed to shelf. An alternative existed: sell the high-quality oil to Dabur or Patanjali as a favoured supplier, keeping the sourcing impact and shedding the complexity.",
+      "Comparing the module's four models on inclusivity, financial viability and scalability. Reliance ticks all three. RuralShores is inclusive economically and by gender, profitable at unit level but not overall, and hard to scale because a large centre destroys the point of a rural BPO. IDE Nepal is very inclusive because donor-driven, so viability does not arise, and scale is proportional to donations raised. GNFC is inclusive, probably not viable standalone given the subsidies, and scalable only by selling oil onward or making products."
+    ],
+    worked: {
+      setup: "A profitable company incubates a social business using its own staff, infrastructure and materials at no charge.",
+      move: "Cost the initiative as though it had to buy all of that, before calling it a viable business.",
+      because: "Internal subsidies are the genuine advantage that lets a large firm start such a venture quickly, cutting the learning curve and reaching market fast. They also hide whether the thing can stand alone, because the labour, material and infrastructure never enter the price of the soap. GNFC's neem sourcing may be perfectly sound as part of its fertilizer business, and judged as a standalone FMCG business it probably is not — and you cannot tell which until the subsidies come out and the costing is redone."
+    },
+    glossary: [
+      {term: "internal subsidies", plain: "Staff, materials and infrastructure supplied free by the parent. They speed a social business up and hide whether it stands alone."},
+      {term: "inclusivity", plain: "The first of the three test questions: is it improving the lives of the poor, and what is the evidence?"},
+      {term: "financial viability", plain: "The second: does the model pay for itself, with no donor behind it?"},
+      {term: "scalability", plain: "The third: can it be replicated beyond one village, given that the problem is enormous?"}
     ],
     connects: "Module 8 asks who funds all of this, and how anyone knows it worked."
   });
@@ -1940,9 +3372,95 @@
       {term: "impact investing", plain: "A subset of alternative investments seeking social impact alongside financial return."},
       {term: "risk-adjusted", plain: "Market-rate returns for the risk taken — what most impact investors still expect."},
       {term: "social stock exchange", plain: "A market built to channel capital to organisations delivering social impact."},
-      {term: "ESG", plain: "Environmental, social, and governance screening — related to, but not the same as, seeking impact."}
+      {term: "ESG", plain: "Environmental, social, and governance screening — related to, but not the same as, seeking impact."},
+,
+      {term: "GIIN criteria", plain: "Intentionality, financial return, and impact measurement — all three or it is not impact investing."},
+      {term: "over-measurement risk", plain: "Measuring so much that easy output metrics crowd out quality and drain working capital."},
+      {term: "carbon markets", plain: "Trading verified emissions reductions as a revenue stream, so an environmental gain also funds the business."},
+      {term: "blended finance", plain: "De-risking capital in tranches — senior, mezzanine, and junior loss-absorbing."}
     ],
-    connects: "If capital is being allocated on impact, impact has to be measured. The last lecture is how."
+    connects: "That is the concept. The next session is a practising investor's account of doing it."
+  });
+
+  lesson({
+    lectureId: "IBM-M08-L02",
+    courseId: "IBM",
+    module: 8,
+    order: 2,
+    title: "What an impact investor buys, and what they can actually measure",
+    objective: "Explain how impact measurement is built into an investment process, and why most reported impact is outputs rather than outcomes.",
+    explainer: [
+      "Aavishkaar's stated vision is to bridge the opportunity gap for the emerging 3 billion. The problems its investments target look unlike a typical startup's: not finding a cab or booking a bus, but making life better for a farmer, solving the circular economy, waste management, markets for rural artisans, financing for home repair. Those need innovations built for rural markets and poor infrastructure. It targets the low to low-middle income segment, since the very bottom needs government and philanthropy rather than investment.",
+      "Impact measurement is built into the investment process rather than bolted onto the end of it. Screen for alignment with the impact framework and for any potential negative impact. Benchmark by mapping the value chain and the stakeholders in it, then identify three or four KPIs, because not everything is measurable. Forecast what impact appears if the business scales, since impact scale-up runs roughly in parallel with it. Then report annually in public, with more detail to the fund's own investors.",
+      "A theory of change runs in five steps: inputs, activities, outputs, outcomes, impact. What is practically measurable is mostly outputs — jobs created, people receiving education, people receiving healthcare. Income enhancement, or the quality-of-life gain from five more hours of electricity, moves into outcomes and needs research behind it. AgroStar is the worked case: seed funded in 2013 as a call centre, now working with more than 10 million farmers of whom 1.7 million have bought, omni-channel, at series E."
+    ],
+    worked: {
+      setup: "An investor claims a fund creates impact, and reports the number of jobs created.",
+      move: "Place the number on the theory of change before accepting it as impact.",
+      because: "Inputs, activities, outputs, outcomes and impact are five different things, and a job count is an output: it says the activity happened, not that a life changed. Outcomes, such as income enhancement or the gain from five more hours of electricity, are what people actually mean by impact, and they need research to establish. Most investors report outputs because outputs can be measured reliably. Knowing which one you are reading is what stops an honest number being taken for a larger claim than it makes."
+    },
+    glossary: [
+      {term: "emerging 3 billion", plain: "The bottom three billion of the world's population — the opportunity gap Aavishkaar states as its target."},
+      {term: "theory of change", plain: "Inputs, activities, outputs, outcomes, impact. Five steps, routinely collapsed into one word."},
+      {term: "outputs", plain: "What the activity produced — jobs created, people trained. Reliably measurable, and not the same as a changed life."},
+      {term: "outcomes", plain: "The change in people's lives, such as income enhancement. Harder to measure, and closer to what impact means."},
+      {term: "KPIs", plain: "The three or four things actually tracked, chosen at investment because not everything can be measured."}
+    ],
+    connects: "That is the investor's own account. The next session is the questions put to it."
+  });
+
+  lesson({
+    lectureId: "IBM-M08-L03",
+    courseId: "IBM",
+    module: 8,
+    order: 3,
+    title: "The hard questions about impact investing",
+    objective: "State the test that separates genuine intention from a claim, and explain how impact and financial return are actually weighed.",
+    explainer: [
+      "The scale is small. Global investment runs around 270 trillion against impact investment of 1.6 to 2.6 trillion; India's is roughly 5 billion, with a CAGR near 24% — a good rate on a small base, up from a few hundred million over five to seven years. Only about 15% goes to new ventures and only about 2% to seed stage. Capital concentrating in mature companies is unsurprising, but the absolute amount reaching early stage has to rise, and risk aversion is what holds it back.",
+      "Anyone can claim intention — a mining company can call job creation impact. The test is whether you measure and report it: which processes, which frameworks, and how transparently the results are published. Where impact is genuinely dual, an impact investor enters only with adequate mitigation of the harm, because stopping oil, gas and coal outright would stop the world working, so the question becomes doing it better. On the supposed trade-off, most impact investors treat impact as a minimum threshold; once it is cleared, the rest is financial return assessment.",
+      "Climate attracts capital partly because its KPIs are easy — emissions reduced, water saved, carbon absorbed — where social impact is nuanced and hard to pin down. But climate is a social question too: a World Bank study puts 80% of the effect first on the low-income population, and about 100 million people could return to extreme poverty. Money is raised from commercial investors, who actually expect higher returns from impact investing, and from DFIs whose mandate is development."
+    ],
+    worked: {
+      setup: "A fund claims impact intent for an investment in an industry that also harms the environment.",
+      move: "Ask what is being measured and reported, and what mitigation the investment terms require.",
+      because: "Intention alone is unfalsifiable, since any capital entering a low-income market can be called impact investing on that basis. The test is the apparatus behind the claim: which KPIs, which framework for screening and monitoring, and how transparently the results are published. Where the impact is dual, entering requires mitigation written into the terms. A negative list of prohibited activities is what turns a stated intention into something the investee is held to."
+    },
+    glossary: [
+      {term: "intention", plain: "The claimed purpose of the capital. Worthless on its own — the test is whether it is measured and reported."},
+      {term: "negative list", plain: "Activities the investment terms forbid, which is how an intention becomes a binding obligation on the business."},
+      {term: "SROI", plain: "Social return on investment, one way of putting a number on impact. Not every impact investor uses it."},
+      {term: "DFIs", plain: "Development finance institutions, whose mandate is to invest for development rather than only for return."},
+      {term: "risk-adjusted", plain: "The financial benchmark capital still demands. Miss it and money stops flowing to the sector, whatever the impact."}
+    ],
+    connects: "Those are the investor's terms. The next session asks how the impact itself gets measured."
+  });
+
+  lesson({
+    lectureId: "IBM-M08-L04",
+    courseId: "IBM",
+    module: 8,
+    order: 4,
+    title: "Measuring social impact, and the metric that decides the answer",
+    objective: "Apply the stakeholder framework for social impact, and explain how the wrong metric reversed Pratham's result.",
+    explainer: [
+      "Financial metrics are tried and tested — profitability, return on investment, asset turnover ratios — and we know what each measures and what it does not. Social impact has neither settled. Professor Ted London's framework supplies structure: a social venture affects sellers and providers, buyers and consumers, intermediaries, and communities; and it affects each of them in three ways — economic conditions, capability and wellbeing, and relationships — over both short and long term, and not always positively.",
+      "Economic covers income and its stability, debt, productivity, pricing, availability and choice, the price a seller realizes, and the opportunity cost of the livelihood given up, plus vulnerability to household shocks. Capability covers skills, health and life expectancy, self-esteem, empowerment and aspirations, and a community's access to information and sense of dignity. Relationships cover networks, dependency, trust and reputation, social status, gender equality, and even consumerism and social cohesion.",
+      "Pratham is the cautionary case. In rural Uttar Pradesh only 30% of children aged 7 to 14 could read and understand a simple story and nearly 15% could not recognise a letter. Its Learn to Read programme trained community volunteers to teach after school, and literacy was scored on a five-point scale: nothing, letter, word, paragraph, story. Evaluators from Education For All then reported Pratham's children at 2.1 against 2.8 for children who never attended, and urged donors to be careful."
+    ],
+    worked: {
+      setup: "An evaluator reports that children in a literacy programme read worse than children who never attended it.",
+      move: "Ask what the two groups looked like before the programme, not only after.",
+      because: "Pratham deliberately recruited the children whose reading was worst, so comparing final levels against better-off village children measures who was selected rather than what the programme did. The right metric is improvement, and on that basis Pratham's children gained 0.6 reading levels against 0.3 — a difference of difference, and positive. Even that is incomplete: a regression bringing in previous reading level, age, gender and parental literacy leaves parents' literacy as the variable that survives."
+    },
+    glossary: [
+      {term: "Ted London", plain: "Whose framework sorts impact by stakeholder — sellers, buyers, intermediaries, communities — and by economic, capability and relationship effects."},
+      {term: "opportunity cost", plain: "The livelihood given up to take this one. An economic impact that a headline income figure hides."},
+      {term: "difference of difference", plain: "Comparing each group's before-and-after change, rather than comparing their end states. It is what rescued Pratham's result."},
+      {term: "regression analysis", plain: "Testing many variables at once. It showed parental literacy mattered more than the programme itself."},
+      {term: "consumerism", plain: "A reminder that impact runs both ways — rising income can produce buying that does not help the community long term."}
+    ],
+    connects: "That is how impact is measured. The next session sets out the frameworks formally."
   });
 
   lesson({
@@ -1968,6 +3486,91 @@
       {term: "theory of change", plain: "The stated chain from activities through outputs and outcomes to impact."},
       {term: "control group", plain: "A closely comparable group that does not receive the intervention, so the difference can be attributed."},
       {term: "treatment group", plain: "The group that receives the intervention being tested."}
+,
+      {term: "Ted London framework", plain: "Four stakeholders — buyers, sellers, intermediaries, community — across three dimensions."},
+      {term: "randomised controlled trial", plain: "The Pratham dispute: selection bias in final scores, resolved by difference-in-difference."}
+    ],
+    connects: "That is impact measured. The next session adds the dimension the frameworks keep separate."
+  });
+
+  lesson({
+    lectureId: "IBM-M08-L06",
+    courseId: "IBM",
+    module: 8,
+    order: 6,
+    title: "Poverty and the environment: two market failures that pull apart",
+    objective: "Explain why poverty and environmental sustainability are different kinds of market failure, and when they align rather than conflict.",
+    explainer: [
+      "Both are market failures, and they fail differently. Poverty is a pricing challenge: the poor cannot pay market rates, so either you innovate a financially sustainable way to serve them or the need goes to the not-for-profit and government route. Environmental sustainability is a time horizon problem: short-term sacrifice for long-term benefit, which the human mind handles badly. It is the same reason people eat badly knowing the consequences arrive later.",
+      "Sometimes they align. SELCO sells decentralized solar, which is both a low-cost energy solution for the poor and a renewable one replacing kerosene and coal-fired power. Hasiru Dala generates income for waste pickers while diverting waste from landfill into compost and recyclate. But these are exceptions. Development generally needs low-cost material and cheap production, and green steel costs far more than the ordinary kind; and as incomes rise, food shifts from carbohydrate to protein, which raises greenhouse gas emission sharply.",
+      "The Earth Overshoot Day chart makes the trajectory visible: in the early 1970s humanity consumed roughly what the Earth could regenerate in a year, and now the year's resources are gone by July or August — about 1.75 Earth. Kuznets' curve says economies pass from agrarian to industrial to service, with emissions peaking in the middle. India largely skipped industrialisation, and Atmanirbhar Bharat brings manufacturing back, which is good for the roughly 12 million joining the workforce yearly and bad for emissions."
+    ],
+    worked: {
+      setup: "A country must choose between cheap steel that lifts incomes and green steel that does not raise emissions.",
+      move: "Name which market failure you are solving before treating the choice as a single problem.",
+      because: "Poverty fails on price and the environment fails on time horizon, so a solution good for one is frequently indifferent or harmful to the other. Cheap production is what makes goods affordable to people who have very little, and under current technology it is exactly what raises emissions. That is why SELCO and Hasiru Dala are exceptional rather than typical: they sit where the two align. Raworth's doughnut names the target instead of pretending the tension away."
+    },
+    glossary: [
+      {term: "market failure", plain: "Where market mechanisms cannot solve the problem. Poverty and environmental sustainability are both, for different reasons."},
+      {term: "Earth Overshoot Day", plain: "The date each year when humanity has used what the Earth regenerates annually. It has moved from late December to July."},
+      {term: "Kuznets", plain: "Whose curve tracks economies from agrarian to industrial to service, with emissions peaking during industrialisation."},
+      {term: "social foundation", plain: "Raworth's floor — livelihood, housing, justice, food, water, political voice — below which life is not worth living."},
+      {term: "ecological ceiling", plain: "Raworth's limit, above which come ozone depletion, ocean acidification, air pollution and biodiversity loss."}
+    ],
+    connects: "That is the tension. The next session is a set of startups sitting exactly on it."
+  });
+
+  lesson({
+    lectureId: "IBM-M08-L07",
+    courseId: "IBM",
+    module: 8,
+    order: 7,
+    title: "Carbon credits: paying a farmer for something nobody can see",
+    objective: "Explain how a carbon credit reaches a smallholder, and why verification is the business rather than a formality.",
+    explainer: [
+      "Multinationals such as Microsoft, Google, Amazon and Unilever have committed to net zero, and since their own emissions cannot reach zero they pay others to remove carbon elsewhere. A carbon credit is a financial certificate representing roughly one ton of carbon dioxide removed or avoided. Carbon avoidance means preventing emissions — renewable electricity, or stopping deforestation. Carbon removal means physically taking carbon dioxide out and storing it, and buyers increasingly prefer it as more credible and more permanent.",
+      "India has vast agricultural land, many farmers, large quantities of agricultural residue, a suitable climate and low operating costs, so roughly 50 carbon removal projects are already registered. Three startups show three scientific pathways. Alt Carbon supplies crushed basalt powder that farmers spread, where rain and soil chemistry lock carbon into stable minerals — enhanced rock weathering. Varaha buys crop residue farmers would otherwise burn and heats it without oxygen into biochar, a soil conditioner that keeps the carbon trapped for decades.",
+      "MittiLabs addresses methane, a far more powerful greenhouse gas than carbon dioxide, produced by continuously flooded rice fields. Alternate wetting and drying cuts it, saves water and can raise yield. So why do farmers not simply do it? Because it means abandoning a practice held for generations, the farmer cannot see methane, electricity for pumping is free, and the benefit varies by crop. The carbon payment is what converts an invisible, uncertain future benefit into a present one."
+    ],
+    worked: {
+      setup: "A buyer in another country is asked to pay for carbon removed on a smallholding it will never visit.",
+      move: "Treat measurement and verification as the product, not as compliance overhead.",
+      because: "Someone at Google cannot know what happened in a field in Telangana or Burdwan, so what is actually being sold is credible proof: baseline measurement, monitoring, laboratory analysis, scientific modelling, independent auditors and internationally accepted standards. Without that the credit is worthless and the market does not function. It is also why the capability set is so wide, and why the cash conversion cycle runs one and a half to two years."
+    },
+    glossary: [
+      {term: "net zero", plain: "Emitting no net greenhouse gas. Since gross emissions cannot be zero, the balance is bought as removal elsewhere."},
+      {term: "carbon removal", plain: "Physically taking carbon dioxide out of the atmosphere and storing it — preferred by buyers over merely avoiding emissions."},
+      {term: "enhanced rock weathering", plain: "Crushed basalt spread on fields, where rain and soil chemistry lock carbon into stable minerals."},
+      {term: "biochar", plain: "Crop residue heated without oxygen, so carbon stays trapped. Returned to the farm as a soil conditioner."},
+      {term: "alternate wetting and drying", plain: "Letting a rice field dry between floodings, which cuts methane sharply and asks a farmer to abandon a generational practice."},
+      {term: "cash conversion cycle", plain: "One and a half to two years here, because the credit sells only after the work, the measurement and the verification are done."}
+    ],
+    connects: "That is the newest form of it. The last session draws the whole course together."
+  });
+
+  lesson({
+    lectureId: "IBM-M08-L08",
+    courseId: "IBM",
+    module: 8,
+    order: 8,
+    title: "What the course argues, and where each kind of organisation fits",
+    objective: "State the course's central claim about inclusive business, and place government, not-for-profits, inclusive models and commercial firms relative to each other.",
+    explainer: [
+      "The argument runs like this. Charity and philanthropy have limits — they create dependence and openings for corruption — so the question becomes whether financially sustainable businesses can serve the poor. Yunus showed a profitable bank built on lending to them, and his deeper insight is that the selfless and the selfish are the same person. Prahalad argued there is fortune at the bottom of the pyramid if you innovate for it. Every case was tested on three things: real impact, financial viability, and whether it scales without diluting its purpose.",
+      "Two families of case ran through the course. Where the poor are the customer: reduce cost relentlessly, arrange finance, link repayment to the income generated, aggregate to raise bargaining power, and decide how much to customise. Where the poor are the producer — impact sourcing — de-skill the complex parts so training substitutes for qualification, link to markets, buffer against price shocks, and ask who captures the consumer surplus. Amartya Sen and Elinor Ostrom set the real test: does any of it leave people with more choices?",
+      "The four organisational types are complements, not substitutes. Government funds through taxes what generates no income, and never has enough. Not-for-profits take specific causes donors care about and can point at the result. Commercial enterprises take problems where price exceeds cost and maximise profit. Inclusive business models sit between: they must be financially viable and will never maximise profit — an investor would earn more in a fixed deposit — which is exactly what makes the impact the point."
+    ],
+    worked: {
+      setup: "An investor asks why they should fund an inclusive business rather than a commercial one or a charity.",
+      move: "Be explicit that the return will be low and the impact will be the reason.",
+      because: "An inclusive business is defined by not maximising profit, so a fixed deposit will often beat it on return, and pretending otherwise recruits the wrong investors — which is how scale pressure dilutes a mission, as micro-lending showed. Against a donation it offers something a donation cannot: the money comes back, and the discipline of having to cover costs keeps the model honest. That is the whole space these organisations occupy, and it is why the course treats all four types as necessary rather than competing."
+    },
+    glossary: [
+      {term: "impact sourcing", plain: "Involving the poor as producers or providers in your supply chain, rather than serving them as customers."},
+      {term: "de-skill", plain: "Breaking a complex activity into routine steps so a trained non-specialist can do it — Gyanshala's teachers, RuralShores' agents."},
+      {term: "consumer surplus", plain: "The value created in the chain. Who keeps it is what separates an inclusive model from an exploitative one."},
+      {term: "Amartya Sen", plain: "Whose test, with Elinor Ostrom, is capability: does the intervention leave people with more choices?"},
+      {term: "corporate social responsibility", plain: "The rule that a profit-making company should spend about 2% of profits on socially impactful activity."}
     ],
     connects: "IBM is complete: why inclusive models exist, how they are built across sectors, who funds them, and how anyone knows they worked."
   });
@@ -1992,6 +3595,99 @@
    * one, and it is the error `sclm_syn_inventory` tests.
    * ------------------------------------------------------------------ */
 
+  /* ------------------------------------------------------------------
+   * SCLM Module 1 — the foundations, added 2026-08-17
+   *
+   * Measured coverage of SCLM module 1 was 5 of 28 named ideas. The bank taught
+   * strategic fit and the six drivers and nothing underneath them, so a learner
+   * finished module 1 without ever being told what a supply chain is. Authored from
+   * the course's own module 1-2 notebook, which is handwritten and was read visually.
+   * ---------------------------------------------------------------- */
+
+  lesson({
+    lectureId: "SCLM-M01-L01",
+    courseId: "SCLM",
+    module: 1,
+    order: 1,
+    title: "What a supply chain is",
+    objective: "Say who is inside a supply chain and which three flows move through it, and name the only source of revenue.",
+    explainer: [
+      "A supply chain involves all parties, functions and activities involved directly or indirectly in fulfilling customer demand. That is wider than the picture most people carry. It comprises manufacturers, warehouse managers, transporters and retailers — and the customer, because customer demand is what triggers the whole chain in the first place. It also takes in functions that are not obviously logistical: marketing, forecasting, procurement, product design, quality, finance, distribution and customer service all sit inside it.",
+      "Three flows move through that structure and they run in different directions. Product flows downstream from supplier to end customer. Information flows both ways — demand, prices, inventory levels — and in practice mostly upstream, from the customer back toward the suppliers of raw material. Funds flow upstream: the customer pays, and that money moves back through retailers, wholesalers, manufacturers and suppliers. The three are interconnected, and a break in the information flow will show up as a break in the other two.",
+      "One consequence is worth stating on its own, because it reorganises how the whole subject is read. The end customer is the only source of positive cash inflow into the chain. Every other payment between partners is an internal transfer — money moving from one pocket of the same system to another. That is why local optimisation is a trap: a stage that improves its own margin at another stage's expense has moved money sideways and added nothing."
+    ],
+    worked: {
+      setup: "A distributor negotiates better payment terms from a manufacturer and reports it as a margin improvement for the chain.",
+      move: "Classify it as an internal transfer, not new revenue, and check whether anything changed for the end customer.",
+      because: "The end customer is the only positive cash inflow into a supply chain; everything between partners is money moving inside the same system. Better terms improve one participant's position and leave the total unchanged, so it cannot be a chain-level improvement — and if the squeezed partner responds by cutting service or holding less stock, the total gets worse."
+    },
+    glossary: [
+      {term: "supply chain", plain: "All parties, functions and activities involved directly or indirectly in fulfilling customer demand."},
+      {term: "product flow", plain: "Goods moving downstream from supplier to end customer."},
+      {term: "information flow", plain: "Demand, price and inventory data moving in both directions, largely upstream."},
+      {term: "funds flow", plain: "Money moving upstream from the customer back through the chain."},
+      {term: "single source of revenue", plain: "The end customer — every other payment between partners is an internal transfer."},
+      {term: "supply chain surplus", plain: "Customer value less the total cost the whole chain spent to deliver it — the objective every stage shares."}
+    ],
+    connects: "That is the structure and what it is for. The next segment sorts the decisions that run it by how far ahead each one reaches."
+  });
+
+  lesson({
+    lectureId: "SCLM-M01-L02",
+    courseId: "SCLM",
+    module: 1,
+    order: 2,
+    title: "Design, planning, operations",
+    objective: "Sort a supply chain decision into design, planning or operations by its horizon, and say why a constraint set in one phase cannot be undone in a later one.",
+    explainer: [
+      "Supply chain decisions cover product, information and cash flows, and they are not all of one kind. Sorting them by how often they are made and how long their effect lasts gives three phases, and one rule runs through all of them: as the horizon shortens, uncertainty falls and decisions get more detailed. Design comes first, on a horizon of years. It is the architecture — where plants and warehouses go, how much capacity to build, whether to make in-house or outsource, which transport modes to rely on, what information systems to run.",
+      "Design decisions are expensive to reverse, so they are made against uncertainty about how demand will grow, how competitors will respond, how regulation will move. This is where a firm chooses what kind of supply chain it wants to be — efficient, responsive, or somewhere between — and builds the infrastructure for it. Planning runs on a quarter to six months and treats that structure as fixed: which markets are served from which warehouse, which warehouses are replenished from which plants, how much to produce each month, what inventory targets to hold, whether to subcontract through a peak, when to run a promotion. Its output is a set of operating policies.",
+      "Operations run on days to weeks and execute inside those policies: which order is filled from which inventory, what a warehouse picks and in what sequence, which vehicle or rider takes which route, what to substitute when something is out of stock. Uncertainty is lowest here because today's orders and today's stock are visible. The reason the classification earns its keep is that the phases cascade. A brilliant operations team cannot compensate for warehouses in the wrong places, and a good design still fails if planning puts inventory in the wrong place at the wrong time."
+    ],
+    worked: {
+      setup: "A retailer keeps missing its delivery promises, and the last-mile team is told to fix its routing.",
+      move: "Ask which phase the binding constraint sits in before optimising anything. If the warehouses are too far from the customers, that is a design decision and no routing change reaches it.",
+      because: "The phases cascade in one direction: design fixes the structure planning allocates within, and planning fixes the policies operations executes against. A constraint set in an earlier phase cannot be undone in a later one, so a routing solved perfectly against the wrong network keeps failing and the team looks incompetent while doing good work. Naming the phase also dates the fix — it tells you whether the answer is available this week, this quarter, or only at the next network review."
+    },
+    glossary: [
+      {term: "decision phases", plain: "The three horizons a supply chain decision sorts into — design, planning and operations — and the order they constrain each other in."},
+      {term: "supply chain design", plain: "The long-horizon architecture — locations, capacity, outsourcing, modes — expensive to reverse."},
+      {term: "supply chain planning", plain: "Quarter-to-six-month allocation inside a fixed structure; its output is operating policies."},
+      {term: "supply chain operations", plain: "Day-to-day execution inside those policies, where uncertainty is lowest."},
+      {term: "operating policies", plain: "The rules and parameters planning hands to operations."}
+    ],
+    connects: "Those are the decisions and the horizons they sit on. The next segment looks at the same chain as a set of processes rather than a set of decisions."
+  });
+
+  lesson({
+    lectureId: "SCLM-M01-L03",
+    courseId: "SCLM",
+    module: 1,
+    order: 3,
+    title: "Three ways to look at the same processes",
+    objective: "Place a process in the cycle view and on the push-pull boundary, and name the three macro processes a firm has to integrate.",
+    explainer: [
+      "A supply chain is a sequence of processes and flows between stages that together fill a customer need, and there are three useful lenses on it. The cycle view cuts it at the interfaces: the customer order cycle between customer and retailer, the replenishment cycle between retailer and distributor, the manufacturing cycle between distributor and manufacturer, and the procurement cycle between manufacturer and supplier. Not every chain shows all four — a direct-to-consumer model may have no distributor stage at all.",
+      "Each cycle repeats the same sub-processes: the supplier markets, the buyer orders, the supplier supplies, the buyer receives, and reverse flows carry returns and packaging back. Two things change as you move upstream, though. Demand uncertainty is highest in the customer order cycle, because that demand comes from outside the chain, while every cycle above it can be projected from the policies of the stage below. And order size grows upstream while the number of orders falls, which is why shared information and consistent policies matter more the further up you go.",
+      "The push-pull view classifies processes by what triggers them. Pull processes are started by a customer order and run against known demand; push processes are started in anticipation and run against a forecast. The boundary between them is a design choice, and moving it changes responsiveness, cost and inventory together. The macro-process view is the firm-level cut: customer relationship management at the customer interface, internal supply chain management fulfilling what CRM creates, and supplier relationship management at the supplier interface. They must be integrated, or marketing plans a promotion the operation is not ready for."
+    ],
+    worked: {
+      setup: "A distributor's monthly orders look far steadier than the retailer's daily sales, for the same product.",
+      move: "Read that as a property of the cycle rather than of the distributor. The customer order cycle carries the highest demand uncertainty because its demand is external to the chain; every cycle upstream is driven by another stage's ordering policy.",
+      because: "Uncertainty is not evenly spread through a chain, and where it sits decides what can be planned. Upstream orders are the output of a policy — a reorder point, a replenishment rule — so they are projectable in a way real customer demand never is. That is also the warning: the steadiness is manufactured by the stage below, so a change to its policy moves the whole pattern, which is why information sharing matters more the further upstream you look."
+    },
+    glossary: [
+      {term: "cycle view", plain: "The chain cut into four cycles, each at the interface between two successive stages."},
+      {term: "replenishment cycle", plain: "The interface between retailer and distributor."},
+      {term: "push process", plain: "Started in anticipation of demand, against a forecast."},
+      {term: "pull process", plain: "Started by an actual customer order, against known demand."},
+      {term: "customer relationship management", plain: "The macro process at the customer interface — marketing, pricing, sales, order management."},
+      {term: "internal supply chain management", plain: "The macro process fulfilling the demand CRM creates: planning, production, inventory, fulfilment."},
+      {term: "supplier relationship management", plain: "The macro process at the supplier interface — selection, terms, quality, joint planning."}
+    ],
+    connects: "Those are the processes and the interfaces they sit on. The next segment asks what the whole arrangement is supposed to be good at."
+  });
+
   lesson({
     lectureId: "SCLM-M01-L04",
     courseId: "SCLM",
@@ -2015,10 +3711,106 @@
       {term: "responsiveness", plain: "Being able to handle swings in quantity, short lead times, wide variety, and high service — at higher cost."},
       {term: "efficiency", plain: "Delivering at the lowest possible cost, usually through standardisation, high utilisation, and stable operations."},
       {term: "cost responsiveness frontier", plain: "The lowest cost achievable at each level of responsiveness; on it, more speed must be paid for."},
+      {term: "efficient supply chain", plain: "A chain built to deliver at low cost. It struggles on uncertain products or fast-response promises, where customers meet stock-outs and delays."},
+      {term: "responsive supply chain", plain: "A chain built to absorb uncertainty quickly. It is wasteful on predictable, stable products, which is why the two are matched to the promise."},
       {term: "zone of strategic fit", plain: "The band where the chain's responsiveness matches the implied uncertainty the promise creates."},
       {term: "tailored supply chain", plain: "Being efficient where uncertainty is low and responsive where it is high, instead of one design for everything."}
     ],
-    connects: "Fit tells you what the chain must be good at. It does not tell you which levers set that — and those levers are the next lecture."
+    connects: "Fit says what the chain must be good at. The next segment asks how you would know whether it is — by reading the chain in the financial statements."
+  });
+
+lesson({
+    lectureId: "SCLM-M01-L05",
+    courseId: "SCLM",
+    module: 1,
+    order: 5,
+    title: "Measuring a supply chain financially",
+    objective: "Trace a supply chain decision to the financial number it moves, using return on assets and the cash-to-cash cycle.",
+    explainer: [
+      "Supply chain decisions change costs, inventories, service levels and cash flows, and all four land in the financial statements. Start where shareholders look. Return on equity is net income over average shareholder equity, about 17% for Amazon in both 2009 and 2010. Return on assets asks a different question — earnings before interest over average total assets, adding back after-tax interest so the answer does not depend on how the firm chose to finance itself — and came to about 6.7%. The gap between the two is return on financial leverage, 10.5% here, and most of Amazon's came from accounts payable rather than borrowing.",
+      "Return on assets then decomposes into profit margin times asset turnover, and that split is the useful part: there are only two routes to a better return. Margin is thin in this business, 3.8% in 2009, so fulfilment and outbound shipping cost per order move it visibly. Asset turnover breaks into three ratios the supply chain owns — accounts receivable turnover, inventory turnover of about 8.74, and property, plant and equipment turnover, which fell from about 19 to 14 as capacity was built ahead of sales.",
+      "Express each of those as weeks and they combine into one measure of how long cash is tied up: the cash-to-cash cycle is minus weeks payable, plus weeks in inventory, plus weeks receivable. Amazon paid suppliers after about 20.18 weeks, held roughly 5.95 weeks of inventory and collected in 2.7, giving about −11.53 weeks. Two supply chain effects never appear as line items at all: markdowns taken to clear excess stock, and lost sales from stock that was not there."
+    ],
+    worked: {
+      setup: "Accounts payable turnover is cost of goods sold over accounts payable — 18,978 over 7,364, about 2.58. A manager reads a turnover that low as a warning sign and proposes paying suppliers faster to fix it.",
+      move: "Convert before judging. Weeks payable is 52 divided by 2.58, about 20.18 weeks. A low turnover means payables are large relative to cost of goods sold, so the firm is running on supplier money for some twenty weeks — that is where the leverage in the ROE-to-ROA gap comes from, and paying faster would spend it.",
+      because: "Reading a low ratio as weakness is the error the conversion corrects: the same number in weeks is plainly a source of financing rather than a problem. The opposite instinct is wrong too. Stretch payables too far and suppliers raise prices, cut priority, tighten terms or become less reliable. This is beneficial up to a point, and the point is set by the supplier relationship rather than by the ratio."
+    },
+    glossary: [
+      {term: "return on equity", plain: "Net income divided by average shareholder equity — the shareholder's view of the return."},
+      {term: "return on assets", plain: "Earnings before interest divided by average total assets, so the answer does not depend on the financing choice."},
+      {term: "earnings before interest", plain: "Net income plus after-tax interest expense, which is interest expense times one minus the tax rate."},
+      {term: "return on financial leverage", plain: "Return on equity minus return on assets — how much of the return comes from leverage, including payables."},
+      {term: "accounts payable turnover", plain: "Cost of goods sold divided by accounts payable; 52 over it gives weeks payable."},
+      {term: "profit margin", plain: "Earnings before interest over sales revenue — the first factor of return on assets."},
+      {term: "asset turnover", plain: "Sales revenue over total assets — the second factor, and the one inventory moves most."},
+      {term: "inventory turnover", plain: "Cost of goods sold divided by inventories; 52 over it gives weeks held in inventory."},
+      {term: "cash-to-cash cycle", plain: "Minus weeks payable plus weeks in inventory plus weeks receivable. Negative means customers pay before suppliers do."},
+      {term: "days inventory outstanding", plain: "The revision sheets' name for weeks in inventory, counted in days: how long stock sits before it sells."},
+      {term: "days sales outstanding", plain: "The same measure as weeks receivable, in days: how long customers take to pay."},
+      {term: "days payable outstanding", plain: "The same measure as weeks payable, in days: how long the firm takes to pay its suppliers."},
+      {term: "lost sales", plain: "Demand not captured because the product was not available — invisible in the statements, and margin gone."}
+    ],
+    connects: "That is how the chain reads in the accounts. The next segment leaves the statements for the six drivers that actually move these numbers."
+  });
+
+  lesson({
+    lectureId: "SCLM-M01-L07",
+    courseId: "SCLM",
+    module: 1,
+    order: 7,
+    title: "The KPI tree: from a financial number down to a driver you can move",
+    objective: "Trace a financial outcome down to the supply chain driver that moves it, and name the trade-off the drill-down exposes.",
+    explainer: [
+      "The financial measures and the six drivers are easy to learn as two separate lists in two separate buckets, and that is exactly the mistake. The point of a supply chain decision is to move a financial outcome. A KPI tree — a key performance indicator tree — makes the connection visible. It is a drill down map: put the financial outcome you want to improve at the top, break it into simpler financial components, and keep going until you reach operational measures you can actually change on the ground.",
+      "ROA is the worked example because it splits cleanly: ROA is profit margin times asset turnover, so if ROA is short there are only two big levers. Profit margin asks how much profit you make per unit of revenue, and the supply chain moves it two ways — by reducing operating costs such as transportation, warehousing and handling, expediting and returns, or by reducing losses from mismatch such as markdowns and lost sales. Asset turnover asks how much revenue each rupee in assets generates, and inventory is the main lever.",
+      "One step further down reaches the six drivers. Facilities and inventory strongly influence asset turnover and cost. Transportation and sourcing influence cost and also inventory needs. Information influences everything, because it drives coordination and planning. Pricing shapes the demand pattern, which feeds back into cost, inventory and service. Even a small business does this implicitly; the tree only makes the logic explicit."
+    ],
+    worked: {
+      setup: "ROA is below target, and the obvious response is to cut inventory hard.",
+      move: "Follow both branches of the tree before pulling either, and read what the pull does to the other one.",
+      because: "Cutting inventory improves asset turnover, which is one of ROA's two factors. It also raises stock outs, and lost sales cut profit margin, which is the other factor — so a single action can push ROA in both directions at once. The tree does not hand you the answer; it tells you where to look first and which trade-off you are triggering. Cash to cash behaves the same way: if cash is tied up too long, the levers are inventory days, receivables and supplier payment terms."
+    },
+    glossary: [
+      {term: "KPI tree", plain: "A drill down map from a financial outcome at the top to the operational levers you can actually change."},
+      {term: "profit margin", plain: "Profit per unit of revenue. The supply chain moves it through operating costs and through losses from mismatch."},
+      {term: "asset turnover", plain: "Revenue per rupee invested in assets. Inventory and facilities are the drivers that move it most."},
+      {term: "operating costs", plain: "Transportation, warehousing and handling, expediting, returns — the costs that sit under the margin branch."},
+      {term: "cash to cash", plain: "How long cash is tied up. Its levers are inventory days, receivables and supplier payment terms."}
+    ],
+    connects: "That is the drill-down. The next segments take the drivers one at a time and keep coming back to it."
+  });
+
+lesson({
+    lectureId: "SCLM-M01-L08",
+    courseId: "SCLM",
+    module: 1,
+    order: 8,
+    title: "Facilities, inventory and transportation up close",
+    objective: "Set each logistical driver to a decision — where, how much, and how it moves — and name the responsiveness each choice buys or spends.",
+    explainer: [
+      "Competitive strategy implies a supply chain strategy, which fixes where the chain should sit on the efficiency-responsiveness spectrum; the drivers are what build it, and three of the six are logistical. Facilities are the where — production sites such as factories and assembly plants, and storage sites such as warehouses, distribution centres, fulfilment centres and retail stores. The core trade-off is to centralise or decentralise: one large warehouse earns economies of scale but leaves customers far away, while many small ones deliver faster at higher facility cost. Three decisions follow — role, location, and capacity.",
+      "Role is the one worth slowing down on. In production it asks flexible or dedicated: flexible plants make many products less efficiently, dedicated plants fewer at lower cost. In warehousing it asks storage or cross-docking, where goods stop briefly at a distribution centre and transfer to outbound vehicles without sitting in storage at all. Location trades proximity to customers against economies of scale, and reads land cost, labour, and connectivity to highways, ports and railways. Capacity absorbs demand spikes when there is slack and creates congestion when there is not.",
+      "Inventory is the what — raw materials, work in progress and finished goods — held because supply and demand do not match in timing. Little's Law ties it to speed: I = D × T, inventory equals throughput times flow time, with the units matched. Separate three kinds by purpose: cycle inventory from ordering in batches, safety inventory against demand spikes and supply delays, seasonal inventory built ahead of a predictable peak such as summer air conditioners or monsoon umbrellas. Transportation is the how, and it is bound to inventory: faster costs more and cuts stock, slower is cheaper and forces more."
+    ],
+    worked: {
+      setup: "An assembly line runs at 60 units per hour and a unit takes about ten hours from entry to exit. The plant is told to bring average inventory down to 300 units without losing output.",
+      move: "Read the present state with Little's Law: I = D × T, so 60 × 10 = 600 units are in the system. Hold throughput at 60 and solve for the flow time 300 units implies — 300 ÷ 60 = 5 hours. The instruction to halve inventory is an instruction to halve flow time.",
+      because: "Little's Law makes inventory a consequence rather than a dial. It does not say how to reach five hours — that is real work on waiting, batching and handoffs — but it does say the target is unreachable without it, so a plan that only cuts order quantities produces stockouts rather than speed. The caveat is D: throughput is usually set by customer demand, so it is the term you do not get to choose freely."
+    },
+    glossary: [
+      {term: "logistical drivers", plain: "Facilities, inventory and transportation — the three that physically place and move product."},
+      {term: "cross-docking", plain: "Goods stop briefly at a distribution centre and transfer to outbound vehicles without sitting in storage."},
+      {term: "cycle inventory", plain: "Stock that builds up because you order or produce in batches to exploit economies of scale."},
+      {term: "safety inventory", plain: "Buffer stock held against uncertainty — demand spikes, supply delays, or both."},
+      {term: "seasonal inventory", plain: "Stock built ahead of a predictable peak, when ramping capacity quickly is slow or expensive."},
+      {term: "Little's Law", plain: "Inventory equals throughput times flow time, I = D × T, provided the time units match."},
+      {term: "flow time", plain: "The average time one unit spends inside the system, entry to exit."},
+      {term: "throughput", plain: "The flow rate through the system in units per period — usually set by customer demand."},
+      {term: "fill rate", plain: "The fraction of demand met immediately from inventory without a stock out."},
+      {term: "network design", plain: "Direct shipping against consolidation through hubs — the first of the two transportation decisions."}
+    ],
+    connects: "Those are the three that place and move the product. The next segment takes the three that cut across departments — information, sourcing and pricing."
   });
 
   lesson({
@@ -2048,7 +3840,148 @@
       {term: "supply chain surplus", plain: "The value the whole chain creates — the target the drivers are set to raise."},
       {term: "dual sourcing", plain: "Base volume from an efficient supplier and the flexible portion from a responsive one."}
     ],
-    connects: "The drivers are set from a demand signal. The next lecture asks how that signal is produced, and how much of it to believe."
+    connects: "That is the glimpse of all six. The next segment puts them into a single framework, so a driver can be set deliberately rather than accidentally."
+  });
+
+  lesson({
+    lectureId: "SCLM-M01-L09",
+    courseId: "SCLM",
+    module: 1,
+    order: 9,
+    title: "Information, sourcing and pricing: the three that cut across departments",
+    objective: "Explain what makes the three cross-functional drivers different, and state the trade-off each one carries.",
+    explainer: [
+      "These three are called cross-functional because they cut across marketing, operations, procurement, finance and customer service rather than sitting in one of them, and in modern supply chains they are where much of the competitive advantage is created. Information is data and analysis about what is happening in the chain — demand, inventory, capacity, transport status, costs, customer behaviour. Good information lets you use assets better and coordinate flows better, which can improve responsiveness and reduce cost at the same time.",
+      "But more is not always better. Sharing more raises the cost of collecting, storing and analysing it, while the marginal benefit of extra data falls, so the goal is the minimum needed to achieve the coordination you want — often aggregate sales by SKU and location, not every detail at the highest frequency. Three decisions matter: a push system where forecasts drive plans against a pull system where actual demand triggers action; coordination, whose classic failure is a promotion sales did not tell operations about; and sales and operations planning, the structured process that produces one shared plan.",
+      "Sourcing decides who performs each activity, and therefore whether you are buying responsiveness or efficiency. Many firms run a portfolio approach: a base with efficient low-cost suppliers and a flexible portion with responsive ones. Pricing shapes demand — who buys, when, and how much. Everyday low pricing keeps demand stable and planning easier; high-low pricing creates peaks and dips and so raises variability and cost."
+    ],
+    worked: {
+      setup: "A buyer can move the whole volume to the lowest-cost supplier on the list.",
+      move: "Price the lead time, the reliability and the quality alongside the unit cost before switching.",
+      because: "Low unit cost is only one part of total cost. If that supplier has longer lead times, poor reliability or quality problems, the chain pays for it elsewhere — in higher safety inventory, in expediting, in stock outs and lost sales — and those costs land in different budgets, which is why they are easy to miss. Good sourcing maximises total surplus rather than minimising purchase price, and that is also why single sourcing buys scale while multiple sourcing buys resilience."
+    },
+    glossary: [
+      {term: "cross-functional", plain: "Cutting across marketing, operations, procurement, finance and service, rather than belonging to one of them."},
+      {term: "pull system", plain: "Actual demand triggers action, so it needs fast, accurate real-time data. A push system runs on forecasts instead."},
+      {term: "sales and operations planning", plain: "The structured process where sales states expected demand and operations answers with what it can deliver, producing one shared plan."},
+      {term: "portfolio approach", plain: "A base volume with efficient low-cost suppliers plus a flexible portion with responsive ones, instead of choosing one type."},
+      {term: "everyday low pricing", plain: "Stable prices, so demand is steadier and planning is easier — against high-low pricing, which creates peaks and raises cost."},
+      {term: "menu pricing", plain: "Different prices for different service levels, such as shipping speed, so one chain can serve customers who want speed and customers who want cheap."}
+    ],
+    connects: "That completes the six. Module 2 turns to the demand signal all of them are set against, and how much of it to believe."
+  });
+
+  lesson({
+    lectureId: "SCLM-M02-L02",
+    courseId: "SCLM",
+    module: 2,
+    order: 2,
+    title: "Why supply chain planning starts with a forecast",
+    objective: "Explain why both push and pull processes need forecasts, and name the second output a forecast must carry besides the number.",
+    explainer: [
+      "Demand planning starts from one question — what will customers want, when and where — and forecasting is its first building block, because inventory, capacity, transportation and sourcing all rest on some view of the future. A push process acts in anticipation of demand, so it obviously needs one. A pull process acts after an order arrives, and needs one too: capacity and stock have to be in place beforehand or the response is not possible. A paint retailer mixes the shade after the customer asks, which is pull, but the base paint and pigments on the shelf are push and had to be forecast.",
+      "The difficulty appears when every stage forecasts alone. The store, the paint factory and the suppliers upstream can each hold a different view, and where the views differ supply and demand do not meet — stockouts at one end, excess inventory at the other. Collaborative forecasting is the fix: partners share information and align on a common view. A beverage company planning a promotion has to get that into the bottler's forecast, or the bottler plans capacity for a normal quarter and supply falls short exactly when the promotion lands.",
+      "Forecasts run at two horizons and both matter — long range ones build the system, choosing capacity, warehouse locations and launches, while short range ones run it, driving replenishment, staffing and schedules. And the number is only half the output. Forecast error is the other half, because it is what sizes the buffers: stable groceries forecast easily, fashion and new gadgets do not, and high error has to be answered with safety inventory, flexible capacity, faster replenishment or demand shaping. Forecasting is not predicting the future perfectly. It is reducing uncertainty enough to decide, while stating how wrong you are likely to be."
+    ],
+    worked: {
+      setup: "A paint retailer mixes every shade to order, after the customer has asked for it.",
+      move: "Do not conclude that the store needs no forecast. Split the process: the mixing is pull, but the base paint and the pigments sitting on the shelf are push, and those are what the forecast is for.",
+      because: "Pull removes the need to predict the final configuration, not the need to predict the inputs. Nobody can wait for a customer to ask and then order base paint from the factory, so the store forecasts bases and dyes, the factory forecasts base production, and the suppliers forecast beyond that. What postponement really buys is a forecast on a smaller number of more predictable items — which is a better forecasting problem, not the absence of one."
+    },
+    glossary: [
+      {term: "demand planning", plain: "Planning what customers will want, when and where — forecasting is its first step."},
+      {term: "push process", plain: "Producing, moving or stocking in anticipation of demand, before any order exists."},
+      {term: "pull process", plain: "Acting after a customer order arrives — which still needs capacity and stock planned ahead."},
+      {term: "collaborative forecasting", plain: "Partners sharing information and aligning on one view instead of forecasting privately."},
+      {term: "forecast error", plain: "How wrong the forecast is likely to be — the figure that sizes every buffer."}
+    ],
+    connects: "That is why the subject needs forecasts at all. The next segment says what is true of every forecast whatever technique made it, and what separates a useful one from a number."
+  });
+
+  lesson({
+    lectureId: "SCLM-M02-L03",
+    courseId: "SCLM",
+    module: 2,
+    order: 3,
+    title: "What is true of every forecast, and what makes one good",
+    objective: "Name the four features every forecast shares, judge one against the elements of a good forecast, and run the six-step process.",
+    explainer: [
+      "Four things hold whatever technique produced a forecast. It assumes the system that generated the past carries on, so nobody can hand forecasting to a model and walk away — a weather shock, a competitor's price move or a policy change breaks that assumption and the model will not notice. It is never exact, which is why forecast error is tracked and why buffers exist at all. It is more accurate for groups than for single items, because one SKU in one store is noisy while a category across a region has ups and downs that cancel. And accuracy falls as the time horizon lengthens.",
+      "That last one is a supply chain fact and not only a statistical one: a flexible chain can wait and plan on a short, better forecast, while a slow one commits early on a worse one. Seven things then make a forecast good. Timely, meaning early enough to act on. Reasonably accurate, with the accuracy stated mathematically, because that figure sizes safety stock. Reliable rather than brilliant one month and hopeless the next. In meaningful units for the decision — value for finance, units for operations, truckloads for transport. Written and shared, since functions planning on different numbers is how a chain misaligns. Simple enough to be used. And cost effective.",
+      "The process itself is six steps, and it is a loop. Determine the purpose, since what the forecast supports sets the detail needed. Establish the time horizon to match the decision's lead time. Obtain and prepare the data, cleaning errors and outliers. Choose a method. Generate the forecast. Then monitor the errors and revise — assumptions, data, sometimes the method. And when errors appear the response is often managerial rather than mathematical: a promotion when demand runs low, overtime or expediting when it runs high."
+    ],
+    worked: {
+      setup: "A planner is told to improve the accuracy of a forecast made twelve months ahead.",
+      move: "Ask what forces the twelve months before touching the method. Accuracy falls as the horizon lengthens, so a chain that can act faster gets a better forecast without changing how it forecasts.",
+      because: "Two of the four features meet here. The horizon degrades accuracy, and it is the chain's own lead times that set the horizon — if capacity takes months to add, the commitment is months out and the forecast under it is the worse one by construction. So \"improve the forecast\" has an answer that is not a better model. And where the horizon cannot be shortened, accuracy is still not the only lever: buffers, flexible capacity and faster replenishment let a chain absorb the error it could not remove."
+    },
+    glossary: [
+      {term: "forecast error", plain: "The gap between actual and forecast demand — the figure buffers are sized from."},
+      {term: "time horizon", plain: "How far ahead the forecast reaches; accuracy falls as it lengthens."},
+      {term: "meaningful units", plain: "The unit the decision needs — value, units, or truckloads for the same forecast."},
+      {term: "forecasting process", plain: "Purpose, horizon, data, method, generate, then monitor and revise."},
+      {term: "cost effective", plain: "The benefit of forecasting has to exceed the data, systems and time it consumes."}
+    ],
+    connects: "Those are the properties every forecast has, and the ones a good one earns. The next segment looks inside the demand being forecast, and measures how wrong the answer was."
+  });
+
+  lesson({
+    lectureId: "SCLM-M02-L04",
+    courseId: "SCLM",
+    module: 2,
+    order: 4,
+    title: "Demand components, and measuring how wrong you were",
+    objective: "Name the patterns inside observed demand, and compute MAD, MSE and MAPE from one error column.",
+    explainer: [
+      "Plot the data before applying any formula, because the shape decides which method can work. A horizontal pattern fluctuates around a stable average, carrying only random variation. A trend is the average level itself drifting up or down. Seasonality repeats on the calendar with a fixed, known periodicity — weekends against weekdays, summer against winter. A cyclical pattern also rises and falls, but over more than a year with no fixed periodicity, tracking credit conditions or GDP. Irregular variation is the one-off — a strike, severe weather, a mega promotion — flagged and handled apart, because fitting it distorts everything else.",
+      "Together those patterns are the systematic component, the part a model can learn; what is left after them is random variation, and it does not go away. So the goal is a measured forecast, not a perfect one. Forecast error at period t is Et = At − Ft: positive when the forecast was too low, negative when too high, so an actual of 100 against a forecast of 90 is +10. Average the signed errors and you have the mean error, which is bias — near zero when misses cancel, drifting when the forecast is consistently high or low. Average the absolute errors instead and you have mean absolute deviation, the typical miss in units.",
+      "Two more answer different questions. Mean square error squares each error before averaging, so a few large misses dominate — right where one big miss causes disproportionate trouble in stockouts or expediting. Mean absolute percentage error divides each error by that period's actual, making it scale-free: being out by 10 units is severe against demand of 5 and trivial against 10,000. All three serve two purposes, choosing between methods and monitoring whether the system improves. And all carry one trade-off — the most historically accurate method is often the least responsive, since a stable one reacts slowly once the pattern moves."
+    ],
+    worked: {
+      setup: "Eight days of a dark store's actual and forecast demand for a fast-moving SKU. Day 1 is 217 against a forecast of 215; day 2 is 213 against 216.",
+      move: "Build four columns before computing anything — error, absolute error, squared error, absolute percentage error — then read all three metrics: MAD = 22 ÷ 8 = 2.75 units, MSE = 76 ÷ 8 = 9.5, MAPE = 10.26 ÷ 8 = 1.28%.",
+      because: "The three answer different questions from the same eight numbers. MAD says the forecast is off by about 2.75 units a day, which a replenishment planner can act on directly. MSE has no interpretable unit at all and exists to make one bad day count for more than eight mediocre ones. MAPE says 1.28% of actual, and it is the only one of the three that survives a comparison against a product selling at a different volume. Reporting one figure and calling it accuracy hides which question was being answered."
+    },
+    glossary: [
+      {term: "horizontal pattern", plain: "Demand fluctuating around a stable level, carrying only random variation."},
+      {term: "cyclical", plain: "Longer than a year and with no fixed periodicity — economic waves rather than the calendar."},
+      {term: "irregular variation", plain: "A one-off event, flagged and handled apart from the pattern so it does not distort the fit."},
+      {term: "forecast error", plain: "Et = At − Ft: positive when the forecast was too low, negative when it was too high."},
+      {term: "bias", plain: "The mean error with its sign kept, which exposes consistent over- or under-forecasting."},
+      {term: "mean absolute deviation", plain: "MAD — the average absolute error, in units; the typical miss per period."},
+      {term: "mean square error", plain: "MSE — errors squared before averaging, so large misses dominate."},
+      {term: "mean absolute percentage error", plain: "MAPE — error against actual as a percentage, so different volumes compare."}
+    ],
+    connects: "That is what demand is made of, and how far off the answer was. The next segment opens the toolkit — where judgement earns its place, and the averaging methods that start the quantitative side."
+  });
+
+  lesson({
+    lectureId: "SCLM-M02-L05",
+    courseId: "SCLM",
+    module: 2,
+    order: 5,
+    title: "Judgement methods, and the averaging family",
+    objective: "Choose a qualitative method by the bias it carries, and compute a simple or weighted moving average with the right n.",
+    explainer: [
+      "Forecasting splits into two families. Qualitative forecasting rests on judgement — executive opinion, sales force input, consumer surveys, panels of experts — and earns its place where data is missing or about to stop applying, as with a new product or a fast-changing environment. Quantitative forecasting relies on historical data and objective analysis, and divides again: time series methods use past values, associative models use other explanatory variables. Firms usually combine them, running a quantitative baseline and adjusting it qualitatively for events the data cannot know.",
+      "Each qualitative method is best remembered by how it fails. Executive opinion gathers senior managers across functions, and risks producing the boss's forecast when one personality dominates. Sales force opinion picks up early signals, and confuses what customers say with what they will buy — worse when forecasts are tied to quotas. Consumer surveys ask buyers directly, at cost, and carry sampling and question-wording bias. The Delphi method runs anonymous expert rounds towards consensus, which stops one loud voice deciding. For day-to-day inventory decisions, though, time series methods are more consistent and scalable, and judgement is kept for exceptions.",
+      "The simplest time series family is averaging. A simple moving average forecasts the next period as the mean of the most recent n actuals, and n is the whole decision: a large n smooths more and reacts slowly, a small n reacts fast and chases noise. A weighted moving average keeps the window and changes the weights, giving the most recent period the largest — say 0.4, 0.3, 0.2, 0.1 — with the weights summing to one. That makes a simple moving average the special case where all weights are equal. Its cost is that the weights are chosen subjectively, usually by trial and error."
+    ],
+    worked: {
+      setup: "The last five periods of demand end 43, 40, 41, and a three-period moving average forecast is wanted for period 6.",
+      move: "Average the three most recent actuals: (43 + 40 + 41) ÷ 3 = 41.33. When period 6 comes in at 38, drop the oldest and add the newest — (40 + 41 + 38) ÷ 3 = 39.67 for period 7.",
+      because: "The window moves and its size never changes, which is what makes the method mechanical and also what limits it: every value inside the window carries the same weight, so the oldest counts as much as the newest and a real shift in demand takes n periods to work through. Weighting the same four periods 0.4, 0.3, 0.2, 0.1 gives 41 rather than 41.33 on this data — a small difference here, and the mechanism that lets the forecast turn faster when demand actually moves."
+    },
+    glossary: [
+      {term: "qualitative forecasting", plain: "Judgement-based methods, for when data is missing, irrelevant, or about to stop applying."},
+      {term: "quantitative forecasting", plain: "Methods built on historical data — time series from past values, associative from other variables."},
+      {term: "executive opinion", plain: "A senior group forecasting collectively; risks becoming the dominant voice's number."},
+      {term: "sales force opinion", plain: "Front-line customer signals, distorted when forecasts are tied to quotas."},
+      {term: "Delphi method", plain: "Anonymous expert rounds with summaries fed back, converging on consensus."},
+      {term: "simple moving average", plain: "The mean of the most recent n actuals, every value weighted equally."},
+      {term: "weighted moving average", plain: "The same window with larger weights on recent periods, weights summing to one."}
+    ],
+    connects: "Both averages weight a fixed window and forget everything outside it. The next segment keeps the whole history and controls its influence with a single constant."
   });
 
   lesson({
@@ -2072,7 +4005,171 @@
       {term: "smoothing constant", plain: "Alpha — the proportion of last period's forecast error carried into the next forecast."},
       {term: "forecast error", plain: "Actual demand minus the forecast that predicted it."}
     ],
-    connects: "Smoothing produces a demand figure. The inventory models consume one — and which model you may use depends on whether that demand is treated as known or uncertain."
+    connects: "Smoothing produces a demand figure. The next session puts it against the other two averaging methods and asks which of them is actually better."
+  });
+
+  lesson({
+    lectureId: "SCLM-M02-L07",
+    courseId: "SCLM",
+    module: 2,
+    order: 7,
+    title: "Comparing three methods on one data set",
+    objective: "Set up a fair comparison window across methods, and explain why the ranking changes with the error metric.",
+    explainer: [
+      "Three methods are run over the same eleven periods of demand: a two-period simple moving average, a two-period weighted moving average with 0.60 on the most recent period and 0.40 on the one before, and single exponential smoothing with a smoothing constant of 0.10. Each produces a forecast and an error, where error is simply actual minus forecast, and the three error metrics are computed from those columns.",
+      "The window has to be set before anything is compared. Both moving averages need two actuals before they can produce anything, so their first forecast is for period 3. Exponential smoothing is started with F2 = A1, using the first actual as the starting forecast, so it has an extra forecast at period 2. Including it would give exponential smoothing an extra term the others do not have, so all three are judged over periods 3 to 11 — an apples-to-apples window rather than every number each method happens to produce.",
+      "On this data the ranking is not one ranking. Lowest mean absolute deviation is the weighted moving average; lowest mean squared error is exponential smoothing; lowest mean absolute percentage error is the weighted moving average again. That split is the point of the exercise. Mean squared error squares before averaging, so it punishes a few large misses far more than many small ones, and a method that stays close most of the time while occasionally missing badly loses on it — even while winning on the metrics that treat all errors alike. With different data, a different window, different weights or a different alpha, the ranking moves again."
+    ],
+    worked: {
+      setup: "Period 1 demand is 42 and period 2 is 40, and forecasts are needed for period 3 from all three methods.",
+      move: "Moving average: (40 + 42) ÷ 2 = 41. Weighted: 0.6 × 40 + 0.4 × 42 = 40.8. Exponential smoothing from F2 = 42: 0.9 × 42 + 0.1 × 40 = 41.8. Actual is 43, so the errors are +2, +2.2 and +1.2.",
+      because: "The three numbers come from the same two actuals and differ only in how the recent one is weighted — half, six-tenths, and a tenth. With alpha at 0.10 almost all the weight stays on the previous forecast, which is why exponential smoothing barely moves and why it will win on mean squared error while losing on the others: it never chases, so it never produces the large single miss that squaring punishes."
+    },
+    glossary: [
+      {term: "single exponential smoothing", plain: "Next forecast as a weighted blend of the last forecast and the last actual."},
+      {term: "smoothing constant", plain: "Alpha — the weight given to the newest actual; 0.10 here, so the forecast moves slowly."},
+      {term: "mean square error", plain: "Errors squared before averaging, so a few large misses dominate."},
+      {term: "percentage error", plain: "Error stated against actual demand, which is what makes MAPE comparable across products."}
+    ],
+    connects: "All three of these smooth noise and assume the level is not going anywhere. The next segment handles demand that is systematically moving."
+  });
+
+  lesson({
+    lectureId: "SCLM-M02-L08",
+    courseId: "SCLM",
+    module: 2,
+    order: 8,
+    title: "The linear trend equation",
+    objective: "Fit and read a linear trend line, and say what an ignored trend costs in each direction.",
+    explainer: [
+      "Moving averages and single exponential smoothing are built to smooth random fluctuation, and they assume the underlying level is not going anywhere. Once demand has a trend — a long-term upward or downward movement — those methods lag, because they keep pulling the forecast back towards recent history while the true level moves away from it. The response is to model the direction explicitly.",
+      "The simplest form is a straight line: Ft = a + bt, where a is the intercept, the value at t = 0, and b is the slope, the change per period. In Ft = 45 + 5t the level starts at 45 and rises 5 units a period, so period 10 forecasts 95. A negative b is a declining trend and the arithmetic is unchanged. This is simple linear regression with time as the explanatory variable, and a and b are estimated by least squares — the fitted line that minimises squared deviations, from which two normal equations give the two unknowns.",
+      "Plot before fitting. Ten weeks of cell phone sales look clearly rising but not perfectly smooth, which is what makes a straight line reasonable here; a parabolic, life-cycle or exponential shape would not be served by one. Regression returns an intercept of 699.4 and a slope of 7.5, so Ft = 699.4 + 7.5t, weekly sales are growing about 7.5 units a week, and weeks 11 and 12 forecast 782 and about 790. The cost of skipping this is directional and therefore expensive: ignore a rising trend and you under-forecast every period, producing stockouts, expediting and poor service; ignore a falling one and you over-forecast into excess inventory, markdowns, write-offs and idle capacity."
+    ],
+    worked: {
+      setup: "Ten weeks of sales rise unevenly, and forecasts are wanted for weeks 11 and 12.",
+      move: "Plot the data first and check that a line is defensible, then estimate: intercept 699.4, slope 7.5, giving Ft = 699.4 + 7.5t, so week 11 is 782 and week 12 about 790.",
+      because: "The plot is the model-selection step, not decoration — fitting a line to a curve produces coefficients that look perfectly respectable and forecast badly, and the regression will not object. Once the line is defensible the slope carries the managerial content: 7.5 units a week is a claim about direction, and a method that misses it errs in the same direction every period. That is the expensive kind of error, because safety stock is sized for random variation and does not cover a systematic one."
+    },
+    glossary: [
+      {term: "linear trend equation", plain: "Ft = a + bt — a straight line fitted with time as the explanatory variable."},
+      {term: "intercept", plain: "a, the value of the fitted line at t = 0."},
+      {term: "slope", plain: "b, how much the forecast changes per period; negative for a declining trend."},
+      {term: "least squares", plain: "Choosing a and b to minimise the squared deviations from the fitted line."}
+    ],
+    connects: "A fitted line gives one slope for the whole history and holds it until somebody refits. The next segment keeps a slope that updates itself every period."
+  });
+
+  lesson({
+    lectureId: "SCLM-M02-L09",
+    courseId: "SCLM",
+    module: 2,
+    order: 9,
+    title: "Holt's method: a slope that keeps updating",
+    objective: "Initialise and run trend adjusted exponential smoothing, and say what its two constants each control.",
+    explainer: [
+      "Single exponential smoothing tracks one thing, the level, so against a trending series it lags — systematically low when demand climbs, systematically high when it falls. Trend adjusted exponential smoothing, also called double exponential smoothing or Holt's method, fixes that by tracking two things separately: a level St, the current baseline, and a trend Tt, how fast that baseline is moving per period. The forecast is simply their sum, TAF for the next period equals St plus Tt — which is what anyone forecasting informally already does: where are we now, and are we climbing or falling.",
+      "Each is updated by a fraction of its own error. The level update is the familiar one, St = TAFt + α(At − TAFt): take the previous trend adjusted forecast and move it by part of the forecast error. The trend update is the same shape one level up, Tt = Tt−1 + β[(TAFt − TAFt−1) − Tt−1]: the bracket is how much the forecast actually moved against how much the old slope said it would, which is the trend error, and beta decides what fraction of it to accept. Alpha controls responsiveness to level shifts, beta to trend shifts; high values react fast, low values stay smooth.",
+      "The contrast with the trend line is the reason to have both. Regression fits one slope from the whole data set and holds it until refitted; Holt's method starts from a rough slope and lets it evolve. If a dark store's baseline is 100 a day with a trend of +2, tomorrow forecasts 102 — and if demand climbs nearer +4 a day, the method pushes the estimate towards 4 rather than staying stuck. Projections are simpler from a line, so the choice is convenience against adaptability."
+    ],
+    worked: {
+      setup: "Weeks 1 to 4 come in at 700, 724, 720 and 728, with alpha 0.4 and beta 0.3, and the method has nothing to update yet.",
+      move: "Initialise from the early actuals. Level S4 = 728, the last known actual. Trend T4 = (728 − 700) ÷ 3 = 9.33, the net change spread over the three steps. Then TAF5 = 728 + 9.33 = 737.33, and once A5 = 740 arrives, S5 = 737.33 + 0.4 × (740 − 737.33) = 738.40 and T5 stays 9.33, so TAF6 = 747.73.",
+      because: "Both recursions need a previous value, so nothing runs until a level and a slope are supplied from outside the method. The initialisation is deliberately crude — the last actual, and the average change over three steps — because alpha and beta will correct it within a few periods, and a careful starting estimate buys almost nothing. What does matter is the divisor: three changes separate four observations, not four, and using four here would understate the slope from the first period onwards."
+    },
+    glossary: [
+      {term: "trend adjusted exponential smoothing", plain: "Holt's method — smoothing that carries an explicit, continuously updated trend term."},
+      {term: "double exponential smoothing", plain: "The same method named for its two smoothed quantities, level and trend."},
+      {term: "level", plain: "St, the current baseline demand after smoothing, before the trend is added."},
+      {term: "smoothing constant", plain: "Alpha for the level and beta for the trend — how fast each is allowed to move."}
+    ],
+    connects: "Level and trend cover direction. The next segment adds the pattern that repeats on the calendar instead of pointing one way."
+  });
+
+  lesson({
+    lectureId: "SCLM-M02-L10",
+    courseId: "SCLM",
+    module: 2,
+    order: 10,
+    title: "Seasonal relatives: stripping the wave out and putting it back",
+    objective: "Compute seasonal relatives by the simple average method, then deseasonalise data and reseasonalise a forecast.",
+    explainer: [
+      "Seasonality is a repeating up-and-down pattern tied to the calendar, with a known and repeating frequency — daily, weekly, monthly, quarterly or yearly. It is not trend: trend is a long-term direction, while seasonality returns in a loop, so umbrellas can spike every monsoon with no long-run growth at all. It can be modelled additively, demand as trend plus a fixed quantity, or multiplicatively, demand as trend times a factor. The multiplicative form is usually preferred because the seasonal swing scales as the business grows, which a fixed addition cannot do.",
+      "In the multiplicative model the pattern is stored as seasonal relatives, also called seasonal indices. A relative of 1.2 means that season runs 20% above the average level; 0.75 means 25% below. They can be estimated by the simple average method — each season's average demand divided by the average across all seasons. Three years of quarterly data totalling 60, 30, 66 and 84 give quarter averages of 20, 10, 22 and 28, an overall average of 20, and relatives of 1, 0.5, 1.1 and 1.4. Quarter one is an ordinary quarter; quarter two runs at half of one.",
+      "The relatives are then used in two directions. To deseasonalise, divide actual demand by its relative — 158.4 in a 1.2 quarter is 132, and 110 in a 0.75 quarter is 146.7 — which strips the wave out so the underlying level or trend can be fitted cleanly. To forecast, run it the other way: forecast the level first, then multiply by the relative for that period. Cycles are the thing this does not handle — longer wavelike movements tied to economic conditions with no fixed periodicity, so a seasonal index cannot be pinned to them."
+    ],
+    worked: {
+      setup: "The trend equation is Ft = 124 + 7.5t, period 9 falls in quarter one whose relative is 1.2, and period 10 in quarter two at 1.1.",
+      move: "Two steps, in this order. Level first: F9 = 124 + 7.5 × 9 = 191.5 and F10 = 199. Then reseasonalise: 191.5 × 1.2 = 229.8 and 199 × 1.1 = 218.9.",
+      because: "The trend equation was fitted to deseasonalised data, so what it returns is a season-neutral level rather than a demand figure — an average quarter's worth of demand for that point in the series. Stopping at 191.5 would under-forecast a peak quarter by a fifth, and the same figure would over-forecast a trough. The relative is the layer that converts the level back into the quarter actually being planned for, which is why deseasonalising and reseasonalising are the same operation run in opposite directions."
+    },
+    glossary: [
+      {term: "seasonal relative", plain: "The multiplier for a season — 1.2 is 20% above the average level, 0.75 is 25% below."},
+      {term: "seasonal index", plain: "The other name for a seasonal relative."},
+      {term: "deseasonalize", plain: "Dividing actual demand by its seasonal relative to expose the underlying level."},
+      {term: "simple average method", plain: "Estimating relatives as each season's average divided by the average across seasons."},
+      {term: "multiplicative model", plain: "Demand as trend times a seasonal factor, so the swing scales with the business."}
+    ],
+    connects: "That closes the time series toolkit, all of it driven by the calendar alone. The next segment forecasts from a driver that is not time."
+  });
+
+  /* Placed here, after L10 and before L11, rather than first in the module. The transcript
+     file's positions are the lecture ids, but this lecture's own opening — "so far we have
+     mostly used time series methods ... even with seasonality now" — places its content after
+     the seasonality lecture and before aggregate planning, and it closes the forecasting arc.
+     Filed in reading order so the module reads as a path; the id and order fields still match
+     the manifest exactly. See TEACHING_LAYER_AUTHORING_PLAN.md. */
+  lesson({
+    lectureId: "SCLM-M02-L01",
+    courseId: "SCLM",
+    module: 2,
+    order: 1,
+    title: "Associative forecasting: when demand is driven by something else",
+    objective: "Set up a one-predictor regression forecast, and apply the three cautions that decide whether it can be trusted.",
+    explainer: [
+      "Every method so far has treated time as the only input, and works while the future looks like the past plus noise. Often demand is driven by something observable instead. Price moves and demand moves; rain moves umbrellas; a big cricket match moves snacks and beverages; a festival week moves quick commerce volumes. Forecasting from one or more related variables like these is associative forecasting — using a predictor to forecast the thing you care about.",
+      "The simple case is one predictor and a straight line, the familiar regression setup Y = a + bX, where Y is what is being forecast, X is the predictor, a is the intercept and b the slope: how much Y is expected to change when X rises by one unit. The line is fitted by least squares, minimising the sum of squared deviations from it. As always, plot before fitting, and estimate the coefficients from the data rather than assuming them.",
+      "Three cautions decide whether the result can be used. Do not extrapolate far outside the observed range of X, because the fit says nothing about territory it never saw. Check that the relationship is roughly linear across the range you care about. And look at the deviations from the line: they should look random, because a clear pattern means the model is missing structure. Add more predictors — price, promotion, a competitor's pricing, rainfall — and it becomes multiple regression, needing more data and inviting overfitting. The real value is not the arithmetic; it is that the method forces the question of what actually drives demand."
+    ],
+    worked: {
+      setup: "A regression fitted on ten weeks of data is asked to forecast a period well outside that range.",
+      move: "Refuse the extrapolation rather than compute it, and forecast within the observed range wherever possible.",
+      because: "Regression is only safe inside the range of data it was fitted on. A straight line through ten weeks makes no claim about a point far beyond them, where the relationship may curve, saturate or hit a threshold, and the model will return a confident number regardless — extrapolation fails silently rather than loudly. The diagnostic that matters is the pattern in the deviations: if they are structured rather than random, the model is already missing something, and projecting it further compounds what it is missing."
+    },
+    glossary: [
+      {term: "associative forecasting", plain: "Forecasting from a related observable variable rather than from time alone."},
+      {term: "predictor variable", plain: "The X used to forecast demand — price, rainfall, a calendar event."},
+      {term: "simple linear regression", plain: "One predictor and a straight line, fitted by least squares."},
+      {term: "overfitting", plain: "The risk when many predictors are added: fitting the noise as well as the signal."}
+    ],
+    connects: "That completes the forecasting toolkit. The next segment stops producing demand signals and starts turning one into a plan — capacity, production and inventory over the coming months."
+  });
+
+  lesson({
+    lectureId: "SCLM-M02-L11",
+    courseId: "SCLM",
+    module: 2,
+    order: 11,
+    title: "Aggregate planning: the middle horizon",
+    objective: "State the aggregate planning problem with its inputs and outputs, and name the three costs any plan trades against each other.",
+    explainer: [
+      "If capacity were free and lead times zero, a demand spike could be met the day it appeared and none of this would exist. Capacity costs money and lead times are long — people are hired and trained, machines bought, suppliers given notice, logistics capacity contracted — so firms have to commit ahead of demand. Aggregate planning is that commitment: how much to produce, how much capacity to hold ready, whether to run overtime or subcontract, how much inventory to carry, and whether to allow backlogs.",
+      "Two qualifications sit in the name. It is aggregate — product families or total volume, not SKU-level — and it works an intermediate horizon of roughly 3 to 18 months. That window exists because re-forecasting weekly does not help when the levers are slower than a week: hiring can take four to six weeks and a supplier lead time eight, so a weekly reaction arrives after the decision was needed. Too early to fix the daily SKU mix, too late to change fundamental capacity, is exactly where the value is.",
+      "The outputs are production rate, workforce level, overtime, subcontracting, planned inventory and planned backlog or stockout, and they are tightly linked — raise the production rate and you need workforce or overtime; refuse to add capacity and you need inventory built earlier or backlogs accepted. The inputs are the demand forecast per period, production costs at regular time, overtime and subcontract rates, the cost of changing capacity by hiring or laying off, holding costs, backlog and stockout costs, and the constraints on each. All of it reduces to three costs — capacity, inventory, and backlog or stockout — and any plan that lowers one raises another."
+    ],
+    worked: {
+      setup: "A plant proposes to hold capacity flat through a demand peak and to carry no extra inventory.",
+      move: "Ask which of the three costs the plan has moved rather than whether it looks lean. Flat capacity and no inventory leaves only the third — backlog or lost sales.",
+      because: "The three buckets are exhaustive, so a plan that declines two has chosen the third whether or not anyone said so. That is the discipline of aggregate planning: the levers trade against each other and none can be set in isolation, so a plan is complete only when the cost it accepted is named. Naming it also prices it properly — a stockout is not merely a cost but lost margin and possibly lost future demand, which is why the objective is maximising profit rather than minimising spend."
+    },
+    glossary: [
+      {term: "aggregate planning", plain: "Planning production, capacity and inventory at product-family level over 3 to 18 months."},
+      {term: "production rate", plain: "How much is planned to be made in each period of the horizon."},
+      {term: "workforce level", plain: "How much internal capacity is held, which hiring and layoff costs make expensive to change."},
+      {term: "backlog", plain: "Planned unmet demand carried forward rather than lost — one of the three costs a plan can accept."},
+      {term: "product families", plain: "The grouping aggregate planning works in, instead of individual SKUs."}
+    ],
+    connects: "That states the problem and its costs. The next segment picks between the standard ways of answering it, and gets the functions to agree on one plan."
   });
 
   lesson({
@@ -2104,6 +4201,64 @@
   });
 
   lesson({
+    lectureId: "SCLM-M03-L01",
+    courseId: "SCLM",
+    module: 3,
+    order: 1,
+    title: "What inventory is for, and how it is classified",
+    objective: "Name the functions inventory performs and the types it comes in, then classify it by ABC and measure it by turnover.",
+    explainer: [
+      "Inventory is a stock of goods acting as a buffer wherever supply and demand are not perfectly synchronised, and it balances three things that pull against each other: operational flow, customer service level, and the balance sheet. It comes in five types — raw materials, work in process, finished goods, MRO items for maintenance, repair and operating, and pipeline stock that is in transit and therefore owned but not available.",
+      "The functions are what justify holding any of it. Inventory satisfies anticipated demand, smooths seasonal production so a factory need not swing with the season, decouples operational steps so a stoppage at one does not immediately halt the next, and captures economies of scale in purchasing and transport. Every unit held should be traceable to one of those four; stock that serves none of them is simply cost.",
+      "ABC classification sorts items by annual value — annual demand multiplied by unit cost — rather than by unit price or physical volume. A items are high annual value and get tight, continuous control. C items are low annual value and get simple, automated monitoring, because the clerical cost of managing them closely exceeds anything that management could save. Two metrics then measure the result: inventory turnover, cost of goods sold divided by average inventory, which reads as operational efficiency, and days of inventory, which reads as availability and buffer depth. They are the same fact from opposite ends — high turnover means few days of cover."
+    ],
+    worked: {
+      setup: "A cheap fastener is ordered in tiny quantities and consumes as much purchasing attention as a major component.",
+      move: "Classify by annual value, not unit price. A high-volume cheap item may be an A item; a genuinely low-value one is a C item and should be automated.",
+      because: "ABC sorts by annual demand times unit cost, so unit price alone decides nothing — a cheap part consumed constantly can carry more annual value than an expensive part bought twice a year. If the fastener is genuinely a C item, the clerical effort spent managing it exceeds any saving available, which is exactly the misallocation the classification exists to prevent."
+    },
+    glossary: [
+      {term: "inventory", plain: "A stock of goods buffering supply against demand that is not synchronised with it."},
+      {term: "inventory functions", plain: "Satisfy anticipated demand, smooth production, decouple steps, capture scale economies."},
+      {term: "work in process", plain: "Partly finished goods inside the production system."},
+      {term: "pipeline inventory", plain: "Stock in transit — owned, and not yet available."},
+      {term: "ABC classification", plain: "Sorting items by annual value: annual demand times unit cost."},
+      {term: "inventory turnover", plain: "Cost of goods sold divided by average inventory — operational efficiency."},
+      {term: "days of inventory", plain: "How many days of cover the stock represents."}
+    ],
+    connects: "That is what inventory is and how it is sorted. The next segment prices it — the four costs every ordering policy is built to trade off."
+  });
+
+  lesson({
+    lectureId: "SCLM-M03-L02",
+    courseId: "SCLM",
+    module: 3,
+    order: 2,
+    title: "The four inventory costs, and where to spend attention",
+    objective: "Name the four inventory costs by what drives each, price holding as i·C, and set control effort by annual value rather than unit price.",
+    explainer: [
+      "Ordering policies are optimisation problems, so they only make sense once you know what is being traded off. Costs are the language of inventory decisions, and there are four. Purchase cost is what you pay the supplier per unit — largest in absolute terms, and often not the decision driver, because it does not change with how often you order, though it governs the working capital tied up in stock.",
+      "Holding cost is what you pay because the item sits in your system over time: cost of capital, warehousing, insurance, spoilage, pilferage, obsolescence. The usual shorthand is h = i·C, the annual interest rate applied to the unit's value, so an item costing ₹180 at a 10% cost of capital carries ₹18 per unit per year. Ordering cost is the fixed charge K incurred once per order however large it is, and its production twin is the setup cost of a run. Shortage cost is what running out costs — lost margin, goodwill, expediting, contractual penalties — and it is the hardest of the four to measure.",
+      "With thousands of SKUs you cannot track everything to the same standard, so classification decides where attention goes. Rank items by annual value — annual demand times unit cost. A items are typically 10 to 20% of items carrying 60 to 70% of the value, and earn tight control and frequent review; C items are 50 to 60% of items carrying 10 to 15%, and get simple bulk handling. Cycle counting follows the same split. Low value is not low criticality: a missing bolt still stops an assembly line."
+    ],
+    worked: {
+      setup: "Ten items are ranked by annual value. The largest single item accounts for 52.7% of a total of 75,910, the next three for 40.8% between them, and the remaining six for 6.5%.",
+      move: "Cut on cumulative share of value rather than on a fixed item count: that one item is an A item, the next three are B items, and the last six are C items.",
+      because: "Ten per cent of the SKUs are carrying more than half the money, which is where tight control and frequent counting repay their cost; six items sharing 6.5% cannot repay the clerical effort of managing them closely. The cutoffs are conventions and firms move them, but the differential control they produce is the point of the exercise, not the labels."
+    },
+    glossary: [
+      {term: "purchase cost", plain: "What you pay the supplier per unit — large in total, and unchanged by how often you order."},
+      {term: "holding cost", plain: "The cost of keeping one unit in stock over time, usually priced as h = i·C."},
+      {term: "ordering cost", plain: "The fixed charge K incurred once per order, whatever its size."},
+      {term: "shortage cost", plain: "What running out costs: lost margin, goodwill, expediting, or penalties."},
+      {term: "stock keeping unit", plain: "The variant level at which stock is tracked, forecast and replenished."},
+      {term: "annual dollar value", plain: "Annual demand times unit cost — the measure ABC ranks items on."},
+      {term: "cycle counting", plain: "Physically counting stock on a rotating basis, A items more often than C."}
+    ],
+    connects: "Those are the costs, and where the attention goes. The next segment finally spends them, on the two questions every ordering policy answers: how much to order, and when."
+  });
+
+  lesson({
     lectureId: "SCLM-M03-L03",
     courseId: "SCLM",
     module: 3,
@@ -2128,6 +4283,33 @@
       {term: "cycle inventory", plain: "The stock held because you order in batches rather than continuously."}
     ],
     connects: "EOQ assumes demand is known and the order repeats. The next lecture handles the opposite case, and telling them apart is its own skill."
+  });
+
+  lesson({
+    lectureId: "SCLM-M03-L04",
+    courseId: "SCLM",
+    module: 3,
+    order: 4,
+    title: "The newsstand: what changes when demand is uncertain",
+    objective: "Recognise a decision whose leftovers do not carry forward, and build the overage and underage costs it turns on.",
+    explainer: [
+      "EOQ assumed demand was deterministic and steady. Most real procurement commits before anyone knows what customers will want, and then the question stops being cost minimisation and becomes a risk trade-off: order too much and you hold leftovers, order too little and you lose sales. In some settings the leftovers do not carry forward economically even though they carry forward physically — an unsold monthly magazine is obsolete the day the month ends. Each period is then a fresh problem, which is what single period or one-shot means.",
+      "The lecture's example is a newsstand. Mr Hemant Patel pays a wholesale price of ₹30 a copy, sells at ₹40, and clears anything unsold at ₹10. Records say monthly demand is equally likely to be 6, 7, 8, 9 or 10 copies. A sold copy earns P − C = ₹10. A leftover copy loses C − S = ₹20, because ₹30 went out and only ₹10 comes back.",
+      "Those two numbers are the overage cost and the underage cost, and their ratio decides everything. Overage here is twice underage, so leftovers hurt more than stockouts and the order should sit below the middle of the demand range rather than at it. Score every order quantity by expected profit and that is exactly what happens: 60, 64, 62, 54 and 40 for quantities of 6 through 10, with the best at 7 against a midpoint of 8."
+    ],
+    worked: {
+      setup: "Five possible demands, five possible order quantities, each demand equally likely at probability 0.2.",
+      move: "Fill every cell with the profit that pairing would produce — ₹10 for each copy sold, less ₹20 for each copy left over — then take the probability-weighted mean down each order-quantity column.",
+      because: "Q = 7 wins at an expected profit of ₹64, one below the middle of the range, and the reason is the cost ratio rather than anything about the demand distribution: a leftover costs twice what a missed sale does, so the optimum shifts down. Note also what makes the arithmetic easy here — every demand carries the same 0.2, so the expected profit is just the average of a column. That is a property of this example, not of the method."
+    },
+    glossary: [
+      {term: "overage cost", plain: "Co = C − S, what one leftover unit loses once salvage is counted."},
+      {term: "underage cost", plain: "Cu = P − C, the margin lost on a sale you could not fulfil."},
+      {term: "salvage value", plain: "S, what an unsold unit is still worth after the selling period."},
+      {term: "single period model", plain: "One buying opportunity, and leftovers that do not carry to the next period."},
+      {term: "expected profit", plain: "Each outcome's profit weighted by its probability, then summed."}
+    ],
+    connects: "A five-by-five table is brute force, and it stops working the moment demand takes many values or a continuous distribution. The next segment turns the same trade-off into a general rule."
   });
 
   lesson({
@@ -2187,6 +4369,140 @@
   });
 
   lesson({
+    lectureId: "SCLM-M03-L07",
+    courseId: "SCLM",
+    module: 3,
+    order: 7,
+    title: "Periodic review, and why its buffer has to be bigger",
+    objective: "Recognise a periodic review stem and set the order-up-to level from a protection period of T plus L.",
+    explainer: [
+      "The Q model is triggered by a threshold: watch continuously, order a fixed quantity the moment inventory position hits the reorder point. Periodic review is triggered by time instead. You check at fixed intervals — every week, every 30 days — and order at the end of each. Firms choose it when continuous monitoring is costly or impractical, when orders for many SKUs can be clubbed onto one schedule, or when a delivery calendar or procurement cycle fixes the rhythm from outside.",
+      "Because the trigger is the clock rather than a level, the inventory position at the moment of ordering varies from cycle to cycle, so the order quantity cannot be fixed. The parameter is an order-up-to level S: at every review, order whatever restores the inventory position to S. High demand last period means a low position and a large order; low demand means a small one. This is also called a base stock policy, and the quantity is never chosen — it is whatever the target implies.",
+      "The consequence is the protection period. Under continuous review you are exposed only for the lead time, because the moment stock falls to the reorder point an order goes in. Under periodic review, stock can fall dangerously low just after a review and nobody looks again until T days later, and the order placed then still takes L to arrive. The exposure is therefore T + L, and S = μ_D(T + L) + z·σ_D·√(T + L). Same service level, more safety stock than continuous review — that is what not watching costs."
+    ],
+    worked: {
+      setup: "Daily demand is normal with a mean of 10 and a standard deviation of 3, the review period is 30 days, the replenishment lead time is 14 days, management wants 98% of demand met from stock, and 150 units are on hand at this review.",
+      move: "Protection period is T + L = 44 days. z for 98% is 2.05, so S = 10 × 44 + 2.05 × 3 × √44 = 480.8. With 150 on hand, order 331 units.",
+      because: "The 44 is the whole decision. Buffering the 14-day lead time alone would leave the thirty days before the next review unprotected, and that is precisely the stretch nobody is watching. The 331 is also this period's number only — S stays at 480.8 while the on-hand figure differs at every review, so the order quantity moves and the target does not. That is the mirror image of the Q model, where the quantity is fixed and the trigger level is what stays put."
+    },
+    glossary: [
+      {term: "periodic review", plain: "Checking stock on a fixed calendar and ordering then, whatever the level."},
+      {term: "order up to level", plain: "S, the inventory position each review restores."},
+      {term: "base stock policy", plain: "The other name for an order-up-to rule."},
+      {term: "review period", plain: "T, the fixed interval between one review and the next."},
+      {term: "protection period", plain: "The stretch the buffer must cover — T + L here, against L alone under continuous review."}
+    ],
+    connects: "Both policies answer uncertainty by paying for a buffer. The next segment asks the prior question: whether the uncertainty itself can be made smaller before anyone sizes one."
+  });
+
+  lesson({
+    lectureId: "SCLM-M03-L08",
+    courseId: "SCLM",
+    module: 3,
+    order: 8,
+    title: "Pooling: shrinking the uncertainty instead of buffering it",
+    objective: "Explain why pooled safety stock scales with √N rather than N, and choose between pooling locations, products and lead time.",
+    explainer: [
+      "Every policy so far reacts to uncertainty by carrying stock against it. Pooling reduces the uncertainty there is to carry stock against. Take N identical regions, each with mean μ and standard deviation σ, served by a warehouse each: total planned stock is N·μ + N·z·σ. Centralise them and the means still add to N·μ, but independent variances add rather than standard deviations, so the pooled standard deviation is √N·σ and the safety term becomes √N·z·σ.",
+      "The mean grows linearly under either design. Only the uncertainty term changes, from N to √N, so the entire pooling benefit lives in safety stock and none of it in average demand. Independence is the condition. Positive correlation across locations means demands move together, variance rises and the benefit shrinks; negative correlation, where one region's peak meets another's trough, makes it larger. And centralising is not free — a large site is harder to run, and serving a wide region from one node raises transport cost and worsens response time.",
+      "The same logic works without moving a warehouse. Product pooling holds one generic variant instead of several: O'Neill's surfer and diver wetsuits differ only in the logo, so a single generic suit needs one buffer instead of two, at the cost of specialised functionality and of price segmentation between the two. Lead time pooling, or postponement, delays the commitment instead — a paint store stocks base and pigments and mixes the shade when the customer arrives, and Benetton knits first and dyes later. Delayed differentiation pays when the variety is cosmetic and can be added late and cheaply."
+    ],
+    worked: {
+      setup: "A firm serves two identical regions from a warehouse in each, and asks whether one central warehouse would cut inventory.",
+      move: "Compare the safety terms rather than the totals. Two warehouses carry 2·z·σ of buffer between them; one central warehouse carries z·√2·σ — the square root of two in place of two — while the 2μ of expected demand is unchanged.",
+      because: "Pooling cannot touch the mean, so any saving has to come out of the buffer, and it does so only because independent variances add while standard deviations do not. The √2 is conditional on that independence: if the two regions peak together the covariance term returns and the saving shrinks. Set against it is a site further from both regions, costing more to serve and slower to respond — which is why growing networks add locations back."
+    },
+    glossary: [
+      {term: "pooling", plain: "Combining demand streams so variability partly cancels and less buffer is needed."},
+      {term: "location pooling", plain: "Serving several regions from one stock point, so safety stock scales with √N rather than N."},
+      {term: "product pooling", plain: "Holding one generic variant instead of several, so one buffer covers all of them."},
+      {term: "universal design", plain: "The generic product that makes product pooling possible."},
+      {term: "lead time pooling", plain: "Holding stock in unfinished form and committing to the final version later."},
+      {term: "delayed differentiation", plain: "The same idea named for its effect — differentiate close to demand, not before it."}
+    ],
+    connects: "That closes inventory planning: policies that absorb uncertainty, and design levers that shrink it. The next module turns outward to sourcing, where pooling returns as the reason a third party can beat doing the work yourself."
+  });
+
+  lesson({
+    lectureId: "SCLM-M04-L01",
+    courseId: "SCLM",
+    module: 4,
+    order: 1,
+    title: "Total cost of ownership and aggregation",
+    objective: "Price a sourcing decision on total cost of ownership rather than unit price, and say how a third party creates surplus by aggregating.",
+    explainer: [
+      "A sourcing decision priced on unit purchase price is priced on one line of several. Total cost of ownership adds the rest: freight, the cost of holding whatever inventory the arrangement forces you to carry, defect and quality costs, commercial terms, and the cost of governing the supplier relationship. A cheaper unit that arrives less reliably, in larger minimum batches, from further away, is routinely more expensive once those are counted — which is why the comparison has to be made on the total rather than on the quote.",
+      "Two words that get used interchangeably mean different things. Outsourcing is about who performs an activity — a third party rather than in-house. Offshoring is about where it is performed — abroad rather than domestically. They are independent choices: work can be outsourced domestically, or performed in-house offshore, and conflating them hides which decision is actually being made.",
+      "The reason a third party can be cheaper than doing it yourself is aggregation, and it is worth stating precisely because it is the mechanism rather than a claim about efficiency. A third party pools demand across many customers, which lets it reach economies of scale in capacity, inventory, transport and procurement that no single customer could reach alone. That pooled scale is what raises total supply chain surplus — the third party is not merely taking a margin, it is creating something that was not available to any participant separately."
+    ],
+    worked: {
+      setup: "A supplier quotes fifteen per cent below the incumbent, from a port two weeks further away.",
+      move: "Rebuild both quotes as total cost of ownership — freight, the extra pipeline and safety stock two weeks implies, quality risk, and governance.",
+      because: "Unit price is one component of total cost of ownership. Two extra weeks of transit means more pipeline inventory in transit and more safety stock to cover the longer lead time, both of which cost money continuously. Fifteen per cent off the unit is frequently smaller than what the added holding and risk cost, and the comparison is only meaningful on the total."
+    },
+    glossary: [
+      {term: "total cost of ownership", plain: "Unit price plus freight, holding, quality, terms and supplier governance."},
+      {term: "outsourcing", plain: "Who performs the activity — third party rather than in-house."},
+      {term: "offshoring", plain: "Where the activity is performed — international rather than domestic."},
+      {term: "aggregation", plain: "A third party pooling demand across customers to reach scale nobody reaches alone."}
+    ],
+    connects: "That prices the supplier. The next session sorts which suppliers deserve which treatment."
+  });
+
+  lesson({
+    lectureId: "SCLM-M04-L02",
+    courseId: "SCLM",
+    module: 4,
+    order: 2,
+    title: "Risk-sharing contracts",
+    objective: "Explain why a simple wholesale price under-orders, and how buyback and revenue-sharing contracts move risk to raise total surplus.",
+    explainer: [
+      "Under a plain wholesale-price contract, the buyer carries all the risk of unsold stock. Faced with uncertain demand, a rational retailer therefore orders less than the quantity that would maximise the chain's total profit — every additional unit risks their money alone, while the upside is shared with the supplier who already got paid. The result is a chain that under-orders systematically even though everyone in it is behaving sensibly.",
+      "Risk-sharing contracts exist to fix that, by moving some of the downside back to the party that does not currently carry it. A buyback contract lets the retailer return unsold units at an agreed price, so the cost of overstocking falls and the retailer orders closer to the chain-optimal quantity. A revenue-sharing contract lowers the wholesale price and gives the supplier a share of revenue instead, which has the same effect from the other direction: the retailer risks less per unit, so orders more.",
+      "The general shape is worth carrying rather than the individual terms. These contracts do not make the risk disappear; they place it where it does least damage to the total. Both increase supply chain surplus by correcting an incentive, not by squeezing a partner — which is why they are treated as coordination mechanisms alongside information sharing rather than as negotiation tactics. The check on any of them is whether both parties are better off than under the wholesale price, because a contract that only helps one will not be signed twice."
+    ],
+    worked: {
+      setup: "A retailer consistently orders below the quantity the manufacturer believes the season will sell.",
+      move: "Treat it as an incentive problem, not a forecasting disagreement, and offer a buyback or revenue-sharing term.",
+      because: "Under a wholesale price the retailer bears the whole cost of unsold stock while sharing the upside, so ordering below the chain-optimal quantity is the rational response, not a mistake about demand. Arguing about the forecast changes nothing. Moving part of the overstocking risk back to the manufacturer changes the retailer's calculation, and the order rises without either party being worse off."
+    },
+    glossary: [
+      {term: "risk-sharing contract", plain: "Terms that move downside risk to raise the chain's total order quantity and surplus."},
+      {term: "buyback contract", plain: "Unsold units can be returned at an agreed price, lowering the cost of overstocking."},
+      {term: "revenue-sharing contract", plain: "A lower wholesale price in exchange for a share of the retailer's revenue."}
+    ],
+    connects: "Those are the risk-sharing contracts. The next session maps the rest of them, and procurement itself."
+  });
+
+  lesson({
+    lectureId: "SCLM-M04-L03",
+    courseId: "SCLM",
+    module: 4,
+    order: 3,
+    title: "Contracts as incentive design, not price negotiation",
+    objective: "Match a contract type to the problem it solves, and name the distortion each one can introduce.",
+    explainer: [
+      "A supply contract is not only price and delivery terms; it shapes behaviour along the whole chain. The core problem is that buyer and supplier are different entities each optimising their own objective, so misaligned incentives shrink the total supply chain surplus even when both parties behave rationally for themselves. Three questions to put to any contract: what it does to firm profit and to total profit, whether it introduces information distortion such as gaming or inflated orders, and how it moves availability, responsiveness, quality and lead time.",
+      "Four buckets follow. For product availability, where demand is uncertain and the retailer orders before demand is known and therefore stocks conservatively: a buyback contract has the supplier repurchase unsold units, revenue sharing lowers the wholesale price in exchange for a share of revenue, and quantity flexibility lets the retailer commit to a band rather than one number. For cost coordination against fixed ordering, setup and shipping costs, the quantity discount — which can also degrade the demand signal by rewarding order batching.",
+      "For effort that cannot be observed, the two-part tariff pairs a fixed fee with a per-unit price, and threshold incentives motivate but bunch effort near period ends. For changing the system rather than working harder inside it, shared savings gives the supplier a pre-agreed share of the improvement it funded. Upstream of all of this sits design collaboration, because much of a product's total cost is fixed at design — with lock-in as its trade-off."
+    ],
+    worked: {
+      setup: "A quantity discount is introduced to cut procurement cost, and upstream forecasts get worse.",
+      move: "Ask whether the discount rewards real consumption or merely the timing of orders.",
+      because: "A lot-size discount pays the buyer to order in large batches, so orders start reflecting the discount schedule rather than the demand underneath them. Procurement cost falls while the signal upstream degrades — the contract coordinates one thing and distorts another, which is why the three questions are asked together rather than one at a time. The usual repair is to move the discount to volume over a longer horizon, so scale is still rewarded and batching is not."
+    },
+    glossary: [
+      {term: "buyback contract", plain: "The supplier repurchases unsold units at an agreed price, so the retailer's downside shrinks and it stocks closer to what the chain needs."},
+      {term: "revenue sharing", plain: "A lower wholesale price in exchange for a share of revenue — the retailer's margin per sale rises and the supplier takes the upside."},
+      {term: "quantity flexibility", plain: "A committed band with a minimum and a maximum instead of one number, adjustable as better demand information arrives."},
+      {term: "two-part tariff", plain: "A fixed fee plus a per-unit price, used where one party's effort drives the outcome but cannot be observed directly."},
+      {term: "shared savings", plain: "The supplier takes an agreed share of an improvement it paid for, so it will invest in changing the system rather than just working harder."},
+      {term: "design collaboration", plain: "Involving suppliers early enough to influence design, tolerances and materials, because most of the total cost is fixed there."}
+    ],
+    connects: "Contracts and procurement are set. The next session sorts which suppliers get which treatment."
+  });
+
+  lesson({
     lectureId: "SCLM-M04-L04",
     courseId: "SCLM",
     module: 4,
@@ -2243,6 +4559,219 @@
   });
 
   lesson({
+    lectureId: "SCLM-M04-L06",
+    courseId: "SCLM",
+    module: 4,
+    order: 6,
+    title: "Five reasons coordination fails, and the lever for each",
+    objective: "Classify a coordination failure into one of five obstacle categories, and name the lever that actually addresses it.",
+    explainer: [
+      "One sentence carries the whole segment: any factor that leads to local optimization by different stages, or that increases information distortion, is an obstacle to coordination. There are five categories — incentive, information processing, operational, pricing and behavioral. Firms keep suffering the bullwhip effect not because nobody has explained it, but because each obstacle is individually rational at the stage that creates it, and because the feedback is delayed and noisy, so the learning never quite lands.",
+      "Incentive obstacles reward metrics that are not aligned with total performance. A transportation manager measured on cost per unit ships larger batches, which raises inventory and lead time variability while the local dashboard improves. Sales paid on sell-in rather than sell-through pushes volume at period end, producing a spike and then a hangover as the channel clears. Information processing obstacles distort the signal: each stage forecasts from the orders it receives rather than customer demand, so noise compounds into an apparent trend.",
+      "Operational obstacles are mechanical. Batching means an order placed every five weeks is five weeks of demand, so the order stream is more variable than the demand stream. Long replenishment lead times force earlier commitment and bigger buffers. Rationing by order size invites shortage gaming — order 100 hoping to get 75. Pricing obstacles drive forward buying. Behavioral obstacles are the soft ones that keep the hard ones alive: blame shifting, weak feedback, and lack of trust."
+    ],
+    worked: {
+      setup: "Consumer demand is steady and factory orders swing violently.",
+      move: "Ask of each stage whether its behaviour is local optimization or information distortion before proposing anything.",
+      because: "The two need opposite levers. A stage reading orders instead of point of sale data is a signal problem, and sharing demand and promotion calendars repairs it. A stage that understands the signal perfectly and still batches because its metric rewards cost per unit is an incentive problem, and no amount of extra data will touch it — that needs the measure changed, sell-in moved to sell-through, and rolling horizons instead of end-of-month targets. Fix one and the other keeps rebuilding the bullwhip."
+    },
+    glossary: [
+      {term: "local optimization", plain: "A stage improving its own metric in a way that costs the chain more than it saves — usually rational for whoever is measured."},
+      {term: "sell-in", plain: "Shipments into the distributor or retailer. Paying sales on it pushes volume at period end regardless of consumer demand."},
+      {term: "sell-through", plain: "Sales to the final customer. Moving incentives onto it is the practical fix for the period-end push."},
+      {term: "shortage gaming", plain: "Inflating orders to win a bigger allocation when supply is rationed by order size, so scarcity becomes an amplified swing."},
+      {term: "forward buying", plain: "Buying ahead during a promotion to lock in the price, which spikes shipments far above actual sales and empties the next period."},
+      {term: "batching", plain: "Ordering in large lots for fixed-cost or truckload reasons. Operationally rational, and it amplifies variability upstream."}
+    ],
+    connects: "Those are the obstacles and their levers. The next session is what coordination looks like in practice."
+  });
+
+  lesson({
+    lectureId: "SCLM-M04-L07",
+    courseId: "SCLM",
+    module: 4,
+    order: 7,
+    title: "CRP, VMI and CPFR: coordination as a working arrangement",
+    objective: "Distinguish the three practical coordination mechanisms, and say when a retailer should refuse vendor-managed inventory.",
+    explainer: [
+      "Continuous replenishment programs drive replenishment from actual customer withdrawals, usually through point of sale data, instead of each stage forecasting from the orders it receives. That produces one consistent demand signal and removes the amplification of several layers reading orders. The retailer still owns the inventory, and the manufacturer still gains: stabler orders improve its production planning and capacity utilization, better in-stock performance expands category sales, and earlier visibility reduces the firefighting that forces buffers and expediting.",
+      "Vendor-managed inventory goes further. The supplier takes the replenishment decision, and often owns the stock until it sells, so there is a single decision-maker and fewer competing forecasts. The difficulty is substitution: retailers carry competing brands, and two brands each running VMI as though theirs were the only option will overstock the category between them. The answer is one coherent policy at the right level, which is what category leadership and the category captain idea provide.",
+      "CPFR is the structured version — collaborative planning, forecasting and replenishment — organised around strategy and planning, demand and supply management, execution, and analysis. It is an organisational design project as much as a technical one, and firms justify it empirically rather than philosophically: start on one category or one distribution centre, then measure forecast accuracy, in-stock rates, inventory turns and expediting before scaling."
+    ],
+    worked: {
+      setup: "A retailer is offered VMI by a supplier whose brand competes with three others on the same shelf.",
+      move: "Ask whether that vendor can see, and will act on, substitution across the whole category before handing over the decision.",
+      because: "VMI's benefit is a single decision-maker; its risk is that the decision-maker's view stops at its own brand. A vendor optimising its own availability while blind to substitution stocks as though it were the only option, and the category ends up carrying far too much. So the retailer keeps category-level decision rights, or runs the lighter CRP where control stays shared. The same caution applies where differentiation rests on assortment the vendor cannot see."
+    },
+    glossary: [
+      {term: "continuous replenishment", plain: "Replenishment driven by actual customer withdrawals rather than by the orders each stage receives. The retailer still owns the stock."},
+      {term: "vendor-managed inventory", plain: "The supplier makes the replenishment decision and often owns the inventory until it sells — one decision-maker instead of several forecasts."},
+      {term: "category captain", plain: "A designated category leader setting availability at category level, so one brand's VMI cannot ignore substitution."},
+      {term: "CPFR", plain: "Collaborative planning, forecasting and replenishment: a structured process turning shared information into one shared plan."},
+      {term: "point of sale", plain: "The withdrawal data that makes a single demand signal possible — the input CRP and VMI both run on."}
+    ],
+    connects: "That closes coordination. The next session steps back across the whole first half of the course."
+  });
+
+  lesson({
+    lectureId: "SCLM-M04-L08",
+    courseId: "SCLM",
+    module: 4,
+    order: 8,
+    title: "The first half in one line, and what the second half changes",
+    objective: "State the tension the whole course turns on, and say how the second half's questions differ from the first's.",
+    explainer: [
+      "Zoomed out, the subject is designing and running end-to-end flows of material, information and cash so customers get what they want when they want it, at a cost and risk the firm can sustain. One tension runs underneath all of it: efficiency versus responsiveness. Most managerial decisions in the course are a choice about where the firm sits on that trade-off, and how to use information and process design to push the frontier outward rather than simply picking a point on it.",
+      "The path so far. First the system view — a supply chain as an ecosystem of stakeholders whose local decisions all affect the end-to-end outcome. Then the metrics view, because you have to know what good means before solving anything, with the KPI tree translating \"service is poor\" into measurable drivers. Then demand planning: forecasting, sales and operations planning, aggregate planning, and forecast error, whose size and structure drives every buffer that follows.",
+      "Then inventory as a buffer against mismatch, split into cycle inventory and safety inventory, with EOQ, the news vendor setting, and the Q and P models; plus pooling and postponement, which cut the cost of variability by design instead of buffering it. Then sourcing and contracting, which changed the question from what policy to run into how work should be allocated across firms. Then coordination. The second half asks the same questions at the interfaces — inbound, middle mile, last mile and reverse flows."
+    ],
+    worked: {
+      setup: "A manager says service is poor and cost is too high, and wants to know which part of the course applies.",
+      move: "Translate the complaint into a measurable driver first, then find which decision owns that driver.",
+      because: "That is what the KPI tree is for. \"Service is poor\" is a symptom, not a decision, and it can come from forecast error, from an inventory policy, from a sourcing lead time, or from a coordination failure two stages upstream. Each has a different owner and a different lever, and choosing the wrong one costs months. The course's sequence is that diagnosis order: ecosystem and metrics, then uncertainty, then buffering it, then allocating the work, then coordination."
+    },
+    glossary: [
+      {term: "efficiency versus responsiveness", plain: "The tension underneath every decision in the course. The job is choosing where to sit, and using design to move the frontier."},
+      {term: "cycle inventory", plain: "The stock that exists because you order in lots rather than continuously."},
+      {term: "safety inventory", plain: "The stock held against uncertainty in demand and lead time, as opposed to the stock created by ordering in batches."},
+      {term: "aggregate planning", plain: "Planning at a higher level across functions given demand uncertainty and capacity limits — a coordination problem, not a maths problem."},
+      {term: "middle mile", plain: "Movement between plants and warehouses, and between warehouses. One of the interfaces the second half studies."}
+    ],
+    connects: "The stages are understood. The next module studies the lines connecting them."
+  });
+
+lesson({
+    lectureId: "SCLM-M05-L01",
+    courseId: "SCLM",
+    module: 5,
+    order: 1,
+    title: "FarmAid: the case, and the two questions it asks",
+    objective: "State what FarmAid's logistics review was asked to settle, and say why an end-of-month order revision is a supply chain problem rather than a sales one.",
+    explainer: [
+      "The case follows a tractor manufacturer's supply chain and outbound logistics in an industry where capacity had begun to outrun demand, so operational efficiency, supply chain effectiveness and dealer service had become what competition actually turned on. FarmAid Tractors Limited entered in the early 1990s, held about 20% of the market by FY1999 as the third-largest manufacturer, and meant to lead within five years. In the summer of 1999 it opened a review of its supply chain and distribution as part of a wider restructuring and business process reengineering effort, and engaged an academic consultant to study the logistics system.",
+      "What the consultant examined is worth listing, because the breadth is the point: manufacturing operations, production planning, dispatch procedures, regional offices, stockyards and the dealer network. Several operational issues came out of that, and two were prioritised for detailed analysis — order processing and inventory planning, and the design of the distribution network, particularly where stockyards sit and what they are for. Everything the module later does with FarmAid answers one of those two, so the prioritisation is the case's structure rather than a detail of it.",
+      "The first question starts from a concrete defect. Regional offices placed monthly orders against dealer requirements, consolidated and finalised around the twentieth of the month for the following month's deliveries — and then revised them near month end, sometimes because demand moved and sometimes to improve the month's sales performance. Production planning and dispatch scheduling absorbed the churn. The proposed framework answers with demand forecasting, safety stock and closer coordination between regional offices and production planning, aiming at roughly 98% service level at the stockyards on a shorter ordering cycle."
+    ],
+    worked: {
+      setup: "A regional office finalises next month's order on the twentieth, as the system requires. Near month end it revises the order upward to lift the month's sales performance. Nothing is late, no rule is broken, and the sales figure genuinely improves.",
+      move: "Follow the revision downstream instead of judging it where it was made. Production planning had already committed against the twentieth-day order, so dispatch scheduling absorbs the change and stockyards receive against a plan that no longer describes them. The consultant's answer is structural — forecast at company, regional office and dealer level, hold safety stock for the uncertainty that is left, and shorten the ordering cycle so a late revision has less to invalidate.",
+      because: "Nobody here is behaving badly. The regional office is doing what its own measure rewards, inside the deadline it was given. The cost simply lands where it is not measured — as churn in production planning and dispatch, surfacing much later as tractors arriving late or in the wrong place. That is why the fix is a shorter cycle and a stated service level rather than an instruction to stop revising: the instruction would fail, and the shorter cycle removes the room the revision needs."
+    },
+    glossary: [
+      {term: "outbound logistics", plain: "Everything that moves finished product from the factory outward — the half of the chain this case is about."},
+      {term: "business process reengineering", plain: "Redesigning how work runs rather than tuning it; the review here sat inside one such effort."},
+      {term: "regional office", plain: "The unit between factory and dealers that consolidates dealer requirements into a monthly order. FarmAid had eighteen."},
+      {term: "stockyard", plain: "An intermediate holding point between the factory and the dealers, usually paired with a regional office."},
+      {term: "ordering cycle", plain: "How often orders are placed and fixed. A shorter one leaves a late revision less to invalidate."},
+      {term: "safety stock", plain: "Stock held against the demand uncertainty a forecast cannot remove — the second half of the proposed framework."}
+    ],
+    connects: "The case is on the table and its two questions are set. The next segments build the tools the module answers them with, beginning with the chain that turned milk from a luxury into a surplus."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L02",
+    courseId: "SCLM",
+    module: 5,
+    order: 2,
+    title: "Milk: what integrating a supply chain actually changed",
+    objective: "Name the three states a product can be in, and read the milk cooperative as integration in both directions plus a finance flow.",
+    explainer: [
+      "A product in a supply chain is always in one of three states: movement, storage, or conversion. Logistics has traditionally covered the first two. Add conversion and the multiplicity of actors performing all three, and you are looking at the supply chain in its entirety — which is why logistics is a critical part of a supply chain rather than another name for one.",
+      "The milk case shows what integration bought. Until around independence milk was a luxury, processed partly by international players such as Polson under what farmers experienced as an exploitative relationship. The cooperative answer put ownership of the dairies with the farmers, and under Dr Kurien the Gujarat Cooperative Milk Marketing Federation went both ways from procurement and processing. Forward integration added distribution, ghee and cheese, and eventually retailing under the Amul brand; it integrated backwards into animal husbandry, feed and packaging, because better feed raises yield from the same cattle and better packaging preserves it.",
+      "The subtler lever was the finance flow, what the lecture calls cash logistics. Farmers supplying intermediaries had been paid late, borrowed to bridge the gap, and stayed indebted. The cooperative guaranteed payment, made a day or two later so the milk's fat content could be tested and the price set on it. That delay created the lock-in: a farmer returning to collect the money may as well bring more milk. India is now the world's largest producer, exporting surplus — including to New Zealand, which had once come to set up dairies here."
+    ],
+    worked: {
+      setup: "Payment is guaranteed but deliberately made a day or two after the milk is handed over, not on the spot.",
+      move: "Read the delay as design rather than as friction. It buys the time to test fat content and price on quality, and it brings the farmer back to the collection point.",
+      because: "Two problems are solved by one arrangement. Quality-based pricing needs a test, and a test needs time; paying on the spot would mean paying blind. And the return trip converts a payment into a second procurement opportunity, so the finance flow is doing procurement work. What made it hold was the guarantee: the certainty of being paid is what broke the borrowing cycle, and without that the same delay would simply have been another late payment."
+    },
+    glossary: [
+      {term: "cash logistics", plain: "The finance flow through a chain — here a payment guarantee that also secured supply."},
+      {term: "forward integration", plain: "Extending downstream into distribution, value-added products and retail."},
+      {term: "conversion", plain: "The third state a product can be in, alongside movement and storage."}
+    ],
+    connects: "That is one chain redesigned end to end. The next segment takes three more — tea, paint and a consumer goods giant — and names the move each one made."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L03",
+    courseId: "SCLM",
+    module: 5,
+    order: 3,
+    title: "Tea, paint and organised retail: three redesigns",
+    objective: "Identify the redesign move in three cases — removing a stage, postponing differentiation, and splitting a channel.",
+    explainer: [
+      "Tea companies buy at auction because a consistent brand needs a consistent blend, and the leaf changes season to season; a tea taster rates lots so buyers can assemble a blend holding aroma, colour and strength steady. Wagh Bakri noticed that for the kadak chai its Gujarat market drank, the finer parameters mattered less. So it skipped the auction and sourced directly from a few gardens — saving transport, the inventory the auction required and the auction's own service charges. Going backwards in the chain bought control over procurement, and the test was whether the end product could carry it.",
+      "Paint made the classic move. Ten types of paint times fifty colours is 500 SKUs to forecast, manufacture and stock, and the result at retail was excess inventory and stockouts at the same time. A mixing machine at the retailer changed the arithmetic: ten grey bases and ten colourants, blended to a recipe in about fifteen minutes, is 20 SKUs. An optical reader then extended it further, reading a colour the customer brought in and converting it to a recipe, so the range became effectively unlimited. It works because paint is not an impulse purchase — the buyer is willing to wait, and the differentiation fits inside that willingness.",
+      "Hindustan Unilever split its channel instead. Kirana stores kept the warehouse-and-light-vehicle distribution; organised retail, which had its own warehouses and the volumes to fill trucks, got full truckloads delivered to those warehouses, and then a managed section of them — stock still on HUL's account until the retailer drew it. That is vendor managed inventory, and structurally it is horizontal differentiation, two chains for two segments, plus vertical integration into the customer's warehouse."
+    ],
+    worked: {
+      setup: "A factory forecasts and stocks 500 paint SKUs, and retail still shows stockouts on some colours and dead stock on others.",
+      move: "Stop differentiating at the factory. Hold ten bases and ten colourants — 20 SKUs — and mix the shade at the retail counter once the customer has named it.",
+      because: "Five hundred forecasts each carry their own error, and errors on individual colours do not cancel; they show up as both shortage and surplus in the same shop. Twenty items pool that uncertainty into far fewer, far more predictable ones while the customer still sees the whole range. The condition is buyer behaviour, not technology: postponement only works where the wait it introduces is shorter than the wait the customer will accept."
+    },
+    glossary: [
+      {term: "tea taster", plain: "The specialist who rates lots so a buyer can assemble a consistent blend."},
+      {term: "horizontal differentiation", plain: "Running different supply chains for different customer segments."},
+      {term: "vertical integration", plain: "Absorbing a neighbouring stage so the chain has fewer actors and transactions."},
+      {term: "vendor managed inventory", plain: "The supplier managing stock inside the customer's warehouse, on its own account."}
+    ],
+    connects: "Those redesigns changed where a stage happened. The next segment changes what is shipped and when the product becomes what it is."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L04",
+    courseId: "SCLM",
+    module: 5,
+    order: 4,
+    title: "Bicycles, cement and Benetton: postponing in space and in time",
+    objective: "Explain why shipping an unassembled or unfinished product can be cheaper, and say which attribute postponement should defer.",
+    explainer: [
+      "The bicycle chain moved work outwards at both ends. Components in steel, rubber and plastic are made more cheaply by small and medium enterprises specialising in each material, so the factory stopped making them. Retailers already knew how to strip and rebuild bicycles for repair, so with some training they could assemble too. What was left was a kitting centre: source, kit, develop dealers, hold the brand and the quality oversight. The transport gain is the sharp part — assembled bicycles fill a truck by volume long before weight, so a ten-tonne truck carries about six tonnes of them, while kits let it carry the full ten.",
+      "Cement moved the differentiation instead of the assembly. Plants sit near limestone because the process loses weight, so moving the lighter output is cheaper than moving the ore. But cement is hygroscopic, needing tarpaulins on trucks and covered wagons on rail, while open wagons were the ones readily available. Clinker is the intermediate that already captures the weight reduction, and it is not moisture-sensitive — so modern plants make clinker at the mine, move it in open wagons to grinding units near markets, and grind, blend and bag there. Large developments now take it unbagged in flexible silos, straight into ready-mix concrete.",
+      "Benetton postponed in time rather than in space. Hosiery was traditionally dyed as yarn and then knitted, which fixes colour first. But colour was the harder attribute to forecast and style the easier one, so the process was fixing the high-variance attribute first. Knit versus dye reverses it — knit grey, dye later — once the technology made a knitted fabric absorb colour as well as yarn."
+    ],
+    worked: {
+      setup: "A ten-tonne truck leaves the bicycle factory carrying about six tonnes.",
+      move: "Do not look for a better loading pattern. Ship kits instead of assembled bicycles and the same truck carries its full ten tonnes.",
+      because: "The load is volume-restricted, not weight-restricted: an assembled bicycle is an unwieldy shape and the air between frames is what fills the truck. No amount of stacking discipline recovers that, because the constraint is the product's geometry rather than the loading. Shipping the same material unassembled removes the air, and the assembly it defers is work a trained retailer was already doing for repairs — which is why the move pays twice."
+    },
+    glossary: [
+      {term: "clinker", plain: "The cement intermediate that already captures the weight loss and is not moisture-sensitive."},
+      {term: "grinding unit", plain: "A market-side plant that grinds and blends clinker into cement."},
+      {term: "knit versus dye", plain: "Knitting grey and dyeing later, so the harder-to-forecast attribute is fixed last."},
+      {term: "hygroscopic", plain: "Absorbing moisture from the air — why bagged cement needs covered transport."}
+    ],
+    connects: "Those are moves inside a chain. The next segment steps back to what is flowing through it, and in which direction."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L05",
+    courseId: "SCLM",
+    module: 5,
+    order: 5,
+    title: "The four flows, and what a supply chain is for",
+    objective: "Name the flows through a chain and their directions, and separate efficiency from effectiveness by whose perspective each takes.",
+    explainer: [
+      "Dell is the last vignette and the cleanest statement of the pattern. It found a segment that was computer-aware, customisation-sensitive and price-sensitive, and served it with mass customization: online remote ordering into assemble-to-order locations, then express parcel delivery in two days. Established brands assembled to stock because a showroom needs stock; Dell had the order before it assembled, and skipping the retail layer is where the price came from.",
+      "Underneath every such case are the flows. Value flows down the chain, added step by step from supplier through manufacturer, branch or clearing and forwarding agent, wholesaler and retailer to the end customer. Information flows up, because an order has to travel from the customer backwards for anything to move forward. Finance flows up too, and that one is existential — unless money moves upward the chain is not viable and does not exist. A fourth flow is optional: downward flow of information, telling the next actor what has been dispatched and when. Nothing fails without it, which is exactly why it marks out the chains that bother.",
+      "That gives the definition: the design and operation of the physical, managerial, informational and financial systems that move goods and services from the furthest point of production to the furthest point of consumption, efficiently and effectively. Efficiency is doing things right — supply-driven, measured as output per input, delivering productivity and cost. Effectiveness is doing the right things, judged from the customer's side against what they expected. Where the two conflict, effectiveness takes primacy."
+    ],
+    worked: {
+      setup: "A distributor tells the retailer nothing until the truck arrives at the door.",
+      move: "Install a downward flow of information — dispatch confirmed, contents, expected arrival — even though nothing in the chain fails without it.",
+      because: "The upward flows are what make a chain function; the downward flow of information is what makes it good. A retailer who knows what is coming clears display space, plans back-office storage and staffs the unloading, so the same delivery costs less to receive. Without it the retailer either scrambles or chases the information upward, which converts a free message into a stream of anxious phone calls. Nothing breaks either way, which is precisely why only the aspiring chains bother."
+    },
+    glossary: [
+      {term: "mass customization", plain: "Serving individual configurations at volume — Dell's assemble-to-order model."},
+      {term: "assemble to order", plain: "Building only after the order exists, rather than assembling to stock for a showroom."},
+      {term: "downward flow of information", plain: "Proactively telling the next actor downstream what is coming and when."},
+      {term: "effectiveness", plain: "Doing the right things, judged against what the customer expected — it outranks efficiency."}
+    ],
+    connects: "That is what flows and what it is judged on. The next segment asks what makes a firm decide to rebuild the thing in the first place."
+  });
+
+  lesson({
     lectureId: "SCLM-M05-L06",
     courseId: "SCLM",
     module: 5,
@@ -2266,7 +4795,161 @@
       {term: "facilitating technologies", plain: "Technology that makes a supply chain redesign possible in the first place."},
       {term: "technological minimum", plain: "The shortest lead time the process could actually achieve, which real lead times usually exceed."}
     ],
-    connects: "Motivation tells you why to redesign. The rest of the module works through firms that actually did it, and what the redesign cost them."
+    connects: "Motivation tells you why to redesign. The next segment says who gets to decide anything, and sorts a shipper's own decisions by how far ahead they reach."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L07",
+    courseId: "SCLM",
+    module: 5,
+    order: 7,
+    title: "The ecosystem, and who decides what",
+    objective: "Name the four actors in a supply chain ecosystem, and sort a shipper's decisions into strategic, tactical and operational.",
+    explainer: [
+      "Competitive advantage belongs to a supply chain rather than to a firm, so the decisions that improve one are spread across four actors. Shippers are the brand owners whose product has to reach the customer. Industry bodies act where many shippers share a problem no one of them can fix. Infrastructure and service providers — truckers, railways, ports, road builders, IT — are the supply side that enables the rest. Government envisions, develops, enables and regulates.",
+      "The shipper's own decisions sort by horizon. Strategic: product design, packaging, choice of markets and sources, production structure, plant location, and the design of the distribution and procurement networks. Product design is not a detail here — cuboid watermelons raise packing efficiency from the roughly 60% a spherical shape allows towards the 100% a cube does, and the segment that juices them does not care about the shape. Tactical: dispatch and purchase plans, inventory norms, whether to outsource logistics, warehouse location, transport contracting. Operational: batch sizes, scheduling, allocation between markets, shipment size and routing, warehouse picking.",
+      "Industry-level decisions matter because so much of the Indian chain is disaggregated — many small vendors, agents, truckers and retailers, none with enough voice alone. Associations organise what the lecture calls the people sector, lobby for laws and taxation, and develop standards; the reason seafood is better in quality and price near the coast than inland is the absence of transport and storage standards. Government's levers are infrastructure, facilitating law and taxation, and developing clusters and corridors."
+    ],
+    worked: {
+      setup: "A firm boasts of near-zero working capital, taking advances downstream and credit upstream.",
+      move: "Read it at chain level rather than firm level. The inventory has not gone anywhere; its financing has been pushed onto the actors either side.",
+      because: "What matters is the total inventory in the chain and whether it is at the right level, not whose balance sheet carries it — because whoever finances it, the end customer pays for it in the end. Moving the burden outward looks like working capital discipline and buys no efficiency at all, while making coordination harder, since the actors now holding it did not choose the level. This is precisely where an industry body has standing that no single shipper does."
+    },
+    glossary: [
+      {term: "macro ecosystem actors", plain: "The four who decide: shippers, industry bodies, infrastructure and service providers, and government."},
+      {term: "shipper decision horizons", plain: "The strategic, tactical and operational bands a brand owner's supply chain decisions sort into."},
+      {term: "packing efficiency", plain: "How much of a container's volume the goods actually occupy — about 60% for spheres, 100% for cubes."},
+      {term: "people sector", plain: "The many small, disaggregated actors whose voice comes only through association."},
+      {term: "clusters and corridors", plain: "Government-developed concentrations of interdependent industry and the routes between them."}
+    ],
+    connects: "Those are the ordinary decisions well made. The next segment collects the ones that take a chain past business as usual."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L08",
+    courseId: "SCLM",
+    module: 5,
+    order: 8,
+    title: "Principles for an aspiring supply chain",
+    objective: "Apply the aspiring-chain principles: event-based planning, continuous over discrete, monotonic aggregation, and deliberate slack.",
+    explainer: [
+      "Planning defaults to the calendar — annual, quarterly, monthly — while demand often follows events. Some 40 to 50% of India's paint sales happen in the two months before Diwali, and Diwali moves against the English calendar, so a firm planning by month is planning against the wrong axis. The sharpest example is the smallest: food carts outside a campus stocked against announced quizzes and assignment deadlines, because their demand was too vulnerable for anything else.",
+      "Continuous systems beat discrete ones. A cake of soap becomes a smaller cake becomes liquid soap, and each step is easier to keep supplied and to hold at the right level. A single queue with staff taking breaks in turn never stops, while one window closing for lunch discretises time and manufactures a wait. Bulk cement flowing into ready-mix concrete beats bagging and then slashing the bag open.",
+      "Three more. Variety accumulates because each new feature seems to buy demand, and it buys complexity too — so withdrawals matter as much as launches, unless postponement lets variety be created against actual demand. Aggregation and disaggregation should be monotonic: food grain is loose when procured, bagged in the middle and loose again in the kitchen, and every reversal costs something the branding or handling gain has to justify. And capacity should carry marginal redundancy, because a chain absorbing unanticipated variation cannot be run at 100%. Slack is what effectiveness costs."
+    ],
+    worked: {
+      setup: "A logistics operation is run at close to full asset utilisation and looks efficient on every internal measure.",
+      move: "Treat the missing slack as a defect rather than an achievement, and design in marginal redundancy — capacity above what the chain normally requires.",
+      because: "Nothing in a chain arrives in the standardised quantities the plan assumed, and the variation that matters is the kind nobody anticipated. A system with no spare capacity has no way to absorb it, so the variation is passed downstream as delay. High utilisation is an efficiency measure, taken from the supply side; the customer experiences the delay instead. That is the trade the principle names — slack is bought deliberately, and it is bought for effectiveness."
+    },
+    glossary: [
+      {term: "event-based planning", plain: "Planning against the events that drive demand rather than against the calendar."},
+      {term: "continuous system", plain: "A flow arrangement that avoids the artificial waits a discretised one creates."},
+      {term: "marginal redundancy", plain: "Deliberate spare capacity, so unanticipated variation is absorbed rather than passed on."}
+    ],
+    connects: "Slack and event awareness change how the chain runs. The next segment changes what gets reported about it."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L09",
+    courseId: "SCLM",
+    module: 5,
+    order: 9,
+    title: "Measuring the interface, and what mass customization merges",
+    objective: "Redesign a performance measure along the four attribute shifts, and place mass customization against the process types.",
+    explainer: [
+      "Performance measures need four shifts. From one actor to two, because effectiveness lives at the interface between actors rather than inside either. From inputs to outputs — not how well a machine was used but how much of what came out was good. From averages to distributions: average inventory connects to working capital and hides everything else, whereas inventory by age tells you how much is over a year old and therefore where attention belongs. And from product measures to service measures, because for an aspiring chain the advantage is usually in the service — installation, information for comfortable use, the follow-up check, the first maintenance, warranties, and delivery itself.",
+      "Delivery is the example worth holding. A household where both adults work is locked most of the day, so a service timed to an ordinary working day either forces someone to stay home or fails. The question is whether the organisation measures how often that happens. Usually not — and often the work is outsourced, so the tension lands on the outsourcee, who can adjust very little, while the principal who sets the service parameters never sees it.",
+      "Then the connection to operations. A job shop is built for variety at low volume per customer; a continuous process runs standardised output at huge volume. Mass customization is the deliberate merger — drive the principles of continuous process up into the job shop and the principles of the job shop down into the continuous process, so variety is served at volume. Read alongside postponement it is the same ambition: collapse the time and distance between a customer wanting something and receiving it. The course's image for the limit is Kamadhenu, the mythical cow that grants a wish the moment it is made."
+    ],
+    worked: {
+      setup: "A warehouse reports average inventory every month and the number looks stable.",
+      move: "Break the same stock into an age distribution — under three months, three to six, six to twelve, over a year — and read that instead.",
+      because: "An average connects to working capital and to nothing else. Stable average inventory is consistent with a healthy fast-moving stock and with a growing block of obsolete goods offset by a shrinking one of good stock, and the two need opposite responses. The ageing bands make the second visible, which is what allows both actions the situation needs: deciding what to do with the old stock, and changing what caused it to age in the first place."
+    },
+    glossary: [
+      {term: "job shop", plain: "A process built for variety at low volume per customer — one end of the merger."},
+      {term: "Kamadhenu", plain: "The mythical cow granting a wish instantly — the course's image for a chain with no time or distance left in it."}
+    ],
+    connects: "That closes the principles. The rest of the module applies them to one firm, starting with the industry it was competing in."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L10",
+    courseId: "SCLM",
+    module: 5,
+    order: 10,
+    title: "FarmAid: an industry that built more capacity than demand",
+    objective: "Read a tractor market from its growth, penetration and utilisation figures, and say why logistics became the competitive lever.",
+    explainer: [
+      "The Indian tractor industry grew hard through the 1990s as agriculture mechanised: sales rose from about 121,000 units in FY1990 to more than 260,000 by FY2000, a compound annual growth rate of about 8%, well ahead of both agricultural output and GDP. Penetration still lagged — roughly 10.5 tractors per 1,000 hectares of cultivated land against a global average near 28 — so the headroom was real. Demand tracks agricultural investment rather than the cycles of the rest of the automotive industry, driven by monsoon, credit, landholding, farmer incomes and technology adoption.",
+      "Then the growth met its own consequence. Manufacturers expanded capacity in anticipation, and by FY1999 industry capacity had reached about 350,000 units a year against production well below it, with capacity utilisation around 72%. Excess capacity turns competition inward: with more supply than demand, operational efficiency, supply chain effectiveness and dealer service become the determinants of who wins, because the product alone no longer separates anyone.",
+      "The market's shape was also moving. The 31 to 40 horsepower segment was the largest, more than half of all sales. Demand had concentrated in Punjab, Haryana and Uttar Pradesh, which benefited early from the Green Revolution and whose soft alluvial soil needed lower-powered machines. It then spread into Madhya Pradesh, Rajasthan, Gujarat and Maharashtra, where harder soil demands more power, so the mix shifted towards medium-powered tractors and portfolios, dealer networks and distribution had to follow. FarmAid, an early-1990s entrant at about 20% share and third place, wanted to lead within five years — which is why it reviewed its logistics in the summer of 1999."
+    ],
+    worked: {
+      setup: "Industry capacity reaches about 350,000 units a year while utilisation sits near 72%.",
+      move: "Read the utilisation figure as a statement about competition rather than about factories. With capacity ahead of demand, the differentiator moves off the product and onto service and cost.",
+      because: "Excess capacity means every manufacturer can supply more than the market will absorb, so nobody wins by being able to build. What is left is whether the right model reaches the right dealer in time, at what cost — which is exactly why a tractor company hired a consultant to study order processing, stockyards and dealer service rather than the plant. It also explains the urgency: a firm at 20% share aiming for leadership has to take that share from competitors who are equally able to build."
+    },
+    glossary: [
+      {term: "capacity utilization", plain: "Production against installed capacity — about 72% here, the mark of industry overcapacity."},
+      {term: "horsepower", plain: "The engine rating tractors are segmented by; 31 to 40 hp was over half the market."},
+      {term: "regional office", plain: "The state-level unit through which FarmAid ordered from the factory and ran its stockyard."}
+    ],
+    connects: "That is the market. The next segment goes inside the company and prices what its distribution system was costing."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L11",
+    courseId: "SCLM",
+    module: 5,
+    order: 11,
+    title: "FarmAid: what a day of inventory costs, and planning the season",
+    objective: "Derive a per-day inventory cost from asset value and carrying rate, and build a seasonality plan that permits no back orders.",
+    explainer: [
+      "FarmAid ran one plant near Thane, 18 regional offices each with a stockyard, about 300 dealers, and 15 models of which four made nearly 90% of sales, producing around 60,000 tractors a year. Against seven competitors — Mahindra & Mahindra leading near 25%, Escorts second, then FarmAid at about 20% — and new entrants like Ford New Holland and L&T John Deere, dealer service decides sales, because a customer who cannot get the model wanted switches brand. Dealers reported that 70% of tractors were not ready for sale on arrival.",
+      "The cost of holding is worth deriving rather than quoting. A tractor is worth about ₹200,000, the carrying rate is 18% a year, so about 1.5% a month is ₹3,000, and dividing by 30 gives roughly ₹100 per tractor per day. Twenty days in stock is ₹2,000 a tractor and about ₹12 crore a year across the company — and every extra day has to be earned back in value somewhere. Dealers separately carried around ₹3,500 a tractor in financing and farmer credit.",
+      "Demand is seasonal on a known pattern: 5,000 in January, 4,000 in February, 4,500 in March, peaking at 6,000 in April, falling to 4,000 in August, recovering to 5,500 and 5,400 in October and November — 60,000 in all. April peaks because farmers making the down payment come in with cash after the harvest, around Holi; monsoon is the trough; Diwali lifts it again. Forecasting runs at three levels — company, regional office and dealer — and the dealer level needs customer tracking rather than a model, because buyers commit to a model and then wait roughly two weeks for bank financing."
+    ],
+    worked: {
+      setup: "A uniform plan produces 5,000 a month against that demand curve, and the running balance goes negative — minus 1,100 by the end of June.",
+      move: "If back orders are not acceptable, lift the whole inventory profile by 1,100, the largest deficit. January becomes 1,100, February 2,100, March 2,600 at the peak, then down through 1,600 and 700 to zero at the end of June.",
+      because: "The deficit belongs to the whole cycle rather than to June, so it cannot be patched in the month it appears — the stock has to be built during the months when production exceeds demand, all of which come before it. Lifting the profile by exactly the worst cumulative shortfall is the smallest opening balance that never goes negative, and the March peak it creates is what a level plan costs. Where a stockout sends the customer elsewhere, that is the price of not losing the sale."
+    },
+    glossary: [
+      {term: "inventory carrying cost", plain: "The cost of holding stock — 18% a year here, about ₹100 per tractor per day."},
+      {term: "uniform production", plain: "Producing the same quantity every month regardless of the demand curve."},
+      {term: "back order", plain: "Demand accepted and not yet met — what the seasonality plan is lifted to avoid."},
+      {term: "stockyard", plain: "The state-level holding point between the factory and the dealers."}
+    ],
+    connects: "That plans how much exists and when. The next segment plans where it sits and how it moves."
+  });
+
+  lesson({
+    lectureId: "SCLM-M05-L12",
+    courseId: "SCLM",
+    module: 5,
+    order: 12,
+    title: "FarmAid: the dispatch yard, and where the stockyards go",
+    objective: "Justify a facility investment from a per-day inventory saving, and state the trade-off a stockyard location model resolves.",
+    explainer: [
+      "Distribution runs in two stages. Primary moves tractors from the factory to stockyards on long platform trucks carrying five; secondary moves them from stockyards to dealers on standard trucks carrying two. The factory had almost no finished-goods space and long platform trucks could not reach it, so tractors went first to a transporter's godown — which cost the company control and about two days of transit.",
+      "A central dispatch yard 20 kilometres away on a highway is effectively the finished-goods area the factory lacks. It costs ₹15 million to build and ₹2 million a year to run, and recovering two days at ₹100 a day across 60,000 tractors is about ₹12 million a year, so ₹10 million net against a ₹15 million investment pays back inside two years — before counting the quality gain, since uncontrolled handling was a main reason 70% of tractors arrived not ready for sale.",
+      "Stockyard location is harder, and it is a trade-off between three costs. Primary transport runs about ₹3 per tractor-kilometre — ₹15 a kilometre for a long platform truck over five tractors, falling to ₹2.5 once a redesigned rear hook lets six fit. Secondary rises from ₹3 to ₹3.5, because self-driving tractors to dealers is being replaced by a standard truck at ₹7 a kilometre carrying two, bought for the quality it protects. Against those sits each yard's own operating cost: in Gujarat, monthly quotes of ₹20,000 to ₹30,000 across Valsad, Surat, Vadodara, Ahmedabad and Rajkot. Service adds a constraint — overnight delivery caps a dealer at 300 to 350 kilometres from its stockyard."
+    ],
+    worked: {
+      setup: "Five candidate stockyards in Gujarat serve nineteen dealer locations, and the cheapest answer is not obviously one yard or several.",
+      move: "Set it up as a trade-off rather than a ranking. More stockyards raise operating cost and shorten secondary hauls; fewer do the reverse — and the 350-kilometre overnight limit rules out combinations regardless of cost.",
+      because: "The three costs move in opposite directions as yards are added, so no single figure decides it and a mathematical programming model is what holds them together — the kind a spreadsheet solver runs. The service constraint is not a cost at all: a dealer beyond 350 kilometres cannot be served overnight at any price, so it removes options before the arithmetic starts. Two assumptions had to go first — one yard per state, a pre-GST tax artefact, and a yard beside the marketing office."
+    },
+    glossary: [
+      {term: "long platform truck", plain: "The primary-stage vehicle carrying five tractors, six after the rear-hook redesign."},
+      {term: "central dispatch yard", plain: "An off-site finished-goods area, here 20 km from a factory with no space of its own."},
+      {term: "overnight delivery", plain: "The service promise that caps a dealer at 300 to 350 km from its stockyard."},
+      {term: "central sales tax", plain: "The pre-GST 4% interstate levy that made one stockyard per state worth it."},
+      {term: "mathematical programming", plain: "The optimisation model, run on a spreadsheet solver, that resolves the three-way cost trade-off."}
+    ],
+    connects: "That sets up the model. The next segment reads what it produced, and picks a recommendation from its scenarios."
   });
 
   lesson({
@@ -2297,6 +4980,115 @@
   });
 
   lesson({
+    lectureId: "SCLM-M06-L01",
+    courseId: "SCLM",
+    module: 6,
+    order: 1,
+    title: "Cold storage: an industry where most operators lose money",
+    objective: "Explain what a cold store does in an agricultural chain, and identify the operating choices that separate a profitable one from the rest.",
+    explainer: [
+      "Agricultural production is seasonal and consumption is not, so a cold store is an inventory buffer standing between them — an intermediate node connecting producers, traders, wholesale markets and retail. It lets a peak-season harvest be released into the market gradually, which cuts post-harvest losses and improves the price the produce realises. That is the service. The economics behind it are harsh: refrigeration runs continuously, so the business is capital intensive and energy intensive at once.",
+      "Electricity is roughly 45% of operating cost, and cold stores are classed as service industries and so pay electricity duties of about 20%, well above what manufacturing pays. Storage rents meanwhile stayed flat under competition, so a small tariff rise moves straight to the bottom line. Demand is seasonal too, and capacity utilisation swings with the harvest calendar — around 80% on average at Mother Shree, close to full in peak summer, and 50 to 70% through the monsoon and early winter. By 2006 Ahmedabad had about thirty facilities and roughly ten of them were profitable.",
+      "Four of those ten were Hasmukhbhai's, which makes the operating choices worth reading closely. He entered against a near-monopoly that charged high rents, demanded payment in advance and opened for limited hours, and took the opposite position on each: 24-hour service, eight trucks moving goods between the store and customers, and a Naroda site close to Madhavpura mandi, the Naroda fruit market and National Highway 8. Rent is charged for a full month even for a single day's storage, which stabilises revenue. And he managed hands-on rather than through supervisors."
+    ],
+    worked: {
+      setup: "Two operators in the same city face the same electricity tariff and the same storage rents, and one is profitable while the other is closing.",
+      move: "Look at utilisation and hours rather than at price. The profitable operator runs at around 80% average utilisation, opens 24 hours, and moves its customers' goods itself.",
+      because: "With electricity at 45% of operating cost and rents held flat by competition, the cost per tonne stored falls almost entirely on how full the building is — a refrigerated room costs nearly the same to run whether it is half loaded or full. Price competition cannot fix that, and both operators face the same tariff. Service that keeps traders loyal and the racks occupied can, which is why the differentiators here are hours, transport and relationships rather than rate."
+    },
+    glossary: [
+      {term: "cold storage", plain: "A refrigerated facility buffering seasonal harvests against year-round consumption."},
+      {term: "post-harvest losses", plain: "Produce spoiled between harvest and sale, which storage is meant to reduce."},
+      {term: "commission agents", plain: "Traders acting for others, who with traders are the cold store's real customers rather than farmers."},
+      {term: "electricity duties", plain: "A levy of about 20% on cold stores as service industries, above the manufacturing rate."},
+      {term: "storage rent", plain: "The charge for space, billed for a full month even if goods stay one day."},
+      {term: "multi-commodity", plain: "A facility with rooms at different temperatures, storing fruits, pulses and spices together."}
+    ],
+    connects: "That is one small service provider seen from the inside. The next segment moves to the largest one in the country, and the schemes it uses to hold onto freight."
+  });
+
+  lesson({
+    lectureId: "SCLM-M06-L02",
+    courseId: "SCLM",
+    module: 6,
+    order: 2,
+    title: "Rail innovations and systemic bottlenecks",
+    objective: "Explain Own Your Wagon and Engine on Load, and say why fixing one stage of a rail movement often fails to help.",
+    explainer: [
+      "Two rail schemes address the same shortage from different ends. Own Your Wagon lets shippers invest in their own private rolling stock in exchange for freight discounts and, more importantly, security of supply — the wagons are there when needed rather than allocated by a queue. Engine on Load is an operating policy under which the locomotive stays attached to the rake during loading and unloading, which removes the wait for an engine to be detached, sent elsewhere and brought back. One buys assured capacity; the other removes dead time from the capacity already there.",
+      "Turnaround is the measure both are aimed at, and road works the same way. Profitability in trucking is driven by turnaround speed, rate density and backhaul load factors rather than by distance travelled. A truck returning empty roughly doubles its cost per trip, which is why managing the load factor matters as much as pricing does. In both modes the asset earns only while it is moving loaded, and everything else is overhead.",
+      "The systemic bottleneck is the warning that governs all of it. Improving one stage in isolation frequently just moves the constraint somewhere else: cut terminal waiting time and the delay reappears as transit time limited by engine power. Rail efficiency has to be optimised end to end rather than stage by stage, because each stage's improvement is only worth what the next stage can absorb. This is the same lesson as local optimisation in module 1, arriving through operations rather than through accounting."
+    ],
+    worked: {
+      setup: "A terminal upgrade halves loading time, and end-to-end delivery time barely moves.",
+      move: "Look for where the constraint went rather than at what the upgrade achieved — the bottleneck has shifted to the next stage.",
+      because: "Improving one stage in isolation shifts the bottleneck rather than removing it. Faster loading only shortens the journey if the next constraint — engine availability, line capacity, transit speed — can absorb the extra throughput. Rail efficiency has to be optimised holistically, which is why the terminal gain shows up locally and disappears end to end."
+    },
+    glossary: [
+      {term: "own your wagon", plain: "Shippers buy private rolling stock for freight discounts and supply security."},
+      {term: "engine on load", plain: "The locomotive stays attached during loading and unloading, removing detachment wait."},
+      {term: "wagon turnaround time", plain: "How fast an asset completes a loaded cycle — the real driver of profitability."},
+      {term: "backhaul", plain: "A return load; without one, a truck roughly doubles its cost per trip."},
+      {term: "systemic bottleneck", plain: "Improving one stage moves the constraint elsewhere unless the chain is optimised end to end."}
+    ],
+    connects: "That is the largest service provider in the country. The next segment turns to the small ones who do most of the work, starting with a carrying and forwarding agent."
+  });
+
+  lesson({
+    lectureId: "SCLM-M06-L03",
+    courseId: "SCLM",
+    module: 6,
+    order: 3,
+    title: "The service provider's side of the chain",
+    objective: "Describe what a carrying and forwarding agent actually does, and read a logistics firm that competes on coordination rather than on assets.",
+    explainer: [
+      "Everything so far has been the shipper's view — FarmAid worrying about getting its product to market. Turn it around. Supply chains happen because service providers make them happen, and in India those providers are mostly small: distributors, carrying and forwarding agents, warehouse operators and trucking companies, with Indian Railways at the far other extreme. Two cases carry this part of the course, a C&FA and a cold warehouse operator.",
+      "Logistics Solutions is the C&FA: an Ahmedabad family firm more than a hundred years old, serving pharmaceuticals, processed foods, FMCG, consumer durables and garments. Its work is carrying and forwarding agency operations, distribution management, warehousing and stocking, and inventory handling with dispatch coordination. Each client is run as a separate agency for accounting and operations under one umbrella, and family members take the agencies matching their expertise — the younger brother on edible oils, Dhaniram's sons on pharmaceuticals.",
+      "What makes it interesting is what it refused to become. Unlike logistics firms that build fleets and warehouse networks, Logistics Solutions deliberately kept its core competence at coordinating rather than owning, preferring not to sink capital into physical infrastructure. Working capital comes from personal borrowings from relatives and associates, and is turned over about 36 to 40 times a year — a lot of movement financed by very little money. In 1998 Josh Denims outsourced its Gujarat distribution and chose the firm as C&FA, which set up a dedicated agency, Raj Distribution Services."
+    ],
+    worked: {
+      setup: "A logistics firm with a century of reputation has almost no trucks and no warehouse network of its own.",
+      move: "Read that as a chosen competence rather than as under-investment, and check the working capital cycles — 36 to 40 a year — for what it is actually good at.",
+      because: "Owning assets and coordinating them are different businesses with different economics. An asset-light coordinator earns on the reliability of its arrangements, and its performance shows up in how hard a small amount of working capital is made to work, not in a balance sheet of vehicles. Thirty-six to forty cycles a year is that measure, and it is only available to a firm whose capital is moving rather than parked in trucks."
+    },
+    glossary: [
+      {term: "carrying and forwarding agency", plain: "C&FA — warehousing, order processing, dispatch, collection and compliance done on a manufacturer's behalf."},
+      {term: "distribution management", plain: "Coordinating the movement and stocking of a client's goods through to its channel."},
+      {term: "working capital cycles", plain: "How many times a year working capital turns over — 36 to 40 here."},
+      {term: "core competence", plain: "The capability a firm builds on and refuses to trade away; here coordination rather than asset ownership."}
+    ],
+    connects: "The account was won on reputation and capability. The next segment is what happened when the client changed the structure the account was priced for."
+  });
+
+  lesson({
+    lectureId: "SCLM-M06-L04",
+    courseId: "SCLM",
+    module: 6,
+    order: 4,
+    title: "When a client removes a layer and the work lands on you",
+    objective: "Quantify the workload a channel redesign transfers to a partner, and locate where the compensation stopped matching the job.",
+    explainer: [
+      "Josh's original structure was multi-tier: manufacturer to C&FA to distributor to retailer to consumer, with ten distributors across Gujarat and 180 approved outlets. Distributors did more than resell. They held inventory and extended credit, absorbing operational and financial risk, and acted as demand buffers against retailer fluctuation. The C&FA did warehousing, order processing, dispatch, shipment tracking, collection from distributors, inventory monitoring, returns and statutory compliance including sales tax and octroi, for a fixed ₹60,000 a month — about 2% of ₹3 million of monthly sales.",
+      "After fifteen months Josh removed the distributor layer to simplify the structure, gain control and capture the distributors' margin. The C&FA now supplied all 180 retailers directly across 14 districts. Retailers order below case-lot sizes — 10 to 35 cartons a month, half of them fifteen or fewer, averaging twenty — so monthly shipments rose from about 2,500 cartons to about 3,600, of which roughly two-thirds needed repackaging. Around 1,200 could pass through as received; the remaining 1,300 became about 2,400 repacked cartons.",
+      "Read where the work actually went, because not all of it moved. Trucking barely changed: shipments to distributors were already less than truckload, and retailers in a distributor's area still consolidate at the C&FA. Three things did move — repacking, final delivery to the retailer, and credit and relationship management with 180 counterparties instead of ten. Margins downstream tell the rest: 2% at the C&FA, 7 to 10% at the distributor, 15 to 25% at the retailer. Josh captured the middle band and the remuneration stayed fixed."
+    ],
+    worked: {
+      setup: "Monthly cartons rise from about 2,500 to about 3,600 while the C&FA's ₹60,000 fee stays unchanged.",
+      move: "Do not read the increase as 44% more of the same work. Split it: about 1,200 cartons pass through untouched, and roughly 2,400 exist only because 1,300 were repacked.",
+      because: "The carton count understates the change because the new cartons are the expensive ones — each is a repacking operation the distributor used to perform, and each ends in a delivery to a retailer rather than to a distributor. A fixed fee set against a volume-based structure survives a volume increase; it does not survive a structural change that converts bulk handling into piece handling, which is why the case is about aligning compensation with responsibility rather than about growth."
+    },
+    glossary: [
+      {term: "multi-tier distribution", plain: "Manufacturer to C&FA to distributor to retailer to consumer — the structure Josh removed a layer from."},
+      {term: "demand buffer", plain: "What a distributor absorbs by holding stock and smoothing retailer fluctuation."},
+      {term: "case lot", plain: "The full-case quantity a channel is designed around; retailers ordered below it."},
+      {term: "order fragmentation", plain: "Many small orders replacing few large ones, raising administrative and delivery work."},
+      {term: "repackaging", plain: "Breaking received cases into retailer-sized cartons — about two-thirds of shipments here."},
+      {term: "octroi", plain: "A local entry levy on goods, part of the statutory compliance the C&FA handled."}
+    ],
+    connects: "That is the agent's side of a structure someone else redesigned. The next segment returns to the cold store owner, who is the one deciding, and asks where he should expand."
+  });
+
+  lesson({
     lectureId: "SCLM-M06-L05",
     courseId: "SCLM",
     module: 6,
@@ -2320,6 +5112,33 @@
       {term: "geographical diversification", plain: "Spreading facilities across locations to reduce business risk, not only to add demand."}
     ],
     connects: "That is expansion judged from the owner's side. The next segment takes a firm already at scale and asks what it took to turn its logistics around."
+  });
+
+  lesson({
+    lectureId: "SCLM-M06-L06",
+    courseId: "SCLM",
+    module: 6,
+    order: 6,
+    title: "Indian Railways as a service provider, and a closed circuit",
+    objective: "Explain why the railway is repositioning as a logistics provider, and read a dedicated rail circuit as an investment with a return.",
+    explainer: [
+      "Freight is where Indian Railways earns: more than two-thirds of its revenue, against passenger services that run most of the trains. At the time of the case it carried about 40% of India's freight tonne-kilometres, since fallen below 30%, and that slide to road and coastal shipping is the problem behind everything here. Road offers flexibility, door-to-door service and — decisively — smaller parcel sizes than rail can handle. The response was to reposition as a third party logistics provider offering integrated solutions to large industrial customers rather than simply hauling wagons.",
+      "Cement was picked as the sector to prove it on. Plants sit near limestone rather than near buyers, so transport decides competitiveness; cement is about 9% of railway freight, roughly 46 million tonnes a year, with the South Central zone carrying about 11 million and the Secunderabad division about 8. But rail's share of cement moved fell from about 59% in 1991-92 to around 40% by 2002-03, on complaints of wagon shortage, poor loading and unloading facilities, weak coordination across zones, and no visibility of where wagons were.",
+      "Rajashree Cement at Malkhaid, 4.2 million tonnes a year, sends about 52,000 tonnes a month to Bangalore over a 575-kilometre route to Doddaballapur, run as a closed circuit: load at the plant, haul, unload, and return the empty rake for the next cycle. Three rakes of 2,400 tonnes each make about seven trips a month, roughly 21 across the system. Under Own Your Wagon the company put in about ₹600 million — ₹200 million of wagons, ₹10 million of loading silos at Malkhaid, ₹390 million of unloading facilities at Doddaballapur — for around ₹73 million of annual freight savings, about 12%, plus a 22.5% freight subsidy and wagons that are actually there."
+    ],
+    worked: {
+      setup: "The ₹600 million invested under Own Your Wagon is mostly not wagons: ₹390 million of it is unloading facilities at the destination.",
+      move: "Read the split before the return. The wagons are ₹200 million; the greenfield terminal at Doddaballapur is nearly twice that, while the loading silos at Malkhaid cost ₹10 million because they attach to a plant that already exists.",
+      because: "A scheme named for wagons is really an investment in the two ends of the circuit, and the ends are not symmetrical. Loading bolts onto existing plant infrastructure; unloading had to be built from nothing in a place with no cement operations. That asymmetry is what makes the circuit closed and the return a fixed feature — ₹73 million a year against ₹600 million is about 12%, and it is only available because the destination terminal exists."
+    },
+    glossary: [
+      {term: "closed circuit", plain: "A dedicated loop where the same rakes cycle between one origin and one destination."},
+      {term: "greenfield", plain: "Built from nothing on a new site, as the Doddaballapur unloading facility was."},
+      {term: "loading silos", plain: "Storage that discharges straight into wagons passing underneath, removing a handling step."},
+      {term: "freight subsidy", plain: "The 22.5% tariff reduction Own Your Wagon participants receive."},
+      {term: "wagon availability", plain: "Whether rolling stock is there when wanted — the security private wagons buy."}
+    ],
+    connects: "The circuit is built and the wagons are owned. The next segment measures what the cycle actually spends its time doing, and asks whether more capacity or less waiting is the cheaper way to move more."
   });
 
   lesson({
@@ -2347,6 +5166,225 @@
       {term: "throughput", plain: "Tons actually moved per month, which can rise from faster cycles as well as from more assets."}
     ],
     connects: "That gain depended on another party's scheduling and incentives. The next segment goes inside a transport operator and looks at how its drivers are paid."
+  });
+
+  lesson({
+    lectureId: "SCLM-M06-L08",
+    courseId: "SCLM",
+    module: 6,
+    order: 8,
+    title: "Shreeji: route economics, and incentives that reward the wrong thing",
+    objective: "Test a route-profitability belief against trip data, and diagnose why a distance-based driver incentive can idle assets.",
+    explainer: [
+      "Full truckload is more than 60% of Shreeji's revenue, and the firm's inherited belief was that long routes pay best because the truck stays loaded longer. Metis tested it on one month of data — 772 trips — and it did not hold. Chennai to Mumbai is the longer haul, but Chennai to Bengaluru produced better contribution margins: stronger rates for the shorter run, and faster turnaround because loads were always available in both directions. Distance is not the earning unit; the loaded cycle is.",
+      "The parcel business, about 10% of revenue, was improved by attention rather than assets. Delivery time fell from 8.16 days in April 2012 to 5.90 in March 2013, helped by an Express Parcel Bakshish paid when a driver delivered inside a set time, which lifted parcel volumes by 20%, and by destination-specific dispatches that cut costly trans-shipment. Against that sits a data problem with strategic weight: the same customer entered under different names in the master data made customer-wise profitability unanalysable, so small high-margin customers stayed invisible.",
+      "The second incentive scheme is the instructive failure. Paiya Gumao, Paisa Kamao paid ₹1,500 if a truck crossed 7,000 kilometres a month, then ₹1 a kilometre from 7,000 to 9,000 and ₹1.50 above 9,000. Older trucks could not reach 7,000 regularly, so drivers avoided them — and a driver who did take one had no reason to push, since the first rupee only arrives at a threshold he cannot reach. The old vehicles sat idle, adding to the 15% idle capacity the firm already had. The question it raises is whether an incentive should be tied to driver effort or to the condition of the truck he is given."
+    ],
+    worked: {
+      setup: "A distance incentive pays ₹1,500 at 7,000 kilometres a month and nothing below it, and the oldest trucks stop moving.",
+      move: "Read the threshold, not the rate. A driver assigned a truck that cannot reach 7,000 earns nothing from the scheme however hard he drives, so his rational move is to refuse that truck.",
+      because: "A common metric across unequal assets converts an effort incentive into an asset lottery, and the payoff is a step rather than a slope, so partial achievement earns nothing at all. The firm ends up paying to have its newest trucks driven hard and its oldest ones parked — the opposite of the utilisation the scheme was bought to raise, and a direct addition to the idle capacity already on the books."
+    },
+    glossary: [
+      {term: "route wise profitability", plain: "Contribution measured per route rather than per truck or per month."},
+      {term: "bakshish", plain: "The parcel scheme paying a driver for delivery inside a set time; parcel volumes rose 20%."},
+      {term: "trans-shipment", plain: "Rehandling a consignment mid-journey, which destination-specific dispatch avoids."},
+      {term: "receivable days", plain: "How long customers take to pay — rising from 77 to 90 days here."},
+      {term: "part load", plain: "A consignment smaller than a truck, consolidated with others to fill one."},
+      {term: "bonded trucking", plain: "Moving airport cargo between cities under customs bond; nine airports, about 25 airlines."}
+    ],
+    connects: "That is what the data said about routes and drivers. The next segment steps back to the C&FA and puts the decision the case was built around on the table."
+  });
+
+  lesson({
+    lectureId: "SCLM-M06-L09",
+    courseId: "SCLM",
+    module: 6,
+    order: 9,
+    title: "Seth Dhaniram's decision: leave the account, or change the business",
+    objective: "Weigh a contract that has become financially unattractive against what it buys that is not money, and name the structural options that would change the terms.",
+    explainer: [
+      "The financial reading is short. The remuneration is unchanged at ₹60,000 a month while the work has grown a repacking operation, a retailer delivery step and credit management across 180 counterparties. More manpower and administration will be needed and none of it is compensated, so on cash the account has become less attractive than it was when it was won.",
+      "The other side is real and does not appear in the fee. Association with a prestigious brand raises the visibility and credibility of Logistics Solutions in the logistics market, in a business where accounts are awarded on reputation, financial strength, infrastructure, professional management and technological competence — the same criteria Josh used to select the firm. The assignment also trains younger family members, which for a firm passing to its next generation is a purchase rather than a cost. Dhaniram had already stepped back into strategic guidance and mentoring by the mid-1990s, so this is precisely what he is managing.",
+      "There are structural moves, not just a yes or no. The firm could enter trucking directly or through a partnership, as some C&FAs do, which would give control over the retailer delivery step that is now the weak link. It could leverage the other agencies under the Logistics Solutions umbrella, since the same warehouse, staff and routes serve pharmaceuticals, foods, FMCG and durables. The general lesson is the one the case is built to deliver: when a chain is redesigned, incentives, responsibilities and compensation have to be realigned together, or the party that absorbed the work carries it uncompensated."
+    ],
+    worked: {
+      setup: "The account no longer covers its own workload, and walking away is available.",
+      move: "Separate what the fee pays for from what the relationship buys, then ask which of the two the firm is short of.",
+      because: "A contract that loses money on cash can still be worth holding if it buys something the firm cannot buy otherwise — here market credibility and a training ground for the next generation, neither purchasable at any price. The decision is therefore not whether the maths is negative, which it is, but whether the non-financial return justifies a known loss and for how long. The trucking option and a renegotiation exist because that answer has a time limit."
+    },
+    glossary: [
+      {term: "remuneration", plain: "The fixed monthly fee, unchanged through the structural change that raised the workload."},
+      {term: "strategic benefits", plain: "Reputation, visibility and experience — returns a contract can pay that the fee does not."},
+      {term: "credit management", plain: "Collecting from customers; harder against 180 retailers than against ten distributors."},
+      {term: "family-managed enterprise", plain: "A firm where family members hold the agencies and the succession is part of the strategy."}
+    ],
+    connects: "That is one family service provider deciding whether to stay. The next segment takes another that decided to change how it is run instead."
+  });
+
+  lesson({
+    lectureId: "SCLM-M06-L10",
+    courseId: "SCLM",
+    module: 6,
+    order: 10,
+    title: "Professionalising a family logistics business",
+    objective: "Read a firm's growth indicators against its concerns, and say what changes when management moves from location to function.",
+    explainer: [
+      "Shreeji is what the second stage of an Indian family business looks like. It began in 1967 as Kumar Transport with two trucks, moved into parcels in 1983 serving Mumbai garment makers shipping to Bengaluru and Chennai, incorporated in 1994, and by 2012-13 ran five service lines — full truckload, parcel and part load, bonded trucking, warehousing and 3PL, and import-export — on ₹680 million of turnover, 250 employees of whom 200 were drivers, 25 branches and 209 owned vehicles.",
+      "The growth indicators were good and the concerns were structural. Revenue compounded at 15% between 2006 and 2011, profit after tax at 22%, return on capital employed rose from 14% to 18%, and more than a quarter of the vehicles were debt-free. Against that: receivable days rising from 77 to 90, some routes running at a loss, 15% idle capacity and high administrative overheads. Growth was real and it was not reaching the bottom line evenly, which is the condition the whole intervention addresses.",
+      "Two changes followed. The organisation moved from location-based to function-based management — the question stopped being who handles which city and became who owns which function — which ended the duplication and excess truck buying that independent local fiefdoms produced. And management information systems replaced intuition, making profitability measurable by route, segment and vehicle, which is what turned a belief about long routes into a testable claim. The lessons are blunt: revenue is not profit, asset ownership must be strategic rather than prestige, and logistics is a margin game."
+    ],
+    worked: {
+      setup: "Revenue is compounding at 15% and profit after tax at 22%, and the firm is told it has a problem.",
+      move: "Read the growth figures next to receivable days at 90, 15% idle capacity and loss-making routes, rather than on their own.",
+      because: "Aggregate growth hides distribution. A firm can compound revenue while some routes lose money on every trip, because the profitable ones cover them inside a single reported number, and it can grow profit while tying up more and more of it in receivables it has not collected. That is why the fix is measurement by route, segment and vehicle rather than a push for more revenue — you cannot stop doing the unprofitable work until you can see which work it is."
+    },
+    glossary: [
+      {term: "management information system", plain: "Reporting that makes profitability measurable by route, segment and vehicle."},
+      {term: "return on capital employed", plain: "Profit against the capital the business uses — 14% to 18% here."},
+      {term: "customer master data", plain: "The customer record; duplicated names made customer-wise profitability unreadable."},
+      {term: "full truck load", plain: "A consignment filling a whole vehicle — more than 60% of Shreeji's revenue."},
+      {term: "idle capacity", plain: "Assets owned and not earning; 15% of the fleet here."}
+    ],
+    connects: "That closes the service providers — a cold store, a C&FA, the railway and a trucking firm. The next module returns to a shipper, designing a transport system for a plant that has not started production yet."
+  });
+
+  lesson({
+    lectureId: "SCLM-M07-L01",
+    courseId: "SCLM",
+    module: 7,
+    order: 1,
+    title: "Laxmi Transformers: the tonnage the plant creates",
+    objective: "Turn a plant's rated capacity and feed mix into the annual inbound tonnage, and say why that number makes logistics the project's central risk.",
+    explainer: [
+      "In February 1991 Laxmi Transformers was preparing to produce direct reduced iron — sponge iron — at a newly built plant at Alibag in Maharashtra, an investment of about ₹500 crore. Sponge iron substitutes for the scrap India was importing, and it is a better input: it carries none of the chromium, nickel or tin that scrap picks up from wherever it has already been used, so the quality going into a furnace is consistent. Mini steel plants and foundries across Maharashtra, Gujarat and Punjab wanted it, and integrated steel plants used it as a supplementary input.",
+      "Demand was not the difficulty. The feed mix is. Each tonne of sponge iron needs roughly 1.24 tonnes of iron pellets and 0.31 tonnes of lump iron ore, about 80% pellets to 20% lump. Against a rated capacity of 500,000 tonnes a year that is 620,000 tonnes of pellets and 155,000 tonnes of lump ore — some 775,000 tonnes to be brought in annually, against 500,000 tonnes of product going out. The sources are distant: ore from Odisha travels 1,600 to 1,800 kilometres.",
+      "So the case has two long flows. Inbound moves pellets and lump ore from pellet plants and mines to Alibag. Outbound distributes sponge iron to mini steel plants, foundries and integrated steel plants across western, northern, eastern and southern India. Every extra handling of sponge iron costs about 1% of the material, which at around ₹4,000 a tonne is ₹40 a tonne each time it is touched. A newly appointed manager – logistics had to design one configuration serving both flows, which is what makes this a logistics case rather than a market one."
+    ],
+    worked: {
+      setup: "The plant is rated at 500,000 tonnes of sponge iron a year, and the process needs 1.24 tonnes of pellets plus 0.31 tonnes of lump ore for every tonne it makes.",
+      move: "Multiply before arguing about anything else: 500,000 × 1.24 = 620,000 tonnes of pellets, 500,000 × 0.31 = 155,000 tonnes of lump ore, so about 775,000 tonnes have to arrive every year.",
+      because: "The capacity figure is the one everybody quotes, and it understates the transport problem by more than half — 775,000 tonnes in against 500,000 out. No argument about mode, route or shipment size can start before that number exists, because every cost in the case is quoted per tonne. It also fixes a ratio that is not negotiable: 80 to 20 is what the process requires, so pellets and ore cannot be traded off against each other to suit a cheaper route."
+    },
+    glossary: [
+      {term: "direct reduced iron", plain: "Sponge iron — ore reduced to metallic iron without melting, keeping a porous structure."},
+      {term: "feed mix", plain: "The input ratio the process requires, here roughly 80% pellets to 20% lump ore."},
+      {term: "iron pellets", plain: "Fine ore agglomerated into pellets; 1.24 tonnes per tonne of sponge iron."},
+      {term: "lump iron ore", plain: "Ore fed as lumps rather than pellets; 0.31 tonnes per tonne of sponge iron."},
+      {term: "mini steel plants", plain: "Small steel units which, with foundries, are the main buyers of sponge iron."},
+      {term: "handling loss", plain: "About 1% of sponge iron lost at each handling — roughly ₹40 a tonne at ₹4,000."}
+    ],
+    connects: "The tonnage is settled; the routes are not. The next segment steps back to the national network those routes would run on, and the reforms reshaping it."
+  });
+
+  lesson({
+    lectureId: "SCLM-M07-L02",
+    courseId: "SCLM",
+    module: 7,
+    order: 2,
+    title: "Modes, multimodal transport, and national reforms",
+    objective: "Read India's modal split against its costs, and name the four reforms reshaping freight infrastructure.",
+    explainer: [
+      "India's freight network is road-dominated: road carries over sixty per cent of freight and rail about twenty-eight, and road's share of gross value added is more than four times rail's. That gap is the finding rather than the split itself — shippers pay a premium for road's speed, door-to-door reach and flexibility even where rail could move the same tonnage more cheaply. Indian Railways is the world's fourth largest network, with coal alone at forty-four per cent of freight volume, and its wagons spend only thirty-eight per cent of cycle time actually earning revenue; the rest goes to loading, unloading, marshalling and idling.",
+      "Multimodal transport moves a consignment across more than one mode under a single arrangement, which is where the cost trade-off is actually made. Four inventory costs drive that choice: cycle stock tied to shipment size, buffer stock absorbing uncertainty, pipeline stock sitting in transit — so a slower mode locks up more capital on the water or the rails — and seasonality stock built ahead of shutdowns. A cheaper mode with a longer transit can cost more once pipeline stock is counted.",
+      "Four national reforms are reshaping the constraint. The landlord port model is now the industry standard: public port authorities act as regulator and landowner while private firms operate the terminals, combining public oversight with private operating efficiency. PM Gati Shakti is a GIS-based platform integrating infrastructure planning across more than twenty ministries to cut cross-agency delay. The Unified Logistics Interface Platform, ULIP, is a single digital interface giving real-time tracking across all modes. And dedicated freight corridors are freight-only rail lines built to lift speeds from roughly 25 km/h to 100 km/h, freeing passenger lines as they do it."
+    ],
+    worked: {
+      setup: "A shipper moves high-value goods by sea to cut freight cost, and working capital rises.",
+      move: "Price the pipeline stock. A slower mode holds more inventory in transit for longer, and that capital is locked up the whole way.",
+      because: "Mode choice is driven by four inventory costs, and pipeline stock is the one transit time controls directly. On high-value goods the capital sitting on the water can exceed the freight saved, which is exactly why India's road share of gross value added is four times rail's despite rail being cheaper per tonne-kilometre — shippers are paying for time, not for tonnage."
+    },
+    glossary: [
+      {term: "pipeline stock", plain: "Inventory in transit; slower modes lock up more capital for longer."},
+      {term: "landlord port model", plain: "Public authority as regulator and landowner, private firms operating terminals."},
+      {term: "PM Gati Shakti", plain: "A GIS-based platform integrating infrastructure planning across 20+ ministries."},
+      {term: "Unified Logistics Interface Platform", plain: "ULIP — one digital interface for real-time tracking across all modes."},
+      {term: "dedicated freight corridors", plain: "Freight-only rail lines raising speeds from about 25 km/h to 100 km/h."}
+    ],
+    connects: "That is the network and the reforms reshaping it. The next segment goes inside the mode carrying most of it, and asks why road freight is cheap while its service is not."
+  });
+
+  lesson({
+    lectureId: "SCLM-M07-L03",
+    courseId: "SCLM",
+    module: 7,
+    order: 3,
+    title: "Trucking in India: the structure behind the price",
+    objective: "Explain why road freight prices sit barely above operators' costs, and name the condition under which that breaks.",
+    explainer: [
+      "Start with what is not known, because it conditions everything else. The last scientific sample-survey study of modal share was done by RITES in 2007-08, and on a tonne-kilometre basis put road at about 50%, rail at 36%, pipelines a little over 7%, coastal shipping about 6%, and inland water transport and airways under 1% each. Everything since is projection — rail is now put nearer 27 to 28%, with most of the loss going to road. Rail, pipelines, coastal shipping and airways report from a large organised sector; road does not, which is what the Unified Logistics Interface Platform is being built to capture.",
+      "The structure explains the rest. Four core actors: customers, trucking companies, brokers and agents, and pure truck owners — and a trucking company often does not own the trucks it offers, working closer to a marketing company with owners attached to it or reached through brokers. Ownership matches: roughly 75% of trucks sit with parties owning one to five, about 15% with parties owning six to twenty, and only about 10% with owners of more than twenty. Bank lending has favoured the small trucker, which has helped keep it that way.",
+      "That fragmentation produces what the course calls an unholy equilibrium. Competition is purely on cost, so the price a shipper pays sits barely above what the operator spends, and margins are too thin to fund better service. Operators recover margin by overloading instead, and the wear on trucks and roads is paid for elsewhere. It breaks where a shipper will pay for control: steel companies hire trucks they maintain, keep returning and refuse to let be overloaded, which is affordable because finished steel's value dwarfs the cost of moving it."
+    ],
+    worked: {
+      setup: "A shipper wants more reliable road service and finds no operator willing to supply it at anything close to the going rate.",
+      move: "Read it as the unholy equilibrium rather than as a negotiation failure, and pay above the market for controlled capacity — the route the steel sector took.",
+      because: "Cost-based competition between thousands of one-to-five-truck owners holds the price barely above cost, which leaves nothing to fund maintenance, driver quality or schedule discipline. The service being asked for therefore cannot be bought at the market price, by construction rather than by bad luck. Paying above it is only affordable where the goods are worth much more than their freight, which is why steel can break the equilibrium and low-value bulk cannot."
+    },
+    glossary: [
+      {term: "modal share", plain: "How freight splits across modes, measured on a tonne-kilometre basis."},
+      {term: "unholy equilibrium", plain: "Cost-based competition among fragmented truckers, leaving no margin to fund service."},
+      {term: "pure truck owners", plain: "Parties who own trucks without marketing to shippers themselves."},
+      {term: "brokers and agents", plain: "Intermediaries matching available loads to available trucks."},
+      {term: "gross value added", plain: "A sector's contribution to national output — transport is 4 to 5%, road a little over 3% against rail's 0.73%."},
+      {term: "goods vehicles", plain: "The freight-carrying share of registered vehicles — 4.65% of 295.8 million in 2019."}
+    ],
+    connects: "That is the industry any road quote in the case comes from. The next segment returns to Laxmi Transformers and asks why the plant is at Alibag at all."
+  });
+
+  lesson({
+    lectureId: "SCLM-M07-L04",
+    courseId: "SCLM",
+    module: 7,
+    order: 4,
+    title: "Why Alibag, and what a delivery term decides",
+    objective: "Justify a plant location from the inputs it makes cheap, and read a procurement price against its delivery term.",
+    explainer: [
+      "Location was chosen for two advantages, and location is itself one of the decision areas a supply chain settles. The first is gas. The process uses reformed natural gas as its reducing agent, gas from the Bombay High offshore fields comes ashore by pipeline at Uran, a landfall point about 25 kilometres south of Mumbai and a little north of Alibag, and industries near the landfall buy at landfall prices well below what inland consumers pay — about ₹2,500 per 1,000 cubic metres, against roughly 300 cubic metres needed per tonne of sponge iron.",
+      "The second is maritime access, and it arrives with a permanent condition attached. The plant sits on the shore, so sea transport is available for raw materials and finished goods alike. But the port has draft limitations: ocean-going vessels cannot come to the jetty and must anchor offshore, with cargo transferred to smaller barges that shuttle in. That extra handling is a real and recurring cost, not a start-up inconvenience, and sea is still attractive for bulk over long distances despite it.",
+      "Procurement was already contracted, and its terms shape the logistics problem. Pellets come from Kudremukh Iron Ore Company Limited near Mangalore at ₹600 per tonne free on board, subject to annual review — a favourable price won partly because KIOCL was in financial difficulty and wanted long-term domestic customers. Lump ore comes from three mines: Daitari and Banspani in Odisha at 40% each and ₹250 a tonne, and Goa at 20% and ₹330."
+    ],
+    worked: {
+      setup: "Pellets are contracted at ₹600 a tonne free on board at Mangalore, and pellets are the large volume — 620,000 tonnes against 155,000 tonnes of lump ore.",
+      move: "Read the delivery term before the number. Free on board means the ₹600 buys pellets at the seller's port, so every kilometre from Mangalore to Alibag is LT's cost and LT's decision.",
+      because: "A quoted price is not comparable to anything until its delivery term is known. Under free on board the ₹600 is not what a tonne of pellets costs at the plant — it is the opening balance of a separate transport problem, and the largest one in the case, since pellets are four-fifths of the annual intake. The favourable price also has a shelf life worth noting: it came from a supplier's financial difficulty and is subject to annual review."
+    },
+    glossary: [
+      {term: "landfall price", plain: "The lower gas price available where the pipeline comes ashore, here at Uran."},
+      {term: "reducing agent", plain: "What strips oxygen from iron ore without melting it — reformed natural gas at this plant."},
+      {term: "free on board", plain: "FOB: the price holds at the seller's port, and the buyer owns the movement from there."},
+      {term: "draft limitation", plain: "Water too shallow for ocean-going vessels to reach the jetty, forcing them to anchor offshore."},
+      {term: "jetty", plain: "The plant's own berth, reachable only by the barges shuttling from the anchored ship."}
+    ],
+    connects: "The site is fixed and the sources are contracted. The next segment lays out the three modes that could connect them, and the costs a mode choice has to be judged on."
+  });
+
+  lesson({
+    lectureId: "SCLM-M07-L05",
+    courseId: "SCLM",
+    module: 7,
+    order: 5,
+    title: "Four inventories, and the four decisions that matter",
+    objective: "Separate the four logistics inventories a mode choice creates, and rank the case's four decisions by how much they move.",
+    explainer: [
+      "Three modes are feasible and each has a shape. Road is the most flexible and suits short hauls — about 50 paise a tonne-kilometre, possibly 70 under stricter loading rules — and over 1,500 kilometres of bulk it is the dearest of the three. Rail reaches Pen, 15 kilometres away, with no line to the plant and no railway plan to build one: LT could lay its own siding at about ₹1 crore a kilometre, perhaps shared with neighbouring industries, or move Pen to Alibag by road at ₹30 a tonne including handling. Freight classification is unsettled — ore is category 110, sponge iron somewhere between 150 and 210.",
+      "Sea is cheapest for bulk over distance, and its conditions are physical. Ships of 35,000 and 65,000 deadweight tonnes anchor offshore; 1,000-tonne barges shuttle to a jetty that takes four at a time and unloads 2,000 tonnes an hour; five barges manage one round trip a day, because only the two daily high-tide windows can be used — loaded in one, empty back in the next. Deep-water working stops for roughly 120 days of monsoon each year.",
+      "That sets the cost frame. Transportation cost is the out-of-pocket payment. Inventory cost is four separate things: cycle stock from shipment size, buffer stock against uncertainty, pipeline stock from transit duration, and stock built for a known seasonality of operations. Handling cost includes the roughly 1% lost per touch, and stockyard cost applies wherever an outbound parcel must be broken into customer-sized ones. Four decisions follow — inbound mode and shipment size, outbound markets and mode, siding or not, how many barges and for which months — and the last two are subservient to the first two."
+    ],
+    worked: {
+      setup: "Deep-water operations are impossible for about 120 days a year during the monsoon.",
+      move: "Book that as stock for seasonality of operations, sized separately, rather than raising the buffer stock to absorb it.",
+      because: "Seasonality is a known variation and uncertainty is not, so the two are sized by different methods. Buffer stock comes from a distribution and a chosen service level — 99%, say, meaning under 1% risk of running out. The monsoon stock is arithmetic: the consumption of a known outage, built up before the window closes. Merging them either hides a certainty inside a probability, or inflates the service level to cover a shutdown it was never meant to cover."
+    },
+    glossary: [
+      {term: "seasonality of operations", plain: "A known interruption — here 120 monsoon days — stocked against separately from uncertainty."},
+      {term: "rail siding", plain: "A private line from the railhead to the plant; about ₹1 crore a kilometre here."},
+      {term: "freight classification", plain: "The railway category that sets a commodity's rate — ore at 110, sponge iron unsettled between 150 and 210."},
+      {term: "deadweight", plain: "A ship's carrying capacity — 35,000 or 65,000 tonnes for the vessels considered."},
+      {term: "high tide window", plain: "One of the two daily windows barges can move in, which caps them at a round trip a day."},
+      {term: "stockyard", plain: "A break-bulk point where a large inbound parcel is split into customer-sized deliveries."}
+    ],
+    connects: "That is the frame. The next segment applies it to one source, Daitari, and reaches a mode choice by computing only the option that could overturn the ranking."
   });
 
   lesson({
@@ -2398,9 +5436,36 @@
       {term: "major ports", plain: "Ports driven by the central government — 854 million tons in 2024-25."},
       {term: "non-major ports", plain: "State-government-driven ports, about 46% of national traffic and rising."},
       {term: "public private partnerships", plain: "Private ownership or operation of ports and terminals, now over 74% of traffic."},
-      {term: "coastal movement", plain: "Domestic freight moved by sea along the coast rather than overland."}
+      {term: "coastal movement", plain: "Domestic freight moved by sea along the coast rather than overland."},
+      {term: "multimodal transport", plain: "Moving a consignment across more than one mode under a single arrangement."}
     ],
     connects: "Ports are one node a government can improve. Module 8 turns to how logistics performance is measured across states, and what that measurement is meant to do."
+  });
+
+  lesson({
+    lectureId: "SCLM-M08-L04",
+    courseId: "SCLM",
+    module: 8,
+    order: 4,
+    title: "Postponement, kitting, and cross-docking",
+    objective: "Apply the three strategic-fit techniques, and say which supply chain problem each one removes.",
+    explainer: [
+      "Three techniques recur across the whole subject because each attacks a different source of cost while protecting what the customer actually wanted. Postponement delays final product differentiation until as late as possible — paint mixed at the retail counter rather than in the factory. The variety the customer sees is unchanged, and the inventory behind it collapses, because the business holds base stock rather than every finished variant. It is the direct answer to a wide product range with unpredictable demand per variant.",
+      "Kitting bundles individual components upstream into complete kits, so that downstream assembly receives one package rather than assembling a list. It simplifies and speeds the downstream step, and it moves the sorting work to where it can be done in bulk. Cross-docking goes further and removes storage altogether: goods transfer directly from inbound to outbound vehicles, so there is no putaway, no picking, and no warehouse holding period at all. It needs reliable inbound timing to work, which is the trade it makes.",
+      "The course sets an ideal above all three that is worth knowing as the benchmark rather than as a target: Kamadhenu, the mythical cow that grants a wish the instant it is made. Professor Raghuram uses it for the supply chain with no distance lapse and no time lapse left in it — nothing to move, and nothing to store, because the product is already where and when it is wanted. Nothing reaches it. Postponement, kitting and cross-docking are steps in that direction, which is a useful way to read them — each removes one component of distance or delay, and none removes both."
+    ],
+    worked: {
+      setup: "A paint company holds finished stock in five hundred shades and still runs out of the popular ones.",
+      move: "Postpone the differentiation: hold a small number of base stocks and tint at the retail point.",
+      because: "Holding every finished variant means demand uncertainty applies to each one separately, so stockouts and dead stock happen at the same time. Postponing differentiation pools that uncertainty into a few bases, which are far more predictable in aggregate, while the customer still sees the full range. The variety is preserved and the inventory that carried it is not."
+    },
+    glossary: [
+      {term: "postponement", plain: "Delaying final differentiation — paint tinted at the retail point — to cut inventory while keeping variety."},
+      {term: "kitting", plain: "Bundling components upstream into complete kits to simplify downstream assembly."},
+      {term: "cross-docking", plain: "Transferring goods straight from inbound to outbound vehicles, with no storage or picking."},
+      {term: "Kamadhenu", plain: "The mythical cow granting a wish instantly — the course's image for a supply chain with no distance lapse and no time lapse left."}
+    ],
+    connects: "That closes SCLM: from what a supply chain is, through forecasting, inventory and sourcing, to the techniques that compress it."
   });
 
   lesson({
@@ -2430,6 +5495,33 @@
   });
 
   lesson({
+    lectureId: "SCLM-M08-L02",
+    courseId: "SCLM",
+    module: 8,
+    order: 2,
+    title: "Akshaya Patra: the constraints a meal supply chain runs inside",
+    objective: "State the time and temperature limits that govern the Midday Meal supply chain, and explain why limited storage forces procurement to track production.",
+    explainer: [
+      "The Midday Meal Programme attacks two social problems at once: the nutritional status of school children, and regular attendance among children from economically disadvantaged families. Gujarat introduced it in 1962 in selected talukas for children between 6 and 11, and the national programme of 1995 pushed states towards cooked meals rather than distributed grain. By the late 2000s more than 39 lakh children in Gujarat were being fed, on an annual budget above rupees 460 crores funded jointly by the centre and the state.",
+      "Akshaya Patra began in Bengaluru in 2000 with about 1,500 children across 5 schools, inspired by Prasadam — food offered in temples and distributed to devotees. By August 2010 it served roughly 12.28 lakh children across more than 8,000 government schools in 9 states. Gujarat started in 2007 at about 65,000 children and passed 211,000 across 815 schools within three years, growth of more than 320%. The Gandhinagar centralized kitchen serves about 150,000 children a day and Vadodara about 80,000, close to 230,000 together, over 51 routes with 51 vehicles.",
+      "Two constraints govern everything. The interval from cook to consume may not exceed 6 hours, and the food must still reach the last school on a route at 60 degrees centigrade or above. Storage at Gandhinagar is limited, so inventory norms fix minimum and maximum stock and a reorder level for each ingredient against its shelf life, and procurement has to be planned against the production schedule rather than independently of it."
+    ],
+    worked: {
+      setup: "A new school is added at the far end of an existing delivery route.",
+      move: "Check the arrival time and the food temperature at the last stop before checking whether the kitchen has capacity.",
+      because: "Kitchen capacity is the obvious constraint and usually not the binding one — Gandhinagar alone can serve about 150,000 children a day. The binding constraints are the two the government sets: six hours from cooking to consumption, and 60 degrees centigrade on arrival. Both bite hardest at the end of a route, so a stop added there spends slack belonging to every school already on it. That is why production, packaging and routing are synchronised rather than planned in sequence."
+    },
+    glossary: [
+      {term: "cook to consume", plain: "The interval between cooking and eating, capped at six hours by the government. The constraint the whole chain is built around."},
+      {term: "centralized kitchen", plain: "One large kitchen serving schools in a reasonable neighbourhood — suited to urban areas, where rural schools still cook on site."},
+      {term: "inventory norms", plain: "Minimum stock, maximum stock and a reorder level set per ingredient against its shelf life, because storage is limited."},
+      {term: "mandis", plain: "The wholesale markets — Kalupur and Madhupura in Ahmedabad — where bulk buying gets ingredients 10 to 12% below market rates."},
+      {term: "talukas", plain: "The administrative regions the programme was first introduced across in Gujarat in 1962."}
+    ],
+    connects: "Those are the constraints. The next session runs the kitchen and the routes inside them."
+  });
+
+  lesson({
     lectureId: "SCLM-M08-L03",
     courseId: "SCLM",
     module: 8,
@@ -2455,6 +5547,133 @@
     connects: "That completes the chain from kitchen to school gate. The final session draws the module's threads together."
   });
 
+  /* ------------------------------------------------------------------
+   * SPMS Module 1 — what a product is, before anything is managed
+   *
+   * Added 2026-08-17. Measured coverage of SPMS module 1 was 3 of 17 named ideas:
+   * the bank taught DFV and Jobs to Be Done and nothing else, so a learner arriving
+   * cold met "desirability" before ever being told what a product is. These five
+   * lessons carry the module's opening half — the four elements, the physical/software
+   * split, the four kinds of software product, family/platform/line, and the startup
+   * discovery and validation phases.
+   *
+   * No question cites them yet, so they are read-only: they appear in the reading
+   * surface and not in a scheduled run. That is deliberate for now — the alternative
+   * is threading new sourceIds through the question generators, which changes
+   * scheduled coverage and is a larger change than this one.
+   * ---------------------------------------------------------------- */
+
+  lesson({
+    lectureId: "SPMS-M01-L01",
+    courseId: "SPMS",
+    module: 1,
+    order: 1,
+    title: "What makes something a product",
+    objective: "Name the four elements every product has, and say why the transfer of rights matters more than the payment.",
+    explainer: [
+      "Before anything can be managed, it has to be a product, and the course defines that structurally rather than by intuition. Four elements are present in every product, whether it is a pen, a television, or WhatsApp. There are the parties involved — a supplier, which may be a person or a legal entity, and a consumer. There is value, meaning the offering is actually useful to the person receiving it. There are defined rights, which set out what the customer may and may not do with the thing. And there is a commercial interest, which is the supplier's motive for offering it at all.",
+      "The rights element is the one that separates software from most physical goods. Buy a chair and you own it; you may use it, rent it out, or sell it on. Buy Outlook and you have bought a licence to use it, not the software itself. The right transferred is narrower, and it is defined rather than assumed.",
+      "The commercial interest need not be money, which is where the definition earns its keep. Free software still has a supplier motive behind it — very often data collection, sometimes promotion or distribution. So the course states the priority plainly: the transfer of rights is more fundamental to a product business than the payment process. A thing can change hands with no money involved and still be a product, and a thing can be paid for and still not be one."
+    ],
+    worked: {
+      setup: "A team argues that a free app with no revenue is not really a product.",
+      move: "Test it against the four elements instead of against the price. Parties, value, defined rights, commercial interest.",
+      because: "Payment is not one of the four. The supplier still has a motive — usually the data the free tier collects — and the user still receives defined rights under a licence. Both parties are present and the offering is useful, so all four elements hold. Judging by whether money changed hands would classify most of the software the course studies as something other than a product."
+    },
+    glossary: [
+      {term: "parties involved", plain: "A supplier — a person or legal entity — and a customer or consumer."},
+      {term: "value", plain: "The usefulness of the offering to the person receiving it."},
+      {term: "defined rights", plain: "What the customer may and may not do with it — own, rent, resell, or merely use under licence."},
+      {term: "commercial insights", plain: "The supplier's motive: money, data, promotion, or distribution — free software collecting data is the course's own example."}
+    ],
+    connects: "Those four elements hold for anything. The next session asks what changes when the product is made of bits, and which offerings count as software products at all."
+  });
+
+lesson({
+    lectureId: "SPMS-M01-L02",
+    courseId: "SPMS",
+    module: 1,
+    order: 2,
+    title: "Physical, software, and software-intensive products",
+    objective: "Separate physical and software products on marginal cost, then sort any offering by asking where its primary value sits.",
+    explainer: [
+      "A physical product is made of atoms and a software product is made of bits, and almost every practical difference follows from that. Each additional physical unit consumes raw material, manufacturing, labour and logistics, so marginal cost is high; changing it means retooling a line, so iteration is slow; getting it to a buyer needs warehousing, shipping and shelf space; and learning whether it worked means waiting on surveys, complaints or warranty claims. Software inverts all four. Serving one more user costs very close to nothing, new code deploys overnight, distribution is an app store or a cloud endpoint, and feedback arrives in real time as telemetry.",
+      "Marginal cost is the difference to carry into an exam, because it is what makes the rest of the syllabus possible. When each extra user is nearly free, freemium tiers, volume scaling and give-away-then-monetise models all become rational; when each extra unit costs real money, inventory discipline and careful forecasting are what keep the business alive. Risk behaves the same way — a physical commitment is hard to reverse, while software can be fixed, upgraded or withdrawn after release.",
+      "That still leaves which offerings count as software products at all, and one question sorts them: does the primary value come from the software itself? Embedded software is written to control a machine, running on limited resources under specific device conditions, so its job is to make a physical device work. A standalone product is one where the software is the value and using it alone delivers the benefit. A software-intensive product has software as its main driver but not its only component — a smartphone, an IoT device — so the offering is a system with code at its centre rather than code alone."
+    ],
+    worked: {
+      setup: "A banking app is well designed, heavily used, and clearly built on a lot of software. A team argues it is therefore a software product and should be managed like one.",
+      move: "Apply the primary-value test rather than counting the code. The app is an interface; without a linked bank account it is worth nothing at all. The primary value is the banking service behind it, so this is a non-software product delivered through software. A UPI application has the same shape — the interface is the app, the value is the payment rail.",
+      because: "Asking whether there is code involved sorts none of these four categories, because there is code in all of them. Asking where the primary value sits sorts all four at once. The distinction is not pedantry: it decides whether improving the software can improve the offering, which for an interface over someone else's service is sharply limited."
+    },
+    glossary: [
+      {term: "marginal cost", plain: "What one more unit or user costs to serve — high for atoms, near zero for bits."},
+      {term: "iteration speed", plain: "How fast the product can be changed; a retooled line against an overnight deploy."},
+      {term: "telemetric data", plain: "Usage data arriving from the running product in real time, instead of surveys months later."},
+      {term: "irreversibility", plain: "How hard a commitment is to undo — the physical kind mostly cannot be, software mostly can."},
+      {term: "embedded software", plain: "A specialised program controlling a machine on limited resources under specific device conditions."},
+      {term: "software intensive product", plain: "A system where software is the main driver but not the only component — a smartphone, an IoT device."},
+      {term: "primary value", plain: "Where an offering's worth actually comes from. The one question that sorts software products from the rest."}
+    ],
+    connects: "That is what a software product is. The next session covers how several of them are arranged: family, platform, and line."
+  });
+
+lesson({
+    lectureId: "SPMS-M01-L03",
+    courseId: "SPMS",
+    module: 1,
+    order: 3,
+    title: "Family, platform, and product line",
+    objective: "Tell a product family from a platform and a platform from a product line, and say which one you build on and which one you sell.",
+    explainer: [
+      "A product family is a set of diverse but connected products leveraging one strong brand name — Google's search, Maps, Photos, Drive and Meet, or Microsoft Office 365 with Word, Excel and PowerPoint marketed together for productivity. Each member has its own distinct functionality, and what holds them together is the consistent branding, the trust it carries and the cross-selling it enables. The course is blunt about this: a family is held together for marketing reasons, and its members may share no technology at all.",
+      "A product platform is the opposite kind of thing — a foundational set of shared technologies, components and services that enables multiple related products to be developed, rather than being one product itself. Two types are worth naming. An innovation platform gives a technological foundation others build on: AWS, where startups develop their own products on someone else's compute and storage. A transaction platform is an intermediary or online marketplace making it possible for people and organisations to buy, sell or share — the Amazon marketplace, where a buyer and a seller meet.",
+      "A product line is the extension of the platform concept: the variants built over one common architecture. Amazon runs a single underlying platform and manifests it as amazon.in, .jp, .fr and the rest — similar look and feel, genuinely different functionality, because product discovery differs by market. Android is the same shape, one open-source operating system with variants across brands and devices. The automobile version makes it concrete: one platform, the same engine and braking system, giving a sedan, a hatchback and an estate. A platform is what you build on; a product line is what you sell."
+    ],
+    worked: {
+      setup: "A company calls its shared login, payment gateway and merchant database a product line, and plans to market, version and retire it the way it does its apps.",
+      move: "Ask whether a customer buys it. If it is built once and upgraded continuously behind several offerings, it is the platform, and the customer-facing variants launched over it are the lines.",
+      because: "The distinction is what is sold against what is built on. Naming the platform as a line implies it should be marketed, versioned and retired like a product — when its whole value is that several products rest on it at once, so retiring it takes them all down. The family is a third thing again and shares neither: it is a branding decision, which is why family members can sit on entirely separate technology."
+    },
+    glossary: [
+      {term: "product family", plain: "Diverse but connected products under one strong brand — held together for marketing rather than by shared technology."},
+      {term: "product platform", plain: "Shared technologies, components and services that enable multiple related products — what you build on."},
+      {term: "innovation platform", plain: "A technological foundation others develop their own products on, such as AWS."},
+      {term: "transaction platform", plain: "An intermediary or online marketplace letting parties buy, sell or share access to goods and services."},
+      {term: "product line", plain: "The variants built over one common product platform for different markets or devices — what you sell."}
+    ],
+    connects: "That is how products are arranged. The next session defines the discipline that manages them and traces how it got here."
+  });
+
+lesson({
+    lectureId: "SPMS-M01-L04",
+    courseId: "SPMS",
+    module: 1,
+    order: 4,
+    title: "Software product management and its eras",
+    objective: "Define software product management by its scope and lifecycle, and place today's practice in the evolution of software product management that produced it.",
+    explainer: [
+      "Software product management governs a software product, the software parts of software-intensive products, and the services around them, across the entire life cycle to generate business value — from concept and need, through development, growth and maturity, to end of life and retirement. Two kinds of value must hold at once: customer value and business value. A product delivering only the first does not survive; one delivering only the second does not deserve to. Product versus project is the boundary to fix early — a project is temporary with fixed scope, budget and timeline; a product is continuous, and outlives every project inside it.",
+      "The evolution ran in eras, each answering what the previous one could not do. The product era of the early 1900s, with Ford as its emblem, focused on manufacturing and engineering, driven by scale and standardisation — any colour is fine as long as it is black. The marketing era around 1930 is where the title comes from: Procter and Gamble needed separate leadership for soaps aimed at different consumer segments, priced and positioned differently, so the brand and product manager was born, running a product's profit and loss with the four Ps.",
+      "Software separated from hardware at IBM in the late 1960s, but productisation came in the 1980s and 1990s with Microsoft shipping off-the-shelf products, moving the focus to features, user experience and iterative delivery. The platform era followed, where Amazon and Uber compete as ecosystems. Then the phygital era, where software removes a physical product's friction — an air conditioner switched on from a phone before you reach home. Today is the intelligent era, with cyber-physical systems like Tesla and da Vinci 5. Read the list as a ladder, not a timeline: each era kept the previous one's concerns and added a driver."
+    ],
+    worked: {
+      setup: "A team treats product management as deciding which features to build next, and measures itself on how much of the backlog ships each quarter.",
+      move: "Widen it to the whole life cycle — concept, need, development, growth, maturity, retirement — and check both customer value and business value at each step.",
+      because: "The definition is scope, not activity. Governing a product over its entire life cycle includes the decision to retire it, which feature selection alone never reaches. And the two-value test is what stops the two standard failures: a beloved product that never pays, and a profitable one whose customers are leaving. A backlog burn-down measures neither."
+    },
+    glossary: [
+      {term: "software product management", plain: "The discipline governing a software product across its entire life cycle to generate business value."},
+      {term: "product vs project", plain: "A project is temporary with fixed scope, budget and timeline; a product is continuous and outlives the projects inside it."},
+      {term: "life cycle", plain: "Concept and need, development, growth, maturity, then end of life and retirement — what SPM governs end to end."},
+      {term: "customer value", plain: "What the product is worth to the person using it — one of the two values SPM must serve."},
+      {term: "business value", plain: "What the product is worth to the company running it — the other half of the same test."},
+      {term: "platform era", plain: "The shift to competing as an ecosystem rather than a point solution, with Amazon and Uber as its examples."},
+      {term: "phygital", plain: "A physical product whose friction is removed through software — the air conditioner started from a phone."}
+    ],
+    connects: "That is the discipline and where it came from. The next session gives it its first working test: whether an idea is desirable, feasible and viable at once."
+  });
+
   lesson({
     lectureId: "SPMS-M01-L05",
     courseId: "SPMS",
@@ -2464,8 +5683,9 @@
     objective: "Test an idea separately on all three of desirability, feasibility, and viability, and name what breaks when one is missing.",
     explainer: [
       "Three areas drawn as a Venn diagram, derived by IDEO Consulting in design thinking and adapted here for product management. Desirability asks whether customers or potential customers actually need the thing. Feasibility asks whether it can be built with the technology available today. Viability asks whether it should be built at all — whether it can turn a profit, or make enough money to support the business. The point of separating them is that passing one check tells you nothing about the other two.",
-      "The running example is a digital water bottle: put an edge device on an ordinary bottle and it becomes a hydration device that measures the temperature you drink at, how many times you drink, how much, and at what intervals. Desirability is whether people look at that and say it is worth having, or shrug and say a regular bottle is fine. Feasibility is whether the edge devices, electronics, and firmware actually exist to measure those things. Viability is whether there is money in it once both of those hold.",
-      "Each area needs a different skill. Desirability needs design skills, because you are validating empathy with customers and reading their pulse. Feasibility needs engineering skills. Viability needs business skills. The intersections are where the framework earns its keep. Desirability plus feasibility without viability is an unsustainable product: people want it and you can build it, but every new iteration and every new customer costs you more money. Desirability plus viability without engineering capability is the space-travel case — a real want, genuinely profitable, that you cannot build."
+      "The running example is a digital water bottle: an edge device on an ordinary bottle measures what you drink, how often, and at what intervals. Desirability is whether people think that worth having. Feasibility is whether the electronics and firmware exist to measure it. Viability is whether there is money in it once both hold. Each needs a different skill — design, engineering, and business.",
+      "The intersections are where the framework earns its keep, and each has a name. Desirability plus feasibility without viability is the unsustainable product: early Dunzo and Zepto had the technology and the affection and still struggled on unit economics. Desirability plus viability without feasibility is the pipe dream — pre-Jio telemedicine had market need and funding, and 2G and 3G could not carry it. Feasibility plus viability without desirability is useless innovation: specialised VR labs, technically sound and funded, that did not fit how students behave.",
+      "UPI is the case where all three hold, and it reads as three passes rather than one success. It solved a real pain, so desirability held. It worked on cheap phones, so feasibility held under the constraint that mattered in that market. And it found a secondary path to profit instead of charging for the transaction, so viability held. Two of three is not two-thirds of a business — it is a named failure, with a different name for each way of failing."
     ],
     worked: {
       setup: "A team has validated that customers want the product and has proved the technology can deliver it.",
@@ -2481,6 +5701,117 @@
     connects: "Those three checks tell you whether an idea is a business. The next session looks at the kinds of organisation that take such ideas on."
   });
 
+lesson({
+    lectureId: "SPMS-M01-L06",
+    courseId: "SPMS",
+    module: 1,
+    order: 6,
+    title: "Startups: what they are, and the three kinds",
+    objective: "Define a startup by what it is searching for, and read a bootstrapped, funded or corporate venture by the constraint each one accepts.",
+    explainer: [
+      "Steve Blank's definition is the one to hold: a startup is an experiment in search of a business model. Every word carries load. Experiment means the product is not final — you do not know who the customers will be, how they will use it, or how it will meet their need, so you iterate. Business model means asking whether the thing can stand on its own feet. The organisation is temporary: the search ends in a model or it ends. The second attribute is uncertainty, running across markets, money and team at once. Hence the course's image — a caterpillar is not a small butterfly, and a startup is not a small version of a mature company.",
+      "Three types follow, each accepting a different constraint. A bootstrapped startup takes no external funding — the founders fund it, so the emphasis falls on frugal innovation and incremental steps. That buys flexibility over markets, technology and when features ship, plus real freedom to pivot. It costs dependence on ecosystem partners for basics like storage, compute and reach, any of which can delay or derail you. Zoho refused funding to determine its own destiny.",
+      "A funded startup reverses the trade. An investor has understood the business model and accepted the risk, so resources stop being the constraint — but the money is not patient capital, and returns are expected over three to five years. Release timelines tighten, monetisation must be clear over months rather than eventually, and freedom to pivot narrows because investors share control. Flipkart and Paytm are the cases. A corporate venture has a single investor, the parent company, so capital comes with market access — strategic investment, not only monetary. Its constraint is alignment: the parent's priorities set yours. Jio is the case, on Reliance's fibre and distribution."
+    ],
+    worked: {
+      setup: "Instagram launched as a location-sharing app — check in at a restaurant, a theme park or a mall, post photos of it, and let sponsors pay for the attention. Many features were built for that idea, and the usage did not follow the plan.",
+      move: "Read which feature people actually used rather than which one the plan needed. One was being used extensively — sharing photos. The response was to remove the rest and keep the product on that single job, and the business model followed the users into the creator economy rather than the location sponsorship originally intended.",
+      because: "The instinct under uncertainty is to add — another feature, another reason to stay. This is the opposite move, and it is the one an experiment actually licenses: the location idea was the hypothesis, and usage falsified it while validating something adjacent. Removing features is a legitimate result of experimentation rather than an admission that the build was wasted, and the pivot was only visible because somebody measured which feature carried the use."
+    },
+    glossary: [
+      {term: "business model", plain: "Whether the thing can stand on its own feet and be viable — what the startup's experiment is searching for."},
+      {term: "extreme uncertainty", plain: "Not knowing the market, the money or the team — the condition a startup builds a roadmap inside."},
+      {term: "frugal innovation", plain: "Building economically and iteratively because funds are short; the bootstrapped startup's working method."},
+      {term: "funded startup", plain: "One an external investor has backed: resources stop being the constraint and time becomes one."},
+      {term: "patient capital", plain: "Money with no near-term return expectation — what venture funding explicitly is not."},
+      {term: "corporate venture", plain: "A funded startup whose single investor is a parent company, adding market access and an alignment constraint."},
+      {term: "pivot", plain: "Changing direction on what the experiment has shown; sometimes by removing features rather than adding them."}
+    ],
+    connects: "That is the organisation and the money behind it. The next session goes inside the product: how it evolves through a startup's stages, beginning with discovery."
+  });
+
+  lesson({
+    lectureId: "SPMS-M01-L07",
+    courseId: "SPMS",
+    module: 1,
+    order: 7,
+    title: "Startups: discovery and validation",
+    objective: "Walk the three discovery steps from a customer problem to the alternatives people already use, and say what discovery settles before anything is built.",
+    explainer: [
+      "Discovery exists because of a number: research the course cites from Crunchbase Insights puts roughly 40% of the products created by startups as never needed by the population at all. The phase is the guard against joining them, and it asks two things — is there a need for this product, and what is its market, meaning the size and the attributes and choices of the segments. Airbnb is the running case, and its origin is the shape of the problem: two founders in San Francisco who could not pay their rent, and three air mattresses.",
+      "The framework runs across the startup stages — early stage, growth stage and scale-up — asking how the product evolves through them. Discovery is the first phase, and where desirability is settled. Step one is the customer problem: current frustrations and unmet needs, stated as the customer would state them. Step two asks who has this problem and whether it recurs — where market size and segment come from. Step three surveys the alternatives people use today, and the course is careful that this is not competitive analysis — the question is whether those alternatives genuinely cannot meet the need. Airbnb is the case: vacant rooms on one side, expensive distant stays on the other.",
+      "Validation then asks whether the solution works for real users, with desirability and feasibility both holding. Step four builds a core product in the lowest time, effort and money that still gives people a working experience to react to. Step five validates it — feasible, desirable, and will they come back? Step six sharpens it on measurable feedback. The chain is short: a clear target customer, a clear problem, a working MVP, and feedback."
+    ],
+    worked: {
+      setup: "A founder lists competitors and concludes the market is proven because several companies already serve it.",
+      move: "Run step three as the course states it — study the alternatives customers actually use, and ask what those alternatives cannot do.",
+      because: "Step three is explicitly not competitive analysis. The output needed is a need that existing alternatives fail to meet, which is what makes a new product worth building. A list of competitors shows a market exists; it does not show a gap. Airbnb's discovery found idle supply on one side and unmet demand on the other precisely because it looked at what people were doing instead, not at who else was selling."
+    },
+    glossary: [
+      {term: "customer problem", plain: "Current frustrations and unmet needs, read from how people complete the task today — the first discovery step."},
+      {term: "discovery phase", plain: "The first phase, settling desirability: the problem, who has it, and what they use instead."},
+      {term: "validation phase", plain: "The second phase, testing whether the solution works for real users on both desirability and feasibility."},
+      {term: "core product", plain: "The least time, effort and money that still gives people a working experience to react to."},
+      {term: "alternatives", plain: "What customers use today — studied for what they cannot do, which is not competitive analysis."}
+    ],
+    connects: "That is discovery settled and validation sketched. The next session works the validation phase properly — what gets built, who receives it, and what counts as proof."
+  });
+
+lesson({
+    lectureId: "SPMS-M01-L08",
+    courseId: "SPMS",
+    module: 1,
+    order: 8,
+    title: "The validation phase, and what counts as proof",
+    objective: "Run the three validation steps on a real pilot, and separate evidence that a solution works from encouragement that it might.",
+    explainer: [
+      "Discovery asks whether the problem is real. Validation asks whether your solution actually works for real users, and the shift shows on the DFV framework: discovery leans on desirability — do they need it — while validation puts feasibility alongside it, because now something has to be built and used. The phase runs steps four to six of the evolution framework. Step four builds the core product: a solution that is valuable to early customers, created within the least time, cost and effort that still leaves people something they can genuinely use.",
+      "Who receives the pilot matters as much as what is built. The criterion is felt need and willingness to give feedback, not proximity — friends and family who say yes out of goodwill often do not have the need, and their interest is not data. Airbnb's own step four was barely a website: a blog-like page with photographs and a contact number, listing the founders' own apartment and three air mattresses, aimed at attendees of one specific conference. No automation and no scale, just a working experiment people could use.",
+      "Step five validates that core product on durability and repeatable use against the alternatives people already have — would the stay compare with a comparable hotel at the price, and would they book again? Airbnb had two behavioural questions underneath: would strangers stay in someone's home, and would hosts list their space, both of them invasions of a settled habit. Step six sharpens on validated learning, which is data and metrics rather than qualitative praise — better listing photographs, collected reviews because trust matters, simpler booking. The phase ends at problem-solution fit: a known target customer, a clear problem, a working MVP, and users who find it valuable."
+    ],
+    worked: {
+      setup: "A pilot group tells the founders the idea is great, the design is excellent and they are excited to see where it goes. The team records the round of positive feedback as validation and starts preparing to scale.",
+      move: "Ask what behaviour changed. Validation is not users saying the idea is good — it is users doing something differently because of the product. Airbnb's proof was not enthusiasm about the concept: hosts listed their space, guests booked and stayed, and both sides paid.",
+      because: "Praise costs the person giving it nothing, which is exactly why it is not evidence. The step-four rule about choosing pilot customers exists for the same reason — proximity produces goodwill, and goodwill produces encouraging noise shaped like a signal. Usage and feedback matter more than payment alone, because a single purchase can be a favour while repeated use cannot be."
+    },
+    glossary: [
+      {term: "core product", plain: "The minimum version built for early customers in the least time, cost and effort that still works."},
+      {term: "early adopters", plain: "The pilot users chosen for felt need and willingness to feed back, not for being close to the founders."},
+      {term: "validated learning", plain: "Data and metrics on what to improve and what to remove, rather than qualitative praise."},
+      {term: "behavioural change", plain: "Users doing something differently because of the product — the evidence validation actually needs."},
+      {term: "problem solution fit", plain: "A known target customer, a clear problem, a working MVP, and users who find it valuable."}
+    ],
+    connects: "That closes the validation phase at problem-solution fit. The next session steps back and asks what a product has to hold up on to be worth scaling at all."
+  });
+
+lesson({
+    lectureId: "SPMS-M01-L09",
+    courseId: "SPMS",
+    module: 1,
+    order: 9,
+    title: "Product thinking: the five dimensions",
+    objective: "Hold a product against all five dimensions of product thinking at once, and name the failure each one on its own produces.",
+    explainer: [
+      "Product thinking separates building a product from running a project: a project works to a limited scope, budget, time and defined goals, while a product is continuous and long-term. It asks an offering to hold on five dimensions at once — value, scalability, sustainability, responsibility, and profitability or impact. Value comes first: solving a real-world problem in a simple, relatable way, then driving adoption and retention. WhatsApp arrived in 2009 into a market that already had Skype; what made it spread was that a mobile connection was the whole signup, so the benefit of first use arrived at once rather than after enrolment, email and a password.",
+      "Scalability asks who the product is for at full size — not a hundred users but millions — and whether the architecture holds as they arrive. It has two halves: the growth of adoption, and ecosystem thinking, because a product at population scale must interface with everything around it. UPI is the case. Moving money between financial institutions used to be laborious; NPCI's architecture reduced it to a mobile number, and it works because it interfaces with payment gateways, banking systems and devices at once, handling billions of transactions a month.",
+      "The last three are the ones a growing product defers. Sustainability has three senses — environmental, social, and economic, meaning value for the ecosystem and partners rather than the firm alone. Responsibility became a pillar as digital products entered everyday life: ethics, no dark patterns, data privacy, no engineered addiction, defaults a customer would have chosen if informed, and safety for non-users. Aadhaar is the course's example. Profitability or impact is stated as a pair because not every platform is commercial — Aadhaar is societal, WhatsApp is not — but a product that is neither profitable nor impactful leaves the shelves."
+    ],
+    worked: {
+      setup: "A product is valuable, scaling fast and comfortably profitable. The team proposes a set of defaults and interface patterns that measurably lift retention, knowing that some users would not choose them if the choice were put plainly.",
+      move: "Test it against all five dimensions rather than the three it is winning on. This is the responsibility pillar: dark patterns, defaults that are not the informed choice, and engineered stickiness are named failures of it, whatever they do to the numbers.",
+      because: "The dimensions exist because product success is multidimensional and the trade-offs between them have to be managed rather than resolved by whichever one is easiest to measure. Retention is easy to measure and responsibility is not, so the tempting move always looks locally correct. Trust and sustainability are strategic advantages: a product people stop trusting is rejected sooner rather than later, even where no regulator bans it."
+    },
+    glossary: [
+      {term: "product thinking", plain: "Holding a product to five dimensions at once — value, scalability, sustainability, responsibility, profitability or impact."},
+      {term: "adoption and retention", plain: "How fast a user reaches the benefit, and whether they come back — the two halves of the value dimension."},
+      {term: "scalability", plain: "Serving millions without breaking, through robust architecture and interfaces to the surrounding ecosystem."},
+      {term: "sustainability", plain: "Environmental, social and economic — the last meaning value for the partners and ecosystem, not the firm alone."},
+      {term: "responsibility", plain: "Ethics, data privacy, no dark patterns or engineered addiction, and defaults an informed customer would pick."},
+      {term: "dark patterns", plain: "Interface choices that push a user toward what they would not choose if it were put plainly."}
+    ],
+    connects: "Those are the five tests. The next session asks the question underneath the first of them: what job was the customer trying to get done?"
+  });
+
   lesson({
     lectureId: "SPMS-M01-L10",
     courseId: "SPMS",
@@ -2489,7 +5820,7 @@
     title: "Jobs to Be Done",
     objective: "Separate the job a customer is hiring a product for from the product itself, and read its functional, emotional, and social layers.",
     explainer: [
-      "The framework starts from a distinction that is easy to blur. A need is a perceived problem. Value is that problem solved well enough to motivate someone to pay for it and use it repeatedly. Many products fail not because they do not solve the need, but because they do not deliver enough value. Customer need is a problem, a pain, or a job that users want done — which is where Jobs to Be Done takes its name.",
+      "The framework starts from a distinction that is easy to blur: need versus value. A need is a perceived problem. Value is that problem solved well enough to motivate someone to pay for it and use it repeatedly. Many products fail not because they do not solve the need, but because they do not deliver enough value. Customer need is a problem, a pain, or a job that users want done — which is where Jobs to Be Done takes its name.",
       "The example is a doctor buying a drilling machine and a drilling bit. Taken at face value that is a drill sale. Ask why and it becomes hanging a picture; ask again and it is displaying an MD certificate in her clinic; ask again and it is so that new patients feel comfortable and trust they are seeing a qualified doctor. Three layers stack in one purchase. The functional need is displaying the degree. Underneath sits pride in more than a decade of study. And the social need is the confidence a walk-in patient takes from seeing it on the wall.",
       "Customer value is the perceived benefit relative to the cost of alternatives — benefits minus cost, where cost means money, time, effort, and risk together. In the drill case the cost is a frame and a hole in the wall; the benefit is all three layers at once. That is why need and value come apart so routinely: a product can satisfy the stated need and still lose to an alternative delivering more of the emotional and social job. Uber against pre-Uber taxis and auto rickshaws is the same comparison, where the stated need was only to get from one place to another."
     ],
@@ -2508,6 +5839,85 @@
   });
 
   lesson({
+    lectureId: "SPMS-M02-L01",
+    courseId: "SPMS",
+    module: 2,
+    order: 1,
+    title: "Customer value and the value pyramid",
+    objective: "Place a product's value on the pyramid's four levels, and say why functional value alone rarely produces loyalty.",
+    explainer: [
+      "Bain's B2C value pyramid adapts Maslow's hierarchy to products, sorting what a product gives someone into four levels. Functional value is the base: it solves a tangible problem — saves time, reduces effort, simplifies, reduces cost. Emotional value sits above it, satisfying how the product makes someone feel. Above that are life-changing elements, and at the top social-impact elements, where the product connects to something beyond the individual.",
+      "The level matters commercially, not just descriptively. Functional value is table stakes — necessary, and rarely enough to distinguish anything, because a competitor can match a time saving. Products that reach emotional value earn markedly higher net promoter scores and stronger loyalty than products delivering the same function without it. That is the exam-relevant claim: moving up the pyramid is what converts a useful product into one people stay with and recommend.",
+      "The trap this framework exposes is a roadmap built entirely at the base. A team that keeps shipping faster, cheaper and simpler is competing on the one dimension every rival can copy, and is puzzled when satisfaction stays flat. Asking which level a feature serves reframes the question from what the product does to why anyone would prefer it."
+    ],
+    worked: {
+      setup: "A product measures well on speed and cost against every competitor, and its net promoter score will not move.",
+      move: "Read the roadmap against the pyramid. If every item is functional, the flat score is the expected result, not a mystery.",
+      because: "Functional value is table stakes: it is required to compete and cannot differentiate, because any rival can match a time saving. Emotional value is what the course ties to higher promoter scores and loyalty. A roadmap sitting entirely at the base is optimising the level that does not produce advocacy."
+    },
+    glossary: [
+      {term: "value pyramid", plain: "Bain's four levels of product value: functional, emotional, life-changing, social-impact."},
+      {term: "functional value", plain: "Table stakes — saves time, reduces effort, simplifies, cuts cost."},
+      {term: "emotional value", plain: "What the product makes someone feel; tied to higher promoter scores than function alone."},
+      {term: "net promoter score", plain: "A loyalty measure the course links to value above the functional level."}
+    ],
+    connects: "That is what value is. The next session is the tool for finding it in a specific customer."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L02",
+    courseId: "SPMS",
+    module: 2,
+    order: 2,
+    title: "The value proposition canvas",
+    objective: "Map a product as pain relievers and gain creators against a customer's real pains and gains, rather than listing features.",
+    explainer: [
+      "The value proposition canvas exists to stop a team describing its product as a feature list. It has two halves that must be built in order. The customer half sets out the jobs they are trying to do, the pains they meet doing them, and the gains they hope for. The product half — the value map — states how the offering acts as a pain reliever and as a gain creator against exactly those entries. Fit is when the two halves line up, and the gap between them is the value gap.",
+      "Order is the discipline. Starting on the product side produces a value map that relieves pains nobody reported, which is how feature lists get rewritten as benefit lists without becoming any truer. Starting on the customer side means every claim on the product half has something on the customer half to answer to.",
+      "UPI is the course's worked case. Its gain creators are interoperability — you can pay anyone regardless of which app they use — and financial inclusion, bringing people into digital payments who were outside them. Its pain relievers are scan-and-pay, which removes manual entry of account details, and a zero-fee architecture, which removes the cost that would have stopped small transactions. Each one names a specific pain or gain rather than a capability."
+    ],
+    worked: {
+      setup: "A team writes its value map first and then looks for customers whose pains it happens to relieve.",
+      move: "Reverse it. Build the customer profile — jobs, pains, gains — and only then write pain relievers and gain creators against those entries.",
+      because: "The canvas is a fit test, and a fit test only works when the two halves are produced independently. A value map written first will always look convincing, because it was never constrained by what anyone actually reported. Building the customer side first is what makes the value gap visible rather than assumed away."
+    },
+    glossary: [
+      {term: "value proposition canvas", plain: "A two-sided fit tool: the customer's jobs, pains and gains against the product's value map."},
+      {term: "value map", plain: "The product half — how the offering relieves pains and creates gains."},
+      {term: "pain reliever", plain: "Something the product does that removes a specific reported pain, like scan-and-pay."},
+      {term: "gain creator", plain: "Something that delivers a hoped-for gain, like UPI's interoperability."},
+      {term: "value gap", plain: "The distance between what customers need and what the product actually relieves or creates."}
+    ],
+    connects: "That finds value for one customer. The next session asks how many such customers there are."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L03",
+    courseId: "SPMS",
+    module: 2,
+    order: 3,
+    title: "What a market actually is",
+    objective: "Apply the three-part test for a market, and explain why strong technology fails without market readiness.",
+    explainer: [
+      "A market is not an industry, and the course defines it by three conditions that must hold together. A market is a group of customers who share a specific problem, have purchasing power, and are willing to adopt and pay for a solution. Drop any one and it stops being a market: a shared problem with no purchasing power is a cause, purchasing power with no shared problem is just a demographic, and both without willingness to adopt is a market that exists on paper and never converts.",
+      "This is why technical strength does not predict success. Google Glass was more advanced than almost anything around it and failed on market readiness — the willingness to adopt was not there, whatever the capability. WhatsApp was technically simple and succeeded enormously because it met a shared problem in a segment ready to act. The comparison is the point: sophistication and market fit are independent, and only one of them is being tested here.",
+      "Serviceable obtainable market is the honest version of market size — the portion you can realistically reach right now with the resources you actually have, as opposed to everyone who could conceivably buy. Zerodha's early SOM was cost-conscious retail investors, not every investor in India. Naming SOM rather than the total market is what makes a go-to-market plan executable instead of aspirational."
+    ],
+    worked: {
+      setup: "A pitch sizes its opportunity as everyone in the country who could use the product.",
+      move: "Apply the three conditions, then narrow to the serviceable obtainable market — who can be reached now, with current resources.",
+      because: "A market needs a shared problem, purchasing power, and willingness to adopt, all at once. A national population satisfies none of the three as a group. Zerodha did not target every investor; it targeted cost-conscious retail investors, which is a group that shares a problem and will act on it. Sizing to the total market produces a number that cannot be executed against."
+    },
+    glossary: [
+      {term: "market", plain: "Customers sharing a specific problem, with purchasing power and willingness to adopt and pay."},
+      {term: "market readiness", plain: "Whether the segment is willing to adopt now — independent of how good the technology is."},
+      {term: "serviceable obtainable market", plain: "The slice reachable right now with current resources, not everyone who could buy."},
+      {term: "earlyvangelists", plain: "Early adopters moved by urgent need or strong vision — Paytm at demonetisation, early Tesla buyers."}
+    ],
+    connects: "That is who the market is. The next session sizes it from the top down."
+  });
+
+  lesson({
     lectureId: "SPMS-M02-L04",
     courseId: "SPMS",
     module: 2,
@@ -2515,7 +5925,7 @@
     title: "TAM, SAM, SOM and early evangelists",
     objective: "Size an opportunity through TAM, SAM, and SOM, and name the innermost group who will adopt without hesitation.",
     explainer: [
-      "Two questions come before building anything. How big is this opportunity — am I building for everyone in Delhi, for India, for the world? And who are my first one, two, hundred, or thousand customers, the people who will use the product right away without any hesitation? The answers are drawn as concentric circles: Total Addressable Market, Serviceable Available Market, Serviceable Obtainable Market, and inside those the early evangelists.",
+      "Two questions come before building anything. How big is this opportunity — am I building for everyone in Delhi, for India, for the world? And who are my first one, two, hundred, or thousand customers, the people who will use the product right away without any hesitation? The answers are drawn as concentric circles: Total Addressable Market, Serviceable Available Market, Serviceable Obtainable Market, and inside those the earlyvangelists — the course writes it as one word on its slides, and shortens it to EVG.",
       "TAM is how big the market could possibly be. For Zerodha, an investment platform, that is every retail investor wanting to invest in exchange traded securities or mutual funds — worldwide, anyone who could use it. SAM is how much of that you could reach now. Cross-border investing runs into regulatory frameworks, so even though the product could solve the problem for online retail investors anywhere, Zerodha's serviceable available market narrows to online retail investors in India.",
       "SOM narrows again: of the people you could reach, how many can you practically service and win today. India's online retail investors are already being served by brokerages such as Kotak Securities, ICICI Direct, and HDFC Securities, so the obtainable market is the segment those firms fit badly — cost-conscious, frugal investors who want to save on brokerage, who want plenty of information for do-it-yourself investing, and who do not need a dedicated relationship manager. The early evangelists sit inside that circle."
     ],
@@ -2528,9 +5938,190 @@
       {term: "Total Addressable Market", plain: "The largest the market could be — everyone who could ever use the product."},
       {term: "Serviceable Available Market", plain: "The part of TAM you could actually reach now, after regulation and geography."},
       {term: "Serviceable Obtainable Market", plain: "The part of SAM you can practically service and win against incumbents."},
-      {term: "Early Evangelist", plain: "A first customer who adopts right away without hesitation, sitting inside the innermost circle."}
+      {term: "Earlyvangelists", plain: "A first customer who adopts right away without hesitation, sitting inside the innermost circle. The course's slides write it as one word, and abbreviate it EVG; \"early evangelists\" appears too, so expect either."}
     ],
     connects: "Sizing tells you where to aim. The next session is about learning fast enough to actually hit it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L05",
+    courseId: "SPMS",
+    module: 2,
+    order: 5,
+    title: "The learning loop",
+    objective: "Run the build–measure–learn loop on one assumption, and read its result as a decision to pivot or persevere.",
+    explainer: [
+      "A learning loop is three steps run as a cycle: build a small experiment, measure what it does, then learn from it. It exists because the alternative is building in isolation — 84 features when 12 or 14 would have told you the same thing — which costs money and, more expensively, the time the market was open. Running the loop instead lowers market risk and reaches product-market fit sooner, because each turn is informed by the one before it.",
+      "The loop only works with the right people and the right evidence. An early evangelist has a clear problem, is actively searching for a solution, is unhappy with the alternatives, can pay, and will give feedback — and that last one counts even where they never pay, because feedback is what the loop is buying. Measurement is behavioural rather than conversational: asking how somebody likes the app returns politeness, while whether they used it, came back, and hit a case the product could not handle returns evidence. Engagement and retention are the reading; opinion is not.",
+      "What the loop produces is a decision. The assumptions you began with are hypotheses, and each turn either validates one or breaks it, which forces a choice — persevere, meaning the course is right and the product builds out from here, or pivot, meaning go back and change direction. A pivot has a target: the product, the customer, or the value promised. Naming which of the three moved is what makes the next loop a smaller question than the last."
+    ],
+    worked: {
+      setup: "An early build draws warm feedback in interviews and almost no repeat use.",
+      move: "Read the behavioural data as the result, and choose a product, customer or value pivot rather than running the same loop again.",
+      because: "Interview warmth is opinion and returning is behaviour, and the loop is only informative when it is scored on the second. Almost no repeat use has already answered the hypothesis under test, so rebuilding the same experiment buys nothing. Naming which assumption broke — the product, the customer chosen, or the value promised — is what makes the next turn a smaller question rather than the same one asked louder."
+    },
+    glossary: [
+      {term: "learning loop", plain: "Build a small experiment, measure behaviour, learn — run as a cycle rather than once."},
+      {term: "validated learning", plain: "Learning through experiment rather than argument, which is what the loop is for."},
+      {term: "minimum viable product", plain: "The least that produces maximum learning; not a prototype, and not the product."},
+      {term: "early evangelist", plain: "Someone with the problem, searching for a solution, unhappy with alternatives, and willing to give feedback."},
+      {term: "persevere", plain: "The loop's verdict that the course is right and the product builds out from here."},
+      {term: "pivot", plain: "The loop's verdict that direction must change — in the product, the customer, or the value."}
+    ],
+    connects: "That is the loop and the decision it produces. The next session runs it three times on one product, and shows how the MVPs ladder."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L06",
+    courseId: "SPMS",
+    module: 2,
+    order: 6,
+    title: "Laddering MVPs across loops",
+    objective: "Sequence several MVPs so each loop answers one hypothesis at the lowest cost that can answer it.",
+    explainer: [
+      "Before any MVP there are three hypotheses to state separately: the problem, the customer, and the value. For a smart water bottle they are that people do not drink enough water and the existing prompts do not fix it; that the people with the problem are the distracted, the fitness-minded and athletes; and that smart tracking changes hydration habits rather than merely recording it. Stating them apart matters because each loop is built to test one, and an experiment testing all three at once settles none of them.",
+      "The MVP is then the smallest thing that can answer the hypothesis currently in doubt, and it need not be the product. Loop one is a WhatsApp reminder bot — no app, certainly no bottle — asking only whether reminders are valuable at all. Loop two adds personalisation, triggering on activity data from a wearable with the user's consent, and asks whether tailoring beats a fixed schedule. Only loop three builds hardware, and it is aimed at willingness to pay. Each rung is climbed only if the one beneath it held.",
+      "The loops are read on activation, retention, engagement and conversion, and the pivots they trigger have names: a product pivot to app-only, a segment pivot onto athletes or corporate users, a value pivot from hydration to wellness. The traps are consistent — building hardware too early, ignoring early customers, measuring vanity metrics, and iterating too slowly. The line worth keeping is that the goal is not to build a product; it is to build a learning system."
+    ],
+    worked: {
+      setup: "The team wants to manufacture a small hardware batch to find out whether the concept works at all.",
+      move: "Run the reminder bot first, and hold hardware back until willingness to pay is the question actually open.",
+      because: "Hardware is the most expensive rung and it answers the last question rather than the first. If reminders turn out not to be valuable, the batch has bought an answer a WhatsApp bot would have given for nothing — building hardware too early is a named trap for exactly this reason. Each loop should cost the least that can still settle the hypothesis in doubt, which is what makes a ladder cheaper than a single large bet."
+    },
+    glossary: [
+      {term: "hypothesis", plain: "An informed assumption about the problem, the customer or the value, written down so a loop can test it."},
+      {term: "activation", plain: "Whether people who arrive actually start using the thing."},
+      {term: "retention", plain: "Whether they come back, which no interview can tell you."},
+      {term: "conversion", plain: "Whether they will pay, or intend to — the question hardware is built to answer."},
+      {term: "segment pivot", plain: "Changing who the product is for, such as narrowing onto athletes or corporate users."},
+      {term: "vanity metrics", plain: "Numbers that rise without telling you anything you can act on."}
+    ],
+    connects: "That is the ladder, and what climbing it in the wrong order costs. The next session is the metrics these loops are read on, and which of them flatter you."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L09",
+    courseId: "SPMS",
+    module: 2,
+    order: 9,
+    title: "Moore's adoption curve and the chasm",
+    objective: "Place a product on the adoption curve, and say what each segment needs before it will buy.",
+    explainer: [
+      "Geoffrey Moore's high-tech market development model turns Everett Rogers' diffusion theory into something a product team can act on. Its claim is that a market is not homogeneous: it is five segments along a bell curve — innovators, early adopters, early majority, late majority, laggards — and each adopts for a different reason. Innovators want novelty and tolerate bugs. Early adopters want strategic advantage; they accept risk because they have bought the vision of where this is going.",
+      "Between the early adopters and the early majority sits the chasm, and it is a gap in motivation rather than in marketing spend. The early majority is pragmatic. It wants reliability, proof, and somewhere to take the thing when it breaks, and it asks the utility question rather than the vision one — in India, plainly, what mileage does it give. A pitch that moved early adopters argues change; the early majority is not buying change, so the same pitch lands as an unanswered risk.",
+      "Past that, the late majority adopts only once the market has standardised: price-sensitive, impatient with complexity, waiting until this is evidently what everyone uses. Laggards move when the alternative is withdrawn — the old model is de-supported, the spare parts stop, the apps no longer run. Each move demands more proof and less vision than the one before it, which is why segments are worked in order rather than addressed at once."
+    ],
+    worked: {
+      setup: "A product with enthusiastic early adopters stalls, and the team responds by increasing the advertising spend.",
+      move: "Read the stall as the chasm, and build proof — reliability evidence, references, support — before spending more on the message.",
+      because: "Early-adopter enthusiasm is bought with vision and risk tolerance, and neither transfers to the early majority, who want a proven solution and somewhere to take it when it fails. More spend repeats a pitch aimed at the segment already won. What the next segment is missing is evidence, so the work is references, ratings, support coverage and a reliability record — not volume."
+    },
+    glossary: [
+      {term: "chasm", plain: "The gap between the early market and the mainstream, where a vision-led pitch stops working."},
+      {term: "innovators", plain: "Adopt for novelty, tolerate instability, and are not a signal about the mainstream."},
+      {term: "early adopters", plain: "Adopt for strategic advantage and accept risk, having bought the direction."},
+      {term: "early majority", plain: "Pragmatic buyers who want proven solutions, peer evidence, reliability and return."},
+      {term: "late majority", plain: "Adopt once the market has standardised; price-sensitive and averse to complexity."},
+      {term: "laggards", plain: "Move only when the old option is withdrawn or unsupported."}
+    ],
+    addIns: [
+      {
+        lectureId: "SPMS-M02-L08",
+        module: 2,
+        order: 8,
+        title: "Market expansion",
+        objective: "Say what changes when a product moves from the segment it was validated on to the next one.",
+        explainer: [
+          "A market is a group of customers with a shared problem, comparable purchasing power, and willingness to adopt the solution — so it is defined by needs, by context (geography, demography, lifestyle) and by behaviour together, not by headcount. Expanding means moving between such groups: niche to mainstream, or local to global.",
+          "UPI ran that path from urban smartphone users, to small merchants, to rural consumers, to street vendors once QR codes removed the typing, ending as national payment infrastructure. Airbnb began with budget travellers at conferences and widened into family vacations, long stays and business travel. Neither started broad. The point that carries into Moore's model is that a product built for early adopters does not automatically suit the early majority — the attributes and the pain points differ, and they have to be understood rather than assumed."
+        ],
+        glossary: [
+          {term: "market", plain: "Customers sharing a problem, comparable buying power and willingness to adopt."},
+          {term: "market expansion", plain: "Moving a validated product into a segment with different needs, context and behaviour."}
+        ]
+      }
+    ],
+    connects: "That is the curve and the gap in it. The next session is how a product actually crosses that gap."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L07",
+    courseId: "SPMS",
+    module: 2,
+    order: 7,
+    title: "Metrics that can drive a pivot",
+    objective: "Separate vanity metrics from actionable ones on causality, actionability and predictive power, so a loop's reading can carry a decision.",
+    explainer: [
+      "Your learning depends on what you measure, which makes the measure step the one that decides whether a loop taught anything at all. A vanity metric is a number that feels good without helping you decide — two hundred likes on a post, when nobody bought, hired or followed because of it. Before trusting any metric, put it through three tests: causality, actionability, and predictive power.",
+      "Causality asks whether there is a real link between what you built and what moved: a prompt that fires forty-five minutes into a workout rather than on a fixed two-hour gap ties the behaviour to the product's value. Actionability asks what you would do differently on this reading — widen the pilot to four hundred people, capture another parameter. Predictive power asks whether it extrapolates: if the data cannot say which segments and markets come next, it has not repaid the effort of collecting it.",
+      "On a hydration MVP the split is sharp. Downloads are vanity, because installing is not using. Notifications sent is vanity too — an output rather than an outcome, and whether anyone read or acted on it was never in your control. Active users, reminder response rate and daily hydration tracked are actionable, each carrying a behavioural link back to the value claimed. Units sold is the deceptive one: revenue feels conclusive, so it has to be read beside engagement, or paying customers who never engage become bad news later."
+    ],
+    worked: {
+      setup: "An MVP reports 5,000 notifications sent, 3,000 downloads and 180 daily active users, and the team calls the pilot a success.",
+      move: "Score each number on causality, actionability and predictive power, then read the pilot on the 180.",
+      because: "Notifications sent is an output that nobody outside the team acted on, and a download is not a use — both feel like progress and neither can change a decision. Daily active users carries the behavioural link back to the value claimed, which is what makes it the only one of the three able to support a pivot-or-persevere call. Deciding on the larger numbers would be deciding on the ones selected for their size."
+    },
+    glossary: [
+      {term: "vanity metric", plain: "A number that makes you feel good without helping you decide anything."},
+      {term: "causality", plain: "A real link between what you built and what moved, rather than two things rising together."},
+      {term: "predictive power", plain: "Whether a reading extrapolates to the segments and markets that come next."},
+      {term: "active users", plain: "How many people use it day to day — engagement, and therefore actionable."},
+      {term: "outcome", plain: "What changed for the user, as opposed to an output such as messages sent."}
+    ],
+    connects: "Metrics tell you whether a loop learned anything. The next session turns outward: what expanding into a new market means, and the adoption curve that expansion runs along."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L11",
+    courseId: "SPMS",
+    module: 2,
+    order: 11,
+    title: "Problem-solution fit and product-market fit",
+    objective: "Separate the two fits by the stage and the question each answers, and list the signals that product-market fit has arrived.",
+    explainer: [
+      "The two fits are often merged and they are not the same milestone. Problem-solution fit happens at the early, MVP stage and answers one question: are we solving a real and important problem? It is a claim about the problem, tested on a small number of people, and it can be true while the business is still nothing.",
+      "Product-market fit happens at the growth stage and answers a different question: can this product scale sustainably across a broader market? It is a claim about the market, and it cannot be established with the same evidence, because a handful of enthusiastic users say a great deal about the problem and almost nothing about whether reaching thousands more is sustainable.",
+      "The course lists the signals that product-market fit has arrived, and they are behavioural rather than declarative. Retention is strong. Word of mouth produces organic referrals without being paid for. Revenue traction appears. Adoption is fast. And acquisition friction falls — it gets easier to bring in the next customer rather than harder. The last of those is the most diagnostic, because a product without fit shows the opposite pattern: each additional customer costs more than the one before."
+    ],
+    worked: {
+      setup: "A team has twenty delighted pilot users and concludes it has product-market fit.",
+      move: "Call that problem-solution fit, and check the market signals separately — retention, organic referral, revenue traction, and whether acquisition is getting easier.",
+      because: "Twenty delighted users establish that the problem is real and important, which is the early-stage question. Whether the product scales sustainably across a broader market is a different claim needing different evidence. The diagnostic signal is acquisition friction: without fit, each new customer costs more than the last, which twenty hand-picked pilots cannot reveal."
+    },
+    glossary: [
+      {term: "problem-solution fit", plain: "Early stage: are we solving a real and important problem?"},
+      {term: "product-market fit", plain: "Growth stage: can this scale sustainably across a broader market?"},
+      {term: "organic referral", plain: "Word of mouth that is not paid for — one of the signals of fit."},
+      {term: "acquisition friction", plain: "How hard the next customer is to win; falling friction signals fit, rising friction denies it."}
+    ],
+    connects: "Those two fits close the module's argument. The next session is a guest practitioner's account of running product management for real."
+  });
+
+  lesson({
+    lectureId: "SPMS-M02-L12",
+    courseId: "SPMS",
+    module: 2,
+    order: 12,
+    title: "A practitioner's view: services against products",
+    objective: "Say why a services measure destroys a product business, and where a startup's advantage against an incumbent actually lies.",
+    explainer: [
+      "The sharpest distinction in this session is the business model. A professional services business is simple to run: hire engineers, win customer projects, staff them. Two numbers manage it — the utilization rate, meaning the share of available time engineers spend on customer projects, and the daily rate they are sold at. A product business breaks both. There you want developers working on the standard product rather than on customer-specific work, so keeping utilization rate as the main measure kills the product business. It looks obvious, and it has gone wrong repeatedly in services companies moving into products.",
+      "The startup's early sequence differs from a mature company's for the same reason. An established product company has a running business and the job is investing enough to keep it running. A startup asks, in order: what customer problem are we addressing — desirability; is it feasible to implement and does it actually address that problem — problem-solution fit; and can this become a viable business — product market fit. Product strategy is then routinely neglected, either because the product manager's role is positioned around planning and the development interface, or because founders keep strategy while being pulled into finance, sales and management.",
+      "Against a large incumbent the startup's real asset is innovation, defended by a moat it can hold over time. Big listed corporates struggle with radical innovation because predictable earnings and radical change conflict — which is why they buy innovation by acquiring startups, and why those integrations so often fail. Pricing is where startups most reliably damage themselves: entering low to offset a weaker product sets a price that is very hard to raise. The AI companies are the live example, moving to cost-based token models and meeting protest from the heavy users the old price attracted."
+    ],
+    worked: {
+      setup: "A services company builds a product team and keeps measuring everyone on utilization rate.",
+      move: "Change the measure for the product team before changing anything else.",
+      because: "Utilization rate rewards time billed to customer projects, so a developer improving the standard product is, by that measure, idle. The team will drift back into customer-specific work because that is what the number pays them for, and the product quietly becomes a consultancy with a product-shaped brochure. This is named as a repeated failure rather than a hypothetical, and no amount of strategy documentation survives a measure pointing the other way."
+    },
+    glossary: [
+      {term: "utilization rate", plain: "Share of engineers' time on customer projects — the services measure that destroys a product business."},
+      {term: "daily rate", plain: "The other services lever: what an engineer's day is sold for."},
+      {term: "problem-solution fit", plain: "The solution is feasible and actually addresses the customer problem."},
+      {term: "product market fit", plain: "The viability question — whether this becomes a real business."},
+      {term: "moats", plain: "A differentiation a startup can defend over time, not just establish once."}
+    ],
+    connects: "That closes the market and validation module. The next turns to strategy: vision, positioning and how the business model captures value."
   });
 
   lesson({
@@ -2560,6 +6151,197 @@
   });
 
   lesson({
+    lectureId: "SPMS-M03-L01",
+    courseId: "SPMS",
+    module: 3,
+    order: 1,
+    title: "Product vision and company vision",
+    objective: "Separate a product vision from a company vision, and place both at the head of the chain that ends in go-to-market.",
+    explainer: [
+      "A company vision is the organisation's overall future goal — what the whole business is for. A product vision is narrower and more useful day to day: the long-term direction for this product, the north star it steers by, defining both the customer value it intends to deliver and the business value it intends to return. One company vision can sit above several product visions, and confusing the two produces roadmaps that describe the company's ambition rather than the product's direction.",
+      "The two feed a chain the course states in order: vision, then product definition, then positioning, then go-to-market. Each step constrains the next. The definition says what the product does, internally. Positioning says why a customer should choose it, externally. Go-to-market says how it will reach them. Read backwards, a go-to-market plan that cannot be traced to a positioning statement, and a positioning statement that cannot be traced to a definition, are both improvisation.",
+      "The internal and external halves are the pair most often collapsed. Product definition is written for the people building it and answers what the thing does. Positioning is written for the market and answers why it should be preferred over the alternatives — which includes the alternative of doing nothing. A team that publishes its definition as its positioning ends up telling customers what the product does and never telling them why it matters."
+    ],
+    worked: {
+      setup: "A launch page lists what the product does, feature by feature, and conversion is poor.",
+      move: "Recognise that as the product definition, and write the positioning separately: why choose this over the alternatives.",
+      because: "Definition is internal and answers what the product does; positioning is external and answers why anyone should prefer it. They sit at different points in the chain from vision to go-to-market, and a page carrying only the definition asks the reader to work out the value themselves, including against the alternative of doing nothing at all."
+    },
+    glossary: [
+      {term: "company vision", plain: "The organisation's overall future goal."},
+      {term: "product vision", plain: "The long-term direction for one product — its north star, in customer and business value."},
+      {term: "product definition", plain: "Internal: what the product does."},
+      {term: "positioning", plain: "External: why a customer should choose it over the alternatives."},
+      {term: "go to market", plain: "How the product reaches customers — B2B on trust, ROI and long cycles; B2C on virality and fast growth."}
+    ],
+    connects: "Vision sets the direction. The next session covers the four motions a product can grow by."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L04",
+    courseId: "SPMS",
+    module: 3,
+    order: 4,
+    title: "Growth strategies: SLG, MLG, PLG, ELG",
+    objective: "Name the four growth motions and pick the one a product's economics and buyer actually support.",
+    explainer: [
+      "The course names four growth strategies, and they differ in what does the selling. Sales-led growth puts a sales team at the centre, which suits enterprise B2B where deals are large, buyers are committees, and cycles are long. Marketing-led growth drives demand through marketing and advertising, so the spend is on reach rather than on headcount. Product-led growth lets the product do the acquiring — self-serve signup, value visible before payment — and carries the lowest customer acquisition cost of the four. Ecosystem-led growth grows through APIs, integrations and network effects, where other people's products bring you customers.",
+      "The choice is not a matter of taste. It is set by deal size, buyer behaviour and volume. A sales-led motion on a low-priced, high-volume product spends more acquiring each customer than the customer is worth. A product-led motion on a complex enterprise purchase leaves a buying committee with nobody to answer its procurement and security questions, and the deal simply does not close.",
+      "Motions can be combined, and often are, but each one still has to pay for itself. The common hybrid is product-led acquisition feeding a sales-led conversion for larger accounts: free signup brings people in, and the enterprise deals are closed by a human. What breaks is running two motions without deciding which one owns the customer at each stage, because then neither is accountable for the handoff."
+    ],
+    worked: {
+      setup: "A low-priced, high-volume product hires a field sales team to grow faster.",
+      move: "Check the acquisition cost per customer against what one customer is worth before adding headcount.",
+      because: "Growth motion is set by deal size and volume, not by ambition. Sales-led growth carries the highest cost per customer of the four; product-led carries the lowest. On a low-priced product, a field sales team spends more to acquire a customer than that customer returns, so the motion loses money faster the better it works."
+    },
+    glossary: [
+      {term: "sales-led growth", plain: "A sales team drives growth — fits enterprise B2B with large deals and long cycles."},
+      {term: "marketing-led growth", plain: "Marketing and advertising drive demand; spend goes to reach rather than headcount."},
+      {term: "product-led growth", plain: "The product acquires its own users through self-serve; lowest acquisition cost."},
+      {term: "ecosystem-led growth", plain: "Growth through APIs, integrations and network effects."}
+    ],
+    connects: "Motion decides how it is sold. The next session covers how the business model captures the value."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L05",
+    courseId: "SPMS",
+    module: 3,
+    order: 5,
+    title: "The business model canvas",
+    objective: "Fill the nine boxes in the order that makes them answerable, and read the canvas as desirability, feasibility and viability.",
+    explainer: [
+      "A business model is how a company intends to make money from a product. Osterwalder's definition is more useful than that: it describes the rationale by which an organisation creates, delivers and captures value while interacting with suppliers, customers and partners. The canvas puts that on one page in nine boxes — customer segments, value proposition, channels, customer relationships, revenue streams, key activities, key resources, key partners, and cost structure.",
+      "Fill them right to left, because that is the order in which they are answerable. Who are the segments? What is the value proposition to each — their jobs to be done, pains removed, gains created? Through which channels do you reach them, and what relationship is it: self-service, subscription, co-creation? How do they pay? Only then the left side: what key activities deliver that value, what resources those activities need, which partners fill the gaps, and what it all costs. Write a separate canvas per segment, since the value proposition differs between them.",
+      "Read as a whole, the canvas is the three lenses on one sheet. The right-hand side is desirability — do they need it. The left-hand side is feasibility — can we do it. And revenue minus cost along the bottom is viability — should we do it. That last one is the question businesses fail on: a canvas can be for a future state rather than today, but if no arrangement of the nine boxes produces revenue above cost, the model has answered."
+    ],
+    worked: {
+      setup: "WhatsApp is free to its individual users, and the canvas has to show where the money comes from.",
+      move: "Separate the segments and read revenue from the one that pays: business APIs charged per message, business accounts, and payments.",
+      because: "The value proposition differs by segment, which is why the canvas is drawn per segment rather than once. Individuals get free secure messaging; businesses get access to a user base of billions and its engagement, and are charged for the API messages and accounts that reach it. Reading it as a single canvas makes the product look revenue-free, when in fact one segment is the product and another is the customer."
+    },
+    glossary: [
+      {term: "business model canvas", plain: "Nine boxes describing how a company creates, delivers and captures value."},
+      {term: "customer segments", plain: "Who the value is being created for — one canvas each, since the proposition differs."},
+      {term: "key activities", plain: "What the company must do to deliver the value proposition."},
+      {term: "cost structure", plain: "What delivering the value costs — the other half of viability."},
+      {term: "revenue streams", plain: "What each segment actually pays, and for what."}
+    ],
+    connects: "That is how the model captures value. The next session takes the canvas a startup uses when most of it is still assumption."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L08",
+    courseId: "SPMS",
+    module: 3,
+    order: 8,
+    title: "Tailorability: one product, many customers",
+    objective: "Fit a standard product to a customer's regulations and workflows by the least invasive method that will do the job.",
+    explainer: [
+      "Tailorability is how a standard product is fitted to one customer without becoming a different product, and four things drive it. Local regulations, which are non-negotiable — Finacle operates in more than a hundred countries. Workflows, since foreign, public-sector, private, community, cooperative and agricultural banks all run the same core banking product differently. Integrations with the customer's other software, which are the last mile of the whole product. And business rules, down to whether interest is applied in the morning or the evening at a quarter end.",
+      "Without it, customers cannot differentiate themselves. Where one vendor holds most of a country's banking market, its customers' apps should not look like siblings — each bank wants to express itself to its own end customers, and a product that forbids that hands the competitor an argument. The opposite extreme fails too: hand over a rules engine and tell the customer to work it out, and every implementation starts from scratch and takes months. The target is a product already eighty to ninety per cent right, with the remainder assembled.",
+      "Three strategies, ordered by how much is already built. Configuration sets parameters among choices the product has already coded for — currency, language, time zone, twelve or twenty-four hour, metric or imperial — so anything outside that set is simply invalid. Composition adds code that was never in the base product: a vernacular-language plugin nobody outside India needs, a regional compliance extension, or a partner's marketplace app preconfigured to fit. Customization changes or adds code, and that is where invasive and non-invasive bites."
+    ],
+    worked: {
+      setup: "A bank asks for an interest computation no other customer uses, and engineering offers to add it to the core product.",
+      move: "Provide it through the customer's own business logic, non-invasively, rather than admitting it to the main code base.",
+      because: "Customization is legitimate and this is exactly what it exists for: business logic unique to one institution, which they would not want shared anyway. What is not legitimate is where it lands. A rule written into the main product must be carried by every release and paid for in complexity by every other customer, and at twenty thousand customers that is how a product stops being one product. The architecture has to let their logic sit outside the core, which is what non-invasive means."
+    },
+    glossary: [
+      {term: "tailorability", plain: "Fitting a standard product to one customer's regulations, workflows, integrations and rules."},
+      {term: "configuration", plain: "Setting parameters among choices the product already codes for; anything else is invalid."},
+      {term: "composition", plain: "Adding code that was never in the base product — plugins, extensions, marketplace apps."},
+      {term: "customization", plain: "Changing or adding code for one customer. The course spells it with a z; house prose uses the s."},
+      {term: "non-invasive", plain: "A change that sits outside the core, so no other customer carries it."},
+      {term: "marketplace apps", plain: "Partner-built extensions, preconfigured to work with the product."}
+    ],
+    connects: "That is how one product bends to fit many customers. The next session turns to the services wrapped around it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L09",
+    courseId: "SPMS",
+    module: 3,
+    order: 9,
+    title: "Service strategy: the rest of the whole product",
+    objective: "Decide which services a product needs, who delivers them, and avoid the two ways startups get it wrong.",
+    explainer: [
+      "Customers buy outcomes rather than software, and for some products the outcome is unreachable without help. SAP's services economy runs four to five times its licence economy; Salesforce scaled on onboarding, training and a partner ecosystem; Finacle reached a hundred countries on the strength of implementation. A service is useful labour that produces no tangible commodity — human services like a help desk, and technical ones like an interface called by another system. Services belong to the whole product, so a service strategy names which are needed, who provides them, and how they contribute to the customer's success.",
+      "Two kinds sit side by side. Professional or delivery services get the product running: installation, configuration, customisation, data migration off the legacy system, integration with what the customer already runs, and cutting over into production — months of work with large teams, often alongside a system integration partner supplying hardware and third-party tools. In enterprise budgets that half regularly outweighs the licence. Product support services are the ongoing half: bug fixes and maintenance, on-call support, the help desk, training, and running the service itself where it is hosted.",
+      "Who delivers is not either-or. The vendor's own people give closer engagement and higher satisfaction at higher cost; partners scale faster and bring local expertise and language, at some cost in consistency and customer intimacy, with overdependence a real risk. Most companies split it — global help desk and maintenance in-house, local support and routine implementation with partners, and the difficult first implementation in a new country kept close."
+    ],
+    worked: {
+      setup: "A SaaS startup decides a good product sells itself and ships without onboarding help or a help desk.",
+      move: "Fund the minimum service layer — onboarding and a support route — before spending more on features.",
+      because: "Services are part of the whole product, not an optional wrapper, and the failure mode is documented: customers who cannot configure the product do not report a configuration problem, they churn, and they leave the review that deters the next buyer. Early SaaS companies have failed exactly here. The opposite extreme is just as costly — customising for every customer individually — so the answer is a service layer that is deliberate and small, not absent."
+    },
+    glossary: [
+      {term: "professional services", plain: "Getting the product live: installation, configuration, migration, integration, cutover."},
+      {term: "help desk", plain: "The ongoing support route — part of the product from the customer's side."},
+      {term: "data migration", plain: "Moving the customer off their legacy system without losing what it held."},
+      {term: "system integration", plain: "A partner assembling hardware, third-party tools and the product into one working whole."},
+      {term: "whole product", plain: "The product plus the services and partners that make its outcome reachable."}
+    ],
+    connects: "That is the service half of the offering. The next session decides what to build and what to source."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L07",
+    courseId: "SPMS",
+    module: 3,
+    order: 7,
+    title: "Delivery models: on-premise, SaaS, managed services",
+    objective: "Choose how a product reaches customers, and say what multi-tenancy costs and what it buys.",
+    explainer: [
+      "A delivery model is how a vendor makes the product available, and the three software delivery models are settled by more than convenience: the revenue model, the scale and concurrency expected, how diverse the customer base is, the partner ecosystem, and long-term profitability. On-premise means the customer licenses it, installs it on their own infrastructure and runs it with their own people. That buys high control, deep customisation and a strong perception of security, at the cost of large upfront spend on servers — which is where Tally, Oracle databases and SAP's ERP implementations lived.",
+      "Software as a service moves the hosting to the vendor: reached through a browser, paid by subscription, updated without the customer applying anything, and scaled on demand because the vendor owns the hardware. Salesforce pioneered it and Zoho launched cloud-native from the first day. Between the two sit managed services, where the software runs on the customer's own infrastructure but the vendor operates it — how India's GST system and Passport Seva are run. The line between them is multi-tenancy: one instance serves many customers, while managed services gives each dedicated infrastructure.",
+      "Multi-tenancy is where the architectural cost lands. A single instance serves banks in India, Australia, Europe and the United States whose currency codes, business rules and access controls all differ, so the physical infrastructure is shared while the logical configuration is tailored per customer. In exchange the model changes the financial shape for both sides: recurring revenue and better retention for the vendor, an operating expense rather than a capital one for the buyer. Adobe's move from boxed licences to Creative Cloud subscriptions is the worked case."
+    ],
+    worked: {
+      setup: "A vendor with regulated enterprise customers wants to move all of them onto a single cloud instance.",
+      move: "Check the architecture supports multi-tenancy across their differing rules, and keep on-premise or managed services where regulation or security demands it.",
+      because: "Moving to software as a service is not simply a change of hosting. One instance must serve customers whose currency codes, business rules and access controls differ, which is a logical-tailoring problem inside the architecture rather than a deployment task. And on-premise persists for reasons that are not inertia: business-sensitive and security-bound systems need the infrastructure physically controlled, so for those buyers the move removes the property they bought."
+    },
+    glossary: [
+      {term: "on-premise", plain: "Licensed to the customer, installed on their infrastructure, run by their own people."},
+      {term: "software as a service", plain: "Vendor-hosted, reached by browser, paid by subscription, updated centrally."},
+      {term: "managed services", plain: "The vendor operates the software, but it runs on the customer's dedicated infrastructure."},
+      {term: "multi-tenancy", plain: "One software instance serving many customers, tailored logically rather than physically."},
+      {term: "perpetual license", plain: "Bought once and used indefinitely — the on-premise shape, a capital cost."},
+      {term: "recurring revenue", plain: "Subscription income renewed monthly or yearly, and what makes retention decisive."}
+    ],
+    connects: "That is how the product reaches the customer. The next session is how one product bends to fit many of them."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L10",
+    courseId: "SPMS",
+    module: 3,
+    order: 10,
+    title: "Sourcing: what to build and what to buy",
+    objective: "Decide what a startup builds itself and what it sources, using differentiation rather than cost as the test.",
+    explainer: [
+      "Sourcing answers what you build and what you take from outside, driven by speed, cost, scalability, quality and competitive advantage. What can be sourced is broader than code: talent, software components, infrastructure, data sources, cloud platforms and external services. The pattern across companies is selective rather than absolute — Apple designs its chips and has them manufactured, Netflix runs on someone else's cloud while keeping its recommendation engine, Flipkart scaled on external cloud and logistics partners, and Zoho deliberately kept almost everything in-house.",
+      "The governing rule is one sentence: build what differentiates you, and source what is commoditised. Payment gateways are the standard case — standardised, regulated and readily available, so integrating an existing payment API beats rebuilding one. Cloud infrastructure is the same argument at larger scale. Open source sits in that category too, bringing low cost, faster development and community innovation, but carrying licence risk: misread a copyleft obligation and the terms you received can propagate to whatever you built on top of it.",
+      "The failures are as consistent as the rule. Building everything internally slows execution and spends engineering money on things nobody pays extra for. Outsourcing the core does the opposite damage — product knowledge is lost, innovation weakens, and a partner who leaves can take the ability to maintain the code with them. Cheap vendors buy delivery delays and security exposure. Developers making licence decisions alone create intellectual-property problems that surface at acquisition. And tactical outsourcing that never becomes strategic accumulates technical debt until the dependency, rather than the market, sets the company's limits."
+    ],
+    worked: {
+      setup: "An early startup outsources its whole MVP to move fast, including the algorithm the product is differentiated on.",
+      move: "Source the commodity parts and keep the differentiating algorithm in-house, even at the cost of shipping later.",
+      because: "Speed is a real reason to source, and it is why the MVP was outsourced at all. But the line is drawn on differentiation rather than on cost or calendar: the parts nobody chooses you for should come from outside, and the part they do choose you for should not. A partner who departs takes the product knowledge with them, nobody left can scale the architecture, and an investor who reads that the core intellectual property sits elsewhere prices that risk into the round."
+    },
+    glossary: [
+      {term: "sourcing strategy", plain: "Deciding what to build and what to take from outside — a strategic call, not an operational one."},
+      {term: "build versus buy", plain: "Build what differentiates you; buy what is standard and available."},
+      {term: "COTS", plain: "Commercially available off-the-shelf software, bought rather than written."},
+      {term: "open source", plain: "Community-built software: low cost and fast, with licence obligations attached."},
+      {term: "copyleft", plain: "A licence term that can require what you build on top to carry the same freedoms."},
+      {term: "tech debt", plain: "What short-term sourcing shortcuts accumulate until they limit what the company can do."}
+    ],
+    connects: "That closes the strategy module. The next module turns to what the product should cost."
+  });
+
+  lesson({
     lectureId: "SPMS-M03-L02",
     courseId: "SPMS",
     module: 3,
@@ -2583,6 +6365,34 @@
       {term: "transaction friction", plain: "Cost imposed by the payment itself — no exact change, no suitable device."}
     ],
     connects: "A position statement is a claim. The next session covers the practices that take it to market."
+  });
+
+  lesson({
+    lectureId: "SPMS-M03-L03",
+    courseId: "SPMS",
+    module: 3,
+    order: 3,
+    title: "Go-to-market: two different funnels",
+    objective: "Answer the five go-to-market questions, and run the funnel that matches whether you sell to a business or a person.",
+    explainer: [
+      "Go-to-market covers everything from market introduction to market leadership, and it matters more for software than for physical goods because the incremental cost of serving one more customer is close to nothing — growth is a distribution problem rather than a manufacturing one. It answers five questions: who are the target customers, what value are we offering, how will customers discover the product, how will revenue be generated, and how will adoption increase at scale. A great product that stays a best-kept secret fails on the third of those.",
+      "The characteristics split by buyer. Selling to businesses runs on trust, demonstrable return, and workflow integration — a bank running a hundred systems cares less about your benchmark than about whether you coexist with the rest — plus an ongoing relationship with service levels, because once their business depends on you, you are mission-critical. Selling to consumers runs on virality, easy onboarding, habit formation, emotional connection, and conversion from free to paid. ChatGPT's route was a free tier, sharing, a conversational interface and an enterprise upgrade path; Freshworks won small businesses by being easy to implement, integrate and maintain.",
+      "So the funnels differ. The business funnel is awareness through thought leadership, consideration via case studies and account-based marketing, evaluation by proof of concept and pilot, a decision involving procurement, technology and business stakeholders together, then retention and expansion — land and expand. The consumer funnel is awareness, interest via a free signup, conversion to paid once the habit exists, retention against a low exit barrier, then advocacy. With acquisition costs high on both sides, a customer retained is worth a customer acquired."
+    ],
+    worked: {
+      setup: "A team selling enterprise software runs consumer tactics: a free tier, app-store presence and social sharing.",
+      move: "Rebuild the funnel around evaluation and the buying unit — proof of concept, case studies, and the several people who must all agree.",
+      because: "A consumer funnel assumes one person decides quickly on their own experience. An enterprise purchase has procurement, technology and business stakeholders who each need a different argument, a sales cycle measured in months, and an evaluation stage — proof of concept, pilot, site visit — that free-tier signups never reach. The tactics are not weak; they are aimed at a buying unit that does not exist here."
+    },
+    glossary: [
+      {term: "go-to-market", plain: "Everything from introducing a product to leading its market: segments, positioning, pricing, channels, scale."},
+      {term: "workflow integration", plain: "Whether the product coexists with the systems a business already runs — often the deciding question."},
+      {term: "account-based marketing", plain: "Pursuing named accounts individually rather than marketing to a broad audience."},
+      {term: "land and expand", plain: "Winning a first deployment, then selling further modules into the same customer."},
+      {term: "habit formation", plain: "The consumer retention driver: going back instinctively rather than deciding again."},
+      {term: "customer acquisition cost", plain: "What winning a customer costs — high enough that retention is worth as much as acquisition."}
+    ],
+    connects: "That is how the product reaches its market. The next session turns to how growth itself is engineered."
   });
 
   lesson({
@@ -2612,6 +6422,88 @@
     connects: "The canvas names what has to be true. The next session turns to how the product actually reaches the customer."
   });
 
+lesson({
+    lectureId: "SPMS-M04-L01",
+    courseId: "SPMS",
+    module: 4,
+    order: 1,
+    title: "What a price communicates",
+    objective: "Read a digital product's price as a statement about value, risk and ecosystem, and say why giving a segment the product free can be the strategy rather than a concession.",
+    explainer: [
+      "A product talks to you through its features; the company talks to you through its pricing. Four things are readable in a price before any number is defended. The value definition, meaning what the vendor believes the product is worth. The risk posture — whether the vendor is passing risk to the customer or holding it. The ecosystem intent, or how partners are meant to sit around the offering. And the culture behind it, whether the company is engineering-led, user-led or finance-led. The first pricing skill is therefore reading one, not setting one.",
+      "Spotify is the worked case, and it is read segment by segment against the value pyramid's layers — functional, emotional, life-changing, social impact. In India it offers Lite at about 139 rupees a month, a Standard tier, Platinum, and a student price near 99 rupees for two months, and most users still pay nothing. The free ad-supported majority get functional value in free access, easy discovery and background listening, and emotional value in fun and entertainment and in discovery excitement, because the service keeps widening and personalising what they hear.",
+      "Creators are the segment that explains the design. They receive distribution convenience instead of marketing a new song to a million people, analytics on who is listening and where, and monetisation tools — then recognition and validation emotionally, and career sustainability and financial independence at the life-changing layer. Their perceived value is the highest of any segment and they pay nothing, because charging them would collapse the ecosystem the catalogue depends on. The strategy underneath: monetise emotional value, subsidise life-changing value, and use functional value to retain."
+    ],
+    worked: {
+      setup: "A finance team reviews the numbers and proposes reducing the free tier. Free users consume infrastructure, generate no revenue, and receive the same catalogue, the same choices and the same unlimited listening time as subscribers.",
+      move: "Ask what each segment gives rather than what it pays. Free users are value amplifiers, not loss makers — they build the audience the creators need, and the creators build the catalogue the subscribers pay for. What premium users buy is not better music, since the product is the same; it is emotional value, being free of ads and able to share choices, which is why Wrapped is worth investing in.",
+      because: "The mistake is reading a segment on its own line in the accounts. Free users are the segment finance teams most often misread, because the value they create shows up in someone else's row. Family plans work the same way — they are a churn reduction weapon, since one of four or five people still using it keeps the subscription alive for all of them. Pricing a segment correctly requires knowing what it contributes to the others."
+    },
+    glossary: [
+      {term: "risk posture", plain: "Whether the vendor passes risk to the customer or holds it — one of the things a price discloses."},
+      {term: "ecosystem intent", plain: "How the pricing expects partners and complementors to sit around the offering."},
+      {term: "discovery excitement", plain: "The emotional value in being shown more than you already own, personalised as you listen."},
+      {term: "distribution convenience", plain: "What a creator gets instead of marketing alone: being findable by an audience that already exists."},
+      {term: "churn", plain: "How many subscribers stop paying. Family plans reduce it because one active user sustains the whole plan."}
+    ],
+    connects: "That is what a price says and who it says it to. The next session builds the number itself, from the value the customer perceives rather than from what the product cost to make."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L04",
+    courseId: "SPMS",
+    module: 4,
+    order: 4,
+    title: "Pricing as a business lever: five objectives",
+    objective: "Choose a pricing move by the business outcome it is meant to produce, and check the position each one requires before using it.",
+    explainer: [
+      "The same price can be set to reach very different outcomes — revenue growth, profitability, market share, reputation, cash flow — and each of the five named uses needs a particular position to work from. Maximising profit is the established company's move: Adobe and Salesforce charge premium prices based on willingness to pay, and it holds because of brand reputation and switching costs. That is entrenchment — a large share with no credible alternative — and a company without it cannot simply decide to charge more and expect the price to stick.",
+      "Penetrating a new market is the well-funded entrant's move. Zoom expanded its global footprint on free and very low-cost plans to acquire users fast while the category was rushing, and the funding is the precondition rather than the pricing. Saturation is the dominant player's move: multiple tiers, free editions and bundled ecosystems that stop competitors growing, which is what Google can do to a rival by pricing Gemini low or bundling it through a telecom partner. It works by vacating the lower segments so nobody can enter through them.",
+      "The last two buy cash and reputation rather than share. Maximising liquidity trades price for timing — an annual or advance payment at a discount, so twelve months are bought for the value of about ten. That improves cash immediately and removes revenue uncertainty, letting a firm carrying debt save interest or put the cash into new product. And maximising goodwill gives ancillary products away — free Android and Docs, a student edition — building brand reputation and an ecosystem that produces demand for the paid offerings later, sometimes priced only once the share is won."
+    ],
+    worked: {
+      setup: "A young product with modest funding wants to charge premium prices, on the grounds that its quality justifies them.",
+      move: "Check the precondition before the price: premium capture rests on entrenchment, which this product does not have yet.",
+      because: "Maximising profit through premium pricing is an established firm's move, and what makes it hold is brand reputation and switching costs — a large share with no credible alternative to defect to. A new product has neither, so the same price without the entrenchment behind it simply prices the product out of consideration. The levers available at this position are the ones that buy position rather than margin: penetration if the funding is there, or goodwill through free ancillary offerings that build the ecosystem first."
+    },
+    glossary: [
+      {term: "entrenchment", plain: "Large share and no credible alternative — what makes a premium price hold."},
+      {term: "switching costs", plain: "What makes leaving expensive once a customer is on the platform."},
+      {term: "saturation", plain: "Tiers, free editions and bundles that keep competitors out of the lower segments."},
+      {term: "liquidity", plain: "Cash now: annual or advance payment discounted, to remove revenue uncertainty."},
+      {term: "goodwill", plain: "Ancillary products given away to build reputation and an ecosystem that pays later."}
+    ],
+    connects: "Those are the levers. The next session reads a company's pricing backwards, to diagnose what it believes."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L09",
+    courseId: "SPMS",
+    module: 4,
+    order: 9,
+    title: "What investors want, stage by stage",
+    objective: "Bring the evidence a funding stage actually tests, rather than the evidence you happen to have most of.",
+    explainer: [
+      "Investors do not fund an idea. Across every stage they are testing five things: evidence that the problem is real and people feel it, learning velocity — how fast the team turns feedback into insight, scalable economics, market potential, and whether this team can execute. Underneath sit the same three questions the course has used throughout, as desirability, feasibility and viability: is it needed, can it be done, should it be done. What changes from stage to stage is which of them carries the weight, and pitching the wrong one is the common failure.",
+      "Early, the questions are qualitative. At pre-seed the investor asks whether the problem is worth solving and whether these founders can solve it — Airbnb's early backers funded founder insight, an observed market inefficiency and early behavioural signals from hosts and guests, and explicitly not financial predictability, because there was none. At the seed stage the question becomes whether product-market fit is emerging: Freshworks showed the problem was real globally, that its SaaS onboarding acquired customers efficiently, and that churn was low while retention held.",
+      "Later the questions turn numeric, then institutional. At product-market fit the test is whether the business scales efficiently — recurring revenue quality, enterprise retention, payback and expansion revenue. From Series B the test is market leadership: Razorpay's growth investors examined regulatory capability in a space where compliance is binary, payment scale economics, and month-on-month merchant ecosystem growth. At the late and pre-IPO stage they want a durable, predictable institution, which is what Freshworks' listing turned on — SaaS efficiency, retention quality, governance maturity and enterprise expansion."
+    ],
+    worked: {
+      setup: "A pre-seed pitch leads with a five-year revenue projection worked to two decimal places.",
+      move: "Lead with the problem and the founder insight instead, and keep the projection as an openly stated range.",
+      because: "Pre-seed investors are testing whether the problem is worth solving and whether this team can solve it — desirability and feasibility. Airbnb's early backers funded exactly that and explicitly not financial predictability, because at that stage there is none to fund. Precise long-range figures claim a certainty the stage cannot have, and they answer a question nobody is asking yet: scalable economics is what the product-market-fit and Series B investors test, on recurring revenue quality, retention and payback."
+    },
+    glossary: [
+      {term: "funding stages", plain: "Pre-seed tests the problem, seed tests emerging fit, later stages test scale then predictability."},
+      {term: "learning velocity", plain: "How fast the team converts customer and market feedback into insight."},
+      {term: "scalable economics", plain: "Proof the per-customer numbers still hold as the business gets larger."},
+      {term: "retention quality", plain: "Not just low churn — whether retained customers consume as forecast."},
+      {term: "governance maturity", plain: "Disclosure and transparency good enough for an external board."},
+      {term: "defensibility", plain: "Whether the position can be held once competitors arrive — a later-stage test."}
+    ],
+    connects: "That is what investors want and when. The next session closes the module with a founder who has been through it."
+  });
+
   lesson({
     lectureId: "SPMS-M04-L02",
     courseId: "SPMS",
@@ -2634,6 +6526,10 @@
       {term: "cost-based pricing", plain: "Pricing from your own inputs — the hourly-billing model used when impact is unknown."},
       {term: "value creation", plain: "The foundational layer: being sure value exists before pricing anything."},
       {term: "economic value", plain: "Value that is tangible and measurable, like 200 cups of coffee a day."},
+      {term: "price structure", plain: "The shape of the charge — per seat, per unit of usage, tiered, flat — decided before the number is."},
+      {term: "price-value communication", plain: "How the customer is told why the offering is worth its price."},
+      {term: "pricing policy", plain: "The rules on discounts, terms and exceptions that sit under the published price."},
+      {term: "price level", plain: "The actual number. It comes last, because every level beneath it limits which numbers are available."},
       {term: "value pyramid", plain: "The framework of value levels the pricing discussion is built on."}
     ],
     connects: "That establishes the basis for a price. The next session covers the strategies that actually set one."
@@ -2657,12 +6553,150 @@
       because: "The unit follows the customer relationship model. SaaS acquires a customer who then transacts repeatedly across a lifetime, so the customer acquisition cost has to be spread over that whole relationship — which only works if the unit is the account. A marketplace relationship is transactional, so the transaction is the unit. Borrowing the marketplace's unit for SaaS would bury the acquisition cost that decides whether the model works at all."
     },
     glossary: [
+      {term: "payback period", plain: "How long per-customer profit takes to repay what that customer cost to win."},
+      {term: "churn rate", plain: "Customers lost over total customers — the number the other unit metrics lean on."},
+      {term: "gross margin", plain: "Revenue minus direct costs over revenue; a healthy software business runs high."},
       {term: "unit economics", plain: "Profitability measured for one unit of the offering — a customer, a ride, an order."},
       {term: "customer acquisition cost", plain: "What it costs to acquire a customer, totalled over a period; abbreviated CAC."},
       {term: "business model validation", plain: "Establishing what it takes to get and service the business, and when profit arrives."},
       {term: "customer relationship model", plain: "Whether a customer transacts once or repeatedly, which decides what the unit is."}
     ],
     connects: "Per-unit numbers are the input. The next session scales them up into financial management and forecasting."
+  });
+
+  lesson({
+    lectureId: "SPMS-M05-L01",
+    courseId: "SPMS",
+    module: 5,
+    order: 1,
+    title: "Business ecosystems and the three roles",
+    objective: "Identify whether a company is a keystone, a dominator, or a niche player, and say what each does to the partners around it.",
+    explainer: [
+      "A business ecosystem is the set of companies whose fortunes depend on each other's, and the course sorts participants into three roles by what they do to everyone else. A keystone player acts as a hub: it creates value and deliberately enables its partners to thrive, because a healthy ecosystem is what makes the hub valuable. Android and Shopify are the examples — both are worth more when more people build successfully on them.",
+      "A dominator also sits at the centre and behaves differently. It controls the ecosystem aggressively, dictates the rules, and captures a disproportionate share of the value created inside it. Apple and Amazon are the named cases. The distinction from a keystone is not size or centrality — both are large and central — it is whether partners are enabled or squeezed.",
+      "A niche player is highly specialised in one narrow functional capability, and typically operates across several platforms rather than committing to one. Grammarly and DocuSign are the examples: neither owns a platform, both are excellent at exactly one thing, and their strategy is to be present wherever their capability is needed. The strategic reading is that a niche player's risk is a keystone deciding to build that capability itself, which is why breadth of platform presence is their defence."
+    ],
+    worked: {
+      setup: "A platform is deciding whether to build a popular partner's capability into its own core product.",
+      move: "Recognise that this is the choice between behaving as a keystone and behaving as a dominator, and price the partner response.",
+      because: "A keystone's value comes from partners thriving on it, because that is what makes building there attractive. Absorbing a partner's capability captures value once and signals to every other partner that their capability is next, which reduces the building that made the platform valuable. Both roles are available; the course's distinction is whether partners are enabled or squeezed."
+    },
+    glossary: [
+      {term: "business ecosystem", plain: "Companies whose fortunes depend on each other's."},
+      {term: "keystone player", plain: "A hub that creates value and enables partners to thrive — Android, Shopify."},
+      {term: "dominator", plain: "A hub that dictates rules and captures excessive value — Apple, Amazon."},
+      {term: "niche player", plain: "Specialised in one narrow capability, operating across platforms — Grammarly, DocuSign."}
+    ],
+    connects: "That is who else is in the market. The next session asks who you are actually competing against."
+  });
+
+lesson({
+    lectureId: "SPMS-M05-L03",
+    courseId: "SPMS",
+    module: 5,
+    order: 3,
+    title: "Product marketing management",
+    objective: "Place product marketing among the marketing sub-functions, and say what value articulation is and who does it when nobody owns it.",
+    explainer: [
+      "Marketing in a B2B product business is not one function but four. Product marketing is the one this session is about. Field marketing carries the company and product message into particular geographies, engaging industry, influencers, prospects and partners where a European market needs a different focus from an Asian one. Influencer and partner marketing engages the ecosystem of partners and the analysts — Gartner, Forrester — and builds the marketplace where partners sell alongside you. Corporate marketing owns the brand, PR and media, events, and advocacy through customer case studies.",
+      "Product marketing management's own work is a long list with one theme: go-to-market strategy, segment-specific messaging, product packaging and bundling, product launches, sales enablement with battle cards and collateral and RFP input, engaging influencers and partners, advocacy and PR on the product itself, and lead generation from events and roundtables. The theme is value articulation — saying in solid, specific terms what the customer will get. Not that a product is powerful, but that a merchant can be onboarded in ten minutes.",
+      "Product marketing and product management overlap heavily and deliberately. Both sit close to customers and prospects, both do market research, positioning, voice of the customer, competition analysis and pricing; product management runs value creation and delivery, product marketing runs articulation. A startup usually has no dedicated product marketing function, and often no dedicated marketing function at all — but the need does not go away with the job title. Until someone owns it, product management articulates the value itself."
+    ],
+    worked: {
+      setup: "A startup has one person covering all of marketing, working on the company brand and the funnel. Nobody is writing segment-specific messaging, battle cards or launch collateral, and the argument is that a company this size cannot afford a product marketing hire.",
+      move: "Separate the function from the headcount. The question is not whether to hire a product marketing manager but who is doing value articulation, because the tasks arrive whether or not a role exists. In a startup that falls to product management, which already holds the positioning, the competitive picture and the pricing.",
+      because: "Marketing at company level and value articulation at product level are different jobs that look similar from outside. Brand work builds trust in the company; articulation states what this product does for this segment in specific terms. A startup that treats the second as a luxury ships a product nobody can describe — including its own salespeople, who are the first people a prospect meets."
+    },
+    glossary: [
+      {term: "product marketing management", plain: "The function that articulates a product's value to segments, partners and the market."},
+      {term: "value articulation", plain: "Stating in solid, specific terms what the customer gets — onboarding in ten minutes, not 'powerful'."},
+      {term: "field marketing", plain: "Regional marketing carrying the company and product message into a particular geography."},
+      {term: "sales enablement", plain: "Battle cards, collateral and RFP input that let salespeople give prospects an informed view of the product."},
+      {term: "product packaging", plain: "Bundling complementary products into a suite that completes the value for a customer."}
+    ],
+    connects: "That is who articulates the value. The next sessions follow the articulation into the journey a buyer actually travels."
+  });
+
+  lesson({
+    lectureId: "SPMS-M05-L06",
+    courseId: "SPMS",
+    module: 5,
+    order: 6,
+    title: "Planning a launch: assess, objectives, customers, positioning",
+    objective: "Work the first four stages of a launch framework, so the launch answers the questions a buyer is actually asking.",
+    explainer: [
+      "Most startups treat a launch as the day the product is announced. A buyer treats it as the moment their questions get answered — what it does, what it costs, whether it is available here, what changes from the version they already have, what the deal is for existing customers. That is the buyer's journey, awareness through consideration to decision, arriving at one event. The course's launch framework exists so none of it is missed: assess, objectives, customers, positioning, then the launch and what follows. Like every framework here it is structure, not prescription.",
+      "Assess reads two environments before anything is promised. Internally: is the product ready, can the teams demonstrate and sell it, is there funding behind the marketing, is the technology stable. Externally: is the market ready, how aware are customers, who competes, what does regulation demand. Objectives then turn that into something checkable — \"the event should go well\" is not one, \"acquire ten thousand active users in ninety days\" is. Business launches target qualified leads and anchor customers; consumer launches target downloads and engagement, with the numbers drawn from the segment work already done rather than a founder's guess.",
+      "Understanding customers means separating four roles that collapse into one person in a plan and never do in reality: who buys, who uses, who influences, and who approves the budget. A hospital buys, a patient uses, a doctor influences. Positioning then answers why us, why now, why not the competitors, and why the customer should care — standing on four pillars: segments, advantages, competitors and obstacles. Obstacles is the pillar most often misread: it means obstacles to adoption, not weaknesses in the product."
+    ],
+    worked: {
+      setup: "A connected fitness device is positioned on its advantages over rival products, and adoption stalls across several regions.",
+      move: "Work the obstacles pillar separately from the competitors pillar — ask what blocks adoption, not what a rival does better.",
+      because: "Positioning stands on four pillars, and obstacles is the one about adoption rather than about the product. A device needing continuous broadband is unusable where connectivity is mobile-only, however favourably it compares with anything else. Arguing the competitors pillar harder cannot move that, because those buyers are not choosing a rival — they cannot use the category. Naming the obstacle converts what looks like a messaging problem into a segment decision or a product one."
+    },
+    glossary: [
+      {term: "product launch", plain: "A staged process that answers a buyer's questions, not a one-day announcement."},
+      {term: "positioning", plain: "Why us, why now, why not the competitors, and why the customer should care."},
+      {term: "obstacles", plain: "What blocks adoption — connectivity, approval, habit — rather than what is weak in the product."},
+      {term: "anchor customer", plain: "A chosen early customer whose adoption can be shown to the next market."},
+      {term: "qualified leads", plain: "The business-to-business launch target: a funnel of genuinely interested organisations."},
+      {term: "BrainKraft", plain: "The company whose launch framework the course uses: assess, objectives, customers, positioning, launch, then prepare, accelerate and review. Written both \"BrainKraft\" and \"Braincraft\" in adjacent sessions, so expect either."}
+    ],
+    connects: "That is the launch framework and what it has to decide. The next session takes the launch plan itself — readiness, acceleration and review."
+  });
+
+  lesson({
+    lectureId: "SPMS-M05-L07",
+    courseId: "SPMS",
+    module: 5,
+    order: 7,
+    title: "Product launch: plan, accelerate, review",
+    objective: "Run a launch as four readiness checks, an acceleration window and an honest review, measured on adoption rather than on the event.",
+    explainer: [
+      "The launch plan asks four readiness questions in parallel, not one. Product readiness fixes the release date, and the market decides how much slack there is: a business-to-business launch can run while final integration testing continues, while a consumer launch cannot, because customers download the moment it is announced. Marketing readiness means campaign content, the demo, the story and the invitation list — influencers who will dissect the product publicly, beta customers who can say what it did for them, analysts and partners. Sales readiness is training, pricing and playbooks; support readiness is the migration plan existing customers will ask about on the day.",
+      "Launch day is the beginning of the work rather than its end, and the acceleration window exists to maximise adoption before the excitement wears off. The tactics split by market: consumer launches run influencer content, social handles active across time zones, and referral codes already in customers' hands, while business launches run webinars, regional customer events, analyst briefings and partner outreach, with people stationed to take the business as it arrives. Cynicism and bad press belong in the plan as something anticipated, not as a surprise on the day.",
+      "The review is the stage startups skip, and it is where the next launch is actually built. It asks what was achieved against the stated objectives, what failed, and what surprised — a speaker who underperformed, a demo glitch, analysts nobody mapped, press conversations bunched into one day when an embargoed release would have bought detailed coverage. The metrics differ by market as well: downloads, active users, retention and net promoter score for consumer; leads, probability-weighted pipeline, adoption and renewals for business. Read them across the first day, week, month and ninety days, because a launch is a trend rather than a moment."
+    ],
+    worked: {
+      setup: "A business-to-business launch is called a success — the room was full, the press covered it — and the team moves on to the next release.",
+      move: "Hold the review anyway, and score it against the funnel objective rather than against the day.",
+      because: "A launch objective is traction — leads and a pipeline good enough to forecast revenue and staffing — not that the event went off well. Skipping the review leaves those two confused and loses what only that week can teach: which analysts were never mapped, which demo failed, which press conversations should have been spaced or embargoed. That is the tribal knowledge the next launch runs on, and it exists nowhere else."
+    },
+    glossary: [
+      {term: "launch plan", plain: "Product, marketing, sales and support readiness checked together before the button is pressed."},
+      {term: "customer advisory board", plain: "Existing customers who endorse and adopt early, giving other buyers the comfort of not being first."},
+      {term: "fear, uncertainty, doubt", plain: "The mental block a large buyer holds against change, which the launch has to answer directly."},
+      {term: "progressive modernization", plain: "Replacing a large system module by module so the buyer never risks the whole enterprise at once."},
+      {term: "tribal knowledge", plain: "Field learning from a launch that no textbook carries, captured only if the review happens."}
+    ],
+    connects: "That is the launch and the window after it. The next session widens the frame to the whole relationship a launch begins."
+  });
+
+  lesson({
+    lectureId: "SPMS-M05-L08",
+    courseId: "SPMS",
+    module: 5,
+    order: 8,
+    title: "Customer experience as the advantage",
+    objective: "Manage customer experience as the whole relationship rather than the interface, and use it as the advantage a startup can actually hold.",
+    explainer: [
+      "Customer experience is the sum of every interaction someone has with the company across the life cycle — before the purchase, during it, and long after. User experience sits inside it rather than beside it: product interaction, judged on usability, owned by product and design, lasting as long as the session. Customer experience is the whole journey, judged on relationship and loyalty, owned by everyone from the founder to the janitor. Ordering food shows the split — search, menu photographs and payment are user experience; whether the rider is polite and a wrong order refunded without argument is not.",
+      "The life cycle runs awareness, evaluation, purchase, onboarding, usage, then renewal and advocacy, and each stage is a question a product manager has to answer. How will they hear of us? Can they understand the value proposition, and is the pricing legible? Is signing up frictionless, or does it want twenty documents? How long until first value? Are the key features being used, or are people dropping off? Why do the ones who stay stay, and why do the leavers leave? WhatsApp beat a more featured Skype on one of those answers alone: first use was better.",
+      "Customer experience is a competitive advantage, and it is the one a startup can actually hold. It cannot outspend an incumbent on brand, advertising or distribution, but experience is harder to copy than features, which makes it a moat rather than a lead that erodes. The returns compound — advocacy lowers acquisition cost, retention lengthens the relationship, and lifetime value rises without new spend. Measure it with net promoter score, satisfaction and retention together, since satisfaction is the absence of complaint while advocacy is a positive act, and use the analytics to intervene while somebody is stuck rather than after they have gone."
+    ],
+    worked: {
+      setup: "A product scores well in usability testing, and cancellations keep rising anyway.",
+      move: "Audit the stages outside the interface — billing, support, delivery and renewal — before changing anything in the product.",
+      because: "Usability testing measures user experience, which is one stage of a life cycle that also contains billing, support and renewal, and the customer calls all of it the product. Competition is one click or one cancelled subscription away, so a single bad experience anywhere in that chain ends the relationship without ever showing up in a usability score. Cancellation is a customer-experience signal before it is a product defect."
+    },
+    glossary: [
+      {term: "customer experience", plain: "Every interaction with the company across the life cycle, not just with the product."},
+      {term: "net promoter score", plain: "Willingness to recommend, net of detractors — a measure of advocacy rather than of satisfaction."},
+      {term: "CSAT", plain: "The customer satisfaction rating for an interaction; satisfaction is not the same as advocacy."},
+      {term: "churn", plain: "Customers leaving, read alongside why the ones who stayed stayed."},
+      {term: "predictive customer success", plain: "Using usage signals to forecast churn or an upsell before the customer acts."}
+    ],
+    connects: "That closes the market-facing module. The next turns inward, to how requirements are gathered and written."
   });
 
   lesson({
@@ -2673,9 +6707,10 @@
     title: "Competition and alternatives",
     objective: "Define competition the way a customer does — across every alternative, including doing nothing — instead of naming two rivals early.",
     explainer: [
-      "One of the biggest mistakes startups make is defining competition very early and too narrowly. Start an education venture and people immediately ask whether you are like Byju's, and you begin unconsciously identifying with named players before you have worked out whom you are serving or what value you are giving. The second mistake follows from the first: assuming that if you build a software product, your competition must be another software product.",
-      "Customers are the ones who actually decide who your competition is, and they decide it by comparison. A music service is not measured against rival music services alone — it sits against Apple Music, YouTube, and Amazon Music, and also against CDs and radio. In business software the alternatives are frequently not software at all: a spreadsheet, consultants, legacy systems, internal tools. And in enterprise scenarios the most common alternative is simply not doing anything, which the lecture names outright — inertia is the biggest competition.",
-      "So the analysis has to reach every alternative, current and potential. Product management should hold direct competition, substitutes, ecosystem forces, and strategic positioning together as alternatives, rather than treating only the first of those as real competition. The lecture draws this as a petal diagram of market alternatives, set against traditional competition analysis that worked inside an industry and a method. Product A versus product B is not the problem the customer is trying to solve."
+      "One of the biggest mistakes startups make is defining competition too early and too narrowly. Start an education venture and people immediately ask whether you are like Byju's, and you begin identifying with named players before working out whom you serve or what value you give. The second mistake follows: assuming that if you build a software product, your competition must be another software product.",
+      "Customers decide who your competition is, and they decide it by comparison. A music service is not measured against rival music services alone — it sits against Apple Music, YouTube and Amazon Music, and against CDs and radio. In business software the alternatives are frequently not software at all: a spreadsheet, consultants, legacy systems, internal tools. And in enterprise scenarios the most common alternative is doing nothing, which the lecture names outright — inertia is the biggest competition.",
+      "So the analysis has to reach every alternative. Product management should hold direct competition, substitutes, ecosystem forces and strategic positioning together as alternatives, rather than treating only the first as real competition. The lecture draws this as a petal diagram of market alternatives, against traditional analysis that worked inside one industry and method. Product A versus product B is not the problem the customer is trying to solve.",
+      "The alternative to fighting is not to. A red ocean is an existing market with known boundaries and identified competitors, all dividing the same demand; a blue ocean is uncontested space where demand is created instead. Value innovation is the mechanism, and the part most often stated wrongly — rather than choose between differentiation and low cost, it pursues both. Jio is the case: not cheaper service to the same subscribers, which would have been a red-ocean move, but a market widened to first-time internet users."
     ],
     worked: {
       setup: "An enterprise software team lists three rival vendors as its competition.",
@@ -2683,13 +6718,16 @@
       because: "The customer sets the comparison, not the vendor. In enterprise the most frequent outcome is not losing to a rival but the buyer carrying on exactly as they are, which is why inertia is named as the biggest competition. An analysis listing only vendors has no strategy at all against the option that wins most often."
     },
     glossary: [
+      {term: "red ocean", plain: "An existing market with known boundaries and identified competitors, where winning means taking share."},
+      {term: "blue ocean strategy", plain: "Creating uncontested market space so demand is made rather than divided."},
+      {term: "value innovation", plain: "Raising what customers get while lowering what it costs to deliver, instead of trading one against the other."},
       {term: "alternatives", plain: "Everything a customer could do instead, including manual processes and existing tools."},
       {term: "market alternatives", plain: "The petal-diagram view of every option open to the customer, current and potential."},
       {term: "direct competition", plain: "Rival products in the same category — only one slice of the alternatives."},
       {term: "substitutes", plain: "Different means to the same end, which customers weigh alongside direct rivals."},
       {term: "inertia", plain: "The customer doing nothing, named here as the biggest competition in enterprise settings."}
     ],
-    connects: "Knowing what you are compared against sets the message. The next session covers the function that carries it."
+    connects: "Alternatives are the fight, and value innovation is how to leave it. The next session covers the function that carries the message."
   });
 
   lesson({
@@ -2716,6 +6754,140 @@
       {term: "value messaging", plain: "Need-relevant content, format, and channel matched to the buyer's current stage."}
     ],
     connects: "That is the half before the purchase. The next session takes the customer journey that follows it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M05-L05",
+    courseId: "SPMS",
+    module: 5,
+    order: 5,
+    title: "Value communication: the customer's journey",
+    objective: "Carry value communication past the sale through onboarding, use and advocacy, so the customer recognises the value they bought.",
+    explainer: [
+      "The buyer's journey ends at the decision; the customer's journey is what follows, and it runs onboarding, then use, then promotion. At onboarding the only question is how fast someone reaches value: sign-up should be short, activation immediate, and time to first value measured in minutes. A watch that must charge overnight before it does anything has already spent the goodwill the purchase created. Product marketing's work here is onboarding communication, plain documentation, a welcome campaign that puts the buyer inside a community, and setup guidance that removes friction rather than explaining it.",
+      "The use stage opens with post-purchase dissonance — am I receiving the promised value, did I pay too much — and it is where subscriptions are quietly abandoned. Selling harder does not answer it; delivered outcomes the customer can notice do. That means reading usage analytics rather than treating the sale as the end: spotting the subscriber who never came back, asking what stopped them, watching how regularly the product is used. Netflix keeps demonstrating value through recommendation and personalisation, so the experience grows with use instead of decaying after it.",
+      "Promotion is the hardest stage, because advocacy costs the customer something the purchase did not: their credibility. Recommending a product means promising on the vendor's behalf, so it needs confidence in the roadmap and the service, not just satisfaction with today's build. Product management earns that through continuous improvement and by listening both to what is said and to what the analytics say unsaid. The rule underneath the whole journey is that value the customer does not recognise has not been delivered — money credited to an account nobody acknowledged has not arrived."
+    ],
+    worked: {
+      setup: "A subscriber signed up a fortnight ago, has opened the product twice, and the renewal falls due next month.",
+      move: "Treat it as the use stage rather than the renewal stage: read the usage analytics, ask what stopped them, and help them notice the outcome they bought.",
+      because: "Post-purchase dissonance is settled by outcomes the customer can see, not by a renewal campaign. Two opens in a fortnight is the analytics saying the outcome has not landed. Waiting for the renewal date asks for a decision about value that was never demonstrated, and the customer answers with the only evidence they have."
+    },
+    glossary: [
+      {term: "post-purchase dissonance", plain: "The doubt after buying — am I getting the promised value, did I overpay — that ends subscriptions."},
+      {term: "time to first value", plain: "How long from delivery until the customer experiences the benefit; minutes, not overnight."},
+      {term: "usage analytics", plain: "Back-end evidence of who is using what, and the signal that an outcome has not landed."},
+      {term: "customer advocacy", plain: "A customer putting their own credibility behind the product, which is more than satisfaction."},
+      {term: "referral program", plain: "Rewarding both sides of a recommendation, which lowers acquisition cost and raises lifetime value."}
+    ],
+    connects: "Advocacy closes the customer journey. The next session opens the product launch that starts the whole cycle."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L01",
+    courseId: "SPMS",
+    module: 6,
+    order: 1,
+    title: "Product planning and its three approaches",
+    objective: "Define product planning by the four questions it answers, and pick the approach that fits what the product is driven by.",
+    explainer: [
+      "Product planning is deciding what to build, why, when, and for whom, in order to maximise customer and business value. Those four questions are the whole definition, and dropping any one produces a familiar failure: what without why is a feature factory, what without when is a wish list, and what without for whom is a product built for the team that made it.",
+      "The course names three approaches, distinguished by what actually drives the decision. Requirements-driven planning follows customer and regulatory needs, which is how enterprise software like SAP or Finacle is planned — a regulator changes a rule and the roadmap changes with it. Data-driven planning follows analytics, A/B testing and observed behaviour, which is how Netflix and Swiggy plan. AI or data-input-driven planning is the newest: the data itself shapes what the product does, as with OpenAI, so planning is partly about what the model is trained and evaluated on.",
+      "Requirements-driven planning is the approach with named sources, and there are four. Legal and regulatory rules, where a central bank or a health regulator prescribes and nothing is left to imagination. Commodity features, which you cannot sell without — a wallet lacking a QR code, whatever else it does. Technology, since the platform and the back-end APIs impose requirements of their own. And the environment: in a bank already running seventy or eighty systems, your product has to coexist with them, and the integrations and data correctness that demands are themselves requirements."
+    ],
+    worked: {
+      setup: "A startup plans its roadmap from a backlog of feature requests, in a market where customers, funding and preferences are all still uncertain.",
+      move: "Plan for customer and business value under that uncertainty rather than for feature count, and choose the approach from what actually drives the decision.",
+      because: "The goal of product planning is not to build more features — it is to maximise customer and business value under uncertainty, and in a startup uncertainty is the normal condition: priorities turn on a single new piece of learning, resources are limited, and learning has to continue throughout. A feature backlog answers what to build and none of when, why or for whom, which is three of the four questions product planning exists to settle."
+    },
+    glossary: [
+      {term: "product planning", plain: "Deciding what, why, when and for whom to build, to maximise customer and business value."},
+      {term: "requirements-driven planning", plain: "Driven by customer and regulatory needs — SAP, Finacle."},
+      {term: "data-driven planning", plain: "Driven by analytics, A/B testing and observed behaviour — Netflix, Swiggy."},
+      {term: "commodity features", plain: "What you cannot sell without, regulation or no regulation — a wallet without a QR code."}
+    ],
+    connects: "Planning decides what to build. The next session is how you get deeper than what customers say they want."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L09",
+    courseId: "SPMS",
+    module: 6,
+    order: 9,
+    title: "The requirement repository and its eight states",
+    objective: "Move a requirement through the ISPMA states, and use triage to decide quickly on very little information.",
+    explainer: [
+      "Requirements are held at the atomic level — one requirement rather than several combined — because an atomic requirement can be reused and pointed at precisely. The repository stores what makes that possible: the state it is in, a short unique name and identifier, the source (regulatory, an existing customer, a partner), a brief description, the functional component it belongs to, a priority expressed as a rationale rather than a rank, the motivation in business terms, links to related requirements for traceability, an estimate, a schedule once it has one, and pointers to design and test material.",
+      "The requirement lifecycle runs bottom-left to top-right through eight states: new, approved or rejected, specified, selected, implemented, tested, released. Not every requirement visits them all — plenty go new, then rejected. That decision is triage, and the course's analogy is the emergency card: a decisive call made on very little information. Approval is conditional, so something approved in principle can still be rejected once specification shows the context cannot be pinned down, like a scheduled birthday greeting nobody can time across zones. Rejected requirements stay in the database, because in four years the architecture may have changed.",
+      "A dotted line sits above specified, and that is where release planning begins: nothing can be selected for a release until its specification is complete. The arrows between specified and selected run both ways — a requirement can be pushed back for more specification once building starts and the detail proves insufficient, or deselected, taken out because the market it was for is no longer being addressed. The processes between the states are the work itself: elicitation produces a new requirement, triage decides it, analysis specifies it, selection places it in a release."
+    ],
+    worked: {
+      setup: "A requirement is approved on the strength of the idea, and specification then shows nobody can define when it should fire.",
+      move: "Reject it at specification and file it in the rejected set rather than carrying it forward.",
+      because: "Approval is deliberately conditional — triage is a fast decision on very little information, so a later rejection is the process working rather than failing. Carrying an unspecifiable requirement onward means selecting something nobody can build to a definition. Filing rather than deleting matters too: what defeated it was context that could not be pinned down, and a changed architecture in a few years may pin it down."
+    },
+    glossary: [
+      {term: "atomic", plain: "One requirement, not several combined — which is what makes it reusable and traceable."},
+      {term: "requirement repository", plain: "Where a requirement's state, source, rationale, links and estimates are held."},
+      {term: "triage", plain: "A decisive approve-or-reject call made on very little information; approval is conditional."},
+      {term: "elicitation", plain: "The work that produces a new requirement in the first place."},
+      {term: "deselection", plain: "Removing a requirement from a release because the reason for it has gone."}
+    ],
+    connects: "Specification is what makes a requirement buildable. The next session is how specified requirements are chosen into a release."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L10",
+    courseId: "SPMS",
+    module: 6,
+    order: 10,
+    title: "Release planning: versions, scenarios and competing pressures",
+    objective: "Define what a release contains, and balance the pressures that decide it.",
+    explainer: [
+      "Release planning defines the contents of a release: selecting the optimal set of requirements, documenting them in release notes, and validating what development produced. The version number carries the shape — a major version for significant change, a new platform or a new interface; a minor version for functional additions needing no new infrastructure; and a third number for patches, which correct rather than add. Work on the next major version runs while the current minor ones ship, and customers sit across several versions at once, because none of them can be made to migrate on your schedule.",
+      "How often you can release at all is set by who controls the runtime environment. A powerboat or a speedboat controls it — an early product, or a hosted service — so releases are frequent and small and continuous deployment fits. An icebreaker or a cruise ship does not: the customer has to exercise the update inside their own production environment, which means detailed release notes, training and data-migration plans, and a release that may come once a year. The scenario is not a preference; it follows from the deployment reality.",
+      "The plan is then a balance of conflicting pressures. Technology push against market pull — an operating system being de-supported forces a release nobody asked for. Innovation against stated customer requirements. A theme that holds the release together. Prioritisation argued from business cases, against target cost and payback. Dependencies that are thematic, technical and temporal at once. The competitive situation. And the marketing calendar, because a release timed away from the event that would have carried it wastes the attention it earned."
+    ],
+    worked: {
+      setup: "A vendor of enterprise software wants to ship a finished feature immediately, mid-cycle.",
+      move: "Judge it against the release scenario and its dependencies rather than against readiness.",
+      because: "Readiness is only one input. Where customers must exercise an update inside their own production environments, an unscheduled release asks each of them to plan testing, training and migration out of cycle, and most will decline. Dependencies are rarely single either: a feature can be thematically ready while the technical or third-party handshake it needs is not. The question is which release it belongs in, not whether it is finished."
+    },
+    glossary: [
+      {term: "release planning", plain: "Choosing what a release contains, documenting it, and validating what was built."},
+      {term: "release notes", plain: "The documented contents of a release — what changed, and what it requires."},
+      {term: "powerboat", plain: "A scenario where the vendor controls the runtime, so releases can be frequent and small."},
+      {term: "cruise ship", plain: "A scenario where the customer runs the update, so releases are rare and heavily planned."}
+    ],
+    connects: "That is what a release contains and what pulls at it. The next session is the rhythm it ships on, and who approves a change to it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L11",
+    courseId: "SPMS",
+    module: 6,
+    order: 11,
+    title: "The release heartbeat, compatibility, and the change control board",
+    objective: "Ship on a predictable rhythm, hold both compatibility directions, and route changes through the board.",
+    explainer: [
+      "The heartbeat principle is predictable release timing, and the argument for it is the customer's calendar rather than the vendor's. An enterprise buyer needs months to study a release, build a business case, win budget approval and deploy — so a release landing every September can reach production in the new financial year, while one landing at random cannot. Predictability organises the vendor too: hiring, leave, promotions and sales forecasts all plan against it, and a maintained heartbeat reads in the market as evidence of continued investment.",
+      "Two compatibility directions constrain what a release may contain. Upward compatibility means everything working in version n still works in n+1 — data transfers unchanged, interfaces unchanged, and at no extra charge — and it is the normal expectation unless a feature is being withdrawn by design. Downward compatibility is the reverse and much harder: data created in n+1 must still be usable in n. It matters where a customer running a mission-critical system may roll back an unstable upgrade, so the older version has to treat an unknown field as absent rather than as an error.",
+      "Release contents are not frozen, which is why changes route through a change control board — product management leading, with engineering, sales, finance and domain people — so anyone affected can say so before a requirement is added or dropped. The selection criteria they weigh fall into three groups: business reasons, management reasons such as the delivery date, and system reasons including technical debt. Stakeholder priority carries the largest single share of release content, around eighteen per cent, which is the honest description of how a roadmap actually gets set."
+    ],
+    worked: {
+      setup: "A late requirement arrives attached to a large deal, and the product team wants to add it to the release.",
+      move: "Take it to the change control board before agreeing, and price it against whatever leaves the release to make room.",
+      because: "A release holds a fixed amount of capacity, so a late addition almost always means a removal — and the people carrying that consequence sit outside the product team: engineering staffs it, sales has already promised the dropped item to another market, finance funded it. Stakeholder priority genuinely does drive the largest share of release content, so the request may well win. It should win in front of the people it costs."
+    },
+    glossary: [
+      {term: "heartbeat principle", plain: "Predictable release timing, so customers and the business can plan against it."},
+      {term: "upward compatibility", plain: "Everything working in version n still works in n+1, unchanged and unbilled."},
+      {term: "downward compatibility", plain: "Data made in n+1 still usable in n — rare, hard, and vital where rollback is possible."},
+      {term: "change control board", plain: "Product, engineering, sales, finance and domain together approving a change to a release."},
+      {term: "selection criteria", plain: "Business, management and system reasons that decide what enters or leaves a release."},
+      {term: "planned obsolescence", plain: "Withdrawing a feature deliberately — the exception to upward compatibility."}
+    ],
+    connects: "That closes product planning. The next module decides what order the work goes in."
   });
 
   lesson({
@@ -2750,11 +6922,12 @@
     module: 6,
     order: 8,
     title: "From customer need to project requirement",
-    objective: "Trace a need from a customer's business aspiration through a standardised product requirement into the project requirements engineering owns.",
+    objective: "Trace a need from a customer's business aspiration through a standardised product requirement into the project requirements engineering owns, and say why that chain is called traceability.",
     explainer: [
       "Customer requirements arrive non-standard, and that is not a failure on the customer's part. They are not writing system requirements; they are describing business needs and aspirations. Converting those into product requirements takes a significant amount of work, and that translation is the product manager's central competence here. Standardising means generalising one customer's stated need so that more customers of that same nature can be serviced through the one product.",
-      "Then comes a third class. Once a product requirement exists, it is broken down for a release across smaller teams — there might be five, ten, or twenty of them, depending on whether the release runs to a hundred person days or a thousand. Those are project requirements, and they sit much closer to the product development team. Ask for a customer master to be created and the specification questions follow immediately: is there an internal ID, a formatted ID, a linkage, and what does data integrity demand of the table design?",
-      "The boundary matters as much as the chain does. Project requirements belong to the development project, and project issues that surface during requirements work are explicitly not part of the product management process — they are left with the engineering team. What the product management layer owes is generalisation: requirements made actionable for developers, in a consistent style, suitable for internal communication, and oriented towards a standard product rather than one customer's particular installation."
+      "Then comes a third class. Once a product requirement exists, it is broken down for a release across smaller teams — five, ten, or twenty of them, depending on whether the release runs to a hundred person days or a thousand. Those are project requirements, and they sit close to the development team. Ask for a customer master and the specification questions follow at once: internal ID, formatted ID, linkage, and what data integrity demands of the table design.",
+      "Customer requirement to product requirement to project requirement is the chain, and walking it in either direction is what the course calls traceability. It is one of six properties a good requirement is expected to have — complete, correct, traceable, unambiguous, consistent, verifiable — and it is the one that fails silently. It lets you ask of any line of work which customer need it descends from, and of any need which release satisfied it. Without it a release ships in full and nobody can show what it was for.",
+      "The boundary matters as much as the chain. Project requirements belong to the development project, and project issues surfacing during requirements work are explicitly not part of the product management process. What the product layer owes is generalisation: requirements made actionable for developers, in a consistent style, oriented towards a standard product rather than one customer's installation."
     ],
     worked: {
       setup: "A customer asks for a customer master to be created.",
@@ -2765,9 +6938,148 @@
       {term: "customer requirements", plain: "What a customer wants to establish, stated as business needs rather than system specifications."},
       {term: "product requirements", plain: "The standardised, generalised version that serves many customers of that nature."},
       {term: "project requirements", plain: "Internal development specifications for a release, owned by engineering."},
-      {term: "requirements elicitation", plain: "Drawing requirements out of customers and other sources before standardising them."}
+      {term: "requirements elicitation", plain: "Drawing requirements out of customers and other sources before standardising them."},
+      {term: "traceability", plain: "Being able to walk the customer → product → project chain in either direction."},
+      {term: "good requirement", plain: "One that is complete, correct, traceable, unambiguous, consistent, and verifiable."}
     ],
-    connects: "That is the requirement chain end to end. The next session places it inside the ISPMA framework."
+    connects: "That is the requirement chain end to end, and traceability is what holds it together. The next session places it inside the ISPMA framework."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L02",
+    courseId: "SPMS",
+    module: 7,
+    order: 2,
+    title: "The Kano model and cost-value",
+    objective: "Classify a feature into Kano's five categories, and use cost-value to choose among what survives.",
+    explainer: [
+      "The Kano model sorts features by how they affect satisfaction, which is a different question from how much value they add. Must-be features cause dissatisfaction when absent and produce no delight when present — accurate delivery time on a food app. Performance features scale both ways: more is better, less is worse, and delivery speed is the example. Delighters produce satisfaction out of proportion to their size and are not missed if absent, like an AI suggestion nobody asked for.",
+      "Two categories are easy to forget and both matter. Indifferent features move satisfaction in neither direction — a loading screen — so effort spent on them is effort wasted whatever it costs. Reverse features actively reduce satisfaction for some users while pleasing others, and notifications are the standard case: the same feature that keeps one user engaged drives another away.",
+      "The model's most useful claim is that categories migrate. Delighters eventually become basic expectations — today's surprise is next year's must-be, and a product that stops adding delighters slowly slides into being merely adequate. Cost-value prioritisation then works on whatever survives Kano and MoSCoW: prefer high value at low cost, which is why Spotify's AI playlist recommendations are the course's example — a delighter that reused infrastructure already built."
+    ],
+    worked: {
+      setup: "A team is proud of a feature that surprised users at launch and is puzzled that satisfaction has drifted back down.",
+      move: "Recognise the migration: a delighter has become a must-be, and now only causes dissatisfaction by its absence.",
+      because: "Kano categories move over time. A delighter produces satisfaction disproportionate to its size precisely because it is unexpected, and once it is expected it behaves as a must-be — invisible when present, painful when missing. The feature did not get worse; its category changed, which is why the model treats classification as something to revisit rather than to set once."
+    },
+    glossary: [
+      {term: "Kano model", plain: "Sorts features by their effect on satisfaction: must-be, performance, delighter, indifferent, reverse."},
+      {term: "must-be", plain: "Causes dissatisfaction when absent, no delight when present."},
+      {term: "delighter", plain: "Satisfaction out of proportion to size; not missed if absent — and migrates to must-be."},
+      {term: "indifferent", plain: "Moves satisfaction neither way, so effort on it is wasted."},
+      {term: "reverse", plain: "Pleases some users and actively annoys others — notifications."},
+      {term: "cost-value prioritisation", plain: "Prefer high value at low cost among whatever survives the other filters."}
+    ],
+    connects: "That settles what to build. The next session follows a single requirement from elicitation through to the testing that certifies it."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L08",
+    courseId: "SPMS",
+    module: 7,
+    order: 8,
+    title: "Agile: values, principles, and the sweet spot",
+    objective: "Say what Agile changed about traditional development, and separate its values and principles from its practices.",
+    explainer: [
+      "Before about 2000, software was built in a straight line: requirements documented to the last detail, then high- and low-level design, then code, test, release, maintain. The waterfall model has real advantages and still runs some mission-critical systems, but it assumes the requirements can be known a year ahead. As software spread that assumption broke, and the complaint was always the same — a customer handed over requirements and saw nothing at all until the release.",
+      "The Agile Manifesto answered with four preferences: individuals and interactions over process and tools, working software over comprehensive documentation, customer collaboration, and responding to change. Behind them is a shift in what counts as success — from on time and within budget to value actually delivered, with visibility along the way, adaptability when the business moves, and the risk of a year-long misunderstanding cut. The target is three things at once: doing the right things, doing them right, and doing them fast. Any two without the third is a known failure.",
+      "Agile has three layers and confusing them is the standard mistake. The values are those four preferences. The principles follow from them — customer satisfaction first, changing requirements welcomed rather than resisted, working software delivered often, teams trusted and self-organising, quality shown at every step rather than tested in at the end. The practices are what you actually see: sprints, sprint planning, stand-ups, sprint reviews, retrospectives, and roles including the scrum master. Many teams adopt the practices and keep none of the values, which is how the ceremonies run perfectly while nothing about the delivery improves."
+    ],
+    worked: {
+      setup: "A team runs stand-ups, sprints and retrospectives on schedule, and still shows the customer nothing until release day.",
+      move: "Audit the values and principles rather than the ceremonies — specifically working software delivered often, and customer collaboration.",
+      because: "The practices are the visible layer and the easiest to adopt without the rest, which is the failure the course names directly. Stand-ups and retrospectives can run to the calendar while delivery stays a black box, and at that point the team has waterfall with meetings. Visibility along the way is the thing Agile was built to buy, so a customer who sees nothing until release is evidence the values were skipped, whatever the ceremonies say."
+    },
+    glossary: [
+      {term: "waterfall", plain: "The sequential model: requirements, design, code, test, release, maintain."},
+      {term: "Agile Manifesto", plain: "The four preferences Agile is built on, favouring people, working software, collaboration and change."},
+      {term: "working software", plain: "The deliverable Agile counts as progress, in preference to documentation about it."},
+      {term: "sprint planning", plain: "Deciding what a chunk of delivery contains, and who has the days for it."},
+      {term: "retrospectives", plain: "The after-the-fact team review, one of the practices rather than one of the values."},
+      {term: "scrum master", plain: "The practice-level role that keeps the team's process running."}
+    ],
+    connects: "Those are the values, the principles and the practices. The next session continues into the methodology in practice, and where it strains."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L10",
+    courseId: "SPMS",
+    module: 7,
+    order: 10,
+    title: "Product manager and product owner",
+    objective: "Tell the two team roles apart by what each is measured on, and say which decisions belong to which.",
+    explainer: [
+      "Product manager and product owner are different team roles rather than two ranks of one. The product manager owns what gets built and why: the product vision and its link to the corporate one, market success, customer value, pricing, segmentation and the business model. The orientation is outward — customers, founders, investors, sales, marketing, partners — and the horizon is the whole product lifecycle. A Netflix product manager works on subscriber growth, the recommendation engine and global content strategy.",
+      "The product owner is a Scrum role, answering how the team builds the increment well: the backlog, user stories, sprint prioritisation, clarifying requirements and accepting completed work. The orientation is inward, towards developers, quality assurance, the scrum master and designers, over one sprint and the scope of one team. On the same food-delivery product the manager says faster checkout should raise conversion; the owner turns that into sprint stories, acceptance criteria and an order of work.",
+      "They overlap on purpose — product vision, roadmap, release planning, personas and positioning are worked together — while business case realisation, portfolio decisions, buy-versus-build, pricing and sunset stay with the manager. Buy rather than build and there is no product owner role at all. In a startup one person often plays both, which is precisely why the line is worth holding. The analogy offered is a director, who decides what the film is without writing the script or scoring it, against a production manager, who gets the scenes shot on schedule."
+    ],
+    worked: {
+      setup: "A role is advertised as product management, and the work described is backlog grooming and sprint ceremonies.",
+      move: "Ask what the appraisal will actually measure at the end of the period.",
+      because: "The two titles are used interchangeably in the market, so the deliverable settles what the label cannot. Revenue, profitability, market share, user acquisition and customer satisfaction are product-management measures. Defect counts, on-time delivery and accepted user stories measure a product owner. Neither is the better job, but they are different careers, and the metric you are judged on is the honest description of which one you are taking."
+    },
+    glossary: [
+      {term: "product manager", plain: "Owns what is built and why: vision, market success, pricing, business outcomes."},
+      {term: "product owner", plain: "A Scrum role owning how the team builds the increment — backlog, stories, acceptance."},
+      {term: "backlog", plain: "The ordered list of work the product owner maintains for the team."},
+      {term: "user stories", plain: "Requirements written as the unit a sprint accepts and delivers."},
+      {term: "business outcomes", plain: "Revenue, adoption and market growth — what a product manager answers for, not outputs."}
+    ],
+    connects: "That is who decides what. The next session goes inside one of those functions, to the architecture decisions product management owns."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L11",
+    courseId: "SPMS",
+    module: 7,
+    order: 11,
+    title: "Orchestration: the architecture product management owns",
+    objective: "Split architecture into the parts product management defines and the parts technical architects decide.",
+    explainer: [
+      "Orchestration is the course's name for the functions along the right of the framework — development, marketing, sales and fulfilment, and support and delivery. In a mature company these are separate departments with their own leadership; in a startup the lines are blurred and early employees, product management among them, run several at once. The need does not disappear with the org chart, so somebody has to be taking each decision deliberately rather than by default.",
+      "Inside development, architecture divides by who is competent to decide. Technical architecture — load, uptime, data integrity, and therefore the database and the operating system — belongs to technical architects, and costs in proportion to how stringent its requirements are. Product management owns two others. Business architecture is the domain layer: which components are shared rather than rebuilt per module, and what the data model carries — a bank needs a permanent account number on its know-your-customer component, a hospital system needs a blood group.",
+      "Offering architecture is the second: which features reach whom, so a wearable's app is configured for a senior citizen's vital-data trending or an athlete's performance, at different prices. Underneath both sits the tailorability structure — a common core, interfaces that let products be assembled non-invasively into a whole product, and the three ways one product meets many needs: configuration by parameter, components that can be swapped, and bespoke code. Product management says what must be configurable; the architects decide how, including whether a third-party rule engine or an in-house one carries it."
+    ],
+    worked: {
+      setup: "An MVP's architecture is chosen on what the team already knows and can stand up fastest.",
+      move: "Check it against where the business intends to sell before anything is built on top of it.",
+      because: "Architecture is usually argued on the technology alone — most available, most innovative, cheapest, easiest to adopt — and every one of those can be right while the choice is still wrong. A platform built for one operating system loses a market running entirely on another, and a design that carries a hundred users will not carry a million. Where the direction is not in view at the start, the product outlives its architecture within months, and moving off the MVP becomes a redevelopment rather than a refactor."
+    },
+    glossary: [
+      {term: "orchestration", plain: "Running development, marketing, sales and fulfilment, and support as one system rather than silos."},
+      {term: "business architecture", plain: "The domain layer product management owns: shared components and what the data model holds."},
+      {term: "offering architecture", plain: "Which features reach which segment, and at what price — a product decision, not a technical one."},
+      {term: "technical architecture", plain: "Load, uptime, integrity and the stack that meets them — the architects' call."},
+      {term: "whole product", plain: "The assembled offering, including parts sourced or plugged in rather than built."}
+    ],
+    connects: "That is who owns which architecture. The next session follows the development function itself."
+  });
+
+lesson({
+    lectureId: "SPMS-M07-L06",
+    courseId: "SPMS",
+    module: 7,
+    order: 6,
+    title: "The product lifecycle, and what changes at each stage",
+    objective: "Place a product on the six lifecycle stages and say what the product manager's focus and stakeholders become there.",
+    explainer: [
+      "Product lifecycle management is the business view of a product from concept to retirement — cradle to grave — and it is a different framework from the evolution framework met earlier, which followed a startup through discovery and validation. This one asks what investment and what organisational activity a product needs at each point of its life. Six stages run along it: conception or creation, introduction, growth, maturity, decline, and withdrawal or sunset. Time is the x-axis and revenue or volume the y-axis, and the length of the curve varies enormously — a decade in some spaces, under a year in others, depending on the market, technology obsolescence and business practice.",
+      "What the framework buys is the knowledge that the product manager's role changes along it, and so do the organisational priorities. The course's analogy is a T20 innings: a batter plays the early overs differently from the middle overs and differently again from the slog overs. Most product managers have not lived a full lifecycle inside one company — they have worked early-stage products at some employers and late-stage ones at others — which is exactly why the stages are worth naming rather than absorbed by experience.",
+      "Conception and creation is where the focus is innovation: reimagining an existing process, knowing the current alternatives, and finding differentiation, because without it there is nothing to introduce. Positioning follows — articulating the innovation to potential target customers — and then investment. ChatGPT is the example: large language models existed and AI had been discussed for years, but 2022 turned it into something a retail user could benefit from directly, by putting an uncluttered experience over the model and positioning it as no harder than search."
+    ],
+    worked: {
+      setup: "A product in its introduction stage is measured on margin and cost efficiency, because that is how the company measures its established products and the finance team wants one comparable set of numbers.",
+      move: "Read which stage sets the measure. Introduction is about learning and adoption; efficiency and margin are maturity-stage concerns. Applying maturity discipline to an introduction-stage product strangles it before it has found the adoption the margin would eventually come from.",
+      because: "The stage decides what good management looks like, so a single measure applied across a portfolio is wrong for most of it. The error runs the other way too: introduction-stage optimism applied to a declining product keeps funding a curve that is going down, spending the capital that should be paying for whatever replaces it. Naming the stage first is what makes the decision between reinvestment and orderly withdrawal a decision rather than a habit."
+    },
+    glossary: [
+      {term: "product lifecycle management", plain: "The business view of a product from conception to sunset, and what each stage requires."},
+      {term: "conception", plain: "The first stage: innovation, differentiation, positioning and the investment case, before anything is introduced."},
+      {term: "maturity", plain: "The stage where the product holds its market share and management turns to efficiency and margin."},
+      {term: "decline", plain: "Where the product is losing relevance to its market, and reinvestment is weighed against withdrawal."},
+      {term: "sunset", plain: "Withdrawing the product deliberately at the end of its life, rather than letting it decay in place."}
+    ],
+    connects: "Those are the stages and the first of them. The next session works through the rest, from introduction to sunset."
   });
 
   lesson({
@@ -2775,26 +7087,33 @@
     courseId: "SPMS",
     module: 7,
     order: 1,
-    title: "Prioritisation: MoSCoW",
-    objective: "Sort a release bucket with must, should, could, and won't so the team agrees on what is out as well as what is in.",
+    title: "Prioritisation: MoSCoW and RICE",
+    objective: "Sort a release bucket with must, should, could, and won't, and rank what is left by reach, impact, confidence, and effort.",
     explainer: [
-      "The situation is a growing product with more demand than capacity. Different customers ask for features they find missing, investors ask for features that open new markets, and the sales team asks for something else again — all against a release bucket of only one, three, or six months. Deciding between them is the actual job of the product manager and the founder, and the course covers four prioritisation techniques across this session and the next.",
-      "The first is Moscow, which is an acronym rather than a capital city: must have, should have, could have, and won't have. Its purpose is to build a common understanding across the team about what definitely needs doing and what definitely does not. It works as a filtering criterion, closer to a triage than to a ranking, and part of its value is being able to state that some things will definitely not be done. That is why it fits agile and release planning, and why it matters most in an MVP, where scope must be controlled and time to market is important.",
-      "Ride-sharing makes the four levels concrete. Must have covers ride booking, payments, and GPS tracking — without those you simply do not have ride software. Should have is driver rating: it is what helps a customer choose between one ride or driver and another, valuable without being load-bearing. Could have is multi-stop ride planning. Uber launched as a point A to point B service, and adding a stop — dropping someone on the way with a small detour — is a genuine improvement the product ran without for years."
+      "A growing product has more demand than capacity: customers ask for what they find missing, investors for what opens new markets, sales for something else again — all against a release bucket of one, three, or six months. Choosing between them is the actual job.",
+      "MoSCoW is an acronym rather than a capital city: must have, should have, could have, and won't have. It builds a common understanding of what definitely needs doing and what definitely does not, working as a filtering criterion closer to triage than to ranking. Part of its value is being able to say some things will not be done at all. In ride-sharing, must have covers booking, payments, and GPS; should have is driver rating; could have is multi-stop planning, which Uber ran without for years.",
+      "MoSCoW sorts necessity, which leaves a gap: inside one bucket it cannot say which of two discretionary features to build first. RICE is the quantitative counterpart and scores four things — reach, how many users the change touches in a period; impact, how much it moves the outcome for each; confidence, how good the evidence behind those estimates is; and effort, what it costs to build. Reach, impact, and confidence multiply and effort divides, so a large claim resting on a guess is discounted by its own confidence rather than winning on ambition. Standard RICE suits B2C; B2B weights impact above reach, because a few accounts can outweigh a headcount.",
+      "Neither technique decides anything alone. Effort and confidence sit inside the score precisely so a cheap, well-evidenced, narrow improvement can outrank a speculative and expensive one — and a figure built from four estimates is only as good as its assumptions. The score is an argument you can inspect, not a verdict."
     ],
     worked: {
-      setup: "Customers, investors, and sales each want different features, and the release bucket is three months.",
-      move: "Run the four levels and make the won't-have list explicit, not just the must-have list.",
-      because: "The technique is described as a filtering criterion, like a triage, and filtering only works in both directions. A must-have list on its own leaves everything else implicitly negotiable, so the same requests return at every planning cycle. Naming what will definitely not be done is what makes scope control real — which is exactly what an MVP needs when time to market matters."
+      setup: "Two discretionary features differ in reach, likely impact, evidence quality, and engineering effort, and a legal capability is non-negotiable.",
+      move: "Mark the legal capability Must under MoSCoW, then score only the discretionary pair with RICE — and review the assumptions behind the confidence figure before acting on the ranking.",
+      because: "The two techniques answer different questions. MoSCoW filters on necessity, so the legal item never competes on value at all. RICE then compares what is genuinely optional, and because confidence divides ambition down, a high claimed impact backed by weak evidence loses to a smaller change that is actually known to work. What the score does not do is remove the need to examine how it was produced."
     },
     glossary: [
       {term: "must have", plain: "Capabilities without which the product does not function at all — booking, payments, GPS."},
       {term: "should have", plain: "Valuable but not load-bearing, like driver ratings that help a customer choose."},
       {term: "could have", plain: "Real improvements the product can ship without, like multi-stop planning."},
       {term: "won't have", plain: "Explicitly excluded this release — the half of the filter that makes scope control real."},
+      {term: "RICE", plain: "A quantitative ranking: reach times impact times confidence, divided by effort."},
+      {term: "reach", plain: "How many users a change touches in a given period."},
+      {term: "impact", plain: "How much the change moves the outcome for each user it reaches."},
+      {term: "confidence", plain: "How good the evidence behind the reach and impact estimates actually is."},
+      {term: "effort", plain: "What the change costs to build — the divisor, so cheap work ranks higher."},
+      {term: "weighted RICE", plain: "The B2B variant, which weights impact above reach because accounts differ in size."},
       {term: "release planning", plain: "Deciding what fits in a fixed release window of one, three, or six months."}
     ],
-    connects: "That is the first technique. The next session adds three more and compares when each one fits."
+    connects: "MoSCoW filters and RICE ranks. The next session adds the two techniques that judge a feature by how customers react to it and what it costs to deliver."
   });
 
   lesson({
@@ -2823,28 +7142,116 @@
     connects: "That is the shape of a roadmap. The next session continues into how one is built and kept current."
   });
 
+lesson({
+    lectureId: "SPMS-M07-L05",
+    courseId: "SPMS",
+    module: 7,
+    order: 5,
+    title: "Roadmaps: horizons, formats, and what they commit you to",
+    objective: "Place a roadmap between vision and backlog by its planning horizon, choose a format for the context, and name the commitment an external roadmap creates.",
+    explainer: [
+      "A roadmap is a statement of intent about what the product is trying to achieve over time. It carries a timescale but not timelines, and it is not a release plan. Four planning horizons sit in order: the product vision aligns with the corporate vision and is a long-term aspiration; strategy is how you intend to realise it; the roadmap is narrower, naming markets, customers, features and partners over roughly one to five years; and the backlog is detailed implementation over days or weeks. The horizons are contextual, and applying one context's timescale to another is the first mistake.",
+      "The second is feature orientation: a roadmap works on themes and outcomes, not a feature list. Formats evolved with the business model — on-premise licensing produced fixed-time roadmaps because customers had to plan deployments, SaaS allows a rolling roadmap giving a 6, 12 or 24 month view at any moment, and the AI era pushes toward adaptive capability roadmaps. The classic timeline roadmap still earns its place in enterprise SaaS, where sequencing lets partners, budgets and recruitment align behind it; its costs are rigidity and feature detail. A now, next, later roadmap trades precision for flexibility, which suits a startup that cannot promise five years.",
+      "Whatever the format, four properties have to hold: a single version of truth that is current, well-founded on company strategy, credible, and explicitly stated as iterative and evolving. Field staff working from an old roadmap is a real hazard. Product management owns it, validated by an interdepartmental team, with different versions for different stakeholders and any customer commitments documented. And legal implications matter, because a roadmap shared outside is communicated to the market — disclaimers exist so that it does not come back and bite you."
+    ],
+    worked: {
+      setup: "A team wants to share its internal quarterly roadmap with a large prospect to win the deal. The document lists features against quarters, and the features are genuine intentions the team expects to deliver.",
+      move: "Change what is shared before deciding whether to share it. An internal date is an intention; the same date in a customer's hands can become a contractual commitment. Produce a stakeholder version — themes and outcomes rather than features against quarters — carry the disclaimer that it is iterative and evolving, and document whatever commitment is actually made.",
+      because: "The roadmap is a communication tool, so the audience changes the artefact rather than just its distribution. Feature-and-date detail is what makes an internal roadmap useful for sequencing and exactly what makes an external one dangerous. Refusing to share anything loses the deal; sharing the internal document creates obligations nobody agreed to, and the version for stakeholders is what avoids both."
+    },
+    glossary: [
+      {term: "product roadmap", plain: "A statement of intent over time — a timescale, not timelines, and not a release plan."},
+      {term: "planning horizons", plain: "Vision, strategy, roadmap, backlog — four scopes running from a decade down to days."},
+      {term: "rolling roadmap", plain: "A view that always extends the same distance ahead — 6, 12 or 24 months — rather than to a fixed end date."},
+      {term: "timeline roadmap", plain: "The quarterly, sequenced format that lets partners, budgets and hiring align; rigid, and heavy on feature detail."},
+      {term: "single version of truth", plain: "One current roadmap everyone communicates from, so nobody is quoting a superseded one."}
+    ],
+    connects: "That is the plan and what it commits you to. The next session takes the longer view: how a product is managed differently at each stage of its life."
+  });
+
+lesson({
+    lectureId: "SPMS-M08-L01",
+    courseId: "SPMS",
+    module: 8,
+    order: 1,
+    title: "Orchestrating with sales and fulfilment",
+    objective: "Name where product management has to sit inside the sales cycle, and say why the work exists in a startup that has no sales function yet.",
+    explainer: [
+      "Orchestration is coordination across functions that already exist, and it stays necessary in a mature organisation precisely because those functions are mature and separate. In a startup the departments have not formed, but the tasks do not disappear — so product management and the founders carry them until someone else can. Sales and fulfilment breaks into four activities: sales planning, customer relationship management, operational sales, and operational fulfilment through to collection. The emphasis is B2B, where pursuit cycles are long; in B2C much more of this weight sits with marketing.",
+      "Customer relationship management here means the relationship, not the software. It starts at the prospect stage — understanding what a customer wants in their own market — and continues as long as they run their business on your product, through ongoing engagement and systematic communication. Product value is too detailed to leave to salespeople alone, which is why product management participates directly: tailoring to the account, since a community bank's challenges differ from a large enterprise's. Knowledge management is the corporate memory behind it — what was contractually committed, what has already shipped, what is still owed and in which release.",
+      "The same logic puts product management into the deal itself: understanding why discounts are being given below minimum price levels, handling product-specific commitments on measurements such as uptime, joining pre-sales meetings selectively in new markets, and being present at final negotiation — sometimes to say no, because a company that agrees to build everything a customer asks for reads as immature and loses the deal it was trying to win. Longer term it means flagging the domain skill gaps a new module will need in the sales team, and aligning on what both sides count as progress."
+    ],
+    worked: {
+      setup: "The sales team sets a country penetration strategy: a dozen new markets this year. The product is stable and selling well at home, so the plan is treated as a sales exercise with no product implication.",
+      move: "Test product fit market by market before the strategy is committed. New countries differ in business processes, not only language, so the questions are whether the product fits that market's standard customer, whether local partners can cover the gaps until a release closes them, and whether customisation is warranted. Market readiness, product readiness and organisation readiness all have to hold.",
+      because: "A sales plan that outruns product fit does not fail quietly — it produces mis-selling, and mis-selling produces legal exposure later. Local partners or consultants exist to check that what a customer is asking for is what you understood, which is exactly the gap a familiar-sounding requirement hides. Sales is the tip of the arrow and the first contact a prospect has, which is why equipping it is a product management responsibility rather than a courtesy."
+    },
+    glossary: [
+      {term: "orchestration", plain: "Coordinating across functions — and, in a startup, carrying their tasks until the functions exist."},
+      {term: "customer relationship management", plain: "The engagement itself, from prospect onward, rather than the software that records it."},
+      {term: "knowledge management", plain: "The corporate memory: what was committed, what shipped, what is still owed and when."},
+      {term: "operational fulfilment", plain: "Completing the sales cycle through to collection of the money."},
+      {term: "product readiness", plain: "Whether the product fits a market's standard customer — checked with market and organisation readiness before entering."}
+    ],
+    connects: "That is the front of the chain. The next session follows the customer past the sale, into delivery and support."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L08",
+    courseId: "SPMS",
+    module: 8,
+    order: 8,
+    title: "Market analysis: the analysts, the quadrant, and the hype cycle",
+    objective: "Read a Forrester Wave, a Magic Quadrant and a Hype Cycle for what each actually claims, and choose where in a technology's curve to enter.",
+    explainer: [
+      "Market analysis sits in the strategic management column and is a core product management responsibility, tracked most closely at growth stage. Its sources are the industry analysts — Gartner, Forrester, IDC, ISV World, Statista — plus internal and secondary research, and the niche analysts covering one industry. They matter twice over, because they are also what B2B customers rely on when deciding whether to buy, so being visible or invisible changes how the ecosystem treats you. ISV World tracks more than five million technology companies from over a thousand sources each, which feeds the buy, align or build decision.",
+      "Two instruments get cited constantly and answer different questions. A Forrester Wave scores strategy against current offering — is the roadmap robust and credible, and are you actually delivering on it — across more than a hundred parameters, ranking players as leaders, strong performers and contenders. A Magic Quadrant plots completeness of vision against ability to deliver, sorting vendors into leaders, challengers, visionaries and niche players; a visionary has the vision and cannot execute on it yet. Both are positional. They tell you who is where now.",
+      "A Hype Cycle is temporal instead. A technology leaves an innovation trigger and climbs — first-generation products, high prices, heavy customisation, mass media hype before anyone discusses return on investment — then falls as negative press begins and suppliers consolidate, into the trough of disillusionment where under five per cent have adopted. Second-generation products and emerging best practices carry it up the slope of enlightenment to a plateau of productivity at twenty to thirty per cent adoption. Not every technology completes the loop and the speeds differ wildly: AI has been going round it for thirty years, while NFC finished and became the tap-and-go utility."
+    ],
+    worked: {
+      setup: "A small startup with limited runway is deciding whether to build on a technology that is currently at the top of the hype.",
+      move: "Match the entry point to how long you can afford to stay invested, not to where the excitement is.",
+      because: "A Hype Cycle answers when a category is, not who is winning, and there is no correct entry point — only one that fits your balance sheet. A Tesla, Amazon or Meta can enter at the innovation trigger and wait out the trough for eight or ten years. A startup whose cash runs out in weeks cannot, because the trough of disillusionment is precisely where adoption sits under five per cent while negative press begins and suppliers consolidate. Reading a Magic Quadrant instead would answer a different question altogether."
+    },
+    glossary: [
+      {term: "magic quadrant", plain: "Completeness of vision against ability to deliver: leaders, challengers, visionaries, niche players."},
+      {term: "hype cycle", plain: "A technology's path over time, not a ranking of who is winning."},
+      {term: "innovation trigger", plain: "Where the curve starts — R&D and first funding, before any product."},
+      {term: "trough of disillusionment", plain: "Negative press, supplier consolidation, and under five per cent adoption."},
+      {term: "plateau of productivity", plain: "Mainstream at twenty to thirty per cent adoption, delivering predictably."},
+      {term: "perspective planning", plain: "Reading how the shape of things will change, to time acquisitions and bets."}
+    ],
+    connects: "That is the market read from outside. The next session assembles the whole framework for a startup."
+  });
+
   lesson({
     lectureId: "SPMS-M08-L03",
     courseId: "SPMS",
     module: 8,
     order: 3,
     title: "Metrics, performance, and risk",
-    objective: "Choose startup-appropriate metrics across the four types, and use them to reduce uncertainty rather than to report performance.",
+    objective: "Choose startup-appropriate metrics across the four types, tell an actionable metric from a vanity one, and use both to reduce uncertainty rather than to report performance.",
     explainer: [
       "Risk management matters more in a startup than in a mature company, because the business is still evolving and the standard performance measures may not be ready yet — top line, bottom line, and net promoter score all assume a steadier state than an early-stage product has. The fundamental difference is the level of uncertainty. A startup does not yet know whether customers truly want the product, whether the business model is scalable, whether acquisition costs are sustainable, or whether the product can generate long-term profitability. Those being open is why performance and risk management bear directly on survival.",
-      "That reframes what metrics are for. They exist to reduce uncertainty as far as it can be reduced, to improve decision-making with whatever information is available on a dynamic basis, to identify risks early where that is possible, and to allocate resources smartly. This is a different purpose from reporting performance upward, and it changes which numbers are worth collecting in the first place.",
-      "Four types are worth measuring in a startup product context: business and financial metrics, product metrics, customer metrics, and marketing and visibility metrics. Which business metrics apply depends on the stage you are at — recurring revenue measured annually or monthly, average revenue per user, customer lifetime value, gross margin as the measure of profitability efficiency, and operating profitability once below-the-line costs are accounted for."
+      "That reframes what metrics are for. They exist to reduce uncertainty as far as it can be reduced, to improve decisions with whatever information is available, to identify risks early, and to allocate resources smartly. That is a different purpose from reporting performance upward, and it changes which numbers are worth collecting at all.",
+      "Four types are worth measuring in a startup: business and financial, product, customer, and marketing and visibility. Which business metrics apply depends on stage — recurring revenue annual or monthly, average revenue per user, customer lifetime value, and gross margin as the measure of profitability efficiency.",
+      "Within every type the same split appears, and it is the distinction worth carrying into the exam. A vanity metric looks impressive and tells you nothing you can act on — app downloads, units shipped, notifications sent. They rise with spending and never fall, which is exactly why they are comfortable to report. An actionable metric ties to behaviour reflecting core value: daily active users, response rate to a reminder, repeat purchase, activation in the first session. The test is not whether a number is large but whether a change in it would change what you do next. Downloads that never open are evidence of a campaign, not of a product."
     ],
     worked: {
-      setup: "An early-stage product has no meaningful net promoter score, and its bottom line is not yet informative.",
-      move: "Do not wait for the mature metrics to become available. Pick from the four types according to which open question each one closes.",
-      because: "What distinguishes a startup is uncertainty, not scale. The useful metric is the one that answers whether customers truly want the product, whether the model is scalable, or whether acquisition costs are sustainable. Since metrics here exist to reduce uncertainty and surface risk early rather than to report performance, a number that is easy to produce but answers nothing is worth less than a rougher one that closes an open question."
+      setup: "An early-stage product reports two hundred thousand downloads and has no meaningful net promoter score.",
+      move: "Treat the download figure as a vanity metric and go looking for an actionable one — how many of those users returned on day seven, and how many completed the core action at all.",
+      because: "What distinguishes a startup is uncertainty, not scale. Downloads rise with marketing spend and cannot fall, so no decision follows from them; retention and activation can move in both directions and therefore carry information. Since metrics here exist to reduce uncertainty and surface risk early rather than to report performance, a number that is easy to produce but answers nothing is worth less than a rougher one that closes an open question."
     },
     glossary: [
       {term: "average revenue per user", plain: "Revenue divided across the user base — ARPU, a stage-dependent business metric."},
       {term: "customer lifetime value", plain: "What a customer is worth across the whole relationship, not one transaction."},
       {term: "gross margin", plain: "The measure of profitability efficiency before below-the-line costs."},
-      {term: "product metrics", plain: "One of the four types, measuring the product itself rather than the business around it."}
+      {term: "product metrics", plain: "One of the four types, measuring the product itself rather than the business around it."},
+      {term: "vanity metric", plain: "A number that looks impressive, rises with spend, and changes no decision — downloads, units sold."},
+      {term: "actionable metric", plain: "A number tied to behaviour reflecting core value, which can move either way — daily actives, repeat use."},
+      {term: "AARRR", plain: "Acquisition, activation, retention, revenue, referral — the funnel frame for where the business loses people."},
+      {term: "HEART framework", plain: "Happiness, engagement, adoption, retention, task success — the quality of the experience."},
+      {term: "north star metric", plain: "One number expressing core customer value, used to align teams."}
     ],
     connects: "Metrics manage the risks you can count. The next session turns to the legal exposures you cannot."
   });
@@ -2871,9 +7278,594 @@
       {term: "CCPA", plain: "The US state law covered here, alongside category regimes like HIPAA for health data."},
       {term: "DPDP", plain: "India's data protection legislation, the third regime a product selling here must meet."},
       {term: "right to be forgotten", plain: "An individual's ability to require that data held about them be erased."},
-      {term: "data protection by design", plain: "Protection built in from the outset, never something a customer has to request."}
+      {term: "data protection by design", plain: "Protection built in from the outset, never something a customer has to request."},
+      {term: "data fiduciary", plain: "The party deciding why and how personal data is processed, and answerable for it."}
     ],
     connects: "That is the legal floor the product stands on. The next session steps back up to strategic management."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L02",
+    courseId: "SPMS",
+    module: 6,
+    order: 2,
+    title: "Customer insights: the story behind the data",
+    objective: "Turn an observation into an insight using interviews, usage data and A/B tests, rather than building what customers ask for.",
+    explainer: [
+      "On a project one customer states the requirement — this font, this field, this screen. A product has no such customer, so you work from the segment you serve and have to get deeper than what anyone says. Ford's buyers asked for faster horses; what they wanted was to reach the same place in a third of the time. Data is the raw fact and the insight is the story behind it: five minutes on onboarding is data, users are confused by onboarding is the insight. Feature usage dropped means the feature does not fit the workflow; low retention means the product never created a habit.",
+      "Three sources produce it. A customer interview covers current and prospective users and works by observing rather than asking — you are there to learn what the problem was and how they handled it before you existed, not to validate a design you already hold. Slack came from exactly that: communication friction, email inefficiency, fragmented collaboration, none of it named as a missing product. Product usage analysis reads drop-offs, abandonment, repeat usage and long task times. A/B testing compares two variants, and the winner can be split again.",
+      "What you look for is the same across sources: pain points, workflows, frustrations, motivations, alternatives, aspirations, decision behaviour. In SaaS the support log is richest — how-to questions mean the product is not intuitive, feature requests mean it is incomplete, pleas to simplify mean it costs too much effort. AI products add trust. OpenAI reads prompt behaviour and hallucination complaints into model tuning and roadmap, because a hobbyist tolerates a wrong answer where a researcher does not, enterprises need explainability rather than probability, and latency nobody notices at home is unacceptable in a mission-critical system."
+    ],
+    worked: {
+      setup: "Usage data shows 40% of users abandoning onboarding at the step that asks for a phone number.",
+      move: "Treat the 40% as data, establish why by observing users, then run the two variants — with the number and without — as an A/B test.",
+      because: "The figure alone supports more than one story: the field may be intrusive, or it may simply be where a slow form finally exhausts people. Observation produces the insight and the A/B test then measures whether removing the field actually changes behaviour instead of assuming it. Going straight from the drop-off to deleting the field is Ford's faster horses running the other way — acting on what the data appears to say without establishing what produced it."
+    },
+    glossary: [
+      {term: "customer insight", plain: "The story behind an observation, as against the observation itself."},
+      {term: "data", plain: "A raw fact, such as time on a screen or a drop-off percentage."},
+      {term: "insight", plain: "The explanation of why that fact is what it is."},
+      {term: "customer interview", plain: "Observing a current or prospective user's problem and workarounds, not validating your design."},
+      {term: "product usage analysis", plain: "Reading drop-offs, abandonment, repeat usage and task times from the product itself."},
+      {term: "A/B testing", plain: "Comparing two variants to see which performs better; the winner can be split again."}
+    ],
+    connects: "That is how you read the market you are planning for. The next session sorts products into the four scenarios that decide how the planning is done."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L03",
+    courseId: "SPMS",
+    module: 6,
+    order: 3,
+    title: "Planning scenarios: the two the vendor controls",
+    objective: "Place a product on the ISPMA two-by-two, and run powerboat or speedboat planning when the vendor owns the runtime.",
+    explainer: [
+      "ISPMA sorts product planning onto a two-by-two, and the axes are who controls the production environment and whether the product is new or evolved. Vendor-controlled means you own the runtime and the installation, as in SaaS or cloud. Customer-controlled means they do — and a virtual private cloud the customer holds access control over counts as customer-controlled despite being cloud. A new product carries no install base and so has room to experiment; an evolved one is mature and scaling. The four cells are powerboat, speedboat, icebreaker and cruise ship.",
+      "A powerboat is a new product in a vendor-controlled environment: an early-stage startup, MVP-focused, uncertain about requirements, customers and value alike. It prototypes extensively, experiments frequently and pivots. Khata Book began as ledger management for small merchants and had to validate vernacular interfaces across Gujarati, Marathi, Tamil and Telugu while integrating merchant workflows. The goal is to define the MVP, and the planning elements follow: a very flexible roadmap, releases measured in weeks or days, emerging rather than fixed requirements, experiment-driven decisions, qualitative insight.",
+      "A speedboat is an evolved product, still vendor-controlled. Product-market fit exists and the job is scaling, so the question shifts from what should we build to how do we scale and optimise. A/B testing and funnel optimization replace the conversation you can no longer have with thousands of customers. Swiggy runs delivery analytics, order patterns, cohort behaviour and location intelligence, which is why a central business district at lunch and a distant suburb get different promises. The elements: continuous releases, very heavy data use, real-time feedback, a dynamic roadmap, high automation."
+    ],
+    worked: {
+      setup: "A scaling SaaS product with a few thousand customers adds fifty a week, and still sets its roadmap by ringing customers to ask what to build next.",
+      move: "Move to speedboat planning — decide from analytics and A/B tests, and release continuously rather than announcing each change.",
+      because: "Asking is powerboat behaviour and it suits a product whose requirements are still emerging and whose insight is necessarily qualitative. Once product-market fit exists the constraint changes: you cannot consult thousands of customers per release, and because the vendor holds the runtime the releases can be small, automated and frequent instead. The question itself moves with the scenario — a powerboat is deciding what to build, a speedboat is deciding how to scale and optimise what it has."
+    },
+    glossary: [
+      {term: "product planning scenarios", plain: "The ISPMA two-by-two: who controls the runtime, against a new or evolved product."},
+      {term: "vendor-controlled", plain: "The vendor owns the runtime and installation, as in SaaS or cloud."},
+      {term: "powerboat", plain: "A new product the vendor controls — MVP-focused, experiment-driven, rapid releases."},
+      {term: "speedboat", plain: "An evolved product the vendor controls — scaling, analytics-led, continuous releases."},
+      {term: "product-led growth", plain: "Growth driven by the product's own usage and virality, which the speedboat suits."},
+      {term: "funnel optimization", plain: "Tuning the path customers take through the product, using the data it produces."}
+    ],
+    connects: "Those are the two scenarios the vendor controls. The next session takes the two the customer does."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L04",
+    courseId: "SPMS",
+    module: 6,
+    order: 4,
+    title: "Planning scenarios: the two the customer controls",
+    objective: "Plan a new or a mature product into environments you do not control, and generalise past the customer in front of you.",
+    explainer: [
+      "An icebreaker is a new product in a customer-controlled environment, which in practice means B2B and customer zero. Postman began with API testing and generalised into collaboration and governance across an enterprise API suite. The defining difficulty is drawing a generic inference from one specific instance: an API that works for Paytm and fails for PhonePe is finished. Customer environments vary, deployment cycles run longer, workflow analysis goes deeper, and requirements engineering is broader than in anything the vendor controls.",
+      "Its planning elements follow from that. Customer collaboration is very high, because no survey tells you what sits inside a customer's production environment. Release frequency is only moderate, since each customer has to test and integrate. Requirements engineering is critical and is not data-driven — you elicit and validate with each customer in turn. Customization pressure is high and costs twice: an architecture that lets customizations exist at all, and the argument for why a request is custom rather than part of the standard product. Think a thousand customers while building for the first.",
+      "A cruise ship is the evolved product in a customer-controlled environment — a mature enterprise platform with a large global install base, low release frequency, and heavy interoperability demands, as Oracle's database has to run across Unix and mainframes alike. Risk tolerance is extremely low and stability focus extremely high, governance is strong, and backward compatibility is critical, so what works in version 10 works in 11. Finacle started as an icebreaker for one Indian bank in the nineties and now runs in over a hundred countries across six continents."
+    ],
+    worked: {
+      setup: "An enterprise customer asks for a workflow no other customer has requested.",
+      move: "Build it as a customization rather than a product feature, say so plainly, and make sure the architecture allows customizations at all.",
+      because: "The icebreaker's defining constraint is that you build for customer zero and must serve a thousand, so absorbing one customer's specific workflow into the product is how building for one customer becomes a disaster. That costs two things and both are real work: the customization architecture itself, and the conversation in which you convince a customer their requirement sits outside the standard product, or is built for them at a price."
+    },
+    glossary: [
+      {term: "icebreaker", plain: "A new product in a customer-controlled environment — B2B, customer zero, long cycles."},
+      {term: "cruise ship", plain: "A mature product in a customer-controlled environment — stability first, rare releases."},
+      {term: "COTS", plain: "Commercially off-the-shelf: the shrink-wrapped standard product, as against a customization."},
+      {term: "customization pressure", plain: "Each customer wanting their own scenario served by the standard product."},
+      {term: "install base", plain: "The customers already running the product, whose environments constrain every release."},
+      {term: "backward compatibility", plain: "What works in version n keeps working in n+1 — critical where customers run the software themselves."}
+    ],
+    connects: "That completes the four planning scenarios. The next session turns from planning the product to what a requirement actually is."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L06",
+    courseId: "SPMS",
+    module: 6,
+    order: 6,
+    title: "Three classes of requirement, and the qualities each hides",
+    objective: "Sort a requirement into functional, quality or constraint, and state a quality requirement so it can actually be verified.",
+    explainer: [
+      "Requirements segregate three ways, not two. A functional requirement is an action under a condition given an input — enter the account and it is accepted, transfer money and the balance updates. A quality requirement, also called non-functional, is a property the product must possess. A constraint is the third and least obvious: a requirement that existing functionality is deliberately withheld, as a child lock disables menu options once a date of birth is known. Without constraints the range of realisable alternatives is X; with them it is X minus delta X.",
+      "The user-facing qualities are routinely confused with one another. Availability is how much of the time the product is up; reliability is how long it runs without failure, and is what warranties are given on. Interoperability is how easily it exchanges data or services with other systems, which is why financial products speak SFMS or ISO 853. Robustness is continuing to operate correctly given invalid inputs, faults in connected systems or unexpected conditions — a camera rated for 0 to 50 degrees is not robust at minus thirty. Usability is not prettiness: it is the effort needed to prepare input, operate, and interpret output.",
+      "A second set faces the developer. Scalability is the range of workloads still served with satisfying performance; maintainability is whether someone who did not write the code can locate a fault, which decides your service levels; portability is moving between operating systems or environments, App Store to Play Store, and is not interoperability; reusability is writing KYC or date validation once; testability is whether you can verify at all. What makes any of them usable is a measurable form — a million concurrent users, under an hour of downtime a month, parameters editable only with super user rights."
+    ],
+    worked: {
+      setup: "A requirement arrives as: the app must also work on Android, and must talk to the bank's core system.",
+      move: "Split it. Running on Android is portability. Exchanging data with the core system is interoperability.",
+      because: "The lecture separates these deliberately and they are met by different work. Portability is migrating the product from one operating system or environment to another; interoperability is handshaking with another system, which is why financial messaging carries standards like SFMS and ISO 853 at all. Collapsed into one line, one of the two gets designed and tested and the other is discovered in production — and since both are quality requirements, neither ever shows up as a missing feature."
+    },
+    glossary: [
+      {term: "quality requirement", plain: "A property the product must possess, also called non-functional."},
+      {term: "constraint", plain: "A requirement that an existing capability is deliberately not available."},
+      {term: "robustness", plain: "Operating correctly given invalid inputs, faults in connected systems, or unexpected conditions."},
+      {term: "reliability", plain: "How long the product runs without failure — what warranties cover, unlike availability."},
+      {term: "portability", plain: "Moving the product between operating systems or environments — not interoperability."},
+      {term: "interoperability", plain: "Exchanging data or services with other systems, which is why messaging standards exist."}
+    ],
+    connects: "That is what a requirement can be. The next session is where they come from."
+  });
+
+  lesson({
+    lectureId: "SPMS-M06-L07",
+    courseId: "SPMS",
+    module: 6,
+    order: 7,
+    title: "Where requirements come from, and the translation they need",
+    objective: "Work the product's sources of requirement, and convert what each sends you into one standard-product requirement set.",
+    explainer: [
+      "In services a client states the requirement: this title, this font, these fields. A product has no such client. A tailor making one shirt takes your measurements; the same tailor launching a jacket brand has to decide shoulder, waist and length for a market he must characterise himself. Sourcing requirements is that job, and it starts with the user group — everyone who uses the product or might. Uber has two: drivers and riders, each caring about accuracy, the information shown, its periodicity, and how much battery the thing consumes.",
+      "Customers are not users. In B2B the customer is the organisation and the users are personas — a bank holds a dozen, from teller and manager to investment advisor, credit authoriser and auditor — and the organisation states global quality and availability requirements the personas never would. Partners contribute integration and interface requirements under the whole product idea, while channel partners selling into the GCC ask for an Arabic interface, which runs right to left. Consultants implementing SAP at Procter & Gamble or Reliance bring what configuration keeps demanding across many sites.",
+      "The remaining sources each see one slice. Competitive analysis finds the table stakes — a QR code was once a wow feature and is now the absence that loses you the sale. Market research covers regulation such as HIPAA and how people actually consume. Development, sales, marketing, support and executive management follow, support being the granular one, your eyes and ears on delight and pain. None of them is trained to write requirements, so they arrive as a mail, a WhatsApp message, twenty pages or a screenshot. Generalising that into actionable, consistently styled requirements for a standard product is the competence."
+    ],
+    worked: {
+      setup: "In one week: a support log full of navigation complaints, a channel partner in the GCC asking for Arabic, and a sales note about a feature one prospect wants.",
+      move: "Read each for what its source can actually see, then generalise all three into one standard-product requirement set rather than three customer-shaped ones.",
+      because: "Sources differ in what they can articulate about technology, domain and market, and they arrive pain-point-oriented and goal-oriented rather than generalised. Support sees granular usage, a channel partner sees a market's local practice, sales sees one prospect. Acting on each in the shape it arrived produces a product assembled out of individual requests, which is why the translation into a consistent style, suitable for internal communication and oriented to a standard product, is the product layer's own work."
+    },
+    glossary: [
+      {term: "user group", plain: "Everyone who uses the product or could — for Uber, drivers and riders both."},
+      {term: "personas", plain: "The individual roles who use the product, as against the organisation that buys it."},
+      {term: "channel partners", plain: "Those selling or servicing the product in a market, who report its local requirements."},
+      {term: "table stakes", plain: "A commoditised feature whose absence loses the sale, regulation or no regulation."},
+      {term: "competitive analysis", plain: "Reading what competitors ship to find the table stakes and the gaps."},
+      {term: "market research", plain: "Regulation and consumption habits together — HIPAA on one side, how people actually use on the other."}
+    ],
+    connects: "Those are the sources, and none arrives ready to use. The next session is the chain a requirement travels once it is standardised."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L03",
+    courseId: "SPMS",
+    module: 7,
+    order: 3,
+    title: "The requirements lifecycle, and the two questions testing answers",
+    objective: "Walk a requirement from elicitation to validation, and separate building the product right from building the right product.",
+    explainer: [
+      "The path runs elicitation, triage, analysis, selection, validation. Elicitation and triage together form the requirements inquiry cycle, and it is a cycle because elicitation has no single structured method and no signal that it is finished — questionnaires, self-recording, observation, introspection, system archaeology to reverse-engineer an undocumented legacy system, and perspective-oriented reading of release notes and user documentation. The cycle asks two things: what is this requirement, and how could it be implemented. Under agile the second may still be settling during development; the first has to be answered before triage can decide anything.",
+      "Analysis produces a business case, written at product, release or requirement level. Its cost side is skill sets in person days, extra resources and licences, and the development risk engineering owns — touching a complex module without impact analysis manufactures bugs. Weigh volatility beside it: defects raised and fixed over the last six to twelve months, and how many customers actually asked. The benefit need not be revenue, because harm avoidance counts too — a feature you skip can leave you non-compliant and paying damages. Selection then crosses the dotted line, and not every specified requirement enters a release.",
+      "Validation is where a product differs from a project. On a project the customer signs acceptance; a product has no single customer, so product management plays that part with domain expertise, through reviews, inspections, simulations and prototyping. Underneath sit two different questions that sound alike. Verification asks whether we are building the product right, and answers in unit tests, integration, beta before general availability, regression and system retesting. Validation asks whether we are building the right product. A car can be perfectly roadworthy and still be driving to the wrong city."
+    ],
+    worked: {
+      setup: "A release passes unit, integration and regression testing with no defects outstanding.",
+      move: "Ask the second question too — is this the right product — and have product management sign the acceptance criteria, since no single customer can.",
+      because: "Verification and validation are used as synonyms and are not. Verification asks whether the product was built right, and a clean test run answers only that. Validation asks whether it should have been built at all, and that is the question a product organisation has to answer for itself: on a services project the customer accepts and signs off, and a product has no such customer to do it. Passing verification certifies the absence of defects, never the presence of value."
+    },
+    glossary: [
+      {term: "requirements inquiry cycle", plain: "Elicitation and triage run together and repeatedly, asking what a requirement is and how it could be built."},
+      {term: "system archaeology", plain: "Reverse-engineering an existing system to recover requirements nobody documented."},
+      {term: "business case", plain: "Cost, development risk and benefit for one requirement, release or product."},
+      {term: "harm avoidance", plain: "A benefit measured as the penalty escaped — non-compliance, damages, a lost customer."},
+      {term: "verification", plain: "Are we building the product right? Unit, integration, beta, regression and system tests."},
+      {term: "validation", plain: "Are we building the right product? Acceptance and usability against the need."}
+    ],
+    connects: "That certifies one requirement end to end. The next session puts the surviving list on a time axis as a roadmap."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L07",
+    courseId: "SPMS",
+    module: 7,
+    order: 7,
+    title: "Extending a product's life: evolution, SaaS and ecosystems",
+    objective: "Choose what product management should optimise at each lifecycle stage, and extend a mature product instead of enduring its decline.",
+    explainer: [
+      "A real product is never a single-version journey. Initial development is followed by evolution — more segments, more features — which extends life until the original demand saturates, and a product can branch into a new one where the underlying architecture carries over. Banks 2000 and Finacle share customer, account and transaction logic at the atomic level, and the enterprise version adds complexity rather than replacing it. Lifecycle thinking is an input to strategy rather than a label on a chart: it moves investment priorities, release frequency, go-to-market, pricing, customer acquisition and architecture.",
+      "So the question at each stage is what product management should optimise, not what it has to endure. Early, speed, with growth and revenue ahead of profitability. In growth, scalability. In maturity, profitability, retention, and technical debt — the code that no longer earns its keep and lengthens every cycle, which is what Twitter eventually had to refactor. The telemetry moves with the stage too: activation and onboarding at introduction, acquisition cost and active users in growth, churn and then expansion and lifetime value in maturity, retention and cross-selling in decline.",
+      "A cloud-native product breaks the curve altogether, because deployment is continuous rather than discrete and innovation, upgrade and monetisation run as one loop — Netflix reinvents against its own data. The strongest life extension is an ecosystem: Salesforce, SAP and Finacle became backbones other people build on, and that wins three ways at once, since customers avoid a migration every decade, partners get a niche without fighting the incumbent, and the core product outlives its own feature set. The classic failures mirror it — over-investing in decline, ignoring a platform shift as camera makers did, delaying the move to SaaS, and weak sunset planning."
+    ],
+    worked: {
+      setup: "A mature enterprise product is losing ground, and the proposal is to fund a large feature push to win new customers.",
+      move: "Weigh an ecosystem play before more features — open the platform so partners supply the complementary functionality.",
+      because: "Over-investing during decline is the first of the named lifecycle mistakes, and it assumes acquisition still answers to spending the way it did in growth. In maturity the working levers are retention, profitability and technical debt instead. Opening a platform extends life on three sides at once: the customer avoids a migration, the partner gets a niche without competing with the incumbent, and the core product keeps earning while others build the functionality it never will."
+    },
+    glossary: [
+      {term: "technical debt", plain: "Code that no longer earns its keep and lengthens every development cycle."},
+      {term: "telemetry", plain: "The data a product collects about its own use, and which measures matter changes by stage."},
+      {term: "cloud-native", plain: "Built for continuous deployment, so the lifecycle is a loop rather than a curve."},
+      {term: "ecosystem", plain: "Partners building complementary offerings on your product, which extends its life."},
+      {term: "sunset planning", plain: "Deciding in advance how a product ends, rather than assuming it runs for ever."}
+    ],
+    connects: "That is the whole arc of a product's life. The next session turns to how the work inside it is organised."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L09",
+    courseId: "SPMS",
+    module: 7,
+    order: 9,
+    title: "Scrum in practice, and what agile is not",
+    objective: "Run a sprint through its ceremonies, and tell real agility apart from performing the ceremonies.",
+    explainer: [
+      "Requirements reach development by one route. They arrive from anywhere, pass through product management to the product owner, and land in the product backlog. A sprint takes a manageable chunk of that into a sprint backlog, chosen on the release theme and on how clear the requirements already are. Sprints run to no more than four weeks and often much less, and the end date and the deliverables do not move once set — you go deeper into the detail during the sprint rather than settling it all beforehand.",
+      "The ceremonies are the events that keep the work visible. Every twenty-four hours a daily standup, facilitated by the scrum master, asks each person what they did, what they will do next, and what to continue, stop and start. The sprint review follows, then the retrospective on what worked and what did not, after which the finished work is handed over and the decision to ship is taken. Burndown charts carry the progress. The team runs seven to ten people, cross-functional, dedicated and self-organising, with autonomy over how it meets a commitment — and the team, not the individual, is the unit that commits.",
+      "The failure mode is treating the ceremonies as the point. Agile is not a silver bullet, not prescriptive, not undisciplined, and not on its own an answer to scaling, which is what SAFe exists for. It is not anti-architecture, anti-documentation or anti-planning, and it is not a reporting line — you do not work for the scrum master. DevOps carries the same instinct past development, collapsing the wall to operations so that last night's code is already in shippable shape. The product owner's job inside it is to give the team why and what, never how: no algorithms, no logic, no interface designs. The focus is agility, not being agile."
+    ],
+    worked: {
+      setup: "A team runs every ceremony on schedule and still ships late, with features nobody asked for.",
+      move: "Check whether the practices are producing agility — outcomes prioritised by value — rather than being performed on time.",
+      because: "Agile is explicitly not prescriptive, so running the ceremonies is not the same as being agile, and the symptoms here name their own cause: prioritisation by convention rather than by value, and progress counted as milestone outputs rather than outcomes. The product owner's contribution is why and what, and it fails in both directions — supplying how takes the decision away from the team, and supplying neither leaves them building without a reason. An empowered team is what delivers; the ceremonies exist to make that visible, not to stand in for it."
+    },
+    glossary: [
+      {term: "sprint", plain: "A fixed chunk of work, four weeks at most, whose end date and deliverables do not move."},
+      {term: "product backlog", plain: "Everything the product might do, held in one place and owned by the product owner."},
+      {term: "sprint backlog", plain: "The slice the team pulls from it for one sprint, chosen on theme and clarity."},
+      {term: "daily standup", plain: "The twenty-four-hour check on what was done, what is next, and what to start or stop."},
+      {term: "ceremonies", plain: "The scrum events — standup, review, retrospective — that make the work visible."},
+      {term: "DevOps", plain: "Collapsing the wall between development and operations so built code is shippable code."}
+    ],
+    connects: "That is the method and the roles that run it. The next session separates two of those roles that are routinely confused."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L12",
+    courseId: "SPMS",
+    module: 7,
+    order: 12,
+    title: "Product engineering: architecture, environment, execution, quality",
+    objective: "Influence the engineering decisions product management genuinely owns, without taking the how away from engineering.",
+    explainer: [
+      "The development column runs architecture, environment, execution, detailed requirements and quality. The founding myth is that product management decides what and engineering decides how; in practice the two are symbiotic, because business strategy drives product strategy and a poor engineering decision destroys scalability, reliability and eventually profitability — Twitter's scaling trouble cost it reliability and performance work it had not planned for. Product architecture sets the high-level structure: scalability, security, integrations, and the maintainability that service level agreements depend on.",
+      "Product management influences that through the business and offering architecture it does own. SaaS or on-premise, balancing compliance against convenience. How multitenancy walls one customer off from another. Where ecosystem partners sit upstream and downstream. And how much of a global product is common, localised or customised, which is the tailorability architecture. The development environment is the next decision and it is not incidental: source code control so only reviewed code reaches production, DevOps pipelines and CI/CD, and testing infrastructure with sandboxes where regulation demands them. Spotify's autonomous squads develop concurrently and still integrate.",
+      "Execution turns requirements into software through sprint planning, coding, integration, deployment and release management, and product management's part in it is orchestration — priorities, trade-offs, scope decisions and release sequencing. Detailed requirements engineering converts customer needs into features, user stories and acceptance criteria, and this is exactly where startups fail by building the wrong product correctly. Quality management then answers for reliability, performance, security, usability and compliance together. Cutting testing to get through the door is the standing temptation, and a failure in production costs trust, churn and reputation at once."
+    ],
+    worked: {
+      setup: "A startup is a week from launch and proposes to cut the remaining test cycle to hold the date.",
+      move: "Hold the quality gate, and treat reliability and customer trust as part of what is being shipped.",
+      because: "Cutting corners in testing is the named startup mistake, and its costs are not symmetrical with a week's delay. A production failure drops customer trust, raises churn and damages reputation together, and a security breach can do irreparable harm to the customer rather than merely to you. Quality management answers for reliability, performance, security, usability and compliance as one set, and none of those is recoverable after the fact by shipping a fix quickly."
+    },
+    glossary: [
+      {term: "product architecture", plain: "The high-level structure — scalability, security, integrations, maintainability."},
+      {term: "offering architecture", plain: "What product management specifies upfront, which shapes the technical architecture."},
+      {term: "tailorability", plain: "How much of a global product is common, localised, or customised per customer."},
+      {term: "CI/CD", plain: "Continuous integration and deployment — shortening the gap between building and shipping."},
+      {term: "acceptance criteria", plain: "What a feature must do to be judged complete, written beside the requirement."},
+      {term: "autonomous squads", plain: "Teams developing concurrently on one product and still integrating — Spotify's model."}
+    ],
+    connects: "That is the engineering product management shapes. The next session takes the one column held back from it — the experience a user actually meets."
+  });
+
+  lesson({
+    lectureId: "SPMS-M07-L13",
+    courseId: "SPMS",
+    module: 7,
+    order: 13,
+    title: "User experience, and what product management owns of it",
+    objective: "Run the UX design workflow, separate interface from experience, and orchestrate a specialist team without designing the screens.",
+    explainer: [
+      "Products succeed on experience independently of their feature count. WhatsApp arrived against established enterprise communication tools and won on the absence of clutter; BlackBerry had ubiquity, mail encryption and the keyboard, and lost on the overall experience. Customers do not remember an architecture — they remember whether it was easy, whether it was intuitive, whether it solved the problem, and they decide in seconds. The ISPMA definition is that user experience addresses every aspect of a user's interaction, shaping behaviour, emotions, perceptions, satisfaction, delight and finally trust, in that order.",
+      "User interface is what you see and user experience is what you feel: screens, buttons and colours against the whole journey; visual design against solving the problem. A beautiful banking app that takes ten screens to move money is good interface and poor experience. The workflow runs six steps. User research establishes who the users are and where they are — driving, gloved, in noise — and yields personas. Mood boards set emotional direction: premium or affordable, professional or playful. Wireframes lay out navigation and flow without beautification. A prototype makes it interactive. Usability tests observe whether people finish the task and where they struggle.",
+      "UX owns the experience and product management owns the business outcome, which makes the product manager's job orchestration rather than design. Insist that real user research happens rather than executive opinion. Translate its findings into requirements — abandonment after the form asks too much becomes a three-tap onboarding target. Prioritise UX debt, so a roadmap that keeps adding functionality does not leave a patchwork of inconsistent interfaces behind it. And measure the outcome: conversion, task completion, retention, satisfaction. Airbnb raised adoption by adding photographs of the properties, not by adding technology."
+    ],
+    worked: {
+      setup: "Research shows users abandoning onboarding where the form asks for more information. UX wants the field removed; product management says it is needed.",
+      move: "Decide it on whether the business genuinely cannot complete the transaction without that input — and if it can, the field goes.",
+      because: "This is the accountability conflict the lecture names, and it has a rule rather than a winner. Where the input is genuinely required to close the transaction, product management's requirement stands. Where it is not, the research decides, because the cost is measured and runs one way: onboarding abandonment is the difference between someone signing up and not. Translating the finding into a requirement — a three-tap target — is the product manager's job; drawing the replacement screen is not."
+    },
+    glossary: [
+      {term: "user experience", plain: "Every aspect of the interaction, shaping behaviour, emotion, perception, delight and trust."},
+      {term: "user interface", plain: "What the user sees — screens, buttons, colours. Not the same as the experience."},
+      {term: "mood boards", plain: "Visual and emotional direction: premium or affordable, professional or playful."},
+      {term: "wireframes", plain: "Low-fidelity layouts showing navigation, flow and inputs, without beautification."},
+      {term: "usability test", plain: "Watching whether a real user completes the task, and where they struggle."},
+      {term: "UX debt", plain: "Inconsistent interfaces accumulated as a roadmap adds functionality over time."}
+    ],
+    connects: "That closes the development side of the framework. The next module turns outward, to orchestrating with sales and fulfilment."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L02",
+    courseId: "SPMS",
+    module: 8,
+    order: 2,
+    title: "Delivery and support, and the feedback nobody else sees",
+    objective: "Plan the two delivery services and the three support tiers, and route what support learns back into the product.",
+    explainer: [
+      "The delivery column runs service planning and preparation, service execution, technical support and operations, and how much of each you need depends on whether the product is shrink-wrapped or has to be configured and tailored first. Delivery itself splits two ways. Product-related professional services fit a generic product to one customer's processes — a healthcare, retail or legal firm configuring Salesforce or SAP — through discovery, process mapping, recommended changes and sign-off, estimated in person days and money. Where the customer runs it on premise you also size their environment against their transaction and account volumes, which becomes their bill of material.",
+      "Support runs in tiers. A general help desk takes the first call and decides whether it is a training issue answerable from the material or needs configuration help. Level two is the technical team behind it. Level three is a genuine product bug, which goes to the maintenance or development team — and until it ships in a patch or release, the help desk still owes the customer a workaround. Two categories are then tracked apart, and the distinction is the one that matters: a trouble request says stated functionality is not working, while an enhancement request says the product works and something more is wanted.",
+      "That log is the product's most honest feedback and nobody else sees it. If a large share of calls ask how to use a feature, that is either a training gap or a product that is not intuitive, and both are roadmap inputs. Service planning has to follow the release, because a new version spikes the help desk from customers who have not read the manual — and a support desk is a fire brigade, idle until everything is alight and impossible to staff in a hurry. Across continents that means follow-the-sun rather than nine to five."
+    ],
+    worked: {
+      setup: "The help desk is carrying repeated requests to customise the same workflow, and each one bills well.",
+      move: "Take the pattern to product management before agreeing the next one, and ask whether it belongs in the mainstream product.",
+      because: "Service revenue is genuinely tempting, which is exactly why mature companies route customisation requests through product management rather than through delivery alone. A workflow that several customers keep paying to have rebuilt is a product requirement wearing a services invoice — billing hours each time while the product stays behind. The support and delivery log is the closest thing to unfiltered evidence of how the product behaves in production, which makes it a product management input and not only an operational one."
+    },
+    glossary: [
+      {term: "technical support", plain: "The tiered response to bugs and questions, as against configuring the product."},
+      {term: "trouble request", plain: "Stated functionality is not working."},
+      {term: "enhancement request", plain: "The product works and something more is wanted — a different queue entirely."},
+      {term: "workaround", plain: "What the help desk owes a customer until a level-three fix actually ships."},
+      {term: "service planning", plain: "Staffing support against release stability and customer installations, not against a flat average."},
+      {term: "follow-the-sun", plain: "Support handed between time zones so the desk is never closed."}
+    ],
+    connects: "That is the product in production and what it reports back. The next session turns that into the metrics and risks you manage by."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L04",
+    courseId: "SPMS",
+    module: 8,
+    order: 4,
+    title: "Legal exposure: contracts, SLAs, and the licence that can swallow your code",
+    objective: "Read the clauses that decide liability in a SaaS contract, and keep an open-source licence from forcing your own source open.",
+    explainer: [
+      "Startups fail on legal issues more often than on technology — weak contracts, intellectual property disputes, privacy violations, licensing mistakes, unclear ownership. A licence contract sets scope and transferability: who grants it, to whom, what rights, who keeps the source code, and the geographic and purpose limits, so a licence for banking in one country is not a licence for another sector elsewhere. Around it sit charges, liability and warranty, maintenance provisions, and the miscellaneous clauses that decide outcomes when things go wrong — termination for cause or convenience, dispute resolution and jurisdiction, governing law, severability.",
+      "A SaaS contract adds its own set: subscription term and renewal, usage limits, where the data resides, payment terms, data ownership, security obligations and the compliance regime. Two repay close reading. Limitation of liability caps what can be recovered — spend ten lakh on software, lose a crore when it malfunctions, and the cap decides which number you can claim, often one or two times fees paid. And the service level agreement is what enterprise adoption actually rests on: availability as an uptime percentage, and a critical response rate by severity with a time to restore. AWS answers a missed uptime with service credits.",
+      "Intellectual property is often the most valuable asset in a product business, and it comes in four grades — patent, trademark, copyright and trade secret — with the patent the most defensible. Hold it both ways: defensively so you are not infringing, offensively so you can act when someone infringes you. The trap is open source. A copyleft licence requires any derivative to remain open too, which is why it is called viral licensing — a few lines copied into a proprietary codebase can oblige you to publish the whole of it. That is not only legal risk: it surfaces in due diligence, and it can end an acquisition or send an investor away."
+    ],
+    worked: {
+      setup: "A developer copies a few lines from a copyleft-licensed project into a proprietary product.",
+      move: "Treat it as a licensing incident rather than a code-style question, and scan the codebase before the next release.",
+      because: "A copyleft licence requires any derivative work to remain open source, and the obligation attaches to the derivative as a whole rather than to the lines copied — which is exactly why it is called viral licensing. A handful of lines inside a million-line proprietary codebase can therefore oblige you to open all of it. The cost lands where it is hardest to absorb: an acquirer's due diligence looks for precisely this, and an open-source violation can end the acquisition or make an investor walk."
+    },
+    glossary: [
+      {term: "intellectual property", plain: "Protection over code, algorithms, designs, trademarks and content."},
+      {term: "trade secret", plain: "The fourth grade of IP, protected by keeping it secret rather than by registration."},
+      {term: "viral licensing", plain: "Copyleft's effect: a derivative of open code must itself stay open."},
+      {term: "service level agreement", plain: "Contracted availability and response times, with credits or penalties when missed."},
+      {term: "limitation of liability", plain: "The cap on recoverable loss, often one or two times fees paid."},
+      {term: "data residency", plain: "Which country the data physically sits in — a contract term and a compliance one."}
+    ],
+    connects: "That is the contract and the code. The next session takes the regime that governs a product whatever it signed."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L06",
+    courseId: "SPMS",
+    module: 8,
+    order: 6,
+    title: "Corporate strategy, and what product management owes it",
+    objective: "Feed product evidence into corporate strategy, and avoid the five mistakes that stall a scaling startup.",
+    explainer: [
+      "Three tracks have to advance together for a startup to become a mature company: product readiness, market readiness and organisational readiness. A great product against an organisation that cannot scale is a pity rather than a success. Corporate strategy is the activity of defining, planning, implementing and evaluating the organisation's direction — who are we, why do we exist, who would miss us if we stopped — and it belongs to the founders and corporate leadership. Their work is funding, which is not only when and how much but from whom and where the synergies lie; talent acquisition; organisation structure; stakeholder management; compliance; and building the departments themselves.",
+      "Product management participates in both directions, giving input and taking direction, because the product drives revenue growth, positioning, investment priorities and expansion decisions. Its distinctive contribution is being the customer in the room — pain points, market trends, competitive gaps — and the consequences reach well past features. Netflix's product leadership drove the move from DVD to streaming, the early bet on recommendations, and global content localisation. Adobe's turned a one-time licence into Creative Cloud subscriptions, which changed the corporate revenue model outright rather than the product alone.",
+      "It shapes organisational planning too, without doing the hiring: which competencies the roadmap will demand, how teams should be structured, which skills are arriving, which partners each geography needs. Five mistakes recur. Product and corporate strategy misaligned, one building for a hundred countries while the other goes deep in one. Hiring too early, which burns money and frustrates idle people into leaving. Ignoring compliance, which is close to fatal because corporate memory is long. Product managers operating as feature factories, disconnected and churning output. And over customization for revenue, where a cash-strapped team takes day-rate work until the product itself goes down the kitchen sink."
+    ],
+    worked: {
+      setup: "A newly funded startup wants to staff every function at once now that the money has arrived.",
+      move: "Sequence hiring against what the roadmap actually needs next, and use retainers where the need is not yet continuous.",
+      because: "Hiring too early is one of the named strategic mistakes and its cost is not only the burn rate. People brought in before there is work for them sit idle, grow frustrated and leave, so the money buys attrition rather than capability. The real question is which competencies the next six to twenty-four months genuinely require — and that is one product management can answer better than anyone else in the room, because it is the function that already knows where the market is taking the product."
+    },
+    glossary: [
+      {term: "corporate strategy", plain: "Defining, planning, implementing and evaluating the organisation's direction."},
+      {term: "stakeholder management", plain: "Investors, government, influencers and partners — the external side of the founders' job."},
+      {term: "compliance management", plain: "Binary rather than gradual: you are compliant or you are not."},
+      {term: "feature factories", plain: "Product managers churning output while disconnected from strategy."},
+      {term: "over customization", plain: "Taking day-rate custom work until the product itself stops being built."}
+    ],
+    connects: "That is the organisation around the product. The next session is the part of strategy that decides whether the startup survives at all."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L07",
+    courseId: "SPMS",
+    module: 8,
+    order: 7,
+    title: "Competitive strategy: differentiation and the moat",
+    objective: "Say why customers choose you and why a competitor cannot copy you, and keep both true as the market catches up.",
+    explainer: [
+      "When an opportunity opens, many start and one or two survive — hundreds of players in wallets, eight in core banking in the nineties. Porter's definition is deliberately choosing a different set of activities to deliver a unique mix of value, and for a startup competing against incumbents it reduces to two questions: why do customers choose us, and why can competitors not easily destroy us. The first is the unique value proposition — differentiation, customer value delivered at every interaction rather than only at the end, and market positioning. OpenAI's was value beyond a search engine with no learning curve, and a system that learns you rather than you learning it.",
+      "The second is the moat, the unfair advantage a competitor cannot copy. Intellectual property is one: ToneTag patented sending payment data over sound instead of infrared, then built on it. Proprietary data is another, though Netflix's is consumption insight rather than personal data. Then ecosystem lock-in, distribution advantage of the kind Jio had, cost advantage, and brand trust with community. Paytm's code was never hard to write; what was hard to copy was the base of member establishments and customers acquired before anyone caught up, which then compounds as a network effect.",
+      "Invention and innovation are not the same thing, and a moat needs both. The wheel is the invention; putting it on vehicles is the innovation, and value reaches a customer only through the second. Tesla is the case — electric vehicles already existed, and what it built was the product experience, software integration, and a charging ecosystem. The failures mirror all of this. \"We are AI\" is a technology, not a value proposition. No real moat means the first competitor to copy you ends it. Technology without customer value produces Google Glass. And ignoring customer education leaves a good product unsold, which is why Jio had to teach data consumption."
+    ],
+    worked: {
+      setup: "A startup's pitch is that its product uses AI, and that one per cent of a very large market would be enough.",
+      move: "Replace both claims — state the problem it solves better than any alternative, and what stops a competitor copying it.",
+      because: "Neither claim is a competitive strategy. AI is a technology rather than a unique value proposition, and customers do not adopt a product because it exists or because the founder needs them to — a large share of failed products were built where no user felt the need at all. The one-per-cent argument assumes demand instead of establishing it. Strip both away and what is left is the actual pair of questions the strategy has to answer: why do customers choose this, and why can a competitor not copy it."
+    },
+    glossary: [
+      {term: "competitive strategy", plain: "Deliberately choosing a different set of activities to deliver a unique mix of value."},
+      {term: "moat", plain: "The unfair advantage a competitor cannot easily copy."},
+      {term: "proprietary data", plain: "Consumption insight others cannot reproduce — Netflix's, not personal data."},
+      {term: "ecosystem lock-in", plain: "Partners and integrations that make switching away expensive."},
+      {term: "network effect", plain: "Each additional customer or merchant making the product harder to displace."},
+      {term: "invention", plain: "The new thing itself. Innovation is putting it where it delivers customer value."}
+    ],
+    connects: "That is how you compete. The next session is how you read the market you are competing in."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L09",
+    courseId: "SPMS",
+    module: 8,
+    order: 9,
+    title: "The startup framework: three readinesses, and orchestration",
+    objective: "Judge whether product, market and organisation are ready to scale together, and move from doing a function to orchestrating it.",
+    explainer: [
+      "A startup is an experiment to validate a business model rather than a small business, so the mature framework does not transfer unchanged. Three things have to advance together. Product readiness asks whether it is technically viable, solves the problem, and can scale from a thousand customers to millions — architecture, tailorability, delivery model, UX. Market readiness asks whether demand exists, positioning is clear and go-to-market is ready. Organisational readiness asks whether the company can absorb the demand it wins, and it is the one founders forget: Flipkart needed logistics partners, Paytm needed legal, marketing and coordination as millions arrived at once.",
+      "Across the framework's columns, product strategy and product planning are the core responsibilities product management drives, together with market analysis and product analysis. The rest — development, marketing, sales and fulfilment, delivery and support — are organisational functions that do not exist yet in a young company. So the trajectory runs from participation to orchestration: early on the product manager or the founder drives functions that have no head, and over time hands them over and coordinates them instead. Sales enablement passes to product marketing; customer support becomes customer success management.",
+      "Which activities matter changes with stage, and the framework is indicative rather than etched in stone. Early, survival depends on differentiation, so competitive strategy, customer experience design, MVP validation and experimentation dominate — and customer experience is wider than user experience: with Amazon the interface is UX, while delivering to a locker when you are out is CX. At growth stage funding returns with heavier artefacts — roadmap, path to profitability, unit economics — and the commitments become outcomes rather than outputs. Not the feature by September, but the paying customers, retention and promoter score by December."
+    ],
+    worked: {
+      setup: "A startup has clear product-market fit and orders are arriving faster than it can fulfil them.",
+      move: "Treat organisational readiness as the binding constraint, and fund and staff that rather than the product.",
+      because: "Product, market and organisational readiness have to advance in tandem, and product-market fit guarantees none of the third. The framework's own caution is that a good product and a ready market still fail when the organisation cannot scale behind them — hiring, funding, partner management, support setup, legal presence. The metaphor of the caterpillar becoming a butterfly is exactly this transition, and the constraint has moved off the product even though the product is what got them here."
+    },
+    glossary: [
+      {term: "organizational readiness", plain: "Whether hiring, funding, partners, support and legal can absorb the demand won."},
+      {term: "readiness for scale", plain: "Product, market and organisation advancing together, not one ahead of the others."},
+      {term: "sales enablement", plain: "Equipping sales to pitch the value — product management's early, then product marketing's."},
+      {term: "customer success management", plain: "Where support goes once the function is real enough to own itself."},
+      {term: "participation", plain: "Driving a function that has no head yet, before you can orchestrate it."}
+    ],
+    connects: "That is the framework end to end. The final session asks what all of it owes the people it reaches."
+  });
+
+  lesson({
+    lectureId: "SPMS-M08-L10",
+    courseId: "SPMS",
+    module: 8,
+    order: 10,
+    title: "Responsible product management",
+    objective: "Run a product decision through the six ethical tests, and name the responsibilities an AI product adds.",
+    explainer: [
+      "Responsible product management is building products that maximise value while avoiding or minimising harm to customers, society and stakeholders — business goals of growth, revenue and profitability held against ethical goals of fairness, privacy, safety, inclusion and transparency. Five stakeholders are owed something: the customers who trust the product, the company staking its money and reputation, society, the regulators defining acceptable behaviour, and the team and partners who build it. Three challenges recur, and privacy is the one that has already moved from ethical to legal compliance.",
+      "Manipulation is optimising for engagement, clicks and time spent until the honest question is whether you are helping users or trapping them; infinite scrolling is the standard case. Dark patterns are interfaces built so people do what they otherwise would not — a hidden unsubscribe, forced opt-ins, pricing that rises at the pay button, cancellation made hard where signup was made easy. Six tests catch these before they ship. Would I want to be the user, or my family? Would I explain this publicly? Are we collecting only necessary data? Does this disproportionately affect a group? Will it be respected in five years? And will a regulator hold me liable once the law catches up?",
+      "AI adds three more. Bias is inherited from training data — history that covers only one country, or only men, produces recruitment algorithms that quietly exclude. Explainability is whether the person affected can be told why: why this recommendation, why the loan was refused, with references rather than assertion. And hallucination is the inability to say \"I don't know\", which makes human-in-the-loop a design decision about which use cases are safe and where review is required, since a disclaimer does not transfer the responsibility. Around them sit accessibility for the billion people living with some impairment, and the longer questions of energy cost, digital addiction and misinformation."
+    ],
+    worked: {
+      setup: "A subscription signs people up in one step and takes four screens to cancel. Churn has measurably improved.",
+      move: "Run it through the user and transparency tests, and read the churn improvement as evidence of the problem rather than of success.",
+      because: "A dark pattern makes people do what they would not otherwise do, and the better number is what it produced: leaving got harder, not staying better, so the metric now measures friction rather than satisfaction. Both tests settle it independently of the number — would I want this done to me or to my family, and would I be comfortable explaining this decision publicly. The regulatory test only adds timing, not principle, since firms have already been fined for exactly this once the law caught up with them."
+    },
+    glossary: [
+      {term: "responsible product management", plain: "Maximising value while avoiding or minimising harm to customers, society and stakeholders."},
+      {term: "dark patterns", plain: "Interfaces built so users do what they otherwise would not."},
+      {term: "AI bias", plain: "Unfairness inherited from training data that does not represent everyone."},
+      {term: "explainability", plain: "Whether the person a decision affects can be told why it was made."},
+      {term: "hallucination", plain: "A model's inability to say \"I don't know\", stated confidently instead."},
+      {term: "human-in-the-loop", plain: "Keeping a person in consequential decisions rather than automating them fully."}
+    ],
+    connects: "That closes SPMS: from what a product is, through who it is for and what it costs, to how it is run responsibly."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L03",
+    courseId: "SPMS",
+    module: 4,
+    order: 3,
+    title: "Nine pricing strategies, and when each one fits",
+    objective: "Name the pricing strategy a product is running, and pick one from the market position you are actually in.",
+    explainer: [
+      "Pricing is a lever that reaches several business objectives at once — profitability, growth, market share, liquidity, and the competitive position — which is why there are so many strategies rather than one. Premium pricing justifies a high price through superior quality, brand image, exclusivity, reliability and the ecosystem around it, which is how Apple sells at more than double a competitor and why enterprise tiers cost more than individual ones. Skimming pricing launches high instead, to recover R&D and innovation cost before competitors arrive: Tesla priced full self-driving steeply, and Jio's early enterprise 5G did the same, with the price settling as the category matured.",
+      "Promotion pricing is skimming's opposite. Start low so people taste the product and the habit forms, then raise it — student offers, festival discounts, introductory mobile plans, or AI subscriptions priced free in India through a telecom partner while they cost twenty dollars elsewhere. Penetration pricing looks identical and is not, because it is aimed at a market that already has competitors: a low introductory price buys a foothold, then switching costs and network effects hold it. The difference is what the market looks like when you arrive — promotion and skimming introduce a product, penetration fights for share in a market that exists.",
+      "The rest key on segment, package or time. Price differentiation charges segments and geographies differently — student against enterprise, or a fifth of the Western price in India. Price bundling combines complementary products into one package at one price, as Google Workspace does. Lifecycle-dependent pricing moves with the product's stage, which is why older Apple models cost less. Yield management prices perishable capacity by demand — surge fares, off-season seats — because a seat unsold at departure is worth nothing at all. And dynamic pricing pairs a fixed subscription with usage-based charges, the way cloud services scale with what a startup consumes."
+    ],
+    worked: {
+      setup: "A startup entering a market that already holds several established competitors proposes launching at a high price, to signal quality.",
+      move: "Use penetration pricing rather than premium or skimming — price low to take a foothold, then build switching costs and network effects.",
+      because: "Premium pricing is justified by brand image, exclusivity and an established ecosystem, and a new entrant has none of them yet. Skimming needs the other precondition: no competition to undercut you, and R&D cost worth recovering. This market satisfies neither, because competitors already hold the customers. The strategy built for that situation is the one designed for an existing market — a low introductory price that wins share first and then makes leaving expensive."
+    },
+    glossary: [
+      {term: "premium pricing", plain: "A high price justified by quality, brand, exclusivity and ecosystem."},
+      {term: "skimming pricing", plain: "Launch high to recover R&D before competitors arrive, then let it settle."},
+      {term: "promotion pricing", plain: "Start low so the habit forms, then raise it. Skimming's opposite."},
+      {term: "penetration pricing", plain: "Low entry pricing to take share in a market that already has competitors."},
+      {term: "price differentiation", plain: "Different prices for different segments or geographies."},
+      {term: "price bundling", plain: "Complementary products combined into one package at a single price."},
+      {term: "yield management", plain: "Pricing perishable capacity by demand — surge fares, off-season seats."}
+    ],
+    connects: "Those are the strategies. The next session asks which business objective each one is being used to reach."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L05",
+    courseId: "SPMS",
+    module: 4,
+    order: 5,
+    title: "Reading a price backwards: pricing as a diagnostic",
+    objective: "Place a company on the pricing pyramid, and say what its pricing reveals about what it believes and who carries the risk.",
+    explainer: [
+      "A price can be read like an X-ray, and the pricing pyramid is the instrument. It runs bottom to top through five layers. Free or subsidized pricing at the base is not weakness — Spotify's free tier is a strategic choice, because advertisers, premium payers and creators all want more listeners, not fewer. Cost-based pricing above it reflects internal economics, and is what you fall back on when you cannot see how the customer derives value. Tiered package pricing reflects segmentation. Usage-based pricing reflects consumption. Value-based pricing, at the top, reflects the customer's own outcome.",
+      "Value-based pricing has three preconditions and most companies fail one of them: you have to create value, be able to measure it, and agree with the customer that it was delivered. The diagnosis follows directly. If a company cannot price on value, it either does not know its value or does not trust the customer to see it. OpenAI meters tokens because nobody yet knows what a single prompt is worth, so the customer carries that uncertainty — and the reading is that intelligence is being treated as metered infrastructure rather than as an outcome.",
+      "Four questions do the work as a diagnostic tool. Where does the pricing sit in the pyramid? What risk does the vendor absorb rather than push to the customer? What behaviour does the pricing encourage? And, hardest, what does the company refuse to price at all? Anthropic caps usage and prices for ecosystem trust rather than maximum extraction. Perplexity charges flat for answers with citations, moving up the pyramid. Spotify's is behavioral pricing and segmentation mastery. Gemini is subsidised to defend search. Apple prices identity and experience rather than features; Microsoft prices organisational adoption over individual delight."
+    ],
+    worked: {
+      setup: "A team wants to move from usage-based to value-based pricing, on the grounds that it earns more.",
+      move: "Test the three preconditions first — can you create the value, measure it, and get the customer to agree it was delivered?",
+      because: "Value-based sits at the top of the pyramid because it is the hardest position to hold, not because it is the most profitable to declare. All three conditions have to be met at once, and measurement is the one most often missing while agreement is the one that fails last. Where they are not met the honest layer is usage-based, which is exactly why AI products meter tokens: nobody can yet measure what an answer is worth, so the customer carries that uncertainty and the pricing admits it."
+    },
+    glossary: [
+      {term: "pricing pyramid", plain: "Five layers from subsidized up to value-based, read as a diagnosis rather than a menu."},
+      {term: "subsidized pricing", plain: "Free by strategic choice, because other participants want the volume it creates."},
+      {term: "tiered package pricing", plain: "Price reflecting segmentation, so each segment gets what it values."},
+      {term: "usage-based pricing", plain: "Price reflecting consumption, where value cannot yet be measured."},
+      {term: "behavioral pricing", plain: "Segmenting on how customers actually consume — Spotify's mastery."},
+      {term: "diagnostic tool", plain: "Reading a price for belief, posture, culture and who carries the risk."}
+    ],
+    connects: "That is what a price reveals about a company. The next session is how the money actually arrives."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L06",
+    courseId: "SPMS",
+    module: 4,
+    order: 6,
+    title: "Revenue models: who pays, for what, and why they keep paying",
+    objective: "Choose a revenue model from customer behaviour and product maturity, and say what each costs you in predictability.",
+    explainer: [
+      "A revenue model answers four questions: who pays for the product, what they pay for, how often they pay, and why they keep paying. It is a strategic decision rather than a finance one, because it shapes which customers you can acquire, how far the business scales, what investors will value it at, and even what the roadmap chooses to build. Software supports models physical goods cannot: replication cost is near zero, delivery is digital, subscriptions are feasible, ecosystems create network effects, and the usage data itself becomes monetisable.",
+      "The traditional model is the one-time charge — a perpetual licence bought once — and it has largely gone. Its revenue is lumpy: two hundred customers one year and fifty the next, which investors dislike. Subscription replaced it for predictable cash flow, for lifetime value that can reach three to five times acquisition cost, and for the booked business that gives investors confidence. Its risks mirror its advantages: churn is higher because switching costs are low, you must keep delivering value to stay relevant, and support expectations rise precisely as you succeed.",
+      "Three more sit beside it. Usage-based revenue charges for what is consumed — compute hours, tokens, transactions, storage, API calls — which aligns with the customer's own value and onboards easily, at the price of revenue you cannot forecast. A transaction revenue model takes a fee per event, as Uber, Airbnb and Paytm do, and works where network effects are strong and volume is large. Ad revenue makes access free and sells attention instead, which demands massive scale and a constant supply of fresh content. The most evolved products run hybrids: subscription plus usage, freemium plus ads, subscription plus services."
+    ],
+    worked: {
+      setup: "A B2B product on a pure usage-based model cannot give its investors a revenue forecast for the coming year.",
+      move: "Add a committed subscription floor beneath the usage charges rather than replacing the model — run a hybrid.",
+      because: "Unpredictable revenue is usage-based pricing's named risk, and it is the direct cost of its named advantage: customers pay only for what they consume, so nothing is committed in advance and nothing can be forecast. Replacing it with a pure subscription would throw away the alignment that makes it easy to onboard and lets you grow as the customer grows. A hybrid keeps both — a base that can be forecast, with consumption above it — which is why the most evolved products run subscription plus usage rather than choosing between them."
+    },
+    glossary: [
+      {term: "revenue model", plain: "Who pays, what for, how often, and why they keep paying."},
+      {term: "one-time charge", plain: "A perpetual licence bought once — lumpy revenue, largely displaced."},
+      {term: "subscription", plain: "Recurring payment, and therefore predictable cash flow."},
+      {term: "transaction revenue model", plain: "A fee per event, where network effects and volume are strong."},
+      {term: "ad revenue", plain: "Free access paid for by advertisers buying attention; needs scale and fresh content."},
+      {term: "freemium", plain: "A free base tier for acquisition and network effects, priced above it."}
+    ],
+    connects: "Those are the models. The next session is the per-customer arithmetic that judges whether any of them works."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L08",
+    courseId: "SPMS",
+    module: 4,
+    order: 8,
+    title: "Forecasting without a past to extrapolate from",
+    objective: "Forecast a startup's growth probabilistically, and answer the four financial questions product management owns.",
+    explainer: [
+      "Startups fail by running out of money before reaching sustainable growth, far more often than by building badly — which is why financial management is not only the founder's problem. Four questions belong to product management too: how long can we survive, which customer segments are actually profitable and how do we reach them, is this growth sustainable, and when will we need more funding. Understanding requirements and delivering on time are table stakes — necessary and not sufficient. What has to be forecast is customer growth, revenue, churn, infrastructure demand, pricing, and how fast the market adopts.",
+      "Forecasting is straightforward in a mature business and hard here, for one specific reason. An established cricketer walks in carrying a strike rate and an average; a rookie in his first season offers nothing to forecast from. A mature business has historical data, known renewal rates and seasonal patterns, so quarterly guidance is a spreadsheet exercise. A startup has no past to extrapolate from, markets that are uncertain, customers whose expectations grow as they use the product, and technology that shifts underneath it. Even acquisition cost is unstable — high at first, cheaper with traction, then expensive again at saturation.",
+      "So the forecast has to be iterative and probabilistic rather than a single number. The discipline the course borrows is Tetlock's super forecasting, and three habits carry across. Update your beliefs frequently, because a startup begins from beliefs rather than information, and every one of them should move. Express confidence as a probability rather than a figure — not a thousand customers, but a stated likelihood of a range. And combine multiple perspectives, including outside-in comparisons with what similar products charge and how their customers adopt. It is nearer an art than a science here, and investors still expect the number, iteratively updated."
+    ],
+    worked: {
+      setup: "An investor asks a pre-revenue startup how many customers it will have in twelve months.",
+      move: "Answer with a range and the reasoning that produced it, and commit to revising it as evidence arrives.",
+      because: "There is no past to extrapolate from, and that is the defining condition of the stage rather than an excuse: markets are uncertain, customer behaviour is still forming and acquisition cost is unstable. A single confident figure claims information the business does not have. The forecasting habits are the honest alternative — build the range from the market sizing already done, state it as a probability, corroborate it outside-in against comparable products, and update it as weeks produce data. Investors do not expect the uncertainty removed; they expect it quantified and revised."
+    },
+    glossary: [
+      {term: "financial management", plain: "Survival, segment profitability, sustainable growth and funding need — product's questions too."},
+      {term: "forecasting", plain: "Projecting customers, revenue, churn and infrastructure demand without history to lean on."},
+      {term: "superforecasting", plain: "Update beliefs often, think in probabilities, combine independent perspectives."},
+      {term: "probabilistic", plain: "A stated likelihood over a range, rather than one confident number."}
+    ],
+    connects: "That is the forecast. The next session is who reads it, and what they want to see at each stage."
+  });
+
+  lesson({
+    lectureId: "SPMS-M04-L10",
+    courseId: "SPMS",
+    module: 4,
+    order: 10,
+    title: "Building for a market that cannot pay: the eVidyaloka session",
+    objective: "Find product-market fit where no user pays, by locating the one outcome every stakeholder shares and measuring it.",
+    explainer: [
+      "The starting move is to treat an underserved population as a market rather than as beneficiaries — a word the founders refuse as condescending toward people who are consumers of a service. The question that opened eVidyaloka was distributional: a packet of chips reaches the last village, so why not quality education. Public education is about 85% of India's system and mostly rural, and BharatNet had already reached 100,000 panchayats. The model is an aggregating platform matching villages needing teachers to volunteers anywhere giving two hours a week — now 948 schools, 17 states, 9 languages, 1.9 million child learning hours a year.",
+      "Product-market fit normally means someone uses the product and will pay for it, and here nobody pays: these families sit near six thousand rupees a year. What replaces the price is a single outcome every stakeholder shares — is the child learning. Parent, donor, school and volunteer all want the same thing, which is what lets the platform scale, unlike a marketplace where buyer and seller pull against each other. It is measured rather than asserted: lead measures are volunteer consistency and actual-against-planned class hours near 75%, lag measures are attendance and formal assessment.",
+      "Technology follows the workflow rather than leading it — build what is needed to run, then experiment, streamline, automate, scale. Each process was drafted as a workflow before automation, and the platform moved from Google Forms to PHP to an enterprise system, then digital public infrastructure, now agentic AI. Buy what is not differentiating: an LED TV supplies screen, speaker and microphone, a UPS covers four hours rather than a full solar rig, video conferencing is integrated rather than rebuilt. Only the matchmaking platform is proprietary, and one trainee developer ran it across a thousand schools for three years."
+    ],
+    worked: {
+      setup: "A donor offers to fund paid teachers instead of volunteers — the same platform, better efficiency, no dependence on goodwill.",
+      move: "Run it as a pilot and let the outcome metric decide, rather than arguing it on efficiency.",
+      because: "They did run it, and the result was the opposite of the prediction. Hiring good teachers who would teach in the local language proved hard, since the market prefers English. Then in one school with three volunteer teachers and one paid teacher, students reported simply not attending the paid teacher's class. The value turned out not to be the labour but the innate teacherness of someone who chose to teach — bringing critical reasoning and building on what a child already knows, where formal training more often arrives with a stick in the hand. The idea was dropped despite the funding being available, and the failed pilot became a cross-validation of the fit."
+    },
+    glossary: [
+      {term: "aggregating platform", plain: "One that matches disparate demand to disparate supply neither side could find alone."},
+      {term: "underserved", plain: "The word chosen over beneficiaries — they are consumers of a service, and a market."},
+      {term: "lead measures", plain: "Early signals you can still act on — volunteer consistency, planned against actual hours."},
+      {term: "lag measures", plain: "Outcomes that confirm afterwards — attendance, and formal assessment."},
+      {term: "teacherness", plain: "The disposition to teach, which turned out to carry the value rather than the payment."},
+      {term: "digital public infrastructure", plain: "Shared, open rails for population scale, where a proprietary platform will not reach."}
+    ],
+    connects: "That closes the money and models module, and the course's one worked social platform. The next module turns to the ecosystem the product competes inside."
   });
 
   window.T6_LESSONS = lessons;

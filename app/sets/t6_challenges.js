@@ -129,12 +129,17 @@
       .filter(function (question) { return question.conceptId === conceptId; });
   }
 
+  function assessmentMode(course, concept) {
+    return concept.assessmentMode || (course.id === "IBM" || course.id === "BRGSA" ? "mixed" : "objective");
+  }
+
   function conceptData(course, concept) {
     var surfaces = questionsForConcept(course, concept.id);
     var seed = surfaces.filter(function (question) { return question.explanation && Array.isArray(question.options); })[0] || surfaces[0] || {};
     var applicationSeed = surfaces.filter(function (question) { return question.caselet && Array.isArray(question.options); })[0] || surfaces.filter(function (question) { return question.perspective === "apply" && Array.isArray(question.options); })[0] || seed;
     var wrong = Array.isArray(seed.options) ? seed.options.filter(function (_, index) { return index !== seed.answer; }) : [];
     var applicationWrong = Array.isArray(applicationSeed.options) ? applicationSeed.options.filter(function (_, index) { return index !== applicationSeed.answer; }) : wrong;
+    var authoredCase = typeof concept.caselet === "string" && concept.caselet.trim().length > 0;
     return {
       id: concept.id,
       module: concept.module,
@@ -157,9 +162,9 @@
        * hypothesis. The case's own lecture is carried here so applied surfaces
        * can explain, link, and cite what they actually tested.
        */
-      caseSource: applicationSeed.source || concept.source || seed.source,
-      caseExplanation: applicationSeed.explanation || concept.summary || seed.explanation,
-      caseLink: applicationSeed.link || concept.bridge || seed.link
+      caseSource: authoredCase ? (concept.source || applicationSeed.source || seed.source) : (applicationSeed.source || concept.source || seed.source),
+      caseExplanation: authoredCase ? (concept.caseExplanation || concept.summary || seed.explanation) : (applicationSeed.explanation || concept.summary || seed.explanation),
+      caseLink: authoredCase ? (concept.caseLink || concept.bridge || seed.link) : (applicationSeed.link || concept.bridge || seed.link)
     };
   }
 
@@ -3809,6 +3814,54 @@
     });
   }
 
+  /* A written-only framework still has to belong to the concept graph. Linking it
+   * through an objective boss would violate its declared assessment mode, so it
+   * receives a linked case response with the nearest non-objective idea. It stays
+   * `case`, not `integrated`: the latter is reserved for the few whole authored
+   * scenarios that fill IBM's ten-mark section ahead of generated practice. */
+  function addWrittenLinkAnswer(course, concept, partner, data, partnerData) {
+    addQuestion(course, {
+      id: concept.id + "_written_link",
+      courseId: course.id,
+      conceptId: concept.id,
+      supportingConceptIds: [partner.id],
+      module: concept.module,
+      source: data.source,
+      sourceIds: unique([data.source, partnerData.source]),
+      node: data.name + " → " + partnerData.name,
+      pattern: "Written framework connection",
+      perspective: "generate",
+      type: "short-answer",
+      skills: ["explain", "apply", "connect", "generate"],
+      difficulty: 4,
+      variantFamily: concept.id + "_written-link",
+      boss: false,
+      estimatedMinutes: 7,
+      selfReviewOnly: true,
+      writtenMode: "case",
+      caselet: ensureSentence(data.caselet) + " A second decision in the same organisation raises " + partnerData.name + ": " + ensureSentence(partnerData.caselet),
+      stem: "Write a connected recommendation. Explain what " + data.name + " settles first, what " + partnerData.name + " settles next, and why one framework cannot substitute for the other.",
+      rubric: [
+        {id: "first_idea", label: data.name, description: "Uses the first framework accurately and states the decision it governs: " + ensureSentence(data.application)},
+        {id: "second_idea", label: partnerData.name, description: "Uses the connected idea accurately and states its different decision: " + ensureSentence(partnerData.application)},
+        {id: "integration", label: "Connection", description: "Explains the order or dependency between the two decisions instead of listing the ideas separately."}
+      ],
+      writtenGaps: [
+        writtenGap("first-missing", "first_idea", "missing", "concept", "First framework is missing", "State what the first framework permits you to conclude before moving to the second decision."),
+        writtenGap("first-inaccurate", "first_idea", "misunderstood", "concept", "First framework is inaccurate", "Return to the first course anchor and correct what it permits you to conclude."),
+        writtenGap("second-missing", "second_idea", "missing", "concept", "Connected idea is missing", "Name the second decision and apply the idea that actually governs it."),
+        writtenGap("second-inaccurate", "second_idea", "misunderstood", "concept", "Connected idea is inaccurate", "Separate the second idea from the first and correct its decision rule."),
+        writtenGap("connection-missing", "integration", "missing", "writing", "Ideas are listed, not connected", "Add the because step that shows how the first decision enables, limits, or changes the second."),
+        writtenGap("connection-reversed", "integration", "misunderstood", "concept", "Reasoning order is reversed", "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence.")
+      ],
+      exemplar: ensureSentence(data.summary) + " " + ensureSentence(data.application) + " " + ensureSentence(partnerData.summary) + " " + ensureSentence(partnerData.application) + " Together, the first decision sets the condition under which the second can work; " + ensureSentence(data.bridge) + " " + ensureSentence(partnerData.bridge),
+      explanation: data.summary,
+      link: data.bridge + " " + partnerData.bridge,
+      misconceptions: [],
+      repairId: concept.id + "_case_answer"
+    });
+  }
+
   /* Integrated scenarios are authored whole, not generated from concept fields.
    *
    * Every other written family is assembled — stem from the concept name, rubric
@@ -3883,7 +3936,10 @@
     });
   }
 
-  function addModuleMatch(course, module, pair, dataById) {
+  /* `suffix` distinguishes the second and later pairs in a module that holds more than two
+   * concepts. The first pair keeps the original unsuffixed id, so no question that has ever
+   * shipped changes its identity — history, evidence files and run definitions all key on ids. */
+  function addModuleMatch(course, module, pair, dataById, suffix) {
     var first = dataById[pair[0].id];
     var second = dataById[pair[1].id];
     var choices = rotate([
@@ -3893,8 +3949,15 @@
       second.application
     ], module % 4);
     function answerFor(value) { return choices.indexOf(value); }
+    var matchStems = [
+      "Pair each framework label with the principle or decision that belongs to it.",
+      "Separate the two ideas by matching every row to the course statement it requires.",
+      "Match each principle and decision row to the statement that correctly completes it.",
+      "Distinguish the paired frameworks: assign each claim or action to the correct row.",
+      "For each row, choose the precise explanation or action governed by that framework."
+    ];
     addQuestion(course, {
-      id: course.id.toLowerCase() + "_m" + module + "_match",
+      id: course.id.toLowerCase() + "_m" + module + "_match" + (suffix || ""),
       courseId: course.id,
       conceptId: pair[0].id,
       supportingConceptIds: [pair[1].id],
@@ -3910,7 +3973,7 @@
       variantFamily: course.id.toLowerCase() + "_m" + module + "_match",
       boss: false,
       caselet: null,
-      stem: "Match each prompt to the precise explanation or action.",
+      stem: matchStems[stableNumber(course.id + "|" + module + "|" + (suffix || "first")) % matchStems.length],
       choices: choices,
       rows: [
         {label: first.name + " — principle", answer: answerFor(first.summary), conceptId: pair[0].id},
@@ -3925,7 +3988,7 @@
     });
   }
 
-  function addModuleBoss(course, module, pair, dataById, variant) {
+  function addModuleBoss(course, module, pair, dataById, variant, suffix) {
     var first = dataById[pair[0].id];
     var second = dataById[pair[1].id];
     variant = variant || 1;
@@ -3990,7 +4053,7 @@
       "Use the new evidence to build a defensible two-framework recommendation."
     ];
     addQuestion(course, {
-      id: course.id.toLowerCase() + "_m" + module + "_boss_" + variant,
+      id: course.id.toLowerCase() + "_m" + module + "_boss_" + variant + (suffix || ""),
       courseId: course.id,
       conceptId: pair[0].id,
       supportingConceptIds: [pair[1].id],
@@ -4033,6 +4096,22 @@
         run.questionPoolIds = activeQuestions.filter(function (question) { return question.module === run.module; }).map(function (question) { return question.id; });
         run.questionCount = 8;
         run.bossIds = run.questionPoolIds.filter(function (id) { return course.questions[id].boss; });
+        /* Practise the answer shape the real paper rewards inside the module where
+         * the idea is taught. A quota only exists when that module actually has the
+         * format, so this never invents prose for an objective paper or a numerical
+         * task for material that does not support one. */
+        var quotaShape = course.id === "IBM" ? {type:"short-answer", count:4}
+          : course.id === "BRGSA" ? {type:"short-answer", count:2}
+          : course.id === "SCLM" ? {type:"numeric", count:2}
+          : {type:"msq", count:2};
+        var quotaAvailable = run.questionPoolIds.filter(function (id) {
+          return (course.questions[id].type || "mcq") === quotaShape.type;
+        }).length;
+        run.formatQuotas = quotaAvailable ? [{type:quotaShape.type, count:Math.min(quotaShape.count, quotaAvailable)}] : [];
+        if (course.id === "BRGSA") {
+          var caseAvailable = run.questionPoolIds.filter(function (id) { return course.questions[id].type === "case-cloze"; }).length;
+          if (caseAvailable) run.formatQuotas.push({type:"case-cloze", count:1});
+        }
         run.minutes = 12;
       } else if (run.id === 9) {
         run.questionPoolIds = activeQuestions.filter(function (question) {
@@ -4066,27 +4145,73 @@
       return data;
     });
     course.concepts.forEach(function (concept) {
+      var mode = assessmentMode(course, concept);
       addPrimer(course, concept, dataById[concept.id]);
-      addContrastCheck(course, concept, dataById[concept.id], allData);
-      addBridgeCloze(course, concept, dataById[concept.id], allData);
-      addMisconceptionRepair(course, concept, dataById[concept.id], allData);
-      addCaseCloze(course, concept, dataById[concept.id], allData);
+      if (mode !== "written") {
+        addContrastCheck(course, concept, dataById[concept.id], allData);
+        addBridgeCloze(course, concept, dataById[concept.id], allData);
+        addMisconceptionRepair(course, concept, dataById[concept.id], allData);
+        addCaseCloze(course, concept, dataById[concept.id], allData);
+      }
       /* The final-paper contract has prose responses only in BRGSA and IBM.
        * Those subjects receive both fast framework fluency and full case transfer.
        * SPMS and SCLM still carry case-based objective/numeric work, but inventing
        * prose practice for them would train a format their papers do not ask for. */
-      if (course.id === "BRGSA" || course.id === "IBM") {
+      if ((course.id === "BRGSA" || course.id === "IBM") && mode !== "objective") {
         addShortAnswer(course, concept, dataById[concept.id]);
         addCaseAnswer(course, concept, dataById[concept.id]);
       }
     });
+    course.concepts.forEach(function (concept, index) {
+      if (assessmentMode(course, concept) !== "written") return;
+      var candidates = course.concepts.filter(function (other) {
+        return other.id !== concept.id && assessmentMode(course, other) !== "objective";
+      }).sort(function (a, b) {
+        var aModule = a.module === concept.module ? 0 : 1;
+        var bModule = b.module === concept.module ? 0 : 1;
+        return aModule - bModule || Math.abs(course.concepts.indexOf(a) - index) - Math.abs(course.concepts.indexOf(b) - index);
+      });
+      if (!candidates.length) throw new Error(course.id + "/" + concept.id + " has no non-objective partner for written linkage");
+      addWrittenLinkAnswer(course, concept, candidates[0], dataById[concept.id], dataById[candidates[0].id]);
+    });
     /* After the per-concept families, because these span several of them. */
     if (course.id === "BRGSA" || course.id === "IBM") addIntegratedScenarios(course);
+    /* CHAIN THE MODULE, DO NOT JUST TAKE THE FIRST TWO.
+     *
+     * The module match and the boss steps are the only generated surfaces that carry
+     * `supportingConceptIds`, so they are the entire link mechanism `conceptLinks()` reads.
+     * While every module held exactly two concepts, `pair.slice(0, 2)` was invisible. It is
+     * not harmless: a third concept in a module was born with no link at all, and — because
+     * the slice takes array order — whichever concept sorted third **lost the links it already
+     * had**, silently, with `groupWeaknesses()` reporting it isolated for ever.
+     *
+     * Chaining consecutive pairs gives every concept a link to its neighbour and reads as the
+     * sequence the module teaches.
+     *
+     * BOTH the match and the boss are chained, and the first attempt chained only the match.
+     * The bank validator rejected that immediately and was right to: it requires every concept
+     * to carry boss coverage and at least ten actively scheduled surfaces, and a concept with
+     * only its nine per-concept surfaces has neither. Leaving the boss on the first pair would
+     * have given the second and later concepts in a module a thinner deal than the first two,
+     * which is exactly the inequality the widening exists to remove.
+     *
+     * The surface count grows with the concept count, and that is correct rather than a cost to
+     * manage here: bank size and session length are different things. Runs select from the
+     * bank, so how long a learner sits is decided by run composition, not by how much the
+     * generators produced. */
     for (var module = 1; module <= 8; module += 1) {
-      var pair = course.concepts.filter(function (concept) { return concept.module === module; });
-      if (pair.length < 2) continue;
-      addModuleMatch(course, module, pair.slice(0, 2), dataById);
-      for (var bossVariant = 1; bossVariant <= 5; bossVariant += 1) addModuleBoss(course, module, pair.slice(0, 2), dataById, bossVariant);
+      var moduleConcepts = course.concepts.filter(function (concept) {
+        return concept.module === module && assessmentMode(course, concept) !== "written";
+      });
+      if (moduleConcepts.length < 2) continue;
+      for (var step = 0; step + 1 < moduleConcepts.length; step += 1) {
+        var stepPair = [moduleConcepts[step], moduleConcepts[step + 1]];
+        var stepSuffix = step === 0 ? "" : "_" + (step + 1);
+        addModuleMatch(course, module, stepPair, dataById, stepSuffix);
+        for (var bossVariant = 1; bossVariant <= 5; bossVariant += 1) {
+          addModuleBoss(course, module, stepPair, dataById, bossVariant, stepSuffix);
+        }
+      }
     }
 
     // Runs last, over every question in the course — authored MCQs included — so a

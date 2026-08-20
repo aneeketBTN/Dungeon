@@ -1,0 +1,81 @@
+{
+  "date": "2026-08-20",
+  "objective": "Do learners feel prepared for the subject?",
+  "preparednessInterpretation": {
+    "afterOneRecommendedSet": "No persona should feel whole-subject ready; the product now reports that honestly.",
+    "afterCompleteLearnAndMocks": "The diligent and average personas have a credible paper-shaped route; the lazy persona does not.",
+    "limit": "This is verified product coverage, not a longitudinal learner-outcome claim."
+  },
+  "teachingDelivery": {
+    "registeredLectureEntries": 283,
+    "scheduledInModuleRuns": 283,
+    "readableOnly": 0,
+    "bySubject": {
+      "BRGSA": { "registered": 50, "scheduled": 50, "readableOnly": 0 },
+      "IBM": { "registered": 78, "scheduled": 78, "readableOnly": 0 },
+      "SCLM": { "registered": 71, "scheduled": 71, "readableOnly": 0 },
+      "SPMS": { "registered": 84, "scheduled": 84, "readableOnly": 0 }
+    }
+  },
+  "namedIdeaCoverage": {
+    "total": 359,
+    "reached": 359,
+    "percent": 100,
+    "bySubject": {
+      "BRGSA": "69/69",
+      "IBM": "90/90",
+      "SCLM": "84/84",
+      "SPMS": "116/116"
+    }
+  },
+  "bank": {
+    "conceptRecords": 219,
+    "linkedConceptRecords": 219,
+    "isolatedConceptRecords": 0,
+    "questions": 2827,
+    "bySubject": {
+      "BRGSA": { "conceptRecords": 29, "questions": 417 },
+      "IBM": { "conceptRecords": 85, "questions": 936 },
+      "SCLM": { "conceptRecords": 36, "questions": 516 },
+      "SPMS": { "conceptRecords": 69, "questions": 958 }
+    }
+  },
+  "learnPaperShape": {
+    "BRGSA": "2 short-answer + 1 case-cloze per module run",
+    "IBM": "4 short-answer per module run; written-first recommendation",
+    "SCLM": "up to 2 numeric items where authored",
+    "SPMS": "2 negative-marking-style MSQ per module run"
+  },
+  "freshMocks": {
+    "papers": 17,
+    "setsBySubject": { "SPMS": 3, "BRGSA": 4, "IBM": 7, "SCLM": 3 },
+    "moduleBreadthPerPaper": "8/8",
+    "sectionShortfalls": 0,
+    "coverageCycleConceptReach": {
+      "SPMS": "69/69 paper-relevant (100%)",
+      "BRGSA": "29/29 paper-relevant (100%)",
+      "IBM": "65/65 written-relevant (100%); 20 objective-only records remain Learn-only",
+      "SCLM": "36/36 (100%)"
+    },
+    "selection": "Each later fixed set prioritises paper-relevant concepts earlier sets did not reach; the subject cycle stops at complete coverage after a minimum of three sets.",
+    "weakestLinks": "A separate dynamic paper fills the real section shape weakest-first from the learner's Learn evidence and is excluded from the common coverage cycle."
+  },
+  "objectiveCraft": {
+    "strategy": "choose one of the longest options",
+    "chancePercent": 25,
+    "meanPercentOfMcqMarksAcrossCompleteCycle": {
+      "SPMS": 25.2,
+      "BRGSA": 25.1,
+      "SCLM": 25,
+      "IBM": null
+    },
+    "mechanicalStrategyGate": "PASS"
+  },
+  "verification": {
+    "tests": "139/139 pass",
+    "lessonGate": "283/283 scheduled; 0 errors; 0 warnings",
+    "bankValidator": "0 errors; lessonsReadableOnly 0 in every subject",
+    "examReadiness": "0 errors; 0 warnings",
+    "build": "20 public assets"
+  }
+}

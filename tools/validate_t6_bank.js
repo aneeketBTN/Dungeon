@@ -439,14 +439,33 @@ courseIds.forEach(function (courseId) {
     var families = new Set(surfaces.map(function (question) { return question.variantFamily; }));
     var activeTypes = new Set(activeSurfaces.map(function (question) { return question.type; }));
     var activeFamilies = new Set(activeSurfaces.map(function (question) { return question.variantFamily; }));
-    if (surfaces.length < 10) errors.push(courseId + "/" + concept.id + " has only " + surfaces.length + " surfaces");
-    if (types.size < 5) errors.push(courseId + "/" + concept.id + " has only " + types.size + " question types");
-    if (families.size < 8) errors.push(courseId + "/" + concept.id + " has only " + families.size + " independent variant families");
-    if (activeSurfaces.length < 10) errors.push(courseId + "/" + concept.id + " has only " + activeSurfaces.length + " actively scheduled surfaces");
-    if (activeTypes.size < 4) errors.push(courseId + "/" + concept.id + " has only " + activeTypes.size + " actively scheduled question types");
-    if (activeFamilies.size < 6) errors.push(courseId + "/" + concept.id + " has only " + activeFamilies.size + " actively scheduled variant families");
-    if (!surfaces.some(function (question) { return question.boss; })) errors.push(courseId + "/" + concept.id + " has no boss coverage");
-    if (["BRGSA", "IBM"].indexOf(courseId) >= 0) {
+    var mode = concept.assessmentMode || (["BRGSA", "IBM"].indexOf(courseId) >= 0 ? "mixed" : "objective");
+    if (["mixed", "written", "objective"].indexOf(mode) < 0) errors.push(courseId + "/" + concept.id + " has unsupported assessmentMode " + mode);
+    if (courseId === "IBM" && concept.conceptKind) {
+      var expectedMode = concept.conceptKind === "layer" ? "mixed" : concept.conceptKind === "framework" ? "written" : concept.conceptKind === "concept" ? "objective" : null;
+      if (!expectedMode) errors.push(courseId + "/" + concept.id + " has unsupported conceptKind " + concept.conceptKind);
+      else if (mode !== expectedMode) errors.push(courseId + "/" + concept.id + " declares " + concept.conceptKind + " but uses assessmentMode " + mode + " instead of " + expectedMode);
+    }
+    if (mode === "written") {
+      if (surfaces.length < 4) errors.push(courseId + "/" + concept.id + " has only " + surfaces.length + " written surfaces");
+      if (activeSurfaces.length < 3) errors.push(courseId + "/" + concept.id + " has only " + activeSurfaces.length + " actively scheduled written surfaces");
+      if (families.size < 4 || activeFamilies.size < 3) errors.push(courseId + "/" + concept.id + " lacks independent written practice families");
+      if (activeSurfaces.some(function (question) { return question.type !== "short-answer"; })) errors.push(courseId + "/" + concept.id + " is written-only but appears on an objective surface");
+      if (surfaces.some(function (question) { return question.boss; })) errors.push(courseId + "/" + concept.id + " is written-only but appears in an objective boss");
+      if (!surfaces.some(function (question) {
+        return question.type === "short-answer" && (question.supportingConceptIds || []).length;
+      })) errors.push(courseId + "/" + concept.id + " has no linked written practice");
+    } else {
+      if (surfaces.length < 10) errors.push(courseId + "/" + concept.id + " has only " + surfaces.length + " surfaces");
+      if (types.size < 5) errors.push(courseId + "/" + concept.id + " has only " + types.size + " question types");
+      if (families.size < 8) errors.push(courseId + "/" + concept.id + " has only " + families.size + " independent variant families");
+      if (activeSurfaces.length < 10) errors.push(courseId + "/" + concept.id + " has only " + activeSurfaces.length + " actively scheduled surfaces");
+      if (activeTypes.size < 4) errors.push(courseId + "/" + concept.id + " has only " + activeTypes.size + " actively scheduled question types");
+      if (activeFamilies.size < 6) errors.push(courseId + "/" + concept.id + " has only " + activeFamilies.size + " actively scheduled variant families");
+      if (!surfaces.some(function (question) { return question.boss; })) errors.push(courseId + "/" + concept.id + " has no boss coverage");
+    }
+    if (mode === "objective" && activeSurfaces.some(function (question) { return question.type === "short-answer"; })) errors.push(courseId + "/" + concept.id + " is objective-only but appears on a written surface");
+    if (["BRGSA", "IBM"].indexOf(courseId) >= 0 && mode !== "objective") {
       ["short", "case"].forEach(function (mode) {
         if (!surfaces.some(function (question) { return question.type === "short-answer" && question.writtenMode === mode; })) errors.push(courseId + "/" + concept.id + " has no exam-aligned " + mode + " written practice");
       });
@@ -481,25 +500,62 @@ var lessonCoverage = {};
 
 Object.keys(lessons).forEach(function (lectureId) {
   var lesson = lessons[lectureId];
-  var label = "lesson " + lectureId;
+  /* An add-in teaches a lecture inside a neighbouring lecture's lesson (owner decision
+   * 2026-08-19). The worked example and the handoff belong to its HOST — that is what
+   * makes it a fold-in rather than a thin lesson — so requiring them here would force
+   * every add-in to be padded back to lesson shape, which is the thing the mechanism
+   * exists to avoid. Everything that keeps the teaching checkable is still required of
+   * it: its own objective, its own prose, and its own glossary, whose terms this file's
+   * LAW-49 gate still scores against the transcripts exactly as it does a lesson's. */
+  var isAddIn = Boolean(lesson.addInOf);
+  var label = (isAddIn ? "add-in " : "lesson ") + lectureId;
   if (lesson.lectureId !== lectureId) errors.push(label + " disagrees with its own key");
   if (courseIds.indexOf(lesson.courseId) < 0) errors.push(label + " has unknown courseId " + lesson.courseId);
+  if (isAddIn && !lessons[lesson.addInOf]) errors.push(label + " names host " + lesson.addInOf + ", which has no lesson");
   if (!lesson.objective || String(lesson.objective).trim().length < 20) errors.push(label + " has no usable objective");
   if (!Array.isArray(lesson.explainer) || lesson.explainer.length < 2) errors.push(label + " needs at least two explainer paragraphs");
-  if (!lesson.worked || !lesson.worked.setup || !lesson.worked.move || !lesson.worked.because) errors.push(label + " needs a worked example with setup, move and reason");
-  if (!Array.isArray(lesson.glossary) || lesson.glossary.length < 2) errors.push(label + " needs at least two glossary terms");
+  if (!isAddIn && (!lesson.worked || !lesson.worked.setup || !lesson.worked.move || !lesson.worked.because)) errors.push(label + " needs a worked example with setup, move and reason");
+  var minGlossary = isAddIn ? 1 : 2;
+  if (!Array.isArray(lesson.glossary) || lesson.glossary.length < minGlossary) errors.push(label + " needs at least " + minGlossary + " glossary term" + (minGlossary === 1 ? "" : "s"));
   (lesson.glossary || []).forEach(function (entry, index) {
     if (!entry || !entry.term || !entry.plain) errors.push(label + " glossary entry " + index + " is incomplete");
     else if (String(entry.plain).trim().length < 15) errors.push(label + " glossary term \"" + entry.term + "\" has no real definition");
   });
-  if (!lesson.connects) errors.push(label + " does not hand off to what comes next");
+  if (!isAddIn && !lesson.connects) errors.push(label + " does not hand off to what comes next");
 });
 
 /* Lecture source. The clean transcripts are the authority; the old AI-Ready Pack
  * is still readable so existing invocations do not break, but content authored
  * against its dense layer is what LAW-49 exists to catch. See tools/lib/. */
 var lectureSource = require("./lib/clean_transcripts.js");
-var packPath = process.argv[2];
+/* The path may come from the environment so `npm run validate:bank` is not a
+ * different, weaker check than the one the protocol documents. Without a path this
+ * script used to skip the lecture checks and the whole vocabulary gate and still
+ * report ok:true — a green tick over nothing, which is worse than no gate at all,
+ * because it is quoted as evidence. Absent a path it is now an error. */
+var packPath = process.argv[2] || process.env.T6_PACK;
+
+/* The course notes, as a second authority beside the lectures. Optional, because the
+ * material is owner-supplied and gitignored — but its absence is reported on every
+ * finding it would have settled, so a run without it can never be mistaken for a
+ * clean one. Nothing read here is written anywhere: see tools/lib/course_notes.js on
+ * why this is loaded live rather than precomputed into an index. */
+var courseNotes = require("./lib/course_notes.js");
+var notesPath = process.argv[3] || process.env.T6_NOTES ||
+  (fs.existsSync(path.join(__dirname, "..", "docs", "course-material"))
+    ? path.join(__dirname, "..", "docs", "course-material") : null);
+var notes = {available: false, sources: []};
+if (notesPath) {
+  try {
+    notes = courseNotes.loadNotes(notesPath);
+  } catch (error) {
+    warnings.push("Could not read course notes at " + notesPath + ": " + error.message);
+  }
+}
+if (!notes.available) {
+  warnings.push("No course-notes source read, so every vocabulary finding below is judged on the lecture transcripts alone. The lessons were authored from the revision sheets too, so findings may be artefacts. Pass the course-material path as the third argument or set T6_NOTES.");
+}
+
 if (packPath) {
   var loaded = null;
   try {
@@ -555,9 +611,35 @@ if (packPath) {
      * invented vocabulary and sends the author to delete a term the course teaches in
      * a lecture TITLE. Hyphens, slashes, and repeated whitespace all collapse to one
      * space on both sides before matching. The title is included in the searched text
-     * for the same reason — naming a concept in the title is teaching it. */
+     * for the same reason — naming a concept in the title is teaching it.
+     *
+     * -ise/-ize is folded for the same reason, and folded the same way on BOTH sides.
+     * The transcripts are transcribed to US spelling and the lessons are written in
+     * British; without this, "decentralised model", "social mobilisation", "local
+     * optimisation" and "randomised controlled trial" are all reported as invented
+     * vocabulary while the course teaches every one of them. The fold does not have to
+     * be linguistically correct — it turns "advertise" into "advertize" too — because
+     * it is applied to the term and the transcript alike, so the comparison still holds.
+     * It must never be applied to only one side. */
     function normaliseForVocab(value) {
-      return String(value || "").toLowerCase().replace(/[‐-―\-\/]+/g, " ").replace(/\s+/g, " ").trim();
+      return String(value || "")
+        .toLowerCase()
+        .replace(/[‐-―\-\/]+/g, " ")
+        .replace(/\s+/g, " ")
+        .replace(/is(ation|ations|e|es|ed|ing)\b/g, "iz$1")
+        .trim();
+    }
+
+    /* Plural tolerance has to work in BOTH directions. The first version appended an
+     * optional plural to each word, which matched a singular heading against a plural
+     * source — but not the reverse. So "carbon markets" failed against notes that say
+     * "carbon market", and the gate reported a term the course does teach as absent from
+     * its own module notes. Stemming the trailing plural off the heading first, then
+     * allowing an optional one, makes the comparison symmetric. Words of three letters or
+     * fewer are left alone so "gas" or "ops" are not stemmed into noise. */
+    function wordPattern(word) {
+      var stem = word.length > 3 ? word.replace(/(es|s)$/, "") : word;
+      return stem.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?:e?s)?";
     }
 
     var transcriptsBySubject = {};
@@ -576,10 +658,18 @@ if (packPath) {
       return ordered;
     }
 
+    /* A glossary heading is singular ("pain reliever", "actionable metric") and the
+     * lecture says it in the plural. A bare \bterm\b misses that — it reported six
+     * terms as invented while the course used every one of them, one of them in the
+     * very lecture the lesson describes. Each word may therefore carry an optional
+     * plural. The tolerance is deliberately only a plural, not a general suffix:
+     * \w* here would match "market" inside "marketing" and quietly stop the gate
+     * catching the invented terminology it exists for. */
     function firstUse(courseId, term) {
       var needle = normaliseForVocab(term);
       if (!needle) return null;
-      var pattern = new RegExp("\\b" + needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i");
+      var body = needle.split(" ").map(wordPattern).join("\\s+");
+      var pattern = new RegExp("\\b" + body + "\\b", "i");
       var texts = lectureTexts(courseId);
       for (var index = 0; index < texts.length; index += 1) {
         if (pattern.test(texts[index].text)) return texts[index].lectureId;
@@ -587,22 +677,81 @@ if (packPath) {
       return null;
     }
 
+    /* The notes are the second authority, and without them this gate manufactures
+     * failures. `data/syllabus/README.md` says the term lists come from the course's
+     * revision sheets, and the lessons were authored from those sheets as much as from
+     * the lectures. A term the module notes introduce either has no transcript position
+     * or has one that says nothing about where the course teaches it — "CSR trap",
+     * "BOP scale paradox", "policy ripple effect" and "career aspiration bottleneck"
+     * all read as invented vocabulary until the IBM short notes were searched, and all
+     * four are in them.
+     *
+     * A term is available to a lesson when the module's OWN notes carry it, judged on
+     * the first module of the file's range so a two-module file cannot smuggle a term
+     * one module early. Crucially, a miss against a file that could not be extracted is
+     * UNKNOWN and never an error: 9 of 49 note files here are image scans at 0
+     * characters a page, and treating those as absence would fail lessons for material
+     * nobody searched. */
+    var notesBySubject = {};
+    var unsearchableBySubject = {};
+    if (notes.available) notes.sources.forEach(function (source) {
+      if (source.searchable) {
+        (notesBySubject[source.subject] = notesBySubject[source.subject] || [])
+          .push({firstModule: source.firstModule, text: normaliseForVocab(source.text), file: source.file});
+      } else {
+        (unsearchableBySubject[source.subject] = unsearchableBySubject[source.subject] || [])
+          .push({firstModule: source.firstModule, file: source.file});
+      }
+    });
+
+    function inNotes(courseId, term, module) {
+      var needle = normaliseForVocab(term);
+      if (!needle) return null;
+      var body = needle.split(" ").map(wordPattern).join("\\s+");
+      var pattern = new RegExp("\\b" + body + "\\b", "i");
+      var pool = notesBySubject[courseId] || [];
+      for (var index = 0; index < pool.length; index += 1) {
+        var source = pool[index];
+        if (source.firstModule !== null && source.firstModule > module) continue;
+        if (pattern.test(source.text)) return source.file;
+      }
+      return null;
+    }
+    /* Is there material covering this module that we could not read? */
+    function blindSpot(courseId, module) {
+      return (unsearchableBySubject[courseId] || []).filter(function (source) {
+        return source.firstModule === null || source.firstModule <= module;
+      })[0] || null;
+    }
+
     Object.keys(lessons).forEach(function (lectureId) {
       var lesson = lessons[lectureId];
       (lesson.glossary || []).forEach(function (entry) {
         var term = String(entry.term || "").trim();
         var seen = firstUse(lesson.courseId, term);
-        if (!seen) {
-          // A plain-language label for an idea the course teaches without naming
-          // it is legitimate; a technical-sounding phrase the course never uses
-          // is the defect this gate exists to catch.
-          if (term.split(/\s+/).length > 1) {
-            warnings.push("lesson " + lectureId + " defines \"" + term + "\", which does not appear in the " + lesson.courseId + " transcripts — confirm it is not invented vocabulary.");
-          }
+        var premature = seen && lectureRank(seen) > lectureRank(lectureId);
+        if (seen && !premature) return;
+
+        // Either absent from the transcripts, or ahead of its first use in them.
+        // Both are settled by the module's own notes before anything is reported.
+        var note = notes.available ? inNotes(lesson.courseId, term, lesson.module) : null;
+        if (note) return;
+
+        var blind = notes.available ? blindSpot(lesson.courseId, lesson.module) : null;
+        if (!notes.available) {
+          // No notes given at all: fall back to the transcript-only judgement, but say so.
+          if (premature) errors.push("lesson " + lectureId + " defines \"" + term + "\" but the course does not use it until " + seen + " (no notes source given; pass one to check the revision sheets before treating this as a defect)");
+          else if (term.split(/\s+/).length > 1) warnings.push("lesson " + lectureId + " defines \"" + term + "\", which does not appear in the " + lesson.courseId + " transcripts — confirm it is not invented vocabulary.");
           return;
         }
-        if (lectureRank(seen) > lectureRank(lectureId)) {
-          errors.push("lesson " + lectureId + " defines \"" + term + "\" but the course does not use it until " + seen);
+        if (blind) {
+          warnings.push("lesson " + lectureId + " defines \"" + term + "\", which is in neither the " + lesson.courseId + " transcripts nor the searchable notes — but " + blind.file + " covering this module could not be extracted, so this is unverified rather than wrong.");
+          return;
+        }
+        if (premature) {
+          errors.push("lesson " + lectureId + " defines \"" + term + "\" but the course does not use it until " + seen + ", and the module's own notes do not carry it either");
+        } else if (term.split(/\s+/).length > 1) {
+          warnings.push("lesson " + lectureId + " defines \"" + term + "\", which appears in neither the " + lesson.courseId + " transcripts nor the module's notes — confirm it is not invented vocabulary.");
         }
       });
     });
@@ -651,20 +800,36 @@ if (packPath) {
       var lectures = new Set();
       scheduled.forEach(function (question) { (question.sourceIds || []).forEach(function (sourceId) { lectures.add(sourceId); }); });
       var taughtLectures = Array.from(lectures).filter(function (lectureId) { return !!lessons[lectureId]; });
+      var runModules = new Set((courses[courseId].runs || []).filter(function (run) {
+        return run.module >= 1 && run.module <= 8;
+      }).map(function (run) { return run.module; }));
+      var registeredLessons = Object.keys(lessons).filter(function (lectureId) {
+        return lessons[lectureId].courseId === courseId;
+      });
+      var lessonsScheduledInModuleRuns = registeredLessons.filter(function (lectureId) {
+        return runModules.has(lessons[lectureId].module);
+      });
       lessonCoverage[courseId] = {
         scheduledQuestions: scheduled.length,
         questionsFullyTaught: taught.length,
         questionsWithoutLesson: scheduled.length - taught.length,
         lecturesCited: lectures.size,
-        lecturesWithLesson: taughtLectures.length
+        lecturesWithLesson: taughtLectures.length,
+        registeredLessons: registeredLessons.length,
+        lessonsScheduledInModuleRuns: lessonsScheduledInModuleRuns.length,
+        lessonsReadableOnly: registeredLessons.length - lessonsScheduledInModuleRuns.length
       };
       if (taught.length < scheduled.length) {
         warnings.push(courseId + ": " + (scheduled.length - taught.length) + " of " + scheduled.length +
           " scheduled questions still have no lesson for at least one lecture they cite (0→80 backlog).");
       }
+      if (lessonsScheduledInModuleRuns.length < registeredLessons.length) {
+        errors.push(courseId + ": " + (registeredLessons.length - lessonsScheduledInModuleRuns.length) +
+          " registered lesson(s) are readable only and never scheduled by sets 1–8.");
+      }
     });
   }
-} else warnings.push("Lecture-source existence, the vocabulary gate, and lesson coverage were not checked; pass the T6 pack path to enable them.");
+} else errors.push("No lecture source given, so lecture existence, the LAW-49 vocabulary gate, and lesson coverage were all skipped. Pass the clean-transcripts path as the first argument or set T6_PACK. This is an error, not a warning: a run without it proves nothing.");
 
 var total = courseIds.reduce(function (sum, courseId) { return sum + Object.keys(courses[courseId].questions).length; }, 0);
 /* A floor, not an equality. The original check pinned the bank at exactly 792 so

@@ -1,0 +1,304 @@
+{
+  "courseId": "SPMS",
+  "title": "Software Product Management and Strategy",
+  "source": "course revision sheets, modules 1-8",
+  "modules": {
+    "1": [
+      "Software product management",
+      "Product vs project",
+      {
+        "term": "evolution of software product management",
+        "aliases": [
+          "evolution of product management"
+        ]
+      },
+      {
+        "term": "Physical vs software products",
+        "aliases": [
+          "physical and software products"
+        ]
+      },
+      "Marginal cost",
+      {
+        "term": "Embedded product",
+        "aliases": [
+          "embedded software"
+        ]
+      },
+      "Product platform",
+      "Product line",
+      "Product family",
+      {
+        "term": "Desirability, feasibility, viability",
+        "aliases": [
+          "DFV framework",
+          "desirability"
+        ]
+      },
+      "Startup",
+      {
+        "term": "Minimum viable product",
+        "aliases": [
+          "MVP"
+        ]
+      },
+      "Startup stages",
+      "Need versus value",
+      "Product thinking",
+      {
+        "term": "Jobs to Be Done",
+        "aliases": [
+          "JTBD"
+        ]
+      },
+      {
+        "term": "Customer discovery",
+        "aliases": [
+          "discovery phase"
+        ]
+      }
+    ],
+    "2": [
+      {
+        "term": "B2C value pyramid",
+        "aliases": [
+          "value pyramid"
+        ]
+      },
+      "Functional value",
+      "Emotional value",
+      {
+        "term": "Value proposition canvas",
+        "aliases": [
+          "VPC"
+        ]
+      },
+      {
+        "term": "Total addressable market",
+        "aliases": [
+          "TAM"
+        ]
+      },
+      {
+        "term": "Serviceable addressable market",
+        "aliases": [
+          "SAM"
+        ]
+      },
+      {
+        "term": "Serviceable obtainable market",
+        "aliases": [
+          "SOM"
+        ]
+      },
+      {
+        "term": "Earlyvangelists",
+        "aliases": [
+          "early evangelists"
+        ]
+      },
+      "Learning loops",
+      "Pivot",
+      "Vanity metrics",
+      "Actionable metrics",
+      {
+        "term": "Problem-solution fit",
+        "aliases": [
+          "PSF"
+        ]
+      },
+      {
+        "term": "Product-market fit",
+        "aliases": [
+          "PMF"
+        ]
+      },
+      {
+        "term": "Crossing the chasm",
+        "aliases": [
+          "the chasm"
+        ]
+      }
+    ],
+    "3": [
+      "Product vision",
+      "Company vision",
+      "Product definition",
+      "Positioning",
+      {
+        "term": "Go to market",
+        "aliases": [
+          "GTM"
+        ]
+      },
+      "Growth strategies",
+      "Business model",
+      "Lean Canvas",
+      "Software delivery models",
+      "On-premise",
+      "Managed services",
+      "Tailorability",
+      "Sourcing strategy"
+    ],
+    "4": [
+      "Cost-based pricing",
+      "Value-based pricing",
+      "Value creation",
+      "Price structure",
+      "Price-value communication",
+      "Pricing policy",
+      "Price level",
+      {
+        "term": "Software revenue models",
+        "aliases": [
+          "revenue models",
+          "one-time charge",
+          "subscription"
+        ]
+      },
+      {
+        "term": "One-time charge",
+        "aliases": [
+          "OTC"
+        ]
+      },
+      {
+        "term": "Subscription",
+        "aliases": [
+          "SaaS"
+        ]
+      },
+      "Unit economics",
+      "Payback period",
+      "Churn rate",
+      "Gross margin",
+      "Funding stages",
+      "Superforecasting"
+    ],
+    "5": [
+      "Business ecosystem",
+      "Keystone players",
+      "Dominators",
+      "Niche players",
+      "Blue ocean strategy",
+      "Value innovation",
+      "Product marketing",
+      "Customer journey",
+      "Product launch",
+      "Competitive advantage",
+      "Competition and alternatives"
+    ],
+    "6": [
+      "Product planning",
+      "Requirements-driven planning",
+      "Data-driven planning",
+      "Requirements engineering",
+      "Functional requirements",
+      {
+        "term": "Quality requirements",
+        "aliases": [
+          "non-functional requirements",
+          "NFR"
+        ]
+      },
+      "Requirements elicitation",
+      "Traceability",
+      "Requirement lifecycle",
+      "Triage",
+      "Release planning",
+      "Heartbeat principle",
+      {
+        "term": "Change control board",
+        "aliases": [
+          "CCB"
+        ]
+      },
+      {
+        "term": "Verification versus validation",
+        "aliases": [
+          "verification",
+          "validation"
+        ]
+      }
+    ],
+    "7": [
+      "Prioritisation",
+      "MoSCoW",
+      {
+        "term": "RICE",
+        "aliases": [
+          "weighted RICE"
+        ]
+      },
+      "Kano model",
+      "Cost-value prioritisation",
+      "Product roadmap",
+      "Release plan",
+      "Planning horizons",
+      {
+        "term": "Product lifecycle management",
+        "aliases": [
+          "PLM"
+        ]
+      },
+      "product lifecycle management",
+      "Team roles",
+      {
+        "term": "Agile",
+        "aliases": [
+          "DevOps"
+        ]
+      }
+    ],
+    "8": [
+      "Orchestration",
+      "Product metrics",
+      {
+        "term": "AARRR",
+        "aliases": [
+          "pirate metrics"
+        ]
+      },
+      "HEART framework",
+      "North star metric",
+      "Intellectual property",
+      "Data privacy",
+      {
+        "term": "GDPR",
+        "aliases": [
+          "general data protection regulation"
+        ]
+      },
+      {
+        "term": "CCPA",
+        "aliases": [
+          "california consumer privacy act"
+        ]
+      },
+      {
+        "term": "DPDP",
+        "aliases": [
+          "digital personal data protection"
+        ]
+      },
+      "Data fiduciary",
+      {
+        "term": "Privacy by design",
+        "aliases": [
+          "data protection by design"
+        ]
+      },
+      "Magic quadrant",
+      "Hype cycle",
+      "Dark patterns",
+      "AI bias",
+      "Explainability",
+      {
+        "term": "Human in the loop",
+        "aliases": [
+          "HITL"
+        ]
+      }
+    ]
+  }
+}

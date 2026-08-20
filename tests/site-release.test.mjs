@@ -61,6 +61,7 @@ test("static responses receive launch security and cache headers", async () => {
   assert.equal(response.headers.get("x-content-type-options"), "nosniff");
   assert.equal(response.headers.get("x-frame-options"), "DENY");
   assert.match(response.headers.get("content-security-policy"), /frame-ancestors 'none'/);
+  assert.match(response.headers.get("content-security-policy"), /style-src-attr 'unsafe-inline'/);
   assert.equal(response.headers.get("cache-control"), "private, max-age=0, must-revalidate");
   assert.equal(response.headers.get("cross-origin-resource-policy"), "same-origin");
   assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow, noarchive");
@@ -72,6 +73,7 @@ test("release build includes only the allowlisted active app", async () => {
     "utf8"
   );
   assert.match(buildScript, /app\/t6\.html/);
+  assert.match(buildScript, /app\/t6-chart\.js/);
   assert.match(buildScript, /app\/login\.html/);
   assert.match(buildScript, /app\/admin\.html/);
   assert.match(buildScript, /app\/robots\.txt/);
@@ -81,6 +83,31 @@ test("release build includes only the allowlisted active app", async () => {
   assert.doesNotMatch(buildScript, /CLAs\//);
   assert.doesNotMatch(buildScript, /legacy\//);
   assert.match(buildScript, /client.*release-manifest\.json|release-manifest\.json.*client/s);
+});
+
+test("every dashboard graph is a shadcn Recharts component", async () => {
+  const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
+  const charts = await readFile(new URL("../app/t6-chart.jsx", import.meta.url), "utf8");
+
+  assert.match(html, /<script src="t6-chart\.js"><\/script>/);
+  assert.match(html, /<div id="hero-trend"[^>]*role="img"/);
+  assert.match(html, /<div id="mastery-radar"[^>]*role="img"/);
+  assert.match(html, /<div id="progress-trend"[^>]*role="img"/);
+  assert.doesNotMatch(html, /<canvas/);
+
+  assert.match(charts, /ui\.shadcn\.com\/r\/styles\/new-york-v4\/chart-area-gradient\.json/);
+  assert.match(charts, /ui\.shadcn\.com\/r\/styles\/new-york-v4\/chart-radar-default\.json/);
+  assert.match(charts, /<AreaChart\s+accessibilityLayer/);
+  assert.match(charts, /<RadarChart\s+accessibilityLayer/);
+  assert.match(charts, /<CartesianGrid vertical=\{false\}/);
+  assert.match(charts, /<PolarGrid gridType="polygon"/);
+  assert.match(charts, /type="natural"/);
+  assert.match(charts, /<ChartTooltip cursor=\{false\}/);
+  assert.match(charts, /<ResponsiveContainer/);
+
+  assert.doesNotMatch(app, /getContext\(["']2d["']\)/);
+  assert.doesNotMatch(app, /goalRouteMarkup|paintRadar|trend-line|trend-area/);
 });
 
 test("anonymous login assets do not disclose the private WhatsApp invite", async () => {

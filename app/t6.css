@@ -324,9 +324,14 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .rail-heading h3 { margin: 0; color: var(--muted); font: 800 11px/1 Inter, sans-serif; letter-spacing: .13em; text-transform: uppercase; }
 /* The full name of what you just picked, answering the block's question directly.
    It used to sit three sections lower, inside a tab. */
-/* Edge fade for the subject swipe row. Drawn only on the side that still has cards
-   behind it, and only when the row actually scrolls — data-scroll="none" on every
-   width where all four fit. Pointer-events off so it never eats a tap. */
+/* Edge fade for the subject rail. Drawn only on the side that still has cards behind
+   it, and only when the row actually scrolls — data-scroll="none" on every width where
+   all four fit. Pointer-events off so it never eats a tap.
+
+   Since 2026-08-18 that is every width: the phone layout was a swipe row hiding 54% of
+   itself and is now a 2x2 grid, so nothing scrolls and this paints nothing. Kept rather
+   than deleted because it is self-correcting — if a fifth subject arrives, or the rail
+   returns, the cue comes back without anyone remembering to re-add it. */
 .rail-scroll { position: relative; min-width: 0; }
 .rail-scroll::before, .rail-scroll::after { content: ""; position: absolute; top: 0; bottom: 0; width: 34px; pointer-events: none; opacity: 0; transition: opacity .18s ease; }
 .rail-scroll::before { inset-inline-start: 0; background: linear-gradient(to right, var(--paper), var(--paper-fade)); }
@@ -338,7 +343,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    generously clear of the hero below, so the space says which one it belongs to
    instead of leaving it floating between the two. */
 .subject-identity { max-width: 62ch; margin: -5px 0 0; color: var(--muted); font-size: var(--t-meta); }
-.focus-panel { position: relative; overflow: hidden; margin-top: 26px; display: grid; grid-template-columns: minmax(0,1.42fr) minmax(300px,.62fr); color: var(--on-deep); background: var(--deep); border: 1px solid var(--deep-edge); border-radius: var(--r-panel); box-shadow: var(--shadow); }
+.focus-panel { position: relative; overflow: hidden; margin-top: 26px; display: grid; grid-template-columns: minmax(0,1.32fr) minmax(380px,.76fr); color: var(--on-deep); background: var(--deep); border: 1px solid var(--deep-edge); border-radius: var(--r-panel); box-shadow: var(--shadow); }
 .focus-panel::before { content: ""; position: absolute; width: 360px; height: 360px; right: -130px; top: -180px; border: 1px solid var(--deep-ring); border-radius: 50%; box-shadow: 0 0 0 48px var(--deep-ring-faint), 0 0 0 96px var(--deep-ring-fainter); pointer-events: none; }
 .focus-copy { position: relative; z-index: 1; padding: clamp(30px,5vw,58px); }
 .focus-copy .eyebrow { color: var(--on-deep-muted); }
@@ -392,7 +397,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
    ran 57% of the way down and stopped in mid-air — the single clearest "unfinished"
    tell on the block. The column now spans the panel and the rule terminates against
    both edges; the content is centred inside it instead. */
-.focus-goal { position: relative; z-index: 1; align-self: stretch; display: grid; align-content: center; padding: clamp(24px,3vw,34px) clamp(26px,3.4vw,40px); border-inline-start: 1px solid var(--deep-line); }
+.focus-goal { position: relative; z-index: 1; min-width: 0; align-self: stretch; display: grid; align-content: center; padding: clamp(24px,3vw,34px) clamp(26px,3.4vw,40px); border-inline-start: 1px solid var(--deep-line); }
 .focus-goal .eyebrow { color: var(--on-deep-faint); }
 .momentum-figure { margin-top: 9px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; }
 .momentum-figure > b { font: 700 32px/1 Georgia, serif; }
@@ -400,7 +405,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .momentum-delta.up { color: var(--green); background: var(--green-soft); }
 .momentum-delta.down { color: var(--red); background: var(--red-soft); }
 .momentum-delta.flat { color: var(--muted); background: var(--grey-soft); }
-.hero-trend { display: block; width: 100%; height: 88px; margin: 12px 0; overflow: visible; }
+.hero-trend { display: block; width: 100%; max-width: 660px; height: clamp(132px,14vw,176px); margin: 14px 0 0; }
 .focus-goal > p:not(.eyebrow):not(.route-legend) { margin: 0; color: var(--on-deep-muted); font-size: var(--t-meta); }
 .momentum-unit, .focus-goal .route-legend { color: var(--on-deep-faint); }
 .focus-goal .info { background: transparent; border-color: var(--deep-veil-strong); color: var(--on-deep-muted); }
@@ -466,7 +471,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .mastery-matrix .summary-heading { align-items: start; }
 .mastery-matrix .summary-heading h3 { margin: 0; font: 650 21px/1.15 Georgia, serif; }
 .radar-layout { margin-top: 8px; display: grid; grid-template-columns: minmax(200px,1fr) minmax(130px,.62fr); align-items: center; gap: 8px; }
-#mastery-radar { display: block; width: min(100%,340px); aspect-ratio: 1; margin: 0 auto; }
+#mastery-radar { display: block; width: min(100%,340px); height: clamp(260px,27vw,340px); margin: 0 auto; }
 .mastery-values { margin: 0; padding: 0; display: grid; gap: 7px; list-style: none; }
 .mastery-values li { padding: 6px 0; display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); }
 .mastery-values span { color: var(--muted); font-size: var(--t-micro); font-weight: 800; }
@@ -604,18 +609,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .trend-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
 .trend-heading h3 { margin: 0; font: 650 21px/1.15 Georgia, serif; }
 .trend-heading > b { color: var(--green); font: 700 30px Georgia, serif; }
-.progress-trend { width: 100%; height: 220px; margin-top: 9px; overflow: visible; }
-.trend-grid { stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; }
-/* On the scale, not one pixel under it. These seven axis labels were the only type in
-   the product below `--t-micro`, and `ui-audit`'s type check could not report them:
-   its floor was hard-coded a pixel ABOVE the scale, so it listed 111 compliant
-   elements, truncated at ten, and buried the seven that actually broke the rule. */
-.trend-label, .trend-axis-copy { fill: var(--muted); font: var(--t-micro) Inter, sans-serif; }
-.trend-area { fill: var(--green-fill-soft); }
-.trend-line { fill: none; stroke: var(--green); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.progress-trend circle { fill: var(--card); stroke: var(--green); stroke-width: 3; vector-effect: non-scaling-stroke; }
-.trend-empty { fill: none; stroke: var(--line-strong); stroke-width: 2; stroke-dasharray: 6 7; vector-effect: non-scaling-stroke; }
-.trend-empty-copy { fill: var(--muted); font: 13px Inter, sans-serif; }
+.progress-trend { position: relative; width: 100%; height: 220px; margin-top: 9px; }
 #trend-description { margin: 2px 0 0; color: var(--muted); font-size: var(--t-small); }
 /* The module browser, its stepper, the concept nodes, and the inspector panel were
    removed here: a second copy of the concept list that only the shelf could act on.
@@ -825,20 +819,37 @@ button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visib
 .numeric-unit { color: var(--muted); font-size: var(--t-meta); }
 .numeric-verdict { margin: 10px 0 0; font-size: var(--t-meta); font-variant-numeric: tabular-nums; }
 
-/* The route to the goal. The full line is always drawn so the distance is
-   legible before any progress exists; the filled wedge is ground covered. */
-/* The route to the goal now draws on the dark hero rather than a pale card, so the
-   same three meanings are restated at dark-surface contrast: green is the goal,
-   cyan is where you stand, and the dashed remainder is the distance left. The
-   meanings are unchanged — only the luminance is. */
-.route-full { fill: none; stroke: var(--deep-veil-strong); stroke-width: 3; stroke-dasharray: 6 6; stroke-linecap: round; }
-.route-gained { fill: var(--blue-fill-on-deep); stroke: none; }
-.route-done { fill: none; stroke: var(--blue-on-deep); stroke-width: 3; stroke-linecap: round; }
-.route-goal { fill: var(--green-on-deep); stroke: var(--ink); stroke-width: 3; }
-.route-here { fill: var(--blue-on-deep); stroke: var(--ink); stroke-width: 3; }
-/* 54px left the route reading as a stray diagonal in a large dark field. */
-.hero-trend { height: 72px; margin: 16px 0 0; overflow: visible; }
-.route-legend { margin: 4px 0 0; display: flex; justify-content: space-between; font-size: var(--t-micro); }
+/* This is the shadcn gradient-area chart component, not a chart-shaped SVG authored
+   in Dungeon. Only its tokens and compact tooltip are local. Recharts owns the
+   responsive geometry, natural curve, grid, gradient areas and accessible layer. */
+.momentum-chart { width: 100%; height: 100%; min-width: 0; color: var(--on-deep); font-size: var(--t-micro); }
+.momentum-chart .recharts-wrapper, .momentum-chart .recharts-surface { overflow: visible; outline: none; }
+.momentum-chart .recharts-cartesian-grid line { stroke: var(--deep-veil-strong); stroke-opacity: .42; }
+.momentum-chart .recharts-area-curve { vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+.momentum-chart .chart-route-icon { color: var(--on-deep-faint); filter: drop-shadow(0 1px 0 var(--deep)); }
+.momentum-chart .chart-route-icon.current { color: var(--saffron); }
+.momentum-chart .chart-route-icon.goal { color: var(--green-on-deep); }
+.momentum-chart-tooltip { min-width: 126px; padding: 8px 10px; display: grid; gap: 3px; color: var(--on-deep); background: var(--deep-raised); border: 1px solid var(--deep-edge); border-radius: var(--r-control); box-shadow: var(--shadow-deep); }
+.momentum-chart-tooltip b { font-size: var(--t-small); }
+.momentum-chart-tooltip span { color: var(--on-deep-muted); font-size: var(--t-micro); }
+/* The remaining dashboard graphs use the same shadcn ChartContainer and tooltip
+   contract on the paper surface. Recharts owns every plotted mark and breakpoint. */
+.dungeon-chart { width: 100%; height: 100%; min-width: 0; color: var(--ink); font-size: var(--t-micro); }
+.dungeon-chart .recharts-wrapper, .dungeon-chart .recharts-surface { overflow: visible; outline: none; }
+.dungeon-chart .recharts-cartesian-grid line,
+.dungeon-chart .recharts-polar-grid-angle line,
+.dungeon-chart .recharts-polar-grid-concentric-polygon { stroke: var(--line); }
+.dungeon-chart .recharts-cartesian-axis-tick text,
+.dungeon-chart .recharts-polar-angle-axis-tick text { fill: var(--muted); font-size: var(--t-micro); font-weight: 750; }
+.dungeon-chart .recharts-area-curve,
+.dungeon-chart .recharts-radar-polygon { vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+.trend-chart .trend-single-point { color: var(--green); }
+.dungeon-chart-tooltip { min-width: 126px; padding: 8px 10px; display: grid; gap: 3px; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r-control); box-shadow: var(--shadow); }
+.dungeon-chart-tooltip b { font-size: var(--t-small); }
+.dungeon-chart-tooltip span { color: var(--muted); font-size: var(--t-micro); }
+.trend-empty-copy { position: absolute; inset: 50% 12px auto; z-index: 2; margin: 0; color: var(--muted); font-size: var(--t-small); text-align: center; transform: translateY(-50%); pointer-events: none; }
+.route-legend { width: 100%; max-width: 660px; margin: 3px 0 0; display: flex; justify-content: space-between; gap: 16px; font-size: var(--t-micro); }
+.route-legend > span:last-child { text-align: end; }
 .momentum-figure > b { color: var(--on-deep); }
 .momentum-unit { font-size: var(--t-micro); }
 #momentum-message { margin-top: 14px; }
@@ -1305,13 +1316,28 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
      starts. Full width makes it shorter, not longer: 68px → 60px. */
   .compact-heading { align-items: flex-start; }
   .compact-heading > p { max-width: none; font-size: var(--t-meta); text-align: start; }
-  /* One swipeable row keeps the subject switch a thumb move away instead of a screen of cards.
-     The scrollbar is hidden because the edge fade now carries that message and does it
-     better — it says which direction has more, and disappears at each end. Nothing is
-     lost: the cards are real buttons, so focus still walks and scrolls the row. */
-  .course-grid { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding-bottom: 0; scrollbar-width: none; }
-  .course-grid::-webkit-scrollbar { display: none; }
-  .course-card { flex: 0 0 186px; scroll-snap-align: start; min-height: 96px; grid-template-columns: 1fr; gap: 4px; }
+  /* Two by two, not a swipe row.
+   *
+   * This was one horizontal rail — "the subject switch a thumb move away instead of a
+   * screen of cards" — with the scrollbar hidden because the edge fade was held to carry
+   * the affordance instead. Measured at 375 it showed **355px of 768px: 54% of the row
+   * hidden**, which `ui-audit`'s `hiddenScroll` reports, and the hidden half was not
+   * detail — it was IBM and SCLM entirely off-screen. Two of the four subjects were
+   * invisible on the control whose whole job is choosing between four subjects.
+   *
+   * A rail earns its keep for a long or unknown list. This list is four, fixed, and known
+   * at build time, so there is nothing to page through and nothing the fade can usefully
+   * say. Falling back to the two-column grid the <=900px rule already defines puts all
+   * four on screen, at 174px against the 186px the card was tuned for.
+   *
+   * The cost is honest and was measured rather than assumed: **+106px**, one row of cards,
+   * on a dashboard that runs about 6,700px on a phone. The original comment's fear was a
+   * vertical stack of four (~410px); two rows is not that.
+   *
+   * The fade is left in place and correctly goes quiet on its own — `updateRailScrollCue`
+   * writes data-scroll="none" when there is no slack, which is now every width. */
+  .course-grid { gap: 8px; }
+  .course-card { min-height: 96px; grid-template-columns: 1fr; gap: 4px; }
   .course-name { min-height: 30px; font-size: var(--t-small); }
   /* Two rows, always — not "one row, unless it happens not to fit".
    *
@@ -1426,7 +1452,7 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
   .account-controls { gap: 0; }
   .community-actions { display: grid; }
   .radar-layout { grid-template-columns: 1fr; }
-  #mastery-radar { width: min(100%,280px); }
+  #mastery-radar { width: min(100%,300px); height: 280px; }
   .mastery-values { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 12px; }
 }
 
@@ -1438,6 +1464,15 @@ body.has-resume-bar .dashboard-wrap, body.has-resume-bar .exam-home { padding-bo
 .lesson-coverage { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
 .lesson-coverage-chip { padding: 5px 11px; color: var(--muted); background: var(--grey-soft); border-radius: var(--r-pill); font-size: var(--t-micro); font-weight: 800; }
 .lesson-coverage-chip.primary { color: var(--green); background: var(--green-soft); }
+
+/* How much of the subject these lessons actually cover. Full width so it drops below
+   the chips rather than wrapping into them, since it is a sentence and they are labels. */
+.lesson-coverage-scope { flex: 1 0 100%; margin: 4px 0 0; color: var(--muted); font-size: var(--t-small); line-height: 1.5; }
+.lesson-module-scope { margin: -4px 0 10px; color: var(--muted); font-size: var(--t-small); line-height: 1.5; }
+/* A module with nothing taught changes what the learner should do next, so it is set
+   apart — by weight and ink, not by hue. The wording already carries the meaning
+   ("revise it from your own notes"), which keeps it readable without colour. */
+.lesson-module-scope.none { color: var(--ink-soft); font-weight: 750; }
 
 .lesson-index { display: grid; gap: 22px; }
 .lesson-module > h4 { margin: 0 0 10px; color: var(--muted); font-size: var(--t-micro); font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
@@ -1513,6 +1548,7 @@ details.lesson-row[open] > .lesson-row-head { border-bottom: 1px solid var(--lin
 .exam-readiness.is-ready { color: var(--green); background: var(--green-soft); border-color: var(--green-line); }
 .exam-paper-readiness { margin: 10px 0 0; color: var(--amber); font-size: var(--t-meta); line-height: 1.45; }
 .exam-paper-readiness.is-ready { color: var(--green); }
+.exam-cycle-copy { margin: 12px 0 0; color: var(--muted); font-size: var(--t-small); line-height: 1.45; }
 /* Inline control inside a sentence. 44px minimum applies to it like everything
    else (LAW from the mobile pass), so it carries its own vertical padding rather
    than inheriting the paragraph's line box. */
@@ -1562,6 +1598,12 @@ details.lesson-row[open] > .lesson-row-head { border-bottom: 1px solid var(--lin
 .exam-numeric input { width: min(260px,100%); min-height: 48px; padding: 10px 13px; color: var(--ink); background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-card); font: inherit; font-size: 17px; font-variant-numeric: tabular-nums; }
 .exam-written textarea { width: 100%; padding: 13px 14px; resize: vertical; color: var(--ink); background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-card); font: inherit; line-height: 1.6; }
 .exam-hint { margin: 8px 0 0; color: var(--muted); font-size: var(--t-small); }
+.exam-confidence { max-width: 760px; margin: 22px 0 0; padding: 13px 0 0; border: 0; border-top: 1px solid var(--line); }
+.exam-confidence legend { padding: 0; color: var(--ink); font-weight: 800; }
+.exam-confidence legend small { color: var(--muted); font-weight: 500; }
+.exam-confidence > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 9px; }
+.exam-confidence button { min-height: 38px; padding: 7px 11px; color: var(--muted); background: var(--card); border: 1px solid var(--line-strong); border-radius: 999px; cursor: pointer; }
+.exam-confidence button:hover, .exam-confidence button.chosen { color: var(--blue); border-color: var(--blue); background: var(--blue-tint); }
 .exam-match { display: grid; gap: 10px; max-width: 760px; }
 .exam-match-row { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
 .exam-match-row select { min-height: 46px; padding: 8px 11px; color: var(--ink); background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r-card); }
@@ -2094,6 +2136,8 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 .exam-sets { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 10px; margin-top: 16px; }
 .exam-set { display: grid; gap: 3px; padding: 13px 15px; text-align: start; background: var(--card-soft); border: 1px solid var(--line-strong); border-radius: var(--r-card); cursor: pointer; font: inherit; color: inherit; transition: border-color .15s ease, background .15s ease; }
 .exam-set:hover { border-color: var(--deep); background: var(--card); }
+.exam-set-weak { border-inline-start: 4px solid var(--saffron); background: var(--amber-soft); }
+.exam-set-weak:hover { border-color: var(--saffron); background: var(--card); }
 .exam-set b { font: 650 17px Georgia, serif; }
 .exam-set span { font-size: var(--t-meta); font-variant-numeric: tabular-nums; }
 .exam-set small { color: var(--muted); font-size: var(--t-small); }
@@ -2181,31 +2225,6 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
    rather than being pushed. `both` holds the end state so nothing snaps back. */
 .reveal-in { animation: rise-in .42s cubic-bezier(.22,.61,.36,1) both; }
 
-/* Line drawing. The trend line, the sparkline, and the route to the goal each draw
-   themselves from their first point, which is also the direction a learner reads
-   them. The dash length is set per path by script, since only it knows the length. */
-.draw-in { stroke-dasharray: var(--draw-length); stroke-dashoffset: var(--draw-length); animation: draw-line .85s cubic-bezier(.33,.9,.44,1) forwards; }
-@keyframes draw-line { to { stroke-dashoffset: 0; } }
-/* Dashed lines are wiped, not traced: stroke-dasharray is already carrying meaning on
-   them (the distance still to go), so it cannot also carry the animation. The clip
-   reveals the path left to right and leaves every dash exactly where it was. */
-/* The clipped state lives only inside the keyframes, never on the rule itself. Held
-   on the element it would be a permanent hide the moment the animation does not run —
-   a throttled tab, an unsupported engine — and an invisible chart is a far worse
-   outcome than a chart that simply appears. `both` holds the start during the delay
-   and the fully-revealed end afterwards. (An earlier version ended on inset(0 -4% 0 0);
-   negative insets are invalid, so the animation was dropped and the line stayed
-   clipped to nothing.) */
-.draw-wipe { animation: wipe-in .8s cubic-bezier(.33,.9,.44,1) .1s both; }
-@keyframes wipe-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-/* The area under a drawn line has no length to trace, so it fades in behind the
-   stroke instead of appearing before it. */
-.draw-fade { animation: fade-in .5s ease-out .3s both; }
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-/* Endpoint markers land after the line reaches them. */
-.draw-pop { animation: pop-in .32s cubic-bezier(.34,1.56,.64,1) .6s both; transform-origin: center; }
-@keyframes pop-in { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
-
 /* Press feedback. The hover lift already says "this is pressable"; this says
    "you pressed it", and it has to be quick because it is the most-repeated
    animation in the app. */
@@ -2220,11 +2239,7 @@ body.has-resume-bar .bag-panel { inset-block-end: calc(90px + env(safe-area-inse
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
-  /* Duration alone is not enough for these two: a .01ms draw still starts from a
-     fully offset dash, and a .01ms rise still starts at opacity 0. Both would land
-     correctly but flicker. Remove the starting state outright. */
+  /* Duration alone is not enough for the entrance: a .01ms rise still starts at
+     opacity 0. Recharts receives the same preference as an explicit prop. */
   .reveal-pending, .reveal-in { opacity: 1 !important; animation: none !important; transform: none !important; }
-  .draw-in { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; animation: none !important; }
-  .draw-wipe { clip-path: none !important; animation: none !important; }
-  .draw-fade, .draw-pop { animation: none !important; opacity: 1 !important; transform: none !important; }
 }

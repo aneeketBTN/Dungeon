@@ -9,6 +9,7 @@ const publicFiles = [
   "app/t6.html",
   "app/t6.css",
   "app/t6.js",
+  "app/t6-chart.js",
   // Loaded synchronously in <head> so the theme is set before the first paint; it
   // cannot be inline because the release serves `script-src 'self'`.
   "app/theme.js",
@@ -27,7 +28,8 @@ const publicFiles = [
   "app/sets/t6_brgsa.js",
   "app/sets/t6_catalog.js",
   "app/sets/t6_integrated.js",
-  "app/sets/t6_challenges.js"
+  "app/sets/t6_challenges.js",
+  "app/sets/t6_coverage.js"
 ];
 
 await rm(dist, { recursive: true, force: true });
