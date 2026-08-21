@@ -91,6 +91,14 @@ results.push(run("Absolute bias", "tools/measure-absolute-bias.js", [], (out) =>
 results.push(run("Palette", "tools/check-palette.mjs", [], (out, code) =>
   ({ ok: code === 0, detail: out.trim().split("\n").pop() })));
 
+results.push(run("Mini-mock coverage and rotation", "tools/check-mini-mocks.mjs", [], (out, code) => {
+  const json = JSON.parse(out);
+  return {
+    ok: code === 0 && json.ok === true,
+    detail: json.subjects.map((row) => `${row.courseId} ${row.rounds}×8, applied≥${row.applicationFloor}, rotation ${row.rotationChange.join("/")}%`).join(" · ")
+  };
+}));
+
 results.push(run("Release build", "tools/build-site.mjs", [], (out, code) =>
   ({ ok: code === 0, detail: out.trim().split("\n").pop() })));
 

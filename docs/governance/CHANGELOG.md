@@ -1,5 +1,106 @@
 # Changelog
 
+## 2026-08-21 — Last-day mocks teach in eight questions, rotate through the whole bank, and the UI clears release
+
+Evidence: `evidence/2026-08-21/t6-last-day-mini-mocks/verification.md`.
+
+**A mini-mock is now a coached confidence round rather than a short imitation exam.** Each one is
+exactly eight applied questions — one per module — with immediate correction and an optional
+four-step way-in before answering. There are no lesson, primer, repair, confidence or reattempt
+insertions, so the interaction stays bounded at fifteen minutes. Numerical questions reuse the
+Quick Notes setup/units/formula/check exoskeleton. The result names this as teaching rather than an
+exam prediction and hands the learner to the next fresh round.
+
+**The rich bank is a rotation, not a random draw.** The selector prioritises concepts the current
+cycle has not reached and persists progress per subject. Its shortest whole-concept cycles are
+SPMS **69 concepts / 7×8**, BRGSA **29 / 2×8**, IBM **85 / 10×8**, and SCLM **36 / 5×8**. Every
+round still spans all eight modules and every selected item is applied. A new gate fails missing
+modules, non-applied or duplicate questions, incomplete cycle coverage, or sampled rotations below
+35% id change; observed changes are SPMS 75/73%, BRGSA 75/63%, IBM 74/59%, SCLM 80/70%.
+
+**The release UI separates by tone, lift, and status marks instead of drawing boxes around
+everything.** Dashboard, progress, Exam and mini cards use tonal elevation, restrained shadows and
+small status tabs. The dashboard Bag utility stopped covering the mobile Start action, the duplicate
+resume action is absent at the front door, long readiness copy is reduced to the next useful step,
+and the real-paper confidence targets now meet 44px. The alignment runner audits nine scenes at
+mobile/dark and desktop/light: **18/18 PASS**, with zero overflow, clipping, overlaps, cut rows,
+hidden scroll, dead shadows, flat panels or undersized targets. A fresh regular sweep and an optical
+sweep each produced **24/24** valid, manually inspected captures.
+
+**Verification:** `npm test` **144/144**; mini rotation gate PASS; lesson gate 283/283 scheduled;
+transcript-backed bank validator `ok: true`, 0 errors and populated four-subject coverage; combined
+craft review, naming, palette and exam readiness PASS; production build **20 assets**. The validator
+also reports 69 extraction-unverified glossary warnings for source PDFs it cannot extract; they are
+visible in the review and are not introduced question-bank errors.
+
+## 2026-08-21 — The dashboard is actually smaller, Quick Notes covers the course, and corrections teach
+
+Branch `fix/theme-switch-and-login-theming`. Not merged, not deployed. Evidence:
+`evidence/2026-08-21/t6-dashboard-purge-quick-notes/verification.md`.
+
+**Progressive disclosure had become a way to keep everything.** This pass removes rather than
+relocates: three dashboard charts and their shipped runtime, the five-dial custom builder, lesson
+index, time plan, exam-plan panel, prediction disclaimer, duplicate status coins and the header
+subject dropdown. Learn now keeps the fixed-run action, one four-number progress glance, replay,
+concept detail, one Focused practice disclosure that responds to actual evidence, and a quiet reset.
+The four subject cards are the only subject switch and still start or resume revision directly.
+
+**Quick Notes turns the completed teaching layer into one readable course.** The new third top-level
+destination renders all **283 authored teaching entries** in subject, module and lecture order, with
+the lesson objective, layered explanation, worked move, glossary and course connection intact.
+Each module starts with its assessed concept map. Search jumps to a matching lecture, and Print
+subject / save PDF expands the complete selected subject. Eleven reusable numerical guides — BRGSA
+3, SCLM 5, SPMS 2, IBM 1 — teach the theory, unit setup, question exoskeleton and reasonableness
+checks rather than rehearsing a bank answer.
+
+**A wrong answer now explains the correction, not Dungeon's scheduler.** `The idea will return` and
+confident-error repair mechanics are gone from learner feedback. The panel reads `Not quite`, Better
+answer, Why, What your answer missed, Use this check and How it fits. Live Browser testing also
+caught two stale scenario fixtures and the redundant header dropdown causing 74px mobile overflow;
+both fixtures were repaired and the dropdown was removed. Desktop routes and Notes search pass with
+zero console errors; Dashboard and Notes both have zero overflow at 375 × 812.
+
+**Verification:** full suite **142/142**; focused release suite 11/11; lesson gate 283/283 scheduled,
+0 errors / 0 warnings; review, palette and exam readiness PASS; build **19 public assets** after the
+chart runtime left the allowlist; JavaScript syntax and whitespace checks clean. Local Browser
+verified dashboard disclosure, subject → lesson → return, Notes subjects/modules/search/numerical
+guides, the wrong-answer hierarchy, and responsive layout. No merge or deployment was performed.
+
+## 2026-08-21 — Learn becomes one sequenced front door, and every run ends with a quick look
+
+Branch `fix/theme-switch-and-login-theming`. Not merged, not deployed. Evidence:
+`evidence/2026-08-21/t6-learn-streamlining/verification.md`.
+
+**"Right now" and "Where can I start" are one decision now.** The Learn home no longer opens
+with a recommendation followed by five alternative routes and ten selectable set cards. The four
+subject cards spend their click on revision — start or resume — and the selected subject has one
+matching primary action. Exam order is fixed rather than exposed as another sort to manage. The
+ordinary path is the nine authored non-builder runs: the first uncleared run is the only new run
+shown, completing it unlocks the next, future runs stay absent, and only completed runs appear in
+the Replay disclosure. A fixed path still responds to evidence: at most two concepts currently
+marked Needs practice are repeated on a fresh question family inside the next run without replacing
+its authored questions or changing which run unlocks.
+
+**The dashboard is progressive rather than encyclopaedic.** Subject stats, the three existing real
+Recharts graphs, confidence explanation and the concept shelf move behind `Your stats`; the
+concept-by-concept rows require a second deliberate disclosure. Weakest-first, written and custom
+practice move behind `More practice options`. Cleared replays remain separate and are hidden until
+one exists. The default page therefore shows subjects, the one open run and its fixed-path progress,
+while preserving every specialist surface for the learner who asks for it.
+
+**A completed run now produces a two-column quick look.** The left side states run accuracy, first-
+attempt results, concepts improved, what was learned, what caused difficulty and exactly which run
+unlocked next. The right side is an accessible three-bar comparison of subject evidence before the
+run, now and the all-Strong goal. When an unresolved concept will be carried into the next run, the
+debrief names it as the likely repeat. Concept cards and full answer review remain below as optional
+detail rather than interrupting the handoff.
+
+**Verification:** `npm test` **140/140**; the focused release suite 9/9; `npm run review` all PASS;
+palette PASS; build 20 public assets; JavaScript syntax and whitespace checks clean. The new release
+regression pins the single sequenced front door, hidden future/replay contract, two-item carry-forward
+seam, progressive disclosures and learned/struggled/next chart debrief. No Browser inspection or
+deployment was performed in this change.
+
 ## 2026-08-20 — Mock sets become coverage cycles, and Learn can issue a weakest-links paper
 
 Branch `fix/theme-switch-and-login-theming`. Not merged, not deployed. Evidence:

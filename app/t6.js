@@ -93,8 +93,178 @@
     seven: {
       title: "A seven-day evidence cycle",
       steps: ["Day 0: diagnose and retrieve foundations.", "Day 1: delayed retrieval and misconception repair.", "Day 2: weak concepts, one constructed response, and one case.", "Day 3: interleave useful contrasts and try a new case.", "Days 4–5: open flags, untouched coverage, and failed reasoning steps only.", "Day 6: whole-chain reasoning and a mixed practice check.", "Day 7: a brief refresh of core distinctions."],
-      note: "Ten study sets remain available, but later practice should narrow instead of forcing every set."
+      note: "The nine-run path remains available, but later practice should narrow instead of forcing every replay."
     }
+  };
+
+  /* Calculation notes teach the reusable setup rather than rehearsing one bank
+   * item. They sit beside the authored lesson sequence, while the theory and worked
+   * examples continue to come directly from T6_LESSONS. */
+  var NUMERICAL_METHODS = {
+    BRGSA: [
+      {
+        module: 2,
+        title: "Experiment numbers without fooling yourself",
+        theory: "A rate is evidence only when the numerator, denominator, sample rule, and decision threshold were fixed before the result was inspected.",
+        steps: [
+          "Write the decision first: what would make you keep A, switch to B, or collect more data?",
+          "Name the numerator and denominator for each variant. Keep the populations and time windows comparable.",
+          "Compute each rate as outcomes ÷ eligible observations. Compare rates, not raw wins.",
+          "Check the pre-declared sample and stopping rule before interpreting the gap.",
+          "State the error trade-off: a false positive ships a non-improvement; a false negative discards a real one."
+        ],
+        checks: ["Never stop because an early line looks persuasive.", "A larger sample cannot repair a biased sample or a changed metric."],
+        example: "For two onboarding flows, first define activation and who counts as eligible. Only then compare activation rates at the planned sample."
+      },
+      {
+        module: 3,
+        title: "Growth rates, cohorts, CAC, LTV, and payback",
+        theory: "Growth arithmetic is useful only when it preserves the population and the unit. Totals can rise while every new cohort becomes less valuable.",
+        steps: [
+          "Write the unit beside every figure: users, customers, rupees, months, or percentage points.",
+          "For a funnel rate, divide the later stage by the immediately eligible earlier stage and multiply by 100.",
+          "For growth, use (new − old) ÷ old × 100. Do not divide by the new value.",
+          "For CAC, divide the acquisition cost included in scope by the new customers attributable to that scope.",
+          "Estimate LTV as ARPU × expected lifespan × gross margin, with the lifespan assumption written beside it.",
+          "Estimate payback as CAC ÷ monthly gross profit per customer, then compare the answer with expected retention."
+        ],
+        checks: ["Percent and percentage-point change are different.", "Revenue is not gross profit; acquired signups are not acquired customers."],
+        example: "If retention falls by cohort while total accounts rise, diagnose the cohort before celebrating the total."
+      },
+      {
+        module: 4,
+        title: "Find a constraint from a funnel",
+        theory: "The biggest absolute loss is usually near the top because the top is widest. The constraint is the stage furthest below the rate it should achieve.",
+        steps: [
+          "Convert every hand-off into a step conversion rate.",
+          "Place the relevant benchmark beside each rate.",
+          "Compute the gap to benchmark, keeping direction clear.",
+          "Choose the binding gap, then ask whether improving it changes end-to-end output.",
+          "Recalculate the whole funnel under the proposed improvement before moving budget."
+        ],
+        checks: ["Do not rank stages by the count lost.", "Do not call the lowest raw rate the constraint without a benchmark."],
+        example: "A 12% visitor-to-signup rate can be healthy while a 33% signup-to-activation rate is the real bottleneck if its benchmark is much higher."
+      }
+    ],
+    SCLM: [
+      {
+        module: 2,
+        title: "Forecasting and exponential smoothing",
+        theory: "Exponential smoothing moves the old forecast partway toward the latest actual. Alpha controls responsiveness: high alpha follows new information faster and also follows noise faster.",
+        steps: [
+          "Write the relation before substituting: new forecast = old forecast + α × (actual − old forecast).",
+          "Compute the forecast error in brackets and keep its sign.",
+          "Multiply only the error by alpha.",
+          "Add the correction to the old forecast.",
+          "Check direction: actual above forecast must move the new forecast up; actual below must move it down."
+        ],
+        checks: ["The new forecast should lie between the old forecast and the latest actual when 0 < α < 1.", "If the answer equals the actual, you effectively used α = 1."],
+        example: "Set out forecast, actual, error, weighted error, then new forecast as five labelled lines."
+      },
+      {
+        module: 3,
+        title: "EOQ and the annual cost at an order quantity",
+        theory: "EOQ balances a cost paid per order against a cost paid per unit held per year. The factor of two exists because average cycle stock is Q/2.",
+        steps: [
+          "Identify units first: D is units/year, K is currency/order, and h is currency/unit/year.",
+          "Substitute into EOQ = √(2DK ÷ h). Keep the whole numerator under the root.",
+          "Round only after taking the square root, and only as the question permits.",
+          "If cost is requested, calculate ordering cost as (D ÷ Q)K and holding cost as (Q ÷ 2)h.",
+          "Add only the relevant costs. Purchase cost drops out when it does not change with Q."
+        ],
+        checks: ["At the EOQ, annual ordering and holding costs should be approximately equal.", "K and h can never swap: their units are different."],
+        example: "Build a small units table before touching the calculator; it catches most EOQ substitutions."
+      },
+      {
+        module: 3,
+        title: "Newsvendor and the critical ratio",
+        theory: "The critical ratio turns the pain of being short and the pain of being long into a position in the demand distribution.",
+        steps: [
+          "Compute underage cost Cu = selling price − purchase cost.",
+          "Compute overage cost Co = purchase cost − salvage value.",
+          "Compute critical ratio = Cu ÷ (Cu + Co).",
+          "Use that probability to locate the required percentile or z-value when a distribution is supplied.",
+          "Translate the distribution position back into an order quantity."
+        ],
+        checks: ["A critical ratio must be between 0 and 1.", "If underage hurts more than overage, the ratio must exceed 0.5."],
+        example: "Label the two mistakes—one unit too few and one unit too many—before writing either cost."
+      },
+      {
+        module: 3,
+        title: "Safety stock, reorder point, and service level",
+        theory: "A reorder point covers expected demand during the time you cannot react, plus a buffer for variability during that same protection period.",
+        steps: [
+          "Convert the mean to lead time: μDLT = mean demand per period × lead time.",
+          "Convert variability to lead time: σDLT = σ per period × √lead time. Variances add; standard deviations do not.",
+          "Read z for the required service level, or work backwards from a policy using z = (ROP − μDLT) ÷ σDLT.",
+          "Compute safety stock = z × σDLT.",
+          "Compute reorder point = μDLT + safety stock.",
+          "Compare the reorder point with inventory position: on hand + on order − backorders."
+        ],
+        checks: ["A reorder point equal to mean lead-time demand buys only about 50% cycle service.", "Use √L, never L, when independent-period standard deviations are supplied."],
+        example: "Draw a three-line bridge: protection-period mean, protection-period deviation, then buffer and reorder point."
+      },
+      {
+        module: 6,
+        title: "Cycle time, waiting, and throughput",
+        theory: "The largest block of time is not automatically waste. Separate productive movement or processing from waiting before choosing the lever.",
+        steps: [
+          "List every component of the cycle in one unit.",
+          "Classify each as value-creating, necessary support, or avoidable wait.",
+          "Add the components to reconcile to the reported total before diagnosing anything.",
+          "Rank recoverable waiting, not all time, and identify the resource causing it.",
+          "Translate hours removed into cycles per period and then into capacity."
+        ],
+        checks: ["A faster transit assumption is not a scheduling improvement.", "The answer must reconcile back to the original cycle total."],
+        example: "A 34-hour transit can be necessary while a 13-hour locomotive wait is the largest removable loss."
+      }
+    ],
+    SPMS: [
+      {
+        module: 4,
+        title: "Market size and unit economics without false precision",
+        theory: "A market number is a sequence of narrowing assumptions. Unit economics asks whether value captured per customer can repay what it costs to acquire and serve that customer.",
+        steps: [
+          "State the population, period, geography, and spending unit before estimating TAM.",
+          "Narrow to SAM using constraints the product can actually serve, then to SOM using a defensible reach assumption.",
+          "Keep price, revenue, gross margin, contribution, CAC, and LTV on separate labelled lines.",
+          "Test the result with a top-down estimate and a bottom-up estimate.",
+          "Name the assumption that would change the decision most and vary it before presenting the number."
+        ],
+        checks: ["A precise answer built on an unnamed reach assumption is still a guess.", "Use gross profit—not revenue—when comparing customer value with acquisition cost."],
+        example: "Show a range when the input is a range; do not compress uncertain assumptions into one impressive total."
+      },
+      {
+        module: 7,
+        title: "RICE and cost-value prioritisation",
+        theory: "A score makes assumptions visible; it does not replace judgement. Non-negotiable work is classified before discretionary work is ranked.",
+        steps: [
+          "Separate true Must work—legal, safety, or viability—from discretionary candidates.",
+          "For each candidate, define reach, impact, confidence, and effort on the same scales.",
+          "Compute RICE = reach × impact × confidence ÷ effort.",
+          "Rank the scores, then inspect which assumption created the order.",
+          "Run a sensitivity check: change the least certain input and see whether the ranking survives."
+        ],
+        checks: ["Confidence belongs in the arithmetic; optimism is not evidence.", "A high score cannot overrule a true Must or a dependency."],
+        example: "If two features switch order when confidence moves slightly, the next action is research, not pretending the ranking is settled."
+      }
+    ],
+    IBM: [
+      {
+        module: 8,
+        title: "Use numbers as evidence in a written case",
+        theory: "IBM is an all-written paper. The numerical skill is interpretation: preserve denominators, compare like with like, and connect the number to inclusion, viability, or impact.",
+        steps: [
+          "Name what the figure measures and whose outcome it represents.",
+          "Recover the denominator and time period before comparing percentages or totals.",
+          "Separate reach, depth of benefit, commercial viability, and impact; one figure rarely proves all four.",
+          "Use the number in a reasoning sentence: evidence → implication → decision.",
+          "State what the number cannot prove and what evidence would close the gap."
+        ],
+        checks: ["A larger beneficiary count can hide a thinner benefit.", "An output is not automatically an outcome, and an outcome is not automatically attributable impact."],
+        example: "Write: ‘Because X changed from A to B for this group over this period, the model suggests C; however, D remains untested.’"
+      }
+    ]
   };
 
   var PRACTICE_SHAPES = [
@@ -207,7 +377,8 @@
   }
 
   function writtenGradingApplies(question) {
-    return writtenAuthority.available && writtenAuthority.capabilities.indexOf("rubric-mark") >= 0 && session && session.mode !== "simulation" && question && question.type === "short-answer";
+    return writtenAuthority.available && writtenAuthority.capabilities.indexOf("rubric-mark") >= 0 && session &&
+      session.mode !== "simulation" && session.kind !== "confidence-sprint" && question && question.type === "short-answer";
   }
 
   function defaultProfile() {
@@ -226,6 +397,10 @@
          because the useful question is "did this move" and storing the paper back
          would make a saved profile a copy of the bank. */
       examAttempts: {},
+      /* One compact record per finished confidence round. The cycle definition is
+         deterministic and rebuildable from its rotation, so responses and question
+         text never need to be copied into the profile. */
+      miniMockProgress: {},
       completed: {},
       lastMock: {},
       active: null,
@@ -294,6 +469,7 @@
        existing saved profile has no examMisses and must not be thrown away for it. */
     candidate.examMisses = candidate.examMisses && typeof candidate.examMisses === "object" ? candidate.examMisses : {};
     candidate.examAttempts = candidate.examAttempts && typeof candidate.examAttempts === "object" ? candidate.examAttempts : {};
+    candidate.miniMockProgress = candidate.miniMockProgress && typeof candidate.miniMockProgress === "object" ? candidate.miniMockProgress : {};
     candidate.writtenPractice = candidate.writtenPractice && typeof candidate.writtenPractice === "object" ? candidate.writtenPractice : {};
     candidate.builder = normalizeBuilder(candidate.builder);
     if (candidate.active) {
@@ -450,7 +626,9 @@
     window.clearTimeout(writtenEvidenceTimer);
     writtenEvidenceTimer = null;
     $all(".screen").forEach(function (screen) { screen.classList.toggle("active", screen.id === id); });
-    markMode(EXAM_SCREENS[id] ? "exam" : "learn");
+    var coachedMockScreen = (id === "practice-screen" && session && session.kind === "confidence-sprint") ||
+      (id === "results-screen" && lastFinished && lastFinished.kind === "confidence-sprint");
+    markMode(id === "notes-screen" ? "notes" : (EXAM_SCREENS[id] || coachedMockScreen) ? "exam" : "learn");
     syncModeSwitchVisibility();
     /* After markMode, not before: the header reports the side you are on, and the
        screen's own render runs before this and would compute it from the side you
@@ -463,7 +641,6 @@
        which after a scroll reset it never is. */
     document.body.classList.remove("has-resume-bar");
     window.scrollTo(0, 0);
-    if (id === "dashboard-screen") window.requestAnimationFrame(renderMasteryRadar);
   }
 
   function getCourse(courseId) { return COURSES[courseId]; }
@@ -1491,23 +1668,20 @@
 
   function renderDashboard(options) {
     options = options || {};
-    var overall = overallStats();
-    $("overall-strong").textContent = String(overall.strong);
-    $("overall-developing").textContent = String(overall.developing);
-    $("overall-needs").textContent = String(overall.needs);
-    $("overall-unseen").textContent = String(overall.unseen);
-    $("calibration-summary").textContent = overallConfidenceSummary();
+    /* The disclosed numbers belong to the subject the learner picked. The previous
+       version mixed whole-term counts into a subject-specific page, making the first
+       four figures require interpretation before they were useful. */
+    var selectedStats = courseStats(profile.selectedCourse);
+    $("overall-strong").textContent = String(selectedStats.strong);
+    $("overall-developing").textContent = String(selectedStats.developing);
+    $("overall-needs").textContent = String(selectedStats.needs);
+    $("overall-unseen").textContent = String(selectedStats.unseen);
     renderCourseCards();
     renderHeaderStats();
-    renderMasteryRadar();
     renderSelectedSubject();
     renderRecommendation();
-    /* After renderRecommendation, which decides the "next" line the learn face shows. */
-    renderCoin("coin-home", "learn");
-    renderPracticeBuilder();
     renderProgressStory();
     renderCommunityReminder();
-    renderLessonIndex();
     renderConceptShelf();
     // The row is rebuilt above, so its scrollable width has just changed.
     updateRailScrollCue();
@@ -1565,6 +1739,12 @@
    * own two numbers are how many papers you have finished and what they averaged. */
   function renderHeaderStats() {
     var label = $("header-stat-label");
+    if (currentMode() === "notes") {
+      if (label) label.textContent = "Quick Notes";
+      $("header-trend-value").textContent = String(Object.keys(LESSONS).length);
+      $("header-trend-note").textContent = "course lessons";
+      return;
+    }
     if (currentMode() === "exam") {
       var attempts = [];
       Object.keys(profile.examAttempts || {}).forEach(function (courseId) {
@@ -1637,26 +1817,22 @@
   }
 
 
-  function progressStory() {
+  function progressStory(courseId) {
     var seen = {};
     var blocks = {};
-    var story = {answers: 0, blocks: 0, touched: 0, subjects: 0, latest: 0};
-    COURSE_IDS.forEach(function (courseId) {
-      var subjectTouched = false;
-      getCourse(courseId).concepts.forEach(function (concept) {
-        var attempts = attemptsFor(courseId, concept.id);
-        if (attempts.length) { story.touched += 1; subjectTouched = true; }
-        attempts.forEach(function (attempt) {
-          blocks[attemptBlock(attempt)] = true;
-          if (attempt.at > story.latest) story.latest = attempt.at;
-          // One question can carry several concepts; count the answer once.
-          var key = courseId + "|" + attempt.questionId + "|" + attemptBlock(attempt) + "|" + attempt.at;
-          if (seen[key]) return;
-          seen[key] = true;
-          story.answers += 1;
-        });
+    var story = {answers: 0, blocks: 0, touched: 0, latest: 0};
+    getCourse(courseId).concepts.forEach(function (concept) {
+      var attempts = attemptsFor(courseId, concept.id);
+      if (attempts.length) story.touched += 1;
+      attempts.forEach(function (attempt) {
+        blocks[attemptBlock(attempt)] = true;
+        if (attempt.at > story.latest) story.latest = attempt.at;
+        // One question can carry several concepts; count the answer once.
+        var key = courseId + "|" + attempt.questionId + "|" + attemptBlock(attempt) + "|" + attempt.at;
+        if (seen[key]) return;
+        seen[key] = true;
+        story.answers += 1;
       });
-      if (subjectTouched) story.subjects += 1;
     });
     story.blocks = Object.keys(blocks).length;
     return story;
@@ -1680,48 +1856,21 @@
    * numbers that describe evidence rather than effort. Still strictly factual: no
    * praise, and activity is never presented as progress. */
   function renderProgressStory() {
-    var story = progressStory();
-    var overall = overallStats();
+    var courseId = profile.selectedCourse;
+    var story = progressStory(courseId);
+    var course = getCourse(courseId);
     if (!story.answers) {
-      $("story-stats").textContent = "Nothing is recorded yet. Your first short block fills in every number here.";
+      $("story-stats").textContent = "Nothing is recorded in " + course.shortTitle + " yet. Its first run fills in these numbers.";
       return;
     }
     $("story-stats").textContent = story.answers + " answer" + (story.answers === 1 ? "" : "s") +
       " across " + story.blocks + " practice block" + (story.blocks === 1 ? "" : "s") + ". " +
-      story.touched + " of " + overall.total + " concepts have evidence, in " +
-      story.subjects + " of " + COURSE_IDS.length + " subjects. Last answer " + relativeDay(story.latest) + ".";
-  }
-
-  /* Reading a theme colour from script. Recharts now reads CSS tokens directly;
-   * this resolver remains only for the computed results score-ring border. */
-  var colorProbe = null;
-  function themeColor(expression) {
-    if (!colorProbe) {
-      colorProbe = document.createElement("span");
-      colorProbe.setAttribute("aria-hidden", "true");
-      colorProbe.style.cssText = "position:absolute;width:0;height:0;visibility:hidden;pointer-events:none";
-      document.body.appendChild(colorProbe);
-    }
-    colorProbe.style.color = "";
-    colorProbe.style.color = expression;
-    return window.getComputedStyle(colorProbe).color;
-  }
-
-  /* The score ring sits on the results hero, which is the deep panel in both themes,
-     so its three bands are the meaning colours at dark-surface luminance rather than
-     the reading-surface ones. Set as an inline style because the band is computed,
-     not a class the stylesheet could match. */
-  var SCORE_BAND_INK = {high: "var(--green-on-deep)", mid: "var(--saffron)", low: "var(--red-on-deep)"};
-  function paintScoreRing() {
-    var ring = $("score-ring");
-    if (!ring) return;
-    ring.style.borderColor = themeColor(SCORE_BAND_INK[ring.dataset.band] || "var(--deep-rule)");
+      story.touched + " of " + course.concepts.length + " concepts have evidence. Last answer " + relativeDay(story.latest) + ".";
   }
 
   /* Everything the theme switch cannot reach through CSS. */
   function repaintThemedSurfaces() {
     if ($("mastery-radar")) renderMasteryRadar();
-    if ($("results-screen") && $("results-screen").classList.contains("active")) paintScoreRing();
   }
 
   /* The four subjects plus their cross-course connections use shadcn's official
@@ -1927,7 +2076,7 @@
     if (label) {
       var shelfCoverage = coverageFor(courseId);
       label.textContent = (course.shortTitle || courseId) + " · " + (course.concepts || []).length + " concepts" +
-        (shelfCoverage ? " · " + shelfCoverage.percent + "% of the syllabus" : "");
+        (shelfCoverage ? " · " + shelfCoverage.percent + "% syllabus" : "");
     }
 
     var byModule = {};
@@ -2215,13 +2364,208 @@
     return host;
   }
 
+  /* Quick Notes ---------------------------------------------------------------
+   *
+   * The note reader is a view over the authored teaching layer, not a parallel set
+   * of summaries. That gives it all 283 registered entries, in lecture order, and
+   * means a better explanation written for Learn becomes a better note immediately. */
+  var notesState = {courseId:null, module:1, query:"", printing:false};
+
+  function notesCourseId() {
+    return notesState.courseId && getCourse(notesState.courseId)
+      ? notesState.courseId
+      : profile && getCourse(profile.selectedCourse) ? profile.selectedCourse : EXAM_ORDER[0];
+  }
+
+  function notesModuleTitle(course, module) {
+    if (course.modules && course.modules[module - 1]) return course.modules[module - 1];
+    var run = (course.runs || []).filter(function (entry) { return entry.module === module; })[0];
+    return run ? run.title : "Module " + module;
+  }
+
+  function notesLessons(courseId, module) {
+    return Object.keys(LESSONS).map(function (lectureId) { return LESSONS[lectureId]; })
+      .filter(function (entry) { return entry.courseId === courseId && (!module || entry.module === module); })
+      .sort(function (left, right) {
+        return left.module - right.module || Number(left.order || 0) - Number(right.order || 0) ||
+          String(left.lectureId).localeCompare(String(right.lectureId));
+      });
+  }
+
+  function notesModuleCount(courseId) {
+    return Math.max.apply(null, notesLessons(courseId).map(function (entry) { return entry.module; }).concat([1]));
+  }
+
+  function notesSearchText(entry) {
+    var values = [entry.title, entry.objective, entry.connects, entry.brands].concat(entry.explainer || []);
+    (entry.glossary || []).forEach(function (item) { values.push(item.term, item.plain); });
+    if (entry.worked) values.push(entry.worked.setup, entry.worked.move, entry.worked.because);
+    return values.join(" ").toLowerCase();
+  }
+
+  function notesLessonHtml(entry) {
+    var explainer = Array.isArray(entry.explainer) ? entry.explainer : [entry.explainer];
+    var worked = entry.worked
+      ? "<section class='notes-worked' aria-label='Worked example'><h4>Worked move</h4>" +
+        "<p><b>Situation.</b> " + escapeHtml(entry.worked.setup) + "</p>" +
+        "<p><b>Move.</b> " + escapeHtml(entry.worked.move) + "</p>" +
+        "<p><b>Why it works.</b> " + escapeHtml(entry.worked.because) + "</p></section>"
+      : "";
+    var glossary = (entry.glossary || []).length
+      ? "<dl class='notes-glossary' aria-label='Key terms'>" + (entry.glossary || []).map(function (item) {
+        return "<dt>" + escapeHtml(item.term) + "</dt><dd>" + escapeHtml(item.plain) + "</dd>";
+      }).join("") + "</dl>"
+      : "";
+    var connection = entry.connects
+      ? "<p class='notes-connects'><b>Next connection.</b> " + escapeHtml(entry.connects) + "</p>"
+      : entry.addInOf
+        ? "<p class='notes-connects'><b>Folded into.</b> " + escapeHtml(entry.addInHostTitle || entry.addInOf) + "</p>"
+        : "";
+    var brands = entry.brands
+      ? "<p class='notes-connects'><b>Course context.</b> " + escapeHtml(entry.brands) + "</p>"
+      : "";
+    return "<section class='notes-lesson' id='notes-" + escapeHtml(entry.lectureId) + "'>" +
+      "<div class='notes-lesson-meta'><span>" + (entry.addInOf ? "Add-in" : "Lecture " + escapeHtml(entry.order)) +
+      "</span><span>" + escapeHtml(entry.lectureId) + "</span></div>" +
+      "<h3>" + escapeHtml(entry.title) + "</h3>" +
+      "<p class='notes-objective'><b>After this layer:</b> " + escapeHtml(entry.objective) + "</p>" +
+      "<div class='notes-prose'>" + explainer.filter(Boolean).map(function (paragraph) {
+        return "<p>" + escapeHtml(paragraph) + "</p>";
+      }).join("") + "</div>" + worked + glossary + brands + connection + "</section>";
+  }
+
+  function notesConceptMapHtml(courseId, module) {
+    var concepts = getCourse(courseId).concepts.filter(function (concept) { return concept.module === module; });
+    if (!concepts.length) return "";
+    return "<section class='notes-layer-map' aria-labelledby='notes-map-" + module + "'><h3 id='notes-map-" + module + "'>Start with the map</h3>" +
+      "<p>These are the assessed ideas. The lecture notes below also carry the surrounding theory, vocabulary, and examples.</p>" +
+      "<ul class='notes-concepts'>" + concepts.map(function (concept) {
+        return "<li><b>" + escapeHtml(concept.name) + "</b><span>" + escapeHtml(concept.summary) + "</span></li>";
+      }).join("") + "</ul></section>";
+  }
+
+  function notesMethodsHtml(courseId, module) {
+    return (NUMERICAL_METHODS[courseId] || []).filter(function (method) { return method.module === module; })
+      .map(function (method) {
+        return "<section class='notes-method'><h3>" + escapeHtml(method.title) + "</h3><p>" + escapeHtml(method.theory) + "</p>" +
+          "<div class='notes-method-grid'><div><h4>Question exoskeleton</h4><ol>" + method.steps.map(function (step) {
+            return "<li>" + escapeHtml(step) + "</li>";
+          }).join("") + "</ol></div><aside class='method-checks'><h4>Checks before you commit</h4>" + method.checks.map(function (check) {
+            return "<p>" + escapeHtml(check) + "</p>";
+          }).join("") + "<p><b>Pattern example.</b> " + escapeHtml(method.example) + "</p></aside></div></section>";
+      }).join("");
+  }
+
+  function notesModuleHtml(courseId, module, includeNavigation) {
+    var course = getCourse(courseId);
+    var lessons = notesLessons(courseId, module);
+    var moduleCount = notesModuleCount(courseId);
+    var title = notesModuleTitle(course, module);
+    var first = lessons[0], last = lessons[lessons.length - 1];
+    var intro = lessons.length
+      ? "Read " + lessons.length + " course entr" + (lessons.length === 1 ? "y" : "ies") + " in order, from " + first.title + " to " + last.title + "."
+      : "This module has no registered teaching entries.";
+    var navigation = includeNavigation
+      ? "<nav class='notes-chapter-nav' aria-label='Move between modules'>" +
+        (module > 1 ? "<button type='button' data-notes-module='" + (module - 1) + "'>← Module " + (module - 1) + "</button>" : "<span></span>") +
+        (module < moduleCount ? "<button type='button' data-notes-module='" + (module + 1) + "'>Module " + (module + 1) + " →</button>" : "<span></span>") +
+        "</nav>"
+      : "";
+    return "<section class='notes-print-module'><header class='notes-chapter-head'><p class='eyebrow'>" + escapeHtml(course.shortTitle) +
+      " · Module " + module + " of " + moduleCount + "</p><h2>" + escapeHtml(title) + "</h2><p>" + escapeHtml(intro) + "</p></header>" +
+      notesConceptMapHtml(courseId, module) + notesMethodsHtml(courseId, module) + lessons.map(notesLessonHtml).join("") + navigation + "</section>";
+  }
+
+  function renderNotesSearch(courseId, query) {
+    var course = getCourse(courseId);
+    var matches = notesLessons(courseId).filter(function (entry) { return notesSearchText(entry).indexOf(query) >= 0; });
+    $("notes-reader").innerHTML = "<header class='notes-search-head'><p class='eyebrow'>" + escapeHtml(course.shortTitle) +
+      " search</p><h2>" + matches.length + " result" + (matches.length === 1 ? "" : "s") + "</h2><p>Matches search the complete explanations, worked moves, and glossary in this subject.</p></header>" +
+      "<div class='notes-search-results'>" + matches.map(function (entry) {
+        return "<button class='notes-search-result' type='button' data-notes-result='" + escapeHtml(entry.lectureId) + "' data-notes-result-module='" + entry.module + "'>" +
+          "<span>Module " + entry.module + " · " + escapeHtml(notesModuleTitle(course, entry.module)) + "</span><span><b>" + escapeHtml(entry.title) +
+          "</b><small>" + escapeHtml(entry.objective) + "</small></span></button>";
+      }).join("") + "</div>";
+  }
+
+  function renderNotesNavigation() {
+    var courseId = notesCourseId();
+    var course = getCourse(courseId);
+    $("notes-lesson-count").textContent = String(Object.keys(LESSONS).length);
+    $("notes-course-code").textContent = course.shortTitle;
+    $("notes-course-title").textContent = course.title;
+    $("notes-course-description").textContent = course.description || "Theory, examples, and methods in the sequence the course teaches them.";
+
+    $("notes-subjects").innerHTML = EXAM_ORDER.map(function (id) {
+      var selectedCourse = id === courseId;
+      return "<button type='button' role='tab' data-notes-course='" + id + "' aria-selected='" + selectedCourse + "'>" +
+        escapeHtml(getCourse(id).shortTitle) + "</button>";
+    }).join("");
+
+    var moduleCount = notesModuleCount(courseId);
+    var moduleButtons = [];
+    for (var module = 1; module <= moduleCount; module += 1) {
+      moduleButtons.push("<button type='button' data-notes-module='" + module + "' aria-current='" + (module === notesState.module) + "'>" +
+        "<span>" + module + "</span>" + escapeHtml(notesModuleTitle(course, module)) + "</button>");
+    }
+    $("notes-module-nav").innerHTML = moduleButtons.join("");
+  }
+
+  function renderNotesReader() {
+    var courseId = notesCourseId();
+    var host = $("notes-reader");
+    if (notesState.printing) {
+      var chapters = [];
+      for (var module = 1; module <= notesModuleCount(courseId); module += 1) chapters.push(notesModuleHtml(courseId, module, false));
+      host.innerHTML = chapters.join("");
+      return;
+    }
+    var query = String(notesState.query || "").trim().toLowerCase();
+    if (query) renderNotesSearch(courseId, query);
+    else host.innerHTML = notesModuleHtml(courseId, notesState.module, true);
+  }
+
+  function renderNotes() {
+    notesState.courseId = notesCourseId();
+    var count = notesModuleCount(notesState.courseId);
+    notesState.module = Math.max(1, Math.min(count, Number(notesState.module) || 1));
+    renderNotesNavigation();
+    renderNotesReader();
+  }
+
+  function openNotes(options) {
+    options = options || {};
+    if (options.courseId && getCourse(options.courseId)) notesState.courseId = options.courseId;
+    if (options.module) notesState.module = Number(options.module) || 1;
+    requestLeaveLivePaper(function () {
+      crossProducts("notes", function () {
+        renderNotes();
+        showScreen("notes-screen");
+        $("notes-reader").focus({preventScroll:true});
+      });
+    });
+  }
+
+  function printNotesSubject() {
+    notesState.printing = true;
+    document.body.classList.add("printing-notes");
+    renderNotesReader();
+    function restoreNotesAfterPrint() {
+      notesState.printing = false;
+      document.body.classList.remove("printing-notes");
+      renderNotesReader();
+    }
+    window.addEventListener("afterprint", restoreNotesAfterPrint, {once:true});
+    window.requestAnimationFrame(function () { window.print(); });
+  }
+
   /* The header's subject control, kept in step with the rail rather than competing
      with it: both read and write the same `profile.selectedCourse`, and this one is
      rebuilt from the same ordering, so whichever you use the other agrees. */
   function renderHeaderSubject() {
     var select = $("header-subject");
     if (!select) return;
-    var order = orderedCourseIds(profile.subjectSort === "hardest" ? "hardest" : "exam");
+    var order = orderedCourseIds("exam");
     /* The code alone. The strong-count belongs to the rail, which shows all four at
        once and can be compared; repeating it here bought a number you cannot compare
        against anything and cost the width that keeps this control on a 320px phone. */
@@ -2236,27 +2580,15 @@
     renderHeaderSubject();
     var grid = $("course-grid");
     grid.innerHTML = "";
-    var mode = profile.subjectSort === "hardest" ? "hardest" : "exam";
-    var sortControl = $("subject-sort");
-    if (sortControl) {
-      sortControl.value = mode;
-      /* The hint is an on-demand tooltip now, not body copy. Writing it as
-       * textContent replaced the icon glyph with a sentence, which then wrapped
-       * and spilled out of the rail. Set the description, keep the glyph. */
-      var hintNode = $("subject-sort-hint");
-      if (hintNode) {
-        var hint = SORT_MODES[mode].hint + " " + (mode === "exam"
-          ? "Both papers on a day run back to back, so the subject you sit first is the one you can least afford to leave until the end."
-          : "Subjects with the least evidence come first, using your own attempts.");
-        hintNode.setAttribute("data-tip", hint);
-        hintNode.setAttribute("aria-label", hint);
-      }
-    }
+    /* Exam order is the one stable order now. A sort control asked the learner to
+       manage the dashboard before revising; the path inside each subject already
+       decides what comes next. */
+    var mode = "exam";
     var order = orderedCourseIds(mode);
     var previousDay = null;
     order.forEach(function (courseId) {
       var course = getCourse(courseId);
-      var stats = courseStats(courseId);
+      var path = courseRunPath(courseId);
       var exam = EXAM_SCHEDULE[courseId] || {};
       var button = document.createElement("button");
       button.type = "button";
@@ -2270,10 +2602,15 @@
        * rest on a tooltip, which is mouse-only — so the button's own label carries
        * the full sitting details for anyone reading by keyboard or screen reader.
        * (This previously prefixed "Sat " onto a day that already began "Sat".) */
+      var pathAction = profile.active && profile.active.courseId === courseId
+        ? "Continue saved run"
+        : path.current
+          ? (path.cleared.length ? "Continue with run " : "Start run ") + path.current.step + " of " + path.steps
+          : "Learning path cleared";
       button.setAttribute("aria-label", course.shortTitle + ", " + course.title + ". " +
         (exam.full ? exam.full + ", " + exam.start + " to " + exam.end + ", " + exam.marks + " marks" +
           (exam.negative ? ", negative marking in Section B" : "") + ". " : "") +
-        stats.strong + " of " + stats.total + " concepts strong. Open subject dashboard.");
+        path.cleared.length + " of " + path.steps + " runs cleared. " + pathAction + ".");
       /* The card carries four facts and nothing else: which subject, when it is
        * sat, how far along you are, and whether it punishes a wrong answer.
        *
@@ -2286,7 +2623,7 @@
        * Progress is a single pill whose fill *is* the bar, so the count, the
        * remaining work, and the visual are one element instead of three. */
       var slot = exam.full ? exam.full + ", " + exam.start + "–" + exam.end + ", " + exam.marks + " marks" : "";
-      var pillCopy = stats.strong + "/" + stats.total + " concepts Strong";
+      var pillCopy = path.cleared.length + "/" + path.steps + " runs cleared";
       button.innerHTML =
         "<span class='course-head'>" +
           "<b class='course-code'>" + escapeHtml(course.shortTitle) + "</b>" +
@@ -2294,14 +2631,17 @@
           (exam.short ? "<span class='course-meta' data-tip='" + escapeHtml(slot) + "'>" + escapeHtml(exam.short) + " · " + escapeHtml(exam.start) + "</span>" : "") +
         "</span>" +
         "<span class='course-name'>" + escapeHtml(course.title) + "</span>" +
-        "<span class='course-pill'><i class='pill-fill' aria-hidden='true' style='width:" + stats.weighted + "%'></i>" +
-          "<span class='pill-label'>" + escapeHtml(pillCopy) + "</span></span>";
+        "<span class='course-pill'><i class='pill-fill' aria-hidden='true' style='width:" +
+          Math.round(path.cleared.length / Math.max(1, path.steps) * 100) + "%'></i>" +
+          "<span class='pill-label'>" + escapeHtml(pillCopy) + "</span></span>" +
+        "<span class='course-action'>" + escapeHtml(pathAction) + " <i aria-hidden='true'>→</i></span>";
       button.addEventListener("click", function () {
         profile.selectedCourse = courseId;
         saveProfile();
-        renderDashboard();
-        var selectedCard = document.querySelector(".course-card.selected");
-        if (selectedCard) selectedCard.focus({preventScroll: true});
+        /* A subject card spends its click on revision. Subject inspection remains
+           available through the compact header selector, but the large cards are
+           start/continue controls rather than tabs that merely repaint the page. */
+        executeRecommendation();
       });
       grid.appendChild(button);
     });
@@ -2338,10 +2678,11 @@
    * is deliberately not a second recommendation: the copy is read from the hero and
    * the click is delegated to it, so there is exactly one place that decides what the
    * next step is (LAW-04, LAW-18 — the scope is named). */
-  function bindFloatingOffer(barId, heroId, goId, fill) {
+  function bindFloatingOffer(barId, heroId, goId, fill, observeId) {
     var bar = $(barId);
     var hero = $(heroId);
-    if (!bar || !hero || !window.IntersectionObserver) return;
+    var observed = observeId ? $(observeId) : hero;
+    if (!bar || !hero || !observed || !window.IntersectionObserver) return;
     $(goId).addEventListener("click", function () { hero.click(); });
     new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -2350,7 +2691,7 @@
         document.body.classList.toggle("has-resume-bar", away);
         if (away) fill(hero);
       });
-    }, {threshold: 0}).observe(hero);
+    }, {threshold: 0}).observe(observed);
   }
 
   function bindResumeBar() {
@@ -2361,7 +2702,7 @@
        * ellipsis in this width; the button already says the same thing as an
        * action in four words, and it is the thing this bar clicks. */
       $("resume-bar-title").textContent = hero.textContent.replace(/\s*→\s*$/, "").trim();
-    });
+    }, "learn-focus");
     /* The examiner's own. Its page is twelve set buttons long, so the recommendation
        scrolls away just as surely. The scope is the paper and set rather than the
        subject code alone, because on this side "SPMS" is not enough to know what you
@@ -2370,7 +2711,7 @@
       var pick = recommendedMock();
       $("exam-resume-scope").textContent = pick ? pick.paper.courseId + " · " + examSetLabel(pick.set.set) : "Mock";
       $("exam-resume-title").textContent = hero.textContent.replace(/\s*→\s*$/, "").trim();
-    });
+    }, "exam-pick");
   }
 
   // A route's label and its one-line description are set together, so the two can
@@ -2386,20 +2727,22 @@
     var courseId = profile.selectedCourse;
     var course = getCourse(courseId);
     var stats = courseStats(courseId);
+    var path = courseRunPath(courseId);
     $("selected-course-code").textContent = course.shortTitle;
     // Not the title: the selected card, the hero eyebrow, and the goal column all
     // already name this subject. Only the description is new information here.
     $("subject-description").textContent = course.description;
-    $("sets-title").textContent = course.shortTitle + " · Ten available study sets";
+    $("run-progress-value").textContent = path.cleared.length + " of " + path.steps + " runs cleared";
+    $("run-progress-fill").style.width = Math.round(path.cleared.length / Math.max(1, path.steps) * 100) + "%";
+    $("run-progress-note").textContent = path.current
+      ? "Run " + path.current.step + " is open. Future runs unlock one at a time; cleared runs become replayable."
+      : "The fixed path is clear. Replay any run or use a focused practice option.";
     setRouteCopy("practice-priority",
       stats.needs ? "Practise " + stats.needs + " concept" + (stats.needs === 1 ? "" : "s") + " that need" + (stats.needs === 1 ? "s" : "") + " work"
         : stats.developing ? "Build stronger evidence"
         : stats.unseen ? "Start the next new concepts" : "Refresh strong concepts",
       subjectProgressCopy(stats));
-    renderMomentum(courseId);
-    renderTrend(courseId);
     renderSetList(courseId);
-    renderHorizonPlan(profile.horizon || "today");
   }
 
   function subjectProgressCopy(stats) {
@@ -2410,7 +2753,7 @@
     if (stats.developing) return stats.developing === 1
       ? "1 is developing; open it to see exactly which evidence is still missing."
       : stats.developing + " are developing; open one to see exactly which evidence is still missing.";
-    return "Choose any concept or start with the first short study set.";
+    return "Start the open run, or inspect a concept if you need the detail first.";
   }
 
   function courseTrend(courseId) {
@@ -2455,6 +2798,25 @@
    * 8 in another, on the same screen. */
   function setQuestionCount(definition) {
     return definition.questionCount || (definition.questionIds || []).length;
+  }
+
+  /* The ordinary Learn path is a sequence, not a catalogue. The nine authored
+   * non-builder runs are fixed; a completion record clears a run, the first uncleared
+   * run is the only new one available, and completed runs are the only replay choices.
+   * Evidence still adapts inside a run, but it no longer decides which door appears. */
+  function courseRunPath(courseId) {
+    var records = (profile.completed && profile.completed[courseId]) || {};
+    var sequence = getCourse(courseId).runs.filter(function (definition) { return !definition.mock; })
+      .map(function (definition, index) {
+        var record = records[String(definition.id)] || null;
+        return {definition:definition, step:index + 1, record:record, complete:Boolean(record)};
+      });
+    return {
+      sequence: sequence,
+      cleared: sequence.filter(function (run) { return run.complete; }),
+      current: sequence.filter(function (run) { return !run.complete; })[0] || null,
+      steps: sequence.length
+    };
   }
 
   /* The eight course steps own the complete teaching sequence for their module.
@@ -2575,74 +2937,35 @@
   }
 
   function renderSetList(courseId) {
-    var course = getCourse(courseId);
     var holder = $("set-list");
-    var ladder = courseLadder(courseId);
-    var byId = {};
-    ladder.rungs.forEach(function (rung) { byId[rung.definition.id] = rung; });
-
-    /* The heading carries the shape of the thing. "Ten study sets are available" and
-       "You do not have to complete all ten" described a menu, and the eight that are
-       a sequence were the ones it was describing. */
+    var path = courseRunPath(courseId);
+    var replay = $("replay-disclosure");
     var headingEl = $("sets-title");
     var noteEl = $("sets-note");
-    if (headingEl) {
-      headingEl.textContent = ladder.current
-        ? "The subject in " + ladder.steps + " steps — you are on step " + ladder.current.step
-        : "The subject in " + ladder.steps + " steps — all of them taught";
-    }
-    if (noteEl) {
-      noteEl.textContent = ladder.current
-        ? "Each step gathers one module's concepts and rests on the ones before it. " +
-          ladder.taughtConcepts + " of " + ladder.totalConcepts +
-          " concepts taught so far. The last two sets are not steps: they revisit what the eight have covered."
-        : "All " + ladder.totalConcepts + " concepts have been taught. The last two sets revisit them — set 9 tests the connections between them, and the practice check builds its own mix.";
-    }
+    replay.hidden = path.cleared.length === 0;
+    if (headingEl) headingEl.textContent = path.cleared.length + " cleared run" + (path.cleared.length === 1 ? "" : "s");
+    if (noteEl) noteEl.textContent = "Only cleared runs appear here. The next new run stays on the main button.";
 
     holder.innerHTML = "";
-    course.runs.forEach(function (definition) {
-      var records = profile.completed[courseId] || {};
-      var record = records[String(definition.id)];
+    path.cleared.forEach(function (run) {
+      var definition = run.definition;
+      var record = run.record;
       var active = profile.active && profile.active.courseId === courseId && profile.active.setId === definition.id;
-      var state = active ? "Resume" : record ? "Best " + record.best + "%" : definition.mock ? "Available now" : "Start";
-      var rung = byId[definition.id];
+      var state = active ? "Resume replay" : "Best " + record.best + "%";
       var button = document.createElement("button");
       button.type = "button";
-      button.className = "set-card" + (record ? " complete" : "") + (definition.mock ? " mock" : "") +
-        (rung ? " ladder-" + rung.state : "");
-
-      /* What this step adds, and what it stands on. Both are stated because the
-         second is the half that makes a step a step: a learner who knows set 4 rests
-         on the six concepts before it can tell whether they are ready for it, and a
-         learner who does not is choosing from a menu. */
-      var detail = "";
-      if (rung) {
-        detail = "<small class='set-adds'>Adds " + escapeHtml(conceptNameList(rung.concepts)) + "</small>";
-        if (rung.restsOn.length) {
-          detail += "<small class='set-rests'>Rests on the " + rung.restsOn.length +
-            " concept" + (rung.restsOn.length === 1 ? "" : "s") + " before it" +
-            (rung.state === "later" ? " — not all taught yet" : "") + "</small>";
-        } else {
-          detail += "<small class='set-rests'>Starts the subject — nothing before it</small>";
-        }
-      }
-
-      var stepBadge = rung
-        ? "<span class='set-step'>Step " + rung.step + " of " + ladder.steps + "</span>"
-        : "<span class='set-step set-step-aside'>" + (definition.mock ? "Your own mix" : "Revisits all " + ladder.totalConcepts) + "</span>";
+      button.className = "set-card complete";
 
       button.setAttribute("aria-label",
-        (rung ? "Step " + rung.step + " of " + ladder.steps : definition.mock ? "Flexible practice check" : "Study set " + definition.id) +
-        ": " + definition.title + ". " +
-        (rung ? "Adds " + conceptNameList(rung.concepts) + ". " : "") + state);
-      var estimate = definition.mock ? null : studySetEstimate(courseId, definition);
-      button.innerHTML = "<span class='set-number'>" + (definition.mock ? "P" : definition.id) + "</span>" +
-        "<span class='set-body'><b>" + escapeHtml(definition.title) + "</b>" + detail +
+        "Replay run " + run.step + " of " + path.steps + ": " + definition.title + ". " + state);
+      var estimate = studySetEstimate(courseId, definition);
+      button.innerHTML = "<span class='set-number'>" + run.step + "</span>" +
+        "<span class='set-body'><b>" + escapeHtml(definition.title) + "</b>" +
         "<small class='set-cost'>" + setQuestionCount(definition) + " questions" +
-        (estimate && estimate.lessons ? " · " + estimate.lessons + " unread lesson" + (estimate.lessons === 1 ? "" : "s") : "") +
-        " · ~" + (estimate ? estimate.minutes : definition.minutes) + " min</small></span>" +
-        "<span class='set-meta'>" + stepBadge + "<span class='set-state'>" + state + "</span></span>";
-      button.addEventListener("click", function () { if (definition.mock) openPracticeSetup(courseId); else startStudySet(courseId, definition.id); });
+        (estimate.lessons ? " · " + estimate.lessons + " unread lesson" + (estimate.lessons === 1 ? "" : "s") : "") +
+        " · ~" + estimate.minutes + " min</small></span>" +
+        "<span class='set-meta'><span class='set-step'>Run " + run.step + " of " + path.steps + "</span><span class='set-state'>" + state + "</span></span>";
+      button.addEventListener("click", function () { startStudySet(courseId, definition.id); });
       holder.appendChild(button);
     });
   }
@@ -2658,73 +2981,33 @@
   }
 
   function recommendation(courseId) {
-    var course = getCourse(courseId);
     if (profile.active && profile.active.courseId === courseId) {
-      return {kind: "resume", title: "Resume where you stopped", copy: profile.active.title + " is saved at question " + (profile.active.index + 1) + ".", minutes: "Saved", questions: (profile.active.queue.length - profile.active.index) + " left"};
+      return {kind:"resume", title:"Continue " + profile.active.title, copy:"Your run is saved at question " + (profile.active.index + 1) + ".", minutes:"Saved", questions:(profile.active.queue.length - profile.active.index) + " left"};
     }
-    var written = writtenPracticeSummary(courseId);
-    if (writtenPracticeAvailable(courseId) && written.focus) {
-      var focusConcept = written.focus.conceptId ? getConcept(courseId, written.focus.conceptId) : null;
-      return {
-        kind:"written",
-        title:"Repair: " + written.focus.label,
-        copy:"Dungeon found this " + (written.focus.kind === "misunderstood" ? "misunderstanding" : "missing move") +
-          (focusConcept ? " in " + focusConcept.name : "") + ". It will teach the exact gap, use fresh course-grounded prompts and cases, and require " + written.focus.confirmationsNeeded + " more successful confirmation" + (written.focus.confirmationsNeeded === 1 ? "" : "s") + " before closing it.",
-        minutes:"~12 minutes",
-        questions:"4 written prompts"
-      };
-    }
-    /* IBM is a written paper. A cold learner used to be sent into an eight-question
-       objective set and could finish several modules without writing a sentence.
-       Establish the paper's actual answer shape first; module sets then keep four
-       written responses in every eight-question sample. */
-    if (courseId === "IBM" && writtenPracticeAvailable(courseId) && written.accepted === 0) {
-      return {
-        kind:"written",
-        title:"Start with the answer shape this paper uses",
-        copy:"IBM is assessed through written case responses. Dungeon will begin with a short explanation, two case applications and one integrated response, with course-grounded review after each.",
-        minutes:"~25 minutes",
-        questions:"4 written prompts"
-      };
-    }
-    var concepts = course.concepts.slice();
-    var needs = concepts.filter(function (concept) { return conceptStatus(courseId, concept.id) === "needs"; });
-    var developing = concepts.filter(function (concept) { return conceptStatus(courseId, concept.id) === "developing"; });
-    var unseen = concepts.filter(function (concept) { return conceptStatus(courseId, concept.id) === "unseen"; });
-    if (needs.length) {
-      needs.sort(function (a, b) { return conceptPriority(courseId, b).score - conceptPriority(courseId, a).score; });
-      return {kind:"priority",title:"Practise the concepts that need work first",copy:"Start with " + needs[0].name + " because " + conceptPriority(courseId, needs[0]).reason + ". The set uses a different question family before repeating wording.",minutes:"~10 minutes",questions:"Up to " + PRIORITY_RUN_LENGTH + " questions"};
-    }
-    if (developing.length) {
-      developing.sort(function (a, b) { return conceptPriority(courseId, b).score - conceptPriority(courseId, a).score; });
-      return {kind:"priority",title:"Build the missing evidence",copy:"Start with " + developing[0].name + " because " + conceptPriority(courseId, developing[0]).reason + ".",minutes:"~12 minutes",questions:"Up to " + PRIORITY_RUN_LENGTH + " questions"};
-    }
-    if (unseen.length) {
-      /* The next rung of the ladder, named as a rung. Recommending "Module 5" told a
-         learner where the material sat in the course and nothing about where they
-         were in it, and the question count came from `questionIds` — the stale seed
-         list — so the hero advertised four questions for a set that delivers eight. */
-      var ladder = courseLadder(courseId);
-      var rung = ladder.rungs.filter(function (row) { return row.definition.module === unseen[0].module; })[0]
-        || ladder.current;
-      var definition = rung ? rung.definition : getStudySet(courseId, unseen[0].module);
+    var path = courseRunPath(courseId);
+    if (path.current) {
+      var definition = path.current.definition;
       var estimate = studySetEstimate(courseId, definition);
+      var carry = plannedCarryForward(courseId, questionIdsForSet(courseId, definition), 2);
+      var carryMinutes = carry.ids.reduce(function (sum, id) {
+        var question = getQuestion(courseId, id);
+        return sum + (question ? expectedResponseMinutes(question) : 0);
+      }, 0);
       return {
-        kind: "set", setId: definition.id,
-        title: rung ? "Step " + rung.step + " of " + ladder.steps + ": " + definition.title : "Start the next part of the subject",
-        copy: rung
-          ? "Adds " + conceptNameList(rung.concepts) + ". " +
-            (rung.restsOn.length
-              ? "It rests on the " + rung.restsOn.length + " concepts before it, which you have been taught."
-              : "It starts the subject, so nothing comes before it.") +
-            " You have been taught " + ladder.taughtConcepts + " of " + ladder.totalConcepts + " concepts in this subject."
-          : "Study Module " + definition.module + ": " + course.modules[definition.module - 1] + ".",
-        minutes: "~" + estimate.minutes + " minutes",
-        questions: setQuestionCount(definition) + " questions" +
+        kind:"set", setId:definition.id, step:path.current.step, steps:path.steps,
+        title:"Run " + path.current.step + " of " + path.steps + ": " + definition.title,
+        copy:(path.current.step === 1
+          ? "This is the first run. Finish it once to unlock run 2."
+          : path.current.step < path.steps
+            ? "This is the only new run open. Finish it once to unlock run " + (path.current.step + 1) + "."
+            : "This is the final run. Finish it once to clear the learning path.") +
+          (carry.names.length ? " It also checks " + conceptNameList(carry.names.map(function (name) { return {name:name}; })) + " again from your last run." : ""),
+        minutes:"~" + Math.max(3, Math.ceil((estimate.minutes + carryMinutes) / 5) * 5) + " minutes",
+        questions:(setQuestionCount(definition) + carry.ids.length) + " questions" +
           (estimate.lessons ? " · " + estimate.lessons + " unread lesson" + (estimate.lessons === 1 ? "" : "s") : "")
       };
     }
-    return {kind:"mock",title:"All core concepts have strong current evidence",copy:"Build your own check below to see whether the subject still holds together. It is practice, not a prediction of the final paper.",minutes:"8–24 minutes",questions:"Choose the mix"};
+    return {kind:"priority", title:"All nine runs are clear", copy:"Use a focused check built from your weakest or stalest evidence, or replay a cleared run.", minutes:"About 12 minutes", questions:"Weakest evidence first"};
   }
 
   function renderRecommendation() {
@@ -2788,7 +3071,7 @@
 
   function recommendationActionLabel(rec) {
     if (rec.kind === "resume") return "Resume saved practice";
-    if (rec.kind === "set") return "Start this study set";
+    if (rec.kind === "set") return "Start run " + rec.step;
     if (rec.kind === "mock") return "Mix your own practice";
     if (rec.kind === "written") return "Strengthen this writing move";
     return "Practise these concepts";
@@ -2798,7 +3081,7 @@
     var rec = recommendation(profile.selectedCourse);
     if (rec.kind === "resume") return resumeActive();
     if (rec.kind === "set") return startStudySet(profile.selectedCourse, rec.setId);
-    if (rec.kind === "mock") return openPracticeSetup(profile.selectedCourse);
+    if (rec.kind === "mock") return startPriorityPractice(profile.selectedCourse);
     if (rec.kind === "written") return startWrittenPractice(profile.selectedCourse);
     startPriorityPractice(profile.selectedCourse);
   }
@@ -2945,6 +3228,34 @@
     return selectQuestionsFromPool(courseId, definition.questionPoolIds, count, required);
   }
 
+  /* A fixed run can still remember what the previous one exposed. At most two
+   * currently weak concepts are carried into the next run with a fresh question
+   * family. They do not replace the run's authored questions and they do not unlock
+   * a different level; they are the small adaptive seam inside the fixed sequence. */
+  function plannedCarryForward(courseId, baseIds, limit) {
+    var represented = {};
+    baseIds.forEach(function (id) {
+      conceptIdsOf(getQuestion(courseId, id)).forEach(function (conceptId) { represented[conceptId] = true; });
+    });
+    var candidates = getCourse(courseId).concepts.filter(function (concept) {
+      return conceptStatus(courseId, concept.id) === "needs" && !represented[concept.id];
+    }).sort(function (a, b) {
+      return conceptPriority(courseId, b).score - conceptPriority(courseId, a).score;
+    });
+    var ids = [];
+    var names = [];
+    candidates.some(function (concept) {
+      if (ids.length >= limit) return true;
+      var question = chooseQuestion(courseId, concept.id, null, baseIds.concat(ids));
+      if (!question || baseIds.indexOf(question.id) >= 0 || ids.indexOf(question.id) >= 0) return false;
+      ids.push(question.id);
+      names.push(concept.name);
+      conceptIdsOf(question).forEach(function (conceptId) { represented[conceptId] = true; });
+      return ids.length >= limit;
+    });
+    return {ids:ids, names:names};
+  }
+
   /* Which runs re-teach a lesson the learner has already read. Remediation does,
    * because it exists because something went wrong; discovery does not, because a
    * study set is where the material is met rather than repaired. */
@@ -2973,7 +3284,7 @@
      * accident, and LAW-47 holds a fortiori — a lesson can only ever come earlier
      * than the surface that triggered it, never later. */
     var owed = [];
-    if (mode !== "simulation") {
+    if (mode !== "simulation" && !(options && options.skipLessons)) {
       (options && options.lessonIds || []).forEach(function (lectureId) {
         if (lessonFor(lectureId) && !lessonIsRead(lectureId) && owed.indexOf(lectureId) < 0) owed.push(lectureId);
       });
@@ -3010,7 +3321,7 @@
        * on the scored question let that primer run five steps ahead of its own
        * lesson — the original defect in miniature. */
       function teachFirst(surface, conceptId) {
-        if (mode === "simulation") return;
+        if (mode === "simulation" || (options && options.skipLessons)) return;
         var needed = pendingLessonsFor(surface, reteachIn);
         /* Drain the owed list up to the latest lecture this surface needs. Anything
          * earlier that is still outstanding is a foundation this surface is about to
@@ -3044,7 +3355,7 @@
 
       teachFirst(question, question.conceptId);
 
-      if (mode !== "simulation") conceptIds.forEach(function (conceptId) {
+      if (mode !== "simulation" && !(options && options.skipPrimers)) conceptIds.forEach(function (conceptId) {
         if (introduced.indexOf(conceptId) >= 0 || primerSupportLevel(courseId, conceptId) <= 0) return;
         var primer = primerQuestionFor(courseId, conceptId);
         if (!primer) return;
@@ -3090,7 +3401,8 @@
     var initialStatuses = {};
     getCourse(courseId).concepts.forEach(function (concept) { initialStatuses[concept.id] = conceptStatus(courseId, concept.id); });
     var queue = layeredQueue(courseId, questionIds, details.mode || "learning",
-      {reteach: RETEACHING_KINDS.indexOf(details.kind) >= 0, lessonIds: details.lessonIds || []});
+      {reteach: RETEACHING_KINDS.indexOf(details.kind) >= 0, lessonIds: details.lessonIds || [],
+        skipLessons:Boolean(details.skipLessons), skipPrimers:Boolean(details.skipPrimers)});
     return {
       courseId: courseId,
       kind: details.kind,
@@ -3102,6 +3414,9 @@
       writtenFocus: details.writtenFocus || [],
       setId: details.setId || null,
       conceptId: details.conceptId || null,
+      confidenceRotation: details.confidenceRotation == null ? null : Number(details.confidenceRotation),
+      confidenceRound: details.confidenceRound == null ? null : Number(details.confidenceRound),
+      confidenceCycleRounds: details.confidenceCycleRounds == null ? null : Number(details.confidenceCycleRounds),
       title: details.title,
       kicker: details.kicker,
       /* Set by the weakness route: which surface checks which pair of linked concepts,
@@ -3159,6 +3474,8 @@
     // showScreen resets the scroll position, and with smooth scrolling that animation would
     // outlive and override the jump to the builder (LAW-42).
     if (!$("dashboard-screen").classList.contains("active")) showScreen("dashboard-screen");
+    var advanced = $("advanced-disclosure");
+    if (advanced) advanced.open = true;
     setBuilderOpen(true);
     var builder = $("practice-builder");
     if (!builder) return;
@@ -3584,13 +3901,18 @@
     if (profile.active && profile.active.courseId === courseId && profile.active.setId === Number(setId)) {
       session = clone(profile.active);
     } else {
+      var coreIds = questionIdsForSet(courseId, definition);
+      var carry = plannedCarryForward(courseId, coreIds, 2);
       session = createSession(courseId, {
         kind: "set",
         setId: definition.id,
         title: definition.title,
-        kicker: "Study set " + definition.id + " of 10",
+        kicker: "Run " + definition.id + " of " + courseRunPath(courseId).steps +
+          (carry.names.length ? " · repeats " + carry.names.join(" + ") : ""),
+        carryForwardConceptNames:carry.names,
         lessonIds: moduleLessonIdsForStudySet(courseId, definition)
-      }, questionIdsForSet(courseId, definition));
+      }, coreIds.concat(carry.ids));
+      session.carryForwardConceptNames = carry.names.slice();
       profile.active = clone(session);
       saveProfile();
     }
@@ -3730,6 +4052,10 @@
 
   function shouldAskConfidence(question, item) {
     if (question.type === "primer" || question.type === "lesson" || question.type === "written-repair") return false;
+    /* Eight questions and immediate teaching is the mini-mock's entire time budget.
+       Confidence sampling remains in Learn and the full mock analysis; it is not a
+       ninth interaction repeated eight times here. */
+    if (session && session.kind === "confidence-sprint") return false;
     if (typeof item.askConfidence === "boolean") return item.askConfidence;
     var attempts = attemptsFor(session.courseId, question.conceptId).filter(function (attempt) { return attempt.scored !== false; });
     var latest = attempts[attempts.length - 1];
@@ -3750,6 +4076,10 @@
   function renderPracticeShell() {
     $("practice-kicker").textContent = session.kicker;
     $("practice-title").textContent = getCourse(session.courseId).shortTitle + " · " + session.title;
+    $("leave-practice").textContent = session.kind === "confidence-sprint" ? "← Save and return to mocks" : "← Save and return home";
+    $("leave-practice").classList.toggle("to-mocks", session.kind === "confidence-sprint");
+    var dueBox = document.querySelector(".due-box");
+    if (dueBox) dueBox.hidden = session.kind === "confidence-sprint";
     renderTopicList();
     updatePracticeProgress();
   }
@@ -3757,6 +4087,17 @@
   function renderTopicList() {
     var holder = $("topic-list");
     holder.innerHTML = "";
+    if (session.kind === "confidence-sprint") {
+      session.queue.forEach(function (item, index) {
+        var question = getQuestion(session.courseId, item.id);
+        var li = document.createElement("li");
+        li.textContent = "M" + question.module + " · " + question.node;
+        if (index === session.index) li.className = "active";
+        else if (index < session.index) li.className = "done";
+        holder.appendChild(li);
+      });
+      return;
+    }
     var conceptIds = unique(session.queue.reduce(function (values, item) {
       var question = getQuestion(session.courseId, item.id);
       return values.concat([question.conceptId].concat(question.supportingConceptIds || []));
@@ -3799,6 +4140,81 @@
     holder.setAttribute("aria-label", "Course evidence: " + labels.join(", "));
   }
 
+  function confidenceMethodFor(question) {
+    var type = question.type || "mcq";
+    if (type === "numeric") {
+      var methods = (NUMERICAL_METHODS[session.courseId] || []).filter(function (method) {
+        return Number(method.module) === Number(question.module);
+      });
+      var questionWords = String([question.node, question.stem, question.explanation].join(" ")).toLowerCase()
+        .match(/[a-z]{4,}/g) || [];
+      methods.sort(function (left, right) {
+        function overlap(method) {
+          var text = String([method.title, method.theory].concat(method.steps || []).join(" ")).toLowerCase();
+          return unique(questionWords).filter(function (word) { return text.indexOf(word) >= 0; }).length;
+        }
+        return overlap(right) - overlap(left);
+      });
+      var method = methods[0] || (NUMERICAL_METHODS[session.courseId] || [])[0];
+      if (method) return {
+        title: method.title,
+        intro: method.theory,
+        steps: method.steps.slice(0, 4),
+        check: method.checks && method.checks[0]
+      };
+    }
+    if (type === "short-answer") return {
+      title: "Build the answer in four moves",
+      intro: "A strong short answer is a visible chain from framework to evidence to decision.",
+      steps: [
+        "Name the exact decision or claim the prompt asks you to make.",
+        "Choose the one framework that governs it and state the rule in plain language.",
+        "Apply at least one case fact: because this evidence is present, the framework implies this.",
+        "Close with the action, trade-off, or missing evidence that follows."
+      ],
+      check: "If the answer would still read the same with the case facts removed, it has not applied the framework yet."
+    };
+    if (question.caselet || ["case-cloze", "boss", "match"].indexOf(type) >= 0) return {
+      title: "Turn the case into a decision",
+      intro: "Do not hunt for a remembered phrase. Reduce the situation to the rule that changes the next action.",
+      steps: [
+        "State what is being decided, compared, or diagnosed.",
+        "Underline the case fact that makes one course idea relevant.",
+        "Apply the idea as a because → therefore chain.",
+        "Check the tempting alternative: name the fact or rule it contradicts."
+      ],
+      check: "A defensible choice should use both the course rule and a fact from this exact case."
+    };
+    return {
+      title: "Find the governing distinction",
+      intro: "The fastest reliable route is to decide what each option would have to be true about.",
+      steps: [
+        "Rewrite the task as one decision in your own words.",
+        "Recall the shortest usable rule for the named idea.",
+        "Test the options against that rule, not against which wording feels familiar.",
+        "Before committing, explain why the nearest alternative fails."
+      ],
+      check: "If two options still look possible, find the single word or condition that separates their rules."
+    };
+  }
+
+  function confidenceMethodHtml(question, heading) {
+    var method = confidenceMethodFor(question);
+    return "<p class='confidence-method-title'>" + escapeHtml(heading || method.title) + "</p>" +
+      "<p>" + escapeHtml(method.intro) + "</p><ol>" + method.steps.map(function (step) {
+        return "<li>" + escapeHtml(step) + "</li>";
+      }).join("") + "</ol>" + (method.check ? "<p class='confidence-method-check'><b>Final check:</b> " + escapeHtml(method.check) + "</p>" : "");
+  }
+
+  function renderConfidenceGuide(question) {
+    var guide = $("confidence-guide");
+    var shown = session && session.kind === "confidence-sprint" && question && question.type !== "primer";
+    guide.hidden = !shown;
+    guide.open = false;
+    if (!shown) { $("confidence-guide-body").innerHTML = ""; return; }
+    $("confidence-guide-body").innerHTML = confidenceMethodHtml(question);
+  }
+
   function renderQuestion() {
     if (!session || session.index >= session.queue.length) return finishSession();
     var item = currentItem();
@@ -3816,6 +4232,7 @@
     $("lesson-panel").hidden = true;
     $("task-prompt").hidden = false;
     renderGlossaryBlock(question);
+    renderConfidenceGuide(question);
     var focusLabels = (item.writtenFocus || []).map(function (id) { return writtenCriterionLabel(session.courseId, id); });
     /* A joint surface in the weakness route is doing something the learner cannot see
      * from the question alone: checking two gaps against each other. Naming both makes
@@ -3823,6 +4240,7 @@
      * rather than from anything the question asserts about itself. */
     var linkedPair = (session.linkChecks || {})[question.id];
     $("question-pattern").textContent = isPrimer ? "Predict first"
+      : session.kind === "confidence-sprint" ? "Module " + question.module + " · applied confidence round"
       : focusLabels.length ? "Dungeon re-check · " + focusLabels.join(" + ")
       : linkedPair ? "Both together · " + linkedPair.join(" + ")
       : item.isReattempt ? "Re-attempt · new perspective"
@@ -3849,6 +4267,7 @@
      * named at all: without it the step looks like an ordinary question and the reason
      * two weaknesses were brought together stays invisible. */
     $("task-kicker").textContent = linkedPair ? "Both together · " + linkedPair.join(" + ")
+      : session.kind === "confidence-sprint" ? "Apply it"
       : question.caselet ? "Then decide"
       : "Your task";
     $("prompt-flow").classList.toggle("has-kicker", !isPrimer && (!!question.caselet || !!linkedPair));
@@ -5397,8 +5816,8 @@
     var reattemptConceptId = failedConceptIds[0] || question.conceptId;
     var afterEvidence = conceptEvidence(session.courseId, reattemptConceptId);
     var scheduled = false;
-    if (question.type !== "primer" && session.mode !== "simulation" && !correct) scheduled = ensureReattempt(question, confidence === "high" ? "confident-error" : confidence === "low" ? "uncertain-error" : "missed", reattemptConceptId);
-    else if (question.type !== "primer" && session.mode !== "simulation" && conceptStatus(session.courseId, reattemptConceptId) !== "strong" && (confidence === "low" || afterEvidence.correct < 3)) scheduled = ensureReattempt(question, confidence === "low" ? "low-confidence-correct" : "developing", reattemptConceptId);
+    if (question.type !== "primer" && session.mode !== "simulation" && session.kind !== "confidence-sprint" && !correct) scheduled = ensureReattempt(question, confidence === "high" ? "confident-error" : confidence === "low" ? "uncertain-error" : "missed", reattemptConceptId);
+    else if (question.type !== "primer" && session.mode !== "simulation" && session.kind !== "confidence-sprint" && conceptStatus(session.courseId, reattemptConceptId) !== "strong" && (confidence === "low" || afterEvidence.correct < 3)) scheduled = ensureReattempt(question, confidence === "low" ? "low-confidence-correct" : "developing", reattemptConceptId);
 
     var response = {
       id: question.id,
@@ -5484,7 +5903,9 @@
     }).join("");
     var feedback = $("feedback");
     feedback.className = "feedback visible reviewed";
-    feedback.innerHTML = "<span class='feedback-label'>Self-review recorded: " + response.rubricScore + " of " + response.rubricTotal + " criteria</span><p>This is a transparent self-check, not an automatic grade.</p><ul>" + criteria + "</ul><p class='bridge'><b>Grounded exemplar:</b> " + escapeHtml(question.exemplar) + "</p><p class='return-note'>This constructed response is recorded as practice, but it cannot create Strong evidence without independent checking.</p>";
+    feedback.innerHTML = "<span class='feedback-label'>Self-review recorded: " + response.rubricScore + " of " + response.rubricTotal + " criteria</span><p>This is a transparent self-check, not an automatic grade.</p><ul>" + criteria + "</ul><p class='bridge'><b>Grounded exemplar:</b> " + escapeHtml(question.exemplar) + "</p>" +
+      (session.kind === "confidence-sprint" ? "<div class='confidence-method-result'>" + confidenceMethodHtml(question, "Next-time method") + "</div>" : "") +
+      "<p class='return-note'>This constructed response is recorded as practice, but it cannot create Strong evidence without independent checking.</p>";
     $("commit-answer").hidden = true;
     $("next-question").hidden = false;
     $("next-question").innerHTML = session.index + 1 >= session.queue.length ? "Finish this set <span aria-hidden='true'>→</span>" : "Continue <span aria-hidden='true'>→</span>";
@@ -5533,24 +5954,22 @@
     feedback.className = "feedback visible" + (response.correct ? "" : " wrong");
     var partCount = response.partResults ? response.partResults.length : 1;
     var partCorrect = response.partResults ? response.partResults.filter(Boolean).length : (response.correct ? 1 : 0);
-    var label = response.correct ? "Correct" : (partCorrect ? partCorrect + " of " + partCount + " reasoning parts correct" : "Not yet — this idea will return");
-    var returnCopy;
-    var evidence = conceptEvidence(session.courseId, question.conceptId);
-    if (response.statusAfter === "strong") returnCopy = evidence.delayedCorrect ? "Strong evidence: varied formats, more than one block, applied work, and a later retest are present." : "Strong current evidence: varied formats, more than one block, and applied work are present. A later retest will check retention.";
-    else if (!response.correct && response.confidence === "high") returnCopy = "This ‘could explain’ error will return in a different family. It closes only after two independent repairs; difficulty is not increased as punishment.";
-    else if (response.correct && response.confidence === "low") returnCopy = "The answer was right. One new-family check will test the distinction again before relying on it.";
-    else if (response.scheduled && response.correct) returnCopy = "Good progress. Another question of a different type is placed later in this set.";
-    else if (response.scheduled) returnCopy = "A different question on the same idea is placed later in this set—not immediately after this one.";
-    else returnCopy = evidence.reasons.filter(function (reason) { return /needed|required|retest|block|type/i.test(reason); })[0] || "This remains in the next practice block for this subject.";
+    var label = response.correct ? "Correct" : (partCorrect ? "Almost — " + partCorrect + " of " + partCount + " parts were right" : "Not quite");
+    var returnCopy = "";
+    if (response.correct) {
+      var evidence = conceptEvidence(session.courseId, question.conceptId);
+      if (response.statusAfter === "strong") returnCopy = evidence.delayedCorrect ? "Strong evidence: varied formats, more than one block, applied work, and a later retest are present." : "Strong current evidence: varied formats, more than one block, and applied work are present. A later retest will check retention.";
+      else if (response.confidence === "low") returnCopy = "The answer was right. One new-family check will test the distinction again before relying on it.";
+      else if (response.scheduled) returnCopy = "Good progress. Another question of a different type is placed later in this set.";
+      else returnCopy = evidence.reasons.filter(function (reason) { return /needed|required|retest|block|type/i.test(reason); })[0] || "Keep applying this idea in the rest of the run.";
+    }
     var answerKey = correctAnswerKey(question);
     var diagnosis = diagnosisFor(question, response);
     var bossCopy = bossStepFeedback(question, response);
 
-    // A wrong answer is explained in the order a learner needs it: what this
-    // choice assumed, then what actually governs the case, then the full answer,
-    // then the wider connection. The complete answer is no longer collapsed —
-    // hiding it behind a disclosure was the gap that made this panel feel like a
-    // verdict without a reason.
+    // A wrong answer is explained in the order a learner needs it: the better
+    // answer, why it is better, what their choice missed, and one reusable check.
+    // Scheduling remains internal; it does not help a learner understand the idea.
     var body;
     if (response.correct) {
       body = "<p>" + escapeHtml(question.explanation) + "</p>";
@@ -5559,12 +5978,12 @@
       // the answer key already states it. Printing both says the same sentence twice.
       var governingIsInAnswer = answerKey.join(" ").indexOf(String(question.explanation).trim()) >= 0;
       body =
+        (governingIsInAnswer ? "" : "<p class='governing'><b>Why:</b> " + escapeHtml(question.explanation) + "</p>") +
         "<div class='diagnosis'>" +
-          "<p class='diagnosis-head'>" + escapeHtml(diagnosis.label) + "</p>" +
-          "<p>" + escapeHtml(diagnosis.why) + "</p>" +
-          (diagnosis.cue ? "<p class='diagnosis-cue'><b>Catch it earlier:</b> " + escapeHtml(diagnosis.cue) + "</p>" : "") +
-        "</div>" +
-        (governingIsInAnswer ? "" : "<p class='governing'><b>What governs this question:</b> " + escapeHtml(question.explanation) + "</p>");
+          "<p class='diagnosis-head'>What your answer missed</p>" +
+          "<p><b>" + escapeHtml(diagnosis.label) + ".</b> " + escapeHtml(diagnosis.why) + "</p>" +
+          (diagnosis.cue ? "<p class='diagnosis-cue'><b>Use this check:</b> " + escapeHtml(diagnosis.cue) + "</p>" : "") +
+        "</div>";
     } else {
       body = "<p>" + escapeHtml(question.explanation) + "</p>";
     }
@@ -5595,13 +6014,17 @@
         (marks.misses && marks.hits - marks.misses < 0 ? ". The paper floors a question at zero, so this cannot go negative." : "")
       : "";
 
+    var answerKeyHtml = !response.correct ? "<div class='answer-key'><p class='answer-key-head'>Better answer</p><ul>" + answerKey.map(function (answer) { return "<li>" + escapeHtml(answer) + "</li>"; }).join("") + "</ul></div>" : "";
+    var methodCopy = session.kind === "confidence-sprint"
+      ? "<div class='confidence-method-result'>" + confidenceMethodHtml(question, "Next-time method") + "</div>"
+      : "";
     feedback.innerHTML = "<span class='feedback-label'>" + escapeHtml(label) + "</span>" +
       (marksCopy ? "<p class='msq-marks'>" + escapeHtml(marksCopy) + "</p>" : "") +
-      (numericCopy ? "<p class='numeric-verdict'>" + escapeHtml(numericCopy) + "</p>" : "") + body +
+      (numericCopy ? "<p class='numeric-verdict'>" + escapeHtml(numericCopy) + "</p>" : "") + answerKeyHtml + body +
       (bossCopy ? "<p class='still-valid'><b>What remains valid:</b> " + escapeHtml(bossCopy) + "</p>" : "") +
-      (!response.correct ? "<div class='answer-key'><p class='answer-key-head'>The complete answer</p><ul>" + answerKey.map(function (answer) { return "<li>" + escapeHtml(answer) + "</li>"; }).join("") + "</ul></div>" : "") +
-      "<p class='bridge'><b>Why it connects:</b> " + escapeHtml(question.link) + "</p>" +
-      "<p class='return-note'>" + escapeHtml(returnCopy) + "</p>";
+      "<p class='bridge'><b>How it fits:</b> " + escapeHtml(question.link) + "</p>" +
+      methodCopy +
+      (returnCopy ? "<p class='return-note'>" + escapeHtml(returnCopy) + "</p>" : "");
     $("commit-answer").hidden = true;
     $("next-question").hidden = false;
     $("next-question").innerHTML = session.index + 1 >= session.queue.length ? "Finish this set <span aria-hidden='true'>→</span>" : "Continue <span aria-hidden='true'>→</span>";
@@ -5723,6 +6146,7 @@
     var scoredInitial = initialResponses.filter(function (response) { return response.scored !== false; });
     var initialCorrect = scoredInitial.filter(function (response) { return response.correct; }).length;
     var percent = Math.round(initialCorrect / Math.max(1, scoredInitial.length) * 100);
+    recordMiniMockProgress(completedSession, percent, scoredInitial.length);
     if (completedSession.setId) {
       profile.completed[completedSession.courseId] = profile.completed[completedSession.courseId] || {};
       var record = profile.completed[completedSession.courseId][String(completedSession.setId)] || {attempts: 0, best: 0};
@@ -5753,24 +6177,92 @@
     var improved = touched.filter(function (conceptId) {
       return STATUS_ORDER[conceptStatus(completedSession.courseId, conceptId)] > STATUS_ORDER[completedSession.initialStatuses[conceptId]];
     }).length;
+    var isMiniMock = completedSession.kind === "confidence-sprint";
 
-    $("results-kicker").textContent = completedSession.kind === "practice-check" ? "Generic practice check complete" : completedSession.kind === "practice-shape" ? "Learning practice complete" : completedSession.kind === "written-practice" ? "Written practice complete" : "Study set complete";
-    $("results-title").textContent = percent >= 75 ? "Good work. Your next step is clear." : percent >= 50 ? "Useful progress. Keep building it." : "This showed exactly what to practise next.";
-    $("results-copy").textContent = machineGraded.length ? "Scored questions updated your evidence. Dungeon’s written authority issued source-cited rubric marks for written practice, but those marks did not create Strong evidence." : constructed.length ? "Scored questions updated your evidence. Constructed responses were stored as transparent self-review only, not automatic correctness." : "The dashboard has updated. Missed and developing concepts now appear ahead of new material when you continue this subject.";
-    $("result-score").textContent = percent + "%";
-    $("score-caption").textContent = scoredInitial.length + " scored question" + (scoredInitial.length === 1 ? "" : "s");
+    var course = getCourse(completedSession.courseId);
+    var path = courseRunPath(completedSession.courseId);
+    var completedRun = path.sequence.filter(function (run) { return run.definition.id === completedSession.setId; })[0] || null;
+    var nextRun = path.current;
+    var nextCarry = nextRun
+      ? plannedCarryForward(completedSession.courseId, questionIdsForSet(completedSession.courseId, nextRun.definition), 2)
+      : {ids:[], names:[]};
+
+    function evidencePercentFromStatuses(statuses) {
+      var points = course.concepts.reduce(function (sum, concept) {
+        var status = statuses[concept.id] || "unseen";
+        return sum + (status === "strong" ? 1 : status === "developing" ? .5 : 0);
+      }, 0);
+      return Math.round(points / Math.max(1, course.concepts.length) * 100);
+    }
+
+    var beforeEvidence = evidencePercentFromStatuses(completedSession.initialStatuses || {});
+    var nowEvidence = courseStats(completedSession.courseId).weighted;
+    var improvedConcepts = improved ? touched.filter(function (conceptId) {
+      return STATUS_ORDER[conceptStatus(completedSession.courseId, conceptId)] > STATUS_ORDER[completedSession.initialStatuses[conceptId]];
+    }).map(function (conceptId) { return getConcept(completedSession.courseId, conceptId); }).filter(Boolean) : [];
+    var correctConcepts = unique(scoredInitial.filter(function (response) { return response.correct; }).reduce(function (ids, response) {
+      return ids.concat(response.conceptIds || [response.conceptId]);
+    }, [])).map(function (conceptId) { return getConcept(completedSession.courseId, conceptId); }).filter(Boolean);
+    var struggledConcepts = unique(scoredInitial.filter(function (response) { return !response.correct; }).reduce(function (ids, response) {
+      return ids.concat(response.conceptIds || [response.conceptId]);
+    }, [])).map(function (conceptId) { return getConcept(completedSession.courseId, conceptId); }).filter(Boolean);
+
+    $("results-kicker").textContent = isMiniMock
+      ? "15-minute mini-mock complete"
+      : completedRun
+      ? "Run " + completedRun.step + " of " + path.steps + " complete"
+      : completedSession.kind === "written-practice" ? "Written practice complete" : "Practice complete";
+    $("results-title").textContent = isMiniMock
+      ? "You touched all eight modules. Keep the method, not the score."
+      : completedRun ? "Run " + completedRun.step + " is clear. Here’s the quick look." : "Here’s what this practice changed.";
+    $("results-copy").textContent = isMiniMock
+      ? "This was a coached confidence round, not an exam prediction. Use the misses below as a short list of distinctions to carry into the next rotation."
+      : nowEvidence > beforeEvidence
+      ? "Your subject evidence moved from " + beforeEvidence + "% to " + nowEvidence + "%."
+      : "Your evidence held at " + nowEvidence + "%. The useful change is knowing exactly what still needs another check.";
+
+    var accuracyLabel = document.querySelector(".result-stats article:first-child small");
+    if (accuracyLabel) accuracyLabel.textContent = scoredInitial.length ? "Accuracy" : "Review mode";
+    $("result-score").textContent = scoredInitial.length ? percent + "%" : "Self-check";
+    $("score-caption").textContent = scoredInitial.length
+      ? scoredInitial.length + " scored question" + (scoredInitial.length === 1 ? "" : "s")
+      : constructed.length + " written response" + (constructed.length === 1 ? "" : "s");
     $("result-correct").textContent = String(initialCorrect);
     $("result-missed").textContent = String(initialMissed);
     $("result-third-label").textContent = constructed.length ? (completedSession.mode === "simulation" ? "Written responses" : machineGraded.length ? "Written responses checked" : "Responses self-reviewed") : "Re-attempts passed";
     $("result-reattempts").textContent = String(constructed.length || reattempts);
     $("result-improved").textContent = String(improved);
-    /* The band is stored on the element so the ring can be repainted when the theme
-       changes without recomputing the whole results screen. */
-    $("score-ring").dataset.band = percent >= 75 ? "high" : percent >= 50 ? "mid" : "low";
-    paintScoreRing();
+    $("result-learned").textContent = improvedConcepts.length
+      ? conceptNameList(improvedConcepts.slice(0, 3)) + (improvedConcepts.length > 3 ? " and " + (improvedConcepts.length - 3) + " more" : "") + " gained a stronger evidence state."
+      : correctConcepts.length
+        ? "You applied " + conceptNameList(correctConcepts.slice(0, 3)) + " correctly; their evidence state held."
+        : "This run established a baseline. No concept moved up an evidence state yet.";
+    $("result-struggled").textContent = struggledConcepts.length
+      ? conceptNameList(struggledConcepts.slice(0, 3)) + (struggledConcepts.length > 3 ? " and " + (struggledConcepts.length - 3) + " more" : "") + " caused a first-attempt miss."
+      : "No scored concept caused a first-attempt miss in this run.";
+    var nextMini = isMiniMock ? nextMiniMock(completedSession.courseId) : null;
+    $("result-next").textContent = isMiniMock
+      ? nextMini.freshRotation
+        ? "The complete concept cycle is clear. The next round starts a fresh rotation with different question families."
+        : "Round " + (nextMini.round.index + 1) + " of " + nextMini.cycle.rounds.length + " is next; it prioritises concepts this rotation has not reached yet."
+      : nextRun
+      ? "Run " + nextRun.step + " unlocks: " + nextRun.definition.title + "." +
+        (nextCarry.names.length ? " Likely repeat: " + nextCarry.names.join(" and ") + "." : " No open difficulty needs carrying into it.")
+      : "The nine-run path is clear. Replays and focused practice are now fully available.";
+
+    $("result-before-bar").style.width = beforeEvidence + "%";
+    $("result-now-bar").style.width = nowEvidence + "%";
+    $("result-before-value").textContent = beforeEvidence + "%";
+    $("result-now-value").textContent = nowEvidence + "%";
+    $("result-bars").setAttribute("aria-label", course.shortTitle + " evidence was " + beforeEvidence +
+      " percent before this run, is " + nowEvidence + " percent now, and the all-Strong evidence goal is 100 percent.");
+    $("result-chart-note").textContent = nowEvidence > beforeEvidence
+      ? "This run added " + (nowEvidence - beforeEvidence) + " evidence point" + (nowEvidence - beforeEvidence === 1 ? "" : "s") + ". The 100% line means every concept Strong, not a predicted exam score."
+      : "The chart held level because no concept crossed an evidence-state boundary. The 100% goal means every concept Strong, not a predicted exam score.";
 
     var review = $("result-review");
     review.innerHTML = "";
+    review.closest("details").open = false;
     touched.forEach(function (conceptId) {
       var concept = getConcept(completedSession.courseId, conceptId);
       var response = evidenceResponses.filter(function (item) { return (item.conceptIds || [item.conceptId]).indexOf(conceptId) >= 0; }).slice(-1)[0];
@@ -5784,9 +6276,14 @@
     });
     if (!touched.length) review.innerHTML = "<p>No concept response was recorded.</p>";
     renderAnswerReview(completedSession);
-    $("result-primary").innerHTML = recommendationActionLabel(recommendation(completedSession.courseId)) + " <span aria-hidden='true'>→</span>";
-    $("result-primary").onclick = function () { executeRecommendation(); };
-    $("repeat-set").textContent = completedSession.kind === "practice-check" || completedSession.kind === "practice-shape" || completedSession.kind === "written-practice" ? "Repeat this practice" : "Repeat this set";
+    $("results-home").textContent = isMiniMock ? "← Back to mocks" : "← Revision home";
+    $("result-primary").innerHTML = isMiniMock
+      ? (nextMini.freshRotation ? "Start fresh rotation" : "Start next 15-minute round") + " <span aria-hidden='true'>→</span>"
+      : recommendationActionLabel(recommendation(completedSession.courseId)) + " <span aria-hidden='true'>→</span>";
+    $("result-primary").onclick = isMiniMock
+      ? function () { startConfidenceSprint(completedSession.courseId, nextMini.round.index, nextMini.rotation); }
+      : function () { executeRecommendation(); };
+    $("repeat-set").textContent = isMiniMock ? "Repeat this mini-mock" : completedSession.kind === "practice-check" || completedSession.kind === "practice-shape" || completedSession.kind === "written-practice" ? "Repeat this practice" : "Replay this run";
     $("repeat-set").onclick = repeatFinished;
   }
 
@@ -5830,6 +6327,7 @@
 
   function repeatFinished() {
     if (!lastFinished) return goDashboard();
+    if (lastFinished.kind === "confidence-sprint") return startConfidenceSprint(lastFinished.courseId, lastFinished.confidenceRound, lastFinished.confidenceRotation);
     if (lastFinished.setId) return startStudySet(lastFinished.courseId, lastFinished.setId);
     if (lastFinished.kind === "concept") return startConceptPractice(lastFinished.courseId, lastFinished.conceptId);
     if (lastFinished.kind === "written-practice") return startWrittenPractice(lastFinished.courseId);
@@ -5868,6 +6366,12 @@
       profile.active = clone(session);
       saveProfile();
     }
+    if (session && session.kind === "confidence-sprint") return openExamHome();
+    goDashboard();
+  }
+
+  function leaveResults() {
+    if (lastFinished && lastFinished.kind === "confidence-sprint") return openExamHome();
     goDashboard();
   }
 
@@ -5959,6 +6463,7 @@
         var mode = (index + courseIndex) % 4;
         var byType = function (type) { return surfaces.filter(function (question) { return question.type === type; })[0]; };
         var picks = unique([byType("mcq"), byType("cloze"), byType("case-cloze"), byType("match"), byType("boss")].filter(Boolean));
+        if (!picks.length) return;
         if (mode === 0 && picks.length >= 5) {
           picks.slice(0, 3).forEach(function (question, pickIndex) { recordAttempt(courseId, question, true, pickIndex ? "medium" : "low", {at:now - (28 - pickIndex) * 60 * 60 * 1000}, "scenario-early-" + courseId); });
           recordAttempt(courseId, picks[3], false, "low", {at:now - 3 * 60 * 60 * 1000}, "scenario-late-" + courseId);
@@ -6108,6 +6613,19 @@
     beginPractice();
   }
 
+  function openMiniMockScenario(resolved) {
+    startConfidenceSprint("SPMS", 0, 0);
+    if (!resolved) return;
+    var question = currentQuestion();
+    selected = demoSelection(question, false);
+    session.selected = Array.isArray(selected) ? selected.slice() : selected;
+    commitAnswer();
+    if (question.type === "short-answer" && session.subjectiveStage === "rubric") {
+      session.rubricSelection = [0, 1];
+      commitAnswer();
+    }
+  }
+
   function renderSimulationResultsScenario() {
     var courseId = "IBM";
     var ids = practiceShapeQuestionIds(courseId, "mixed");
@@ -6209,6 +6727,14 @@
     }
   }
 
+  function openExamQuestionScenario() {
+    var requested = new URLSearchParams(window.location.search).get("course");
+    var courseId = EXAM_PAPERS[requested] ? requested : "SCLM";
+    openExaminer(courseId, 0);
+    beginExam();
+    renderCalculator();
+  }
+
   function applyScenario(name) {
     scenarioMode = true;
     profile = defaultProfile();
@@ -6231,6 +6757,19 @@
     if (name === "written-recommendation") return seedWrittenRecommendationScenario();
     if (name === "written-repair") return openWrittenRepairScenario();
     if (name === "exam-written-review") return openExamWrittenReviewScenario();
+    if (name === "exam-question") return openExamQuestionScenario();
+    if (name === "exam-home") {
+      renderExamHome();
+      return showScreen("exam-home-screen");
+    }
+    if (name === "notes") {
+      notesState.courseId = "SCLM";
+      notesState.module = 1;
+      renderNotes();
+      return showScreen("notes-screen");
+    }
+    if (name === "mini-question") return openMiniMockScenario(false);
+    if (name === "mini-feedback") return openMiniMockScenario(true);
     /* These two scenarios used to select a tab. Nothing is mutually exclusive on the
      * homepage any more, so they open the matching block and scroll to it instead —
      * the same destination, reached the way a learner now reaches it. */
@@ -6238,7 +6777,8 @@
       seedScenarioProgress();
       renderDashboard();
       showScreen("dashboard-screen");
-      var target = name === "dashboard-concepts" ? $("concept-shelf-title") : revealDisclosure("plan-disclosure");
+      if (name === "dashboard-concepts") revealDisclosure("concepts-disclosure");
+      var target = name === "dashboard-concepts" ? $("concept-shelf-title") : $("next-step-title");
       if (target) window.requestAnimationFrame(function () { target.scrollIntoView({block: "start", behavior: "smooth"}); });
       return;
     }
@@ -6246,7 +6786,7 @@
       seedScenarioProgress();
       renderDashboard();
       showScreen("dashboard-screen");
-      return openPracticeSetup("BRGSA");
+      return startPriorityPractice("BRGSA");
     }
     if (name === "simulation-results") return renderSimulationResultsScenario();
     if (name === "question") return startStudySet("SPMS", 1);
@@ -6280,10 +6820,18 @@
     if (name === "question-short-answer") return openQuestionScenario("BRGSA", Object.keys(getCourse("BRGSA").questions).map(function (id) { return getQuestion("BRGSA", id); }).filter(function (question) { return question.type === "short-answer"; })[0], false);
     if (name === "question-short-answer-review") return openQuestionScenario("BRGSA", Object.keys(getCourse("BRGSA").questions).map(function (id) { return getQuestion("BRGSA", id); }).filter(function (question) { return question.type === "short-answer"; })[0], true);
     if (name === "feedback") {
-      startStudySet("SCLM", 3);
-      var question = currentQuestion();
-      selected = demoSelection(question, false);
-      session.selected = Array.isArray(selected) ? selected.slice() : selected;
+      var feedbackQuestion = Object.keys(getCourse("SCLM").questions).map(function (id) { return getQuestion("SCLM", id); })
+        .filter(function (question) { return question.type === "mcq"; })[0];
+      session = createSession("SCLM", {kind:"concept", conceptId:feedbackQuestion.conceptId, title:feedbackQuestion.node, kicker:"Feedback check"}, [feedbackQuestion.id]);
+      /* Keep this browser fixture on the scored surface. Ordinary learner runs
+       * still begin with the lesson that gives the question its vocabulary. */
+      session.queue = [{id:feedbackQuestion.id, initial:true, isReattempt:false, origin:null, askConfidence:true}];
+      session.baseCount = 1;
+      profile.selectedCourse = "SCLM";
+      profile.active = clone(session);
+      beginPractice();
+      selected = demoSelection(feedbackQuestion, false);
+      session.selected = selected;
       setConfidence("high");
       return commitAnswer();
     }
@@ -7742,6 +8290,7 @@
   function switchMode(mode) {
     if ((pendingMode || currentMode()) === mode) return;
     if (mode === "exam") { openExamHome(); return; }
+    if (mode === "notes") { openNotes(); return; }
     requestLeaveLivePaper(function () {
       crossProducts("learn", function () { renderDashboard(); showScreen("dashboard-screen"); });
     });
@@ -8015,8 +8564,8 @@
       ? " — about " + readiness.marks.percent + "% of this set's " + readiness.marks.available + " marks"
       : "";
     var tail = readiness.nextStep
-      ? ". Step " + readiness.nextStep.step + " of " + readiness.ladderSteps + " in Learn adds " +
-        conceptNameList(readiness.nextStep.concepts) + "."
+      ? ". Learn run " + readiness.nextStep.step + " of " + readiness.ladderSteps + " is next: " +
+        readiness.nextStep.definition.title + "."
       : ".";
     return head + middle + tail;
   }
@@ -8034,27 +8583,27 @@
   }
 
   function renderExamPick() {
-    var pick = recommendedMock();
+    var pick = recommendedMiniMock();
     var block = $("exam-pick");
     block.hidden = !pick;
     if (!pick) return;
-    var paper = pick.paper;
-    var row = pick.set;
-    var questions = paper.spec.sections.reduce(function (n, s) { return n + s.count; }, 0);
-    var short = examShortfalls(paper.courseId);
-    $("exam-pick-title").textContent = paper.spec.title + " · " + examSetLabel(row.set);
-    $("exam-pick-why").textContent = (pick.reason === "unmet"
-      ? "You have not sat this one yet, and it is the next paper on your timetable you have not met. Meeting all four once tells you more than three goes at the same one."
-      : "This is your weakest paper so far, at " + paper.best + "%. It is where the marks are.")
-      + (short.length ? " Some sections are short of the real paper — it says which, and scores you out of what is there." : "");
+    var course = getCourse(pick.courseId);
+    var next = pick.next;
+    var cycleTotal = next.cycle.targetConceptIds.length;
+    $("exam-pick-title").textContent = course.shortTitle + " · " + (pick.active
+      ? "resume your confidence round"
+      : "confidence round " + (next.round.index + 1) + " of " + next.cycle.rounds.length);
+    $("exam-pick-why").textContent = pick.active
+      ? "Your eight-question round is saved exactly where you left it. Continue for immediate teaching feedback and one applied question from every module."
+      : next.freshRotation
+        ? "You completed a full " + cycleTotal + "-concept cycle. This starts a fresh rotation with different question families while keeping all eight modules in view."
+        : "This cycle has reached " + next.covered + " of " + cycleTotal + " concepts. The next round prioritises ideas not yet seen in the cycle while still touching every module.";
     $("exam-pick-facts").innerHTML =
-      "<span>" + escapeHtml(paper.spec.sat) + "</span>" +
-      "<span>" + questions + " questions</span>" +
-      "<span>" + EXAM_MINUTES + " minutes</span>" +
-      "<span>" + paper.spec.total + " marks</span>" +
-      (row.sittings ? "<span>" + row.sittings + " sitting" + (row.sittings === 1 ? "" : "s") + " on this set</span>" : "");
-    $("exam-pick-start").textContent = row.sittings ? "Sit it again" : "Start this paper";
-    $("exam-pick-start").onclick = function () { openExaminer(paper.courseId, row.set); };
+      "<span>8 questions</span><span>All 8 modules</span><span>15 minutes tops</span><span>Teaching after every answer</span>";
+    $("exam-pick-start").textContent = pick.active ? "Resume mini-mock" : next.freshRotation ? "Start fresh rotation" : "Start mini-mock";
+    $("exam-pick-start").onclick = pick.active ? resumeActive : function () {
+      startConfidenceSprint(pick.courseId, next.round.index, next.rotation);
+    };
   }
 
   /* ---- the bag ------------------------------------------------------------------
@@ -8507,10 +9056,10 @@
      the control goes there and starts the work rather than dropping somebody on a
      dashboard to find it themselves. */
   function startNextLadderStep(courseId) {
-    var ladder = courseLadder(courseId);
+    var path = courseRunPath(courseId);
     profile.selectedCourse = courseId;
     crossProducts("learn", function () {
-      if (ladder.current) return startStudySet(courseId, ladder.current.definition.id);
+      if (path.current) return startStudySet(courseId, path.current.definition.id);
       renderDashboard();
       showScreen("dashboard-screen");
     });
@@ -8551,6 +9100,9 @@
       };
     },
     readiness: function (courseId, setIndex) { return examReadiness(courseId, setIndex); },
+    miniMocks: function (courseId, rotation) {
+      return window.T6_MINI_MOCKS ? window.T6_MINI_MOCKS.build(courseId, rotation || 0) : null;
+    },
     ladder: function (courseId) { return courseLadder(courseId); },
     /* What a lesson's closing handoff actually SAYS in a given run — the prose plus
        the correction the app prints when the run departs from the course's order.
@@ -8577,6 +9129,105 @@
     return row.possible ? Math.round((row.awarded / row.possible) * 100) : 0;
   }
 
+  function miniMockState(courseId) {
+    if (!profile.miniMockProgress || typeof profile.miniMockProgress !== "object") profile.miniMockProgress = {};
+    var state = profile.miniMockProgress[courseId];
+    if (!state || typeof state !== "object") {
+      state = {rotation:0, completed:{}, cyclesCompleted:0, totalRounds:0};
+      profile.miniMockProgress[courseId] = state;
+    }
+    state.rotation = Math.max(0, Number(state.rotation) || 0);
+    state.completed = state.completed && typeof state.completed === "object" ? state.completed : {};
+    state.cyclesCompleted = Math.max(0, Number(state.cyclesCompleted) || 0);
+    state.totalRounds = Math.max(0, Number(state.totalRounds) || 0);
+    return state;
+  }
+
+  function miniMockCycle(courseId, rotation) {
+    return window.T6_MINI_MOCKS && window.T6_MINI_MOCKS.build(courseId, rotation || 0);
+  }
+
+  function miniMockCovered(courseId, cycle, completed) {
+    var covered = {};
+    cycle.rounds.forEach(function (round) {
+      if (!completed[String(round.index)]) return;
+      round.newConceptIds.forEach(function (id) { covered[id] = true; });
+    });
+    return Object.keys(covered).length;
+  }
+
+  function nextMiniMock(courseId) {
+    var state = miniMockState(courseId);
+    var cycle = miniMockCycle(courseId, state.rotation);
+    if (!cycle) return null;
+    var next = cycle.rounds.filter(function (round) { return !state.completed[String(round.index)]; })[0];
+    if (next) return {
+      courseId:courseId, state:state, cycle:cycle, round:next, rotation:state.rotation,
+      covered:miniMockCovered(courseId, cycle, state.completed), freshRotation:false
+    };
+    var fresh = miniMockCycle(courseId, state.rotation + 1);
+    return {
+      courseId:courseId, state:state, cycle:fresh, round:fresh.rounds[0], rotation:state.rotation + 1,
+      covered:cycle.targetConceptIds.length, freshRotation:true
+    };
+  }
+
+  function recommendedMiniMock() {
+    if (profile.active && profile.active.kind === "confidence-sprint") {
+      return {courseId:profile.active.courseId, active:true, next:nextMiniMock(profile.active.courseId)};
+    }
+    var courseId = EXAM_ORDER.filter(function (id) {
+      var next = nextMiniMock(id);
+      return next && !next.freshRotation;
+    })[0] || EXAM_ORDER[0];
+    return {courseId:courseId, active:false, next:nextMiniMock(courseId)};
+  }
+
+  function startConfidenceSprint(courseId, roundIndex, rotation) {
+    var state = miniMockState(courseId);
+    rotation = Math.max(0, Number(rotation) || 0);
+    if (rotation !== state.rotation) {
+      state.rotation = rotation;
+      state.completed = {};
+    }
+    var cycle = miniMockCycle(courseId, rotation);
+    var round = cycle && cycle.rounds[Number(roundIndex) || 0];
+    if (!round) return toast("That confidence round is not available.");
+    profile.selectedCourse = courseId;
+    session = createSession(courseId, {
+      kind:"confidence-sprint",
+      mode:"learning",
+      title:"Confidence round " + (round.index + 1),
+      kicker:"15-minute mini-mock · round " + (round.index + 1) + " of " + cycle.rounds.length + " · feedback after every answer",
+      skipLessons:true,
+      skipPrimers:true,
+      confidenceRotation:rotation,
+      confidenceRound:round.index,
+      confidenceCycleRounds:cycle.rounds.length
+    }, round.questionIds);
+    profile.active = clone(session);
+    saveProfile();
+    beginPractice();
+  }
+
+  function recordMiniMockProgress(completedSession, percent, scoredCount) {
+    if (!completedSession || completedSession.kind !== "confidence-sprint") return;
+    var state = miniMockState(completedSession.courseId);
+    if (state.rotation !== completedSession.confidenceRotation) return;
+    var key = String(completedSession.confidenceRound);
+    var previous = state.completed[key] || {attempts:0, best:null};
+    previous.attempts += 1;
+    previous.last = scoredCount ? percent : null;
+    previous.best = scoredCount ? (previous.best == null ? percent : Math.max(previous.best, percent)) : previous.best;
+    previous.at = new Date().toISOString();
+    state.completed[key] = previous;
+    state.totalRounds += 1;
+    var cycle = miniMockCycle(completedSession.courseId, state.rotation);
+    if (cycle && cycle.rounds.every(function (round) { return state.completed[String(round.index)]; })) {
+      state.cyclesCompleted = Math.max(state.cyclesCompleted, state.rotation + 1);
+    }
+  }
+
   /* Every route into the examiner goes through the same door, so arriving from the
      dashboard, from the switch, or from backing out of a brief all look alike. */
   function openExamHome() {
@@ -8592,6 +9243,12 @@
     $all("#exam-papers [data-exam-set]").forEach(function (button) {
       button.addEventListener("click", function () {
         openExaminer(button.dataset.examCourse, Number(button.dataset.examSet));
+      });
+    });
+    $all("#exam-papers [data-mini-mock-course]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        if (profile.active && profile.active.kind === "confidence-sprint" && profile.active.courseId === button.dataset.miniMockCourse) return resumeActive();
+        startConfidenceSprint(button.dataset.miniMockCourse, Number(button.dataset.miniMockRound), Number(button.dataset.miniMockRotation));
       });
     });
     /* The examiner's job here is to hand the learner back, not to keep them. If a
@@ -8615,6 +9272,13 @@
        owed it before they commit two hours, not at the end. */
     var short = examShortfalls(courseId);
     var negative = spec.sections.some(function (s) { return s.negative; });
+    var mini = nextMiniMock(courseId);
+    var miniCycleTotal = mini.cycle.targetConceptIds.length;
+    var activeMini = profile.active && profile.active.kind === "confidence-sprint" && profile.active.courseId === courseId;
+    var miniAction = activeMini ? "Resume round" : mini.freshRotation ? "Start new rotation" : mini.covered ? "Continue round " + (mini.round.index + 1) : "Start round 1";
+    var miniCopy = mini.freshRotation
+      ? "Full " + miniCycleTotal + "-concept cycle complete · the next rotation changes question families"
+      : mini.covered + "/" + miniCycleTotal + " concepts reached in this rotation · round " + (mini.round.index + 1) + " of " + mini.cycle.rounds.length;
 
     var readiness = examReadiness(courseId);
     var readinessLine = readiness && readiness.total
@@ -8662,6 +9326,11 @@
       questions + " questions · " +
       (spec.calculator === "scientific" ? "Scientific calculator" : spec.calculator === "basic" ? "Normal calculator" : "No calculator") +
       (negative ? " · Negative marking" : "") + "</p></header>" +
+      "<section class='exam-mini-mock' aria-label='15-minute teaching mini-mock'>" +
+        "<div><span>15-minute teaching mini-mock</span><b>8 applied questions · every module · immediate feedback</b><small>" + escapeHtml(miniCopy) + "</small></div>" +
+        "<button type='button' class='button primary compact' data-mini-mock-course='" + escapeHtml(courseId) +
+          "' data-mini-mock-round='" + mini.round.index + "' data-mini-mock-rotation='" + mini.rotation + "'>" + escapeHtml(miniAction) + "</button>" +
+      "</section>" +
       "<ul class='exam-paper-sections'>" + spec.sections.map(function (section) {
         return "<li><b>" + escapeHtml(section.label) + "</b><span>" + section.count + " × " +
           section.marks + " mark" + (section.marks === 1 ? "" : "s") + "</span></li>";
@@ -9676,34 +10345,57 @@
     }
     $("course-grid").addEventListener("scroll", updateRailScrollCue, {passive: true});
     window.addEventListener("resize", updateRailScrollCue);
-    /* Changing subject from the header does exactly what the rail's card does, and
-       then puts you on the dashboard: the control is visible from inside a lesson,
-       and silently repointing the app underneath a screen that does not show the
-       subject would be a change you could not see. */
-    $("header-subject").addEventListener("change", function (event) {
-      profile.selectedCourse = event.target.value;
-      saveProfile();
-      if (!$("dashboard-screen").classList.contains("active")) goDashboard();
-      else renderDashboard();
-    });
-    $("subject-sort").addEventListener("change", function (event) {
-      profile.subjectSort = event.target.value === "hardest" ? "hardest" : "exam";
-      saveProfile();
-      renderCourseCards();
-    });
     $("brand-home").addEventListener("click", goDashboard);
     $("start-recommended").addEventListener("click", executeRecommendation);
     $("practice-priority").addEventListener("click", function () { startPriorityPractice(profile.selectedCourse); });
-    $("start-course").addEventListener("click", function () { startStudySet(profile.selectedCourse, 1); });
-    $("builder-toggle").addEventListener("click", function () {
-      setBuilderOpen($("practice-builder").hidden);
-      if (!$("practice-builder").hidden) $("practice-builder").focus({preventScroll: true});
-    });
     $("written-practice-route").addEventListener("click", function () { startWrittenPractice(profile.selectedCourse); });
+    $("notes-subjects").addEventListener("click", function (event) {
+      var button = event.target.closest("[data-notes-course]");
+      if (!button) return;
+      notesState.courseId = button.dataset.notesCourse;
+      notesState.module = 1;
+      notesState.query = "";
+      $("notes-search").value = "";
+      renderNotes();
+      $("notes-reader").focus({preventScroll:true});
+    });
+    $("notes-module-nav").addEventListener("click", function (event) {
+      var button = event.target.closest("[data-notes-module]");
+      if (!button) return;
+      notesState.module = Number(button.dataset.notesModule) || 1;
+      notesState.query = "";
+      $("notes-search").value = "";
+      renderNotes();
+      $("notes-reader").focus({preventScroll:true});
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+    $("notes-reader").addEventListener("click", function (event) {
+      var moduleButton = event.target.closest("[data-notes-module]");
+      if (moduleButton) {
+        notesState.module = Number(moduleButton.dataset.notesModule) || 1;
+        renderNotes();
+        $("notes-reader").focus({preventScroll:true});
+        window.scrollTo({top:0, behavior:"smooth"});
+        return;
+      }
+      var result = event.target.closest("[data-notes-result]");
+      if (!result) return;
+      notesState.module = Number(result.dataset.notesResultModule) || 1;
+      notesState.query = "";
+      $("notes-search").value = "";
+      renderNotes();
+      var target = $("notes-" + result.dataset.notesResult);
+      if (target) window.requestAnimationFrame(function () { target.scrollIntoView({block:"start", behavior:"smooth"}); });
+    });
+    $("notes-search").addEventListener("input", function (event) {
+      notesState.query = event.target.value;
+      renderNotesReader();
+    });
+    $("notes-print").addEventListener("click", printNotesSubject);
     $("leave-practice").addEventListener("click", leavePractice);
     $("commit-answer").addEventListener("click", commitAnswer);
     $("next-question").addEventListener("click", nextQuestion);
-    $("results-home").addEventListener("click", goDashboard);
+    $("results-home").addEventListener("click", leaveResults);
     $("reset-progress").addEventListener("click", function () { $("reset-dialog").showModal(); });
     $("cancel-reset").addEventListener("click", function () { $("reset-dialog").close(); });
     $("confirm-reset").addEventListener("click", confirmReset);
@@ -9711,14 +10403,6 @@
     $("community-link").addEventListener("click", markCommunityOpened);
     $("community-joined").addEventListener("click", acknowledgeCommunity);
     $("skip-confidence").addEventListener("click", function () { setConfidence("skipped"); renderConfidenceControl(); });
-    $all(".horizon-choice").forEach(function (button) {
-      button.addEventListener("click", function () {
-        profile.horizon = button.dataset.horizon;
-        saveProfile();
-        renderHorizonPlan(profile.horizon);
-      });
-    });
-    $("builder-start").addEventListener("click", function () { startBuiltPractice(); });
     $all("input[name='confidence']").forEach(function (input) {
       input.addEventListener("change", function () { if (input.checked) { setConfidence(input.value); renderConfidenceControl(); } });
     });
@@ -9812,6 +10496,7 @@
        original exception in developer tools is essential for scenario and Mac
        smoke-test diagnosis. No learner answer is included in this error path. */
     if (window.console && typeof window.console.error === "function") console.error("Dungeon startup failed", error);
+    document.body.setAttribute("data-startup-error", String(error && (error.stack || error.message) || error));
     document.body.removeAttribute("aria-busy");
     profile = loadProfile();
     bindEvents();

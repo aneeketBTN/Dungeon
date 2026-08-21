@@ -5,7 +5,7 @@
   var initialFeedback = document.getElementById("feedback").textContent;
   var next = document.getElementById("next-question");
   var initial = {
-    subjectHidden:subject && getComputedStyle(subject).display === "none",
+    subjectHidden:!subject || getComputedStyle(subject).display === "none",
     repairAnnounced:/inserted a brief teaching repair/i.test(initialFeedback),
     reattemptAnnounced:/different question on this course idea/i.test(initialFeedback)
   };

@@ -77,7 +77,18 @@
   var frame = document.createElement("iframe");
   frame.width = width;
   frame.height = height;
-  frame.src = "/app/t6.html";
+  /* Exam screenshots start on the exam-home scenario. A view-transition's old frame
+     can remain the photographed layer under headless virtual time even after the DOM
+     has correctly switched, which produced a green title over a dashboard picture.
+     Functional header crossing is tested separately; this frame's job is pixel
+     acceptance of the requested destination. */
+  var startupScenario = scene === "mini-question" || scene === "mini-result" ? "mini-question"
+    : scene === "mini-feedback" ? "mini-feedback"
+    : scene === "notes" ? "notes"
+    : scene === "exam-question" ? "exam-question"
+    : scene === "exam-home" ? "exam-home" : "";
+  frame.src = "/app/t6.html" + (startupScenario ? "?scenario=" + startupScenario +
+    (scene === "exam-question" ? "&course=" + encodeURIComponent(subject) : "") : "");
   document.body.appendChild(frame);
 
   /* ---- waiting -------------------------------------------------------------------
@@ -136,6 +147,93 @@
     if (next && !next.hidden) next.click();
   }
 
+  function answerMiniQuestion() {
+    var d = doc();
+    /* Matching uses a two-click pick/place interaction. Pair the first remaining
+       tablet with the first empty slot until the response is complete. Correctness
+       is irrelevant here; the scene is proving the coached flow reaches feedback. */
+    var safety = 0;
+    while (d.querySelector("#options .tray-items .label-tablet") && safety < 12) {
+      var tablet = d.querySelector("#options .tray-items .label-tablet");
+      var slot = d.querySelector("#options .match-slot:not(.filled)");
+      if (!tablet || !slot) break;
+      tablet.click(); slot.click(); safety += 1;
+    }
+    Array.prototype.slice.call(d.querySelectorAll("#options select")).forEach(function (select) {
+      if (select.options.length) {
+        select.selectedIndex = Math.min(1, select.options.length - 1);
+        select.dispatchEvent(new (win().Event)("change", {bubbles:true}));
+      }
+    });
+    Array.prototype.slice.call(d.querySelectorAll("#options input[type=number], #options input[type=text]")).forEach(function (input) {
+      input.value = "0";
+      input.dispatchEvent(new (win().Event)("input", {bubbles:true}));
+    });
+    var textarea = d.querySelector("#options textarea");
+    if (textarea) {
+      textarea.value = "The framework applies because the case evidence changes the decision, so the next action should follow that rule while checking the main trade-off.";
+      textarea.dispatchEvent(new (win().Event)("input", {bubbles:true}));
+    }
+    var groups = {};
+    Array.prototype.slice.call(d.querySelectorAll("#options input[type=radio]")).forEach(function (radio) {
+      if (!groups[radio.name]) { groups[radio.name] = true; radio.click(); }
+    });
+    var checkbox = d.querySelector("#options input[type=checkbox]");
+    if (checkbox) checkbox.click();
+    var option = d.querySelector("#options .option");
+    if (option && !Object.keys(groups).length && !checkbox) option.click();
+    var commit = d.getElementById("commit-answer");
+    if (!commit || commit.disabled || commit.hidden) throw new Error("mini-mock answer was not ready to check");
+    commit.click();
+  }
+
+  function openMiniMock() {
+    return SCENES["exam-home"]()
+      .then(function () {
+        var button = pick('[data-mini-mock-course="' + subject + '"]');
+        if (!button) throw new Error("no mini-mock button for " + subject);
+        button.click();
+      })
+      .then(function () {
+        return waitFor("the mini-mock question", function () {
+          return pick(".practice-screen.active #commit-answer") && pick(".practice-screen.active #confidence-guide");
+        });
+      });
+  }
+
+  /* Complete the eight-step coached round through its real answer and Continue
+     controls. This is deliberately a browser flow rather than a result fixture: it
+     proves that the time cap is not silently expanded by primers, lessons,
+     confidence prompts or re-attempts, that every answer teaches immediately, and
+     that the eighth Continue reaches the confidence-round result. */
+  function completeMiniMock() {
+    var answered = 0;
+    function answerNext() {
+      return waitFor("mini-mock question " + (answered + 1), function () {
+        return pick(".practice-screen.active #commit-answer:not([hidden])");
+      }).then(function () {
+        answerMiniQuestion();
+        return waitFor("teaching feedback for mini-mock question " + (answered + 1), function () {
+          return pick(".practice-screen.active #feedback.visible .confidence-method-result");
+        });
+      }).then(function () {
+        answered += 1;
+        var next = pick("#next-question:not([hidden])");
+        if (!next) throw new Error("mini-mock teaching feedback had no Continue action");
+        next.click();
+        if (answered < 8) return answerNext();
+        return waitFor("the mini-mock result after exactly eight answers", function () {
+          return pick(".results-screen.active") && pick("#results-title") &&
+            /all eight modules/i.test(pick("#results-title").textContent) &&
+            /next 15-minute round|fresh rotation/i.test(pick("#result-primary").textContent);
+        });
+      });
+    }
+    return answerNext().then(function () {
+      if (answered !== 8) throw new Error("mini-mock completed after " + answered + " answers instead of 8");
+    });
+  }
+
   /* ---- the scenes ---------------------------------------------------------------
    * Each reaches its screen through the controls a learner uses. A scene that cannot
    * find its control rejects, and the frame paints the failure rather than
@@ -143,15 +241,16 @@
   var SCENES = {
     /* The homepage on a fresh profile — what a learner meets first. */
     dashboard: function () {
-      return waitFor("the " + subject + " subject card", function () { return card(subject); })
-        .then(function (button) { button.click(); })
-        .then(function () { return waitFor("the set list", function () { return pick("#set-list .set-card"); }); });
+      return waitFor("the dashboard and its one next action", function () {
+        return card(subject) && pick(".dashboard-screen.active #start-recommended") &&
+          pick(".dashboard-screen.active #next-step-title");
+      });
     },
 
     /* The first lesson of the subject's first step: the teaching surface. */
     lesson: function () {
       return SCENES.dashboard()
-        .then(function () { pick("#set-list .set-card").click(); })
+        .then(function () { card(subject).click(); })
         .then(function () {
           return waitFor("a lesson on screen", function () {
             var panel = doc().getElementById("lesson-panel");
@@ -180,27 +279,66 @@
 
     /* The examiner's front door. Crossing runs through a view transition. */
     "exam-home": function () {
-      return waitFor("the Exam switch", function () { return doc().getElementById("mode-exam"); })
-        .then(function (button) { button.click(); })
-        .then(function () {
-          return waitFor("the paper cards", function () { return pick("#exam-papers [data-exam-set]"); });
+      if (pick(".exam-home-screen.active")) {
+        return waitFor("the active examiner home and its paper cards", function () {
+          return pick(".exam-home-screen.active") && pick("#exam-papers [data-exam-set]");
         });
+      }
+      return waitFor("the Exam switch", function () { return doc().getElementById("mode-exam"); })
+        .then(function (button) {
+          /* Headless virtual time can keep a view-transition update callback pending
+             forever because there is no displayed old frame to snapshot. Navigation
+             is the contract under test here; the transition is decoration and has a
+             synchronous production fallback, so exercise that fallback explicitly. */
+          try { win().document.startViewTransition = null; } catch (error) { /* read-only engine */ }
+          button.click();
+        })
+        .then(function () {
+          return waitFor("the active examiner home and its paper cards", function () {
+            return pick(".exam-home-screen.active") && pick("#exam-papers [data-exam-set]");
+          });
+        });
+    },
+
+    "mini-question": function () {
+      return waitFor("the mini-mock question", function () {
+        return pick(".practice-screen.active #commit-answer") && pick(".practice-screen.active #confidence-guide");
+      });
+    },
+
+    "mini-feedback": function () {
+      return waitFor("immediate mini-mock teaching feedback", function () {
+        return pick(".practice-screen.active #feedback.visible") && pick(".confidence-method-result");
+        }).then(function () {
+          var target = pick("#feedback");
+          var top = target.getBoundingClientRect().top + win().scrollY - 90;
+          doc().documentElement.style.scrollBehavior = "auto";
+          win().scrollTo(0, Math.max(0, top));
+          doc().documentElement.scrollTop = Math.max(0, top);
+          doc().body.scrollTop = Math.max(0, top);
+          return new Promise(function (resolve) { setTimeout(resolve, 240); });
+        });
+    },
+
+    "mini-result": function () {
+      return waitFor("the mini-mock question", function () {
+        return pick(".practice-screen.active #commit-answer") && pick(".practice-screen.active #confidence-guide");
+      }).then(completeMiniMock);
+    },
+
+    notes: function () {
+      return waitFor("Quick Notes and its first complete chapter", function () {
+        return pick(".notes-screen.active #notes-reader .notes-lesson") &&
+          pick(".notes-screen.active #notes-module-nav button");
+      });
     },
 
     /* A paper mid-question: the screen the 2026-08-14 layout sweep never visited, and
        where the legend chip was found painting across its own label (LAW-64). */
     "exam-question": function () {
-      return SCENES["exam-home"]()
-        .then(function () {
-          var open = pick('#exam-papers [data-exam-course="' + subject + '"][data-exam-set="0"]');
-          if (!open) throw new Error("no paper button for " + subject);
-          open.click();
-        })
-        .then(function () {
-          return waitFor("the pre-clock cover", function () { return doc().getElementById("exam-begin"); });
-        })
-        .then(function (begin) { if (!begin.hidden) begin.click(); })
-        .then(function () { return waitFor("a question on the paper", function () { return pick(".exam-stem"); }); });
+      return waitFor("a live question on the requested paper", function () {
+        return pick(".exam-screen.active #exam-runner:not([hidden]) .exam-stem");
+      });
     }
   };
 
@@ -251,12 +389,29 @@
          reported rather than swallowed: a gridline shot that quietly came back without
          gridlines would look exactly like a page with nothing to report. */
       .then(function () {
+        if (params.get("audit") !== "1") return null;
+        return fetch("/tools/browser-checks/ui-audit.js")
+          .then(function (r) { return r.text(); })
+          .then(function (src) {
+            var report = document.createElement("pre");
+            report.id = "ui-audit-report";
+            report.hidden = true;
+            report.textContent = JSON.stringify(win().eval(src));
+            document.body.appendChild(report);
+          });
+      })
+      .then(function () {
         if (params.get("optical") !== "1") return null;
         return fetch("/tools/browser-checks/optical-audit.js")
           .then(function (r) { return r.text(); })
           .then(function (src) {
             var w = win();
             var result = w.eval(src);
+            var report = document.createElement("pre");
+            report.id = "optical-audit-report";
+            report.hidden = true;
+            report.textContent = JSON.stringify(result);
+            document.body.appendChild(report);
             if (!w.optical || typeof w.optical.overlay !== "function") throw new Error("optical.overlay was not installed");
             var drew = w.optical.overlay();
             if (!/\d+ gridlines/.test(String(drew))) throw new Error("overlay drew nothing: " + drew);

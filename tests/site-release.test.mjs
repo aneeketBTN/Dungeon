@@ -73,7 +73,8 @@ test("release build includes only the allowlisted active app", async () => {
     "utf8"
   );
   assert.match(buildScript, /app\/t6\.html/);
-  assert.match(buildScript, /app\/t6-chart\.js/);
+  assert.match(buildScript, /app\/sets\/t6_mini_mocks\.js/);
+  assert.doesNotMatch(buildScript, /app\/t6-chart\.js/);
   assert.match(buildScript, /app\/login\.html/);
   assert.match(buildScript, /app\/admin\.html/);
   assert.match(buildScript, /app\/robots\.txt/);
@@ -85,29 +86,96 @@ test("release build includes only the allowlisted active app", async () => {
   assert.match(buildScript, /client.*release-manifest\.json|release-manifest\.json.*client/s);
 });
 
-test("every dashboard graph is a shadcn Recharts component", async () => {
+test("the streamlined dashboard removes redundant analytics and custom settings", async () => {
   const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
-  const charts = await readFile(new URL("../app/t6-chart.jsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/t6.css", import.meta.url), "utf8");
 
-  assert.match(html, /<script src="t6-chart\.js"><\/script>/);
-  assert.match(html, /<div id="hero-trend"[^>]*role="img"/);
-  assert.match(html, /<div id="mastery-radar"[^>]*role="img"/);
-  assert.match(html, /<div id="progress-trend"[^>]*role="img"/);
-  assert.doesNotMatch(html, /<canvas/);
+  assert.match(html, /<section class="progress-glance"/);
+  assert.match(html, /id="overall-strong"/);
+  assert.match(html, /id="concepts-disclosure"/);
+  assert.doesNotMatch(html, /id="hero-trend"|id="mastery-radar"|id="progress-trend"/);
+  assert.doesNotMatch(html, /t6-chart\.js|id="practice-builder"|id="builder-toggle"/);
+  assert.doesNotMatch(html, /id="plan-disclosure"|id="exam-disclosure"|id="lessons-disclosure"/);
+  assert.doesNotMatch(html, /class="coin"/);
+  assert.doesNotMatch(html, /id="header-subject"/);
+  assert.match(app, /return \{kind:"priority", title:"All nine runs are clear"/);
+  assert.match(css, /\.course-card \{[^}]*border: 0;[^}]*box-shadow: var\(--shadow-lift\)/s);
+  assert.match(css, /\.progress-glance \{[^}]*border: 0;[^}]*box-shadow: var\(--shadow-lift\)/s);
+  assert.match(css, /\.dashboard-disclosure \{[^}]*border: 0;[^}]*box-shadow: var\(--shadow-lift\)/s);
+  assert.match(css, /\.stat \{[^}]*border: 0;[^}]*box-shadow: var\(--shadow-lift\)/s);
+});
 
-  assert.match(charts, /ui\.shadcn\.com\/r\/styles\/new-york-v4\/chart-area-gradient\.json/);
-  assert.match(charts, /ui\.shadcn\.com\/r\/styles\/new-york-v4\/chart-radar-default\.json/);
-  assert.match(charts, /<AreaChart\s+accessibilityLayer/);
-  assert.match(charts, /<RadarChart\s+accessibilityLayer/);
-  assert.match(charts, /<CartesianGrid vertical=\{false\}/);
-  assert.match(charts, /<PolarGrid gridType="polygon"/);
-  assert.match(charts, /type="natural"/);
-  assert.match(charts, /<ChartTooltip cursor=\{false\}/);
-  assert.match(charts, /<ResponsiveContainer/);
+test("Learn has one sequenced front door and discloses detail progressively", async () => {
+  const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
 
-  assert.doesNotMatch(app, /getContext\(["']2d["']\)/);
-  assert.doesNotMatch(app, /goalRouteMarkup|paintRadar|trend-line|trend-area/);
+  assert.match(html, /<p class="eyebrow">Study now<\/p>/);
+  assert.match(html, /<section class="progress-glance"/);
+  assert.match(html, /<details class="dashboard-disclosure" id="replay-disclosure" hidden>/);
+  assert.match(html, /<details class="dashboard-disclosure" id="advanced-disclosure">/);
+  assert.doesNotMatch(html, /Where can I start|Your next step|Ten available study sets/);
+
+  assert.match(app, /runs\.filter\(function \(definition\) \{ return !definition\.mock; \}\)/);
+  assert.match(app, /replay\.hidden = path\.cleared\.length === 0/);
+  assert.match(app, /path\.cleared\.forEach\(function \(run\)/);
+  assert.match(app, /plannedCarryForward\(courseId, coreIds, 2\)/);
+
+  assert.match(html, /id="result-learned"/);
+  assert.match(html, /id="result-struggled"/);
+  assert.match(html, /id="result-next"/);
+  assert.match(html, /id="result-bars"[^>]*role="img"/);
+});
+
+test("Quick Notes covers the authored course and teaches numerical setup", async () => {
+  const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
+
+  assert.match(html, /id="mode-notes"/);
+  assert.match(html, /<section class="screen notes-screen" id="notes-screen"/);
+  assert.match(html, /id="notes-search"/);
+  assert.match(html, /id="notes-print"/);
+  assert.match(app, /Object\.keys\(LESSONS\)\.map/);
+  assert.match(app, /var NUMERICAL_METHODS = \{/);
+  assert.match(app, /Question exoskeleton/);
+  assert.match(app, /EOQ = √\(2DK ÷ h\)/);
+  assert.match(app, /σDLT = σ per period × √lead time/);
+  assert.match(app, /LTV as ARPU × expected lifespan × gross margin/);
+  assert.match(app, /RICE = reach × impact × confidence ÷ effort/);
+  assert.match(app, /window\.print\(\)/);
+});
+
+test("wrong-answer feedback teaches the correction without exposing scheduling rules", async () => {
+  const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
+
+  assert.match(app, /partCorrect \? "Almost — "/);
+  assert.match(app, /: "Not quite"/);
+  assert.match(app, /answer-key-head'>Better answer/);
+  assert.match(app, /diagnosis-head'>What your answer missed/);
+  assert.match(app, /<b>Use this check:<\/b>/);
+  assert.match(app, /<b>How it fits:<\/b>/);
+  assert.doesNotMatch(app, /Not yet — this idea will return|This ‘could explain’ error will return|A different question on the same idea is placed later/);
+});
+
+test("teaching mini-mocks stay short, broad, immediate, and visible beside full papers", async () => {
+  const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
+  const selector = await readFile(new URL("../app/sets/t6_mini_mocks.js", import.meta.url), "utf8");
+
+  assert.match(html, /15-minute teaching mini-mock/);
+  assert.match(html, /Full exam-condition papers/);
+  assert.match(html, /id="confidence-guide"/);
+  assert.match(html, /sets\/t6_mini_mocks\.js/);
+  assert.match(selector, /var ROUND_SIZE = 8/);
+  assert.match(selector, /applicationTier/);
+  assert.match(selector, /uncoveredConceptIds/);
+  assert.match(selector, /rotationRank/);
+  assert.match(app, /kind:"confidence-sprint"/);
+  assert.match(app, /skipLessons:true/);
+  assert.match(app, /skipPrimers:true/);
+  assert.match(app, /feedback after every answer/);
+  assert.match(app, /Next-time method/);
+  assert.match(app, /session\.kind !== "confidence-sprint" && !correct/);
 });
 
 test("anonymous login assets do not disclose the private WhatsApp invite", async () => {

@@ -227,6 +227,11 @@
 
   var flatSurface = [], deadShadow = [];
   all.forEach(function (el) {
+    /* A `.screen` is the page canvas, not a card sitting on that canvas. Its job is
+       to inherit or deliberately match the body background; requiring elevation or
+       an outline there would create a false-positive and encourage a decorative box
+       around the whole application. Descendant panels remain fully audited. */
+    if (el.classList && el.classList.contains("screen")) return;
     var s = getComputedStyle(el);
     var r = el.getBoundingClientRect();
 

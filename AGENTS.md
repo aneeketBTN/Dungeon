@@ -1,10 +1,11 @@
 # Dungeon
 
-## Current Status (2026-08-20)
+## Current Status (2026-08-21)
 
-**Product.** Dungeon is two surfaces over one bank — **Learn** (layered study sets, primers,
-lessons, re-teach on evidenced mistakes) and **Examiner** (timed mocks on the real Batch 1 paper
-pattern, `docs/briefs/T6_EXAM_PATTERN.md`) — across four subjects (SPMS, BRGSA, SCLM, IBM), **219
+**Product.** Dungeon is three surfaces over one course — **Learn** (layered study sets, primers,
+lessons, re-teach on evidenced mistakes), **Examiner** (timed mocks on the real Batch 1 paper
+pattern, `docs/briefs/T6_EXAM_PATTERN.md`) and **Quick Notes** (the complete authored course in
+teaching order, searchable and printable) — across four subjects (SPMS, BRGSA, SCLM, IBM), **219
 concept records and 2,827 questions**. A real tester cohort is live and **a push to `main` deploys** (see
 Collaborators). Every claim in this section has its full story in
 `docs/governance/CHANGELOG.md`, newest first; the ledger below names the entries.
@@ -41,16 +42,48 @@ Learn rather than being forced into its all-written paper. A separate **Weakest 
 uses current Learn evidence to target weak or untested records; it is excluded from the common
 coverage cycle and like-for-like re-sit comparisons because its contents are dynamic.
 
-**Gates, last full run 2026-08-20 — all green:** `check_lesson_file` 283/283 scheduled / 0 errors /
-0 readable-only warnings; bank validator 0 errors (**pass the transcript path** — the silent-skip signature is
-`lessons.coverage: {}` *and* 0 warnings, and the field is nested, not top level); syllabus,
-taught-vocabulary, taught-not-tested, spine, naming, palette and craft gates PASS; `npm test`
-**139/139**; build 20 assets; exam readiness 0 errors / 0 warnings. Local Browser verification shows
-the rail at SPMS 69 / BRGSA 29 / IBM 85 / SCLM 36,
-labels the pills as **concepts Strong**, and shows IBM as 85 concepts / 100% of the syllabus.
-All three dashboard graphs are now real shadcn/Recharts components (two area, one radar), responsive
-at 1280 and 375 with no horizontal overflow; screenshot sweep 16/16 and dashboard optical sweep
-4/4. No handmade graph canvas or path generator remains.
+**Last-day mini-mocks — LIVE (2026-08-21).** Examiner leads with a coached **8-question / all-8-
+module / 15-minute-top** round and leaves the two-hour real-pattern papers below it. Every answer
+teaches immediately; an optional four-step way-in and the Quick Notes numerical exoskeleton teach
+how to start before calculation. Mini-mocks rotate deterministically through the complete concept
+library, prioritising unseen-in-cycle records: SPMS **69 concepts in 7×8**, BRGSA **29 in 2×8**,
+IBM **85 in 10×8**, SCLM **36 in 5×8**. The rotation gate enforces eight applied questions, one per
+module, uniqueness, complete-cycle coverage and at least 35% sampled id change.
+
+**Learn front door — PURGED AND STREAMLINED (2026-08-21).** The four subject cards start or resume
+revision directly. Each subject has a fixed **nine-run** path with one uncleared run visible at a
+time; future runs stay absent and completed runs alone become replay choices. Up to two
+Needs-practice concepts can carry into the next run on a fresh family without changing the sequence.
+The dashboard keeps one four-number progress glance; concept evidence, cleared replay and focused
+practice disclose only when useful. The three charts, custom builder, resource/settings stack,
+duplicate status surfaces and header subject dropdown were removed rather than moved into menus.
+Finishing a run still opens the compact learned / struggled / next-run debrief.
+
+**Quick Notes — COMPLETE FIRST PASS (2026-08-21).** Learn / Exam / Notes is the persistent three-way
+navigation. Notes renders all **283 course entries** by subject, module and lecture, carries the
+authored explanations, worked moves, glossary and connections, adds assessed concept maps, and
+provides subject search plus whole-subject print/PDF. **Eleven numerical exoskeletons** teach setup,
+units, formulas, thinking order and checks across BRGSA 3 / SCLM 5 / SPMS 2 / IBM 1. Wrong-answer
+feedback now teaches Better answer → Why → What your answer missed → Use this check, with internal
+return/retest scheduling language removed.
+
+**UI separation and alignment — RELEASE GREEN (2026-08-21).** Dashboard, progress, Exam and mini
+cards separate through tonal lift, restrained shadow and status silhouettes instead of outline-box
+grids. The dashboard has no competing floating action or Bag overlap; full-paper confidence targets
+meet 44px. The release runner checks nine scenes at 375×812 dark and 1280×900 light: **18/18 PASS**
+with zero overflow, clipping, overlap, cut-row, hidden-scroll, inset, dead-shadow, flat-panel or
+tap-target failures. The final regular and optical sweeps each produced **24/24** valid captures and
+all were visually inspected.
+
+**Gates, last full run 2026-08-21 — all green:** `check_lesson_file` 283/283 scheduled / 0 errors /
+0 readable-only warnings; bank validator 0 errors and populated coverage for all four subjects
+(**pass the transcript path** — the silent-skip signature is `lessons.coverage: {}` and 0 warnings,
+and the field is nested, not top level). Its 69 current warnings are extraction-unverified glossary
+terms from PDFs the validator cannot extract, reported rather than hidden. Syllabus,
+taught-vocabulary, taught-not-tested, spine, naming, palette, mini-rotation and craft gates PASS;
+full test suite **144/144**; build 20 assets; exam readiness 0 errors / 0 warnings. The automated
+layout gate is 18/18 and both screenshot sweeps are 24/24. The dashboard chart runtime is
+intentionally no longer shipped.
 **Expected-state exception:** the
 lesson–lecture match gate `FAIL`s naming `SPMS-M01-L01` and nothing else, by owner decision —
 anything *else* in that output is new.
@@ -58,7 +91,8 @@ anything *else* in that output is new.
 **Waiting.** `WAITING_OWNER_CONTENT_ACCEPTANCE` is **cleared** — the owner accepted all 105
 outstanding surfaces in chat on 2026-08-19. That is a release decision, not a completed review:
 the per-lesson reading set out in decision 1 did not happen, and acceptance is still not faculty
-review. Current branch work is not merged, not deployed.
+review. The 2026-08-21 release is authorised for and sent through `main`, the tester deployment
+branch.
 
 ## Session Ledger — full stories in `docs/governance/CHANGELOG.md`
 
@@ -66,6 +100,28 @@ Each line is a pointer, not the record: the CHANGELOG entry of the same date and
 the numbers, the defects found, and the evidence paths. Do not re-derive a claim from a line
 here — read the entry.
 
+- **2026-08-21 — Last-day mocks teach in eight questions, rotate through the whole bank, and the UI clears release**
+  (Eight applied questions, one per module, immediate teaching, optional four-step scaffold and
+  numerical exoskeleton; no hidden interaction expansion. Complete concept cycles: SPMS 7×8,
+  BRGSA 2×8, IBM 10×8, SCLM 5×8. Tonal/shadow/status separation replaces outline-box grids;
+  dashboard overlap removed; 44px paper controls. Mini gate, 18/18 UI states, two 24/24 screenshot
+  sweeps, 144/144 tests, 283/283 lessons and 20-asset build green. Evidence:
+  `evidence/2026-08-21/t6-last-day-mini-mocks/verification.md`.)
+- **2026-08-21 — The dashboard is actually smaller, Quick Notes covers the course, and corrections teach**
+  (Removed three charts/runtime, custom builder, lesson/time/exam resource panels, duplicate coins
+  and the redundant header subject dropdown. Kept one progress glance, the fixed run action, replay,
+  concept detail, focused practice and reset. Notes renders all 283 entries sequentially with search,
+  print/PDF, concept maps and 11 numerical exoskeletons. Wrong feedback now gives Better answer →
+  Why → What was missed → reusable check, without scheduler language. Browser desktop/mobile green;
+  142/142 tests; lesson 283/283; review/palette/build green. Evidence:
+  `evidence/2026-08-21/t6-dashboard-purge-quick-notes/verification.md`.)
+- **2026-08-21 — Learn becomes one sequenced front door, and every run ends with a quick look**
+  (Right now / Ways in merged into one subject-to-run action. Four subject cards start or resume;
+  nine fixed runs unlock one at a time; future runs are absent and cleared runs alone replay. Up to
+  two Needs-practice concepts carry into the next run. Stats, three charts, concept rows and custom
+  tools are progressive disclosures. Run completion shows learned / struggled / next on the left
+  and before / now / all-Strong evidence bars on the right. `npm test` 140/140; review, palette and
+  build green. Evidence: `evidence/2026-08-21/t6-learn-streamlining/verification.md`.)
 - **2026-08-20 — Mock sets become coverage cycles, and Learn can issue a weakest-links paper**
   (the fixed three-set ceiling is replaced by the shortest deterministic cycle that reaches every
   paper-relevant record: SPMS **3 / 69/69**, BRGSA **4 / 29/29**, IBM **7 / 65/65** written-relevant,

@@ -34,6 +34,7 @@
  */
 
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -56,6 +57,21 @@ const only = flag("only", null);
    doing — reading one for the other is how a probe artifact becomes a design change. */
 const optical = args.includes("--optical");
 const base = `http://localhost:${port}`;
+/* A fresh profile per Chrome invocation prevents a long-lived desktop Chrome process from
+   reusing yesterday's cached frame.html. That failure is especially dangerous here:
+   the read-back process can see the new title while the screenshot process paints the
+   old driver, producing a green report for the wrong screen. */
+const chromeProfiles = [];
+process.on("exit", () => {
+  chromeProfiles.forEach((profile) => {
+    try { fs.rmSync(profile, { recursive: true, force: true }); } catch { /* temp cleanup only */ }
+  });
+});
+function profileFlags() {
+  const profile = fs.mkdtempSync(path.join(os.tmpdir(), "dungeon-shots-"));
+  chromeProfiles.push(profile);
+  return [`--user-data-dir=${profile}`, "--disable-cache"];
+}
 
 const CHROME_CANDIDATES = [
   process.env.DUNGEON_CHROME,
@@ -104,6 +120,19 @@ const SHOTS = [
   { scene: "exam-home", subject: "SCLM", size: DESKTOP, theme: "light" },
   { scene: "exam-home", subject: "SCLM", size: PHONE, theme: "dark" },
 
+  /* The last-day path is a separate interaction contract: eight modules, immediate
+     teaching, and an optional way-in method before the answer. Photograph both the
+     untouched prompt and the resolved teaching state. */
+  { scene: "mini-question", subject: "SPMS", size: DESKTOP, theme: "light" },
+  { scene: "mini-question", subject: "SPMS", size: PHONE, theme: "dark" },
+  { scene: "mini-feedback", subject: "SPMS", size: DESKTOP, theme: "dark" },
+  { scene: "mini-feedback", subject: "SPMS", size: PHONE, theme: "light" },
+  { scene: "mini-result", subject: "SPMS", size: DESKTOP, theme: "light" },
+  { scene: "mini-result", subject: "SPMS", size: PHONE, theme: "dark" },
+
+  { scene: "notes", subject: "SCLM", size: DESKTOP, theme: "light" },
+  { scene: "notes", subject: "SCLM", size: PHONE, theme: "dark" },
+
   /* The screen the 2026-08-14 layout sweep never visited, and where the legend chip
      was found painting across its own label at every desktop width. */
   { scene: "exam-question", subject: "SCLM", size: DESKTOP, theme: "light" },
@@ -120,6 +149,7 @@ fs.mkdirSync(outDir, { recursive: true });
 try {
   execFileSync(chrome, [
     "--headless=new", "--disable-gpu", "--no-sandbox",
+    ...profileFlags(),
     "--virtual-time-budget=3000", "--dump-dom", `${base}/app/t6.html`
   ], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 30000 })
     .includes("subject-rail") || (() => { throw new Error("served page is not the app"); })();
@@ -141,6 +171,7 @@ for (const shot of SHOTS) {
       "--headless=new",
       "--disable-gpu",
       "--no-sandbox",
+      ...profileFlags(),
       "--hide-scrollbars",
       /* Long enough for the app to boot, the frame to drive it, and every animation
          to be finished by hand. Virtual time, so it costs no wall clock. */
@@ -155,7 +186,24 @@ for (const shot of SHOTS) {
   }
   let bytes = 0;
   try { bytes = fs.statSync(file).size; } catch { /* not written */ }
-  results.push({ name, ok: bytes > 0, bytes });
+  /* Chrome's own network-error page and the frame's red timeout panel are valid PNGs,
+     so "file exists" is not acceptance. In this suite a rendered app shot is at
+     least ~55KB; both false greens found by eye were 11–15KB. Retry once with another
+     clean profile to absorb a transient local navigation reset, then fail the shot if
+     it is still only a browser error page. */
+  let retried = false;
+  if (bytes > 0 && bytes < 30000) {
+    retried = true;
+    try {
+      execFileSync(chrome, [
+        "--headless=new", "--disable-gpu", "--no-sandbox", ...profileFlags(),
+        "--hide-scrollbars", "--virtual-time-budget=8000",
+        `--window-size=${shot.size.w},${shot.size.h}`, `--screenshot=${file}`, url
+      ], { stdio: ["ignore", "ignore", "pipe"], timeout: 60000 });
+      bytes = fs.statSync(file).size;
+    } catch { /* the size check below reports the failed retry */ }
+  }
+  results.push({ name, ok: bytes >= 30000, bytes, retried });
 }
 
 /* A frame that failed to drive its scene still writes a PNG — of a red panel. Read the
@@ -170,6 +218,7 @@ for (const shot of SHOTS) {
   try {
     dom = execFileSync(chrome, [
       "--headless=new", "--disable-gpu", "--no-sandbox",
+      ...profileFlags(),
       "--virtual-time-budget=8000", "--dump-dom", url
     ], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 60000 });
   } catch { /* reported below as unverified */ }
