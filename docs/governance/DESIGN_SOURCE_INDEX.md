@@ -65,6 +65,12 @@ not make it authoritative.
      retain personal access and one-browser-at-a-time as tester terms, but do not enforce a device
      ceiling or country lock. Concurrent sessions are allowed; coarse country is neither stored
      nor used to deny access. Owner/admin routes are excluded from learner burst limiting.
+   - Next-term weekly study system (2026-08-22; planning only):
+     `docs/briefs/NEXT_TERM_WEEKLY_STUDY_SYSTEM.md` makes the academic week the shared organising
+     object across Learn, Examiner and Quick Notes. Its core loop is Learn → Check → Repair → Close;
+     Full mocks become milestones, Speedrun becomes per-subject seven-day coverage closure, and
+     Minis remain the final 25–30-minute retrieval pass. It explicitly forbids a fourth dashboard
+     and treats notifications as optional delivery over one next action.
    - Dashboard chart system (2026-08-20): owner direction replaces every handmade data graph with
      the actual shadcn chart component structure and Recharts primitives. Official area and radar
      registries define the implementation reference; Dungeon supplies its own data, tokens and
