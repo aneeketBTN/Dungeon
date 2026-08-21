@@ -124,9 +124,9 @@ anything *else* in that output is new.
 **Waiting.** `WAITING_OWNER_CONTENT_ACCEPTANCE` is **cleared** — the owner accepted all 105
 outstanding surfaces in chat on 2026-08-19. That is a release decision, not a completed review:
 the per-lesson reading set out in decision 1 did not happen, and acceptance is still not faculty
-review. The 2026-08-22 release is merged through `main` and first published from `2a50196` as
-Cloudflare Worker version `30a8ff04-9161-418c-bb59-6ae9f5aba26a`; remote D1 migrations 0005–0008
-are applied.
+review. The accelerated Mini release is merged through `main` at `4843b1f`; its first manual and
+Git-connected 100% production versions are `c58f58e6-71f3-42b5-89c5-f62d9cc19aff` and
+`c8f986c1-e9aa-445b-8428-7c43e5bc6566`. Remote D1 migrations 0005–0008 remain applied.
 
 ## Session Ledger — full stories in `docs/governance/CHANGELOG.md`
 

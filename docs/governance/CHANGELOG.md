@@ -27,6 +27,11 @@ closed disclosures, no horizontal overflow, selection cap, uncheck, clear and vi
 mark. Full suite **150/150**; final-sprint, revision-persona and exam gates PASS; bank validator 0
 errors with the expected 69 extraction warnings; build 23 assets.
 
+Commit `4843b1f` was fast-forwarded and pushed to `main`. Wrangler uploaded the six changed assets;
+manual version `c58f58e6-71f3-42b5-89c5-f62d9cc19aff` reached 100% before the Git-connected rollout
+published `c8f986c1-e9aa-445b-8428-7c43e5bc6566` at 100%. Live health is 200 with D1 storage, the
+anonymous learner entry is intact, and the Control Room still reaches its separate Access boundary.
+
 ## 2026-08-22 — The final-revision release reaches production
 
 Owner authorised deployment in chat after the old Examiner was observed on the live site. The

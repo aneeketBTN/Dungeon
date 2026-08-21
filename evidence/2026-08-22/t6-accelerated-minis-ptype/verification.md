@@ -65,4 +65,8 @@ varied correct-answer positions.
   glossary warnings.
 - Full automated suite: 150/150 PASS.
 - Release build: 23 allowlisted assets.
-
+- Commit `4843b1f` was fast-forwarded to `main`. Wrangler uploaded the six changed release assets;
+  manual version `c58f58e6-71f3-42b5-89c5-f62d9cc19aff` reached 100%, followed by the Git-connected
+  production version `c8f986c1-e9aa-445b-8428-7c43e5bc6566` at 100%.
+- Live health returns 200 with Cloudflare D1 storage; anonymous learner entry remains available and
+  `/dungeon/admin/` still redirects to the separate Cloudflare Access boundary.
