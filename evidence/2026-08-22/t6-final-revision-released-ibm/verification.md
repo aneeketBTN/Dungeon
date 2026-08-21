@@ -2,11 +2,11 @@
 
 Date: 2026-08-22
 
-Branch: `fix/theme-switch-and-login-theming`
+Source branch: `fix/theme-switch-and-login-theming`
 
-Release state: verified on branch; not merged or deployed. The Cloudflare rate-rule exclusion is
-already live. Migration `0008` must be applied to remote D1 immediately before or with the Worker
-release.
+Release state: merged to `main` and first deployed from `2a50196` on 2026-08-22 as Cloudflare
+Worker version `30a8ff04-9161-418c-bb59-6ae9f5aba26a`. The Cloudflare rate-rule exclusion and
+remote D1 migrations 0005–0008 are live.
 
 ## What is implemented
 
@@ -77,9 +77,24 @@ release.
 - Live Browser — GSAP subject fold, Mini timer/reveal, Full mocks, IBM Released case briefing,
   and mode-switch overlay behaviour verified without console errors.
 
+## Production deployment
+
+- `npm test` was rerun immediately before release — **147/147 PASS**.
+- Remote D1 migrations `0005_written_authority.sql` through
+  `0008_remove_device_and_country_enforcement.sql` applied successfully; a post-release migration
+  listing reports none pending.
+- Post-migration readback reports 3/3 written-authority tables present, 0 tester country rows,
+  0 locked tester rows and 0 session-country rows.
+- `main` fast-forwarded from `6fcc875` to `2a50196`; Cloudflare published Worker version
+  `30a8ff04-9161-418c-bb59-6ae9f5aba26a` at 100% traffic.
+- Live `/dungeon/health` returns 200 and names Cloudflare D1; the anonymous entry serves the new
+  access copy without the retired device-switch prompt; `/dungeon/admin/` returns the expected
+  Access redirect rather than a rate-limit response.
+- The protected Examiner requires an admitted learner session. Its exact production asset bundle
+  is the 23-asset build already exercised above; the existing signed-in owner tab needs a reload to
+  replace the page captured before deployment.
+
 ## Release handoff
 
-Do not deploy the Worker before migration `0008`: the old Worker would otherwise be able to write
-legacy lock state back. The safe owner sequence is remote D1 migration, merge/deploy the Worker and
-23-asset bundle, then smoke-test learner sign-in on two sessions/countries and owner Control Room
-fan-out. The branch is pushed as a PR; `main` remains owner-merge only.
+Completed in the safe order: remote migrations, `main` push, Worker/assets publication, then health,
+Access-boundary and D1 readback checks. For future releases, `main` remains owner-authorised only.

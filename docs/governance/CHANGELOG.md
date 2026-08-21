@@ -1,9 +1,25 @@
 # Changelog
 
+## 2026-08-22 — The final-revision release reaches production
+
+Owner authorised deployment in chat after the old Examiner was observed on the live site. The
+verified branch was fast-forwarded to `main` at `2a50196`. Before the push, remote D1 migrations
+0005–0008 were applied in order: the three additive written-authority tables now exist, and the
+legacy country, location-lock, lock-reason and session-country values are cleared. Hosted written
+marking remains off.
+
+Cloudflare Worker version `30a8ff04-9161-418c-bb59-6ae9f5aba26a` was the first production version
+published at 100% traffic. Live
+health returns 200 with D1 storage, the anonymous entry serves the new access copy, the retired
+device-switch prompt is absent, and `/dungeon/admin/` reaches the Access boundary with 302 rather
+than the learner-path 429. Remote migration state reports no pending migrations; D1 reports zero
+country rows, zero locked rows and zero session-country rows. The authenticated Examiner asset is
+the same 23-asset allowlisted build verified below; the owner should reload the existing signed-in
+tab to replace the pre-deployment page.
+
 ## 2026-08-22 — Final revision becomes a real route, IBM receives its released case, and access stops locking people out
 
-Branch `fix/theme-switch-and-login-theming`. Not merged or deployed; the live Cloudflare rate rule
-is the one operational exception described below. Evidence:
+Built on `fix/theme-switch-and-login-theming`; merged to `main` and deployed on 2026-08-22. Evidence:
 `evidence/2026-08-22/t6-final-revision-released-ibm/verification.md`.
 
 **Examiner now asks how far away the exam is.** Full mocks, Speedrun and Minis are three explicit
@@ -32,8 +48,8 @@ Live Browser testing verified the real transition rather than only its static fa
 **Personal access remains a term, not an unreliable automatic verdict.** Login/session handling no
 longer enforces a two-device ceiling or first-country lock, and the retired unlock flow is removed
 from the learner and Control Room. Concurrent sessions retain the same D1 progress; revocation and
-owner sign-out remain. Migration `0008_remove_device_and_country_enforcement.sql` clears legacy
-lock fields and must run against remote D1 immediately before or with the Worker release. The live
+owner sign-out remain. Migration `0008_remove_device_and_country_enforcement.sql` cleared the legacy
+lock fields immediately before the Worker release. The live
 Cloudflare burst rule now excludes `/dungeon/admin` and descendants, stopping the Control Room's
 own API fan-out from rate-limiting the owner while learner-path protection remains at 40 requests
 per 10 seconds.

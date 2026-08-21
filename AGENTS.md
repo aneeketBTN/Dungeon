@@ -52,7 +52,7 @@ module, uniqueness, complete-cycle coverage and at least 35% sampled id change. 
 items are deliberately one interaction: submit once, then reveal a 40–85-word case-grounded answer
 spine. They do not open a second self-marking rubric or create Strong evidence.
 
-**Final revision and released IBM case — RELEASE GREEN ON BRANCH (2026-08-22).** Examiner is now
+**Final revision and released IBM case — LIVE (2026-08-22).** Examiner is now
 three explicit choices by distance to the exam: **Full mocks (1+ week out)**, coached **Speedrun
 (within a week)**, and authored **Minis (last 25–30 minutes)**. Minis carry **32 retrieval prompts — eight per subject and one per
 module** — with answer spines, near-miss checks and subject traps. IBM's 21 August prompt is kept
@@ -60,13 +60,13 @@ verbatim as an open design brief: one explicit assumption set, one coherent Kisa
 and **10 examiner-only written responses / 100 marks / 10 course lenses**. They never enter Learn or
 the seven numbered IBM coverage sets. Quick Notes owns the same case pack and answer structure.
 
-**Subject fold and access simplification — RELEASE GREEN ON BRANCH (2026-08-22).** First load keeps
+**Subject fold and access simplification — LIVE (2026-08-22).** First load keeps
 the four full subject cards. First selection folds them with self-hosted GSAP into a compact sticky
 rail; selected subject is persistently marked, inactive subjects recede, hover/focus restores detail,
 and reduced-motion falls back immediately. Device-count and first-country enforcement are retired;
 personal access and one active browser remain tester terms, while concurrent sessions retain one D1
-progress record. Migration `0008_remove_device_and_country_enforcement.sql` clears legacy fields and
-must be applied remotely immediately before or with Worker release. The live Cloudflare learner
+progress record. Remote migrations 0005–0008 are applied; the legacy country/lock fields and session
+country values are all empty in production. The live Cloudflare learner
 burst rule excludes `/dungeon/admin` and descendants, so Control Room API fan-out no longer locks
 out the owner.
 
@@ -113,9 +113,9 @@ anything *else* in that output is new.
 **Waiting.** `WAITING_OWNER_CONTENT_ACCEPTANCE` is **cleared** — the owner accepted all 105
 outstanding surfaces in chat on 2026-08-19. That is a release decision, not a completed review:
 the per-lesson reading set out in decision 1 did not happen, and acceptance is still not faculty
-review. The 2026-08-21 release is authorised for and sent through `main`, the tester deployment
-branch. The 2026-08-22 work is verified on `fix/theme-switch-and-login-theming` and awaits owner
-merge; remote migration `0008` is required immediately before or with that release.
+review. The 2026-08-22 release is merged through `main` and first published from `2a50196` as
+Cloudflare Worker version `30a8ff04-9161-418c-bb59-6ae9f5aba26a`; remote D1 migrations 0005–0008
+are applied.
 
 ## Session Ledger — full stories in `docs/governance/CHANGELOG.md`
 
