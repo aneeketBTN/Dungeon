@@ -362,14 +362,11 @@ courseIds.forEach(function (courseId) {
       if (!question.boss || !Array.isArray(question.steps) || question.steps.length < 3 || !(question.supportingConceptIds || []).length) errors.push(question.id + " is not a multi-concept, three-step boss");
       (question.steps || []).forEach(function (step, index) { checkOptionShape(question, "boss step " + (index + 1), step.options, step.answer, false); });
     } else if (question.type === "msq") {
-      /* Multiple-select, for SPMS Section B. The paper marks it +1 per right
-       * option and -1 per wrong, floored at zero. Two properties have to hold or
-       * the format teaches the wrong reflex: there must be at least two correct
-       * options, otherwise it is an MCQ wearing checkboxes and rewards picking
-       * one; and at least one wrong option, otherwise selecting everything is
-       * the optimal play and the negative marking never bites. */
+      /* P-type multiple-select, for SPMS Section B. Exactly two options are correct,
+       * the UI allows at most two selections, and the paper awards 2 / 1 / 0. Any
+       * other answer count teaches a response shape the actual interface forbids. */
       if (!Array.isArray(question.options) || question.options.length < 4 || question.options.length > 6) errors.push(question.id + " must offer four to six multiple-select options");
-      if (!Array.isArray(question.answers) || question.answers.length < 2) errors.push(question.id + " must have at least two correct options, or it is a single-answer question");
+      if (!Array.isArray(question.answers) || question.answers.length !== 2) errors.push(question.id + " must have exactly two correct options for the P-type section");
       if ((question.answers || []).length >= (question.options || []).length) errors.push(question.id + " marks every option correct, so selecting all of them cannot be penalised");
       (question.answers || []).forEach(function (index) {
         if (typeof index !== "number" || index < 0 || index >= (question.options || []).length) errors.push(question.id + " has an answer index outside its options");

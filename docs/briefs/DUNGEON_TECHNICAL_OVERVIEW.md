@@ -297,8 +297,9 @@ and again on the recommended-paper hero.
 ### 5.2 Marking
 
 - MCQ: one correct option.
-- **MSQ (SPMS Section B only):** +1 per right option, −1 per wrong, floored at zero *per question*
-  and capped at the question's marks. This is the only negatively marked section in the term.
+- **MSQ (SPMS Section B only):** exactly two options are correct and at most two may be selected.
+  The exact pair earns 2; one correct option with no wrong option earns 1; any response containing
+  a wrong option earns 0. There is no direct negative marking.
 - Match: all-or-nothing, because the paper states no partial credit.
 - Written answers: excluded from the machine total. After submission they can receive a bounded
   practice-rubric judgement plus independently verified coaching; neither is an official mark or
@@ -316,8 +317,8 @@ distinguished:
 - **connection-only** — right on its own, wrong the moment it shared a question with another idea.
   This is the one a score sheet never surfaces.
 
-Alongside it: pacing against the paper's own per-question budget, the cost of speculative ticking
-under negative marking, second thoughts and what they were worth, and for written work, a frozen-
+Alongside it: pacing against the paper's own per-question budget, P-type pair versus safe-single
+behaviour, second thoughts and what they were worth, and for written work, a frozen-
 score post-submit review of rubric evidence, exact bounded gaps, strengths, improvements, and a
 course-grounded stronger answer.
 
@@ -438,9 +439,9 @@ Ordered by what would hurt the cohort soonest.
 1. **Content validation is still a single-owner bottleneck.** The teaching and testing layers are
    structurally complete, but release acceptance is not faculty review and does not make authored
    interpretations authoritative.
-2. **Final-sprint calibration.** The 32 retrieval prompts have coverage, source-grounding, answer-
-   spine, and near-miss gates, but there is no learner-outcome evidence yet showing which eight
-   prompts produce the best final-hour transfer.
+2. **Mini calibration.** The objective selector has coverage, source-grounding, format, rotation and
+   craft gates, but there is no learner-outcome evidence yet showing which eight questions produce
+   the best final-hour transfer.
 3. **No item calibration and only a tiny cohort.** All difficulty is authored, not measured.
    Banded response timing can now detect an implausibly fast Strong proof, but it cannot establish
    item discrimination. Everything downstream — the Strong gates, the ordering, the difficulty

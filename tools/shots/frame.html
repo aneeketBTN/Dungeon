@@ -330,7 +330,7 @@
         return pick(".exam-home-screen.active") && !pick("#exam-mode-final").hidden &&
           pick('[data-final-course="' + subject + '"][aria-selected="true"]') &&
           String(pick("#final-sprint .final-hero .eyebrow").textContent || "").indexOf(subject) === 0 &&
-          doc().querySelectorAll(".final-question").length === 8;
+          doc().querySelectorAll(".final-route-step").length === 8;
         });
     },
 

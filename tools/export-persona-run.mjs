@@ -54,7 +54,7 @@ const lessons = context.window.T6_LESSONS || {};
 const PAPERS = {
   SPMS: { title: "Software Product Management for Startups", sat: "22 August, 09:00–11:00", total: 75, calculator: null, sections: [
     { id: "A", label: "Section A", type: "mcq", count: 35, marks: 1, rule: "One correct option. One mark each. No negative marking." },
-    { id: "B", label: "Section B", type: "msq", count: 20, marks: 2, negative: true, rule: "Multiple correct options. +1 for each right option, −1 for each wrong one, and a question cannot score below zero." }] },
+    { id: "B", label: "Section B", type: "msq", count: 20, marks: 2, negative: false, rule: "P-type MSQ: exactly two options are correct; select at most two. Both correct = 2, one correct with no wrong option = 1, and any wrong option = 0." }] },
   BRGSA: { title: "Business Research and Growth Systems Architecture", sat: "22 August, 13:00–15:00", total: 80, calculator: "basic", sections: [
     { id: "A", label: "Section A", type: "mcq", count: 20, marks: 2, rule: "One correct option. Two marks each. No negative marking." },
     { id: "B", label: "Section B", type: "case-cloze", count: 4, marks: 5, rule: "A short scenario, then a task. Both parts must be right for the marks. No partial credit." },

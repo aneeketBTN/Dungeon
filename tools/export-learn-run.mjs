@@ -151,7 +151,7 @@ function questionView(step, question) {
     prompt: (question.prompt && question.stem && question.prompt !== question.stem) ? question.prompt : null
   };
   if (type === "mcq" || type === "msq") view.options = (question.options || []).slice();
-  if (type === "msq") view.marking = "+1 per right option, −1 per wrong, floored at zero.";
+  if (type === "msq") view.marking = "Exactly two options are correct; select at most two. Both correct = 2, one correct with no wrong option = 1, any wrong option = 0.";
   if (type === "cloze" || type === "case-cloze") {
     view.blanks = (question.blanks || []).map((b) => ({ label: b.label || "", options: (b.options || []).slice() }));
   }

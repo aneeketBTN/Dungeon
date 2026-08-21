@@ -78,7 +78,7 @@ transcripts for the vocabulary gate.
 From Known Gaps ("MSQ format built and verified"): (a) the per-option diagnosis does not
 surface in the wrong-answer panel for MSQ — likely `response.selected` is not carried for
 this type; (b) `msqMarks` is computed but never rendered, so the learner never sees
-"1 of 3 marks".
+the P-type "1 of 2 marks" partial-credit result.
 **Verify:** real-browser check per `docs/governance/UI-CHECKLIST.md`; evidence folder.
 
 ### 7. `button#brand-home` at 42px on desktop

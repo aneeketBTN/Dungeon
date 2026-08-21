@@ -24,35 +24,50 @@ export function auditFinalSprints() {
   const errors = [];
   const subjects = [];
   const expectedSubjects = ["SPMS", "BRGSA", "IBM", "SCLM"];
-  const ids = new Set();
+  const objectiveTypes = new Set(["mcq", "msq", "case-cloze", "numeric", "match"]);
 
   for (const courseId of expectedSubjects) {
     const course = win.T6_COURSES?.[courseId];
     const pack = win.T6_FINAL_SPRINTS?.[courseId];
-    if (!course || !pack) {
-      errors.push(`${courseId}: missing course or final-sprint pack`);
+    const build = win.T6_FINAL_SPRINTS?.build;
+    if (!course || !pack || typeof build !== "function") {
+      errors.push(`${courseId}: missing course, Mini pack, or selector`);
       continue;
     }
-    if (pack.questions?.length !== 8) errors.push(`${courseId}: expected 8 questions, got ${pack.questions?.length ?? 0}`);
-    const modules = new Set();
-    for (const question of pack.questions || []) {
-      if (!question.id || ids.has(question.id)) errors.push(`${courseId}: missing or duplicate id ${question.id || "(blank)"}`);
-      ids.add(question.id);
-      modules.add(question.module);
-      if (String(question.prompt || "").length < 100) errors.push(`${question.id}: prompt is too thin for a self-contained retrieval task`);
-      if (String(question.answer || "").length < 220) errors.push(`${question.id}: answer spine is too thin to teach the decision`);
-      if (String(question.check || "").length < 80) errors.push(`${question.id}: final check is too thin to catch a near-miss`);
-      if (!question.conceptIds?.length) errors.push(`${question.id}: carries no concept`);
-      for (const conceptId of question.conceptIds || []) {
-        const concept = course.concepts.find((entry) => entry.id === conceptId);
-        if (!concept) errors.push(`${question.id}: unknown concept ${conceptId}`);
-        else if (concept.module !== question.module) errors.push(`${question.id}: ${conceptId} belongs to module ${concept.module}, not ${question.module}`);
-      }
+    const first = build(courseId, 0);
+    const second = build(courseId, 1);
+    if (!first || first.questionIds?.length !== 8) errors.push(`${courseId}: first Mini does not contain 8 questions`);
+    if (!second || second.questionIds?.length !== 8) errors.push(`${courseId}: repeat Mini does not contain 8 questions`);
+    if (!first || !second) continue;
+
+    const modules = [...new Set(first.modules)].sort((a, b) => a - b).join(",");
+    if (modules !== "1,2,3,4,5,6,7,8") errors.push(`${courseId}: module coverage is ${modules || "empty"}`);
+    if (first.types.join(",") !== pack.formats.join(",")) {
+      errors.push(`${courseId}: delivered ${first.types.join(",")} instead of promised ${pack.formats.join(",")}`);
     }
-    const moduleList = [...modules].sort((a, b) => a - b).join(",");
-    if (moduleList !== "1,2,3,4,5,6,7,8") errors.push(`${courseId}: module coverage is ${moduleList || "empty"}`);
-    if (pack.traps?.length !== 3) errors.push(`${courseId}: expected exactly three last-minute traps`);
-    subjects.push({courseId, questions: pack.questions?.length || 0, modules: modules.size});
+    if (new Set(first.questionIds).size !== 8) errors.push(`${courseId}: duplicate question in one Mini`);
+    for (const question of first.questions) {
+      if (!question) { errors.push(`${courseId}: selector left a module empty`); continue; }
+      if (!objectiveTypes.has(question.type || "mcq")) errors.push(`${question.id}: Mini asks for prose or a non-rapid response`);
+      if (!course.questions[question.id]) errors.push(`${question.id}: is not grounded in the subject bank`);
+      if (!course.concepts.some((concept) => concept.id === question.conceptId)) errors.push(`${question.id}: has no known concept`);
+      if (!question.explanation || !question.sourceIds?.length) errors.push(`${question.id}: cannot teach immediately from grounded evidence`);
+    }
+    if (!pack.title || !pack.focus || !pack.paperReality) errors.push(`${courseId}: Mini has no focused framing or paper boundary`);
+    if (pack.traps?.length !== 3) errors.push(`${courseId}: expected exactly three optional last-minute traps`);
+
+    if (courseId === "SPMS") {
+      const msqs = first.questions.filter((question) => question.type === "msq");
+      if (msqs.length !== 3) errors.push(`SPMS: expected 3 P-type MSQs in the eight-question mix, got ${msqs.length}`);
+      const bankMsqs = Object.values(course.questions).filter((question) => question.type === "msq");
+      const wrongShape = bankMsqs.filter((question) => question.answers?.length !== 2);
+      if (wrongShape.length) errors.push(`SPMS: ${wrongShape.length} bank MSQs are not exactly-two P-type items`);
+    }
+
+    const rotationChanges = first.questionIds.filter((id, index) => id !== second.questionIds[index]).length;
+    if (rotationChanges < 6) errors.push(`${courseId}: repeat changes only ${rotationChanges} of 8 questions`);
+    subjects.push({courseId, questions:first.questionIds.length, modules:first.modules.length,
+      types:first.types, rotationChanges});
   }
 
   const released = win.T6_IBM_RELEASED_CASE;
@@ -77,10 +92,12 @@ export function auditFinalSprints() {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const report = auditFinalSprints();
-  for (const subject of report.subjects) console.log(`${subject.courseId}: ${subject.questions} questions / ${subject.modules} modules`);
+  for (const subject of report.subjects) {
+    console.log(`${subject.courseId}: ${subject.questions} questions / ${subject.modules} modules / ${subject.types.join(", ")} / ${subject.rotationChanges} changed on repeat`);
+  }
   console.log(`IBM released case: ${report.releasedQuestions}/10 questions`);
   if (report.errors.length) {
     for (const error of report.errors) console.error(`ERROR ${error}`);
     process.exitCode = 1;
-  } else console.log("Final revision and released-case gate: PASS");
+  } else console.log("Accelerated Mini and released-case gate: PASS");
 }

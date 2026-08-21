@@ -218,10 +218,10 @@ work.
 
 Minis remain a deliberately small pre-paper tool:
 
-- map all modules from memory;
-- retrieve eight high-yield prompts;
-- check formulas, answer structures and near-miss distinctions;
-- expose concise answer spines;
+- touch all eight modules through eight objective decisions;
+- mix single-choice with the subject's rapid numerical, matching or multi-select forms;
+- correct every answer immediately with the governing rule and near-miss distinction;
+- keep paper alignment and last-minute traps available only when requested;
 - end with a calm “carry these into the room” list.
 
 Minis should not introduce new concepts, open lengthy remediation, produce a readiness percentage,

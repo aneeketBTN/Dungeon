@@ -1,6 +1,6 @@
 # Term 6 exam pattern — Batch 1
 
-**Owner-supplied, 2026-08-12.** This supersedes `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`, which was a
+**Owner-supplied, 2026-08-12; SPMS Section B clarified by the assessment reminder on 2026-08-22.** This supersedes `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT`, which was a
 standing claim boundary held because no same-course final existed. It does now. Treat this file as
 the authority for paper structure; it outranks any older statement in `AGENTS.md`, `README.md`, or
 the tester guide.
@@ -17,8 +17,11 @@ the tester guide.
 | B | **MSQ** (multiple-select) | 20 | 2 | 40 |
 | | | **55** | | **75** |
 
-**Negative marking — the only paper that has it.** Section B only: +1 for each right answer, −1 for
-each wrong. Net score cannot fall below zero *at the question level*. No calculator.
+**P-type MSQ rule — exactly two options are correct and the interface permits at most two
+selections.** Both correct options earn 2 marks. One correct option, with no incorrect option
+selected, earns 1 mark. One correct plus one incorrect, or only incorrect options, earns 0. There is
+**no direct negative marking**. To change a full pair, first uncheck one option or use **Clear
+Response**, then select again. No calculator.
 
 ### 2 · Business Research and Growth Systems Architecture — 22 Aug, 13:00–15:00
 
@@ -88,7 +91,7 @@ the generated match family repeats one visible task line across the three-questi
 
 | Paper | Objective marks | Written marks | Bank alignment |
 | --- | ---: | ---: | --- |
-| SPMS | 75 (all) | 0 | 219 MCQs and 28 MSQs; both sections fill |
+| SPMS | 75 (all) | 0 | 219 MCQs and 28 exactly-two P-type MSQs; both sections fill |
 | SCLM | 56 (A + C) | 24 (numerical) | 160 MCQs, 28 matches and 8 numericals; all sections fill |
 | BRGSA | 40 | 40 | 78 MCQs, 29 case-clozes and 68 written prompts |
 | **IBM** | **0** | **100** | **167 rotating framework/case prompts plus 10 fixed released-case responses** |
@@ -111,15 +114,15 @@ cannot replace transfer practice across the course.
 
 ### Behaviour the app should now teach
 
-SPMS Section B is the only negatively marked section: +1 per correct option, −1 per wrong, floored
-at zero per question. Selecting every option is strictly bad; selecting only options you are
-confident in is rational. That is a strategy the app can teach directly, and it makes the existing
-confidence sampling more than a research instrument.
+SPMS Section B should teach the P-type decision directly: a defensible pair earns 2; one defensible
+correct option earns 1; adding any incorrect option turns the response into 0. The app must enforce
+the two-selection cap and preserve the real uncheck-or-Clear-Response interaction. That is not
+negative marking—the risk is losing the partial mark already secured by a clean single selection.
 
 ## Claim boundary after this file
 
-`EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` is **closed**. Sections, counts, marks, duration, negative
-marking, and calculator rules may now be stated as fact, citing this file.
+`EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` is **closed**. Sections, counts, marks, duration, marking
+rules, and calculator rules may now be stated as fact, citing this file.
 
 Still not claimable: the ten examination questions, difficulty, topic weighting inside a section,
 a likely score, or a pass probability. The released IBM prompt is known; the questions the faculty

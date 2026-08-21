@@ -41,8 +41,9 @@ npm run build
 - MCQ, MSQ, cloze, case-cloze, match, numeric, short-answer, and multi-step questions.
 - Examiner tabs ordered by distance to the exam: **Full mocks (1+ week out)**, **Speedrun (within a
   week)**, and **Minis (last 25–30 minutes)**.
-- Thirty-two authored final-revision prompts: one per module, with an answer spine and near-miss
-  check, plus three high-cost traps per subject.
+- Interactive last-minute Minis: eight objective questions, one per module, immediate teaching,
+  rotating families, and a subject-first UI that folds after selection. SPMS includes real P-type
+  two-selection controls and 2 / 1 / 0 scoring.
 - Deterministic full-paper coverage cycles, dynamic Weakest links papers, and the fixed IBM
   Released case paper.
 - Quick Notes covering every registered teaching entry, with search, print/PDF, concept maps, and

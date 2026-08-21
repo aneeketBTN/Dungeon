@@ -90,7 +90,8 @@ export function auditRevisionPersonas() {
     const course = win.T6_COURSES?.[courseId];
     const cycle = win.T6_MINI_MOCKS?.build(courseId, 0);
     const pack = win.T6_FINAL_SPRINTS?.[courseId];
-    if (!course || !cycle || !pack) {
+    const mini = win.T6_FINAL_SPRINTS?.build(courseId, 0);
+    if (!course || !cycle || !pack || !mini) {
       errors.push(`${courseId}: missing Speedrun or Mini data`);
       continue;
     }
@@ -131,25 +132,41 @@ export function auditRevisionPersonas() {
     }
     if (cycle.uncoveredConceptIds.length) errors.push(`${courseId}: Speedrun cycle misses ${cycle.uncoveredConceptIds.join(", ")}`);
 
-    const miniAnswerWords = pack.questions.reduce((total, question) => total + words(question.answer), 0);
-    for (const question of pack.questions) {
-      if (Array.isArray(question.options)) errors.push(`${question.id}: Mini exposes selectable options to a craft-only learner`);
-      if (words(question.prompt) < 18 || words(question.prompt) > 40) errors.push(`${question.id}: Mini prompt is not a two-minute retrieval size`);
-      if (words(question.answer) < 35 || words(question.answer) > 60) errors.push(`${question.id}: Mini answer spine is not rapid-review size`);
-      if (words(question.check) < 12 || words(question.check) > 30) errors.push(`${question.id}: Mini near-miss check is not rapid-review size`);
+    /* Minis now deliberately expose selectable answers: the lazy learner still has
+       to beat the same option-craft ceiling, while Joe gets the correction without
+       producing prose and the diligent learner never finds a hidden ninth task. */
+    const miniQuestions = mini.questions.filter(Boolean);
+    const miniDecisions = miniQuestions.flatMap(decisionSets);
+    const miniLongest = strategyShare(miniDecisions, longest);
+    const miniFirst = strategyShare(miniDecisions, fixedFirst);
+    if (miniLongest > 30) errors.push(`${courseId}: longest-option craft earns ${miniLongest}% in Minis`);
+    if (miniFirst > 30) errors.push(`${courseId}: fixed-first craft earns ${miniFirst}% in Minis`);
+    if (miniQuestions.length !== 8) errors.push(`${courseId}: Mini has ${miniQuestions.length}/8 questions`);
+    if ([...new Set(mini.modules)].sort((a, b) => a - b).join(",") !== "1,2,3,4,5,6,7,8") {
+      errors.push(`${courseId}: Mini does not span all modules`);
     }
-    if (miniAnswerWords > 400) errors.push(`${courseId}: Mini answer spines total ${miniAnswerWords} words, over the final-pass budget`);
+    for (const question of miniQuestions) {
+      if (["short-answer", "boss", "primer", "lesson"].includes(question.type)) errors.push(`${question.id}: Mini is not a rapid objective response`);
+      if (!String(question.explanation || "").trim()) errors.push(`${question.id}: Mini has no immediate teaching`);
+    }
+    if (courseId === "SPMS") {
+      const pTypes = miniQuestions.filter((question) => question.type === "msq");
+      if (pTypes.length !== 3 || pTypes.some((question) => question.answers?.length !== 2)) {
+        errors.push("SPMS: Mini does not carry three exactly-two P-type MSQs");
+      }
+    }
 
     subjects.push({
       courseId,
-      brilliantButLazy:{longestOptionPct:longestShare, fixedFirstPct:fixedFirstShare, miniOptions:0},
-      averageJoe:{speedrunQuestions:questions.length, immediateTeaching:questions.length, miniPrompts:pack.questions.length},
-      dumbButDiligent:{speedrunRounds:cycle.rounds.length, conceptsReached:cycle.targetConceptIds.length, miniAnswerWords}
+      brilliantButLazy:{longestOptionPct:longestShare, fixedFirstPct:fixedFirstShare, miniLongestOptionPct:miniLongest, miniFixedFirstPct:miniFirst},
+      averageJoe:{speedrunQuestions:questions.length, immediateTeaching:questions.length, miniQuestions:miniQuestions.length},
+      dumbButDiligent:{speedrunRounds:cycle.rounds.length, conceptsReached:cycle.targetConceptIds.length, miniSteps:miniQuestions.length}
     });
   }
 
-  /* Browser behavior shared by all subjects: a constructed Speedrun is one commit,
-     not a hidden rubric round; Mini answers start collapsed and never write attempts. */
+  /* Browser behavior shared by all subjects: a constructed Speedrun is one commit;
+     Minis progressively disclose one subject, enforce P-type controls, and never
+     write mastery evidence. */
   if (!/session\.kind === "confidence-sprint"\) return finalizeSubjectiveAnswer\(\{deferRubric:true\}\)/.test(app)) {
     errors.push("Speedrun written answers still require a second rubric interaction");
   }
@@ -157,11 +174,16 @@ export function auditRevisionPersonas() {
     errors.push("Speedrun written feedback does not state its coaching and evidence limits");
   }
   if (!/function speedrunWrittenSpine\(question\)/.test(app)) errors.push("Written Speedruns do not bound their exemplar to a rapid answer spine");
-  if (!/<details class='final-question'><summary>/.test(app)) errors.push("Mini answer spines are not collapsed before retrieval");
+  if (!/kind:"final-sprint"/.test(app)) errors.push("Minis do not start an interactive coached session");
+  if (!/final-choice-grid/.test(app) || !/final-disclosure/.test(app)) errors.push("Mini information is not progressively disclosed after subject selection");
+  if (!/else if \(chosen\.length < 2\) chosen\.push\(index\)/.test(app) || !/Clear response/.test(app)) {
+    errors.push("P-type Minis do not enforce the two-selection cap and Clear response behaviour");
+  }
   const miniRoute = app.slice(app.indexOf("function finalSprintData"), app.indexOf("function renderExamPaperCard"));
   if (/recordAttempt\(|recordWrittenPracticeEvidence\(|recordExamWrittenDiagnosis\(/.test(miniRoute)) {
     errors.push("Minis write learning or exam evidence despite being a last-minute self-check");
   }
+  if (!/session\.kind !== "final-sprint"\) recordAttempt/.test(app)) errors.push("Interactive Minis are not explicitly excluded from mastery attempts");
 
   return {ok:errors.length === 0, errors, subjects};
 }

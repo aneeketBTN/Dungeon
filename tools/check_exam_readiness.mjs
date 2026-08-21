@@ -11,10 +11,9 @@
  *
  *   - sections that cannot be filled (SPMS Section B has 8 of 20 MSQs) were discovered
  *     by a learner opening the paper, not by a check;
- *   - every authored MSQ turned out to be 3-correct-of-4, which under the paper's own
- *     marking makes ticking everything score full marks — a whole section free
- *     (LAW-53). The bank validator passed, because each item is individually fine and
- *     nothing looked at the section as a set;
+ *   - an early authored MSQ tranche used the wrong answer count and repeated answer
+ *     positions. The final P-type reminder now makes exactly two correct options a
+ *     section-level contract, while position variety remains a craft check;
  *   - a 50-question section drew 16 questions sharing a character-identical prompt,
  *     because the pool is 52 and nothing measured prompt variety against demand.
  *
@@ -86,46 +85,28 @@ function checkSection(course, section) {
     });
   }
 
-  /* 2. Negative marking has to bite. With k correct of n, the floor and the per-question
-        cap mean ticking everything pays min(marks, max(0, k − (n − k))). If that is full
-        marks for every item, the section is free — LAW-53. */
-  if (section.negative) {
+  /* 2. SPMS P-type shape. Exactly two correct options is now part of the paper,
+        not a variation to diversify. Position patterns still have to vary or the
+        answer can be learned without reading the item. */
+  if (section.type === "msq") {
     const shapes = pool.map(q => {
       const correct = (q.answers || q.correct || []).length;
       const options = (q.options || []).length;
-      return { id: q.id, correct, options, free: Math.min(section.marks, Math.max(0, correct - (options - correct))) >= section.marks };
+      return { id: q.id, correct, options };
     });
-    const free = shapes.filter(s => s.free);
-    if (shapes.length && free.length === shapes.length) {
+    const wrongCount = shapes.filter(shape => shape.correct !== 2);
+    if (wrongCount.length) {
       findings.push({
-        level: "error", code: "NEGATIVE_MARKING_FREE",
-        message: `every one of the ${shapes.length} items scores full marks if the candidate ticks ` +
-          `every option, so the section is free. Author a spread of correct-counts — at ${section.marks} ` +
-          `marks with 4 options, 1-of-4 and 2-of-4 both make a speculative tick cost something.`
-      });
-    } else if (free.length) {
-      findings.push({
-        level: "warn", code: "NEGATIVE_MARKING_PARTLY_FREE",
-        message: `${free.length} of ${shapes.length} items score full marks for ticking everything.`
+        level: "error", code: "PTYPE_CORRECT_COUNT",
+        message: `${wrongCount.length} of ${shapes.length} MSQs do not have exactly two correct options.`
       });
     }
     const counts = {};
     shapes.forEach(s => { counts[`${s.correct}-of-${s.options}`] = (counts[`${s.correct}-of-${s.options}`] || 0) + 1; });
     findings.push({ level: "info", code: "MSQ_SHAPES", message: `shapes: ${JSON.stringify(counts)}` });
 
-    /* A uniform correct-count is gameable even when the section is not free: learn the
-       count once and you know how many to tick on every question. */
-    if (Object.keys(counts).length === 1 && shapes.length > 2) {
-      findings.push({
-        level: "error", code: "MSQ_COUNT_UNIFORM",
-        message: `every item is ${Object.keys(counts)[0]}, so a candidate who counts once knows how ` +
-          `many to tick on all ${shapes.length}. Vary the number of correct options.`
-      });
-    }
-
-    /* Worse, and the one that needs no arithmetic at all: if the correct options sit in
-       the same positions every time, "tick A, B and C" scores full marks without reading
-       a word. Found in the authored eight, where all of them were answers [0,1,2]. */
+    /* If the correct options sit in the same positions every time, the pair can be
+       selected without reading even though the count itself is correctly uniform. */
     const signatures = {};
     pool.forEach(q => {
       const key = (q.answers || q.correct || []).slice().sort((a, b) => a - b).join(",");

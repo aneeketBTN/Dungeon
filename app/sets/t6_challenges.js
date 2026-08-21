@@ -731,10 +731,10 @@
    * carry one concept per module so the reservation is spread across the paper
    * rather than concentrated in one part of the course.
    *
-   * Shapes are deliberately mixed (3-of-5, 2-of-4, 2-of-5). LAW-53 exists because
-   * all eight SPMS MSQs were once 3-correct-of-4, which made ticking every option
-   * score full marks on a negatively marked section; a new tranche that shared one
-   * shape would rebuild that by a different route.
+   * Every P-type item has exactly two correct options. The live paper allows at most
+   * two selections and awards 2 for the exact pair, 1 for one correct option with no
+   * wrong option, and 0 once any wrong option is selected. Option positions still
+   * vary so the pair cannot be learned without reading the question.
    * ------------------------------------------------------------------- */
   var SPMS_MULTI_EXAM_ONLY = [
     {concept: "spms_dfv", source: "SPMS-M01-L05", node: "Desirability, feasibility, viability", examOnly: true, variant: "exam",
@@ -1287,17 +1287,96 @@
     spms_privacy: "Privacy is a constraint on the product itself, not a clause added at launch."
   };
 
+  /* The first SPMS multi-select bank predated the final P-type clarification and
+   * twenty items carried three true statements. Silently truncating their keys would
+   * make a true sentence score as wrong. Each repair therefore rewrites the removed
+   * statement into a specific misconception and supplies the diagnosis that teaches
+   * why it fails. The authored source remains readable above; this table is the
+   * explicit migration into the now-authoritative exactly-two shape. */
+  var SPMS_PTYPE_REPAIRS = {
+    spms_dfv_msq: {answers:[1,2], optionIndex:3,
+      option:"A product that is desirable and feasible is viable even when it cannot sustain the business",
+      diagnosis:{tag:"Averaged the three checks", label:"Turned two passes into an overall pass", why:"Desirability and feasibility do not compensate for failed economics. Viability is a separate condition, and the product remains unsustainable until it clears it.", cue:"Test all three independently; two passes never erase the failed check."}},
+    spms_jtbd_msq: {answers:[2,4], optionIndex:3,
+      option:"The pride attached to the qualification is outside the job because emotional needs are not functional",
+      diagnosis:{tag:"Dropped the emotional job", label:"Treated functional as the only real need", why:"Jobs can be functional, emotional and social at the same time. Pride in the qualification is precisely the emotional layer of this purchase.", cue:"Ask what the customer wants to feel as well as what they need to do."}},
+    spms_tamsam_msq: {answers:[0,2], optionIndex:3,
+      option:"SOM ignores incumbent brokerages because an obtainable market is based only on the firm's ambition",
+      diagnosis:{tag:"Removed the competitive bound", label:"Sized ambition instead of obtainable share", why:"SOM is narrowed by what the firm can realistically win, including customers already held by incumbents. Ambition does not remove that constraint.", cue:"For SOM, keep every current limit on reach and capture in the number."}},
+    spms_chasm_msq: {answers:[1,3], optionIndex:4,
+      option:"Keep the expert interface complex so mainstream users can see the product is powerful",
+      diagnosis:{tag:"Made complexity a quality signal", label:"Raised the adoption risk for mainstream users", why:"Mainstream adoption depends on lowering perceived risk and effort. Preserving expert complexity makes onboarding harder and widens the chasm.", cue:"Ask whether the change makes a cautious user safer and faster on first use."}},
+    spms_lean_canvas_msq: {answers:[2,3], optionIndex:4,
+      option:"Solution is unique to the Business Model Canvas and is removed from the Lean Canvas",
+      diagnosis:{tag:"Reversed the canvas difference", label:"Removed a Lean Canvas box", why:"Solution is one of the startup-specific Lean Canvas boxes, alongside problem, key metrics and unfair advantage.", cue:"Lean Canvas makes the proposed problem-solution pair explicit so it can be tested."}},
+    spms_unit_economics_msq: {answers:[2,3], optionIndex:4,
+      option:"Ride-sharing — one driver lifetime, because the platform acquires drivers rather than rides",
+      diagnosis:{tag:"Changed the economic unit", label:"Measured a transaction business as a lifetime", why:"Ride-sharing economics resolve per ride. A driver lifetime mixes many transactions and hides whether an individual ride contributes or loses money.", cue:"Choose the smallest repeatable transaction whose revenue and variable cost belong together."}},
+    spms_alternatives_msq: {answers:[0,4], optionIndex:1,
+      option:"Rival products count only after the customer has formally shortlisted them",
+      diagnosis:{tag:"Waited for a formal shortlist", label:"Made competition depend on procurement paperwork", why:"A rival competes whenever it is a credible way the customer may do the job. It need not appear on a formal shortlist before it shapes the decision.", cue:"Competition is set by the customer's alternatives, not by the stage of the buying process."}},
+    spms_privacy_msq: {answers:[1,4], optionIndex:0,
+      option:"GDPR protects only European Union citizens, so any other resident's personal data falls outside it",
+      diagnosis:{tag:"Made protection depend on citizenship", label:"Used nationality as the scope test", why:"GDPR scope is not a citizenship test. It protects personal data in the regulated processing context, irrespective of whether the person holds European Union citizenship.", cue:"Check where and how the data is processed; do not substitute nationality for scope."}},
+    spms_value_pricing_msq: {answers:[0,1], optionIndex:3,
+      option:"Billing by engineer hours is value-based pricing because a higher hourly rate signals greater customer value",
+      diagnosis:{tag:"Renamed an input price", label:"Mistook a costly input for a customer outcome", why:"Hourly billing prices the supplier's time and cost base. A higher rate does not turn it into value-based pricing unless the price is pegged to the customer's outcome.", cue:"Ask whether the unit being priced belongs to the supplier or the customer result."}},
+    spms_traceability_msq: {answers:[2,4], optionIndex:3,
+      option:"Project requirements stay at product level and should not be broken down for a particular release",
+      diagnosis:{tag:"Stopped the trace too early", label:"Kept a product requirement away from delivery", why:"Project requirements are precisely the release-level breakdown that smaller delivery teams can build and verify. Refusing the breakdown breaks the trace to execution.", cue:"Follow the chain from business need to product response to release-level work."}},
+    spms_priority_msq_buckets: {answers:[0,3], optionIndex:2,
+      option:"Payments belong in should have because booking alone is enough for a ride-hailing product to launch",
+      diagnosis:{tag:"Removed the commercial transaction", label:"Called a load-bearing capability optional", why:"A ride-hailing product that cannot take payment cannot complete its core exchange. Payments is a must-have, so describing it as optional is the mistake.", cue:"Remove the capability and ask whether the core transaction can still finish."}},
+    spms_metrics_msq: {answers:[1,4], optionIndex:2,
+      option:"The main difference from a mature company is reporting cadence rather than uncertainty",
+      diagnosis:{tag:"Changed the governing difference", label:"Made timing more important than uncertainty", why:"The startup's defining condition is unresolved uncertainty about demand, scale and economics. Reporting cadence does not explain why its measures must work differently.", cue:"Ask what remains unknown, not how often the dashboard is sent."}},
+    spms_dfv_msq_exam: {answers:[0,2], optionIndex:1,
+      option:"Feasibility holds because drivers want the tool, so no separate technical evidence is needed",
+      diagnosis:{tag:"Read demand as buildability", label:"Used desirability evidence for feasibility", why:"Drivers wanting the tool proves desirability. Feasibility needs evidence that the team can build and operate it with available technology.", cue:"Keep customer evidence and engineering evidence in their own checks."}},
+    spms_tamsam_msq_exam: {answers:[0,2], optionIndex:1,
+      option:"Regulatory certification narrows SOM but leaves the serviceable market at the worldwide 900,000",
+      diagnosis:{tag:"Put regulation at the wrong layer", label:"Left an unserviceable market inside SAM", why:"Certification decides which customers the product can legally serve, so it narrows TAM to SAM before sales capacity and competition narrow SOM.", cue:"Apply legal and capability constraints before the obtainable-share constraints."}},
+    spms_lean_canvas_msq_exam: {answers:[0,3], optionIndex:1,
+      option:"It keeps the Business Model Canvas boxes unchanged because startups and established firms answer the same questions",
+      diagnosis:{tag:"Erased the startup adaptation", label:"Treated both canvases as interchangeable", why:"Lean Canvas replaces several established-business boxes with startup questions such as problem, solution, key metrics and unfair advantage.", cue:"Choose the canvas by the uncertainty it is meant to expose."}},
+    spms_unit_economics_msq_exam: {answers:[1,2], optionIndex:0,
+      option:"Acquisition cost is recovered in the second year of the relationship",
+      diagnosis:{tag:"Shortened the payback", label:"Recovered ₹5,400 with only ₹3,600", why:"At ₹1,800 gross profit per year, two years recover ₹3,600. The ₹5,400 acquisition cost is recovered only after three years.", cue:"Divide acquisition cost by annual gross profit before naming the payback year."}},
+    spms_alternatives_msq_exam: {answers:[0,2], optionIndex:1,
+      option:"Manual compilation should be excluded because a non-software process cannot compete with software",
+      diagnosis:{tag:"Excluded the current workaround", label:"Defined competition by product category", why:"The assistant's manual process is what the customer currently uses to do the same job. It competes even though it is not software.", cue:"Ask what the customer would do instead, not what category the alternative belongs to."}},
+    spms_traceability_msq_exam: {answers:[0,2], optionIndex:1,
+      option:"The structured handover record is already a project requirement because it names a feature",
+      diagnosis:{tag:"Collapsed product into project", label:"Skipped the release-level breakdown", why:"The structured record is the product's general response to the need. Template editor and audit trail are the release-specific project requirements.", cue:"A product requirement says what the product will do; a project requirement says what a release team will build."}},
+    spms_roadmap_msq_exam: {answers:[0,3], optionIndex:1,
+      option:"What has been left out is irrelevant once the scheduled releases are clear",
+      diagnosis:{tag:"Dropped the deferral decision", label:"Read only the visible release list", why:"A roadmap allocates scarce time. What is deliberately deferred is part of the strategy because it protects the sequence from becoming an inventory of wishes.", cue:"A real roadmap says both now and not now."}},
+    spms_metrics_msq_exam: {answers:[0,1], optionIndex:2,
+      option:"Weekly active use is irrelevant because only cumulative measures can show whether a young product is growing",
+      diagnosis:{tag:"Preferred accumulation to use", label:"Rejected the measure that can reveal decline", why:"Weekly active use can rise or fall and therefore distinguishes real use from accumulating registrations. Cumulative totals can look healthy even when the product has stalled.", cue:"Prefer a measure that can worsen when the product worsens."}}
+  };
+
   function addAuthoredMultiSelect(course) {
     if (course.id !== "SPMS") return;
     SPMS_MULTI.concat(SPMS_MULTI_EXAM_ONLY).forEach(function (item, index) {
       var concept = (course.concepts || []).filter(function (entry) { return entry.id === item.concept; })[0];
       if (!concept) return;
+      var questionId = item.concept + "_msq" + (item.variant ? "_" + item.variant : "");
+      var repair = SPMS_PTYPE_REPAIRS[questionId] || null;
+      var options = item.options.slice();
+      var answers = item.answers.slice();
+      var wrong = Object.assign({}, item.wrong || {});
+      if (repair) {
+        options[repair.optionIndex] = repair.option;
+        answers = repair.answers.slice();
+        wrong[repair.optionIndex] = repair.diagnosis;
+      }
       addQuestion(course, {
         /* A concept may carry more than one multiple-select item — Section B needs
            twenty and only sixteen SPMS lectures have a lesson to sit one on — so the
            id takes an optional variant. Without it the second item on a concept
            silently overwrote the first. */
-        id: item.concept + "_msq" + (item.variant ? "_" + item.variant : ""),
+        id: questionId,
         courseId: course.id,
         conceptId: item.concept,
         supportingConceptIds: [],
@@ -1323,10 +1402,10 @@
          * null and render exactly as before. */
         caselet: item.caselet || null,
         stem: item.stem,
-        options: item.options,
-        answers: item.answers,
-        diagnoses: item.options.map(function (_, optionIndex) {
-          return item.wrong[optionIndex] || null;
+        options: options,
+        answers: answers,
+        diagnoses: options.map(function (_, optionIndex) {
+          return wrong[optionIndex] || null;
         }),
         explanation: item.explanation,
         link: SPMS_MULTI_LINKS[item.concept] || concept.bridge || concept.summary

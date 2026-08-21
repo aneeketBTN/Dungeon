@@ -54,11 +54,22 @@ spine. They do not open a second self-marking rubric or create Strong evidence.
 
 **Final revision and released IBM case — LIVE (2026-08-22).** Examiner is now
 three explicit choices by distance to the exam: **Full mocks (1+ week out)**, coached **Speedrun
-(within a week)**, and authored **Minis (last 25–30 minutes)**. Minis carry **32 retrieval prompts — eight per subject and one per
-module** — with answer spines, near-miss checks and subject traps. IBM's 21 August prompt is kept
+(within a week)**, and interactive **Minis (last 25–30 minutes)**. A Mini is accelerated objective
+revision: **eight questions, one per module, immediate correction, no prose worksheet and no mastery
+evidence**. SPMS mixes five MCQs with three exact P-type questions; BRGSA and IBM use rapid scenario
+choices without changing their full written papers; SCLM mixes MCQ, numerical and matching work.
+First load shows only four quiet subject choices; selection folds them into a compact strip, keeps
+route/traps behind disclosures, and starting removes the topic sidebar so the current question owns
+the screen. IBM's 21 August prompt is kept
 verbatim as an open design brief: one explicit assumption set, one coherent Kisan Saathi Hubs model,
 and **10 examiner-only written responses / 100 marks / 10 course lenses**. They never enter Learn or
 the seven numbered IBM coverage sets. Quick Notes owns the same case pack and answer structure.
+
+**SPMS P-type alignment — COMPLETE (2026-08-22).** All 28 Section B items now carry exactly two
+correct answers. The interaction caps selection at two, keeps selected options available to uncheck,
+provides Clear Response and scores the official 2 / 1 / 0 rule: exact pair 2; one correct and no
+wrong option 1; any selected wrong option 0; no direct negative mark. Twenty old three-answer items
+were explicitly rewritten with a specific misconception and diagnosis rather than truncated.
 
 **Subject fold and access simplification — LIVE (2026-08-22).** First load keeps
 the four full subject cards. First selection folds them with self-hosted GSAP into a compact sticky
@@ -102,7 +113,7 @@ visually inspected.
 and the field is nested, not top level). Its 69 current warnings are extraction-unverified glossary
 terms from PDFs the validator cannot extract, reported rather than hidden. Syllabus,
 taught-vocabulary, taught-not-tested, spine, naming, palette, mini-rotation, final-sprint,
-revision-persona and craft gates PASS; full test suite **147/147**; build 23 assets; authenticated
+revision-persona and craft gates PASS; full test suite **150/150**; build 23 assets; authenticated
 Wrangler dry run PASS; exam readiness 0 errors / 0 warnings. The automated layout gate is 32/32 and
 both screenshot sweeps are 36/36. The dashboard chart runtime is
 intentionally no longer shipped.
@@ -123,6 +134,14 @@ Each line is a pointer, not the record: the CHANGELOG entry of the same date and
 the numbers, the defects found, and the evidence paths. Do not re-derive a claim from a line
 here — read the entry.
 
+- **2026-08-22 — Minis become accelerated revision and SPMS follows the exact P-type rule**
+  (Static prompts replaced by interactive eight-question, one-per-module objective runs with
+  immediate teaching and no mastery evidence. SPMS 5 MCQ + 3 exact P-type; BRGSA/IBM rapid scenario
+  choices; SCLM MCQ/numerical/match. Initial chooser folds after selection, optional route/traps
+  stay closed, active Mini hides the topic sidebar. All 28 SPMS MSQs are exactly-two and controls
+  implement selection cap, uncheck, clear and 2/1/0 scoring. Browser desktop/mobile green; tests
+  150/150; build 23. Evidence:
+  `evidence/2026-08-22/t6-accelerated-minis-ptype/verification.md`.)
 - **2026-08-22 — Final revision becomes a real route, IBM receives its released case, and access stops locking people out**
   (Examiner split into Full mocks / Speedrun / Minis by distance to the exam. 32 authored final-retrieval prompts,
   all four subjects and all eight modules. Released IBM brief preserved verbatim as an explicit-

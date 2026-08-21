@@ -12,7 +12,7 @@
    * default sort uses: whatever you sit first is what you can least afford to
    * leave until the end. */
   var EXAM_SCHEDULE = {
-    SPMS:  {seat: 1, day: "Sat 22 Aug", short: "Aug 22", full: "Saturday 22 August", start: "09:00", end: "11:00", marks: 75,  negative: true,  note: "35 MCQs + 20 multi-select"},
+    SPMS:  {seat: 1, day: "Sat 22 Aug", short: "Aug 22", full: "Saturday 22 August", start: "09:00", end: "11:00", marks: 75,  negative: false, note: "35 MCQs + 20 P-type MSQs"},
     BRGSA: {seat: 2, day: "Sat 22 Aug", short: "Aug 22", full: "Saturday 22 August", start: "13:00", end: "15:00", marks: 80,  negative: false, note: "20 MCQs + 4 cases + 2 written"},
     IBM:   {seat: 3, day: "Sun 23 Aug", short: "Aug 23", full: "Sunday 23 August",   start: "09:00", end: "11:00", marks: 100, negative: false, note: "10 written answers on a released caselet"},
     SCLM:  {seat: 4, day: "Sun 23 Aug", short: "Aug 23", full: "Sunday 23 August",   start: "13:00", end: "15:00", marks: 80,  negative: false, note: "50 MCQs + 6 numericals + 3 matches"}
@@ -397,6 +397,9 @@
          because the useful question is "did this move" and storing the paper back
          would make a saved profile a copy of the bank. */
       examAttempts: {},
+      /* Minis are deliberately outside mastery evidence. This only rotates their
+         eight objective surfaces and remembers the last result. */
+      finalSprintProgress: {},
       /* One compact record per finished Speedrun. The cycle definition is
          deterministic and rebuildable from its rotation, so responses and question
          text never need to be copied into the profile. */
@@ -470,6 +473,7 @@
     candidate.examMisses = candidate.examMisses && typeof candidate.examMisses === "object" ? candidate.examMisses : {};
     candidate.examAttempts = candidate.examAttempts && typeof candidate.examAttempts === "object" ? candidate.examAttempts : {};
     candidate.miniMockProgress = candidate.miniMockProgress && typeof candidate.miniMockProgress === "object" ? candidate.miniMockProgress : {};
+    candidate.finalSprintProgress = candidate.finalSprintProgress && typeof candidate.finalSprintProgress === "object" ? candidate.finalSprintProgress : {};
     candidate.writtenPractice = candidate.writtenPractice && typeof candidate.writtenPractice === "object" ? candidate.writtenPractice : {};
     candidate.builder = normalizeBuilder(candidate.builder);
     if (candidate.active) {
@@ -626,8 +630,8 @@
     window.clearTimeout(writtenEvidenceTimer);
     writtenEvidenceTimer = null;
     $all(".screen").forEach(function (screen) { screen.classList.toggle("active", screen.id === id); });
-    var coachedMockScreen = (id === "practice-screen" && session && session.kind === "confidence-sprint") ||
-      (id === "results-screen" && lastFinished && lastFinished.kind === "confidence-sprint");
+    var coachedMockScreen = (id === "practice-screen" && session && ["confidence-sprint", "final-sprint"].indexOf(session.kind) >= 0) ||
+      (id === "results-screen" && lastFinished && ["confidence-sprint", "final-sprint"].indexOf(lastFinished.kind) >= 0);
     markMode(id === "notes-screen" ? "notes" : (EXAM_SCREENS[id] || coachedMockScreen) ? "exam" : "learn");
     syncModeSwitchVisibility();
     /* After markMode, not before: the header reports the side you are on, and the
@@ -3490,6 +3494,7 @@
       confidenceRotation: details.confidenceRotation == null ? null : Number(details.confidenceRotation),
       confidenceRound: details.confidenceRound == null ? null : Number(details.confidenceRound),
       confidenceCycleRounds: details.confidenceCycleRounds == null ? null : Number(details.confidenceCycleRounds),
+      finalSprintRotation: details.finalSprintRotation == null ? null : Number(details.finalSprintRotation),
       title: details.title,
       kicker: details.kicker,
       /* Set by the weakness route: which surface checks which pair of linked concepts,
@@ -4123,12 +4128,16 @@
   function currentItem() { return session.queue[session.index]; }
   function currentQuestion() { return getQuestion(session.courseId, currentItem().id); }
 
+  function isRevisionSprint(value) {
+    return Boolean(value) && ["confidence-sprint", "final-sprint"].indexOf(value.kind) >= 0;
+  }
+
   function shouldAskConfidence(question, item) {
     if (question.type === "primer" || question.type === "lesson" || question.type === "written-repair") return false;
     /* Eight questions and immediate teaching is the Speedrun's entire time budget.
        Confidence sampling remains in Learn and the full mock analysis; it is not a
        ninth interaction repeated eight times here. */
-    if (session && session.kind === "confidence-sprint") return false;
+    if (isRevisionSprint(session)) return false;
     if (typeof item.askConfidence === "boolean") return item.askConfidence;
     var attempts = attemptsFor(session.courseId, question.conceptId).filter(function (attempt) { return attempt.scored !== false; });
     var latest = attempts[attempts.length - 1];
@@ -4147,12 +4156,13 @@
   }
 
   function renderPracticeShell() {
+    $("practice-screen").classList.toggle("is-final-sprint", session.kind === "final-sprint");
     $("practice-kicker").textContent = session.kicker;
     $("practice-title").textContent = getCourse(session.courseId).shortTitle + " · " + session.title;
-    $("leave-practice").textContent = session.kind === "confidence-sprint" ? "← Save and return to Speedruns" : "← Save and return home";
-    $("leave-practice").classList.toggle("to-mocks", session.kind === "confidence-sprint");
+    $("leave-practice").textContent = session.kind === "confidence-sprint" ? "← Save and return to Speedruns" : session.kind === "final-sprint" ? "← Save and return to Minis" : "← Save and return home";
+    $("leave-practice").classList.toggle("to-mocks", isRevisionSprint(session));
     var dueBox = document.querySelector(".due-box");
-    if (dueBox) dueBox.hidden = session.kind === "confidence-sprint";
+    if (dueBox) dueBox.hidden = isRevisionSprint(session);
     renderTopicList();
     updatePracticeProgress();
   }
@@ -4160,7 +4170,7 @@
   function renderTopicList() {
     var holder = $("topic-list");
     holder.innerHTML = "";
-    if (session.kind === "confidence-sprint") {
+    if (isRevisionSprint(session)) {
       session.queue.forEach(function (item, index) {
         var question = getQuestion(session.courseId, item.id);
         var li = document.createElement("li");
@@ -4314,6 +4324,7 @@
     var linkedPair = (session.linkChecks || {})[question.id];
     $("question-pattern").textContent = isPrimer ? "Predict first"
       : session.kind === "confidence-sprint" ? "Module " + question.module + " · Speedrun"
+      : session.kind === "final-sprint" ? "Module " + question.module + " · Mini"
       : focusLabels.length ? "Dungeon re-check · " + focusLabels.join(" + ")
       : linkedPair ? "Both together · " + linkedPair.join(" + ")
       : item.isReattempt ? "Re-attempt · new perspective"
@@ -4341,6 +4352,7 @@
      * two weaknesses were brought together stays invisible. */
     $("task-kicker").textContent = linkedPair ? "Both together · " + linkedPair.join(" + ")
       : session.kind === "confidence-sprint" ? "Apply it"
+      : session.kind === "final-sprint" ? "Choose, then check"
       : question.caselet ? "Then decide"
       : "Your task";
     $("prompt-flow").classList.toggle("has-kicker", !isPrimer && (!!question.caselet || !!linkedPair));
@@ -4713,20 +4725,26 @@
 
   /* Multiple-select, for SPMS Section B.
    *
-   * The paper marks this section +1 for each right answer and -1 for each wrong
-   * one, with the net floored at zero per question. Two consequences the surface
-   * has to make visible, because they invert the habit a single-answer bank
-   * builds: selecting every option is strictly bad, and selecting only what you
-   * are confident of is rational. The learner is never told how many are correct
-   * — that is the skill being tested. */
+   * Exactly two options are correct and the paper allows at most two selections.
+   * The mark is 2 for the exact pair, 1 for one correct option with no wrong one,
+   * and 0 once any wrong option is selected. The control reproduces the real
+   * uncheck-or-clear behaviour instead of letting a learner tick a third option. */
   function msqSelection() {
     return Array.isArray(selected) ? selected : [];
+  }
+
+  function scorePTypeSelection(chosen, answers) {
+    chosen = Array.isArray(chosen) ? chosen : [];
+    answers = Array.isArray(answers) ? answers : [];
+    var right = chosen.filter(function (index) { return answers.indexOf(index) >= 0; }).length;
+    var wrong = chosen.length - right;
+    return {awarded: wrong ? 0 : right >= 2 ? 2 : right === 1 ? 1 : 0, right:right, wrong:wrong};
   }
 
   function renderMultiOptions(question) {
     var holder = prepareResponseHolder("msq-options");
     holder.setAttribute("role", "group");
-    holder.setAttribute("aria-label", "Select every correct answer");
+    holder.setAttribute("aria-label", "P-type question: select up to two options");
     var chosen = msqSelection();
     var answers = question.answers || [];
     question.options.forEach(function (copy, index) {
@@ -4736,7 +4754,8 @@
       button.className = "option option-multi";
       button.setAttribute("role", "checkbox");
       button.setAttribute("aria-checked", String(picked));
-      button.disabled = !!session.answered;
+      button.disabled = !!session.answered || (!picked && chosen.length >= 2);
+      button.classList.toggle("selection-locked", !session.answered && !picked && chosen.length >= 2);
       button.innerHTML = "<span class='option-box' aria-hidden='true'></span><span>" + escapeHtml(copy) + "</span>";
       if (session.answered && session.mode !== "simulation") {
         var isAnswer = answers.indexOf(index) >= 0;
@@ -4747,20 +4766,49 @@
       button.addEventListener("click", function () { toggleOption(index); });
       holder.appendChild(button);
     });
-    $("question-help").textContent = "Select every correct answer. Each right one scores +1, each wrong one −1, and the question cannot go below zero — so choose only what you are sure of.";
+    var clear = document.createElement("button");
+    clear.type = "button";
+    clear.className = "button quiet compact msq-clear";
+    clear.textContent = "Clear response";
+    clear.disabled = !!session.answered || !chosen.length;
+    clear.addEventListener("click", clearMsqResponse);
+    holder.appendChild(clear);
+    $("question-help").textContent = "Exactly two options are correct. Select at most two: both correct = 2 marks; one correct and no wrong option = 1; any wrong option = 0. Uncheck or clear before changing a full pair.";
   }
 
   function toggleOption(index) {
     if (!session || session.answered) return;
     var chosen = msqSelection().slice();
     var at = chosen.indexOf(index);
-    if (at >= 0) chosen.splice(at, 1); else chosen.push(index);
+    if (at >= 0) chosen.splice(at, 1);
+    else if (chosen.length < 2) chosen.push(index);
+    else return;
     chosen.sort(function (a, b) { return a - b; });
     selected = chosen;
     session.selected = chosen;
     $all(".option-multi").forEach(function (button, optionIndex) {
-      button.setAttribute("aria-checked", String(chosen.indexOf(optionIndex) >= 0));
+      var picked = chosen.indexOf(optionIndex) >= 0;
+      button.setAttribute("aria-checked", String(picked));
+      button.disabled = !picked && chosen.length >= 2;
+      button.classList.toggle("selection-locked", !picked && chosen.length >= 2);
     });
+    var clear = document.querySelector(".msq-clear");
+    if (clear) clear.disabled = !chosen.length;
+    updateCommitState();
+    saveProfile();
+  }
+
+  function clearMsqResponse() {
+    if (!session || session.answered) return;
+    selected = [];
+    session.selected = [];
+    $all(".option-multi").forEach(function (button) {
+      button.setAttribute("aria-checked", "false");
+      button.disabled = false;
+      button.classList.remove("selection-locked");
+    });
+    var clear = document.querySelector(".msq-clear");
+    if (clear) clear.disabled = true;
     updateCommitState();
     saveProfile();
   }
@@ -5415,10 +5463,9 @@
     }
     /* MSQ indexes diagnoses by option, but `selected` is the set the learner
      * picked and `partResults` tracks the answer indices — neither lines up with
-     * the generic part logic below. Explain the first wrongly selected option:
-     * over-selection is what the negative marking punishes, so that is the
-     * choice worth naming. If they only under-selected there is no wrong pick to
-     * diagnose, and the missed-answer marking already carries the lesson. */
+     * the generic part logic below. Explain the first wrongly selected option,
+     * because one wrong choice is what turns either one- or two-option response
+     * into zero. */
     if (question.type === "msq") {
       var answers = question.answers || [];
       var wrongPick = (response.selected || []).filter(function (index) { return answers.indexOf(index) < 0; })[0];
@@ -5478,24 +5525,24 @@
       };
     }
     if (question.type === "msq") {
-      /* Scored exactly as the paper scores it: +1 per correct option selected,
-       * -1 per wrong option selected, floored at zero for the question. Mastery
-       * evidence is stricter than marks — `correct` requires the exact set, so a
-       * part-marked answer never reads as understanding on the dashboard. */
+      /* Scored exactly as the P-type paper scores it: the exact pair earns 2; one
+       * correct option with no wrong option earns 1; any wrong option earns 0.
+       * Mastery evidence remains stricter than marks — `correct` requires the pair. */
       var answers = question.answers || [];
       var picked = msqSelection();
       var hits = picked.filter(function (index) { return answers.indexOf(index) >= 0; });
       var misses = picked.filter(function (index) { return answers.indexOf(index) < 0; });
-      var awarded = Math.max(0, hits.length - misses.length);
-      var exact = hits.length === answers.length && misses.length === 0;
+      var pType = scorePTypeSelection(picked, answers);
+      var awarded = pType.awarded;
+      var exact = hits.length === 2 && answers.length === 2 && misses.length === 0;
       var firstWrong = misses.length ? misses[0] : null;
       var msqDiagnosis = firstWrong === null ? null : (question.diagnoses || [])[firstWrong];
       return {
         correct: exact,
-        partial: answers.length ? awarded / answers.length : 0,
+        partial: awarded / 2,
         partResults: answers.map(function (index) { return picked.indexOf(index) >= 0; }),
         conceptResults: {},
-        msqMarks: {awarded: awarded, available: answers.length, hits: hits.length, misses: misses.length},
+        msqMarks: {awarded: awarded, available: 2, hits: hits.length, misses: misses.length},
         misconception: exact ? null : (msqDiagnosis ? msqDiagnosis.tag : (misses.length ? "over-selected" : "under-selected"))
       };
     }
@@ -5889,7 +5936,7 @@
     var before = conceptStatus(session.courseId, question.conceptId);
     var predicted = question.type === "primer" && !session.primerSkipped && typeof selected === "string" && selected.trim().length > 0;
     if (question.type === "primer") recordPrimerAttempt(session.courseId, question, predicted);
-    else if (session.mode !== "simulation") recordAttempt(session.courseId, question, evaluation, confidence, item, session.blockId, timing);
+    else if (session.mode !== "simulation" && session.kind !== "final-sprint") recordAttempt(session.courseId, question, evaluation, confidence, item, session.blockId, timing);
     var after = conceptStatus(session.courseId, question.conceptId);
     var failedConceptIds = Object.keys(evaluation.conceptResults || {}).filter(function (conceptId) {
       return evaluation.conceptResults[conceptId] === false;
@@ -5897,8 +5944,8 @@
     var reattemptConceptId = failedConceptIds[0] || question.conceptId;
     var afterEvidence = conceptEvidence(session.courseId, reattemptConceptId);
     var scheduled = false;
-    if (question.type !== "primer" && session.mode !== "simulation" && session.kind !== "confidence-sprint" && !correct) scheduled = ensureReattempt(question, confidence === "high" ? "confident-error" : confidence === "low" ? "uncertain-error" : "missed", reattemptConceptId);
-    else if (question.type !== "primer" && session.mode !== "simulation" && session.kind !== "confidence-sprint" && conceptStatus(session.courseId, reattemptConceptId) !== "strong" && (confidence === "low" || afterEvidence.correct < 3)) scheduled = ensureReattempt(question, confidence === "low" ? "low-confidence-correct" : "developing", reattemptConceptId);
+    if (question.type !== "primer" && session.mode !== "simulation" && !isRevisionSprint(session) && !correct) scheduled = ensureReattempt(question, confidence === "high" ? "confident-error" : confidence === "low" ? "uncertain-error" : "missed", reattemptConceptId);
+    else if (question.type !== "primer" && session.mode !== "simulation" && !isRevisionSprint(session) && conceptStatus(session.courseId, reattemptConceptId) !== "strong" && (confidence === "low" || afterEvidence.correct < 3)) scheduled = ensureReattempt(question, confidence === "low" ? "low-confidence-correct" : "developing", reattemptConceptId);
 
     var response = {
       id: question.id,
@@ -6108,10 +6155,9 @@
       body = "<p>" + escapeHtml(question.explanation) + "</p>";
     }
 
-    /* Multiple-select is the one format where "wrong" is not the whole story: the
-     * paper part-marks it, so a learner who took two of three and left the trap
-     * alone did better than one who selected everything. Showing the marks makes
-     * the negative marking concrete instead of abstract advice. */
+    /* Multiple-select is the one format where "wrong" is not the whole story: one
+     * correct option with no wrong option earns a real mark, while adding any wrong
+     * option drops the response to zero. */
     /* Numeric feedback states the figure entered against the accepted band, so a
      * near miss is legible as a near miss rather than a flat "wrong". */
     var numeric = response.numericEntry;
@@ -6129,9 +6175,8 @@
 
     var marks = response.msqMarks;
     var marksCopy = marks
-      ? marks.awarded + " of " + marks.available + (marks.available === 1 ? " mark" : " marks") +
-        " — " + marks.hits + " right" + (marks.misses ? ", " + marks.misses + " wrong at −1 each" : ", nothing wrongly selected") +
-        (marks.misses && marks.hits - marks.misses < 0 ? ". The paper floors a question at zero, so this cannot go negative." : "")
+      ? marks.awarded + " of " + marks.available + " marks — " +
+        (marks.awarded === 2 ? "both correct options selected." : marks.awarded === 1 ? "one correct option and no wrong option selected." : marks.misses ? "an incorrect option was selected, so the question scores zero." : "no correct option selected.")
       : "";
 
     var answerKeyHtml = !response.correct ? "<div class='answer-key'><p class='answer-key-head'>Better answer</p><ul>" + answerKey.map(function (answer) { return "<li>" + escapeHtml(answer) + "</li>"; }).join("") + "</ul></div>" : "";
@@ -6266,7 +6311,15 @@
     var scoredInitial = initialResponses.filter(function (response) { return response.scored !== false; });
     var initialCorrect = scoredInitial.filter(function (response) { return response.correct; }).length;
     var percent = Math.round(initialCorrect / Math.max(1, scoredInitial.length) * 100);
+    if (completedSession.kind === "final-sprint") {
+      var miniPossible = scoredInitial.reduce(function (sum, response) { return sum + (response.msqMarks ? 2 : 1); }, 0);
+      var miniAwarded = scoredInitial.reduce(function (sum, response) {
+        return sum + (response.msqMarks ? response.msqMarks.awarded : response.correct ? 1 : 0);
+      }, 0);
+      percent = Math.round(miniAwarded / Math.max(1, miniPossible) * 100);
+    }
     recordMiniMockProgress(completedSession, percent, scoredInitial.length);
+    recordFinalSprintProgress(completedSession, percent);
     if (completedSession.setId) {
       profile.completed[completedSession.courseId] = profile.completed[completedSession.courseId] || {};
       var record = profile.completed[completedSession.courseId][String(completedSession.setId)] || {attempts: 0, best: 0};
@@ -6298,6 +6351,9 @@
       return STATUS_ORDER[conceptStatus(completedSession.courseId, conceptId)] > STATUS_ORDER[completedSession.initialStatuses[conceptId]];
     }).length;
     var isMiniMock = completedSession.kind === "confidence-sprint";
+    var isFinalMini = completedSession.kind === "final-sprint";
+    var partMarked = scoredInitial.filter(function (response) { return response.msqMarks && response.msqMarks.awarded === 1; }).length;
+    var miniPossible = scoredInitial.reduce(function (sum, response) { return sum + (response.msqMarks ? 2 : 1); }, 0);
 
     var course = getCourse(completedSession.courseId);
     var path = courseRunPath(completedSession.courseId);
@@ -6327,32 +6383,46 @@
       return ids.concat(response.conceptIds || [response.conceptId]);
     }, [])).map(function (conceptId) { return getConcept(completedSession.courseId, conceptId); }).filter(Boolean);
 
-    $("results-kicker").textContent = isMiniMock
+    $("results-kicker").textContent = isFinalMini
+      ? "Mini complete"
+      : isMiniMock
       ? "Speedrun complete"
       : completedRun
       ? "Run " + completedRun.step + " of " + path.steps + " complete"
       : completedSession.kind === "written-practice" ? "Written practice complete" : "Practice complete";
-    $("results-title").textContent = isMiniMock
+    $("results-title").textContent = isFinalMini
+      ? "Eight fast decisions, eight immediate corrections."
+      : isMiniMock
       ? "You touched all eight modules. Keep the method, not the score."
       : completedRun ? "Run " + completedRun.step + " is clear. Here’s the quick look." : "Here’s what this practice changed.";
-    $("results-copy").textContent = isMiniMock
+    $("results-copy").textContent = isFinalMini
+      ? "This was accelerated revision, not an exam prediction. It does not alter mastery evidence; carry the corrected distinctions into the paper."
+      : isMiniMock
       ? "This was a coached final-week Speedrun, not an exam prediction. Use the misses below as a short list of distinctions to carry into the next rotation."
       : nowEvidence > beforeEvidence
       ? "Your subject evidence moved from " + beforeEvidence + "% to " + nowEvidence + "%."
       : "Your evidence held at " + nowEvidence + "%. The useful change is knowing exactly what still needs another check.";
 
     var accuracyLabel = document.querySelector(".result-stats article:first-child small");
-    if (accuracyLabel) accuracyLabel.textContent = scoredInitial.length ? "Accuracy" : "Review mode";
+    if (accuracyLabel) accuracyLabel.textContent = isFinalMini ? "Mini score" : scoredInitial.length ? "Accuracy" : "Review mode";
     $("result-score").textContent = scoredInitial.length ? percent + "%" : "Self-check";
-    $("score-caption").textContent = scoredInitial.length
+    $("score-caption").textContent = isFinalMini
+      ? miniPossible + " available marks across 8 questions"
+      : scoredInitial.length
       ? scoredInitial.length + " scored question" + (scoredInitial.length === 1 ? "" : "s")
       : constructed.length + " written response" + (constructed.length === 1 ? "" : "s");
+    var resultLabels = $all(".result-stats article small");
+    if (resultLabels[1]) resultLabels[1].textContent = isFinalMini ? "Fully correct" : "Correct first try";
+    if (resultLabels[2]) resultLabels[2].textContent = isFinalMini ? "Needs correction" : "Missed first try";
+    if (resultLabels[3]) resultLabels[3].textContent = isFinalMini ? "One-mark MSQs" : "Concepts improved";
     $("result-correct").textContent = String(initialCorrect);
     $("result-missed").textContent = String(initialMissed);
     $("result-third-label").textContent = constructed.length ? (completedSession.mode === "simulation" ? "Written responses" : machineGraded.length ? "Written responses checked" : "Responses self-reviewed") : "Re-attempts passed";
     $("result-reattempts").textContent = String(constructed.length || reattempts);
-    $("result-improved").textContent = String(improved);
-    $("result-learned").textContent = improvedConcepts.length
+    $("result-improved").textContent = String(isFinalMini ? partMarked : improved);
+    $("result-learned").textContent = isFinalMini
+      ? correctConcepts.length ? "You applied " + conceptNameList(correctConcepts.slice(0, 3)) + (correctConcepts.length > 3 ? " and " + (correctConcepts.length - 3) + " more" : "") + " cleanly." : "The useful result is the correction you just saw after every answer."
+      : improvedConcepts.length
       ? conceptNameList(improvedConcepts.slice(0, 3)) + (improvedConcepts.length > 3 ? " and " + (improvedConcepts.length - 3) + " more" : "") + " gained a stronger evidence state."
       : correctConcepts.length
         ? "You applied " + conceptNameList(correctConcepts.slice(0, 3)) + " correctly; their evidence state held."
@@ -6361,7 +6431,9 @@
       ? conceptNameList(struggledConcepts.slice(0, 3)) + (struggledConcepts.length > 3 ? " and " + (struggledConcepts.length - 3) + " more" : "") + " caused a first-attempt miss."
       : "No scored concept caused a first-attempt miss in this run.";
     var nextMini = isMiniMock ? nextMiniMock(completedSession.courseId) : null;
-    $("result-next").textContent = isMiniMock
+    $("result-next").textContent = isFinalMini
+      ? "A fresh Mini keeps the same subject format mix and rotates the question families."
+      : isMiniMock
       ? nextMini.freshRotation
         ? "The complete concept cycle is clear. The next Speedrun starts a fresh rotation with different question families."
         : "Speedrun " + (nextMini.round.index + 1) + " of " + nextMini.cycle.rounds.length + " is next; it prioritises concepts this rotation has not reached yet."
@@ -6370,6 +6442,10 @@
         (nextCarry.names.length ? " Likely repeat: " + nextCarry.names.join(" and ") + "." : " No open difficulty needs carrying into it.")
       : "The nine-run path is clear. Replays and focused practice are now fully available.";
 
+    var resultChart = document.querySelector(".result-chart");
+    if (resultChart) resultChart.hidden = isFinalMini;
+    var conceptReview = document.querySelector(".result-review-section");
+    if (conceptReview) conceptReview.hidden = isFinalMini;
     $("result-before-bar").style.width = beforeEvidence + "%";
     $("result-now-bar").style.width = nowEvidence + "%";
     $("result-before-value").textContent = beforeEvidence + "%";
@@ -6396,14 +6472,18 @@
     });
     if (!touched.length) review.innerHTML = "<p>No concept response was recorded.</p>";
     renderAnswerReview(completedSession);
-    $("results-home").textContent = isMiniMock ? "← Back to Speedruns" : "← Revision home";
-    $("result-primary").innerHTML = isMiniMock
+    $("results-home").textContent = isFinalMini ? "← Back to Minis" : isMiniMock ? "← Back to Speedruns" : "← Revision home";
+    $("result-primary").innerHTML = isFinalMini
+      ? "Start a fresh Mini <span aria-hidden='true'>→</span>"
+      : isMiniMock
       ? (nextMini.freshRotation ? "Start fresh rotation" : "Start next Speedrun") + " <span aria-hidden='true'>→</span>"
       : recommendationActionLabel(recommendation(completedSession.courseId)) + " <span aria-hidden='true'>→</span>";
-    $("result-primary").onclick = isMiniMock
+    $("result-primary").onclick = isFinalMini
+      ? function () { startFinalSprint(completedSession.courseId); }
+      : isMiniMock
       ? function () { startConfidenceSprint(completedSession.courseId, nextMini.round.index, nextMini.rotation); }
       : function () { executeRecommendation(); };
-    $("repeat-set").textContent = isMiniMock ? "Repeat this Speedrun" : completedSession.kind === "practice-check" || completedSession.kind === "practice-shape" || completedSession.kind === "written-practice" ? "Repeat this practice" : "Replay this run";
+    $("repeat-set").textContent = isFinalMini ? "Repeat this Mini" : isMiniMock ? "Repeat this Speedrun" : completedSession.kind === "practice-check" || completedSession.kind === "practice-shape" || completedSession.kind === "written-practice" ? "Repeat this practice" : "Replay this run";
     $("repeat-set").onclick = repeatFinished;
   }
 
@@ -6447,6 +6527,7 @@
 
   function repeatFinished() {
     if (!lastFinished) return goDashboard();
+    if (lastFinished.kind === "final-sprint") return startFinalSprint(lastFinished.courseId, lastFinished.finalSprintRotation);
     if (lastFinished.kind === "confidence-sprint") return startConfidenceSprint(lastFinished.courseId, lastFinished.confidenceRound, lastFinished.confidenceRotation);
     if (lastFinished.setId) return startStudySet(lastFinished.courseId, lastFinished.setId);
     if (lastFinished.kind === "concept") return startConceptPractice(lastFinished.courseId, lastFinished.conceptId);
@@ -6486,12 +6567,12 @@
       profile.active = clone(session);
       saveProfile();
     }
-    if (session && session.kind === "confidence-sprint") return openExamHome();
+    if (isRevisionSprint(session)) return openExamHome();
     goDashboard();
   }
 
   function leaveResults() {
-    if (lastFinished && lastFinished.kind === "confidence-sprint") return openExamHome();
+    if (isRevisionSprint(lastFinished)) return openExamHome();
     goDashboard();
   }
 
@@ -7013,11 +7094,11 @@
    *
    * The paper shapes below are docs/briefs/T6_EXAM_PATTERN.md, which is the authority
    * for structure and outranks anything else in the repo. Nothing here is invented:
-   * sections, counts, per-question marks, duration, negative marking, and calculator
+   * sections, counts, per-question marks, duration, marking rules, and calculator
    * rules are all from that file. Where the bank cannot fill a section, the brief
    * says so in the learner's own terms rather than padding with the wrong format —
-   * an MSQ section quietly filled with MCQs would train the wrong instinct on the
-   * only negatively marked section in the whole term, which is precisely backwards.
+   * an MSQ section quietly filled with MCQs would train the wrong interaction and
+   * scoring instinct on the real P-type section.
    */
   var EXAM_MINUTES = 120;
   var EXAM_PAPERS = {
@@ -7029,8 +7110,8 @@
       sections: [
         {id: "A", label: "Section A", type: "mcq", count: 35, marks: 1,
          rule: "One correct option. One mark each. No negative marking."},
-        {id: "B", label: "Section B", type: "msq", count: 20, marks: 2, negative: true,
-         rule: "Multiple correct options. +1 for each right option, −1 for each wrong one, and a question cannot score below zero. Choosing every option is strictly worse than choosing only the ones you are sure of."}
+        {id: "B", label: "Section B", type: "msq", count: 20, marks: 2, negative: false,
+         rule: "P-type MSQ: exactly two options are correct and at most two may be selected. Both correct = 2 marks; one correct with no wrong option = 1; any response containing a wrong option = 0. No direct negative marking."}
       ]
     },
     BRGSA: {
@@ -7868,10 +7949,12 @@
     }
     if (type === "msq") {
       var chosen = Array.isArray(item.response) ? item.response : [];
-      return head + "<p class='exam-msq-note'>More than one option is correct. +1 for each right option, −1 for each wrong one.</p>" +
+      return head + "<p class='exam-msq-note'>Exactly two options are correct. Select at most two. Both correct = 2; one correct with no wrong option = 1; any wrong option = 0. Uncheck or use Clear response before changing a full pair.</p>" +
         "<div class='exam-options'>" + (question.options || []).map(function (option, index) {
-          return "<button type='button' class='exam-option multi" + (chosen.indexOf(index) >= 0 ? " chosen" : "") +
-            "' role='checkbox' aria-checked='" + (chosen.indexOf(index) >= 0) + "' data-choice='" + index + "'>" +
+          var picked = chosen.indexOf(index) >= 0;
+          return "<button type='button' class='exam-option multi" + (picked ? " chosen" : "") +
+            "' role='checkbox' aria-checked='" + picked + "' data-choice='" + index + "'" +
+            (!picked && chosen.length >= 2 ? " disabled aria-disabled='true'" : "") + ">" +
             "<span class='option-box'></span><span>" + escapeHtml(option) + "</span></button>";
         }).join("") + "</div>";
     }
@@ -7958,7 +8041,9 @@
         if (type === "msq") {
           var chosen = Array.isArray(item.response) ? item.response.slice() : [];
           var at = chosen.indexOf(choice);
-          if (at >= 0) chosen.splice(at, 1); else chosen.push(choice);
+          if (at >= 0) chosen.splice(at, 1);
+          else if (chosen.length < 2) chosen.push(choice);
+          else return;
           recordExamResponse(item, chosen);
         } else {
           recordExamResponse(item, choice);
@@ -7999,20 +8084,16 @@
   }
 
   /* Scoring, by the paper's rules rather than the learning system's.
-     The only subtle one is SPMS Section B: +1 per right option, −1 per wrong, and the
-     floor is per question, not per paper — so a question cannot drag another one down. */
+     SPMS Section B is P-type: exact pair = 2, one correct with no wrong = 1,
+     and any response containing a wrong option = 0. */
   function scoreExamItem(item) {
     var question = item.question;
     var type = question.type || "mcq";
     if (type === "msq") {
       var correct = question.answers || question.correct || [];
       var chosen = Array.isArray(item.response) ? item.response : [];
-      var right = chosen.filter(function (c) { return correct.indexOf(c) >= 0; }).length;
-      var wrong = chosen.length - right;
-      /* Floored at zero per question so one question cannot drag another down, and
-         capped at the question's own marks so a question carrying three correct
-         options cannot pay out more than the two marks the paper says it is worth. */
-      return {awarded: Math.min(item.marks, Math.max(0, right - wrong)), possible: item.marks, machine: true};
+      var pType = scorePTypeSelection(chosen, correct);
+      return {awarded: pType.awarded, possible: item.marks, machine: true};
     }
     if (type === "mcq") {
       return {awarded: item.response === question.answer ? item.marks : 0, possible: item.marks, machine: true};
@@ -8387,7 +8468,7 @@
       confidenceRecorded: confidenceRecorded, unsureCorrect: unsureCorrect, confidentWrong: confidentWrong,
       machineAwarded: scores.filter(function (s) { return s.machine; }).reduce(function (n, s) { return n + s.awarded; }, 0),
       machinePossible: scores.filter(function (s) { return s.machine; }).reduce(function (n, s) { return n + s.possible; }, 0),
-      negative: negativeMarkingAnalysis(items, scores)
+      pType: pTypeAnalysis(items, scores)
     };
   }
 
@@ -9167,7 +9248,7 @@
         : band(analysis.spent / budget * 100, [[50, "well-under"], [85, "under"], [100, "on-pace"], [1e9, "over"]]),
       exam_guess_band: guessPercent === 0 ? "none"
         : band(guessPercent, [[9, "under-10pct"], [25, "10-25pct"], [1e9, "over-25pct"]]),
-      exam_wrong_ticks: analysis.negative ? analysis.negative.wrongTicks : 0,
+      exam_wrong_ticks: analysis.pType ? analysis.pType.wrongTicks : 0,
       exam_changed_to_wrong: analysis.changedToWrong.length,
       exam_revisit_band: band(attempt.items.reduce(function (n, i) { return n + Math.max(0, i.visits - 1); }, 0),
         [[0, "none"], [analysis.total, "few"], [1e9, "many"]]),
@@ -9233,7 +9314,7 @@
       unsureCorrect: analysis.unsureCorrect.length,
       confidentWrong: analysis.confidentWrong.length,
       changedToWrong: analysis.changedToWrong.length,
-      wrongTicks: analysis.negative ? analysis.negative.wrongTicks : 0,
+      wrongTicks: analysis.pType ? analysis.pType.wrongTicks : 0,
       breakdowns: analysis.breakdowns.length, rungs: rungs,
       autoSubmitted: Boolean(automatic)
     });
@@ -9383,7 +9464,6 @@
   }
 
   function startConfidenceSprint(courseId, roundIndex, rotation) {
-    pauseFinalSprint();
     var state = miniMockState(courseId);
     rotation = Math.max(0, Number(rotation) || 0);
     if (rotation !== state.rotation) {
@@ -9436,9 +9516,6 @@
 
   var examHomeMode = "mini";
   var finalSprintCourse = null;
-  var FINAL_SPRINT_SECONDS = 25 * 60;
-  var finalSprintClock = {remaining: FINAL_SPRINT_SECONDS, endsAt: null, running: false};
-  var finalSprintTicker = null;
 
   function setExamHomeMode(mode) {
     if (["mini", "final", "full"].indexOf(mode) < 0) mode = "mini";
@@ -9517,115 +9594,92 @@
     return window.T6_FINAL_SPRINTS && window.T6_FINAL_SPRINTS[courseId];
   }
 
-  function finalSprintSecondsLeft() {
-    if (!finalSprintClock.running) return finalSprintClock.remaining;
-    return Math.max(0, Math.ceil((finalSprintClock.endsAt - Date.now()) / 1000));
+  function finalSprintState(courseId) {
+    var root = profile.finalSprintProgress || (profile.finalSprintProgress = {});
+    return root[courseId] || (root[courseId] = {attempts:0, best:null, last:null, at:null});
   }
 
-  function finalSprintPhase(secondsLeft) {
-    var elapsed = FINAL_SPRINT_SECONDS - secondsLeft;
-    return elapsed < 3 * 60 ? 1 : elapsed < 19 * 60 ? 2 : 3;
+  function finalSprintBuild(courseId, rotation) {
+    return window.T6_FINAL_SPRINTS && typeof window.T6_FINAL_SPRINTS.build === "function"
+      ? window.T6_FINAL_SPRINTS.build(courseId, rotation) : null;
   }
 
-  function renderFinalSprintClock() {
-    var clock = $("final-sprint-clock");
-    if (!clock) return;
-    var left = finalSprintSecondsLeft();
-    var minutes = Math.floor(left / 60), seconds = left % 60;
-    clock.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-    var phase = finalSprintPhase(left);
-    var phaseNames = {1:"Map all eight modules",2:"Answer the eight prompts",3:"Run the trap check"};
-    $("final-sprint-status").textContent = left === 0 ? "Time. Stop adding content; breathe and carry the answer shapes in." :
-      "Phase " + phase + " · " + phaseNames[phase] + (finalSprintClock.running ? "" : " · paused");
-    $("final-sprint-toggle").textContent = finalSprintClock.running ? "Pause" : left === FINAL_SPRINT_SECONDS ? "Start 25 minutes" : left === 0 ? "Start again" : "Resume";
-    $all("[data-final-phase]").forEach(function (node) {
-      node.classList.toggle("is-current", Number(node.dataset.finalPhase) === phase && left > 0);
-    });
+  function finalFormatLabel(type) {
+    return {mcq:"Single choice", msq:"P-type MSQ", "case-cloze":"Scenario choices", numeric:"Numerical", match:"Match"}[type] || type;
   }
 
-  function stopFinalSprintTicker() {
-    if (finalSprintTicker) window.clearInterval(finalSprintTicker);
-    finalSprintTicker = null;
+  function startFinalSprint(courseId, rotation) {
+    if (profile.active && profile.active.kind === "final-sprint" && profile.active.courseId === courseId && rotation === undefined) return resumeActive();
+    var state = finalSprintState(courseId);
+    rotation = rotation === undefined ? state.attempts : Math.max(0, Number(rotation) || 0);
+    var built = finalSprintBuild(courseId, rotation);
+    if (!built || built.questionIds.length !== 8) return toast("This Mini is missing one of its eight module questions.");
+    profile.selectedCourse = courseId;
+    session = createSession(courseId, {
+      kind:"final-sprint",
+      mode:"learning",
+      title:"25-minute Mini",
+      kicker:"Last 25–30 minutes · 8 rapid questions · immediate correction · no prose worksheet",
+      skipLessons:true,
+      skipPrimers:true,
+      finalSprintRotation:rotation
+    }, built.questionIds);
+    profile.active = clone(session);
+    saveProfile();
+    beginPractice();
   }
 
-  function pauseFinalSprint() {
-    if (!finalSprintClock.running) return;
-    finalSprintClock.remaining = finalSprintSecondsLeft();
-    finalSprintClock.running = false;
-    finalSprintClock.endsAt = null;
-    stopFinalSprintTicker();
-    renderFinalSprintClock();
-  }
-
-  function tickFinalSprint() {
-    var left = finalSprintSecondsLeft();
-    if (left <= 0) {
-      finalSprintClock.remaining = 0;
-      finalSprintClock.running = false;
-      finalSprintClock.endsAt = null;
-      stopFinalSprintTicker();
-      renderFinalSprintClock();
-      toast("Mini complete. Stop adding; carry the answer shapes in.");
-      return;
-    }
-    renderFinalSprintClock();
-  }
-
-  function toggleFinalSprint() {
-    if (finalSprintClock.running) return pauseFinalSprint();
-    if (finalSprintClock.remaining <= 0) finalSprintClock.remaining = FINAL_SPRINT_SECONDS;
-    finalSprintClock.running = true;
-    finalSprintClock.endsAt = Date.now() + finalSprintClock.remaining * 1000;
-    stopFinalSprintTicker();
-    finalSprintTicker = window.setInterval(tickFinalSprint, 500);
-    renderFinalSprintClock();
-  }
-
-  function resetFinalSprint(courseId) {
-    stopFinalSprintTicker();
-    finalSprintClock = {remaining: FINAL_SPRINT_SECONDS, endsAt: null, running: false};
-    if (courseId && finalSprintData(courseId)) {
-      finalSprintCourse = courseId;
-      profile.selectedCourse = courseId;
-      saveProfile();
-    }
-    renderFinalSprint();
+  function recordFinalSprintProgress(completedSession, percent) {
+    if (!completedSession || completedSession.kind !== "final-sprint") return;
+    var state = finalSprintState(completedSession.courseId);
+    state.attempts += 1;
+    state.last = percent;
+    state.best = state.best == null ? percent : Math.max(state.best, percent);
+    state.at = new Date().toISOString();
   }
 
   function renderFinalSprint() {
     var host = $("final-sprint");
     if (!host || !window.T6_FINAL_SPRINTS) return;
-    if (!finalSprintCourse || !finalSprintData(finalSprintCourse)) finalSprintCourse = profile.selectedCourse || "SPMS";
+    if (!finalSprintCourse || !finalSprintData(finalSprintCourse)) {
+      finalSprintCourse = null;
+      host.innerHTML = "<section class='final-choice-head'><p class='eyebrow'>Last 25–30 minutes</p><h2>Which exam are you about to sit?</h2><p>Choose one subject. Dungeon will collapse this menu and load only its eight-question Mini.</p></section>" +
+        "<section class='final-choice-grid' aria-label='Choose a Mini subject'>" + EXAM_ORDER.map(function (courseId) {
+          var choiceCourse = getCourse(courseId);
+          return "<button type='button' class='final-choice-card' data-final-course='" + escapeHtml(courseId) + "'>" +
+            "<span>" + escapeHtml(choiceCourse.shortTitle) + "</span><b>" + escapeHtml(choiceCourse.title) + "</b><small>" +
+            "8 questions · one per module</small><em>Load Mini <span aria-hidden='true'>→</span></em></button>";
+        }).join("") + "</section>";
+      return;
+    }
     var pack = finalSprintData(finalSprintCourse);
     var course = getCourse(finalSprintCourse);
+    var state = finalSprintState(finalSprintCourse);
+    var active = profile.active && profile.active.kind === "final-sprint" && profile.active.courseId === finalSprintCourse;
+    var rotation = active ? profile.active.finalSprintRotation : state.attempts;
+    var built = finalSprintBuild(finalSprintCourse, rotation);
     var subjects = EXAM_ORDER.map(function (courseId) {
       return "<button type='button' role='tab' data-final-course='" + courseId + "' aria-selected='" +
         (courseId === finalSprintCourse) + "'>" + escapeHtml(getCourse(courseId).shortTitle) + "</button>";
     }).join("");
-    var questions = pack.questions.map(function (question) {
-      var concepts = question.conceptIds.map(function (conceptId) {
-        var concept = getConcept(finalSprintCourse, conceptId);
-        return concept ? concept.name : conceptId;
-      }).join(" · ");
-      return "<details class='final-question'><summary><span>Module " + question.module + "</span><b>" +
-        escapeHtml(question.prompt) + "</b></summary><div class='final-answer'><small>Answer spine · " +
-        escapeHtml(concepts) + "</small><p>" + escapeHtml(question.answer) + "</p><p class='final-check'><b>Check:</b> " +
-        escapeHtml(question.check) + "</p></div></details>";
+    var route = (built ? built.questions : []).map(function (question) {
+      var concept = getConcept(finalSprintCourse, question.conceptId);
+      return "<article class='final-route-step'><span>Module " + question.module + "</span><b>" +
+        escapeHtml(concept ? concept.name : question.node) + "</b><small>" + escapeHtml(finalFormatLabel(question.type || "mcq")) + "</small></article>";
     }).join("");
+    var scoreLine = state.attempts ? "Last " + state.last + "% · best " + state.best + "% · next start rotates the questions." : "No Mini completed yet. Your first pass is ready.";
     host.innerHTML =
-      "<nav class='final-subjects' role='tablist' aria-label='Mini subject'>" + subjects + "</nav>" +
+      "<nav class='final-subjects is-folded' role='tablist' aria-label='Mini subject'>" + subjects + "</nav>" +
       "<section class='final-hero'><div><p class='eyebrow'>" + escapeHtml(course.shortTitle) + " · last 25–30 minutes</p><h2>" +
         escapeHtml(pack.title) + "</h2><p>" + escapeHtml(pack.focus) + "</p></div>" +
-        "<div class='final-clock-card'><span class='final-clock' id='final-sprint-clock' role='timer'>25:00</span>" +
-        "<p id='final-sprint-status'>Phase 1 · Map all eight modules · paused</p><div><button class='button primary compact' id='final-sprint-toggle' type='button' data-final-timer='toggle'>Start 25 minutes</button>" +
-        "<button class='button quiet compact' type='button' data-final-timer='reset'>Reset</button></div></div></section>" +
-      "<ol class='final-phases'><li data-final-phase='1'><b>3 min · Map</b><span>Write eight module numbers and one anchor idea beside each. No notes.</span></li>" +
-        "<li data-final-phase='2'><b>16 min · Retrieve</b><span>Give each prompt two minutes. Say or write the answer before revealing the spine.</span></li>" +
-        "<li data-final-phase='3'><b>6 min · Protect</b><span>Read the traps and checks. Repair only the gaps you can name.</span></li></ol>" +
-      "<section class='final-question-list' aria-label='Eight rapid revision questions'>" + questions + "</section>" +
-      "<aside class='final-traps'><p class='eyebrow'>Last six-minute protection</p><h3>Do not donate these marks.</h3><ul>" +
-        pack.traps.map(function (trap) { return "<li>" + escapeHtml(trap) + "</li>"; }).join("") + "</ul></aside>";
-    renderFinalSprintClock();
+        "<div class='final-start-card'><strong>8 questions</strong><span>One per module · correction after each answer</span><small>" + escapeHtml(scoreLine) + "</small>" +
+        "<button class='button primary' type='button' data-final-start='" + escapeHtml(finalSprintCourse) + "'>" + (active ? "Resume saved Mini" : "Start accelerated Mini") + "</button></div></section>" +
+      "<div class='final-paper-rule'><b>How this relates to the paper</b><p>" + escapeHtml(pack.paperReality) + "</p></div>" +
+      "<details class='final-disclosure'><summary><span><b>Preview the eight-module route</b><small>Optional · the questions stay hidden</small></span><span class='disclosure-action'>Open</span></summary>" +
+        "<section class='final-route' aria-label='Eight-module Mini route'>" + route + "</section></details>" +
+      "<details class='final-disclosure final-protection'><summary><span><b>Open the last-minute traps</b><small>Optional · three checks before the paper</small></span><span class='disclosure-action'>Open</span></summary>" +
+        "<aside class='final-traps'><p class='eyebrow'>Last-minute protection</p><h3>Do not donate these marks.</h3><ul>" +
+        pack.traps.map(function (trap) { return "<li>" + escapeHtml(trap) + "</li>"; }).join("") + "</ul></aside></details>";
   }
 
   function renderExamPaperCard(courseId) {
@@ -9765,77 +9819,35 @@
       : "Nothing here is a prediction of your real result. It is what these questions, under this clock, showed about what you can and cannot do yet.";
   }
 
-  /* ---- the cost of a speculative tick ------------------------------------------
+  /* ---- P-type answer behaviour --------------------------------------------------
    *
-   * SPMS Section B is the only negatively marked section in the term: +1 for each
-   * right option, −1 for each wrong one, floored at zero per question. That floor is
-   * the part learners get wrong in both directions — it makes a wild guess cheaper
-   * than it feels, and a careful extra tick more expensive than it looks.
-   *
-   * With n options of which k are correct, a single tick chosen at random is right
-   * with probability k/n, so its expected value is (k/n) − (1 − k/n) = 2k/n − 1.
-   * On a four-option question with two correct answers that is exactly zero: ticking
-   * at random is a coin flip that costs nothing and gains nothing. Every tick above
-   * your actual confidence is only worth it when you believe you are better than
-   * even on it — and the floor means a question you have already lost cannot lose
-   * you more, which is why the *last* tick on a question you are failing is free.
-   */
-  function negativeMarkingAnalysis(items, scores) {
-    var negatives = [];
-    /* Every negatively marked item on the paper, answered or not. The cost analysis
-       needs the answered ones; the *shape* analysis below needs all of them, because
-       whether this paper rewards indiscriminate ticking is a property of the items
-       themselves and not of what this candidate happened to do. */
-    var shapes = [];
+   * Exactly two answers are correct, and at most two may be selected. The strategic
+   * distinction is not negative marking: a clean single correct option earns 1,
+   * while adding any wrong option turns the whole response into 0. This analysis
+   * shows that trade-off without inventing expected-value advice for a rule the
+   * actual paper does not use. */
+  function pTypeAnalysis(items, scores) {
+    var rows = [];
     items.forEach(function (item, index) {
       if ((item.question.type || "") !== "msq") return;
       var correct = item.question.answers || item.question.correct || [];
-      var options = (item.question.options || []).length;
-      shapes.push({options: options, correct: correct.length, marks: item.marks});
       var chosen = Array.isArray(item.response) ? item.response : [];
-      if (!chosen.length) return;
-      var right = chosen.filter(function (c) { return correct.indexOf(c) >= 0; }).length;
+      var right = chosen.filter(function (choice) { return correct.indexOf(choice) >= 0; }).length;
       var wrong = chosen.length - right;
-      negatives.push({item: item, index: index, right: right, wrong: wrong,
-        options: options, correct: correct.length,
-        awarded: scores[index].awarded, possible: item.marks});
+      rows.push({right:right, wrong:wrong, chosen:chosen.length, awarded:scores[index].awarded});
     });
-    if (!shapes.length) return null;
-
-    /* Does ticking every option score full marks? With k correct of n and the floor,
-       ticking everything pays min(marks, max(0, k − (n − k))). When that equals the
-       question's marks, the whole trade-off the section is built on disappears: a
-       candidate who ticks blindly scores as well as one who knows the material.
-       Measured, not assumed — and reported, because a mock that can be beaten this
-       way must say so rather than let a candidate discover it and learn the habit. */
-    var tickAllPerfect = shapes.filter(function (shape) {
-      return Math.min(shape.marks, Math.max(0, shape.correct - (shape.options - shape.correct))) >= shape.marks;
-    }).length;
-    var exploitable = tickAllPerfect === shapes.length;
-
-    if (!negatives.length) {
-      return {questions: 0, wrongTicks: 0, lostToWrongTicks: 0,
-        evPerRandomTick: Math.round((2 * shapes[0].correct / shapes[0].options - 1) * 100) / 100,
-        options: shapes[0].options, correct: shapes[0].correct,
-        totalItems: shapes.length, tickAllPerfect: tickAllPerfect, exploitable: exploitable};
-    }
-    var totalWrongTicks = negatives.reduce(function (n, row) { return n + row.wrong; }, 0);
-    var lostToWrongTicks = negatives.reduce(function (n, row) {
-      /* What the same question would have paid with the wrong ticks removed. */
-      return n + (Math.min(row.possible, row.right) - row.awarded);
-    }, 0);
-    var sampleOptions = negatives[0].options || 4;
-    var sampleCorrect = negatives[0].correct || 2;
+    if (!rows.length) return null;
+    var answered = rows.filter(function (row) { return row.chosen > 0; });
     return {
-      questions: negatives.length,
-      wrongTicks: totalWrongTicks,
-      lostToWrongTicks: lostToWrongTicks,
-      evPerRandomTick: Math.round((2 * sampleCorrect / sampleOptions - 1) * 100) / 100,
-      options: sampleOptions,
-      correct: sampleCorrect,
-      totalItems: shapes.length,
-      tickAllPerfect: tickAllPerfect,
-      exploitable: exploitable
+      totalItems: rows.length,
+      questions: answered.length,
+      exactPairs: answered.filter(function (row) { return row.right === 2 && row.wrong === 0; }).length,
+      safeSingles: answered.filter(function (row) { return row.right === 1 && row.wrong === 0; }).length,
+      zeroedByWrong: answered.filter(function (row) { return row.wrong > 0; }).length,
+      wrongTicks: answered.reduce(function (sum, row) { return sum + row.wrong; }, 0),
+      lostToWrongTicks: answered.reduce(function (sum, row) {
+        return sum + (row.wrong ? Math.min(2, row.right) : 0);
+      }, 0)
     };
   }
 
@@ -10014,40 +10026,20 @@
       });
     });
 
-    /* Negative marking, where the paper has it. */
-    var negative = analysis.negative;
-    $("exam-negative-block").hidden = !negative;
-    if (negative) {
-      var ev = negative.evPerRandomTick;
+    /* P-type behaviour, where the paper has it. */
+    var pType = analysis.pType;
+    $("exam-negative-block").hidden = !pType;
+    if (pType) {
       $("exam-negative-body").innerHTML =
         "<div class='insight-grid'>" +
-        "<div class='insight-card'><small>Wrong ticks</small><b>" + negative.wrongTicks + "</b><span>across " + negative.questions + " answered question" + (negative.questions === 1 ? "" : "s") + "</span></div>" +
-        "<div class='insight-card'><small>Marks they cost</small><b>" + negative.lostToWrongTicks + "</b><span>you would have scored this much more ticking only what you were sure of</span></div>" +
-        "<div class='insight-card'><small>A random tick is worth</small><b>" + (ev > 0 ? "+" : "") + ev.toFixed(2) + "</b><span>on a " + negative.options + "-option question with " + negative.correct + " correct</span></div>" +
+        "<div class='insight-card'><small>Exact pairs</small><b>" + pType.exactPairs + "</b><span>earned both marks</span></div>" +
+        "<div class='insight-card'><small>Safe single answers</small><b>" + pType.safeSingles + "</b><span>earned one mark with no wrong option selected</span></div>" +
+        "<div class='insight-card'><small>Zeroed by a wrong option</small><b>" + pType.zeroedByWrong + "</b><span>one wrong option makes the response worth zero</span></div>" +
         "</div>" +
-        "<p class='insight-verdict'>" + escapeHtml(
-          ev === 0
-            ? "On this paper's shape a random tick is an exact coin flip: it gains as much as it loses, so it is never the thing that decides your score. What decides it is ticking options you are better than even on, and leaving the rest. " +
-              (negative.lostToWrongTicks > 0
-                ? "You gave away " + negative.lostToWrongTicks + " mark" + (negative.lostToWrongTicks === 1 ? "" : "s") + " to ticks that were worse than a coin flip."
-                : "You did not give anything away to speculative ticks. Keep doing that.")
-            : ev > 0
-              ? "On the items in this mock a random tick pays on average, because they carry more correct options than wrong ones. Do not take that to the real paper — see the warning below."
-              : "A random tick loses on average here, so every uncertain tick is a real cost. Tick only what you can defend."
-        ) + "</p>" +
-        /* A mock that can be beaten by ticking everything has to say so. The habit is
-           the harm: a candidate who finds this and does not know it is an artefact of
-           the mock will carry it into a paper where it costs them the section. */
-        (negative.exploitable
-          ? "<div class='insight-warning'>" +
-            "<p><b>A defect in this mock, not a strategy.</b> Every negatively marked question in this build carries " +
-            negative.correct + " correct options out of " + negative.options + ", so ticking <em>all</em> of them scores full marks on all " +
-            negative.totalItems + " — " + negative.correct + " right minus " + (negative.options - negative.correct) +
-            " wrong, and the per-question floor absorbs the rest.</p>" +
-            "<p>The real paper's rule is the opposite: choosing every option is strictly worse than choosing only what you are sure of. " +
-            "These items are miscalibrated and it is recorded as a defect. Do not learn a ticking habit from this section.</p></div>"
-          : "") +
-        "<p class='insight-note'>One thing the floor gives you: a question cannot score below zero, so once a question is already lost, a further tick costs nothing. Being decisive on a question you are failing is free; being speculative on one you are winning is not.</p>";
+        "<p class='insight-verdict'>" + escapeHtml(pType.zeroedByWrong
+          ? "You selected a wrong option on " + pType.zeroedByWrong + " P-type response" + (pType.zeroedByWrong === 1 ? "" : "s") + ". The useful rule is simple: one option you can defend earns 1; do not add a second unless you can defend that too."
+          : "No P-type response was zeroed by a wrong option. Keep using the distinction between a safe one-mark answer and a defensible two-mark pair.") + "</p>" +
+        "<p class='insight-note'>There is no direct negative mark. The risk is losing the one mark a clean correct selection would have earned when a wrong option is added.</p>";
     }
 
     /* Answer behaviour. */
@@ -10709,11 +10701,14 @@
     });
     $("final-sprint").addEventListener("click", function (event) {
       var courseButton = event.target.closest("[data-final-course]");
-      if (courseButton) return resetFinalSprint(courseButton.dataset.finalCourse);
-      var timerButton = event.target.closest("[data-final-timer]");
-      if (!timerButton) return;
-      if (timerButton.dataset.finalTimer === "toggle") toggleFinalSprint();
-      else resetFinalSprint();
+      if (courseButton) {
+        finalSprintCourse = courseButton.dataset.finalCourse;
+        profile.selectedCourse = finalSprintCourse;
+        saveProfile();
+        return renderFinalSprint();
+      }
+      var startButton = event.target.closest("[data-final-start]");
+      if (startButton) startFinalSprint(startButton.dataset.finalStart);
     });
     if (window.T6Theme) {
       $("theme-toggle").addEventListener("click", function () {

@@ -160,6 +160,7 @@ test("wrong-answer feedback teaches the correction without exposing scheduling r
 test("Examiner separates full mocks, Speedruns, and Minis by time to exam", async () => {
   const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/t6.css", import.meta.url), "utf8");
   const selector = await readFile(new URL("../app/sets/t6_mini_mocks.js", import.meta.url), "utf8");
 
   assert.match(html, /data-exam-mode="mini"/);
@@ -182,9 +183,17 @@ test("Examiner separates full mocks, Speedruns, and Minis by time to exam", asyn
   assert.match(app, /skipPrimers:true/);
   assert.match(app, /feedback after every answer/);
   assert.match(app, /Next-time method/);
-  assert.match(app, /session\.kind !== "confidence-sprint" && !correct/);
-  assert.match(app, /var FINAL_SPRINT_SECONDS = 25 \* 60/);
-  assert.match(app, /Answer the eight prompts/);
+  assert.match(app, /!isRevisionSprint\(session\) && !correct/);
+  assert.match(app, /kind:"final-sprint"/);
+  assert.match(app, /final-choice-grid/);
+  assert.match(app, /8 questions · one per module/);
+  assert.match(app, /final-disclosure/);
+  assert.match(app, /classList\.toggle\("is-final-sprint", session\.kind === "final-sprint"\)/);
+  assert.match(css, /\.practice-screen\.is-final-sprint \.topic-panel \{ display: none; \}/);
+  assert.match(css, /\.practice-screen\.is-final-sprint \.practice-shell \{ grid-template-columns: minmax\(0,820px\); gap: 0; \}/);
+  assert.match(html, /t6\.js\?v=20260822-minis-2/);
+  assert.match(app, /both correct = 2 marks; one correct and no wrong option = 1; any wrong option = 0/i);
+  assert.match(app, /else if \(chosen\.length < 2\) chosen\.push\(index\)/);
   assert.match(app, /Speedrun complete/);
   assert.match(app, /Mini complete/);
 });

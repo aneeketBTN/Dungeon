@@ -1,87 +1,141 @@
-(function () {
+/* Dungeon Minis — accelerated, objective final revision.
+ *
+ * A Mini is not a blank-page worksheet and it is not a shortened mock. It is an
+ * eight-question coached pass through the subject: one question per module,
+ * selectable answers, and teaching immediately after every response. Full mocks
+ * remain the place where the exact written paper is reproduced.
+ *
+ * The selector lives here so the browser and the release gate execute the same
+ * rules. `rotation` changes question families on a repeat without changing the
+ * subject's promised format mix.
+ */
+(function (global) {
   "use strict";
 
-  /* The last twenty-five minutes are not a compressed lesson. They are a retrieval
-   * pass: eight blank-page prompts, one per module, followed by an answer spine and
-   * a check that catches the usual near-miss. Keeping this as an authored data file
-   * makes the pack reviewable and lets the gate verify module and concept coverage
-   * without pretending these self-checks are new mastery evidence. */
-  window.T6_FINAL_SPRINTS = {
+  var PACKS = {
     SPMS: {
-      title: "Product decisions on one page",
-      focus: "Recover the decision logic behind the frameworks; do not spend the final minutes memorising framework labels without their use.",
+      title: "Eight product decisions. No blank page.",
+      focus: "Five single-choice questions and three real P-type MSQs, with the correction immediately after every answer.",
+      paperReality: "Section B behaviour is exact: two options are correct, at most two may be selected, and the score is 2 / 1 / 0 with no direct negative marking.",
+      formats: ["mcq", "msq", "mcq", "msq", "mcq", "mcq", "msq", "mcq"],
       traps: [
-        "A framework name is not an answer. State the decision it changes.",
-        "Separate evidence of a problem from evidence of repeatable demand.",
-        "For every metric, say what action changes when it moves."
-      ],
-      questions: [
-        {id:"spms-final-m1",module:1,conceptIds:["spms_dfv"],prompt:"A product is strongly desired and technically feasible, but every sale destroys contribution margin. On blank paper, diagnose the opportunity through desirability, feasibility and viability, then state the next decision.",answer:"Desirability is supported because customers want it; feasibility is supported because it can be built. Viability fails because the economics cannot sustain delivery. The team should not call this a good opportunity yet: change price, cost, segment or model, then retest viability before scaling.",check:"Did you name the failed dimension and a decision that could repair it, rather than treating two green dimensions as an overall pass?"},
-        {id:"spms-final-m2",module:2,conceptIds:["spms_psf_pmf"],prompt:"Write the cleanest distinction you can between problem-solution fit and product-market fit, including the evidence each one needs and the mistake caused by confusing them.",answer:"Problem-solution fit asks whether a real problem exists and an early solution is valued, usually through MVP learning and qualitative evidence. Product-market fit asks whether demand repeats and can scale in a sufficiently large market, using traction and retention evidence. Early enthusiasm does not prove scalable pull.",check:"Have you separated early learning from repeated quantitative demand, or did you use ‘customers like it’ as proof of both?"},
-        {id:"spms-final-m3",module:3,conceptIds:["spms_bmc"],prompt:"Reconstruct the business model canvas from memory as a logic chain, not nine isolated boxes: who receives what, through what route, and what must the firm organise and earn to deliver it?",answer:"Customer segments receive a value proposition through channels and customer relationships, producing revenue streams. Delivery rests on key activities, key resources and key partners, which create the cost structure. The canvas is coherent only when the customer side, operating side and economics reinforce one another.",check:"Did you connect the customer side to the operating and financial sides, or merely list nine headings with no consistency test?"},
-        {id:"spms-final-m4",module:4,conceptIds:["spms_unit_economics"],prompt:"A subscription business celebrates rapid sign-ups. Write the minimum unit-economics diagnostic that decides whether growth creates value or accelerates a loss.",answer:"Estimate customer acquisition cost, contribution or gross margin, churn-informed lifetime value and payback period. Compare lifetime value with acquisition cost and ask how long cash remains tied up. Growth creates value only if retained contribution repays acquisition on an acceptable horizon; revenue alone is insufficient.",check:"Did you include margin, churn and payback—not just the attractive LTV:CAC ratio or top-line revenue?"},
-        {id:"spms-final-m5",module:5,conceptIds:["spms_customer_journey"],prompt:"A launch generates trials but few lasting users. Trace the post-sale customer journey and identify where product marketing should intervene before buying more acquisition.",answer:"Trace onboarding, adoption, retention and advocacy. Find the first stage where users fail to reach the promised outcome, then repair that experience and its communication. Product marketing after purchase helps value arrive; buying more traffic before fixing the break simply sends more people into the same leak.",check:"Did you diagnose the first broken journey stage and its outcome, rather than jumping straight to a louder launch campaign?"},
-        {id:"spms-final-m6",module:6,conceptIds:["spms_release_planning"],prompt:"A customer wants a feature this month, engineering says a platform dependency will not be ready, and sales has promised the date. Write a defensible release-planning response.",answer:"Map the requirement, technical readiness, dependency, customer value and consequence of delay. Re-scope or sequence the release around what can work end to end, make the dependency and trade-off visible, and reset the promise with owners. A date without dependency control is not a release plan.",check:"Did you make a version-and-date decision with dependencies and owners, or only say the teams should communicate better?"},
-        {id:"spms-final-m7",module:7,conceptIds:["spms_priority"],prompt:"Explain when MoSCoW and RICE produce different kinds of help, and why neither formula is allowed to make the roadmap decision by itself.",answer:"MoSCoW sorts items by necessity—must, should, could and will not—so it clarifies minimum scope. RICE compares reach, impact, confidence and effort, so it ranks competing opportunities. Both structure judgement, but strategic fit, dependencies, evidence quality and irreversible risk can override the mechanical order.",check:"Did you give each framework its distinct job and preserve managerial judgement, instead of treating both as interchangeable scoring tools?"},
-        {id:"spms-final-m8",module:8,conceptIds:["spms_metrics"],prompt:"Turn one impressive but useless product number into an actionable metric. State the measure, owner, decision threshold and action it triggers.",answer:"Replace a cumulative vanity total such as registrations with a behaviour tied to value, such as the share of new users reaching the core outcome within seven days. Give it an owner, set a threshold, and pre-agree the action—invest, diagnose a journey stage or stop a change—when it moves.",check:"Could a named owner make a different decision tomorrow because of this metric? If not, it is still reporting, not action."}
+        "For P-type MSQs, one correct option with no wrong option earns 1 mark; adding one wrong option makes the question worth 0.",
+        "Once two options are selected, uncheck one or clear the response before changing the pair.",
+        "A framework name is not enough: use the distinction that makes one option right and its nearest rival wrong."
       ]
     },
     BRGSA: {
-      title: "Evidence before growth",
-      focus: "Recover the decision rule at each growth stage: what evidence counts, what constraint dominates, and what action follows.",
+      title: "Eight evidence decisions. Tap, check, correct.",
+      focus: "Rapid MCQs and selectable case decisions replace prose while keeping the evidence, constraint and action logic of the course.",
+      paperReality: "This is an objective translation for final revision. The full mock still reproduces BRGSA's written Sections B and C.",
+      formats: ["mcq", "case-cloze", "mcq", "case-cloze", "mcq", "case-cloze", "mcq", "case-cloze"],
       traps: [
         "Engagement is not commitment; rank evidence by what the customer risks.",
         "Optimising a non-constraint can look busy while the system stays unchanged.",
         "Never interpret a test whose threshold and action were chosen afterwards."
-      ],
-      questions: [
-        {id:"brgsa-final-m1",module:1,conceptIds:["brgsa_m1_evidence"],prompt:"Rank four demand signals—likes, email sign-ups, a signed letter of intent and a paid pre-order—by commitment strength, then state what the ranking changes in a launch decision.",answer:"Likes are weakest, then email sign-ups, then a signed commitment, with paid pre-orders strongest because customers surrender money. Stronger commitment reduces the gap between stated interest and behaviour. Scale only when the signal asks customers to incur a meaningful cost or obligation relevant to purchase.",check:"Did you explain why the customer’s sacrifice changes evidential strength, rather than treating all four as different-sized versions of attention?"},
-        {id:"brgsa-final-m2",module:2,conceptIds:["brgsa_m2_error"],prompt:"A test says ‘go’ when the idea is actually bad, or ‘stop’ when it is actually good. Name both decision errors and explain which business harm each creates.",answer:"A Type I error is a false positive: the firm scales something that does not work, wasting capital and exposing more customers. A Type II error is a false negative: the firm abandons something that works, losing upside. Test design trades these risks rather than eliminating both.",check:"Did you attach each error to the business decision—wrongly scale versus wrongly abandon—instead of recalling only statistical labels?"},
-        {id:"brgsa-final-m3",module:3,conceptIds:["brgsa_m3_economics"],prompt:"A channel produces cheap customers but weak retention. Build the smallest CAC–LTV argument needed to decide whether the channel deserves more budget.",answer:"Calculate acquisition cost for that channel, then estimate lifetime value from revenue, gross margin and observed retention or lifespan. Compare the value with CAC and examine payback time. Cheap acquisition is not efficient when churn erases margin before acquisition cash returns; cohort quality matters with cost.",check:"Did you use contribution and retention in LTV and examine cash payback, or did low CAC win the argument on its own?"},
-        {id:"brgsa-final-m4",module:4,conceptIds:["brgsa_m4_constraint"],prompt:"Traffic doubles but total activated customers barely move. State how a growth-constraint diagnosis should proceed and where the next experiment belongs.",answer:"Map the funnel and measure conversion and volume at each stage. Identify the stage currently limiting end-to-end throughput—likely activation if added traffic is not becoming activated users. Put the next experiment on that constraint; improving traffic again has little system effect until activation moves.",check:"Did you choose the limiting stage from end-to-end evidence, rather than selecting the easiest metric for the team to improve?"},
-        {id:"brgsa-final-m5",module:5,conceptIds:["brgsa_time_to_aha"],prompt:"Define an AHA moment for a product and show how time to AHA turns onboarding from a tour of features into a measurable growth problem.",answer:"The AHA moment is the first countable event where the promised value actually occurs, not a click or completed tutorial. Time to AHA measures elapsed time from first use to that event. Onboarding should remove steps and uncertainty that delay it, then test whether faster arrival improves activation.",check:"Is your AHA event observable and tied to delivered value, or is it merely an action the interface makes easy to count?"},
-        {id:"brgsa-final-m6",module:6,conceptIds:["brgsa_churn_diagnostics"],prompt:"Monthly churn rises. Write the first diagnostic split and the cohort pattern you would inspect before proposing one retention campaign.",answer:"First separate voluntary churn, where customers choose to leave, from involuntary churn caused by payment failure. Then inspect cohort retention for an early drop, a stable core or a cliff around a dated event or tenure point. Each pattern implies a different mechanism and therefore a different intervention.",check:"Did you distinguish a customer decision from a failed payment and locate when loss occurs, rather than blending every departure into one rate?"},
-        {id:"brgsa-final-m7",module:7,conceptIds:["brgsa_m7_pipeline"],prompt:"A fast-growing sales team closes revenue but creates handoff failures and a long cash gap. Sketch the operating controls and the payback measure needed before scaling it.",answer:"For each handoff define an entry criterion, owner, required context and response-time SLA. Calculate payback as acquisition cost divided by periodic gross profit contribution, using the same cohort and period. Scale only when the pipeline transfers work reliably and cash returns within the firm’s acceptable horizon.",check:"Did you cover both operational handoffs and acquisition-cash recovery, instead of mistaking booked revenue for a functioning revenue system?"},
-        {id:"brgsa-final-m8",module:8,conceptIds:["brgsa_m8_decision"],prompt:"Before an experiment launches, write the decision rule that prevents the team from declaring victory after seeing a convenient result.",answer:"Name the primary metric, its owner, a threshold or interval, minimum evidence conditions and the action for passing, failing or producing an ambiguous result. Freeze that rule before exposure begins. Post-hoc metrics and thresholds turn an experiment into a story-selection exercise rather than a decision system.",check:"Could the team know exactly what it will do for each result before data arrives? If not, the rule is still incomplete."}
       ]
     },
     IBM: {
-      title: "Build inclusion into the economics",
-      focus: "Use one coherent inclusive model and test it from eight module angles; inclusion, operations and financial sustainability must survive together.",
+      title: "Eight inclusion decisions. One coherent model.",
+      focus: "Rapid MCQs and selectable cases test whether inclusion, operations and financial sustainability survive together—without asking for last-minute prose.",
+      paperReality: "This is an objective translation for recall. IBM's real paper is written; the Released case full mock remains the paper-faithful practice.",
+      formats: ["mcq", "case-cloze", "mcq", "case-cloze", "mcq", "case-cloze", "mcq", "case-cloze"],
       traps: [
         "‘Poor people’ is not a segment. Name the livelihood, constraint and agency of the people served.",
         "A lower price is not a model if finance, service and distribution still fail.",
         "Impact claims need governance and measurement, but measurement must not consume delivery."
-      ],
-      questions: [
-        {id:"ibm-final-m1",module:1,conceptIds:["ibm_inclusive"],prompt:"In two sentences, apply the double test that distinguishes an inclusive business from charity on one side and an ordinary low-cost business on the other.",answer:"An inclusive business must meet a specific need of underserved people through their role as customers, producers, workers or entrepreneurs, with agency rather than passive receipt. It must also earn or organise sufficient recurring economics to sustain delivery; social benefit without viability is aid, and viability without inclusion is ordinary business.",check:"Did you name both the underserved person’s role and the mechanism of financial sustainability, or did one half of the double test disappear?"},
-        {id:"ibm-final-m2",module:2,conceptIds:["ibm_total_healthcare_cost"],prompt:"A clinic advertises a low consultation fee. Rebuild affordability using total cost of healthcare and show why the cheapest sticker price may still exclude a rural patient.",answer:"Count the fee, travel, foregone wages, an accompanying person’s cost, repeat visits and the downstream cost of delay or poor quality. A low fee can remain unaffordable when distance and lost income dominate. Decentralisation, reliable diagnosis and fewer repeat trips may reduce total cost more than another fee cut.",check:"Did you include indirect and failure costs borne by the patient, rather than evaluating access from the provider’s price list?"},
-        {id:"ibm-final-m3",module:3,conceptIds:["ibm_responsible_lending"],prompt:"A lender can rapidly expand loans to low-income households. State the responsible-lending controls that keep inclusion from turning into over-indebtedness and mission failure.",answer:"Assess total existing debt, volatile household cash flow, repayment capacity and the loan’s productive or welfare use; disclose terms and build fair collection and grievance routes. Pace growth to screening and servicing capacity. Loan volume is not inclusion when repayment depends on distress borrowing or coercion.",check:"Did you constrain growth with borrower-level capacity and protection, or did access to credit automatically count as positive impact?"},
-        {id:"ibm-final-m4",module:4,conceptIds:["ibm_rural_bpo"],prompt:"A rural BPO promises jobs but a client fears quality loss. Explain the adaptation-versus-standard tension the operating model must solve.",answer:"Adapt location, recruitment, training, language support, transport and career pathways to rural conditions, while holding client-facing service levels, data controls and output quality constant. The inclusive advantage comes from redesigning the delivery system around local talent, not from asking the buyer to accept inferior performance.",check:"Did you specify what changes for rural inclusion and what cannot be relaxed for the paying client?"},
-        {id:"ibm-final-m5",module:5,conceptIds:["ibm_selco"],prompt:"Use SELCO as a system lesson: identify the three linked elements that make an income-enhancing product usable and explain what fails when any one is missing.",answer:"The system links a suitable product, financing matched to customer cash flow and dependable local service. Without finance the upfront price excludes; without service breakdown risk destroys trust and repayment; without a useful product neither finance nor repair creates value. Affordability is a delivered system, not a discount.",check:"Did you make product, finance and service interdependent, or did the answer collapse SELCO into ‘sell solar lights cheaply’?"},
-        {id:"ibm-final-m6",module:6,conceptIds:["ibm_informal_sector"],prompt:"Design one value proposition for informal workers without assuming formalisation is automatically good. State the flexibility to preserve and the insecurity to reduce.",answer:"Preserve flexible entry, timing or multi-source livelihoods that workers value, while reducing exclusions such as unstable demand, unsafe work, opaque pricing, weak records and absent protection. A useful platform improves bargaining, capability, continuity or access without transferring every commercial risk downward to the worker.",check:"Did you recognise both flexibility and insecurity, and test who carries risk after the intervention?"},
-        {id:"ibm-final-m7",module:7,conceptIds:["ibm_fpo"],prompt:"An FPO has registered 600 farmers. Explain why membership and pooled volume are not yet an inclusive business model, then name the missing capabilities.",answer:"Registration creates a vehicle, not income. Aggregation must connect to grading, storage, buyer linkage, working capital and credible delivery; governance must protect member voice and surplus allocation; professional management must execute. The test is whether members gain reliable net value and agency, not whether the entity exists.",check:"Did you connect aggregation to market access, governance and management, or treat a legal form and headcount as the outcome?"},
-        {id:"ibm-final-m8",module:8,conceptIds:["ibm_blended_finance"],prompt:"A donor grant makes an inclusive venture look profitable. Structure a blended-finance argument that uses catalytic money without hiding weak underlying economics.",answer:"Use concessional capital for bounded risks or public-good costs—pilots, first-loss protection, capability or infrastructure—so commercial capital can enter on a clearer risk-return basis. Track unit economics without subsidy, state the time-bound exit or renewal logic, and report both inclusion outcomes and who bears loss.",check:"Did catalytic capital crowd in a viable model with a disclosed purpose and boundary, or merely cover recurring operating losses indefinitely?"}
       ]
     },
     SCLM: {
-      title: "Choose the whole-system trade-off",
-      focus: "Recover the setup, units and system boundary before calculation; the last-minute error is usually solving the wrong supply-chain problem cleanly.",
+      title: "Eight supply-chain decisions. Set up before solving.",
+      focus: "Six MCQs, one authentic numerical and one matching question recover the setup, units and system boundary without a prose worksheet.",
+      paperReality: "The format mix samples all three real sections: MCQ, final-answer numerical and match-the-following.",
+      formats: ["mcq", "numeric", "mcq", "mcq", "mcq", "match", "mcq", "mcq"],
       traps: [
-        "Write units beside every input and answer before touching the calculator.",
+        "Write units beside every numerical input before touching the calculator.",
         "Freight rate, order cost or site count alone never captures the whole decision.",
         "A local improvement is not a system improvement until the next bottleneck moves."
-      ],
-      questions: [
-        {id:"sclm-final-m1",module:1,conceptIds:["sclm_fit"],prompt:"Demand becomes less predictable and customers demand shorter response times. Use strategic fit to state how the supply chain should move and what economic sacrifice that movement entails.",answer:"Implied demand uncertainty has risen, so the chain needs more responsiveness through capacity, inventory, information, sourcing or transport choices. On the cost–responsiveness frontier, that response is paid for with higher cost or lower efficiency. Strategic fit aligns the chosen position with the market promise rather than maximising both.",check:"Did you connect demand uncertainty to a paid-for move in responsiveness, or promise faster response with no cost or asset consequence?"},
-        {id:"sclm-final-m2",module:2,conceptIds:["sclm_demand_components"],prompt:"Before choosing a forecast method, decompose demand and write the three error views that distinguish systematic bias from ordinary magnitude of miss.",answer:"Represent demand as level, trend, seasonality and any cyclical component plus random variation. Evaluate residuals with bias to reveal persistent over- or under-forecasting, MAD for average absolute-unit error, and MAPE for scale-relative percentage error. Always preserve the units and check denominator behaviour.",check:"Did you separate direction of error from size of error and state when a percentage measure can mislead near zero?"},
-        {id:"sclm-final-m3",module:3,conceptIds:["sclm_eoq"],prompt:"Write the EOQ setup from words: identify annual demand, ordering cost and annual holding cost per unit, then state the assumptions and the final reasonableness check.",answer:"Use Q* = √(2DS/H), with D in units per year, S as cost per order and H as holding cost per unit per year. It assumes stable demand and lead time, constant price and no shortages. Check units, positivity, order frequency D/Q and whether the assumptions fit the case.",check:"Is holding cost an annual cost per unit in the same time base as demand, and did you test whether EOQ’s stable-world assumptions apply?"},
-        {id:"sclm-final-m4",module:4,conceptIds:["sclm_bullwhip"],prompt:"Retail demand moves slightly but factory orders swing sharply. Diagnose the bullwhip effect and give interventions that attack causes rather than merely holding more stock.",answer:"Order variability is amplifying upstream beyond customer-demand variability. Diagnose batch ordering, lead times, promotion-driven buying, rationing games and distorted forecasts. Share demand data, shorten lead times, smooth incentives and lot sizes, and coordinate replenishment. Extra inventory absorbs symptoms while preserving amplification.",check:"Did you distinguish end-customer demand from upstream orders and link each intervention to a source of amplification?"},
-        {id:"sclm-final-m5",module:5,conceptIds:["sclm_stockyard"],prompt:"A network team says fewer stockyards must be cheaper. Build the total-cost and service argument that can prove or reject that claim.",answer:"Compare primary inbound transport, secondary delivery distance and cost, inventory pooling, facility and handling cost, throughput limits and service-distance or time requirements. Fewer sites can pool inventory but lengthen expensive secondary legs and breach service. Choose the feasible network with lowest total relevant cost, not fewest dots.",check:"Did you include both transport legs, inventory and a service constraint, or did facility count decide the answer before calculation?"},
-        {id:"sclm-final-m6",module:6,conceptIds:["sclm_rail"],prompt:"Dedicated wagons improve one rail stage but turnaround barely changes. Explain the systemic bottleneck logic and what must be measured next.",answer:"A local asset improvement shifts the constraint to loading, locomotive availability, path allocation, terminal handling, unloading or empty return. Measure end-to-end wagon cycle time and queue or dwell at every stage, then work the new bottleneck. Own Your Wagon or Engine on Load succeeds only when adjacent constraints move too.",check:"Did you follow the wagon through the complete cycle and identify the next queue, rather than declaring the named innovation ineffective?"},
-        {id:"sclm-final-m7",module:7,conceptIds:["sclm_multimodal"],prompt:"Road freight has the lowest quoted rate. Construct the end-to-end multimodal comparison that could still make another route cheaper or better.",answer:"Add line-haul freight, first and last mile, handling and transfers, port or terminal charges, inventory in transit, lot-size effects, reliability, damage and service consequences. Use a common shipment and time basis. A higher rate can win when it reduces total landed cost or protects the required service level.",check:"Did you compare complete door-to-door alternatives on common units, or only place two carrier quotations beside each other?"},
-        {id:"sclm-final-m8",module:8,conceptIds:["sclm_postponement"],prompt:"Distinguish postponement, kitting and cross-docking with one operational sentence each, then choose which one reduces finished-goods variety risk.",answer:"Postponement delays final differentiation until demand is known; kitting consolidates required components upstream into one supplied set; cross-docking moves inbound goods directly to outbound transport without storage. Postponement directly reduces finished-goods variety risk by keeping inventory generic longer, though the others may simplify flow.",check:"Did you choose postponement for uncertainty about final variants and avoid treating all three as synonyms for carrying less inventory?"}
       ]
     }
   };
-})();
+
+  function stableOrder(value) {
+    return String(value).split("").reduce(function (total, character) {
+      return ((total * 33) + character.charCodeAt(0)) >>> 0;
+    }, 17);
+  }
+
+  function eligible(question, type, moduleNumber) {
+    return question && Number(question.module) === moduleNumber && (question.type || "mcq") === type &&
+      !question.primerOnly && !question.repairOnly && !question.examOnly && !question.optionShapeRisk;
+  }
+
+  function appliedRank(question) {
+    return question.caselet || question.perspective === "apply" || (question.skills || []).indexOf("apply") >= 0 ? 1 : 0;
+  }
+
+  function words(value) {
+    return String(value || "").trim().split(/\s+/).filter(Boolean).length;
+  }
+
+  function decisionSets(question) {
+    var type = question.type || "mcq";
+    if (type === "mcq") return [{options:question.options || [], answer:question.answer}];
+    if (type === "case-cloze") return (question.blanks || []).map(function (blank) { return {options:blank.options || [], answer:blank.answer}; });
+    if (type === "match") return (question.rows || []).map(function (row) { return {options:question.choices || [], answer:row.answer}; });
+    return [];
+  }
+
+  function craftRisk(question) {
+    var sets = decisionSets(question);
+    if (!sets.length) return 0;
+    return sets.reduce(function (risk, set) {
+      var lengths = set.options.map(words);
+      var maximum = Math.max.apply(Math, lengths);
+      var longestCount = lengths.filter(function (length) { return length === maximum; }).length;
+      var longestHit = lengths[set.answer] === maximum ? 1 / Math.max(1, longestCount) : 0;
+      return risk + (set.answer === 0 ? 1 : 0) + longestHit;
+    }, 0) / sets.length;
+  }
+
+  function build(courseId, rotation) {
+    var course = (global.T6_COURSES || {})[courseId];
+    var pack = PACKS[courseId];
+    if (!course || !pack) return null;
+    rotation = Math.max(0, Number(rotation) || 0);
+    var all = Object.keys(course.questions || {}).map(function (id) { return course.questions[id]; });
+    var usedFamilies = {};
+    var questions = pack.formats.map(function (type, index) {
+      var moduleNumber = index + 1;
+      var pool = all.filter(function (question) { return eligible(question, type, moduleNumber); });
+      pool.sort(function (left, right) {
+        var leftFamilyUsed = usedFamilies[left.variantFamily || left.id] ? 1 : 0;
+        var rightFamilyUsed = usedFamilies[right.variantFamily || right.id] ? 1 : 0;
+        return leftFamilyUsed - rightFamilyUsed || craftRisk(left) - craftRisk(right) || appliedRank(right) - appliedRank(left) ||
+          stableOrder(left.id) - stableOrder(right.id) ||
+          String(left.id).localeCompare(String(right.id));
+      });
+      if (!pool.length) return null;
+      var applied = pool.filter(function (question) { return appliedRank(question); });
+      var tier = applied.length ? applied : pool;
+      tier.sort(function (left, right) { return craftRisk(left) - craftRisk(right) || stableOrder(left.id) - stableOrder(right.id); });
+      var bestRisk = craftRisk(tier[0]);
+      var safest = tier.filter(function (question) { return craftRisk(question) <= bestRisk + .001; });
+      var picked = safest[rotation % safest.length];
+      usedFamilies[picked.variantFamily || picked.id] = true;
+      return picked;
+    });
+    return {
+      courseId: courseId,
+      rotation: rotation,
+      questionIds: questions.filter(Boolean).map(function (question) { return question.id; }),
+      questions: questions,
+      modules: questions.filter(Boolean).map(function (question) { return Number(question.module); }),
+      types: questions.filter(Boolean).map(function (question) { return question.type || "mcq"; })
+    };
+  }
+
+  var api = {roundSize: 8, build: build};
+  Object.keys(PACKS).forEach(function (courseId) { api[courseId] = PACKS[courseId]; });
+  global.T6_FINAL_SPRINTS = api;
+})(window);

@@ -11,10 +11,11 @@ test("Speedruns and Minis hold for all three revision personas", () => {
   for (const subject of report.subjects) {
     assert.ok(subject.brilliantButLazy.longestOptionPct <= 30);
     assert.ok(subject.brilliantButLazy.fixedFirstPct <= 30);
-    assert.equal(subject.brilliantButLazy.miniOptions, 0);
+    assert.ok(subject.brilliantButLazy.miniLongestOptionPct <= 30);
+    assert.ok(subject.brilliantButLazy.miniFixedFirstPct <= 30);
     assert.ok(subject.averageJoe.immediateTeaching >= 16);
-    assert.equal(subject.averageJoe.miniPrompts, 8);
+    assert.equal(subject.averageJoe.miniQuestions, 8);
     assert.ok(subject.dumbButDiligent.speedrunRounds >= 2);
-    assert.ok(subject.dumbButDiligent.miniAnswerWords <= 400);
+    assert.equal(subject.dumbButDiligent.miniSteps, 8);
   }
 });

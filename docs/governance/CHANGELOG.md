@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-08-22 — Minis become accelerated revision and SPMS follows the exact P-type rule
+
+Evidence: `evidence/2026-08-22/t6-accelerated-minis-ptype/verification.md`.
+
+The static 32-prompt worksheet is gone. A Mini is now an interactive eight-question run: one
+course-grounded objective decision per module, immediate correction, no prose worksheet and no
+mastery evidence. SPMS uses five single-choice questions and three real P-type MSQs; BRGSA and IBM
+use rapid scenario choices without pretending their full written papers changed; SCLM keeps rapid
+single-choice, numerical and matching work. The selector rotates at least six of eight sampled ids
+per subject and the existing three-personality gate now judges both Speedruns and Minis.
+
+The SPMS Section B rule is exact everywhere: exactly two correct options, at most two selections,
+2 marks for the pair, 1 for one correct with no wrong option, and 0 for any response containing a
+wrong option. There is no direct negative marking. Both Learn-style and full-mock controls disable
+the remaining choices at two selections, leave the chosen pair available to uncheck and provide
+Clear Response. All 28 P-type bank questions now have exactly two correct answers; twenty old
+three-answer items were explicitly rewritten with a misconception and diagnosis rather than
+silently truncated.
+
+The Mini UI now discloses information in focus order. First load shows four quiet subject choices.
+Selection folds them into a compact strip and reveals one focused start card; paper alignment stays
+visible while the route and traps stay closed. Starting removes the inherited eight-topic sidebar
+and centres only the current question. Browser checks at desktop and 375×812 verified the fold,
+closed disclosures, no horizontal overflow, selection cap, uncheck, clear and visible 1/2 partial
+mark. Full suite **150/150**; final-sprint, revision-persona and exam gates PASS; bank validator 0
+errors with the expected 69 extraction warnings; build 23 assets.
+
 ## 2026-08-22 — The final-revision release reaches production
 
 Owner authorised deployment in chat after the old Examiner was observed on the live site. The

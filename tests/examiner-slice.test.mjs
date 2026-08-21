@@ -132,31 +132,15 @@ test("no reserved objective item is won outright by a mechanical rule", () => {
     `these reserved items are answerable by eliminating absolutes then taking the second-longest, on every paper: ${offenders.join(", ")}`);
 });
 
-/* LAW-53, as a gate rather than as a memory.
- *
- * All eight original SPMS multi-selects were 3-correct-of-4, which on a section
- * scoring +1 per right option, -1 per wrong, floored at zero and capped at the
- * question's 2 marks, means ticking every option scores FULL marks. It was found by
- * submitting a paper with nothing answered in Section A and reading 16/16.
- *
- * Writing eight new examiner-only multi-selects re-introduced it immediately: four
- * came out 3-of-4 and one 4-of-4, and nothing failed — the shape was only caught by
- * printing the distribution by hand. A defect that returns the moment someone authors
- * in good faith is a defect that needs a test, not a law to remember. */
-test("ticking every option never reaches full marks on the negatively marked section", () => {
-  const MARKS = 2;
-  const offenders = [];
-  for (const question of questionsOf("SPMS")) {
-    if (question.type !== "msq") continue;
-    const right = (question.answers || []).length;
-    const wrong = (question.options || []).length - right;
-    const scored = Math.min(MARKS, Math.max(0, right - wrong));
-    if (scored >= MARKS) {
-      offenders.push(`${question.id} (${right}-of-${right + wrong} scores ${scored}/${MARKS})`);
-    }
-  }
-  assert.equal(offenders.length, 0,
-    `ticking everything must be strictly worse than answering: ${offenders.join(", ")}`);
+/* The assessment reminder makes the count part of the format: every P-type item
+ * has exactly two correct options. Positions still need variety or the answer pair
+ * can be learned without reading. */
+test("SPMS P-type items have exactly two correct options with varied positions", () => {
+  const questions = questionsOf("SPMS").filter((question) => question.type === "msq");
+  assert.ok(questions.length >= 20);
+  assert.deepEqual(questions.filter((question) => question.answers?.length !== 2), []);
+  const signatures = new Set(questions.map((question) => question.answers.slice().sort((a, b) => a - b).join(",")));
+  assert.ok(signatures.size >= 5, `only ${signatures.size} answer-position patterns`);
 });
 
 test("no reserved item reaches any study-set pool", () => {
