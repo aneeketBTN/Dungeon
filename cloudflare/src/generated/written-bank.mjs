@@ -63,8 +63,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
     "caselet": "A team leaves customer interviews delighted and books three months of engineering. One member proposes first running a landing page carrying the real price and a deposit button for a week, against the intended audience.",
     "sourceIds": [
-      "BRGSA-M01-L01",
-      "BRGSA-M01-L03"
+      "BRGSA-M01-L01"
     ],
     "rubric": [
       {
@@ -80,7 +79,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: Signal quality depends on who had the chance to act, not only on the displayed percentage."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A test run before the build can still change the decision; the same evidence gathered afterwards can only explain the loss."
       }
     ],
     "writtenGaps": [
@@ -146,7 +145,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "brgsa_m1_evidence_short_answer",
     "courseId": "BRGSA",
     "conceptId": "brgsa_m1_evidence",
-    "stem": "In two to three sentences, how would you explain Pre-sales commitment and evidence strength in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Pre-sales validation and commitment strength in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
       "BRGSA-M01-L04"
@@ -155,7 +154,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains Pre-sales commitment and evidence strength accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Pre-sales validation and commitment strength accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
@@ -211,7 +210,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies Pre-sales commitment and evidence strength accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Pre-sales validation and commitment strength accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
@@ -221,7 +220,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: Stronger evidence asks the prospect to incur a real cost or commitment."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Free actions are easy to take without conviction, so only a signal the prospect paid something for predicts that they will pay again."
       }
     ],
     "writtenGaps": [
@@ -346,8 +345,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
     "caselet": "A team compares two onboarding flows, opens the dashboard on day three, sees the preferred variant ahead, and wants to declare a winner before the planned sample is reached.",
     "sourceIds": [
-      "BRGSA-M02-L01",
-      "BRGSA-M02-L02"
+      "BRGSA-M02-L01"
     ],
     "rubric": [
       {
@@ -363,7 +361,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: The sample size is calculated before the test runs so excitement cannot rewrite it."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Thresholds fixed before the data arrives are what stop a favourable early reading from rewriting the conclusion."
       }
     ],
     "writtenGaps": [
@@ -504,7 +502,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: False positive spends on a fake effect; false negative abandons a real effect."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A false positive shows up later as wasted spend; a false negative stays invisible, because the gain that was abandoned never appears in any report."
       }
     ],
     "writtenGaps": [
@@ -645,7 +643,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: Acquisition can refill a leaking bucket; cohort curves show whether the bucket improved."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Acquisition can refill a leaking bucket indefinitely, so only the cohort curve shows whether the bucket itself improved."
       }
     ],
     "writtenGaps": [
@@ -770,8 +768,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
     "caselet": "One segment returns close to five times its acquisition cost and another barely one, yet the team spends equally on both because the blended figure looks acceptable.",
     "sourceIds": [
-      "BRGSA-M03-L04",
-      "BRGSA-M03-L05"
+      "BRGSA-M03-L04"
     ],
     "rubric": [
       {
@@ -787,7 +784,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: Scale follows repeatable retention and economics; iterate repairs a link; pivot changes a failed premise."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: An early LTV rests on assumptions that must be revisited as cohorts mature, because the ratio they produce drives every scaling decision after it."
       }
     ],
     "writtenGaps": [
@@ -928,7 +925,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: The primary constraint is the highest-leverage broken link, not the loudest team's metric."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A constraint is worth attacking only when it is within your control and removing it would produce a large end-to-end lift."
       }
     ],
     "writtenGaps": [
@@ -1053,8 +1050,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
     "caselet": "A company raises a round, hires a performance marketer and wires attribution across five tools, while nobody has yet asked the last ten customers why they bought.",
     "sourceIds": [
-      "BRGSA-M04-L02",
-      "BRGSA-M04-L01"
+      "BRGSA-M04-L02"
     ],
     "rubric": [
       {
@@ -1070,7 +1066,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: System health outranks isolated team output."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Early learning has to stay close to whoever can change the product, because a scale-stage system assumes the motion no longer needs changing."
       }
     ],
     "writtenGaps": [
@@ -1211,7 +1207,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: A good product in a mismatched channel can still lose money."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A channel can reach exactly the right buyer and still fail on cost or time to result, so fit has to hold on every dimension at once."
       }
     ],
     "writtenGaps": [
@@ -1336,8 +1332,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
     "caselet": "Registrations rise sharply after a campaign, but most users leave somewhere inside a twelve-step onboarding flow before the product has done anything for them.",
     "sourceIds": [
-      "BRGSA-M05-L05",
-      "BRGSA-M05-L06"
+      "BRGSA-M05-L05"
     ],
     "rubric": [
       {
@@ -1353,7 +1348,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: Do not confuse the effort a survivor endured with the value that caused retention."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Each drop applies to whoever is left, so several individually reasonable steps can destroy an activation rate that no single step explains."
       }
     ],
     "writtenGaps": [
@@ -1478,8 +1473,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
     "caselet": "A team copies a daily streak mechanic into a product customers genuinely need only during an occasional high-stakes event, and engagement rises while retention does not.",
     "sourceIds": [
-      "BRGSA-M06-L01",
-      "BRGSA-M06-L02"
+      "BRGSA-M06-L01"
     ],
     "rubric": [
       {
@@ -1495,7 +1489,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: Lifecycle messaging should move a specific state transition, not merely occupy a calendar."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: External triggers pull users back only while you keep paying for them; an internal trigger is what lets the loop sustain itself."
       }
     ],
     "writtenGaps": [
@@ -1636,7 +1630,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: Acquisition incentive, recurring behaviour, and network value are different mechanisms."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Claiming a network effect that does not exist leads a team to defend a moat it does not have."
       }
     ],
     "writtenGaps": [
@@ -1761,8 +1755,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
     "caselet": "A subscription loses some accounts while retained customers expand enough that recurring revenue still rises; the team reports only logo churn and plans more acquisition.",
     "sourceIds": [
-      "BRGSA-M07-L01",
-      "BRGSA-M07-L02"
+      "BRGSA-M07-L01"
     ],
     "rubric": [
       {
@@ -1778,7 +1771,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: Headline growth can coexist with a structurally leaking revenue base."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Two companies charging the same average revenue per user grow at different rates when one structure contains an upgrade path and the other does not."
       }
     ],
     "writtenGaps": [
@@ -1919,7 +1912,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: Revenue integration is only as strong as the context and accountability crossing each handoff."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Every team can hit its own target while the customer stalls between them, because nobody owns the transition itself."
       }
     ],
     "writtenGaps": [
@@ -2044,8 +2037,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
     "caselet": "A high-visibility feature scores well on team enthusiasm, has no evidence behind its confidence score, needs a quarter of engineering, and does not touch the activation step the funnel math identified.",
     "sourceIds": [
-      "BRGSA-M08-L01",
-      "BRGSA-M08-L07"
+      "BRGSA-M08-L01"
     ],
     "rubric": [
       {
@@ -2061,7 +2053,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: A growth engine closes the loop from constraint → hypothesis → experiment → decision → reallocation."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A high score on a metric that is not the constraint earns no capacity, however much that metric improves."
       }
     ],
     "writtenGaps": [
@@ -2202,7 +2194,1840 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
-        "description": "Uses a specific fact from the case and explains why it supports the decision: The rule protects the decision from the result, not the result from scrutiny."
+        "description": "Uses a specific fact from the case and explains why it supports the decision: The golden rule is to decide the action before the experiment runs: a metric with no owner or threshold records what happened but cannot change what happens next."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_landing_validation_short_answer": {
+    "id": "brgsa_landing_validation_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_landing_validation",
+    "stem": "In two to three sentences, how would you explain Landing page validation in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M01-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Landing page validation accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Use the cold targeted rate and discard the warm-network result, because a conversion percentage has no evidential meaning without the audience behind it."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_landing_validation_case_answer": {
+    "id": "brgsa_landing_validation_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_landing_validation",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A page converts 40% of friends and followers but only 8% of cold visitors selected to match the intended customer.",
+    "sourceIds": [
+      "BRGSA-M01-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Landing page validation accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Use the cold targeted rate and discard the warm-network result, because a conversion percentage has no evidential meaning without the audience behind it."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A validation page is an instrument rather than an advert, so traffic quality is part of the measurement instead of a separate marketing decision."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_low_resource_mvp_short_answer": {
+    "id": "brgsa_low_resource_mvp_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_low_resource_mvp",
+    "stem": "In two to three sentences, how would you explain MVP validation under low resources in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M01-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains MVP validation under low resources accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Build only the functional MVP that performs the core job, using roughly a fraction of the full effort, and keep the remaining roadmap contingent on what that build teaches."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_low_resource_mvp_case_answer": {
+    "id": "brgsa_low_resource_mvp_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_low_resource_mvp",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A targeted smoke test converts at 8%, two prospects pay deposits and the same channel can reach more of them, but the planned roadmap still needs a year of work.",
+    "sourceIds": [
+      "BRGSA-M01-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies MVP validation under low resources accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Build only the functional MVP that performs the core job, using roughly a fraction of the full effort, and keep the remaining roadmap contingent on what that build teaches."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Stacked evidence buys permission for a small build, not certainty about a large one, which is why validation ends in an MVP rather than the complete product."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_ab_significance_short_answer": {
+    "id": "brgsa_ab_significance_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_ab_significance",
+    "stem": "In two to three sentences, how would you explain A/B testing and statistical significance in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M02-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains A/B testing and statistical significance accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Run both variants to the pre-calculated sample and apply the declared threshold before deciding, however persuasive the interim dashboard looks."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_ab_significance_case_answer": {
+    "id": "brgsa_ab_significance_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_ab_significance",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "An onboarding A/B test is planned for 1,400 users per variant at alpha 0.05, but the preferred version leads after eighteen visitors in each group.",
+    "sourceIds": [
+      "BRGSA-M02-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies A/B testing and statistical significance accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Run both variants to the pre-calculated sample and apply the declared threshold before deciding, however persuasive the interim dashboard looks."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: The sample and threshold protect the decision from the result, which is why changing either after looking turns a test into a preference."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_test_modes_short_answer": {
+    "id": "brgsa_test_modes_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_test_modes",
+    "stem": "In two to three sentences, how would you explain Test modes and proxy metrics in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Test modes and proxy metrics accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Use a directional test on the documented proxy, label the result as directional, and reserve a full valid test for a decision whose downside justifies the sample."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_test_modes_case_answer": {
+    "id": "brgsa_test_modes_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_test_modes",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A team cannot wait for long-term revenue before choosing a reversible onboarding sequence, and believes seven-day activation predicts the revenue outcome.",
+    "sourceIds": [
+      "BRGSA-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Test modes and proxy metrics accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Use a directional test on the documented proxy, label the result as directional, and reserve a full valid test for a decision whose downside justifies the sample."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A smaller test changes the strength of the claim, not just its duration, so the mode and the language used to report it have to agree."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_growth_readiness_short_answer": {
+    "id": "brgsa_growth_readiness_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_growth_readiness",
+    "stem": "In two to three sentences, how would you explain Growth readiness brief in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M03-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Growth readiness brief accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Add the brand snapshot, primary and secondary ICPs, one AARRR metric per stage, the quantified constraint, unit economics and the known unknowns that could reverse the readiness call."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_growth_readiness_case_answer": {
+    "id": "brgsa_growth_readiness_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_growth_readiness",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A seed-stage SaaS brief lists registrations and revenue but does not identify an ICP, retention by cohort, the AARRR stage leaking most or the assumptions behind LTV.",
+    "sourceIds": [
+      "BRGSA-M03-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Growth readiness brief accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Add the brand snapshot, primary and secondary ICPs, one AARRR metric per stage, the quantified constraint, unit economics and the known unknowns that could reverse the readiness call."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Research becomes a growth input only when the artifact says what decision the evidence supports and what missing evidence could still change it."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_zero_budget_short_answer": {
+    "id": "brgsa_zero_budget_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_zero_budget",
+    "stem": "In two to three sentences, how would you explain Zero-budget traction levers in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M04-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Zero-budget traction levers accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Choose the highest-fitting lever, write its day-30, day-60 and day-90 commitments before starting, and hold the cadence long enough for the asset to compound."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_zero_budget_case_answer": {
+    "id": "brgsa_zero_budget_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_zero_budget",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A founder scores building in public above community, SEO, creator seeding and a free product, then abandons it after three weeks because growth is still modest.",
+    "sourceIds": [
+      "BRGSA-M04-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Zero-budget traction levers accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Choose the highest-fitting lever, write its day-30, day-60 and day-90 commitments before starting, and hold the cadence long enough for the asset to compound."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Free distribution is not free execution: compounding replaces media spend with sustained work, and the plan is what keeps that work alive long enough to pay."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_time_to_aha_short_answer": {
+    "id": "brgsa_time_to_aha_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_time_to_aha",
+    "stem": "In two to three sentences, how would you explain AHA moment and time to AHA in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M05-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains AHA moment and time to AHA accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Define the first recorded meeting as the AHA candidate, test whether moving users toward it improves retention, and shorten the path to that event rather than to profile completion."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_time_to_aha_case_answer": {
+    "id": "brgsa_time_to_aha_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_time_to_aha",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A meeting assistant promises that follow-ups are ready before a meeting ends, yet most new users never record a meeting and the team optimises profile completion instead.",
+    "sourceIds": [
+      "BRGSA-M05-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies AHA moment and time to AHA accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Define the first recorded meeting as the AHA candidate, test whether moving users toward it improves retention, and shorten the path to that event rather than to profile completion."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A useful activation target is both close to the promise and causally worth accelerating; correlation supplies a candidate, not the decision."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_churn_diagnostics_short_answer": {
+    "id": "brgsa_churn_diagnostics_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_churn_diagnostics",
+    "stem": "In two to three sentences, how would you explain Voluntary versus involuntary churn in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M06-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Voluntary versus involuntary churn accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Recover the failed payments separately, then repair what follows the 21-day programme instead of applying one general retention campaign to both forms of churn."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_churn_diagnostics_case_answer": {
+    "id": "brgsa_churn_diagnostics_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_churn_diagnostics",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A cohort retention table shows a sharp drop at days 30 to 45, immediately after a 21-day challenge ends, while a separate payment review finds failed renewals.",
+    "sourceIds": [
+      "BRGSA-M06-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Voluntary versus involuntary churn accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Recover the failed payments separately, then repair what follows the 21-day programme instead of applying one general retention campaign to both forms of churn."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: The curve's shape and the reason the account closed are separate diagnoses, and collapsing them into one rate erases the cheapest recovery opportunities."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_referral_mechanics_short_answer": {
+    "id": "brgsa_referral_mechanics_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_referral_mechanics",
+    "stem": "In two to three sentences, how would you explain Referral mechanics in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M06-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Referral mechanics accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Strengthen and measure the badge-driven content referral first, and add an incentive only if it reinforces a product demonstration rather than paying for behaviour already happening."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_referral_mechanics_case_answer": {
+    "id": "brgsa_referral_mechanics_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_referral_mechanics",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A meeting tool already sends useful follow-up emails carrying a small badge to non-users every day, while the team proposes a paid refer-a-friend programme.",
+    "sourceIds": [
+      "BRGSA-M06-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Referral mechanics accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Strengthen and measure the badge-driven content referral first, and add an incentive only if it reinforces a product demonstration rather than paying for behaviour already happening."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: The cheapest referral is embedded in value the product already sends outward, so mechanism choice comes before reward design."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_scaling_threshold_short_answer": {
+    "id": "brgsa_scaling_threshold_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_scaling_threshold",
+    "stem": "In two to three sentences, how would you explain Payback scaling threshold in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M07-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Payback scaling threshold accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Improve CAC, ARPU or gross margin until payback fits the company's capital and motion before scaling the acquisition budget."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_scaling_threshold_case_answer": {
+    "id": "brgsa_scaling_threshold_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_scaling_threshold",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A funded SaaS company has an eighteen-month payback period and proposes doubling acquisition because its LTV:CAC ratio is healthy.",
+    "sourceIds": [
+      "BRGSA-M07-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Payback scaling threshold accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Improve CAC, ARPU or gross margin until payback fits the company's capital and motion before scaling the acquisition budget."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: LTV:CAC asks whether acquisition pays; payback asks whether the company can remain alive long enough to receive the answer."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_revenue_architecture_short_answer": {
+    "id": "brgsa_revenue_architecture_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_revenue_architecture",
+    "stem": "In two to three sentences, how would you explain Revenue architecture in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M07-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Revenue architecture accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Choose the motion from deal value and volume, then staff enterprise and self-service work as different jobs when their cycles and proof requirements diverge."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_revenue_architecture_case_answer": {
+    "id": "brgsa_revenue_architecture_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_revenue_architecture",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A self-service motion wins many small accounts, and the same team is now asked to close a few enterprise deals with long cycles, many stakeholders and different proof requirements.",
+    "sourceIds": [
+      "BRGSA-M07-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Revenue architecture accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Choose the motion from deal value and volume, then staff enterprise and self-service work as different jobs when their cycles and proof requirements diverge."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A revenue engine is an architecture of motion, price and proof rather than a preference for product or sales as a philosophy."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_90_day_roadmap_short_answer": {
+    "id": "brgsa_90_day_roadmap_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_90_day_roadmap",
+    "stem": "In two to three sentences, how would you explain 90-day growth roadmap in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M08-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains 90-day growth roadmap accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Add the week-five decision date now, show the dependency and capacity committed, and preserve visible slack so an overrun does not silently consume the next experiment."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_90_day_roadmap_case_answer": {
+    "id": "brgsa_90_day_roadmap_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_90_day_roadmap",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "An experiment will reach its sample in week five, but the roadmap lists only active experiments and leaves the decision date, dependency and slack unrecorded.",
+    "sourceIds": [
+      "BRGSA-M08-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies 90-day growth roadmap accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Add the week-five decision date now, show the dependency and capacity committed, and preserve visible slack so an overrun does not silently consume the next experiment."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A backlog decides what deserves attention; the roadmap decides when evidence will arrive and when that evidence must release the capacity behind it."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "brgsa_growth_system_short_answer": {
+    "id": "brgsa_growth_system_short_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_growth_system",
+    "stem": "In two to three sentences, how would you explain Growth operating system in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "BRGSA-M08-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Growth operating system accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Replace the vanity metric with the real constraint, rescore the backlog, redraw the decision dates and make each AARRR stage consume evidence from the stage it feeds."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "brgsa_growth_system_case_answer": {
+    "id": "brgsa_growth_system_case_answer",
+    "courseId": "BRGSA",
+    "conceptId": "brgsa_growth_system",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
+    "caselet": "A capstone has a clean backlog and roadmap, but impact is scored against total signups and activation experiments ignore the retention behaviours they are meant to create.",
+    "sourceIds": [
+      "BRGSA-M08-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Growth operating system accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Replace the vanity metric with the real constraint, rescore the backlog, redraw the decision dates and make each AARRR stage consume evidence from the stage it feeds."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Coherence is the capstone criterion because one broken input propagates through the whole system, while a real loop lets each cycle start with evidence the last one produced."
       }
     ],
     "writtenGaps": [
@@ -3323,6 +5148,147 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "ibm_disparity_gap_short_answer": {
+    "id": "ibm_disparity_gap_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_disparity_gap",
+    "stem": "In two to three sentences, how would you explain Disparity gap in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M01-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Disparity gap accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Name the underserved outcome, measure the access shortfall, and design the model around the constraint creating that shortfall."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_disparity_gap_case_answer": {
+    "id": "ibm_disparity_gap_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_disparity_gap",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A district has the same disease burden as the state average but one clinic per 80,000 residents instead of one per 18,000, and household travel costs exceed the consultation fee.",
+    "sourceIds": [
+      "IBM-M01-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Disparity gap accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Name the underserved outcome, measure the access shortfall, and design the model around the constraint creating that shortfall."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusive business begins with a disparity that ordinary provision leaves unresolved, so the gap defines both the beneficiary and the value proposition."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
   "ibm_inclusive_short_answer": {
     "id": "ibm_inclusive_short_answer",
     "courseId": "IBM",
@@ -3341,7 +5307,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision use",
-        "description": "Explains when the idea should change a decision, consistently with this course move: Treat it as inclusive because serving an underserved need is the primary purpose and the model always sustains itself."
+        "description": "Explains when the idea should change a decision, consistently with this course move: Treat it as inclusive only when serving the underserved need stays primary and the operating evidence demonstrates a credible path to financial sustainability."
       }
     ],
     "writtenGaps": [
@@ -3397,7 +5363,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "judgement",
         "label": "Decision",
-        "description": "Treat it as inclusive because serving an underserved need is the primary purpose and the model always sustains itself."
+        "description": "Treat it as inclusive only when serving the underserved need stays primary and the operating evidence demonstrates a credible path to financial sustainability."
       },
       {
         "id": "case_evidence",
@@ -3605,6 +5571,993 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "ibm_single_serve_short_answer": {
+    "id": "ibm_single_serve_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_single_serve",
+    "stem": "In two to three sentences, how would you explain Single-serve revolution in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M01-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Single-serve revolution accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Offer a safe smaller unit or payment interval whose total economics remain viable and whose repeated use still delivers the intended benefit."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_single_serve_case_answer": {
+    "id": "ibm_single_serve_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_single_serve",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A sanitation product lasts a month but costs a day's income upfront; households instead buy smaller, more expensive substitutes each evening.",
+    "sourceIds": [
+      "IBM-M01-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Single-serve revolution accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Offer a safe smaller unit or payment interval whose total economics remain viable and whose repeated use still delivers the intended benefit."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Unit design converts aggregate affordability into affordability at the moment a low-income customer actually has cash."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_cross_subsidisation_short_answer": {
+    "id": "ibm_cross_subsidisation_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_cross_subsidisation",
+    "stem": "In two to three sentences, how would you explain Cross-subsidisation in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M01-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Cross-subsidisation accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Separate amenities from essential quality, price the premium clearly, and protect capacity for the subsidised segment."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_cross_subsidisation_case_answer": {
+    "id": "ibm_cross_subsidisation_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_cross_subsidisation",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A hospital proposes premium private rooms whose contribution would fund standard beds, but both segments share the same operating theatres and surgeons.",
+    "sourceIds": [
+      "IBM-M01-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Cross-subsidisation accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Separate amenities from essential quality, price the premium clearly, and protect capacity for the subsidised segment."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Cross-subsidy joins inclusion to willingness to pay, but it fails when the funding segment captures the resource meant to be shared."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_diageo_value_chain_short_answer": {
+    "id": "ibm_diageo_value_chain_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_diageo_value_chain",
+    "stem": "In two to three sentences, how would you explain Diageo value chain in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M01-L08"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Diageo value chain accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Build procurement, aggregation and supplier development together, then track both input reliability and producer income."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_diageo_value_chain_case_answer": {
+    "id": "ibm_diageo_value_chain_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_diageo_value_chain",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A beverage producer can replace imported grain with local smallholder supply, but quality varies and individual farmers cannot meet delivery volumes.",
+    "sourceIds": [
+      "IBM-M01-L08"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Diageo value chain accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Build procurement, aggregation and supplier development together, then track both input reliability and producer income."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusion lasts when the disadvantaged supplier performs an economically necessary role in the buyer's value chain."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_profit_social_good_short_answer": {
+    "id": "ibm_profit_social_good_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_profit_social_good",
+    "stem": "In two to three sentences, how would you explain Profit versus social good in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M01-L10"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Profit versus social good accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Set a mission boundary for capacity and price, then choose commercial activity that funds rather than displaces the protected outcome."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_profit_social_good_case_answer": {
+    "id": "ibm_profit_social_good_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_profit_social_good",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A low-cost diagnostic service can raise margins by shifting scarce appointments to premium wellness tests while its target patients already wait four days.",
+    "sourceIds": [
+      "IBM-M01-L10"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Profit versus social good accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Set a mission boundary for capacity and price, then choose commercial activity that funds rather than displaces the protected outcome."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Profit is an enabling condition in inclusive business, while the social purpose determines which profitable choices remain legitimate."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_zone_of_conflict_short_answer": {
+    "id": "ibm_zone_of_conflict_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_zone_of_conflict",
+    "stem": "In two to three sentences, how would you explain Zone of conflict in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M01-L10"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Zone of conflict accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Make the conflict explicit, protect the outcome with a decision rule, and redesign incentives around sustainable customer value."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_zone_of_conflict_case_answer": {
+    "id": "ibm_zone_of_conflict_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_zone_of_conflict",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A lender earns more from repeat top-up loans, while borrower data show debt service is already consuming most household cash flow.",
+    "sourceIds": [
+      "IBM-M01-L10"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Zone of conflict accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Make the conflict explicit, protect the outcome with a decision rule, and redesign incentives around sustainable customer value."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusive governance matters most where a profitable local choice can quietly reverse the model's social purpose."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_total_healthcare_cost_short_answer": {
+    "id": "ibm_total_healthcare_cost_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_total_healthcare_cost",
+    "stem": "In two to three sentences, how would you explain Total cost of healthcare in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Total cost of healthcare accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Compare complete patient pathways and redesign location, scheduling and follow-up around the cost the household actually bears."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_total_healthcare_cost_case_answer": {
+    "id": "ibm_total_healthcare_cost_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_total_healthcare_cost",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A rural clinic charges less than a city hospital, but patients lose two workdays and pay for transport on four separate visits for one procedure.",
+    "sourceIds": [
+      "IBM-M02-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Total cost of healthcare accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Compare complete patient pathways and redesign location, scheduling and follow-up around the cost the household actually bears."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Healthcare access improves when the delivery model reduces the patient's whole burden rather than one visible tariff."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_inverted_pyramid_short_answer": {
+    "id": "ibm_inverted_pyramid_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_inverted_pyramid",
+    "stem": "In two to three sentences, how would you explain Inverted pyramid in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Inverted pyramid accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Protocolise routine work, define escalation triggers, and reserve scarce specialist capacity for the cases that cross those triggers."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_inverted_pyramid_case_answer": {
+    "id": "ibm_inverted_pyramid_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_inverted_pyramid",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Specialists review every routine screening result, creating a six-week queue even though trained technicians can clear normal cases under a protocol.",
+    "sourceIds": [
+      "IBM-M02-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Inverted pyramid accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Protocolise routine work, define escalation triggers, and reserve scarce specialist capacity for the cases that cross those triggers."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Reallocating tasks expands access when delegation changes who performs the work without lowering the standard governing it."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
   "ibm_vaatsalya_short_answer": {
     "id": "ibm_vaatsalya_short_answer",
     "courseId": "IBM",
@@ -3746,11 +6699,857 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "ibm_market_failure_short_answer": {
+    "id": "ibm_market_failure_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_market_failure",
+    "stem": "In two to three sentences, how would you explain Market failure in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Market failure accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Identify the failed mechanism and redesign information, risk sharing or transaction cost instead of treating the population as having no demand."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_market_failure_case_answer": {
+    "id": "ibm_market_failure_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_market_failure",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Rural patients need teleconsultations and can pay the clinician's fee, but no provider serves them because verifying identity and collecting many small payments costs more than the consultation.",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Market failure accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Identify the failed mechanism and redesign information, risk sharing or transaction cost instead of treating the population as having no demand."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusive models create value by repairing the market mechanism that keeps willing users and capable providers apart."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_decentralised_model_short_answer": {
+    "id": "ibm_decentralised_model_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_decentralised_model",
+    "stem": "In two to three sentences, how would you explain Decentralised model in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Decentralised model accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Place routine capacity locally, specify what stays central, and make referral and quality data flow in both directions."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_decentralised_model_case_answer": {
+    "id": "ibm_decentralised_model_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_decentralised_model",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "One city hospital handles routine cases from forty towns, although local teams could deliver most care if they had protocols and a referral line.",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Decentralised model accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Place routine capacity locally, specify what stays central, and make referral and quality data flow in both directions."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Decentralisation expands access only when local autonomy is joined to a system that manages quality and exceptions."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_asset_light_short_answer": {
+    "id": "ibm_asset_light_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_asset_light",
+    "stem": "In two to three sentences, how would you explain Asset-light model in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Asset-light model accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Use partner assets under enforceable service standards and invest central resources in curriculum, training and quality assurance."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_asset_light_case_answer": {
+    "id": "ibm_asset_light_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_asset_light",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "An education provider can enter twelve districts by training existing schools or only two by buying land and constructing campuses itself.",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Asset-light model accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Use partner assets under enforceable service standards and invest central resources in curriculum, training and quality assurance."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Separating control of the service standard from ownership of the asset can release scale without releasing accountability."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_micro_insurance_short_answer": {
+    "id": "ibm_micro_insurance_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_micro_insurance",
+    "stem": "In two to three sentences, how would you explain Micro-insurance in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Micro-insurance accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Define the covered event, align premium timing with cash flow, and make verification and claims cheap enough for small policies."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_micro_insurance_case_answer": {
+    "id": "ibm_micro_insurance_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_micro_insurance",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Households can manage routine clinic fees but sell productive assets when an emergency admission creates a single large bill.",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Micro-insurance accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Define the covered event, align premium timing with cash flow, and make verification and claims cheap enough for small policies."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Risk pooling protects inclusion when one shock would otherwise erase the livelihood that pays for ordinary needs."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_poverty_dynamics_short_answer": {
+    "id": "ibm_poverty_dynamics_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_poverty_dynamics",
+    "stem": "In two to three sentences, how would you explain Poverty dynamics in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Poverty dynamics accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Design around the sequence of vulnerability, including prevention, payment timing and protection of productive assets."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_poverty_dynamics_case_answer": {
+    "id": "ibm_poverty_dynamics_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_poverty_dynamics",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A worker misses income during illness, borrows at a high rate for treatment, and then sells the equipment used to earn after returning to work.",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Poverty dynamics accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Design around the sequence of vulnerability, including prevention, payment timing and protection of productive assets."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusive models need a dynamic view because solving today's transaction can still worsen the customer's capacity to participate tomorrow."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_aurolab_short_answer": {
+    "id": "ibm_aurolab_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_aurolab",
+    "stem": "In two to three sentences, how would you explain Aurolab in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Aurolab accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Build quality-assured local manufacturing around sufficient volume and pass process savings into access rather than treating low price as low standard."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_aurolab_case_answer": {
+    "id": "ibm_aurolab_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_aurolab",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A hospital imports lenses whose unit price limits subsidised surgery, although regional demand could support a specialised local plant at scale.",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Aurolab accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Build quality-assured local manufacturing around sufficient volume and pass process savings into access rather than treating low price as low standard."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Affordable inputs extend the reach of the care model when manufacturing efficiency and clinical quality reinforce each other."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
   "ibm_aravind_short_answer": {
     "id": "ibm_aravind_short_answer",
     "courseId": "IBM",
     "conceptId": "ibm_aravind",
-    "stem": "In two to three sentences, how would you explain Process specialisation in healthcare in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Aravind Eye Hospital process specialisation in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
       "IBM-M02-L08"
@@ -3759,7 +7558,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains Process specialisation in healthcare accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Aravind Eye Hospital process specialisation accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
@@ -3815,7 +7614,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies Process specialisation in healthcare accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Aravind Eye Hospital process specialisation accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
@@ -3887,11 +7686,575 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "ibm_pay_per_use_short_answer": {
+    "id": "ibm_pay_per_use_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_pay_per_use",
+    "stem": "In two to three sentences, how would you explain Pay-per-use equipment in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L08"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Pay-per-use equipment accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Pool the asset, price each use against lifecycle cost, and guarantee uptime so clinics buy reliable access rather than ownership."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_pay_per_use_case_answer": {
+    "id": "ibm_pay_per_use_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_pay_per_use",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Small clinics need diagnostic equipment twice a week and cannot finance a machine that would sit idle on the other days.",
+    "sourceIds": [
+      "IBM-M02-L08"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Pay-per-use equipment accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Pool the asset, price each use against lifecycle cost, and guarantee uptime so clinics buy reliable access rather than ownership."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Usage pricing matches cash outflow to productive value and can spread expensive capacity across many low-volume users."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_telemedicine_short_answer": {
+    "id": "ibm_telemedicine_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_telemedicine",
+    "stem": "In two to three sentences, how would you explain Telemedicine in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L10"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Telemedicine accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Define remote-safe tasks, escalation rules, data quality and a local pathway for cases that need hands-on care."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_telemedicine_case_answer": {
+    "id": "ibm_telemedicine_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_telemedicine",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Patients make a six-hour trip for every follow-up even though most visits review symptoms, images and medicine adherence.",
+    "sourceIds": [
+      "IBM-M02-L10"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Telemedicine accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Define remote-safe tasks, escalation rules, data quality and a local pathway for cases that need hands-on care."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Digital reach reduces distance only when the service model is explicit about what information can replace and what still needs physical care."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_low_cost_schools_short_answer": {
+    "id": "ibm_low_cost_schools_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_low_cost_schools",
+    "stem": "In two to three sentences, how would you explain Low-cost private schools in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M02-L13"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Low-cost private schools accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Hold an explicit learning standard, equip teachers to meet it, and publish evidence parents can use before replicating the school model."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_low_cost_schools_case_answer": {
+    "id": "ibm_low_cost_schools_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_low_cost_schools",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A school chain halves fees and opens quickly, but pupil attendance and basic reading outcomes fall while parents lack usable performance information.",
+    "sourceIds": [
+      "IBM-M02-L13"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Low-cost private schools accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Hold an explicit learning standard, equip teachers to meet it, and publish evidence parents can use before replicating the school model."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Affordable education is inclusive only when the lower-cost system still produces the capability families are paying to build."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_poverty_penalty_short_answer": {
+    "id": "ibm_poverty_penalty_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_poverty_penalty",
+    "stem": "In two to three sentences, how would you explain Poverty penalty in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M03-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Poverty penalty accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Identify the mechanism creating the premium and redesign payment, access or aggregation so lower income no longer produces higher unit cost."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_poverty_penalty_case_answer": {
+    "id": "ibm_poverty_penalty_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_poverty_penalty",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A household buys water daily at five times the network tariff because it cannot afford a connection deposit and no utility reaches the settlement.",
+    "sourceIds": [
+      "IBM-M03-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Poverty penalty accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Identify the mechanism creating the premium and redesign payment, access or aggregation so lower income no longer produces higher unit cost."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusive value is often created by removing the extra cost of poverty rather than by inventing a completely new need."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
   "ibm_grameen_short_answer": {
     "id": "ibm_grameen_short_answer",
     "courseId": "IBM",
     "conceptId": "ibm_grameen",
-    "stem": "In two to three sentences, how would you explain Group-based microfinance in your own words, and what kind of decision should it change?",
+    "stem": "In two to three sentences, how would you explain Grameen Bank group-based microfinance in your own words, and what kind of decision should it change?",
     "caselet": "",
     "sourceIds": [
       "IBM-M03-L03"
@@ -3900,7 +8263,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Explains Group-based microfinance accurately in the learner's own words; the exact term is optional when the idea is clear."
+        "description": "Explains Grameen Bank group-based microfinance accurately in the learner's own words; the exact term is optional when the idea is clear."
       },
       {
         "id": "judgement",
@@ -3956,7 +8319,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       {
         "id": "understanding",
         "label": "Course understanding",
-        "description": "Applies Group-based microfinance accurately to this case; the exact term need not be named if the idea is clearly used."
+        "description": "Applies Grameen Bank group-based microfinance accurately to this case; the exact term need not be named if the idea is clearly used."
       },
       {
         "id": "judgement",
@@ -3967,6 +8330,711 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
         "description": "Uses a specific fact from the case and explains why it supports the decision: Local information can reduce screening risk, but the structure works only when repayment capacity and group discipline remain real."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_shg_linkage_short_answer": {
+    "id": "ibm_shg_linkage_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_shg_linkage",
+    "stem": "In two to three sentences, how would you explain Self-help group bank linkage in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Self-help group bank linkage accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Assess the group's records and governance, lend through a staged linkage, and keep member debt and use transparent."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_shg_linkage_case_answer": {
+    "id": "ibm_shg_linkage_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_shg_linkage",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Twenty women save together for a year and maintain clear internal repayment records, but none can satisfy the bank's individual collateral rule.",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Self-help group bank linkage accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Assess the group's records and governance, lend through a staged linkage, and keep member debt and use transparent."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: The group becomes an information and discipline bridge between informal financial behaviour and formal capital."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_mission_dilution_short_answer": {
+    "id": "ibm_mission_dilution_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_mission_dilution",
+    "stem": "In two to three sentences, how would you explain Mission dilution in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Mission dilution accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Track who is served and what outcome changes alongside portfolio economics, and set boundaries that expansion cannot quietly cross."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_mission_dilution_case_answer": {
+    "id": "ibm_mission_dilution_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_mission_dilution",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A lender founded for first-time rural borrowers raises average loan size and moves officers to market towns because established traders are cheaper to serve.",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Mission dilution accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Track who is served and what outcome changes alongside portfolio economics, and set boundaries that expansion cannot quietly cross."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Scale preserves inclusion only when the model's customer and outcome remain visible in the incentives that drive daily decisions."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_smallholder_bottlenecks_short_answer": {
+    "id": "ibm_smallholder_bottlenecks_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_smallholder_bottlenecks",
+    "stem": "In two to three sentences, how would you explain Smallholder bottlenecks in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Smallholder bottlenecks accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Map the whole income pathway and intervene at the constraints whose interaction currently prevents value from reaching the farmer."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_smallholder_bottlenecks_case_answer": {
+    "id": "ibm_smallholder_bottlenecks_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_smallholder_bottlenecks",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Farmers receive better seed on credit but still sell individually after harvest to the only local trader because storage and buyer access are absent.",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Smallholder bottlenecks accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Map the whole income pathway and intervene at the constraints whose interaction currently prevents value from reaching the farmer."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Agricultural inclusion is a system problem because improving one stage can leave the farmer's binding constraint untouched."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_open_source_innovation_short_answer": {
+    "id": "ibm_open_source_innovation_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_open_source_innovation",
+    "stem": "In two to three sentences, how would you explain Open-source innovation in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Open-source innovation accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Open the relevant design, document standards and build a contributor and maintenance system that preserves safety and compatibility."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_open_source_innovation_case_answer": {
+    "id": "ibm_open_source_innovation_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_open_source_innovation",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A low-cost irrigation controller works in one region but replacement parts and software changes require a distant vendor whose visits take months.",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Open-source innovation accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Open the relevant design, document standards and build a contributor and maintenance system that preserves safety and compatibility."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Shared knowledge can expand inclusive innovation when local adaptation is paired with governance of quality and interoperability."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_social_mobilisation_short_answer": {
+    "id": "ibm_social_mobilisation_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_social_mobilisation",
+    "stem": "In two to three sentences, how would you explain Social mobilisation in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Social mobilisation accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Invest in trusted local organisation, shared problem definition and representative decision rules before relying on collective delivery."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_social_mobilisation_case_answer": {
+    "id": "ibm_social_mobilisation_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_social_mobilisation",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A producer programme registers farmers individually, but meetings fail and buyers cannot obtain the volume or shared quality commitment they require.",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Social mobilisation accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Invest in trusted local organisation, shared problem definition and representative decision rules before relying on collective delivery."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Participation is productive infrastructure when a model depends on people acting together rather than as isolated customers."
       }
     ],
     "writtenGaps": [
@@ -4169,6 +9237,288 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "ibm_formal_banking_failure_short_answer": {
+    "id": "ibm_formal_banking_failure_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_formal_banking_failure",
+    "stem": "In two to three sentences, how would you explain Formal banking failure in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M03-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Formal banking failure accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Replace unavailable proxies with cash-flow evidence, local information and a delivery channel whose transaction cost fits small loans."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_formal_banking_failure_case_answer": {
+    "id": "ibm_formal_banking_failure_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_formal_banking_failure",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Seasonal traders repay suppliers reliably but lack property titles, payslips and a nearby branch, so a bank rejects every application automatically.",
+    "sourceIds": [
+      "IBM-M03-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Formal banking failure accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Replace unavailable proxies with cash-flow evidence, local information and a delivery channel whose transaction cost fits small loans."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusive finance repairs the screening mechanism without abandoning the need to establish repayment capacity."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_andhra_crisis_short_answer": {
+    "id": "ibm_andhra_crisis_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_andhra_crisis",
+    "stem": "In two to three sentences, how would you explain Andhra Pradesh crisis in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M03-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Andhra Pradesh crisis accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Pause expansion, consolidate exposure data, change incentives and put enforceable borrower-protection and grievance systems in place."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_andhra_crisis_case_answer": {
+    "id": "ibm_andhra_crisis_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_andhra_crisis",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Several lenders enter the same villages, reward officers for disbursement and share no debt data while repayment remains high through refinancing.",
+    "sourceIds": [
+      "IBM-M03-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Andhra Pradesh crisis accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Pause expansion, consolidate exposure data, change incentives and put enforceable borrower-protection and grievance systems in place."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A case of failure becomes a framework when its causal chain guides which safeguards must survive future scale."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
   "ibm_rural_bpo_short_answer": {
     "id": "ibm_rural_bpo_short_answer",
     "courseId": "IBM",
@@ -4249,6 +9599,852 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
         "description": "Uses a specific fact from the case and explains why it supports the decision: The model creates employment because business processes are redesigned around local capability while market-facing quality remains credible."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_socio_cultural_barriers_short_answer": {
+    "id": "ibm_socio_cultural_barriers_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_socio_cultural_barriers",
+    "stem": "In two to three sentences, how would you explain Socio-cultural barriers in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Socio-cultural barriers accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Co-design hours, transport and communication with the affected workers while holding the job's performance standard."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_socio_cultural_barriers_case_answer": {
+    "id": "ibm_socio_cultural_barriers_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_socio_cultural_barriers",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A rural centre recruits women successfully, but most leave when late shifts require unsafe travel and families receive no explanation of the work.",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Socio-cultural barriers accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Co-design hours, transport and communication with the affected workers while holding the job's performance standard."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusion depends on adapting the delivery context because a formally open opportunity can remain practically inaccessible."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_csr_trap_short_answer": {
+    "id": "ibm_csr_trap_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_csr_trap",
+    "stem": "In two to three sentences, how would you explain CSR trap in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains CSR trap accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Connect the capability to a real value chain and buyer while using subsidy only for a defined transition or public-good gap."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_csr_trap_case_answer": {
+    "id": "ibm_csr_trap_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_csr_trap",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A company trains rural graduates each year from its CSR budget, but no business unit commits work and the programme ends whenever annual funding tightens.",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies CSR trap accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Connect the capability to a real value chain and buyer while using subsidy only for a defined transition or public-good gap."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Social spending becomes an inclusive model when the beneficiary's opportunity is supported by repeatable economic demand."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_decentralised_footprint_short_answer": {
+    "id": "ibm_decentralised_footprint_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_decentralised_footprint",
+    "stem": "In two to three sentences, how would you explain Decentralised footprint in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Decentralised footprint accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Replicate smaller connected centres with shared training, routing, security and quality assurance rather than expanding one site indefinitely."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_decentralised_footprint_case_answer": {
+    "id": "ibm_decentralised_footprint_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_decentralised_footprint",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "One large rural centre has filled its local hiring pool, while nearby towns each have smaller groups of qualified workers and suitable partner sites.",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Decentralised footprint accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Replicate smaller connected centres with shared training, routing, security and quality assurance rather than expanding one site indefinitely."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Distribution releases local capacity when coordination lets many small nodes perform as one credible service network."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_coopetition_short_answer": {
+    "id": "ibm_coopetition_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_coopetition",
+    "stem": "In two to three sentences, how would you explain Co-opetition in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Co-opetition accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Define the shared layer, protect client information and compete transparently above it on service and price."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_coopetition_case_answer": {
+    "id": "ibm_coopetition_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_coopetition",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Three rural service firms each lack enough volume for reliable connectivity and training, although together they can support both.",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Co-opetition accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Define the shared layer, protect client information and compete transparently above it on service and price."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Competitors can enlarge an inclusive market together when cooperation is bounded to the bottleneck none can solve efficiently alone."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_multilingual_routing_short_answer": {
+    "id": "ibm_multilingual_routing_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_multilingual_routing",
+    "stem": "In two to three sentences, how would you explain Multilingual IT Routing in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Multilingual IT Routing accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Tag demand and worker capability, route dynamically, and monitor service levels by language instead of duplicating every skill at every centre."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_multilingual_routing_case_answer": {
+    "id": "ibm_multilingual_routing_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_multilingual_routing",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Customer requests arrive in eight regional languages, but each small centre can staff only two and callers are repeatedly transferred or abandoned.",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Multilingual IT Routing accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Tag demand and worker capability, route dynamically, and monitor service levels by language instead of duplicating every skill at every centre."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Information coordination turns dispersed local language capability into scalable market-facing service."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_scaling_ceiling_short_answer": {
+    "id": "ibm_scaling_ceiling_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_scaling_ceiling",
+    "stem": "In two to three sentences, how would you explain Scaling ceiling in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Scaling ceiling accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Identify the first capability that no longer scales, redesign that system, and resume growth only against a capacity and quality threshold."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_scaling_ceiling_case_answer": {
+    "id": "ibm_scaling_ceiling_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_scaling_ceiling",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A rural centre model succeeds in ten towns but expansion stalls because trainers, local managers and audited client work are not growing with sites.",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Scaling ceiling accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Identify the first capability that no longer scales, redesign that system, and resume growth only against a capacity and quality threshold."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Replication is not scale when the mechanism that produced the original result thins out with every additional unit."
       }
     ],
     "writtenGaps": [
@@ -4451,6 +10647,288 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "ibm_impact_sourcing_short_answer": {
+    "id": "ibm_impact_sourcing_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_impact_sourcing",
+    "stem": "In two to three sentences, how would you explain Impact sourcing in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M04-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Impact sourcing accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Procure against credible service standards and track worker access, retention and progression alongside cost and quality."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_impact_sourcing_case_answer": {
+    "id": "ibm_impact_sourcing_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_impact_sourcing",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A firm can source data processing from a metro vendor or from a rural centre whose trained staff meet the same error target and have few local formal jobs.",
+    "sourceIds": [
+      "IBM-M04-L06"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Impact sourcing accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Procure against credible service standards and track worker access, retention and progression alongside cost and quality."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Purchasing becomes inclusive when social impact arises through successful delivery of the work rather than as a concession outside it."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_backward_integration_short_answer": {
+    "id": "ibm_backward_integration_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_backward_integration",
+    "stem": "In two to three sentences, how would you explain Backward integration in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M05-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Backward integration accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Take control of the necessary sourcing, support or processing step while testing whether ownership adds more value than a governed partnership."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_backward_integration_case_answer": {
+    "id": "ibm_backward_integration_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_backward_integration",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A food processor depends on traders for a crop whose variable handling creates rejections and leaves farmers with no quality feedback.",
+    "sourceIds": [
+      "IBM-M05-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Backward integration accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Take control of the necessary sourcing, support or processing step while testing whether ownership adds more value than a governed partnership."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Integration can create shared value when upstream capability improves both producer outcomes and the buyer's operating performance."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
   "ibm_shared_value_short_answer": {
     "id": "ibm_shared_value_short_answer",
     "courseId": "IBM",
@@ -4531,6 +11009,429 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
         "description": "Uses a specific fact from the case and explains why it supports the decision: The business becomes more durable when solving a stakeholder constraint also strengthens the economics that fund the solution."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_income_disparity_short_answer": {
+    "id": "ibm_income_disparity_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_income_disparity",
+    "stem": "In two to three sentences, how would you explain Income disparity in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M05-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Income disparity accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Design payment, risk allocation and delivery around the income constraint while measuring whether the gap in useful access actually narrows."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_income_disparity_case_answer": {
+    "id": "ibm_income_disparity_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_income_disparity",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Two neighbouring groups use the same energy service, but one can finance equipment upfront while the other spends more each month on unsafe substitutes.",
+    "sourceIds": [
+      "IBM-M05-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Income disparity accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Design payment, risk allocation and delivery around the income constraint while measuring whether the gap in useful access actually narrows."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusive business responds to disparity by changing the terms of participation rather than assuming one market offer reaches everyone equally."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_bop_scale_paradox_short_answer": {
+    "id": "ibm_bop_scale_paradox_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_bop_scale_paradox",
+    "stem": "In two to three sentences, how would you explain BOP scale paradox in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M05-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains BOP scale paradox accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Solve distribution density, trust, financing and service before reading the headline population as commercial scale."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_bop_scale_paradox_case_answer": {
+    "id": "ibm_bop_scale_paradox_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_bop_scale_paradox",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A firm cites ten million households needing clean energy, but each sale requires long travel, education, finance and after-sale service for a small ticket.",
+    "sourceIds": [
+      "IBM-M05-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies BOP scale paradox accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Solve distribution density, trust, financing and service before reading the headline population as commercial scale."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Bottom-of-the-pyramid potential becomes viable only when a model aggregates demand and lowers the cost of repeated small transactions."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_energy_poverty_short_answer": {
+    "id": "ibm_energy_poverty_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_energy_poverty",
+    "stem": "In two to three sentences, how would you explain Energy poverty in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M05-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Energy poverty accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Design the technology, finance and service system around the productive use and total substitute cost the customer currently bears."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_energy_poverty_case_answer": {
+    "id": "ibm_energy_poverty_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_energy_poverty",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A tailor stops work at dusk and spends a fifth of weekly income on kerosene whose light also damages indoor air quality.",
+    "sourceIds": [
+      "IBM-M05-L07"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Energy poverty accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Design the technology, finance and service system around the productive use and total substitute cost the customer currently bears."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Energy access is an enabling layer because reliable power changes health, time, education and income opportunities beyond the device itself."
       }
     ],
     "writtenGaps": [
@@ -4733,6 +11634,147 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "ibm_empathy_credit_short_answer": {
+    "id": "ibm_empathy_credit_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_empathy_credit",
+    "stem": "In two to three sentences, how would you explain Empathy-driven credit in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M05-L10"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Empathy-driven credit accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Verify the livelihood economics, align instalments with cash flow, and keep independent capacity checks and transparent terms."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_empathy_credit_case_answer": {
+    "id": "ibm_empathy_credit_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_empathy_credit",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A street vendor saves on fuel after installing solar lighting, but a conventional monthly instalment falls before the days when her weekly cash balance is strongest.",
+    "sourceIds": [
+      "IBM-M05-L10"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Empathy-driven credit accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Verify the livelihood economics, align instalments with cash flow, and keep independent capacity checks and transparent terms."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Empathy improves credit design when understanding the customer's life changes the product without weakening borrower protection."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
   "ibm_labournet_short_answer": {
     "id": "ibm_labournet_short_answer",
     "courseId": "IBM",
@@ -4813,6 +11855,570 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
         "description": "Uses a specific fact from the case and explains why it supports the decision: Identity makes skills and work history legible; that trust opens market and institutional access that income mobility requires."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_informal_sector_short_answer": {
+    "id": "ibm_informal_sector_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_informal_sector",
+    "stem": "In two to three sentences, how would you explain Informal sector in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M06-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Informal sector accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Preserve useful flexibility while adding verifiable skills, transparent terms, portable history and access to protection."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_informal_sector_case_answer": {
+    "id": "ibm_informal_sector_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_informal_sector",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Skilled workers find jobs through local agents, are paid in cash and have no portable record of experience, insurance or grievance route.",
+    "sourceIds": [
+      "IBM-M06-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Informal sector accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Preserve useful flexibility while adding verifiable skills, transparent terms, portable history and access to protection."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusive workforce models create value by making informal capability visible and governable without erasing the way workers actually find work."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_workforce_pivot_short_answer": {
+    "id": "ibm_workforce_pivot_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_workforce_pivot",
+    "stem": "In two to three sentences, how would you explain Workforce solutions pivot in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M06-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Workforce solutions pivot accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Redefine the offer around a successful work placement, then integrate assessment, matching and retention support into the revenue model."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_workforce_pivot_case_answer": {
+    "id": "ibm_workforce_pivot_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_workforce_pivot",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A provider trains thousands of workers but placement remains low because employers need verified skills, attendance support and replacement guarantees.",
+    "sourceIds": [
+      "IBM-M06-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Workforce solutions pivot accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Redefine the offer around a successful work placement, then integrate assessment, matching and retention support into the revenue model."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: The pivot makes social impact and customer value the same completed employment outcome rather than two disconnected outputs."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_floral_upcycling_short_answer": {
+    "id": "ibm_floral_upcycling_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_floral_upcycling",
+    "stem": "In two to three sentences, how would you explain Floral upcycling in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M06-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Floral upcycling accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Design source collection, safe processing, a credible product market and worker economics together before reading tonnage as impact."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_floral_upcycling_case_answer": {
+    "id": "ibm_floral_upcycling_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_floral_upcycling",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Temples discard tonnes of flowers into waterways, and a venture can turn the material into incense but has no steady retail channel or safe sorting process.",
+    "sourceIds": [
+      "IBM-M06-L02"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Floral upcycling accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Design source collection, safe processing, a credible product market and worker economics together before reading tonnage as impact."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Upcycling becomes inclusive when recovered material, paying customers and improved livelihoods reinforce the same operating loop."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_waste_picker_franchise_short_answer": {
+    "id": "ibm_waste_picker_franchise_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_waste_picker_franchise",
+    "stem": "In two to three sentences, how would you explain Waste picker franchisee in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M06-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Waste picker franchisee accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Create a franchise contract with territory, service and safety standards, transparent material pricing and access to pooled buyers."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_waste_picker_franchise_case_answer": {
+    "id": "ibm_waste_picker_franchise_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_waste_picker_franchise",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "Independent collectors know local routes but sell to several intermediaries, lack protective equipment and cannot guarantee buyers a consistent grade.",
+    "sourceIds": [
+      "IBM-M06-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Waste picker franchisee accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Create a franchise contract with territory, service and safety standards, transparent material pricing and access to pooled buyers."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Franchising can combine local ownership with network scale when the central system strengthens rather than captures the collector's livelihood."
       }
     ],
     "writtenGaps": [
@@ -5015,6 +12621,147 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "ibm_urban_centric_paradox_short_answer": {
+    "id": "ibm_urban_centric_paradox_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_urban_centric_paradox",
+    "stem": "In two to three sentences, how would you explain Urban-centric paradox in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M06-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Urban-centric paradox accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Separate the true service requirement from urban assumptions and redesign onboarding, verification and matching for the neglected context."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_urban_centric_paradox_case_answer": {
+    "id": "ibm_urban_centric_paradox_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_urban_centric_paradox",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A workforce platform has thousands of city employers but excludes rural workers because registration requires a smartphone, English and travel to an urban office.",
+    "sourceIds": [
+      "IBM-M06-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Urban-centric paradox accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Separate the true service requirement from urban assumptions and redesign onboarding, verification and matching for the neglected context."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A market can appear absent when the model measures demand only through a channel the intended user cannot enter."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
   "ibm_fpo_short_answer": {
     "id": "ibm_fpo_short_answer",
     "courseId": "IBM",
@@ -5095,6 +12842,147 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
         "description": "Uses a specific fact from the case and explains why it supports the decision: Collective ownership turns fragmented production into scale, but market access and managerial capability convert that scale into income."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_governance_short_answer": {
+    "id": "ibm_governance_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_governance",
+    "stem": "In two to three sentences, how would you explain Governance in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M07-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Governance accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Define member oversight, transparent reporting, conflict controls and professional authority before expanding transactions."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_governance_case_answer": {
+    "id": "ibm_governance_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_governance",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "An FPO's manager signs buyer contracts and sets deductions without publishing prices or allowing farmer directors to review related-party transactions.",
+    "sourceIds": [
+      "IBM-M07-L04"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Governance accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Define member oversight, transparent reporting, conflict controls and professional authority before expanding transactions."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Inclusive ownership creates outcomes only when governance converts formal membership into informed power over decisions and value distribution."
       }
     ],
     "writtenGaps": [
@@ -5297,6 +13185,147 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
       }
     ]
   },
+  "ibm_social_plastics_short_answer": {
+    "id": "ibm_social_plastics_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_social_plastics",
+    "stem": "In two to three sentences, how would you explain Social plastics in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M07-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Social plastics accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Build traceability from collector payment through processing to buyer claim, and price the chain so verified benefit reaches the worker."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_social_plastics_case_answer": {
+    "id": "ibm_social_plastics_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_social_plastics",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A brand offers a premium for recycled plastic, but its supplier reports only tonnes and cannot show who collected it or how workers were paid.",
+    "sourceIds": [
+      "IBM-M07-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Social plastics accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Build traceability from collector payment through processing to buyer claim, and price the chain so verified benefit reaches the worker."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A social-plastics claim is credible when product provenance connects market demand to a demonstrable improvement in the collector's terms."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
   "ibm_impact_investing_short_answer": {
     "id": "ibm_impact_investing_short_answer",
     "courseId": "IBM",
@@ -5377,6 +13406,429 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "id": "case_evidence",
         "label": "Case evidence and reasoning",
         "description": "Uses a specific fact from the case and explains why it supports the decision: Intent defines the desired change, measurement tests whether it occurred, and return keeps investment capital reusable."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_carbon_markets_short_answer": {
+    "id": "ibm_carbon_markets_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_carbon_markets",
+    "stem": "In two to three sentences, how would you explain Carbon markets in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Carbon markets accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Set a credible baseline, verify adoption and persistence, account for leakage, and share revenue under transparent community terms."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_carbon_markets_case_answer": {
+    "id": "ibm_carbon_markets_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_carbon_markets",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A clean-cooking project claims credits for every stove distributed, although many replace functioning clean stoves and household use is not monitored.",
+    "sourceIds": [
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Carbon markets accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Set a credible baseline, verify adoption and persistence, account for leakage, and share revenue under transparent community terms."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Carbon finance supports inclusion only when the environmental claim is real and the value created reaches the people sustaining it."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_blended_finance_short_answer": {
+    "id": "ibm_blended_finance_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_blended_finance",
+    "stem": "In two to three sentences, how would you explain Blended finance in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Blended finance accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Use concessional capital for the specific additional risk, define who bears each loss, and require a path to commercial discipline and measurable impact."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_blended_finance_case_answer": {
+    "id": "ibm_blended_finance_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_blended_finance",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A rural infrastructure fund is viable after construction but private investors will not bear first-loss development and demand risk.",
+    "sourceIds": [
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Blended finance accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Use concessional capital for the specific additional risk, define who bears each loss, and require a path to commercial discipline and measurable impact."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Blending is catalytic when public or philanthropic risk-bearing mobilises capital that serves a real outcome instead of subsidising ordinary returns."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_giin_criteria_short_answer": {
+    "id": "ibm_giin_criteria_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_giin_criteria",
+    "stem": "In two to three sentences, how would you explain GIIN criteria in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains GIIN criteria accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: State the intended outcome before investment, use evidence to set contribution, manage and report performance, and preserve the declared return logic."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_giin_criteria_case_answer": {
+    "id": "ibm_giin_criteria_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_giin_criteria",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A conventional fund buys shares in a profitable employer and retroactively labels every job and tax payment as impact without a target or outcome process.",
+    "sourceIds": [
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies GIIN criteria accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "State the intended outcome before investment, use evidence to set contribution, manage and report performance, and preserve the declared return logic."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: The criteria make impact an investment discipline rather than a favourable story attached after capital has already been allocated."
       }
     ],
     "writtenGaps": [
@@ -5576,6 +14028,2528 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "scope": "writing",
         "label": "Fact-to-decision link is missing",
         "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_ted_london_short_answer": {
+    "id": "ibm_ted_london_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_ted_london",
+    "stem": "In two to three sentences, how would you explain Ted London framework in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M08-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Ted London framework accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Map value creation and capture for each actor, identify value destroyed or transferred, and redesign the relationship before declaring impact."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_ted_london_case_answer": {
+    "id": "ibm_ted_london_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_ted_london",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A distributor lowers product price but requires village agents to hold unpaid stock and absorb every return, while the firm reports rapid reach growth.",
+    "sourceIds": [
+      "IBM-M08-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Ted London framework accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Map value creation and capture for each actor, identify value destroyed or transferred, and redesign the relationship before declaring impact."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: A systemic value lens prevents an inclusive claim from hiding harm carried by the stakeholder with the least bargaining power."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_rct_short_answer": {
+    "id": "ibm_rct_short_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_rct",
+    "stem": "In two to three sentences, how would you explain Randomised controlled trial in your own words, and what kind of decision should it change?",
+    "caselet": "",
+    "sourceIds": [
+      "IBM-M08-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Explains Randomised controlled trial accurately in the learner's own words; the exact term is optional when the idea is clear."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision use",
+        "description": "Explains when the idea should change a decision, consistently with this course move: Pre-register outcomes, randomise transparently, protect participants, measure attrition and interpret the result within its setting and implementation."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not explained",
+        "repair": "State the idea in plain language before naming what it changes."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea used inaccurately",
+        "repair": "Return to the course anchor and correct what the idea permits you to conclude."
+      },
+      {
+        "id": "decision-use-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision use is missing",
+        "repair": "Name the decision this idea should change, not only its definition."
+      },
+      {
+        "id": "decision-use-inaccurate",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision use is inaccurate",
+        "repair": "Check that the proposed decision follows from the course idea rather than merely sounding related."
+      }
+    ]
+  },
+  "ibm_rct_case_answer": {
+    "id": "ibm_rct_case_answer",
+    "courseId": "IBM",
+    "conceptId": "ibm_rct",
+    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "caselet": "A programme has more eligible villages than it can serve this year and wants credible evidence before national expansion.",
+    "sourceIds": [
+      "IBM-M08-L05"
+    ],
+    "rubric": [
+      {
+        "id": "understanding",
+        "label": "Course understanding",
+        "description": "Applies Randomised controlled trial accurately to this case; the exact term need not be named if the idea is clearly used."
+      },
+      {
+        "id": "judgement",
+        "label": "Decision",
+        "description": "Pre-register outcomes, randomise transparently, protect participants, measure attrition and interpret the result within its setting and implementation."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case evidence and reasoning",
+        "description": "Uses a specific fact from the case and explains why it supports the decision: Random assignment strengthens causal inference by balancing selection on average, but it does not replace ethical design or judgement about transfer."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "concept-missing",
+        "criterionId": "understanding",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Course idea not applied",
+        "repair": "State the governing idea and show what it changes in this case."
+      },
+      {
+        "id": "concept-inaccurate",
+        "criterionId": "understanding",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Course idea applied inaccurately",
+        "repair": "Return to the course anchor and correct what the framework permits you to conclude."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "judgement",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decision is missing",
+        "repair": "Make the recommendation explicit before defending it."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "judgement",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check that the recommendation follows from the governing idea and not from an unrelated preference."
+      },
+      {
+        "id": "case-fact-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Decisive case fact is missing",
+        "repair": "Name the fact that carries the recommendation rather than referring to the case generally."
+      },
+      {
+        "id": "case-fact-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case evidence is misread",
+        "repair": "Re-read what the case fact actually shows before using it as support."
+      },
+      {
+        "id": "causal-link-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Fact-to-decision link is missing",
+        "repair": "Add the because step: explain why that fact makes this decision stronger, weaker, safer, or riskier."
+      }
+    ]
+  },
+  "ibm_single_serve_written_link": {
+    "id": "ibm_single_serve_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_single_serve",
+    "stem": "Write a connected recommendation. Explain what Single-serve revolution settles first, what Bottom-of-the-pyramid design settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A sanitation product lasts a month but costs a day's income upfront; households instead buy smaller, more expensive substitutes each evening. A second decision in the same organisation raises Bottom-of-the-pyramid design: A packaged foods company sells a 2 kg fortified flour pack at ₹340, payable in a single transaction, through 400 urban supermarkets. It targets rural districts holding 90 million people and has reached 0.3% of them in two years. Field visits find median household cash arrives weekly rather than monthly, the nearest stocking retailer is 14 km away, and 2 kg exceeds what most families can store safely through the humid season. The country manager proposes doubling the advertising budget, citing the size of the untapped population.",
+    "sourceIds": [
+      "IBM-M01-L07"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Single-serve revolution",
+        "description": "Uses the first framework accurately and states the decision it governs: Offer a safe smaller unit or payment interval whose total economics remain viable and whose repeated use still delivers the intended benefit."
+      },
+      {
+        "id": "second_idea",
+        "label": "Bottom-of-the-pyramid design",
+        "description": "Uses the connected idea accurately and states its different decision: Redesign affordability, access and service around the constraints, because population size is never demand by itself."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_cross_subsidisation_written_link": {
+    "id": "ibm_cross_subsidisation_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_cross_subsidisation",
+    "stem": "Write a connected recommendation. Explain what Cross-subsidisation settles first, what Single-serve revolution settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A hospital proposes premium private rooms whose contribution would fund standard beds, but both segments share the same operating theatres and surgeons. A second decision in the same organisation raises Single-serve revolution: A sanitation product lasts a month but costs a day's income upfront; households instead buy smaller, more expensive substitutes each evening.",
+    "sourceIds": [
+      "IBM-M01-L07"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Cross-subsidisation",
+        "description": "Uses the first framework accurately and states the decision it governs: Separate amenities from essential quality, price the premium clearly, and protect capacity for the subsidised segment."
+      },
+      {
+        "id": "second_idea",
+        "label": "Single-serve revolution",
+        "description": "Uses the connected idea accurately and states its different decision: Offer a safe smaller unit or payment interval whose total economics remain viable and whose repeated use still delivers the intended benefit."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_diageo_value_chain_written_link": {
+    "id": "ibm_diageo_value_chain_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_diageo_value_chain",
+    "stem": "Write a connected recommendation. Explain what Diageo value chain settles first, what Cross-subsidisation settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A beverage producer can replace imported grain with local smallholder supply, but quality varies and individual farmers cannot meet delivery volumes. A second decision in the same organisation raises Cross-subsidisation: A hospital proposes premium private rooms whose contribution would fund standard beds, but both segments share the same operating theatres and surgeons.",
+    "sourceIds": [
+      "IBM-M01-L08",
+      "IBM-M01-L07"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Diageo value chain",
+        "description": "Uses the first framework accurately and states the decision it governs: Build procurement, aggregation and supplier development together, then track both input reliability and producer income."
+      },
+      {
+        "id": "second_idea",
+        "label": "Cross-subsidisation",
+        "description": "Uses the connected idea accurately and states its different decision: Separate amenities from essential quality, price the premium clearly, and protect capacity for the subsidised segment."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_inverted_pyramid_written_link": {
+    "id": "ibm_inverted_pyramid_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_inverted_pyramid",
+    "stem": "Write a connected recommendation. Explain what Inverted pyramid settles first, what Total cost of healthcare settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Specialists review every routine screening result, creating a six-week queue even though trained technicians can clear normal cases under a protocol. A second decision in the same organisation raises Total cost of healthcare: A rural clinic charges less than a city hospital, but patients lose two workdays and pay for transport on four separate visits for one procedure.",
+    "sourceIds": [
+      "IBM-M02-L02",
+      "IBM-M02-L01"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Inverted pyramid",
+        "description": "Uses the first framework accurately and states the decision it governs: Protocolise routine work, define escalation triggers, and reserve scarce specialist capacity for the cases that cross those triggers."
+      },
+      {
+        "id": "second_idea",
+        "label": "Total cost of healthcare",
+        "description": "Uses the connected idea accurately and states its different decision: Compare complete patient pathways and redesign location, scheduling and follow-up around the cost the household actually bears."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_decentralised_model_written_link": {
+    "id": "ibm_decentralised_model_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_decentralised_model",
+    "stem": "Write a connected recommendation. Explain what Decentralised model settles first, what Market failure settles next, and why one framework cannot substitute for the other.",
+    "caselet": "One city hospital handles routine cases from forty towns, although local teams could deliver most care if they had protocols and a referral line. A second decision in the same organisation raises Market failure: Rural patients need teleconsultations and can pay the clinician's fee, but no provider serves them because verifying identity and collecting many small payments costs more than the consultation.",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Decentralised model",
+        "description": "Uses the first framework accurately and states the decision it governs: Place routine capacity locally, specify what stays central, and make referral and quality data flow in both directions."
+      },
+      {
+        "id": "second_idea",
+        "label": "Market failure",
+        "description": "Uses the connected idea accurately and states its different decision: Identify the failed mechanism and redesign information, risk sharing or transaction cost instead of treating the population as having no demand."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_asset_light_written_link": {
+    "id": "ibm_asset_light_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_asset_light",
+    "stem": "Write a connected recommendation. Explain what Asset-light model settles first, what Decentralised model settles next, and why one framework cannot substitute for the other.",
+    "caselet": "An education provider can enter twelve districts by training existing schools or only two by buying land and constructing campuses itself. A second decision in the same organisation raises Decentralised model: One city hospital handles routine cases from forty towns, although local teams could deliver most care if they had protocols and a referral line.",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Asset-light model",
+        "description": "Uses the first framework accurately and states the decision it governs: Use partner assets under enforceable service standards and invest central resources in curriculum, training and quality assurance."
+      },
+      {
+        "id": "second_idea",
+        "label": "Decentralised model",
+        "description": "Uses the connected idea accurately and states its different decision: Place routine capacity locally, specify what stays central, and make referral and quality data flow in both directions."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_micro_insurance_written_link": {
+    "id": "ibm_micro_insurance_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_micro_insurance",
+    "stem": "Write a connected recommendation. Explain what Micro-insurance settles first, what Poverty dynamics settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Households can manage routine clinic fees but sell productive assets when an emergency admission creates a single large bill. A second decision in the same organisation raises Poverty dynamics: A worker misses income during illness, borrows at a high rate for treatment, and then sells the equipment used to earn after returning to work.",
+    "sourceIds": [
+      "IBM-M02-L04"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Micro-insurance",
+        "description": "Uses the first framework accurately and states the decision it governs: Define the covered event, align premium timing with cash flow, and make verification and claims cheap enough for small policies."
+      },
+      {
+        "id": "second_idea",
+        "label": "Poverty dynamics",
+        "description": "Uses the connected idea accurately and states its different decision: Design around the sequence of vulnerability, including prevention, payment timing and protection of productive assets."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_aurolab_written_link": {
+    "id": "ibm_aurolab_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_aurolab",
+    "stem": "Write a connected recommendation. Explain what Aurolab settles first, what Aravind Eye Hospital process specialisation settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A hospital imports lenses whose unit price limits subsidised surgery, although regional demand could support a specialised local plant at scale. A second decision in the same organisation raises Aravind Eye Hospital process specialisation: An eye hospital has four ophthalmologists and a nine-week cataract waiting list. A time study finds each surgeon spends 71% of the working day on counselling, vision measurement, dilation checks and post-operative dressing, and 29% operating. Complication rates sit at the national benchmark and the trustees have said that must not move. The hospital already employs 22 trained paramedical staff, mostly assigned to reception. A consultant proposes recruiting two more surgeons, at a cost current surpluses cannot fund.",
+    "sourceIds": [
+      "IBM-M02-L04",
+      "IBM-M02-L08"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Aurolab",
+        "description": "Uses the first framework accurately and states the decision it governs: Build quality-assured local manufacturing around sufficient volume and pass process savings into access rather than treating low price as low standard."
+      },
+      {
+        "id": "second_idea",
+        "label": "Aravind Eye Hospital process specialisation",
+        "description": "Uses the connected idea accurately and states its different decision: Separate standardisable tasks for trained support staff so the specialist concentrates on the constrained surgical step."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_pay_per_use_written_link": {
+    "id": "ibm_pay_per_use_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_pay_per_use",
+    "stem": "Write a connected recommendation. Explain what Pay-per-use equipment settles first, what Aravind Eye Hospital process specialisation settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Small clinics need diagnostic equipment twice a week and cannot finance a machine that would sit idle on the other days. A second decision in the same organisation raises Aravind Eye Hospital process specialisation: An eye hospital has four ophthalmologists and a nine-week cataract waiting list. A time study finds each surgeon spends 71% of the working day on counselling, vision measurement, dilation checks and post-operative dressing, and 29% operating. Complication rates sit at the national benchmark and the trustees have said that must not move. The hospital already employs 22 trained paramedical staff, mostly assigned to reception. A consultant proposes recruiting two more surgeons, at a cost current surpluses cannot fund.",
+    "sourceIds": [
+      "IBM-M02-L08"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Pay-per-use equipment",
+        "description": "Uses the first framework accurately and states the decision it governs: Pool the asset, price each use against lifecycle cost, and guarantee uptime so clinics buy reliable access rather than ownership."
+      },
+      {
+        "id": "second_idea",
+        "label": "Aravind Eye Hospital process specialisation",
+        "description": "Uses the connected idea accurately and states its different decision: Separate standardisable tasks for trained support staff so the specialist concentrates on the constrained surgical step."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_telemedicine_written_link": {
+    "id": "ibm_telemedicine_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_telemedicine",
+    "stem": "Write a connected recommendation. Explain what Telemedicine settles first, what Low-cost private schools settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Patients make a six-hour trip for every follow-up even though most visits review symptoms, images and medicine adherence. A second decision in the same organisation raises Low-cost private schools: A school chain halves fees and opens quickly, but pupil attendance and basic reading outcomes fall while parents lack usable performance information.",
+    "sourceIds": [
+      "IBM-M02-L10",
+      "IBM-M02-L13"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Telemedicine",
+        "description": "Uses the first framework accurately and states the decision it governs: Define remote-safe tasks, escalation rules, data quality and a local pathway for cases that need hands-on care."
+      },
+      {
+        "id": "second_idea",
+        "label": "Low-cost private schools",
+        "description": "Uses the connected idea accurately and states its different decision: Hold an explicit learning standard, equip teachers to meet it, and publish evidence parents can use before replicating the school model."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_low_cost_schools_written_link": {
+    "id": "ibm_low_cost_schools_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_low_cost_schools",
+    "stem": "Write a connected recommendation. Explain what Low-cost private schools settles first, what Telemedicine settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A school chain halves fees and opens quickly, but pupil attendance and basic reading outcomes fall while parents lack usable performance information. A second decision in the same organisation raises Telemedicine: Patients make a six-hour trip for every follow-up even though most visits review symptoms, images and medicine adherence.",
+    "sourceIds": [
+      "IBM-M02-L13",
+      "IBM-M02-L10"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Low-cost private schools",
+        "description": "Uses the first framework accurately and states the decision it governs: Hold an explicit learning standard, equip teachers to meet it, and publish evidence parents can use before replicating the school model."
+      },
+      {
+        "id": "second_idea",
+        "label": "Telemedicine",
+        "description": "Uses the connected idea accurately and states its different decision: Define remote-safe tasks, escalation rules, data quality and a local pathway for cases that need hands-on care."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_shg_linkage_written_link": {
+    "id": "ibm_shg_linkage_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_shg_linkage",
+    "stem": "Write a connected recommendation. Explain what Self-help group bank linkage settles first, what Grameen Bank group-based microfinance settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Twenty women save together for a year and maintain clear internal repayment records, but none can satisfy the bank's individual collateral rule. A second decision in the same organisation raises Grameen Bank group-based microfinance: A lender wants to reach 30 villages where 82% of households hold no bank-acceptable collateral and no formal credit record, and its two field officers cannot assess 4,000 households individually. A pilot in four villages lent to self-formed groups of five women, releasing funds to two members first and to the rest only after the first repayments arrived, with weekly meetings held in the village. Repayment reached 97% over eighteen months. Head office now proposes dropping the meetings and the staged release to cut cost per loan, keeping the group label.",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Self-help group bank linkage",
+        "description": "Uses the first framework accurately and states the decision it governs: Assess the group's records and governance, lend through a staged linkage, and keep member debt and use transparent."
+      },
+      {
+        "id": "second_idea",
+        "label": "Grameen Bank group-based microfinance",
+        "description": "Uses the connected idea accurately and states its different decision: Use formed groups, staged lending and local monitoring, which works only while repayment capacity stays real."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_open_source_innovation_written_link": {
+    "id": "ibm_open_source_innovation_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_open_source_innovation",
+    "stem": "Write a connected recommendation. Explain what Open-source innovation settles first, what Social mobilisation settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A low-cost irrigation controller works in one region but replacement parts and software changes require a distant vendor whose visits take months. A second decision in the same organisation raises Social mobilisation: A producer programme registers farmers individually, but meetings fail and buyers cannot obtain the volume or shared quality commitment they require.",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Open-source innovation",
+        "description": "Uses the first framework accurately and states the decision it governs: Open the relevant design, document standards and build a contributor and maintenance system that preserves safety and compatibility."
+      },
+      {
+        "id": "second_idea",
+        "label": "Social mobilisation",
+        "description": "Uses the connected idea accurately and states its different decision: Invest in trusted local organisation, shared problem definition and representative decision rules before relying on collective delivery."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_social_mobilisation_written_link": {
+    "id": "ibm_social_mobilisation_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_social_mobilisation",
+    "stem": "Write a connected recommendation. Explain what Social mobilisation settles first, what Open-source innovation settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A producer programme registers farmers individually, but meetings fail and buyers cannot obtain the volume or shared quality commitment they require. A second decision in the same organisation raises Open-source innovation: A low-cost irrigation controller works in one region but replacement parts and software changes require a distant vendor whose visits take months.",
+    "sourceIds": [
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Social mobilisation",
+        "description": "Uses the first framework accurately and states the decision it governs: Invest in trusted local organisation, shared problem definition and representative decision rules before relying on collective delivery."
+      },
+      {
+        "id": "second_idea",
+        "label": "Open-source innovation",
+        "description": "Uses the connected idea accurately and states its different decision: Open the relevant design, document standards and build a contributor and maintenance system that preserves safety and compatibility."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_andhra_crisis_written_link": {
+    "id": "ibm_andhra_crisis_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_andhra_crisis",
+    "stem": "Write a connected recommendation. Explain what Andhra Pradesh crisis settles first, what Formal banking failure settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Several lenders enter the same villages, reward officers for disbursement and share no debt data while repayment remains high through refinancing. A second decision in the same organisation raises Formal banking failure: Seasonal traders repay suppliers reliably but lack property titles, payslips and a nearby branch, so a bank rejects every application automatically.",
+    "sourceIds": [
+      "IBM-M03-L05"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Andhra Pradesh crisis",
+        "description": "Uses the first framework accurately and states the decision it governs: Pause expansion, consolidate exposure data, change incentives and put enforceable borrower-protection and grievance systems in place."
+      },
+      {
+        "id": "second_idea",
+        "label": "Formal banking failure",
+        "description": "Uses the connected idea accurately and states its different decision: Replace unavailable proxies with cash-flow evidence, local information and a delivery channel whose transaction cost fits small loans."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_decentralised_footprint_written_link": {
+    "id": "ibm_decentralised_footprint_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_decentralised_footprint",
+    "stem": "Write a connected recommendation. Explain what Decentralised footprint settles first, what CSR trap settles next, and why one framework cannot substitute for the other.",
+    "caselet": "One large rural centre has filled its local hiring pool, while nearby towns each have smaller groups of qualified workers and suitable partner sites. A second decision in the same organisation raises CSR trap: A company trains rural graduates each year from its CSR budget, but no business unit commits work and the programme ends whenever annual funding tightens.",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Decentralised footprint",
+        "description": "Uses the first framework accurately and states the decision it governs: Replicate smaller connected centres with shared training, routing, security and quality assurance rather than expanding one site indefinitely."
+      },
+      {
+        "id": "second_idea",
+        "label": "CSR trap",
+        "description": "Uses the connected idea accurately and states its different decision: Connect the capability to a real value chain and buyer while using subsidy only for a defined transition or public-good gap."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_coopetition_written_link": {
+    "id": "ibm_coopetition_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_coopetition",
+    "stem": "Write a connected recommendation. Explain what Co-opetition settles first, what Decentralised footprint settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Three rural service firms each lack enough volume for reliable connectivity and training, although together they can support both. A second decision in the same organisation raises Decentralised footprint: One large rural centre has filled its local hiring pool, while nearby towns each have smaller groups of qualified workers and suitable partner sites.",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Co-opetition",
+        "description": "Uses the first framework accurately and states the decision it governs: Define the shared layer, protect client information and compete transparently above it on service and price."
+      },
+      {
+        "id": "second_idea",
+        "label": "Decentralised footprint",
+        "description": "Uses the connected idea accurately and states its different decision: Replicate smaller connected centres with shared training, routing, security and quality assurance rather than expanding one site indefinitely."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_multilingual_routing_written_link": {
+    "id": "ibm_multilingual_routing_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_multilingual_routing",
+    "stem": "Write a connected recommendation. Explain what Multilingual IT Routing settles first, what Co-opetition settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Customer requests arrive in eight regional languages, but each small centre can staff only two and callers are repeatedly transferred or abandoned. A second decision in the same organisation raises Co-opetition: Three rural service firms each lack enough volume for reliable connectivity and training, although together they can support both.",
+    "sourceIds": [
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Multilingual IT Routing",
+        "description": "Uses the first framework accurately and states the decision it governs: Tag demand and worker capability, route dynamically, and monitor service levels by language instead of duplicating every skill at every centre."
+      },
+      {
+        "id": "second_idea",
+        "label": "Co-opetition",
+        "description": "Uses the connected idea accurately and states its different decision: Define the shared layer, protect client information and compete transparently above it on service and price."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_backward_integration_written_link": {
+    "id": "ibm_backward_integration_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_backward_integration",
+    "stem": "Write a connected recommendation. Explain what Backward integration settles first, what Shared value settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A food processor depends on traders for a crop whose variable handling creates rejections and leaves farmers with no quality feedback. A second decision in the same organisation raises Shared value: A dairy processor buys from 12,000 smallholders. Rejections for bacterial count run at 19%, forcing spot purchases at a 23% premium whenever supply falls short. Farmers average 4.1 litres per animal per day against a 7-litre regional benchmark, and most sell through intermediaries who deduct 15%. A proposal would fund village chilling units, veterinary services and direct payment at ₹6 crore over three years, projected to lift yield to 6 litres, cut rejections to 6% and raise farmer realisation by 22%. The CFO asks why a processor should pay for farm productivity.",
+    "sourceIds": [
+      "IBM-M05-L02",
+      "IBM-M05-L07"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Backward integration",
+        "description": "Uses the first framework accurately and states the decision it governs: Take control of the necessary sourcing, support or processing step while testing whether ownership adds more value than a governed partnership."
+      },
+      {
+        "id": "second_idea",
+        "label": "Shared value",
+        "description": "Uses the connected idea accurately and states its different decision: Evaluate whether the operating model creates additional value for both the firm and farmers rather than merely donating after profit is made."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_empathy_credit_written_link": {
+    "id": "ibm_empathy_credit_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_empathy_credit",
+    "stem": "Write a connected recommendation. Explain what Empathy-driven credit settles first, what SELCO affordability system settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A street vendor saves on fuel after installing solar lighting, but a conventional monthly instalment falls before the days when her weekly cash balance is strongest. A second decision in the same organisation raises SELCO affordability system: A street vendor trades until 9 pm and spends ₹15 a day on kerosene, about ₹450 a month, for light poor enough that customers leave early. A solar unit costs ₹9,000 outright, which she cannot pay, but a rural bank will finance it at ₹10 a day over three years once repayment capacity is shown. Brighter light is expected to raise daily takings by about ₹90. Two earlier solar programmes in the district failed when units broke and no technician was available within 40 km, and villagers now say they will not buy without a repair promise.",
+    "sourceIds": [
+      "IBM-M05-L10"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Empathy-driven credit",
+        "description": "Uses the first framework accurately and states the decision it governs: Verify the livelihood economics, align instalments with cash flow, and keep independent capacity checks and transparent terms."
+      },
+      {
+        "id": "second_idea",
+        "label": "SELCO affordability system",
+        "description": "Uses the connected idea accurately and states its different decision: Bundle the light with finance and dependable service, since removing any one of those links makes it unusable."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_workforce_pivot_written_link": {
+    "id": "ibm_workforce_pivot_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_workforce_pivot",
+    "stem": "Write a connected recommendation. Explain what Workforce solutions pivot settles first, what Informal sector settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A provider trains thousands of workers but placement remains low because employers need verified skills, attendance support and replacement guarantees. A second decision in the same organisation raises Informal sector: Skilled workers find jobs through local agents, are paid in cash and have no portable record of experience, insurance or grievance route.",
+    "sourceIds": [
+      "IBM-M06-L02"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Workforce solutions pivot",
+        "description": "Uses the first framework accurately and states the decision it governs: Redefine the offer around a successful work placement, then integrate assessment, matching and retention support into the revenue model."
+      },
+      {
+        "id": "second_idea",
+        "label": "Informal sector",
+        "description": "Uses the connected idea accurately and states its different decision: Preserve useful flexibility while adding verifiable skills, transparent terms, portable history and access to protection."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_floral_upcycling_written_link": {
+    "id": "ibm_floral_upcycling_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_floral_upcycling",
+    "stem": "Write a connected recommendation. Explain what Floral upcycling settles first, what Workforce solutions pivot settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Temples discard tonnes of flowers into waterways, and a venture can turn the material into incense but has no steady retail channel or safe sorting process. A second decision in the same organisation raises Workforce solutions pivot: A provider trains thousands of workers but placement remains low because employers need verified skills, attendance support and replacement guarantees.",
+    "sourceIds": [
+      "IBM-M06-L02"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Floral upcycling",
+        "description": "Uses the first framework accurately and states the decision it governs: Design source collection, safe processing, a credible product market and worker economics together before reading tonnage as impact."
+      },
+      {
+        "id": "second_idea",
+        "label": "Workforce solutions pivot",
+        "description": "Uses the connected idea accurately and states its different decision: Redefine the offer around a successful work placement, then integrate assessment, matching and retention support into the revenue model."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_waste_picker_franchise_written_link": {
+    "id": "ibm_waste_picker_franchise_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_waste_picker_franchise",
+    "stem": "Write a connected recommendation. Explain what Waste picker franchisee settles first, what Inclusive waste enterprise settles next, and why one framework cannot substitute for the other.",
+    "caselet": "Independent collectors know local routes but sell to several intermediaries, lack protective equipment and cannot guarantee buyers a consistent grade. A second decision in the same organisation raises Inclusive waste enterprise: Temples in one city send about 8 tonnes of flower waste a week to landfill, where it decomposes into a local waterway. A venture collects it free, converts it into incense and natural dyes, and employs 60 women from nearby low-income settlements at ₹11,000 a month against the ₹6,500 they earned in informal work. Retail buyers pay a premium for the provenance and current output sells out. Scaling to 20 tonnes needs a second site and either mechanised sorting, which would halve the workforce, or 60 more women hired and trained.",
+    "sourceIds": [
+      "IBM-M06-L04",
+      "IBM-M06-L05"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Waste picker franchisee",
+        "description": "Uses the first framework accurately and states the decision it governs: Create a franchise contract with territory, service and safety standards, transparent material pricing and access to pooled buyers."
+      },
+      {
+        "id": "second_idea",
+        "label": "Inclusive waste enterprise",
+        "description": "Uses the connected idea accurately and states its different decision: Track pollution reduction, product economics and worker livelihoods, which count as shared value only when all three hold."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_social_plastics_written_link": {
+    "id": "ibm_social_plastics_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_social_plastics",
+    "stem": "Write a connected recommendation. Explain what Social plastics settles first, what Social business settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A brand offers a premium for recycled plastic, but its supplier reports only tonnes and cannot show who collected it or how workers were paid. A second decision in the same organisation raises Social business: A food company creates a fortified snack for children in low-income districts, priced at ₹5 so the target households can actually buy it. The line covers its own costs and repays the investors' original capital, after which surplus is reinvested in distribution rather than paid out. Nutrition surveys show a measurable fall in deficiency among regular consumers. The group board asks why the line should not instead be run as CSR funded from group profit, or priced at ₹12 where the same product would earn a normal margin from wealthier urban buyers.",
+    "sourceIds": [
+      "IBM-M07-L05"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Social plastics",
+        "description": "Uses the first framework accurately and states the decision it governs: Build traceability from collector payment through processing to buyer claim, and price the chain so verified benefit reaches the worker."
+      },
+      {
+        "id": "second_idea",
+        "label": "Social business",
+        "description": "Uses the connected idea accurately and states its different decision: Judge whether the social goal drives the model and discipline keeps it running, never letting profit become the purpose."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_carbon_markets_written_link": {
+    "id": "ibm_carbon_markets_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_carbon_markets",
+    "stem": "Write a connected recommendation. Explain what Carbon markets settles first, what Blended finance settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A clean-cooking project claims credits for every stove distributed, although many replace functioning clean stoves and household use is not monitored. A second decision in the same organisation raises Blended finance: A rural infrastructure fund is viable after construction but private investors will not bear first-loss development and demand risk.",
+    "sourceIds": [
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Carbon markets",
+        "description": "Uses the first framework accurately and states the decision it governs: Set a credible baseline, verify adoption and persistence, account for leakage, and share revenue under transparent community terms."
+      },
+      {
+        "id": "second_idea",
+        "label": "Blended finance",
+        "description": "Uses the connected idea accurately and states its different decision: Use concessional capital for the specific additional risk, define who bears each loss, and require a path to commercial discipline and measurable impact."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_blended_finance_written_link": {
+    "id": "ibm_blended_finance_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_blended_finance",
+    "stem": "Write a connected recommendation. Explain what Blended finance settles first, what Carbon markets settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A rural infrastructure fund is viable after construction but private investors will not bear first-loss development and demand risk. A second decision in the same organisation raises Carbon markets: A clean-cooking project claims credits for every stove distributed, although many replace functioning clean stoves and household use is not monitored.",
+    "sourceIds": [
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Blended finance",
+        "description": "Uses the first framework accurately and states the decision it governs: Use concessional capital for the specific additional risk, define who bears each loss, and require a path to commercial discipline and measurable impact."
+      },
+      {
+        "id": "second_idea",
+        "label": "Carbon markets",
+        "description": "Uses the connected idea accurately and states its different decision: Set a credible baseline, verify adoption and persistence, account for leakage, and share revenue under transparent community terms."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_giin_criteria_written_link": {
+    "id": "ibm_giin_criteria_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_giin_criteria",
+    "stem": "Write a connected recommendation. Explain what GIIN criteria settles first, what Blended finance settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A conventional fund buys shares in a profitable employer and retroactively labels every job and tax payment as impact without a target or outcome process. A second decision in the same organisation raises Blended finance: A rural infrastructure fund is viable after construction but private investors will not bear first-loss development and demand risk.",
+    "sourceIds": [
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "GIIN criteria",
+        "description": "Uses the first framework accurately and states the decision it governs: State the intended outcome before investment, use evidence to set contribution, manage and report performance, and preserve the declared return logic."
+      },
+      {
+        "id": "second_idea",
+        "label": "Blended finance",
+        "description": "Uses the connected idea accurately and states its different decision: Use concessional capital for the specific additional risk, define who bears each loss, and require a path to commercial discipline and measurable impact."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_ted_london_written_link": {
+    "id": "ibm_ted_london_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_ted_london",
+    "stem": "Write a connected recommendation. Explain what Ted London framework settles first, what Impact measurement settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A distributor lowers product price but requires village agents to hold unpaid stock and absorb every return, while the firm reports rapid reach growth. A second decision in the same organisation raises Impact measurement: A skills programme reports that graduates earn 34% more two years on than a comparison group of non-participants from the same districts. Enrolment was voluntary and required attending an information session, submitting an application and paying a ₹500 deposit. Baseline data show applicants already had 1.9 more years of schooling and were three times likelier to have held formal employment before the programme began. A regional wage boom lifted earnings across all districts over the same period. The funder is being asked to scale the programme fivefold on the strength of the 34% figure.",
+    "sourceIds": [
+      "IBM-M08-L05"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Ted London framework",
+        "description": "Uses the first framework accurately and states the decision it governs: Map value creation and capture for each actor, identify value destroyed or transferred, and redesign the relationship before declaring impact."
+      },
+      {
+        "id": "second_idea",
+        "label": "Impact measurement",
+        "description": "Uses the connected idea accurately and states its different decision: Use a comparable control or another defensible counterfactual and account for selection before attributing the income change to the programme."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+      }
+    ]
+  },
+  "ibm_rct_written_link": {
+    "id": "ibm_rct_written_link",
+    "courseId": "IBM",
+    "conceptId": "ibm_rct",
+    "stem": "Write a connected recommendation. Explain what Randomised controlled trial settles first, what Ted London framework settles next, and why one framework cannot substitute for the other.",
+    "caselet": "A programme has more eligible villages than it can serve this year and wants credible evidence before national expansion. A second decision in the same organisation raises Ted London framework: A distributor lowers product price but requires village agents to hold unpaid stock and absorb every return, while the firm reports rapid reach growth.",
+    "sourceIds": [
+      "IBM-M08-L05"
+    ],
+    "rubric": [
+      {
+        "id": "first_idea",
+        "label": "Randomised controlled trial",
+        "description": "Uses the first framework accurately and states the decision it governs: Pre-register outcomes, randomise transparently, protect participants, measure attrition and interpret the result within its setting and implementation."
+      },
+      {
+        "id": "second_idea",
+        "label": "Ted London framework",
+        "description": "Uses the connected idea accurately and states its different decision: Map value creation and capture for each actor, identify value destroyed or transferred, and redesign the relationship before declaring impact."
+      },
+      {
+        "id": "integration",
+        "label": "Connection",
+        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "first-missing",
+        "criterionId": "first_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "First framework is missing",
+        "repair": "State what the first framework permits you to conclude before moving to the second decision."
+      },
+      {
+        "id": "first-inaccurate",
+        "criterionId": "first_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "First framework is inaccurate",
+        "repair": "Return to the first course anchor and correct what it permits you to conclude."
+      },
+      {
+        "id": "second-missing",
+        "criterionId": "second_idea",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Connected idea is missing",
+        "repair": "Name the second decision and apply the idea that actually governs it."
+      },
+      {
+        "id": "second-inaccurate",
+        "criterionId": "second_idea",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Connected idea is inaccurate",
+        "repair": "Separate the second idea from the first and correct its decision rule."
+      },
+      {
+        "id": "connection-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas are listed, not connected",
+        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+      },
+      {
+        "id": "connection-reversed",
+        "criterionId": "integration",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Reasoning order is reversed",
+        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
       }
     ]
   },
@@ -6355,6 +17329,1049 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
         "id": "limit",
         "label": "What would change it",
         "description": "Names the dependence on a single buyer, or what happens when the grant ends and the organisation must cover its own costs."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_01_problem": {
+    "id": "ibm_released_01_problem",
+    "courseId": "IBM",
+    "conceptId": "ibm_disparity_gap",
+    "stem": "The released prompt speaks of ‘poor people’ generally. Define the beneficiary and the binding problem Kisan Saathi should solve. Explain why narrowing the segment strengthens rather than weakens the inclusive ambition.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M01-L01",
+      "IBM-M02-L04",
+      "IBM-M03-L03"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Uses disparity, poverty dynamics, and smallholder bottlenecks to identify a structural constraint rather than treating poverty as a personality or a lack of effort."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses the stated pilot assumptions: 600 farmers, six villages, fragmented lots, perishability, irregular cash flow, weak information, storage, and buyer access."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Shows how the constraints reinforce one another and why a service aimed at one mechanism can improve income stability."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Selects small and marginal farmers as the initial beneficiary and makes higher net price plus lower loss the governing outcome."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names evidence that could disprove the diagnosis, such as storage not being the binding constraint or tenant and landless households being excluded."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_02_identity": {
+    "id": "ibm_released_02_identity",
+    "courseId": "IBM",
+    "conceptId": "ibm_inclusive",
+    "stem": "Classify Kisan Saathi as inclusive business, ordinary commercial enterprise, CSR, or charity. State the test you would use if farmer welfare and profitability later pull apart.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M01-L03",
+      "IBM-M01-L10"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Defines inclusive business through a primary underserved need plus financial sustainability, and uses the zone of conflict as the pressure test."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses the 65% farmer ownership, voluntary sale rule, disclosed fees, operating-cost discipline, and patronage dividend rather than relying on the venture’s stated intentions."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Explains why earned revenue protects continuity while governance protects the social objective when profit incentives diverge."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Classifies the design as inclusive only while farmer outcomes remain primary and specifies what the organisation must refuse in the zone of conflict."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Identifies mission drift that would change the classification, such as prioritising high-margin commercial storage or locking farmers into one buyer."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_03_ownership": {
+    "id": "ibm_released_03_ownership",
+    "courseId": "IBM",
+    "conceptId": "ibm_fpo",
+    "stem": "Explain the role farmers play in Kisan Saathi and evaluate the proposed 65:35 ownership and governance arrangement. What keeps aggregation from becoming another intermediary extracting value from them?",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M07-L04"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Uses FPO ownership, aggregation, market linkage, and governance rather than treating membership by itself as inclusion."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses the 65:35 ownership, elected directors, published weights and prices, voluntary sale, grievance process, and patronage dividend."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects collective volume to bargaining power and then shows why governance and professional capability determine who captures the surplus created."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Keeps farmer majority control while giving the operating partner a bounded role in technology, maintenance, standards, and market access."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Addresses elite capture, token voting, weak buyer capability, or a related-party transaction that could make nominal farmer ownership meaningless."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_04_value": {
+    "id": "ibm_released_04_value",
+    "courseId": "IBM",
+    "conceptId": "ibm_shared_value",
+    "stem": "Show how Kisan Saathi creates value for both farmers and buyers. Distinguish genuine shared value from a model that merely transfers quality, price, or weather risk onto farmers.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M05-L07",
+      "IBM-M05-L02",
+      "IBM-M01-L08"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Uses perishability and shared value to locate additional value, not a redistribution presented as creation."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses grading, storage, buyer-sized aggregation, transparent deductions, several buyers, and the higher-net-price scale gate."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects reduced spoilage and quality consistency to better farmer returns and lower buyer procurement cost or rejection."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Makes the enterprise earn only when the farmer receives a better net outcome and keeps quality and price risk visibly allocated."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names a failure condition such as buyer concentration, rejection risk pushed wholly upstream, or fees absorbing the price improvement."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_05_affordability": {
+    "id": "ibm_released_05_affordability",
+    "courseId": "IBM",
+    "conceptId": "ibm_bop",
+    "stem": "Evaluate Kisan Saathi’s pay-after-sale pricing. Explain why affordability is more than a low fee and how the product, payment timing, finance, and service promise must work together.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M01-L07",
+      "IBM-M05-L10"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Applies bottom-of-pyramid design and SELCO’s product–finance–service system to irregular cash flow rather than assuming a discount solves affordability."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses the after-sale deduction, disclosed storage fee, 2% commission, voluntary exit, local maintenance, and sale-linked repayment logic."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Shows how payment timing, livelihood benefit, equipment uptime, and trust jointly determine whether the service can actually be used."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Supports pay-after-sale pricing with independent finance and a repair commitment while keeping capacity and total obligations visible."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names over-indebtedness, hidden deductions, delayed payment, or service downtime as conditions that would make the nominally affordable offer unusable."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_06_operations": {
+    "id": "ibm_released_06_operations",
+    "courseId": "IBM",
+    "conceptId": "ibm_decentralised_model",
+    "stem": "Design the operating architecture for Kisan Saathi. What should be decentralised to the village hub, what should be standardised centrally, and what should the social enterprise own rather than control through partners?",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M02-L04",
+      "IBM-M04-L05",
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Uses decentralisation, asset-light partnership, and controlled replication rather than treating local presence or central ownership as universally superior."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses local operators and technicians, FPO majority ownership, common grading, service, audit, software, maintenance, and multi-buyer standards."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects local trust and knowledge to access while connecting central standards to buyer confidence and equipment reliability."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Assigns community-facing work and routine operation locally, while keeping certification, technology, training, maintenance escalation, data controls, and buyer contracting consistent."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names the signal that decentralisation is failing, such as inconsistent grades, uptime below the service promise, audit breaches, or partners excluding the smallest farmers."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_07_economics": {
+    "id": "ibm_released_07_economics",
+    "courseId": "IBM",
+    "conceptId": "ibm_social_business",
+    "stem": "Explain how Kisan Saathi should finance its pilot and later expansion. Separate catalytic subsidy from operating viability, and state what an impact investor should require before committing capital.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M07-L05",
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Separates social business, impact investment, and blended finance, including intentionality, measurement, and an expected return."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses first-loss pilot capital, fee-funded operations, later impact debt, hub-level cash contribution, two crop cycles, and the explicit farmer outcome gates."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects temporary risk-bearing to learning, then connects demonstrated demand and outcomes to repayable scale capital."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Uses concessional money only for the unproven early risk and refuses expansion capital until both operating economics and inclusion hold."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names what would stop investment: permanent operating subsidy, return depending on opaque fees, weak additionality, or impact reporting based only on hubs and members."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_08_protection": {
+    "id": "ibm_released_08_protection",
+    "courseId": "IBM",
+    "conceptId": "ibm_mission_dilution",
+    "stem": "Identify the main ways Kisan Saathi could harm the people it intends to serve. Design governance and finance protections against mission dilution, over-indebtedness, elite capture, and dependence on one buyer.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M03-L03",
+      "IBM-M03-L05",
+      "IBM-M07-L04"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Uses mission dilution, responsible finance, and governance as operating controls rather than as statements of values."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses majority farmer ownership, approval of fees, voluntary sale, several buyers, total-obligation checks, transparent receipts, grievance handling, and participation reporting."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Explains how growth incentives can gradually remove the protections that made the original model inclusive."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Creates enforceable guardrails on pricing, lending, buyer concentration, access, data, board power, and related-party transactions."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names trade-offs and escalation rules, including when a hub, lender, buyer, director, or partner must be suspended."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_09_scale": {
+    "id": "ibm_released_09_scale",
+    "courseId": "IBM",
+    "conceptId": "ibm_replication",
+    "stem": "The pilot attracts requests from thirty more villages after its first harvest. Write the scale recommendation. What must be proved for two crop cycles, what can be replicated, and what should stop expansion?",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M04-L05",
+      "IBM-M04-L04"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Uses the scaling ceiling and controlled replication to reject reach as sufficient evidence."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses two crop cycles, positive hub cash contribution, higher net price after fees, lower spoilage, prompt payment, inclusive participation, reliable uptime, and common standards."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Connects growth pace to the slowest capability the model cannot safely dilute: operator training, maintenance, buyer demand, governance, or working capital."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Recommends a staged cluster expansion with explicit go, hold, and stop thresholds rather than thirty simultaneous launches."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names a cost of waiting and the evidence that would justify acceleration, while preserving the right to stop when outcomes or standards fail."
+      }
+    ],
+    "writtenGaps": [
+      {
+        "id": "ideas-missing",
+        "criterionId": "diagnosis",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Governing ideas not named",
+        "repair": "Say which course ideas this situation calls for before recommending anything."
+      },
+      {
+        "id": "ideas-wrong",
+        "criterionId": "diagnosis",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Wrong ideas applied",
+        "repair": "Re-read the situation for the symptom each framework is meant to explain."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Case figures not used",
+        "repair": "Quote the numbers that carry your argument rather than describing the case."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case figures misread",
+        "repair": "Check what each figure actually shows before resting a conclusion on it."
+      },
+      {
+        "id": "integration-missing",
+        "criterionId": "integration",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "Ideas listed, not connected",
+        "repair": "Show how one finding causes or constrains the next instead of covering them in turn."
+      },
+      {
+        "id": "decision-missing",
+        "criterionId": "decision",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No decision stated",
+        "repair": "Commit to what should be done; an analysis without a recommendation scores nothing here."
+      },
+      {
+        "id": "decision-unsupported",
+        "criterionId": "decision",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Decision does not follow",
+        "repair": "Check the recommendation follows from the diagnosis rather than from general good practice."
+      },
+      {
+        "id": "limit-missing",
+        "criterionId": "limit",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No condition or cost named",
+        "repair": "Say what would change your recommendation, or what it costs to follow it."
+      }
+    ]
+  },
+  "ibm_released_10_impact": {
+    "id": "ibm_released_10_impact",
+    "courseId": "IBM",
+    "conceptId": "ibm_ted_london",
+    "stem": "Design the impact and learning system for Kisan Saathi. Distinguish output, outcome, and attributable impact; apply the Ted London stakeholder lens; and include environmental as well as social effects.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "sourceIds": [
+      "IBM-M08-L05",
+      "IBM-M08-L01"
+    ],
+    "rubric": [
+      {
+        "id": "diagnosis",
+        "label": "Governing ideas",
+        "description": "Uses output–outcome–impact, a credible counterfactual, Ted London’s stakeholders and dimensions, and impact-investment discipline."
+      },
+      {
+        "id": "evidence",
+        "label": "Use of the brief",
+        "description": "Uses the proposed baseline, phased comparison villages, farmer net price, spoilage, payment days, income stability, participation, uptime, energy, transport, and refrigerant measures."
+      },
+      {
+        "id": "integration",
+        "label": "How the ideas connect",
+        "description": "Shows how one operating change can create economic, capability, relationship, and environmental effects across farmers, buyers, workers, intermediaries, and communities."
+      },
+      {
+        "id": "decision",
+        "label": "The design decision",
+        "description": "Selects a small decision-linked scorecard and a phased comparison rather than claiming attribution from before-and-after improvement alone."
+      },
+      {
+        "id": "limit",
+        "label": "What would change it",
+        "description": "Names selection, displacement, leakage, elite capture, rebound transport, refrigerant, and reporting burden as limits to the impact claim."
       }
     ],
     "writtenGaps": [

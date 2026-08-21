@@ -25,7 +25,7 @@
         <li>Your revision progress: answers, attempts, confidence choices, completion state, and a coarse band for how quickly you responded.</li>
         <li>For a written check: which prompt was checked, whether each visible criterion was met, and a bounded label for whether a writing move was missing or misunderstood.</li>
         <li>A summary of each mock paper — marks, how much you attempted, how long it took. The options you chose are not stored.</li>
-        <li>A hashed session token, the agreement version you accepted, the country code Cloudflare reports at login, and account-lock state.</li>
+        <li>Hashed session tokens and the agreement version you accepted. Dungeon does not store a first-login country lock.</li>
         <li>A per-day count of written checks, to enforce the daily allowance. It holds no question, answer, or result.</li>
       </ul>
 
@@ -48,10 +48,10 @@
       <p>Dungeon does not request precise location, does not store your raw IP address in its database, and does not save exact per-question response times — the browser derives a coarse band and discards the milliseconds. A fast answer keeps its correctness; speed only stops that one response from independently supporting the word Strong. Slow answers are never penalised.</p>
 
       <h2>Honest limits</h2>
-      <p>Your approved email works like a password and inbox ownership is not verified. One active browser session per email. Logging in from a different country than your first login locks the account for review — travel, VPNs and mobile networks all cause this legitimately, so it is a signal, not an accusation.</p>
+      <p>Your approved email works like a password and inbox ownership is not verified. The tester terms still require personal use and ask you to use one active browser at a time, but Dungeon does not automatically limit your devices or lock the account when Cloudflare reports a different country.</p>
 
       <h2>Asking for anything</h2>
-      <p>Corrections, explanations of a lock, withdrawal, or deletion: message Aneeket privately through the channel used to onboard you.</p>
+      <p>Corrections, withdrawal, or deletion: message Aneeket privately through the channel used to onboard you.</p>
 
       <p class="legal-return"><a href="./">Back to Dungeon</a></p>
     </section>

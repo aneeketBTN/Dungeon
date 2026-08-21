@@ -27,9 +27,12 @@ const publicFiles = [
   "app/sets/t6_brgsa.js",
   "app/sets/t6_catalog.js",
   "app/sets/t6_integrated.js",
+  "app/sets/t6_ibm_case.js",
   "app/sets/t6_challenges.js",
+  "app/sets/t6_final_sprints.js",
   "app/sets/t6_mini_mocks.js",
-  "app/sets/t6_coverage.js"
+  "app/sets/t6_coverage.js",
+  "app/vendor/gsap.min.js"
 ];
 
 await rm(dist, { recursive: true, force: true });

@@ -62,11 +62,15 @@ const base = `http://localhost:${port}`;
    the read-back process can see the new title while the screenshot process paints the
    old driver, producing a green report for the wrong screen. */
 const chromeProfiles = [];
-process.on("exit", () => {
-  chromeProfiles.forEach((profile) => {
-    try { fs.rmSync(profile, { recursive: true, force: true }); } catch { /* temp cleanup only */ }
-  });
-});
+async function cleanupChromeProfiles() {
+  /* A full sweep creates more than seventy isolated profiles. Serial synchronous
+     removal in an `exit` handler made Windows sit for minutes after the final clean
+     manifest, with no output and no exit code. Clean concurrently, cap lock retries,
+     and never let disposable browser cache rewrite the acceptance result. */
+  await Promise.allSettled(chromeProfiles.map((profile) => fs.promises.rm(profile, {
+    recursive:true, force:true, maxRetries:1, retryDelay:50
+  })));
+}
 function profileFlags() {
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), "dungeon-shots-"));
   chromeProfiles.push(profile);
@@ -108,6 +112,8 @@ const SHOTS = [
   { scene: "dashboard", subject: "SPMS", size: DESKTOP, theme: "dark" },
   { scene: "dashboard", subject: "SPMS", size: PHONE, theme: "light" },
   { scene: "dashboard", subject: "SPMS", size: PHONE, theme: "dark" },
+  { scene: "dashboard-folded", subject: "IBM", size: DESKTOP, theme: "light" },
+  { scene: "dashboard-folded", subject: "IBM", size: PHONE, theme: "dark" },
 
   { scene: "lesson", subject: "SCLM", size: DESKTOP, theme: "light" },
   { scene: "lesson", subject: "SCLM", size: PHONE, theme: "light" },
@@ -119,6 +125,12 @@ const SHOTS = [
 
   { scene: "exam-home", subject: "SCLM", size: DESKTOP, theme: "light" },
   { scene: "exam-home", subject: "SCLM", size: PHONE, theme: "dark" },
+  { scene: "exam-final", subject: "IBM", size: DESKTOP, theme: "light" },
+  { scene: "exam-final", subject: "IBM", size: PHONE, theme: "dark" },
+  { scene: "exam-full", subject: "IBM", size: DESKTOP, theme: "dark" },
+  { scene: "exam-full", subject: "IBM", size: PHONE, theme: "light" },
+  { scene: "exam-released", subject: "IBM", size: DESKTOP, theme: "light" },
+  { scene: "exam-released", subject: "IBM", size: PHONE, theme: "dark" },
 
   /* The last-day path is a separate interaction contract: eight modules, immediate
      teaching, and an optional way-in method before the answer. Photograph both the
@@ -129,9 +141,15 @@ const SHOTS = [
   { scene: "mini-feedback", subject: "SPMS", size: PHONE, theme: "light" },
   { scene: "mini-result", subject: "SPMS", size: DESKTOP, theme: "light" },
   { scene: "mini-result", subject: "SPMS", size: PHONE, theme: "dark" },
+  /* IBM's written-only frameworks exercise the one-commit answer-spine path that an
+     objective Speedrun cannot cover. */
+  { scene: "mini-feedback", subject: "IBM", size: DESKTOP, theme: "light" },
+  { scene: "mini-feedback", subject: "IBM", size: PHONE, theme: "dark" },
 
   { scene: "notes", subject: "SCLM", size: DESKTOP, theme: "light" },
   { scene: "notes", subject: "SCLM", size: PHONE, theme: "dark" },
+  { scene: "notes-ibm", subject: "IBM", size: DESKTOP, theme: "light" },
+  { scene: "notes-ibm", subject: "IBM", size: PHONE, theme: "dark" },
 
   /* The screen the 2026-08-14 layout sweep never visited, and where the legend chip
      was found painting across its own label at every desktop width. */
@@ -175,7 +193,7 @@ for (const shot of SHOTS) {
       "--hide-scrollbars",
       /* Long enough for the app to boot, the frame to drive it, and every animation
          to be finished by hand. Virtual time, so it costs no wall clock. */
-      "--virtual-time-budget=8000",
+      "--virtual-time-budget=16000",
       `--window-size=${shot.size.w},${shot.size.h}`,
       `--screenshot=${file}`,
       url
@@ -197,7 +215,7 @@ for (const shot of SHOTS) {
     try {
       execFileSync(chrome, [
         "--headless=new", "--disable-gpu", "--no-sandbox", ...profileFlags(),
-        "--hide-scrollbars", "--virtual-time-budget=8000",
+        "--hide-scrollbars", "--virtual-time-budget=16000",
         `--window-size=${shot.size.w},${shot.size.h}`, `--screenshot=${file}`, url
       ], { stdio: ["ignore", "ignore", "pipe"], timeout: 60000 });
       bytes = fs.statSync(file).size;
@@ -219,7 +237,7 @@ for (const shot of SHOTS) {
     dom = execFileSync(chrome, [
       "--headless=new", "--disable-gpu", "--no-sandbox",
       ...profileFlags(),
-      "--virtual-time-budget=8000", "--dump-dom", url
+      "--virtual-time-budget=16000", "--dump-dom", url
     ], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 60000 });
   } catch { /* reported below as unverified */ }
   const row = results.find((r) => r.name === name);
@@ -246,4 +264,5 @@ const failed = results.filter((r) => !r.ok);
 console.log(JSON.stringify({
   chrome, outDir, taken: results.length, failed: failed.length, results
 }, null, 2));
-process.exit(failed.length ? 1 : 0);
+await cleanupChromeProfiles();
+process.exitCode = failed.length ? 1 : 0;

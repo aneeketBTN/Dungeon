@@ -3912,6 +3912,7 @@
            because these items are additional to a Learn surface set that is already
            complete without them. Nothing shared is excluded — see §4.2 of the brief. */
         examOnly: !!scenario.examOnly,
+        releasedCase: !!scenario.releasedCase,
         caselet: scenario.caselet,
         stem: scenario.task,
         rubric: scenario.rubric.map(function (criterion) {

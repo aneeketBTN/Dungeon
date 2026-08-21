@@ -33,7 +33,7 @@ const appDir = path.join(root, "app");
    once t6_brgsa.js has run, and t6_challenges.js reads T6_INTEGRATED while building. */
 const BANK_FILES = [
   "sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js",
-  "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_challenges.js"
+  "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_ibm_case.js", "sets/t6_challenges.js"
 ];
 
 function loadBank(mutate) {
@@ -110,7 +110,7 @@ const SET_COUNT = 3;
 
 function sectionDraw(course, courseId, sectionId, type, count, prefer, modeCounts) {
   const pool = Object.keys(course.questions).map((id) => course.questions[id])
-    .filter((question) => (question.type || "mcq") === type);
+    .filter((question) => !question.releasedCase && (question.type || "mcq") === type);
   return Array.from({ length: SET_COUNT }, (_, set) =>
     takeExamSection(
       examPrefer(examShuffle(pool, examSeed(courseId, set) + sectionId.charCodeAt(0)), prefer),

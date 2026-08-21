@@ -56,6 +56,7 @@ var LOAD_ORDER = [
   "app/sets/t6_brgsa.js",
   "app/sets/t6_catalog.js",
   "app/sets/t6_integrated.js",
+  "app/sets/t6_ibm_case.js",
   "app/sets/t6_challenges.js"
 ];
 

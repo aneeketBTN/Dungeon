@@ -1,5 +1,63 @@
 # Changelog
 
+## 2026-08-22 — Final revision becomes a real route, IBM receives its released case, and access stops locking people out
+
+Branch `fix/theme-switch-and-login-theming`. Not merged or deployed; the live Cloudflare rate rule
+is the one operational exception described below. Evidence:
+`evidence/2026-08-22/t6-final-revision-released-ibm/verification.md`.
+
+**Examiner now asks how far away the exam is.** Full mocks, Speedrun and Minis are three explicit
+tabs rather than one long page with short practice hidden inside paper cards. Full mocks preserve
+the real two-hour conditions for a week or more out. Speedruns are eight-question, all-module
+coached rounds for the final week. Minis are a 3/16/6-minute retrieval
+routine with **32 authored prompts** — eight per subject and exactly one per module — each carrying
+a course-grounded answer spine and a near-miss check, plus three high-cost traps per subject. A new gate fails missing
+subjects/modules, weak prompts, unresolved concept links or incomplete answer/check fields.
+
+**The IBM case is no longer guessed or dismissed.** The 21 August prompt is preserved verbatim and
+treated honestly as an open design brief: it supplies no firm, sector, beneficiary, evidence,
+constraint or figures. Dungeon states those missing assumptions, builds one coherent farmer-owned
+`Kisan Saathi Hubs` model, and supplies a fixed ten-question / 100-mark Released case paper across
+ten course lenses. Its **10 examiner-only responses** carry full rubrics and exemplars, never enter
+Learn, and are excluded from the seven numbered IBM transfer sets. IBM is now 946 questions and 177
+constructed responses; the whole bank is **2,837 questions / 219 linked concepts**. Quick Notes
+module 1 carries the same case pack, assumptions, mechanics and answer shape.
+
+**The subject choice now changes shape after it has done its job.** First load still presents the
+four full subject cards. The first selection animates them into a compact sticky rail using the
+self-hosted GSAP runtime; the current subject has a persistent mark and inactive subjects recede,
+with full detail available on hover/focus. Reduced-motion users get the settled state immediately.
+Live Browser testing verified the real transition rather than only its static fallback.
+
+**Personal access remains a term, not an unreliable automatic verdict.** Login/session handling no
+longer enforces a two-device ceiling or first-country lock, and the retired unlock flow is removed
+from the learner and Control Room. Concurrent sessions retain the same D1 progress; revocation and
+owner sign-out remain. Migration `0008_remove_device_and_country_enforcement.sql` clears legacy
+lock fields and must run against remote D1 immediately before or with the Worker release. The live
+Cloudflare burst rule now excludes `/dungeon/admin` and descendants, stopping the Control Room's
+own API fan-out from rate-limiting the owner while learner-path protection remains at 40 requests
+per 10 seconds.
+
+**The revision routes were run through the established learner personalities.** Brilliant-but-lazy
+checks whether Speedrun answers can be gamed by option length or answer position; Average Joe checks
+that every Speedrun teaches immediately and every Mini supplies all eight prompts; Dumb-but-diligent
+checks complete concept-cycle coverage, literal module spread and bounded final answer spines. This
+pass exposed a genuine timing defect: IBM written Speedrun questions opened a second self-marking
+rubric after submission. They now finish in one interaction and reveal a 40–85-word, case-grounded
+answer spine without grading or manufacturing Strong evidence. All three personalities pass all
+four subjects in both routes.
+
+**Verification:** full suite **147/147**; Minis/released-case, Speedrun, revision-persona, syllabus, taught,
+tested, spine, naming, palette, craft and exam-readiness gates PASS; transcript-backed validator
+2,837 questions / 0 errors / expected 69 extraction-unverified warnings; lesson gate 283/283;
+authenticated Wrangler dry run PASS; release build **23 assets**. The expanded layout runner checks
+16 scenes at phone/dark and desktop/light: **32/32 PASS** with zero overflow, clipping, overlap,
+cut-row, hidden-scroll, dead-shadow, flat-panel or tap-target failures. Regular and optical suites
+each produced **36/36** valid captures. Visual inspection caught and repaired a false IBM-labelled
+SPMS Mini capture, a released-case shutter firing before navigation, whole-pool readiness copy
+on the fixed paper, the old `1 of 8` text contradicting Learn's nine-run path, and a first draft of
+the IBM Speedrun answer spine that was too generic to teach transfer.
+
 ## 2026-08-21 — Last-day mocks teach in eight questions, rotate through the whole bank, and the UI clears release
 
 Evidence: `evidence/2026-08-21/t6-last-day-mini-mocks/verification.md`.

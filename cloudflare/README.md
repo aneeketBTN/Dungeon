@@ -8,7 +8,7 @@ owner-only backup and is not an origin dependency for the public domain.
 Learner endpoints under the prefix are `/api/session`, `/api/progress`, and `/api/community`.
 The community endpoint records invite-opened and explicit join acknowledgements for an authenticated
 tester. The owner `/admin/api/testers` endpoint supports single and bulk `bump` actions in addition
-to add, list, unlock, and revoke. A bump records an in-app timestamp; the browser copies a reminder
+to add, list, sign-out, sign-out-all, and revoke. A bump records an in-app timestamp; the browser copies a reminder
 for manual WhatsApp sending and never claims an automatic message was sent.
 
 ## Required runtime bindings
@@ -38,7 +38,10 @@ list, grant, or revoke operation.
 
 Apply all D1 migrations before deploying a Worker version that uses them. In particular,
 `0004_community_acknowledgement.sql` adds the invite-opened, membership-acknowledged, and reminder
-timestamps required by the current agreement version.
+timestamps required by the current agreement version. Apply
+`0008_remove_device_and_country_enforcement.sql` to remote D1 immediately before or with the Worker
+version that removes lock writes; applying it while the old Worker remains live would allow legacy
+state to be recreated.
 
 The normal release path is `npm run build` from the project root, followed by
 `npm --prefix cloudflare run check`. `npm --prefix cloudflare run build:standalone` creates a
@@ -48,6 +51,11 @@ this authenticated API fallback; `wrangler.jsonc` retains the equivalent `env.AS
 paths run the Worker JWT checks. Never use a temporary workers.dev deployment for production or
 put a deployment credential in source.
 
-Production also has a zone rate-limit rule for the `/dungeon` path: more than 40 requests from one
-IP/colo pair in 10 seconds is blocked for 10 seconds. This contains rapid automated collection
-without representing the client-side bank as DRM.
+Production also has a zone rate-limit rule for learner paths under `/dungeon`: more than 40 requests
+from one IP/colo pair in 10 seconds is blocked for 10 seconds. The owner-only `/dungeon/admin` path
+is explicitly excluded so a Control Room load cannot rate-limit its own authenticated API fan-out.
+This contains rapid automated collection without representing the client-side bank as DRM.
+
+D1 still carries nullable legacy country/lock columns so older deployments migrate safely, but the
+current Worker neither limits concurrent devices nor stores or enforces Cloudflare's country signal.
+Personal, non-shared access remains a tester-agreement term rather than an automated verdict.

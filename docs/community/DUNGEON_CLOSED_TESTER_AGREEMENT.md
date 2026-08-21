@@ -68,17 +68,16 @@ are allowed.
 
 ## 6. Security and data notice
 
-To provide access, save progress, and identify obvious account sharing, Dungeon stores your
-approved email, revision progress and attempts, an opaque session-token hash, timestamps, your
-first-login Cloudflare country code, agreement version and acceptance time, the times you opened
-the group invite, acknowledged joining, or were sent an in-app reminder, and account-lock state.
-It does not request precise GPS
-location. Cloudflare may process ordinary network and security metadata.
+To provide access and save progress, Dungeon stores your approved email, revision progress and
+attempts, opaque session-token hashes, timestamps, agreement version and acceptance time, and the
+times you opened the group invite, acknowledged joining, or were sent an in-app reminder. It does
+not request precise GPS location and no longer stores or enforces a first-login country lock.
+Cloudflare may process ordinary network and security metadata as part of delivering the service.
 
-Only one active browser session is permitted for an approved email. A request from a different
-country than the first login can immediately lock the Dungeon account. Travel, VPNs, mobile
-networks, and routing can create legitimate country changes, so a lock is reviewed by Aneeket and
-is not by itself proof of misconduct.
+Personal access remains a condition of this agreement: use your own approved email, do not share
+the account, and use one active browser at a time. Dungeon does not automatically limit how many
+devices you can sign into or lock you after a country change. A device or region pattern may still
+prompt a good-faith conversation about the personal-use term, but it is not proof of misconduct.
 
 ## 7. Access and consequences
 

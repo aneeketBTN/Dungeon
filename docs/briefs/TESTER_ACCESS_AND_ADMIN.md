@@ -50,21 +50,19 @@ code on the learner path:
 6. Learner progress is stored per email in Cloudflare D1. The browser copy remains an offline
    fallback, and a dirty-flag check stops a staler server copy from overwriting an unsynced local
    run.
-7. Cloudflare rate limiting blocks more than 40 `/dungeon` requests per IP/colo pair in 10 seconds
-   for 10 seconds without penalising a normal page load.
+7. Cloudflare rate limiting blocks more than 40 learner-path requests per IP/colo pair in 10 seconds
+   for 10 seconds without penalising a normal page load. The authenticated `/dungeon/admin` path is
+   excluded so the Control Room's own API fan-out cannot lock out the owner.
 
-## Anti-sharing controls
+## Personal-access controls
 
-- **One active browser per email.** A second concurrent login is refused with an explicit message
-  rather than silently displacing the first. Sign-out releases the lock and flushes pending saves.
-- **Country lock.** If an approved account appears from a different country than its first login,
-  the account is locked and its sessions are deleted, at both login and mid-session checks.
-- **City and region are deliberately unused.** Mobile networks, VPNs, travel, and ISP routing make
-  them too noisy to justify an automatic permanent ban. A lock is an owner review prompt with a
-  human unlock path, not proof of misconduct, and the agreement says so.
-- The Control Room shows active-session, first-country, and lock state per tester so the owner can
-  judge a lock before acting.
-- Revocation deletes that tester's sessions and server-side progress in the same action.
+- An approved email remains personal under the tester agreement. Dungeon does not turn that term
+  into an automatic two-device limit or a region lock: concurrent sessions are allowed, and
+  Cloudflare's coarse country signal is neither stored nor used to deny access.
+- The Control Room shows the number of live sessions so the owner can sign a tester out if a manual
+  review is warranted. A device or region pattern is a conversation prompt, never proof of sharing.
+- Per-tester sign-out ends current sessions without deleting progress. Revocation deletes that
+  tester's sessions and server-side progress in the same action.
 
 ## Closed tester agreement
 
@@ -87,9 +85,9 @@ remains owner-only as a backup, but no origin bypass credential is needed or sto
 
 ## Content-delivery boundary
 
-The production build exposes only thirteen allowlisted assets: the login HTML/CSS/application, the
-learner HTML/CSS/application, the three embedded T6 banks, the owner dashboard
-HTML/CSS/application, and `robots.txt`. It excludes live `data/state/`, `data/history/`, owner source packs,
+The production build exposes only 23 allowlisted assets: the login and privacy surfaces, the
+learner HTML/CSS/application, the current teaching/question/revision scripts, the self-hosted GSAP
+runtime, the owner dashboard, and `robots.txt`. It excludes live `data/state/`, `data/history/`, owner source packs,
 CLA analysis, work files, transfer material, credentials, and the private community invite. The
 invite is returned dynamically only after an approved email reaches the agreement gate; the same
 link appears inside the session-protected learner dashboard for existing testers.
@@ -97,8 +95,8 @@ link appears inside the session-protected learner dashboard for existing testers
 Only the login page and its assets are anonymous. Every learner asset, including the bank scripts,
 requires a valid session cookie and returns `401 LOGIN_REQUIRED` without one.
 
-The three current bank scripts still contain the authored questions required by the client-side
-scheduler. Session access, private cache headers, no-index rules, and rate limiting protect them
+The current allowlisted data scripts contain the authored teaching and questions required by the
+client-side scheduler. Session access, private cache headers, no-index rules, and rate limiting protect them
 from anonymous or casual bulk collection. They do not stop an approved technical tester from
 downloading the bank. Server-side, per-session item delivery is a separate architecture change and
 must be completed before claiming strong resistance to harvesting by authorised users.
@@ -108,9 +106,9 @@ must be completed before claiming strong resistance to harvesting by authorised 
 `app/admin.html` provides:
 
 - production health and allowlisted-release checks;
-- cohort paste-onboarding, current tester list, refresh, clear-lock recovery, and
+- cohort paste-onboarding, current tester list, refresh, per-tester sign-out, and
   confirmation-backed one-person revocation;
-- per-tester session, agreement, progress, country, and last-active signals;
+- per-tester session, agreement, progress, and last-active signals;
 - per-tester WhatsApp-acknowledgement and bump state, one-person Bump, and a bulk **Bump missing
   group joins** action;
 - Participation and Where testers struggle panels computed from real saved state, with small

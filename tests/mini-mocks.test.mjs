@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { auditMiniMocks } from "../tools/check-mini-mocks.mjs";
 
-test("mini-mock cycles stay short, applied, rotating, and complete", () => {
+test("Speedrun cycles stay short, applied, rotating, and complete", () => {
   const report = auditMiniMocks();
   assert.deepEqual(report.errors, []);
   assert.equal(report.ok, true);

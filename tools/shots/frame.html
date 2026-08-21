@@ -84,11 +84,14 @@
      acceptance of the requested destination. */
   var startupScenario = scene === "mini-question" || scene === "mini-result" ? "mini-question"
     : scene === "mini-feedback" ? "mini-feedback"
-    : scene === "notes" ? "notes"
+    : scene === "notes" || scene === "notes-ibm" ? "notes"
     : scene === "exam-question" ? "exam-question"
-    : scene === "exam-home" ? "exam-home" : "";
+    : scene === "exam-home" ? "exam-home"
+    : scene === "exam-final" ? "exam-final"
+    : scene === "exam-full" ? "exam-full"
+    : scene === "exam-released" ? "exam-released" : "";
   frame.src = "/app/t6.html" + (startupScenario ? "?scenario=" + startupScenario +
-    (scene === "exam-question" ? "&course=" + encodeURIComponent(subject) : "") : "");
+    (scene === "exam-question" || scene === "exam-final" || scene === "mini-question" || scene === "mini-feedback" || scene === "mini-result" ? "&course=" + encodeURIComponent(subject) : "") : "");
   document.body.appendChild(frame);
 
   /* ---- waiting -------------------------------------------------------------------
@@ -191,11 +194,11 @@
     return SCENES["exam-home"]()
       .then(function () {
         var button = pick('[data-mini-mock-course="' + subject + '"]');
-        if (!button) throw new Error("no mini-mock button for " + subject);
+        if (!button) throw new Error("no Speedrun button for " + subject);
         button.click();
       })
       .then(function () {
-        return waitFor("the mini-mock question", function () {
+        return waitFor("the Speedrun question", function () {
           return pick(".practice-screen.active #commit-answer") && pick(".practice-screen.active #confidence-guide");
         });
       });
@@ -209,28 +212,28 @@
   function completeMiniMock() {
     var answered = 0;
     function answerNext() {
-      return waitFor("mini-mock question " + (answered + 1), function () {
+      return waitFor("Speedrun question " + (answered + 1), function () {
         return pick(".practice-screen.active #commit-answer:not([hidden])");
       }).then(function () {
         answerMiniQuestion();
-        return waitFor("teaching feedback for mini-mock question " + (answered + 1), function () {
+        return waitFor("teaching feedback for Speedrun question " + (answered + 1), function () {
           return pick(".practice-screen.active #feedback.visible .confidence-method-result");
         });
       }).then(function () {
         answered += 1;
         var next = pick("#next-question:not([hidden])");
-        if (!next) throw new Error("mini-mock teaching feedback had no Continue action");
+        if (!next) throw new Error("Speedrun teaching feedback had no Continue action");
         next.click();
         if (answered < 8) return answerNext();
-        return waitFor("the mini-mock result after exactly eight answers", function () {
+        return waitFor("the Speedrun result after exactly eight answers", function () {
           return pick(".results-screen.active") && pick("#results-title") &&
             /all eight modules/i.test(pick("#results-title").textContent) &&
-            /next 15-minute round|fresh rotation/i.test(pick("#result-primary").textContent);
+            /next Speedrun|fresh rotation/i.test(pick("#result-primary").textContent);
         });
       });
     }
     return answerNext().then(function () {
-      if (answered !== 8) throw new Error("mini-mock completed after " + answered + " answers instead of 8");
+      if (answered !== 8) throw new Error("Speedrun completed after " + answered + " answers instead of 8");
     });
   }
 
@@ -247,10 +250,32 @@
       });
     },
 
+    "dashboard-folded": function () {
+      return SCENES.dashboard()
+        .then(function () {
+          /* Screenshots accept the settled state, not a headless RAF implementation.
+             The production fallback is the same immediate state used for reduced
+             motion; the live browser separately exercises the GSAP transition. */
+          win().gsap = null;
+          card(subject).click();
+        })
+        .then(function () {
+          return waitFor("the compact subject tabs with a named current subject", function () {
+            return pick("#course-grid.is-folded .course-card[aria-current='true'] .course-current");
+          });
+        });
+    },
+
     /* The first lesson of the subject's first step: the teaching surface. */
     lesson: function () {
       return SCENES.dashboard()
-        .then(function () { card(subject).click(); })
+        .then(function () { win().gsap = null; card(subject).click(); })
+        .then(function () {
+          return waitFor("the selected subject and its one start action", function () {
+            return pick("#course-grid.is-folded .course-card[aria-current='true']") && pick("#start-recommended");
+          });
+        })
+        .then(function (button) { button.click(); })
         .then(function () {
           return waitFor("a lesson on screen", function () {
             var panel = doc().getElementById("lesson-panel");
@@ -300,14 +325,37 @@
         });
     },
 
+    "exam-final": function () {
+      return waitFor("the requested final 25 desk and all eight questions", function () {
+        return pick(".exam-home-screen.active") && !pick("#exam-mode-final").hidden &&
+          pick('[data-final-course="' + subject + '"][aria-selected="true"]') &&
+          String(pick("#final-sprint .final-hero .eyebrow").textContent || "").indexOf(subject) === 0 &&
+          doc().querySelectorAll(".final-question").length === 8;
+        });
+    },
+
+    "exam-full": function () {
+      return waitFor("the full-paper chooser", function () {
+        return pick(".exam-home-screen.active") && !pick("#exam-mode-full").hidden &&
+          pick("#exam-mode-full [data-exam-set]");
+        });
+    },
+
+    "exam-released": function () {
+      return waitFor("the released IBM briefing", function () {
+        return pick(".exam-screen.active #exam-brief:not([hidden])") &&
+          /Released case/i.test(pick("#exam-facts").textContent);
+        });
+    },
+
     "mini-question": function () {
-      return waitFor("the mini-mock question", function () {
+      return waitFor("the Speedrun question", function () {
         return pick(".practice-screen.active #commit-answer") && pick(".practice-screen.active #confidence-guide");
       });
     },
 
     "mini-feedback": function () {
-      return waitFor("immediate mini-mock teaching feedback", function () {
+      return waitFor("immediate Speedrun teaching feedback", function () {
         return pick(".practice-screen.active #feedback.visible") && pick(".confidence-method-result");
         }).then(function () {
           var target = pick("#feedback");
@@ -321,7 +369,7 @@
     },
 
     "mini-result": function () {
-      return waitFor("the mini-mock question", function () {
+      return waitFor("the Speedrun question", function () {
         return pick(".practice-screen.active #commit-answer") && pick(".practice-screen.active #confidence-guide");
       }).then(completeMiniMock);
     },
@@ -331,6 +379,16 @@
         return pick(".notes-screen.active #notes-reader .notes-lesson") &&
           pick(".notes-screen.active #notes-module-nav button");
       });
+    },
+
+    "notes-ibm": function () {
+      return SCENES.notes()
+        .then(function () { pick('[data-notes-course="IBM"]').click(); })
+        .then(function () {
+          return waitFor("the IBM released-case notes pack", function () {
+            return pick(".notes-screen.active .notes-case-pack [data-open-released-case]");
+          });
+        });
     },
 
     /* A paper mid-question: the screen the 2026-08-14 layout sweep never visited, and

@@ -1,12 +1,12 @@
 # Dungeon
 
-## Current Status (2026-08-21)
+## Current Status (2026-08-22)
 
 **Product.** Dungeon is three surfaces over one course — **Learn** (layered study sets, primers,
 lessons, re-teach on evidenced mistakes), **Examiner** (timed mocks on the real Batch 1 paper
 pattern, `docs/briefs/T6_EXAM_PATTERN.md`) and **Quick Notes** (the complete authored course in
 teaching order, searchable and printable) — across four subjects (SPMS, BRGSA, SCLM, IBM), **219
-concept records and 2,827 questions**. A real tester cohort is live and **a push to `main` deploys** (see
+concept records and 2,837 questions**. A real tester cohort is live and **a push to `main` deploys** (see
 Collaborators). Every claim in this section has its full story in
 `docs/governance/CHANGELOG.md`, newest first; the ledger below names the entries.
 
@@ -23,15 +23,15 @@ Known Gaps).
 
 **Testing-layer coverage — COMPLETE at the phrase gate (2026-08-20).** `check:tested` now reports
 **359/359 named syllabus ideas (100%)**: BRGSA 69/69, IBM 90/90, SCLM 84/84, SPMS 116/116. The bank
-holds BRGSA 29 concepts / 417 questions, IBM 85 / 936, SCLM 36 / 516, SPMS 69 / 958; every one of
+holds BRGSA 29 concepts / 417 questions, IBM 85 / 946, SCLM 36 / 516, SPMS 69 / 958; every one of
 the 219 concepts has a derived link. This is coverage, **not** the adopted one-record-per-idea depth
 target. The IBM direction changed on 2026-08-20 and supersedes its historical descoping: its
 73-idea queue became **69 new records plus four honest wording repairs**. The new IBM records are
 classified by what they are: **20 foundational layer ideas** generate written + MCQ practice,
 **29 named frameworks/models** generate written practice only, and **20 bounded concepts** generate
 MCQ practice only. The original sixteen records remain layer concepts, so IBM totals 36 layer / 29
-framework / 20 concept records, **167 constructed responses**, and no isolated concept. Generic
-course-grounded caselets teach transfer; nothing claims to reproduce the unreleased exam case.
+framework / 20 concept records, **177 constructed responses**, and no isolated concept. Generic
+course-grounded caselets teach transfer; the released case lives in its own fixed Examiner paper.
 
 **Mock coverage — COMPLETE at the paper-relevant record level (2026-08-20).** Numbered mocks are
 deterministic coverage cycles rather than three unrelated draws. SPMS closes in **3 sets at 69/69**
@@ -42,13 +42,33 @@ Learn rather than being forced into its all-written paper. A separate **Weakest 
 uses current Learn evidence to target weak or untested records; it is excluded from the common
 coverage cycle and like-for-like re-sit comparisons because its contents are dynamic.
 
-**Last-day mini-mocks — LIVE (2026-08-21).** Examiner leads with a coached **8-question / all-8-
-module / 15-minute-top** round and leaves the two-hour real-pattern papers below it. Every answer
+**Speedrun engine — LIVE (first released as mini-mocks, 2026-08-21).** Examiner carries a coached
+**8-question / all-8-module / 15-minute-top** round. Every answer
 teaches immediately; an optional four-step way-in and the Quick Notes numerical exoskeleton teach
-how to start before calculation. Mini-mocks rotate deterministically through the complete concept
+how to start before calculation. Speedruns rotate deterministically through the complete concept
 library, prioritising unseen-in-cycle records: SPMS **69 concepts in 7×8**, BRGSA **29 in 2×8**,
 IBM **85 in 10×8**, SCLM **36 in 5×8**. The rotation gate enforces eight applied questions, one per
-module, uniqueness, complete-cycle coverage and at least 35% sampled id change.
+module, uniqueness, complete-cycle coverage and at least 35% sampled id change. Written Speedrun
+items are deliberately one interaction: submit once, then reveal a 40–85-word case-grounded answer
+spine. They do not open a second self-marking rubric or create Strong evidence.
+
+**Final revision and released IBM case — RELEASE GREEN ON BRANCH (2026-08-22).** Examiner is now
+three explicit choices by distance to the exam: **Full mocks (1+ week out)**, coached **Speedrun
+(within a week)**, and authored **Minis (last 25–30 minutes)**. Minis carry **32 retrieval prompts — eight per subject and one per
+module** — with answer spines, near-miss checks and subject traps. IBM's 21 August prompt is kept
+verbatim as an open design brief: one explicit assumption set, one coherent Kisan Saathi Hubs model,
+and **10 examiner-only written responses / 100 marks / 10 course lenses**. They never enter Learn or
+the seven numbered IBM coverage sets. Quick Notes owns the same case pack and answer structure.
+
+**Subject fold and access simplification — RELEASE GREEN ON BRANCH (2026-08-22).** First load keeps
+the four full subject cards. First selection folds them with self-hosted GSAP into a compact sticky
+rail; selected subject is persistently marked, inactive subjects recede, hover/focus restores detail,
+and reduced-motion falls back immediately. Device-count and first-country enforcement are retired;
+personal access and one active browser remain tester terms, while concurrent sessions retain one D1
+progress record. Migration `0008_remove_device_and_country_enforcement.sql` clears legacy fields and
+must be applied remotely immediately before or with Worker release. The live Cloudflare learner
+burst rule excludes `/dungeon/admin` and descendants, so Control Room API fan-out no longer locks
+out the owner.
 
 **Learn front door — PURGED AND STREAMLINED (2026-08-21).** The four subject cards start or resume
 revision directly. Each subject has a fixed **nine-run** path with one uncleared run visible at a
@@ -67,22 +87,24 @@ units, formulas, thinking order and checks across BRGSA 3 / SCLM 5 / SPMS 2 / IB
 feedback now teaches Better answer → Why → What your answer missed → Use this check, with internal
 return/retest scheduling language removed.
 
-**UI separation and alignment — RELEASE GREEN (2026-08-21).** Dashboard, progress, Exam and mini
+**UI separation and alignment — RELEASE GREEN (2026-08-22).** Dashboard, progress, Exam and mini
 cards separate through tonal lift, restrained shadow and status silhouettes instead of outline-box
 grids. The dashboard has no competing floating action or Bag overlap; full-paper confidence targets
-meet 44px. The release runner checks nine scenes at 375×812 dark and 1280×900 light: **18/18 PASS**
-with zero overflow, clipping, overlap, cut-row, hidden-scroll, inset, dead-shadow, flat-panel or
-tap-target failures. The final regular and optical sweeps each produced **24/24** valid captures and
-all were visually inspected.
+meet 44px. The release runner checks sixteen scenes at 375×812 dark and 1280×900 light:
+**32/32 PASS** with zero overflow, clipping, overlap, cut-row, hidden-scroll, inset, dead-shadow,
+flat-panel or tap-target failures.
+The final regular and optical sweeps each produced **36/36** valid captures and the new surfaces were
+visually inspected.
 
-**Gates, last full run 2026-08-21 — all green:** `check_lesson_file` 283/283 scheduled / 0 errors /
+**Gates, last full run 2026-08-22 — all green:** `check_lesson_file` 283/283 scheduled / 0 errors /
 0 readable-only warnings; bank validator 0 errors and populated coverage for all four subjects
 (**pass the transcript path** — the silent-skip signature is `lessons.coverage: {}` and 0 warnings,
 and the field is nested, not top level). Its 69 current warnings are extraction-unverified glossary
 terms from PDFs the validator cannot extract, reported rather than hidden. Syllabus,
-taught-vocabulary, taught-not-tested, spine, naming, palette, mini-rotation and craft gates PASS;
-full test suite **144/144**; build 20 assets; exam readiness 0 errors / 0 warnings. The automated
-layout gate is 18/18 and both screenshot sweeps are 24/24. The dashboard chart runtime is
+taught-vocabulary, taught-not-tested, spine, naming, palette, mini-rotation, final-sprint,
+revision-persona and craft gates PASS; full test suite **147/147**; build 23 assets; authenticated
+Wrangler dry run PASS; exam readiness 0 errors / 0 warnings. The automated layout gate is 32/32 and
+both screenshot sweeps are 36/36. The dashboard chart runtime is
 intentionally no longer shipped.
 **Expected-state exception:** the
 lesson–lecture match gate `FAIL`s naming `SPMS-M01-L01` and nothing else, by owner decision —
@@ -92,7 +114,8 @@ anything *else* in that output is new.
 outstanding surfaces in chat on 2026-08-19. That is a release decision, not a completed review:
 the per-lesson reading set out in decision 1 did not happen, and acceptance is still not faculty
 review. The 2026-08-21 release is authorised for and sent through `main`, the tester deployment
-branch.
+branch. The 2026-08-22 work is verified on `fix/theme-switch-and-login-theming` and awaits owner
+merge; remote migration `0008` is required immediately before or with that release.
 
 ## Session Ledger — full stories in `docs/governance/CHANGELOG.md`
 
@@ -100,6 +123,18 @@ Each line is a pointer, not the record: the CHANGELOG entry of the same date and
 the numbers, the defects found, and the evidence paths. Do not re-derive a claim from a line
 here — read the entry.
 
+- **2026-08-22 — Final revision becomes a real route, IBM receives its released case, and access stops locking people out**
+  (Examiner split into Full mocks / Speedrun / Minis by distance to the exam. 32 authored final-retrieval prompts,
+  all four subjects and all eight modules. Released IBM brief preserved verbatim as an explicit-
+  assumption Kisan Saathi model with 10 examiner-only written responses; numbered sets exclude it.
+  Subject cards GSAP-fold after first choice. Device/country enforcement retired while personal-use
+  terms, revocation and owner sign-out remain; admin excluded from the live learner burst rule.
+  A three-personality audit caught and removed IBM Speedrun's hidden second rubric interaction;
+  Brilliant-but-lazy, Average Joe and Dumb-but-diligent now pass deterministic craft, teaching,
+  coverage and answer-length checks across Speedruns and Minis. Bank 2,837, IBM 946/177 constructed,
+  test 147/147, build 23, layout 32/32, two screenshot sweeps 36/36, Wrangler dry run green. Remote
+  migration 0008 is a deployment prerequisite. Evidence:
+  `evidence/2026-08-22/t6-final-revision-released-ibm/verification.md`.)
 - **2026-08-21 — Last-day mocks teach in eight questions, rotate through the whole bank, and the UI clears release**
   (Eight applied questions, one per module, immediate teaching, optional four-step scaffold and
   numerical exoskeleton; no hidden interaction expansion. Complete concept cycles: SPMS 7×8,
@@ -707,16 +742,16 @@ and generated outputs are exempt when their parent has a manifest/contact sheet.
 | `.agents/deployment.json` | Fail-closed activation gates, paused automation IDs, models, cadence, and non-running declarations. | 2026-08-11 |
 | `.agents/contracts/tester-event.schema.json` | Consented pseudonymous event contract, `1.1`. Learning **and** examiner event types under **separate consent scopes**, enforced both ways by an `allOf` rule; examiner fields are banded or bounded, never exact, because the cohort is small enough for an exact mark to identify. | 2026-08-12 |
 | `tools/validate-agent-readiness.mjs` | Validates paused charters, synthetic consented events, forbidden fields, and activation blockers. Reads allowed versions/scopes from the contract rather than restating them, and rejects any event whose consent scope does not match its type. | 2026-08-12 |
-| `package.json` | Dependency-free release build, validation, 50-test suite, and local-grader calibration commands. | 2026-08-13 |
-| `tools/build-site.mjs` | Allowlists the learner/admin/protection assets and produces the deployment artifact; prints the count it shipped (18 on 2026-08-14). | 2026-08-14 |
+| `package.json` | Release build, validation, 146-test suite, final-revision/mini gates, and local-grader calibration commands. | 2026-08-22 |
+| `tools/build-site.mjs` | Allowlists the learner/admin/protection/course/revision assets and self-hosted GSAP runtime; produces the 23-asset deployment artifact. | 2026-08-22 |
 | `sites-backup/worker.mjs` | Private Sites backup entrypoint, **not** the deployed Worker: learner/admin redirects, health response, static delivery, and security headers. Diverged from `cloudflare/src/index.mjs` and has no agreement gate. | 2026-08-12 |
 | `sites-backup/README.md` | Records why this worker is not production and what must be reconciled before promoting it. | 2026-08-12 |
 | `cloudflare/src/index.mjs` | Exact-path router (**a file in `app/` needs a route here as well as a place in the build allowlist — `theme.js` had the second and not the first and 404'd in production; LAW-69**), admission/sessions, agreement/community state, D1 progress, signed owner Access, tester management, the per-tester and cohort written-check ceilings, the written-answer archive with its per-row expiry, and the daily `scheduled` purge that keeps retention running after the cohort goes quiet. | 2026-08-15 |
-| `cloudflare/migrations/` | Applied D1 history for auth/progress, browser/country locks, agreement acceptance, community timestamps, per-tester and cohort written-check metering, and `0007_written_answer_archive.sql` — the only table holding a learner's own prose, with the expiry and cascade that make the three-month promise and withdrawal real. | 2026-08-14 |
+| `cloudflare/migrations/` | D1 history for auth/progress, retired browser/country locks, agreement/community state, written-check metering/archive, and `0008_remove_device_and_country_enforcement.sql`; apply 0008 remotely immediately before or with its Worker release. | 2026-08-22 |
 | `db/schema.ts` | Readable mirror of tester, session, progress, agreement, and community-state table shapes. | 2026-08-11 |
 | `app/login.html` | Approved-email entry and the one-time agreement/group step with private invite placeholder and two acknowledgements. Loads `theme.js` before the stylesheet, because it is the first screen anyone sees and a stored dark choice must not flash white here. | 2026-08-15 |
 | `app/login.css` | Login and agreement presentation for `login.html` **and** `privacy.html`, the `[hidden]` guard required by LAW-36, and the narrow-viewport layout. Palette paired on t6.css's contract — every colour a `light-dark()` token, no literal outside the block, light values byte-identical to the unpaired version — plus the one-frame `data-theme-switching` rule (LAW-68). | 2026-08-15 |
-| `app/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery. | 2026-08-11 |
+| `app/login.js` | Admission, approved-only invite binding, open-before-join gate, agreement submission, and recovery; no device-switch or country-unlock branch. | 2026-08-22 |
 | `docs/community/DUNGEON_CLOSED_TESTER_AGREEMENT.md` | Closed-test agreement source with group participation, reminder, and owner-reviewed removal terms. | 2026-08-11 |
 | `work/build_tester_agreement.py` | Builds the verified two-page agreement DOCX for Word/PDF delivery. | 2026-08-11 |
 | `cloudflare/tools/build-standalone.mjs` | Embeds the allowlisted release and bundles the Worker for authenticated API deployment fallback. | 2026-08-11 |
@@ -910,7 +945,7 @@ after the version is live, since a push to `main` deploys.
   tested floor ratcheted to 100%. The bank widened from 64 to **219 concepts** and from 920 to
   **2,827 questions** without adding syllabus aliases or lowering a floor. IBM's 73 misses became
   69 classified records plus four wording repairs: layer → subjective + MCQ, framework →
-  subjective-only, atomic concept → MCQ-only. The unreleased IBM exam case was not invented.
+  subjective-only, atomic concept → MCQ-only. The then-unreleased IBM exam case was not invented.
   Evidence: `evidence/2026-08-20/t6-ibm-classified-coverage/verification.md`.
 - [ ] **Coverage is not the adopted depth target.** The 219 concept records still stand in for 359
   named ideas. All 283 teaching entries are scheduled, but the mirror gate only proves a question

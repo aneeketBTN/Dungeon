@@ -82,7 +82,7 @@ function loadLessons() {
   const win = {};
   // t6_brgsa.js before t6_catalog.js: loading the catalog alone yields 48 concepts
   // instead of 64 and silently drops a whole subject (recorded 2026-08-15).
-  const files = ["t6_lessons.js", "t6_brgsa.js", "t6_catalog.js", "t6_challenges.js", "t6_integrated.js"];
+  const files = ["t6_lessons.js", "t6_brgsa.js", "t6_catalog.js", "t6_integrated.js", "t6_ibm_case.js", "t6_challenges.js"];
   for (const file of files) {
     const full = path.join(ROOT, "app", "sets", file);
     if (!fs.existsSync(full)) continue;

@@ -74,7 +74,7 @@ const valueOf = (flag) => {
 
 function loadBank() {
   const win = {};
-  for (const file of ["t6_lessons.js", "t6_brgsa.js", "t6_catalog.js", "t6_challenges.js", "t6_integrated.js"]) {
+  for (const file of ["t6_lessons.js", "t6_brgsa.js", "t6_catalog.js", "t6_challenges.js", "t6_integrated.js", "t6_ibm_case.js"]) {
     const full = path.join(ROOT, "app", "sets", file);
     if (!fs.existsSync(full)) continue;
     // eslint-disable-next-line no-new-func

@@ -1,13 +1,14 @@
-# Term 6 Revision Dashboard
+# Dungeon — Term 6 revision
 
-The active route is a plain revision dashboard for all four Term 6 subjects. It shows what is
-Strong, Developing, Needs practice, or Not started; recommends the next useful practice; and keeps
-every generic practice shape directly available.
+Dungeon is three surfaces over one complete four-subject course: **Learn** sequences 283 teaching
+entries and 219 trackable concepts, **Examiner** offers Full mocks, final-week Speedruns and
+last-minute Minis, and **Quick Notes** exposes the authored course in searchable,
+printable teaching order.
 
-Current status: the dashboard, all four source-traced course banks, constructed self-review, and
-generic practice modes are verified in a real Browser. The controlled tester-release build is
-implemented and tested. This is the first Term 6 final, so the product targets a documented
-assessment envelope rather than claiming an exact paper blueprint.
+The released IBM prompt is now its own fixed ten-question paper with explicit assumptions and one
+coherent inclusive-business model. Numbered IBM papers remain rotating transfer practice. The
+learner home opens with four full subject cards, then folds them into a compact, animated subject
+rail once a subject is selected.
 
 ## Start
 
@@ -23,27 +24,30 @@ Open:
 http://localhost:8099/
 ```
 
-There is no npm install or build step. The server uses Python's standard library.
+The local server uses Python's standard library. Node dependencies are needed for tests and the
+release build:
+
+```text
+npm install
+npm test
+npm run build
+```
 
 ## What the student sees
 
-- Four immediately available subjects: BRGSA, IBM, SCLM, and SPMS.
-- A staged Overview, Concepts, and Study plan so the page does not expose everything at once.
-- A 64-concept overview and an evidence-over-time trend for the selected subject, with only one
-  two-concept module opened at a time.
-- Ten available sets per subject: eight module sets, one concept-connection set, and one flexible
-  generic practice check. Completing all ten is not compulsory.
-- One-click subject practice that prioritises Needs practice, then Developing, then untouched
-  concepts, with a button that names the concrete action.
-- Clickable concepts for focused practice.
-- MCQ, cloze, case-cloze, match, short-answer, and three-step boss questions, with sampled
-  confidence before checking high-value diagnostic work.
-- A generic practice setup that can emphasise recognition, application, explanation, or a mixed
-  set, with either immediate teaching or correctness held until the results screen.
-- One-day, three-day, and seven-day study plans that protect breaks and sleep and label same-day
-  success as current evidence rather than delayed retention.
-- Immediate answers, causal concept bridges, and later re-attempts from another perspective.
-- Results that say which concepts changed and what to do next.
+- Four immediately available subjects: BRGSA, IBM, SCLM, and SPMS, with a full first-load view and
+  compact active-subject rail after selection.
+- A fixed nine-run Learn path per subject, one uncleared run at a time, plus evidence-led repair.
+- MCQ, MSQ, cloze, case-cloze, match, numeric, short-answer, and multi-step questions.
+- Examiner tabs ordered by distance to the exam: **Full mocks (1+ week out)**, **Speedrun (within a
+  week)**, and **Minis (last 25–30 minutes)**.
+- Thirty-two authored final-revision prompts: one per module, with an answer spine and near-miss
+  check, plus three high-cost traps per subject.
+- Deterministic full-paper coverage cycles, dynamic Weakest links papers, and the fixed IBM
+  Released case paper.
+- Quick Notes covering every registered teaching entry, with search, print/PDF, concept maps, and
+  numerical setup guides.
+- Immediate explanations in Speedruns and deliberately delayed feedback in Full mocks.
 
 A concept becomes Strong only after at least five scored attempts, four correct answers, three
 question types, correct evidence in two practice blocks, applied evidence from a new case or valid
@@ -53,35 +57,32 @@ shown separately. Same-day evidence is not presented as delayed retention.
 
 ## Exam-format boundary
 
-No same-course Term 6 final exists for this first cohort. Public programme policy permits MCQs,
-caselets, or subjective assessments but does not establish their proportions or rules. This
-version practises
-grounded MCQ, cloze, case-cloze, match, short-answer, and boss decisions. Short answers reveal a
-source-grounded rubric and exemplar for transparent self-review; they are not automatically graded
-and cannot independently create Strong evidence. The generic practice check is not an exam replica
-or score prediction. It does not claim the final paper's exact sections, marks, duration, option
-rules, or negative marking.
-
-The first real Term 6 final can inform later cohorts. It cannot be treated as a missing source this
-cohort should wait for.
+The owner-supplied Batch 1 paper pattern is encoded in
+`docs/briefs/T6_EXAM_PATTERN.md`: four 120-minute papers with their actual section shapes. Full
+papers preserve those shapes; they do not predict difficulty, topic weight, likely score, or pass
+probability. Constructed responses use transparent course-grounded rubrics and exemplars for
+self-review, never an official mark. The released IBM design prompt is known; the ten questions
+the faculty will ask about it are not.
 
 ## Progress and privacy
 
-Progress stays in this browser under the internal key:
+Progress is stored in Cloudflare D1 for approved testers, with this browser key as the offline
+fallback:
 
 ```text
 term6.revision.v2
 ```
 
 An unfinished set resumes automatically after reload. **Reset local progress** asks for
-confirmation and removes only this browser profile. The web app does not write to the learning
-engine's live `data/state/` or `data/history/` files. The controlled tester release does not add accounts,
-analytics, advertising trackers, or a server-side learner database. See `docs/community/PRIVACY.md`.
+confirmation. Dungeon stores no advertising analytics or precise location. Approved access remains
+personal under the tester terms, but there is no automatic device ceiling or country lock. See
+`docs/community/PRIVACY.md`.
 
 ## Controlled tester release
 
-`npm run build` creates a ten-asset deployment artifact containing only the active T6 learner
-route, three course-bank scripts, the owner control room, and `robots.txt`. It excludes live
+`npm run build` creates a 23-asset deployment artifact containing only the active learner/login/
+privacy surfaces, allowlisted course and revision scripts, the owner control room, the self-hosted
+animation runtime, and `robots.txt`. It excludes live
 `data/state/`, `data/history/`, local CLA analysis, owner source packs, transfer notes, work files, test
 fixtures, credentials, tester addresses, and community invites. `npm test` checks that boundary,
 the health route, learner/admin redirects, private-cache policy, no-index rules, and security
@@ -101,8 +102,8 @@ provides a feedback template, and drafts—but never autonomously sends—change
 
 The Sites URL remains an owner-only backup. The Cloudflare route is live with separate tester and
 owner Access policies, signed-token verification at the Worker, private/no-index responses, and
-rapid-request rate limiting. The allowlist currently contains only the protected owner bootstrap
-address; no tester is granted access until the owner supplies tester addresses.
+learner-path rapid-request rate limiting. The authenticated admin path is excluded from that burst
+rule so its own API fan-out cannot throttle the owner.
 
 Tester conduct and feedback live in `docs/community/TESTER_GUIDE.md`; moderation and announcement procedures live
 in `docs/community/COMMUNITY_PLAYBOOK.md`; private security reports follow `SECURITY.md`.
@@ -124,6 +125,7 @@ the browser experience.
 Append one scenario to `/app/t6.html`:
 
 - `?scenario=dashboard-progress`
+- `?scenario=dashboard-folded`
 - `?scenario=dashboard-concepts`
 - `?scenario=dashboard-plan`
 - `?scenario=question`
@@ -140,6 +142,11 @@ Append one scenario to `/app/t6.html`:
 - `?scenario=feedback`
 - `?scenario=priority`
 - `?scenario=results`
+- `?scenario=exam-mini`
+- `?scenario=exam-final`
+- `?scenario=exam-full`
+- `?scenario=exam-released`
+- `?scenario=notes-ibm`
 
 Scenario routes do not save normal browser progress.
 

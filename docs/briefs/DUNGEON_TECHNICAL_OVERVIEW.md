@@ -1,6 +1,6 @@
 # Dungeon — technical overview
 
-**For collaborators. Written 2026-08-13.** This is the document to read before proposing a change
+**For collaborators. Written 2026-08-13; current-state sections updated 2026-08-22.** This is the document to read before proposing a change
 to how the product teaches, tests, or claims anything. It describes what is actually built, not
 what is planned. Where something is unfinished or unproven, it says so in the same sentence.
 
@@ -19,17 +19,23 @@ Authoritative sources, in order: `AGENTS.md` (living index and status), then
 
 ## 1. What the product is
 
-Dungeon is two products sharing one question bank, for one cohort sitting four Term 6 papers on
+Dungeon is three surfaces over one course, for one cohort sitting four Term 6 papers on
 22–23 August 2026.
 
 **The learning system** exists to take someone from zero to a pass. It sequences deliberately:
 teaches a lecture before anything tests it, puts weak concepts first, explains every answer, and
 never scores you on something it has not taught.
 
-**The examiner** exists to do the opposite. A full paper, on a clock, in the paper's own random
-order, with no teaching, no hints, and no feedback until submission — because that is the
-condition the real exam is sat under, and practising only under helpful conditions measures the
-help.
+**The examiner** now offers three deliberately different conditions by distance to the exam: a
+two-hour Full mock at least a week out, a coached 15-minute Speedrun with immediate teaching inside
+the final week, and an authored 25-minute Mini immediately before the paper. Full mocks have no
+teaching, hints, or feedback until submission. The IBM Full mocks view also owns a fixed
+ten-question Released case paper; ordinary numbered sets remain rotating framework transfer.
+Written Speedrun items commit once and reveal a bounded, case-grounded answer spine; they do not
+add a second rubric interaction, grade the learner, or create Strong evidence.
+
+**Quick Notes** is the complete authored course in teaching order. It is searchable and printable,
+and provides concept maps plus numerical setup guides without making a learner enter an assessment.
 
 They are linked in exactly one direction. Concepts missed under exam conditions are stored and
 become a curated revision route in the learning system. **Mock answers never touch your evidence.**
@@ -41,12 +47,12 @@ misses *prioritise* and never *score*.
 | | Count |
 | --- | ---: |
 | Subjects | 4 (SPMS, BRGSA, IBM, SCLM) |
-| Concepts | 64 (16 per subject) |
-| Authored lessons | 106 |
-| Bank questions | 816 (SPMS 216, BRGSA 204, SCLM 200, IBM 196) |
-| Boss (multi-step) questions | 160 |
-| Constructed responses | 64 |
-| Mock papers | 4, three independent sets each |
+| Concepts | 219 (SPMS 69, BRGSA 29, IBM 85, SCLM 36) |
+| Registered teaching entries | 283/283 |
+| Main bank questions | 2,837, including 10 fixed released-case responses |
+| Final-revision retrieval prompts | 32 (8 per subject; every module) |
+| Numbered full-paper cycle | 17 papers across four subjects |
+| Additional Examiner routes | 4 Speedrun cycles, 4 last-minute Minis, 4 dynamic Weakest links papers, 1 fixed IBM Released case |
 
 ---
 
@@ -248,7 +254,8 @@ by hand in `app/sets/t6_diagnoses.js`, keyed by question id and option index.
 `docs/authoring/LESSON-AUTHORING-PROTOCOL.md` is the procedure: find the edge (which lectures have
 questions but no lesson), extract candidates once per subject, **verify against the transcript
 before writing**, author one module per batch, gate the batch, verify in a browser, then run the
-full regression. 106 lessons exist against a bank of 816 questions.
+full regression. All 283 registered teaching entries are scheduled against a bank of 2,837
+questions.
 
 ### 4.5 The gates that stop bad material shipping
 
@@ -394,7 +401,7 @@ institutional memory: `BUG-LAWS.md` (58 laws, each with origin, cause, comply pa
 verification), `QUALITY-LOG.md` (truthful interaction, learning integrity, accessibility, motion
 coherence, persistence safety), and `CHANGELOG.md`.
 
-Automated gates: `npm test` (63 tests), `tools/validate_t6_bank.js`, `npm run check:exam`,
+Automated gates: `npm test` (146 tests), `tools/validate_t6_bank.js`, `npm run check:exam`,
 `npm run check:palette` (140 contrast pairings, grayscale separation and three colour-vision
 simulations in both themes, plus an assertion that the four evidence states are shape-distinct,
 not merely colour-distinct), and `tools/browser-checks/ui-audit.js` (overflow, sub-44px tap
@@ -410,13 +417,15 @@ effort.
 1. **The evidence model.** Eight gates, open-flag tracking, family- and block-aware repair, and
    time qualifiers that distinguish same-day fluency from retention. Most study apps ship a
    percentage.
-2. **Option-level diagnosis at bank scale.** 816 questions where every scheduled distractor can
-   say what choosing it revealed, enforced by a build gate rather than by review.
+2. **Option-level diagnosis at bank scale.** Thousands of selectable surfaces across 2,837
+   questions can say what choosing a distractor revealed, enforced by a build gate rather than by
+   review.
 3. **The breakdown analysis.** "Right alone, wrong in combination" is a genuinely different
    finding from "got it wrong", and it changes what to teach next.
 4. **Honesty under pressure.** The bank being short is stated before the clock, not after the
-   score. IBM carries a caveat saying its mock cannot reproduce its paper. `check:exam` exists to
-   find places where the app would flatter a learner.
+   score. The IBM released prompt is practised as a separate fixed paper with explicit assumptions;
+   numbered sets are labelled transfer practice. `check:exam` exists to find places where the app
+   would flatter a learner.
 5. **The ledgers.** Failures are written down with their comply path, so the same class of defect
    is paid for once. Several laws in the file were found by the gates that other laws demanded.
 
@@ -426,28 +435,29 @@ effort.
 
 Ordered by what would hurt the cohort soonest.
 
-1. **Content authoring is a single-threaded human bottleneck.** Every question and lesson is
-   authored against transcripts by one person. Two SCLM Section B numericals are still missing and
-   are *blocked* behind authoring the `SCLM-M03-L06` lesson, because shipping them first would
-   break teach-before-test.
-2. **Prompt variety in SCLM.** `check:exam` warns that 14 of the 50 Section A questions on every
-   paper are forced to share one visible prompt, and 3 of 3 in Section C. It trains recognition of
-   a stem rather than of an idea. Fixing it means varying caselets, not options.
+1. **Content validation is still a single-owner bottleneck.** The teaching and testing layers are
+   structurally complete, but release acceptance is not faculty review and does not make authored
+   interpretations authoritative.
+2. **Final-sprint calibration.** The 32 retrieval prompts have coverage, source-grounding, answer-
+   spine, and near-miss gates, but there is no learner-outcome evidence yet showing which eight
+   prompts produce the best final-hour transfer.
 3. **No item calibration and only a tiny cohort.** All difficulty is authored, not measured.
    Banded response timing can now detect an implausibly fast Strong proof, but it cannot establish
    item discrimination. Everything downstream — the Strong gates, the ordering, the difficulty
    tags — is a defensible rule set, not a validated model.
-4. **Bank breadth against paper size.** SCLM Section A needs 50 questions from a pool of 52. There
-   is almost no room to draw three genuinely different sets.
-5. **IBM cannot be mocked.** Its paper is ten written answers on a caselet released two days before.
-   What the examiner offers is timed writing practice against the frameworks, and it says so.
+4. **The released IBM brief is radically underspecified.** Dungeon can model disciplined assumption
+   setting and application of ten course lenses; it cannot know which assumptions or questions the
+   faculty will reward. The interface says so before the learner starts.
+5. **One released-case model can become memorisation.** The fixed paper is useful for structure,
+   but the numbered IBM coverage cycle must remain available so a learner still practises transfer.
 6. **Written-work calibration.** Local practice can now receive a source-cited Qwen criterion mark
    from the exact owner-approved checkpoint over the private Windows→Mac bridge. Its real-model path
    is operational, but it has not passed the 48-answer owner-marked quality set and timed examiner
    writing remains self-reviewed. Neither number is comparable with machine-marked objective
    sections. The hosted exact checkpoint requires its own owner-reviewed set; local model results
    do not validate Workers AI. The internal subject-wide analyzer is not a learner surface. The recommendation logic
-   excludes caveat papers from "weakest" for this reason.
+   keeps the fixed released-case paper outside weakest-first and numbered coverage comparisons for
+   this reason.
 7. **Visual acceptance.** Automated checks cover contrast, tap targets, overflow and radii. Pixel
    acceptance — someone looking at rendered screens — has been owed since 2026-08-12, because the
    verifying environment mostly does not composite frames. Note the failure mode this creates: an

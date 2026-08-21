@@ -45,6 +45,20 @@ complete structured response.
 No negative marking. **A case study is released two days before the exam**, and every question is
 based on it. There is no objective section at all.
 
+**Released 21 August 2026.** The supplied caselet is an open design prompt, not a factual company
+case with exhibits:
+
+> Based on your understanding of the condition of the poor people in our country and the
+> discussions on case studies that we studied during the course, create an inclusive business
+> model.
+
+Because the brief supplies no geography, sector, poverty segment, constraints, figures, or named
+organisation, a defensible answer must state a bounded set of assumptions before designing the
+model. Dungeon's fixed **Released case** paper therefore keeps the prompt verbatim, declares one
+coherent assumption set, builds one inclusive model, and tests it through ten course lenses. The
+ordinary numbered IBM papers remain rotating framework-transfer cases and never draw from that
+fixed released-case bank.
+
 ### 4 · Supply Chain & Logistics Management — 23 Aug, 13:00–15:00
 
 | Section | Type | Count | Each | Marks |
@@ -77,13 +91,13 @@ the generated match family repeats one visible task line across the three-questi
 | SPMS | 75 (all) | 0 | 219 MCQs and 28 MSQs; both sections fill |
 | SCLM | 56 (A + C) | 24 (numerical) | 160 MCQs, 28 matches and 8 numericals; all sections fill |
 | BRGSA | 40 | 40 | 78 MCQs, 29 case-clozes and 68 written prompts |
-| **IBM** | **0** | **100** | **167 framework/case written prompts; released caselet remains unknowable** |
+| **IBM** | **0** | **100** | **167 rotating framework/case prompts plus 10 fixed released-case responses** |
 
-**IBM is the reversal.** Its paper is ten written answers on a caselet released two days prior.
-Authoring MCQs for its uncited lectures would add zero marks. What helps is framework fluency and
-structured written answers against an unseen case. Layer and framework records carry the written
-surfaces appropriate to them; bounded concepts remain objective-only by the adopted idea taxonomy.
-The mock still states that it cannot reproduce the caselet released two days before the real paper.
+**IBM is the reversal.** Its paper is ten written answers on one released prompt, so authoring more
+MCQs does not add exam marks. Layer and framework records carry written practice; bounded concepts
+remain objective-only by the adopted idea taxonomy. The fixed Released case paper now practises the
+actual brief. The numbered coverage cycle stays separate because repeating one memorised model
+cannot replace transfer practice across the course.
 
 ### Two alignment defects to check in the existing bank
 
@@ -107,6 +121,6 @@ confidence sampling more than a research instrument.
 `EXAM_PATTERN_UNCERTAIN_FIRST_COHORT` is **closed**. Sections, counts, marks, duration, negative
 marking, and calculator rules may now be stated as fact, citing this file.
 
-Still not claimable: question content, difficulty, topic weighting inside a section, the IBM
-caselet's subject, a likely score, or a pass probability. Knowing the shape of a paper is not
-knowing what is on it.
+Still not claimable: the ten examination questions, difficulty, topic weighting inside a section,
+a likely score, or a pass probability. The released IBM prompt is known; the questions the faculty
+will ask about it are not.

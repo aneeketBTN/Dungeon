@@ -27,9 +27,8 @@ data used to provide access, save progress, and detect obvious account sharing.
 - the closed-test agreement version and acceptance time;
 - the time the private WhatsApp invite was opened, the time the tester acknowledged joining, and
   the time an owner bump was recorded, if any;
-- the coarse Cloudflare country code observed at first login and on later requests; and
-- account-security state, including whether an active session exists or a country-change lock was
-  triggered; and
+- whether active hashed browser sessions exist. Dungeon does not store or enforce a first-login
+  country lock; and
 - when hosted written checking is activated, a per-day count of written checks for the approved
   email, used only to enforce the daily allowance. This counter contains no question, answer,
   retrieved text, or model result. A second counter records the whole cohort's daily total and
@@ -98,10 +97,11 @@ never receives it.
 
 ## Important security limits
 
-The approved email acts as a lightweight password; Dungeon does not verify inbox ownership. One
-active browser session is allowed per email. A request from a different country than the first
-login locks the Dungeon account for owner review. Country detection can be affected by travel,
-VPNs, mobile networks, and network routing, so it is a risk signal rather than proof of misconduct.
+The approved email acts as a lightweight password; Dungeon does not verify inbox ownership. The
+tester agreement requires personal account use and asks testers to use one active browser at a
+time, but Dungeon no longer enforces a device-count limit or automatically locks an account when
+Cloudflare reports a different country. A device or region pattern may still prompt a conversation
+about the personal-use term, but it is not proof of misconduct.
 The system cannot reliably detect same-country sequential sharing, photographs taken with another
 device, or every form of copying.
 
@@ -110,7 +110,7 @@ device, or every form of copying.
 Revoking a tester in the owner dashboard deletes that tester's active sessions and saved Dungeon
 progress from the application database. The owner should remove closed-test accounts when they
 are no longer required for the exam-season test. A tester may ask the owner to correct their
-approved email, explain a lock, withdraw from the test, or delete their Dungeon account data.
+approved email, withdraw from the test, or delete their Dungeon account data.
 
 **Written practice answers are deleted three months after they are written.** That window exists so
 the owner can review marking quality after the exam season and improve the rubrics for the next

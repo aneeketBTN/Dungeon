@@ -12,7 +12,7 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const appDir = path.join(root, "app");
 const context = { window: {}, atob: (value) => Buffer.from(value, "base64").toString("binary") };
 vm.createContext(context);
-for (const file of ["t6_lessons", "t6_diagnoses", "t6_brgsa", "t6_catalog", "t6_integrated", "t6_challenges"]) {
+for (const file of ["t6_lessons", "t6_diagnoses", "t6_brgsa", "t6_catalog", "t6_integrated", "t6_ibm_case", "t6_challenges"]) {
   vm.runInContext(fs.readFileSync(path.join(appDir, "sets", `${file}.js`), "utf8"), context, { filename: file });
 }
 const courses = context.window.T6_COURSES;

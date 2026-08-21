@@ -8,7 +8,7 @@ var vm = require("vm");
 var root = path.join(__dirname, "..", "app");
 var context = {window: {}, atob: function (value) { return Buffer.from(value, "base64").toString("binary"); }};
 vm.createContext(context);
-["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_challenges.js"].forEach(function (relative) {
+["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_ibm_case.js", "sets/t6_challenges.js"].forEach(function (relative) {
   var filename = path.join(root, relative);
   vm.runInContext(fs.readFileSync(filename, "utf8"), context, {filename: filename});
 });

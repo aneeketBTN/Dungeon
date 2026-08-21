@@ -15,7 +15,8 @@ questions; all concepts are linked. IBM's historical descoping below was superse
 owner direction: its 73 misses became 69 new classified records and four wording repairs on
 existing layers. Layer ideas receive subjective + MCQ practice, named frameworks subjective-only,
 and bounded concepts MCQ-only. Generic lesson-grounded cases teach transfer without claiming to
-know the unreleased examination case. Teaching delivery is now 283/283 scheduled with zero
+know what was then the unreleased examination case. The 2026-08-21 brief now lives in a separate
+fixed paper and does not alter this taxonomy. Teaching delivery is now 283/283 scheduled with zero
 readable-only entries. This does **not** close Stream D: phrase coverage is not one trackable record
 per idea or equal practice depth.
 

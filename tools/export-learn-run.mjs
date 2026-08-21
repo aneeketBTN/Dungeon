@@ -53,7 +53,7 @@ const dir = process.argv[2] || path.join(here, "..", "evidence", "2026-08-15", "
    once, so the eight integrated scenarios shipped unvalidated for weeks (F-47). */
 const context = { window: {}, atob: (v) => Buffer.from(v, "base64").toString("binary") };
 vm.createContext(context);
-for (const rel of ["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_challenges.js"]) {
+for (const rel of ["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_ibm_case.js", "sets/t6_challenges.js"]) {
   const file = path.join(appRoot, rel);
   vm.runInContext(fs.readFileSync(file, "utf8"), context, { filename: file });
 }

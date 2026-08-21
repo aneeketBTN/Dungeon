@@ -1,4 +1,4 @@
-/* Structural acceptance for the last-day mini-mocks.
+/* Structural acceptance for Speedruns (the file name preserves the original API).
  *
  * This loads the shipped bank and the same selector the browser uses. It fails if a
  * confidence cycle stops short of a concept, if a round is not exactly one question
@@ -15,7 +15,7 @@ const root = path.join(here, "..");
 const setDir = path.join(root, "app", "sets");
 const LOAD_ORDER = [
   "t6_lessons.js", "t6_diagnoses.js", "t6_brgsa.js", "t6_catalog.js",
-  "t6_integrated.js", "t6_challenges.js", "t6_mini_mocks.js"
+  "t6_integrated.js", "t6_ibm_case.js", "t6_challenges.js", "t6_mini_mocks.js"
 ];
 
 function loadBank() {

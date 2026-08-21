@@ -397,7 +397,7 @@
          because the useful question is "did this move" and storing the paper back
          would make a saved profile a copy of the bank. */
       examAttempts: {},
-      /* One compact record per finished confidence round. The cycle definition is
+      /* One compact record per finished Speedrun. The cycle definition is
          deterministic and rebuildable from its rotation, so responses and question
          text never need to be copied into the profile. */
       miniMockProgress: {},
@@ -2456,6 +2456,30 @@
       }).join("");
   }
 
+  function notesReleasedCaseHtml(courseId, module) {
+    var released = window.T6_IBM_RELEASED_CASE;
+    if (courseId !== "IBM" || module !== 1 || !released) return "";
+    return "<section class='notes-case-pack' aria-labelledby='notes-released-case'>" +
+      "<header><p class='eyebrow'>Released case · 21 August</p><h3 id='notes-released-case'>Treat the prompt as an open design brief</h3>" +
+      "<p>It supplies no organisation, beneficiary, sector, evidence, constraint, or decision. A strong answer makes those assumptions visible and then stays internally consistent.</p></header>" +
+      "<blockquote>“" + escapeHtml(released.prompt) + "”</blockquote>" +
+      "<div class='notes-case-model'><div><small>Working model</small><h4>" + escapeHtml(released.model.name) + "</h4><p>" +
+        escapeHtml(released.model.thesis) + "</p></div><div><small>Exam discipline</small><p>" + escapeHtml(released.interpretation) + "</p></div></div>" +
+      "<div class='notes-case-columns'><div><h4>Assumptions you disclose</h4><ul>" + released.assumptions.map(function (item) {
+        return "<li>" + escapeHtml(item) + "</li>";
+      }).join("") + "</ul></div><div><h4>Model mechanics</h4><ul>" + released.model.operatingModel.map(function (item) {
+        return "<li>" + escapeHtml(item) + "</li>";
+      }).join("") + "</ul></div></div>" +
+      "<h4>Five-move answer shape</h4><ol class='notes-answer-shape'>" + released.answerShape.map(function (item) {
+        return "<li>" + escapeHtml(item) + "</li>";
+      }).join("") + "</ol>" +
+      "<div class='notes-case-lenses'>" + released.lenses.map(function (lens) {
+        return "<article><span>" + lens.number + "</span><div><b>" + escapeHtml(lens.title) + "</b><p>" + escapeHtml(lens.cue) + "</p></div></article>";
+      }).join("") + "</div>" +
+      "<button class='button primary compact notes-case-action' type='button' data-open-released-case='IBM'>Sit the 10-question released case</button>" +
+      "</section>";
+  }
+
   function notesModuleHtml(courseId, module, includeNavigation) {
     var course = getCourse(courseId);
     var lessons = notesLessons(courseId, module);
@@ -2473,7 +2497,7 @@
       : "";
     return "<section class='notes-print-module'><header class='notes-chapter-head'><p class='eyebrow'>" + escapeHtml(course.shortTitle) +
       " · Module " + module + " of " + moduleCount + "</p><h2>" + escapeHtml(title) + "</h2><p>" + escapeHtml(intro) + "</p></header>" +
-      notesConceptMapHtml(courseId, module) + notesMethodsHtml(courseId, module) + lessons.map(notesLessonHtml).join("") + navigation + "</section>";
+      notesReleasedCaseHtml(courseId, module) + notesConceptMapHtml(courseId, module) + notesMethodsHtml(courseId, module) + lessons.map(notesLessonHtml).join("") + navigation + "</section>";
   }
 
   function renderNotesSearch(courseId, query) {
@@ -2576,9 +2600,54 @@
     }).join("");
   }
 
+  /* The four large cards are the front door. Once the learner chooses one they fold
+   * into a persistent subject rail, freeing the page for the selected subject while
+   * keeping all four switches visible. This is deliberately session-only: a fresh
+   * homepage load always begins with the full cards and their timetable context. */
+  var subjectRailFolded = false;
+  var subjectRailAnimating = false;
+
+  function commitSubjectSelection(courseId, animateIn) {
+    profile.selectedCourse = courseId;
+    subjectRailFolded = true;
+    saveProfile();
+    renderDashboard();
+    if (!animateIn || !window.gsap || prefersReducedMotion()) return;
+    window.requestAnimationFrame(function () {
+      var cards = $all("#course-grid .course-card");
+      window.gsap.fromTo(cards,
+        {y: 12, scale: .96, autoAlpha: .35},
+        {y: 0, scale: 1, autoAlpha: 1, duration: .34, stagger: .045, ease: "power2.out", clearProps: "transform,opacity,visibility"});
+      var selected = document.querySelector("#course-grid .course-card.selected");
+      if (selected) window.gsap.fromTo(selected, {scale: .96}, {scale: 1, duration: .42, ease: "back.out(1.8)", clearProps: "transform"});
+    });
+  }
+
+  function selectSubjectFromCard(courseId) {
+    if (subjectRailAnimating) return;
+    if (subjectRailFolded || !window.gsap || prefersReducedMotion()) {
+      commitSubjectSelection(courseId, subjectRailFolded);
+      return;
+    }
+    var cards = $all("#course-grid .course-card");
+    subjectRailAnimating = true;
+    window.gsap.timeline({
+      defaults: {ease: "power2.in"},
+      onComplete: function () {
+        subjectRailAnimating = false;
+        commitSubjectSelection(courseId, true);
+      }
+    }).to(cards, {y: -12, scale: .92, autoAlpha: 0, duration: .24, stagger: .035});
+  }
+
   function renderCourseCards() {
     renderHeaderSubject();
     var grid = $("course-grid");
+    var rail = document.querySelector(".subject-rail");
+    grid.classList.toggle("is-folded", subjectRailFolded);
+    if (rail) rail.classList.toggle("is-folded", subjectRailFolded);
+    var subjectTitle = $("subjects-title");
+    if (subjectTitle) subjectTitle.textContent = subjectRailFolded ? "Current subject · switch anytime" : "Choose your subject";
     grid.innerHTML = "";
     /* Exam order is the one stable order now. A sort control asked the learner to
        manage the dashboard before revising; the path inside each subject already
@@ -2598,6 +2667,7 @@
       if (mode === "exam" && exam.day && exam.day !== previousDay) button.classList.add("day-start");
       previousDay = exam.day;
       button.setAttribute("aria-pressed", String(profile.selectedCourse === courseId));
+      if (profile.selectedCourse === courseId) button.setAttribute("aria-current", "true");
       /* The visible card compresses the timetable to "Aug 22 · 09:00" and puts the
        * rest on a tooltip, which is mouse-only — so the button's own label carries
        * the full sitting details for anyone reading by keyboard or screen reader.
@@ -2624,9 +2694,14 @@
        * remaining work, and the visual are one element instead of three. */
       var slot = exam.full ? exam.full + ", " + exam.start + "–" + exam.end + ", " + exam.marks + " marks" : "";
       var pillCopy = path.cleared.length + "/" + path.steps + " runs cleared";
+      if (subjectRailFolded) {
+        button.setAttribute("data-tip", course.shortTitle + " · " + course.title +
+          (slot ? " · " + slot : "") + " · " + pillCopy + " · " + pathAction);
+      }
       button.innerHTML =
         "<span class='course-head'>" +
           "<b class='course-code'>" + escapeHtml(course.shortTitle) + "</b>" +
+          "<span class='course-current'>Current</span>" +
           (exam.negative ? "<em class='course-flag' data-tip='Negative marking in Section B: −1 per wrong answer'>−1</em>" : "") +
           (exam.short ? "<span class='course-meta' data-tip='" + escapeHtml(slot) + "'>" + escapeHtml(exam.short) + " · " + escapeHtml(exam.start) + "</span>" : "") +
         "</span>" +
@@ -2636,12 +2711,7 @@
           "<span class='pill-label'>" + escapeHtml(pillCopy) + "</span></span>" +
         "<span class='course-action'>" + escapeHtml(pathAction) + " <i aria-hidden='true'>→</i></span>";
       button.addEventListener("click", function () {
-        profile.selectedCourse = courseId;
-        saveProfile();
-        /* A subject card spends its click on revision. Subject inspection remains
-           available through the compact header selector, but the large cards are
-           start/continue controls rather than tabs that merely repaint the page. */
-        executeRecommendation();
+        selectSubjectFromCard(courseId);
       });
       grid.appendChild(button);
     });
@@ -2687,6 +2757,10 @@
     new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var away = !entry.isIntersecting;
+        /* The Speedrun recommendation lives inside one Examiner tab. A hidden tab
+           is technically outside the viewport, but that must not resurrect its
+           floating action over Minis or Full mocks. */
+        if (barId === "exam-resume-bar" && examHomeMode !== "mini") away = false;
         bar.hidden = !away;
         document.body.classList.toggle("has-resume-bar", away);
         if (away) fill(hero);
@@ -2703,13 +2777,12 @@
        * action in four words, and it is the thing this bar clicks. */
       $("resume-bar-title").textContent = hero.textContent.replace(/\s*→\s*$/, "").trim();
     }, "learn-focus");
-    /* The examiner's own. Its page is twelve set buttons long, so the recommendation
-       scrolls away just as surely. The scope is the paper and set rather than the
-       subject code alone, because on this side "SPMS" is not enough to know what you
-       are about to sit for two hours. */
+    /* The examiner's own. The visible hero recommends a coached Speedrun, so the
+       floating copy must name that round rather than silently borrowing the separate
+       full-paper recommendation. */
     bindFloatingOffer("exam-resume-bar", "exam-pick-start", "exam-resume-go", function (hero) {
-      var pick = recommendedMock();
-      $("exam-resume-scope").textContent = pick ? pick.paper.courseId + " · " + examSetLabel(pick.set.set) : "Mock";
+      var pick = recommendedMiniMock();
+      $("exam-resume-scope").textContent = pick ? pick.courseId + " · Speedrun" : "Speedrun";
       $("exam-resume-title").textContent = hero.textContent.replace(/\s*→\s*$/, "").trim();
     }, "exam-pick");
   }
@@ -4052,7 +4125,7 @@
 
   function shouldAskConfidence(question, item) {
     if (question.type === "primer" || question.type === "lesson" || question.type === "written-repair") return false;
-    /* Eight questions and immediate teaching is the mini-mock's entire time budget.
+    /* Eight questions and immediate teaching is the Speedrun's entire time budget.
        Confidence sampling remains in Learn and the full mock analysis; it is not a
        ninth interaction repeated eight times here. */
     if (session && session.kind === "confidence-sprint") return false;
@@ -4076,7 +4149,7 @@
   function renderPracticeShell() {
     $("practice-kicker").textContent = session.kicker;
     $("practice-title").textContent = getCourse(session.courseId).shortTitle + " · " + session.title;
-    $("leave-practice").textContent = session.kind === "confidence-sprint" ? "← Save and return to mocks" : "← Save and return home";
+    $("leave-practice").textContent = session.kind === "confidence-sprint" ? "← Save and return to Speedruns" : "← Save and return home";
     $("leave-practice").classList.toggle("to-mocks", session.kind === "confidence-sprint");
     var dueBox = document.querySelector(".due-box");
     if (dueBox) dueBox.hidden = session.kind === "confidence-sprint";
@@ -4240,7 +4313,7 @@
      * rather than from anything the question asserts about itself. */
     var linkedPair = (session.linkChecks || {})[question.id];
     $("question-pattern").textContent = isPrimer ? "Predict first"
-      : session.kind === "confidence-sprint" ? "Module " + question.module + " · applied confidence round"
+      : session.kind === "confidence-sprint" ? "Module " + question.module + " · Speedrun"
       : focusLabels.length ? "Dungeon re-check · " + focusLabels.join(" + ")
       : linkedPair ? "Both together · " + linkedPair.join(" + ")
       : item.isReattempt ? "Re-attempt · new perspective"
@@ -4275,7 +4348,7 @@
     $("feedback").innerHTML = "";
     $("commit-answer").hidden = false;
     // "Check primer" described marking something. Nothing here is checked against a key.
-    $("commit-answer").textContent = isPrimer ? "Show me the rule" : question.type === "short-answer" && session.mode === "simulation" ? "Save response" : question.type === "short-answer" && session.subjectiveStage === "grading" ? "Checking with " + writtenAuthorityName() + "…" : question.type === "short-answer" && session.subjectiveStage === "rubric" ? "Compare with exemplar" : writtenGradingApplies(question) ? "Check with " + writtenAuthorityName() : question.type === "short-answer" ? "Review with rubric" : "Check answer";
+    $("commit-answer").textContent = isPrimer ? "Show me the rule" : question.type === "short-answer" && session.mode === "simulation" ? "Save response" : question.type === "short-answer" && session.kind === "confidence-sprint" ? "Reveal answer spine" : question.type === "short-answer" && session.subjectiveStage === "grading" ? "Checking with " + writtenAuthorityName() + "…" : question.type === "short-answer" && session.subjectiveStage === "rubric" ? "Compare with exemplar" : writtenGradingApplies(question) ? "Check with " + writtenAuthorityName() : question.type === "short-answer" ? "Review with rubric" : "Check answer";
     $("commit-answer").disabled = !hasCompleteResponse(question) || !confidenceReady() || session.answered || session.subjectiveStage === "grading";
     $("next-question").hidden = true;
     renderResponseControl(question);
@@ -5061,7 +5134,9 @@
       ? (writtenAuthority.provider === "cloudflare-workers-ai"
           ? "Checked by Dungeon Qwen against the cited course lectures. The hosted authority can abstain; its mark is practice guidance, not an official grade."
           : "Checked privately on your machines by " + escapeHtml(writtenAuthority.model || "local Qwen") + " against the cited course lectures. Course evidence is prepared while you write; your answer is sent only when you press Check.")
-      : "Write before opening the rubric. Your wording is not graded by an opaque model.") + "</small>";
+      : session.kind === "confidence-sprint"
+        ? "Say or write a compact answer first. One check reveals the course-grounded spine; this is coached retrieval, not a mark."
+        : "Write before opening the rubric. Your wording is not graded by an opaque model.") + "</small>";
     var textarea = document.createElement("textarea");
     textarea.setAttribute("aria-label", "Your constructed response");
     textarea.placeholder = question.writtenMode === "short" ? "Explain the idea and the decision it should change…" : "Make your judgement and explain what in the case supports it…";
@@ -5112,7 +5187,7 @@
       holder.appendChild(fallback);
     }
     var resolvedResponse = session.answered && session.responses.length ? session.responses[session.responses.length - 1] : null;
-    if (session.mode !== "simulation" && (session.subjectiveStage === "rubric" || session.answered) && !(resolvedResponse && resolvedResponse.machineGraded)) {
+    if (session.mode !== "simulation" && session.kind !== "confidence-sprint" && (session.subjectiveStage === "rubric" || session.answered) && !(resolvedResponse && resolvedResponse.machineGraded)) {
       var rubric = document.createElement("fieldset");
       rubric.className = "rubric-check";
       rubric.id = "subjective-rubric";
@@ -5137,7 +5212,7 @@
       });
       holder.appendChild(rubric);
     }
-    $("question-help").textContent = session.mode === "simulation" ? "Write at least a short recommendation. The rubric and exemplar appear at the end" : session.subjectiveStage === "grading" ? "Qwen is checking your judgement against the prepared course evidence" : session.subjectiveStage === "rubric" ? "Self-check against the visible criteria, then compare with the exemplar" : writtenGradingApplies(question) ? "The practice mark checks course understanding plus judgement and evidence; it never creates Strong evidence" : "Write at least a short recommendation before reviewing the rubric";
+    $("question-help").textContent = session.mode === "simulation" ? "Write at least a short recommendation. The rubric and exemplar appear at the end" : session.kind === "confidence-sprint" ? "Give the decision and its reason, then reveal the answer spine" : session.subjectiveStage === "grading" ? "Qwen is checking your judgement against the prepared course evidence" : session.subjectiveStage === "rubric" ? "Self-check against the visible criteria, then compare with the exemplar" : writtenGradingApplies(question) ? "The practice mark checks course understanding plus judgement and evidence; it never creates Strong evidence" : "Write at least a short recommendation before reviewing the rubric";
   }
 
   /* Retrieval depends on the authored question, never on candidate wording. After a
@@ -5797,6 +5872,12 @@
   function commitAnswer() {
     if (!session || session.answered || !hasCompleteResponse(currentQuestion()) || !confidenceReady()) return;
     if (currentQuestion().type === "short-answer" && session.mode === "simulation") return finalizeSubjectiveAnswer({deferRubric:true});
+    /* A final-week Speedrun has two minutes per module. A written prompt therefore
+       uses one honest retrieval commitment followed by the answer spine; making the
+       learner perform a second rubric-marking interaction turns eight questions into
+       an unadvertised sixteen-step activity and makes IBM's written course impossible
+       to finish in the stated time. It remains unscored and cannot create Strong. */
+    if (currentQuestion().type === "short-answer" && session.kind === "confidence-sprint") return finalizeSubjectiveAnswer({deferRubric:true});
     if (currentQuestion().type === "short-answer" && writtenGradingApplies(currentQuestion()) && session.subjectiveStage !== "rubric") return requestWrittenGrade();
     if (currentQuestion().type === "short-answer" && session.subjectiveStage !== "rubric") return beginSubjectiveReview();
     if (currentQuestion().type === "short-answer") return finalizeSubjectiveAnswer();
@@ -5898,6 +5979,21 @@
 
   function renderSubjectiveResolved(question, response) {
     var selectedCriteria = response.rubricSelection || [];
+    if (session.kind === "confidence-sprint" && response.rubricDeferred) {
+      var speedrunCriteria = (question.rubric || []).map(function (criterion) {
+        return "<li>" + escapeHtml(criterion.label) + "</li>";
+      }).join("");
+      var speedrunSpine = speedrunWrittenSpine(question);
+      var speedrunFeedback = $("feedback");
+      speedrunFeedback.className = "feedback visible reviewed";
+      speedrunFeedback.innerHTML = "<span class='feedback-label'>Compare with the answer spine</span><p>This is coached retrieval, not a grade. Check whether your response made the same decision and causal link.</p><p class='bridge'><b>Answer spine:</b> " + escapeHtml(speedrunSpine) + "</p><p><b>Did you cover:</b></p><ul>" + speedrunCriteria + "</ul>" +
+        "<div class='confidence-method-result'>" + confidenceMethodHtml(question, "Next-time method") + "</div>" +
+        "<p class='return-note'>The response is recorded as constructed practice only; it cannot create Strong evidence without independent checking.</p>";
+      $("commit-answer").hidden = true;
+      $("next-question").hidden = false;
+      $("next-question").innerHTML = session.index + 1 >= session.queue.length ? "Finish this Speedrun <span aria-hidden='true'>→</span>" : "Continue <span aria-hidden='true'>→</span>";
+      return;
+    }
     var criteria = (question.rubric || []).map(function (criterion, index) {
       return "<li><b>" + (selectedCriteria.indexOf(index) >= 0 ? "Included: " : "Still missing: ") + escapeHtml(criterion.label) + "</b> — " + escapeHtml(criterion.description) + "</li>";
     }).join("");
@@ -5909,6 +6005,30 @@
     $("commit-answer").hidden = true;
     $("next-question").hidden = false;
     $("next-question").innerHTML = session.index + 1 >= session.queue.length ? "Finish this set <span aria-hidden='true'>→</span>" : "Continue <span aria-hidden='true'>→</span>";
+  }
+
+  /* A ten-mark exemplar is often 250–350 words. It is excellent after a full paper
+     and unusable inside a two-minute Speedrun slot. Keep complete opening sentences
+     until the excerpt has enough substance to model the decision, then stop before
+     the next sentence would push it beyond the rapid-review budget. */
+  function speedrunWrittenSpine(question) {
+    var exemplar = String(question.exemplar || "").trim();
+    var sentences = exemplar.match(/[^.!?]+[.!?]+(?:[”'\"])?/g) || (exemplar ? [exemplar] : []);
+    var selectedSentences = [];
+    var wordCount = 0;
+    sentences.some(function (sentence) {
+      var clean = sentence.trim();
+      var sentenceWords = clean.split(/\s+/).filter(Boolean).length;
+      if (selectedSentences.length && wordCount >= 45 && wordCount + sentenceWords > 85) return true;
+      selectedSentences.push(clean);
+      wordCount += sentenceWords;
+      return wordCount >= 55;
+    });
+    var spine = selectedSentences.join(" ");
+    var link = String(question.link || "").trim();
+    var linkWords = link.split(/\s+/).filter(Boolean).length;
+    if (wordCount < 45 && link && spine.indexOf(link) < 0 && wordCount + linkWords <= 85) spine += (spine ? " " : "") + link;
+    return spine || [question.explanation, question.link].filter(Boolean).join(" ");
   }
 
   function renderLocalGradedResolved(question, response) {
@@ -6208,7 +6328,7 @@
     }, [])).map(function (conceptId) { return getConcept(completedSession.courseId, conceptId); }).filter(Boolean);
 
     $("results-kicker").textContent = isMiniMock
-      ? "15-minute mini-mock complete"
+      ? "Speedrun complete"
       : completedRun
       ? "Run " + completedRun.step + " of " + path.steps + " complete"
       : completedSession.kind === "written-practice" ? "Written practice complete" : "Practice complete";
@@ -6216,7 +6336,7 @@
       ? "You touched all eight modules. Keep the method, not the score."
       : completedRun ? "Run " + completedRun.step + " is clear. Here’s the quick look." : "Here’s what this practice changed.";
     $("results-copy").textContent = isMiniMock
-      ? "This was a coached confidence round, not an exam prediction. Use the misses below as a short list of distinctions to carry into the next rotation."
+      ? "This was a coached final-week Speedrun, not an exam prediction. Use the misses below as a short list of distinctions to carry into the next rotation."
       : nowEvidence > beforeEvidence
       ? "Your subject evidence moved from " + beforeEvidence + "% to " + nowEvidence + "%."
       : "Your evidence held at " + nowEvidence + "%. The useful change is knowing exactly what still needs another check.";
@@ -6243,8 +6363,8 @@
     var nextMini = isMiniMock ? nextMiniMock(completedSession.courseId) : null;
     $("result-next").textContent = isMiniMock
       ? nextMini.freshRotation
-        ? "The complete concept cycle is clear. The next round starts a fresh rotation with different question families."
-        : "Round " + (nextMini.round.index + 1) + " of " + nextMini.cycle.rounds.length + " is next; it prioritises concepts this rotation has not reached yet."
+        ? "The complete concept cycle is clear. The next Speedrun starts a fresh rotation with different question families."
+        : "Speedrun " + (nextMini.round.index + 1) + " of " + nextMini.cycle.rounds.length + " is next; it prioritises concepts this rotation has not reached yet."
       : nextRun
       ? "Run " + nextRun.step + " unlocks: " + nextRun.definition.title + "." +
         (nextCarry.names.length ? " Likely repeat: " + nextCarry.names.join(" and ") + "." : " No open difficulty needs carrying into it.")
@@ -6276,14 +6396,14 @@
     });
     if (!touched.length) review.innerHTML = "<p>No concept response was recorded.</p>";
     renderAnswerReview(completedSession);
-    $("results-home").textContent = isMiniMock ? "← Back to mocks" : "← Revision home";
+    $("results-home").textContent = isMiniMock ? "← Back to Speedruns" : "← Revision home";
     $("result-primary").innerHTML = isMiniMock
-      ? (nextMini.freshRotation ? "Start fresh rotation" : "Start next 15-minute round") + " <span aria-hidden='true'>→</span>"
+      ? (nextMini.freshRotation ? "Start fresh rotation" : "Start next Speedrun") + " <span aria-hidden='true'>→</span>"
       : recommendationActionLabel(recommendation(completedSession.courseId)) + " <span aria-hidden='true'>→</span>";
     $("result-primary").onclick = isMiniMock
       ? function () { startConfidenceSprint(completedSession.courseId, nextMini.round.index, nextMini.rotation); }
       : function () { executeRecommendation(); };
-    $("repeat-set").textContent = isMiniMock ? "Repeat this mini-mock" : completedSession.kind === "practice-check" || completedSession.kind === "practice-shape" || completedSession.kind === "written-practice" ? "Repeat this practice" : "Replay this run";
+    $("repeat-set").textContent = isMiniMock ? "Repeat this Speedrun" : completedSession.kind === "practice-check" || completedSession.kind === "practice-shape" || completedSession.kind === "written-practice" ? "Repeat this practice" : "Replay this run";
     $("repeat-set").onclick = repeatFinished;
   }
 
@@ -6614,7 +6734,9 @@
   }
 
   function openMiniMockScenario(resolved) {
-    startConfidenceSprint("SPMS", 0, 0);
+    var requested = new URLSearchParams(window.location.search).get("course");
+    var courseId = EXAM_PAPERS[requested] ? requested : "SPMS";
+    startConfidenceSprint(courseId, 0, 0);
     if (!resolved) return;
     var question = currentQuestion();
     selected = demoSelection(question, false);
@@ -6759,9 +6881,31 @@
     if (name === "exam-written-review") return openExamWrittenReviewScenario();
     if (name === "exam-question") return openExamQuestionScenario();
     if (name === "exam-home") {
+      examHomeMode = "mini";
       renderExamHome();
       return showScreen("exam-home-screen");
     }
+    if (name === "exam-mini") {
+      examHomeMode = "mini";
+      renderExamHome();
+      return showScreen("exam-home-screen");
+    }
+    if (name === "exam-final") {
+      var finalCourse = new URLSearchParams(window.location.search).get("course");
+      if (EXAM_PAPERS[finalCourse]) {
+        profile.selectedCourse = finalCourse;
+        finalSprintCourse = finalCourse;
+      }
+      examHomeMode = "final";
+      renderExamHome();
+      return showScreen("exam-home-screen");
+    }
+    if (name === "exam-full") {
+      examHomeMode = "full";
+      renderExamHome();
+      return showScreen("exam-home-screen");
+    }
+    if (name === "exam-released") return openExaminer("IBM", EXAM_RELEASED_SET);
     if (name === "notes") {
       notesState.courseId = "SCLM";
       notesState.module = 1;
@@ -6949,11 +7093,7 @@
          modeCounts: {integrated: 4, case: 6},
          rule: "Ten written answers, every one of them on the caselet released two days before the exam."}
       ],
-      /* IBM cannot be mocked honestly and it is important to say why rather than to
-         ship a paper that pretends otherwise. Its real paper is ten written answers
-         on a case nobody has seen yet; a mock built from bank questions would be a
-         different exam wearing its name. */
-      caveat: "This paper is ten written answers on a caselet released two days beforehand. A mock cannot reproduce that, because the case is the paper. What is offered here is timed writing practice against the frameworks, not a rehearsal of the real questions."
+      releaseNote: "The released text is an open design brief rather than a factual case. The Released case paper keeps the exact brief, states its missing assumptions, and applies ten course lenses to one coherent model. Numbered sets remain framework-transfer practice."
     }
   };
 
@@ -6981,6 +7121,10 @@
         var questionType = question.type || "mcq";
         /* Primers teach. They have no place on a paper. */
         if (questionType === "primer") return;
+        /* The released IBM brief has its own fixed, like-for-like paper. Letting its
+           ten answers leak into numbered sets would both distort the deterministic
+           coverage cycle and make a nominal transfer set partly a memory test. */
+        if (question.releasedCase) return;
         if (questionType === type) pool.push(question);
       });
     });
@@ -7289,9 +7433,35 @@
    * practice. It keeps the real section counts, marks and format mix, but it does not
    * force eight-module breadth or claim a place in the coverage cycle — doing either
    * would spend slots on syllabus balance rather than the learner's weakest links. */
-  /* Negative one can never collide with a numbered coverage set. Telemetry maps the
-     diagnostic to its contract's reserved index 9 at the reporting boundary. */
+  /* Negative values cannot collide with numbered coverage sets. Telemetry maps the
+     diagnostic and released case to reserved non-cycle indices at the reporting boundary. */
   var EXAM_WEAKEST_SET = -1;
+  var EXAM_RELEASED_SET = -2;
+
+  function buildReleasedCasePaper(courseId) {
+    if (courseId !== "IBM") return null;
+    var spec = EXAM_PAPERS.IBM;
+    var questions = [];
+    Object.keys(getCourse("IBM").questions).forEach(function (key) {
+      var group = getCourse("IBM").questions[key];
+      (Array.isArray(group) ? group : [group]).forEach(function (question) {
+        if (question.releasedCase) questions.push(question);
+      });
+    });
+    var expected = spec.sections[0].count;
+    var taken = questions.slice(0, expected);
+    return {
+      courseId: courseId,
+      spec: spec,
+      questions: taken.map(function (question) {
+        return {question: question, section: "A", marks: spec.sections[0].marks};
+      }),
+      shortfalls: taken.length < expected ? [{section:"A", want:expected, have:taken.length, type:"short-answer"}] : [],
+      setIndex: EXAM_RELEASED_SET,
+      releasedCase: true,
+      available: taken.length * spec.sections[0].marks
+    };
+  }
 
   function examWeaknessScore(courseId, question) {
     return conceptIdsOf(question).reduce(function (score, conceptId) {
@@ -7447,10 +7617,13 @@
   }
 
   function openExaminer(courseId, setIndex) {
+    pauseFinalSprint();
     var set = typeof setIndex === "number" ? setIndex : 0;
-    var paper = set === EXAM_WEAKEST_SET
-      ? buildWeakestLinksPaper(courseId)
-      : examPaperForSet(courseId, set);
+    var paper = set === EXAM_RELEASED_SET
+      ? buildReleasedCasePaper(courseId)
+      : set === EXAM_WEAKEST_SET
+        ? buildWeakestLinksPaper(courseId)
+        : examPaperForSet(courseId, set);
     if (!paper) return;
     exam = {
       paper: paper,
@@ -7483,10 +7656,12 @@
     $("exam-runner").hidden = true;
     $("exam-result").hidden = true;
     $("exam-paper-title").textContent = spec.title;
-    $("exam-brief-lede").textContent = exam.paper.personalized
+    $("exam-brief-lede").textContent = exam.paper.releasedCase
+      ? spec.releaseNote
+      : exam.paper.personalized
       ? "A personalised diagnostic: every slot starts from your weakest Learn evidence while keeping this paper's real sections, marks and clock. It changes when your Learn evidence changes, so it is not part of the common coverage cycle." +
-        (spec.caveat ? " " + spec.caveat : "")
-      : spec.caveat ||
+        (spec.releaseNote ? " " + spec.releaseNote : "")
+      : spec.releaseNote ||
         "Sat " + spec.sat + ". Once the clock starts nothing is explained until you submit, and the questions arrive in the paper's order rather than a teaching order.";
     var sat = examAttemptsFor(exam.courseId, exam.setIndex);
     $("exam-facts").innerHTML =
@@ -8373,9 +8548,7 @@
   }
 
   function coinNextExam() {
-    var pick = recommendedMock();
-    if (!pick) return "Four paper-shaped coverage cycles";
-    return pick.paper.courseId + " · " + examSetLabel(pick.set.set) + " · " + EXAM_MINUTES + " minutes";
+    return "Choose by time left";
   }
 
   function renderCoin(mountId, side) {
@@ -8407,9 +8580,9 @@
    * three goes at the same one. Once every paper has been met it is the weakest
    * result, since that is where the marks are.
    *
-   * IBM comes last among the papers you have not met. Its real paper is written
-   * answers on a caselet nobody has seen, so what we can offer is timed writing
-   * practice rather than a rehearsal — worth doing, not worth doing first. */
+   * IBM's released-case paper is deliberately separate from the numbered coverage
+   * cycle. Recommendations still rotate the numbered papers so one fixed case does
+   * not crowd out framework transfer. */
   function recommendedMock() {
     var papers = EXAM_ORDER.filter(function (courseId) { return EXAM_PAPERS[courseId]; })
       .map(function (courseId) {
@@ -8447,10 +8620,9 @@
     var unmet = first(papers.filter(function (p) { return !p.sittings && !p.caveat; }))
       || first(papers.filter(function (p) { return !p.sittings; }));
     if (unmet) return unmet;
-    /* IBM stays out of the weakest-first race too. Its mock is marked by the
-       candidate against a rubric, so its percentage is not the same kind of number
-       as a machine-marked paper's — ranked together it would win "weakest" almost
-       every time and quietly become the only thing ever recommended. */
+    /* A self-reviewed written paper can dominate weakest-first recommendations, so
+       any future caveated paper stays out of that comparison. IBM's numbered sets
+       now participate normally; its fixed Released case remains a separate choice. */
     var met = papers.filter(function (p) { return p.sittings && !p.caveat; });
     if (!met.length) met = papers.filter(function (p) { return p.sittings; });
     if (!met.length) return null;
@@ -8489,14 +8661,28 @@
         conceptIdsOf(question).forEach(function (id) { if (getConcept(courseId, id)) onPaper[id] = true; });
       });
     });
+    var selectedPaper = null;
+    if (typeof setIndex === "number") {
+      selectedPaper = setIndex === EXAM_RELEASED_SET
+        ? buildReleasedCasePaper(courseId)
+        : setIndex === EXAM_WEAKEST_SET
+          ? buildWeakestLinksPaper(courseId)
+          : examPaperForSet(courseId, setIndex);
+      if (selectedPaper) {
+        onPaper = {};
+        selectedPaper.questions.forEach(function (entry) {
+          conceptIdsOf(entry.question).forEach(function (id) {
+            if (getConcept(courseId, id)) onPaper[id] = true;
+          });
+        });
+      }
+    }
     var paperConcepts = Object.keys(onPaper);
     var taughtConcepts = paperConcepts.filter(function (id) { return conceptIsTaught(courseId, id); });
 
     var marks = null;
-    if (typeof setIndex === "number") {
-      var paper = setIndex === EXAM_WEAKEST_SET
-        ? buildWeakestLinksPaper(courseId)
-        : examPaperForSet(courseId, setIndex);
+    if (selectedPaper) {
+      var paper = selectedPaper;
       if (paper) {
         /* A question resting on one taught concept and one untaught one is not a
            taught question. Counting it as half-ready would overstate exactly the
@@ -8535,7 +8721,10 @@
       }
     }
 
-    var ladder = courseLadder(courseId);
+    /* Point back to the same nine-run path the Learn home shows. The older eight-rung
+       teaching ladder omitted the synthesis run and made this briefing say “1 of 8”
+       while the learner-facing path said “1 of 9”. */
+    var ladder = courseRunPath(courseId);
     return {
       courseId: courseId,
       taught: taughtConcepts.length,
@@ -8591,8 +8780,8 @@
     var next = pick.next;
     var cycleTotal = next.cycle.targetConceptIds.length;
     $("exam-pick-title").textContent = course.shortTitle + " · " + (pick.active
-      ? "resume your confidence round"
-      : "confidence round " + (next.round.index + 1) + " of " + next.cycle.rounds.length);
+      ? "resume your Speedrun"
+      : "Speedrun " + (next.round.index + 1) + " of " + next.cycle.rounds.length);
     $("exam-pick-why").textContent = pick.active
       ? "Your eight-question round is saved exactly where you left it. Continue for immediate teaching feedback and one applied question from every module."
       : next.freshRotation
@@ -8600,7 +8789,7 @@
         : "This cycle has reached " + next.covered + " of " + cycleTotal + " concepts. The next round prioritises ideas not yet seen in the cycle while still touching every module.";
     $("exam-pick-facts").innerHTML =
       "<span>8 questions</span><span>All 8 modules</span><span>15 minutes tops</span><span>Teaching after every answer</span>";
-    $("exam-pick-start").textContent = pick.active ? "Resume mini-mock" : next.freshRotation ? "Start fresh rotation" : "Start mini-mock";
+    $("exam-pick-start").textContent = pick.active ? "Resume Speedrun" : next.freshRotation ? "Start fresh rotation" : "Start Speedrun";
     $("exam-pick-start").onclick = pick.active ? resumeActive : function () {
       startConfidenceSprint(pick.courseId, next.round.index, next.rotation);
     };
@@ -8962,7 +9151,9 @@
       consent_scope: "tester-examiner-events-v1",
       synthetic: false,
       course_id: courseId,
-      exam_set_index: attempt.setIndex === EXAM_WEAKEST_SET ? 9 : (attempt.setIndex || 0)
+      exam_set_index: attempt.setIndex === EXAM_WEAKEST_SET ? 9
+        : attempt.setIndex === EXAM_RELEASED_SET ? 8
+          : (attempt.setIndex || 0)
     };
 
     var events = [{
@@ -9082,13 +9273,21 @@
     paper: function (courseId, setIndex) {
       var spec = EXAM_PAPERS[courseId];
       var index = typeof setIndex === "number" ? setIndex : 0;
-      var built = examPaperForSet(courseId, index);
+      var built = index === EXAM_RELEASED_SET
+        ? buildReleasedCasePaper(courseId)
+        : index === EXAM_WEAKEST_SET
+          ? buildWeakestLinksPaper(courseId)
+          : examPaperForSet(courseId, index);
       if (!built) return null;
       return {
         courseId: courseId, setIndex: index, minutes: EXAM_MINUTES,
         total: spec.total, available: built.available, shortfalls: built.shortfalls,
-        coverageCycle: {sets:examSetCount(courseId), newConceptsThisSet:built.newConceptIds.length,
-          conceptsReachedAfterThisSet:built.coverageAfter, paperRelevantConcepts:built.coverageTarget},
+        coverageCycle: built.releasedCase || built.personalized ? null : {
+          sets:examSetCount(courseId), newConceptsThisSet:built.newConceptIds.length,
+          conceptsReachedAfterThisSet:built.coverageAfter, paperRelevantConcepts:built.coverageTarget
+        },
+        releasedCase: Boolean(built.releasedCase),
+        releaseNote: spec.releaseNote || null,
         caveat: spec.caveat || null,
         sections: spec.sections.map(function (section) {
           return {id: section.id, label: section.label, type: section.type,
@@ -9122,7 +9321,7 @@
   };
 
   function examSetLabel(index) {
-    return index === EXAM_WEAKEST_SET ? "Weakest links" : "Set " + (index + 1);
+    return index === EXAM_RELEASED_SET ? "Released case" : index === EXAM_WEAKEST_SET ? "Weakest links" : "Set " + (index + 1);
   }
 
   function examPercent(row) {
@@ -9184,6 +9383,7 @@
   }
 
   function startConfidenceSprint(courseId, roundIndex, rotation) {
+    pauseFinalSprint();
     var state = miniMockState(courseId);
     rotation = Math.max(0, Number(rotation) || 0);
     if (rotation !== state.rotation) {
@@ -9192,13 +9392,13 @@
     }
     var cycle = miniMockCycle(courseId, rotation);
     var round = cycle && cycle.rounds[Number(roundIndex) || 0];
-    if (!round) return toast("That confidence round is not available.");
+    if (!round) return toast("That Speedrun is not available.");
     profile.selectedCourse = courseId;
     session = createSession(courseId, {
       kind:"confidence-sprint",
       mode:"learning",
-      title:"Confidence round " + (round.index + 1),
-      kicker:"15-minute mini-mock · round " + (round.index + 1) + " of " + cycle.rounds.length + " · feedback after every answer",
+      title:"Speedrun " + (round.index + 1),
+      kicker:"Within a week · 15-minute Speedrun " + (round.index + 1) + " of " + cycle.rounds.length + " · feedback after every answer",
       skipLessons:true,
       skipPrimers:true,
       confidenceRotation:rotation,
@@ -9234,21 +9434,50 @@
     crossProducts("exam", function () { renderExamHome(); showScreen("exam-home-screen"); });
   }
 
+  var examHomeMode = "mini";
+  var finalSprintCourse = null;
+  var FINAL_SPRINT_SECONDS = 25 * 60;
+  var finalSprintClock = {remaining: FINAL_SPRINT_SECONDS, endsAt: null, running: false};
+  var finalSprintTicker = null;
+
+  function setExamHomeMode(mode) {
+    if (["mini", "final", "full"].indexOf(mode) < 0) mode = "mini";
+    examHomeMode = mode;
+    var screen = $("exam-home-screen");
+    if (screen) screen.setAttribute("data-exam-home-mode", mode);
+    $all("#exam-mode-switch [data-exam-mode]").forEach(function (button) {
+      var selectedMode = button.dataset.examMode === mode;
+      button.setAttribute("aria-selected", String(selectedMode));
+      button.tabIndex = selectedMode ? 0 : -1;
+    });
+    ["mini", "final", "full"].forEach(function (name) {
+      var panel = $("exam-mode-" + name);
+      if (panel) panel.hidden = name !== mode;
+    });
+    if (mode === "final") renderFinalSprint();
+    if (mode !== "mini") {
+      $("exam-resume-bar").hidden = true;
+      document.body.classList.remove("has-resume-bar");
+    }
+  }
+
   function renderExamHome() {
     renderCoin("coin-exam", "exam");
     renderExamPick();
     renderExamRecord();
+    $("exam-mini-grid").innerHTML = EXAM_ORDER.filter(function (courseId) { return EXAM_PAPERS[courseId]; })
+      .map(renderMiniMockCard).join("");
     $("exam-papers").innerHTML = EXAM_ORDER.filter(function (courseId) { return EXAM_PAPERS[courseId]; })
       .map(renderExamPaperCard).join("");
-    $all("#exam-papers [data-exam-set]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        openExaminer(button.dataset.examCourse, Number(button.dataset.examSet));
-      });
-    });
-    $all("#exam-papers [data-mini-mock-course]").forEach(function (button) {
+    $all("#exam-mini-grid [data-mini-mock-course]").forEach(function (button) {
       button.addEventListener("click", function () {
         if (profile.active && profile.active.kind === "confidence-sprint" && profile.active.courseId === button.dataset.miniMockCourse) return resumeActive();
         startConfidenceSprint(button.dataset.miniMockCourse, Number(button.dataset.miniMockRound), Number(button.dataset.miniMockRotation));
+      });
+    });
+    $all("#exam-papers [data-exam-set]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        openExaminer(button.dataset.examCourse, Number(button.dataset.examSet));
       });
     });
     /* The examiner's job here is to hand the learner back, not to keep them. If a
@@ -9261,6 +9490,142 @@
         startNextLadderStep(button.dataset.teachCourse);
       });
     });
+    setExamHomeMode(examHomeMode);
+  }
+
+  function renderMiniMockCard(courseId) {
+    var course = getCourse(courseId);
+    var mini = nextMiniMock(courseId);
+    var target = mini.cycle.targetConceptIds.length;
+    var active = profile.active && profile.active.kind === "confidence-sprint" && profile.active.courseId === courseId;
+    var action = active ? "Resume saved Speedrun" : mini.freshRotation ? "Start new rotation" : "Start Speedrun " + (mini.round.index + 1);
+    var copy = mini.freshRotation
+      ? "Full " + target + "-concept cycle complete. The next rotation changes question families."
+      : mini.covered + " of " + target + " concepts reached in this rotation · Speedrun " + (mini.round.index + 1) + " of " + mini.cycle.rounds.length + ".";
+    var progress = mini.freshRotation ? 100 : Math.round(mini.covered / Math.max(1, target) * 100);
+    return "<article class='exam-mini-card" + (active ? " is-active" : "") + "'>" +
+      "<header><p class='eyebrow'>" + escapeHtml(course.shortTitle) + "</p><h3>" + escapeHtml(course.title) + "</h3></header>" +
+      "<p>8 applied questions · all 8 modules · correction after every answer</p>" +
+      "<div class='exam-mini-progress'><i aria-hidden='true' style='width:" + progress + "%'></i></div>" +
+      "<small>" + escapeHtml(active ? "A saved round is waiting exactly where you left it." : copy) + "</small>" +
+      "<button type='button' class='button primary compact' data-mini-mock-course='" + escapeHtml(courseId) +
+        "' data-mini-mock-round='" + mini.round.index + "' data-mini-mock-rotation='" + mini.rotation + "'>" + escapeHtml(action) + "</button>" +
+      "</article>";
+  }
+
+  function finalSprintData(courseId) {
+    return window.T6_FINAL_SPRINTS && window.T6_FINAL_SPRINTS[courseId];
+  }
+
+  function finalSprintSecondsLeft() {
+    if (!finalSprintClock.running) return finalSprintClock.remaining;
+    return Math.max(0, Math.ceil((finalSprintClock.endsAt - Date.now()) / 1000));
+  }
+
+  function finalSprintPhase(secondsLeft) {
+    var elapsed = FINAL_SPRINT_SECONDS - secondsLeft;
+    return elapsed < 3 * 60 ? 1 : elapsed < 19 * 60 ? 2 : 3;
+  }
+
+  function renderFinalSprintClock() {
+    var clock = $("final-sprint-clock");
+    if (!clock) return;
+    var left = finalSprintSecondsLeft();
+    var minutes = Math.floor(left / 60), seconds = left % 60;
+    clock.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+    var phase = finalSprintPhase(left);
+    var phaseNames = {1:"Map all eight modules",2:"Answer the eight prompts",3:"Run the trap check"};
+    $("final-sprint-status").textContent = left === 0 ? "Time. Stop adding content; breathe and carry the answer shapes in." :
+      "Phase " + phase + " · " + phaseNames[phase] + (finalSprintClock.running ? "" : " · paused");
+    $("final-sprint-toggle").textContent = finalSprintClock.running ? "Pause" : left === FINAL_SPRINT_SECONDS ? "Start 25 minutes" : left === 0 ? "Start again" : "Resume";
+    $all("[data-final-phase]").forEach(function (node) {
+      node.classList.toggle("is-current", Number(node.dataset.finalPhase) === phase && left > 0);
+    });
+  }
+
+  function stopFinalSprintTicker() {
+    if (finalSprintTicker) window.clearInterval(finalSprintTicker);
+    finalSprintTicker = null;
+  }
+
+  function pauseFinalSprint() {
+    if (!finalSprintClock.running) return;
+    finalSprintClock.remaining = finalSprintSecondsLeft();
+    finalSprintClock.running = false;
+    finalSprintClock.endsAt = null;
+    stopFinalSprintTicker();
+    renderFinalSprintClock();
+  }
+
+  function tickFinalSprint() {
+    var left = finalSprintSecondsLeft();
+    if (left <= 0) {
+      finalSprintClock.remaining = 0;
+      finalSprintClock.running = false;
+      finalSprintClock.endsAt = null;
+      stopFinalSprintTicker();
+      renderFinalSprintClock();
+      toast("Mini complete. Stop adding; carry the answer shapes in.");
+      return;
+    }
+    renderFinalSprintClock();
+  }
+
+  function toggleFinalSprint() {
+    if (finalSprintClock.running) return pauseFinalSprint();
+    if (finalSprintClock.remaining <= 0) finalSprintClock.remaining = FINAL_SPRINT_SECONDS;
+    finalSprintClock.running = true;
+    finalSprintClock.endsAt = Date.now() + finalSprintClock.remaining * 1000;
+    stopFinalSprintTicker();
+    finalSprintTicker = window.setInterval(tickFinalSprint, 500);
+    renderFinalSprintClock();
+  }
+
+  function resetFinalSprint(courseId) {
+    stopFinalSprintTicker();
+    finalSprintClock = {remaining: FINAL_SPRINT_SECONDS, endsAt: null, running: false};
+    if (courseId && finalSprintData(courseId)) {
+      finalSprintCourse = courseId;
+      profile.selectedCourse = courseId;
+      saveProfile();
+    }
+    renderFinalSprint();
+  }
+
+  function renderFinalSprint() {
+    var host = $("final-sprint");
+    if (!host || !window.T6_FINAL_SPRINTS) return;
+    if (!finalSprintCourse || !finalSprintData(finalSprintCourse)) finalSprintCourse = profile.selectedCourse || "SPMS";
+    var pack = finalSprintData(finalSprintCourse);
+    var course = getCourse(finalSprintCourse);
+    var subjects = EXAM_ORDER.map(function (courseId) {
+      return "<button type='button' role='tab' data-final-course='" + courseId + "' aria-selected='" +
+        (courseId === finalSprintCourse) + "'>" + escapeHtml(getCourse(courseId).shortTitle) + "</button>";
+    }).join("");
+    var questions = pack.questions.map(function (question) {
+      var concepts = question.conceptIds.map(function (conceptId) {
+        var concept = getConcept(finalSprintCourse, conceptId);
+        return concept ? concept.name : conceptId;
+      }).join(" · ");
+      return "<details class='final-question'><summary><span>Module " + question.module + "</span><b>" +
+        escapeHtml(question.prompt) + "</b></summary><div class='final-answer'><small>Answer spine · " +
+        escapeHtml(concepts) + "</small><p>" + escapeHtml(question.answer) + "</p><p class='final-check'><b>Check:</b> " +
+        escapeHtml(question.check) + "</p></div></details>";
+    }).join("");
+    host.innerHTML =
+      "<nav class='final-subjects' role='tablist' aria-label='Mini subject'>" + subjects + "</nav>" +
+      "<section class='final-hero'><div><p class='eyebrow'>" + escapeHtml(course.shortTitle) + " · last 25–30 minutes</p><h2>" +
+        escapeHtml(pack.title) + "</h2><p>" + escapeHtml(pack.focus) + "</p></div>" +
+        "<div class='final-clock-card'><span class='final-clock' id='final-sprint-clock' role='timer'>25:00</span>" +
+        "<p id='final-sprint-status'>Phase 1 · Map all eight modules · paused</p><div><button class='button primary compact' id='final-sprint-toggle' type='button' data-final-timer='toggle'>Start 25 minutes</button>" +
+        "<button class='button quiet compact' type='button' data-final-timer='reset'>Reset</button></div></div></section>" +
+      "<ol class='final-phases'><li data-final-phase='1'><b>3 min · Map</b><span>Write eight module numbers and one anchor idea beside each. No notes.</span></li>" +
+        "<li data-final-phase='2'><b>16 min · Retrieve</b><span>Give each prompt two minutes. Say or write the answer before revealing the spine.</span></li>" +
+        "<li data-final-phase='3'><b>6 min · Protect</b><span>Read the traps and checks. Repair only the gaps you can name.</span></li></ol>" +
+      "<section class='final-question-list' aria-label='Eight rapid revision questions'>" + questions + "</section>" +
+      "<aside class='final-traps'><p class='eyebrow'>Last six-minute protection</p><h3>Do not donate these marks.</h3><ul>" +
+        pack.traps.map(function (trap) { return "<li>" + escapeHtml(trap) + "</li>"; }).join("") + "</ul></aside>";
+    renderFinalSprintClock();
   }
 
   function renderExamPaperCard(courseId) {
@@ -9272,14 +9637,6 @@
        owed it before they commit two hours, not at the end. */
     var short = examShortfalls(courseId);
     var negative = spec.sections.some(function (s) { return s.negative; });
-    var mini = nextMiniMock(courseId);
-    var miniCycleTotal = mini.cycle.targetConceptIds.length;
-    var activeMini = profile.active && profile.active.kind === "confidence-sprint" && profile.active.courseId === courseId;
-    var miniAction = activeMini ? "Resume round" : mini.freshRotation ? "Start new rotation" : mini.covered ? "Continue round " + (mini.round.index + 1) : "Start round 1";
-    var miniCopy = mini.freshRotation
-      ? "Full " + miniCycleTotal + "-concept cycle complete · the next rotation changes question families"
-      : mini.covered + "/" + miniCycleTotal + " concepts reached in this rotation · round " + (mini.round.index + 1) + " of " + mini.cycle.rounds.length;
-
     var readiness = examReadiness(courseId);
     var readinessLine = readiness && readiness.total
       ? "<p class='exam-paper-readiness" + (readiness.allTaught ? " is-ready" : "") + "'>" +
@@ -9297,7 +9654,17 @@
     var weakCopy = weakEvidence
       ? "Starts with " + weakConcepts.map(function (concept) { return concept.name; }).join(" · ")
       : "No Learn answers yet · starts with untested concepts";
-    var sets = "<button type='button' class='exam-set exam-set-weak' data-exam-set='" +
+    var sets = "";
+    if (courseId === "IBM" && window.T6_IBM_RELEASED_CASE) {
+      var releasedHistory = examAttemptsFor(courseId, EXAM_RELEASED_SET);
+      var releasedLast = releasedHistory[releasedHistory.length - 1];
+      sets += "<button type='button' class='exam-set exam-set-released' data-exam-set='" +
+        EXAM_RELEASED_SET + "' data-exam-course='IBM'>" +
+        "<b>Released case</b>" +
+        (releasedLast ? "<span>" + examPercent(releasedLast) + "% last</span>" : "<span>Exact released brief</span>") +
+        "<small>10 lenses · one shared model · assumptions made explicit</small></button>";
+    }
+    sets += "<button type='button' class='exam-set exam-set-weak' data-exam-set='" +
       EXAM_WEAKEST_SET + "' data-exam-course='" + escapeHtml(courseId) + "'>" +
       "<b>Weakest links</b>" +
       (weakLast ? "<span>" + examPercent(weakLast) + "% last</span>" : "<span>Personalised diagnostic</span>") +
@@ -9326,18 +9693,13 @@
       questions + " questions · " +
       (spec.calculator === "scientific" ? "Scientific calculator" : spec.calculator === "basic" ? "Normal calculator" : "No calculator") +
       (negative ? " · Negative marking" : "") + "</p></header>" +
-      "<section class='exam-mini-mock' aria-label='15-minute teaching mini-mock'>" +
-        "<div><span>15-minute teaching mini-mock</span><b>8 applied questions · every module · immediate feedback</b><small>" + escapeHtml(miniCopy) + "</small></div>" +
-        "<button type='button' class='button primary compact' data-mini-mock-course='" + escapeHtml(courseId) +
-          "' data-mini-mock-round='" + mini.round.index + "' data-mini-mock-rotation='" + mini.rotation + "'>" + escapeHtml(miniAction) + "</button>" +
-      "</section>" +
       "<ul class='exam-paper-sections'>" + spec.sections.map(function (section) {
         return "<li><b>" + escapeHtml(section.label) + "</b><span>" + section.count + " × " +
           section.marks + " mark" + (section.marks === 1 ? "" : "s") + "</span></li>";
       }).join("") + "</ul>" +
-      /* The caveat and the shortfall are the two things that would be dishonest to
-         put behind a click. IBM cannot be mocked at all; a section the bank cannot
-         fill scores out of less than the real paper. Both are said before you sit. */
+      /* The released-case interpretation and any shortfall stay visible before a
+         candidate commits to the two-hour paper. */
+      (spec.releaseNote ? "<p class='exam-paper-caveat'>" + escapeHtml(spec.releaseNote) + "</p>" : "") +
       (spec.caveat ? "<p class='exam-paper-caveat'>" + escapeHtml(spec.caveat) + "</p>" : "") +
       (short.length ? "<p class='exam-paper-short'>" + short.map(function (row) {
         return row.section.label + " has " + row.have + " of " + row.section.count + " questions in the bank";
@@ -9347,7 +9709,8 @@
          than about the bank, and it is the only one Learn can close. */
       readinessLine +
       "<p class='exam-cycle-copy'>" + cycle.papers.length + "-set coverage cycle · all " +
-        cycle.target.size + " paper-relevant concepts appear by the final set. Each set still keeps the real paper shape.</p>" +
+        cycle.target.size + " paper-relevant concepts appear by the final set. " +
+        (courseId === "IBM" ? "These numbered sets widen framework transfer; Released case stays fixed for like-for-like re-sits." : "Each set still keeps the real paper shape.") + "</p>" +
       "<div class='exam-sets'>" + sets + "</div></article>";
   }
 
@@ -10329,6 +10692,29 @@
     bindBag();
     bindModeSwitch();
     renderThemeToggle();
+    $("exam-mode-switch").addEventListener("click", function (event) {
+      var button = event.target.closest("[data-exam-mode]");
+      if (!button) return;
+      setExamHomeMode(button.dataset.examMode);
+    });
+    $("exam-mode-switch").addEventListener("keydown", function (event) {
+      if (["ArrowLeft", "ArrowRight"].indexOf(event.key) < 0) return;
+      var tabs = $all("#exam-mode-switch [data-exam-mode]");
+      var current = tabs.indexOf(document.activeElement);
+      if (current < 0) return;
+      event.preventDefault();
+      var next = (current + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+      tabs[next].focus();
+      setExamHomeMode(tabs[next].dataset.examMode);
+    });
+    $("final-sprint").addEventListener("click", function (event) {
+      var courseButton = event.target.closest("[data-final-course]");
+      if (courseButton) return resetFinalSprint(courseButton.dataset.finalCourse);
+      var timerButton = event.target.closest("[data-final-timer]");
+      if (!timerButton) return;
+      if (timerButton.dataset.finalTimer === "toggle") toggleFinalSprint();
+      else resetFinalSprint();
+    });
     if (window.T6Theme) {
       $("theme-toggle").addEventListener("click", function () {
         T6Theme.set(T6Theme.next());
@@ -10370,6 +10756,11 @@
       window.scrollTo({top:0, behavior:"smooth"});
     });
     $("notes-reader").addEventListener("click", function (event) {
+      var releasedButton = event.target.closest("[data-open-released-case]");
+      if (releasedButton) {
+        openExaminer(releasedButton.dataset.openReleasedCase, EXAM_RELEASED_SET);
+        return;
+      }
       var moduleButton = event.target.closest("[data-notes-module]");
       if (moduleButton) {
         notesState.module = Number(moduleButton.dataset.notesModule) || 1;

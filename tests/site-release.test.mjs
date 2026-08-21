@@ -157,13 +157,20 @@ test("wrong-answer feedback teaches the correction without exposing scheduling r
   assert.doesNotMatch(app, /Not yet — this idea will return|This ‘could explain’ error will return|A different question on the same idea is placed later/);
 });
 
-test("teaching mini-mocks stay short, broad, immediate, and visible beside full papers", async () => {
+test("Examiner separates full mocks, Speedruns, and Minis by time to exam", async () => {
   const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
   const selector = await readFile(new URL("../app/sets/t6_mini_mocks.js", import.meta.url), "utf8");
 
-  assert.match(html, /15-minute teaching mini-mock/);
-  assert.match(html, /Full exam-condition papers/);
+  assert.match(html, /data-exam-mode="mini"/);
+  assert.match(html, /data-exam-mode="final"/);
+  assert.match(html, /data-exam-mode="full"/);
+  assert.match(html, /id="exam-mini-grid"/);
+  assert.match(html, /id="final-sprint"/);
+  assert.match(html, /Full mocks <small>1\+ week out<\/small>/);
+  assert.match(html, /Speedrun <small>within a week<\/small>/);
+  assert.match(html, /Minis <small>last 25–30 min<\/small>/);
+  assert.match(html, /Full exam-condition mocks/);
   assert.match(html, /id="confidence-guide"/);
   assert.match(html, /sets\/t6_mini_mocks\.js/);
   assert.match(selector, /var ROUND_SIZE = 8/);
@@ -176,6 +183,10 @@ test("teaching mini-mocks stay short, broad, immediate, and visible beside full 
   assert.match(app, /feedback after every answer/);
   assert.match(app, /Next-time method/);
   assert.match(app, /session\.kind !== "confidence-sprint" && !correct/);
+  assert.match(app, /var FINAL_SPRINT_SECONDS = 25 \* 60/);
+  assert.match(app, /Answer the eight prompts/);
+  assert.match(app, /Speedrun complete/);
+  assert.match(app, /Mini complete/);
 });
 
 test("anonymous login assets do not disclose the private WhatsApp invite", async () => {

@@ -25,7 +25,7 @@ var vm = require("vm");
 var root = path.join(__dirname, "..", "app");
 var context = {window: {}, atob: function (v) { return Buffer.from(v, "base64").toString("binary"); }};
 vm.createContext(context);
-["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_challenges.js"].forEach(function (rel) {
+["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_ibm_case.js", "sets/t6_challenges.js"].forEach(function (rel) {
   var file = path.join(root, rel);
   vm.runInContext(fs.readFileSync(file, "utf8"), context, {filename: file});
 });
@@ -63,7 +63,9 @@ function examSeed(courseId, setIndex) {
 
 function examPool(course, type) {
   return Object.keys(course.questions).map(function (k) { return course.questions[k]; })
-    .filter(function (q) { return (q.type || "mcq") !== "primer" && (q.type || "mcq") === type; });
+    .filter(function (q) {
+      return !q.releasedCase && (q.type || "mcq") !== "primer" && (q.type || "mcq") === type;
+    });
 }
 
 function conceptsOf(question) {

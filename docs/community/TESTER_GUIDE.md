@@ -10,16 +10,17 @@ prediction of exam performance or a verified replica of the final paper.
 
 Read and accept the closed-tester participation agreement. Access is personal: the approved email
 acts as the password. Do not give it to another person or let another person practise in your
-account. Use one browser at a time and sign out before moving to another device.
+account. The tester terms ask you to use one browser at a time, but Dungeon no longer blocks a
+second device or makes you sign out elsewhere before continuing.
 
 The first-login agreement shows the private WhatsApp invite only after your email is approved.
 Open it, join the group, return to Dungeon, and confirm truthfully. Joining and giving useful
 feedback during the test are conditions of continued tester access; low scores or difficulty with
 the material are not grounds for removal.
 
-A login from a different country than the first login locks the account for owner review. Travel,
-a VPN, or a mobile-network change can cause this; contact Aneeket rather than repeatedly retrying.
-If a friend would benefit, ask Aneeket to invite them separately.
+Dungeon does not automatically lock an account when Cloudflare reports a different country.
+Device or region patterns may still prompt a conversation about the personal-use term, but they
+are not proof of account sharing. If a friend would benefit, ask Aneeket to invite them separately.
 
 ## What to try
 
@@ -28,7 +29,7 @@ If a friend would benefit, ask Aneeket to invite them separately.
 3. Watch how a minimum primer leads into its first challenge; deliberately miss one answer and
    check that later primer support becomes more explicit before a varied re-attempt.
 4. Reload during a set and confirm that you return to the same place.
-5. Try the dashboard on both a phone and laptop only after signing out of the first browser.
+5. Try the dashboard on both a phone and laptop; progress should follow the approved email.
 
 ## How to give useful feedback
 
@@ -48,8 +49,8 @@ authorised tester group.
 ## Privacy and progress
 
 Dungeon saves progress against the approved email in Cloudflare D1 and keeps a browser recovery
-copy. It also stores an opaque session hash, first-login country, and account-lock state. It does
-not request precise GPS location. The site also records invite-opened, group-acknowledgement, and
+copy. It also stores opaque session hashes, but not a first-login country lock, and does not
+request precise GPS location. The site also records invite-opened, group-acknowledgement, and
 owner-reminder timestamps; it cannot independently verify WhatsApp membership. Cloudflare may
 process ordinary network and security metadata. Revocation deletes the tester's server-side
 Dungeon progress and sessions.
@@ -57,21 +58,14 @@ Dungeon progress and sessions.
 ## Switching between your phone and your laptop
 
 Your progress is saved to your email, not to a device, so you can pick up where you left off
-anywhere you sign in. Only one browser can be signed in at a time — that is what stops an approved
-email being passed around — but you do not need anyone's help to move.
+anywhere you sign in. The agreement still asks you to keep access personal and to use one browser
+at a time, but Dungeon does not enforce a device limit.
 
 1. Open Dungeon on the new device and enter the same approved email.
-2. If the account is still open on your other browser, the page will say so and offer
-   **Sign out the other device and continue**.
-3. Choose it. The other browser is signed out, this one signs in, and every answer you have
-   recorded is already there.
+2. Sign in. Every answer you have recorded should already be there.
 
-Nothing is deleted, and you do not have to sign out on the old device first — which matters when
-it is not with you. The old browser will simply ask for your email again next time.
-
-One thing this does **not** cover: if your account is locked because it was used from a different
-country, signing out the other device will not clear it. That check is deliberate and needs
-Aneeket. Message the group.
+Nothing is deleted, and you do not have to sign out on the old device first. A different country
+or network does not create an automatic lock.
 
 ## Known limits
 

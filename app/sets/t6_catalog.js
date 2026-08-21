@@ -600,8 +600,8 @@
      `layer` is a course idea that other decisions rest on (mixed written + MCQ),
      `framework` is a named model or multi-step method (written only), and
      `concept` is a bounded distinction or mechanism (MCQ only). The caselets are
-     generic practice situations grounded in the named lesson; none predicts or
-     fabricates the unreleased examination case. */
+     generic practice situations grounded in the named lesson; none is presented as
+     the released examination brief, which lives in a separate fixed paper. */
   function ibmIdea(id, module, source, name, kind, summary, caselet, caseEvidence, application, bridge) {
     return {
       id: "ibm_" + id,

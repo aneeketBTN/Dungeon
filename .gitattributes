@@ -15,3 +15,7 @@
 *.docx binary
 *.sqlite binary
 *.tgz  binary
+
+# Preserve upstream minified bundles byte-for-byte; their license banners and EOF spacing are not
+# project-authored formatting defects.
+*.min.js -whitespace

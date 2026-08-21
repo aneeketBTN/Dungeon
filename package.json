@@ -8,7 +8,7 @@
   "scripts": {
     "build": "node tools/build-site.mjs",
     "build:chart": "node tools/build-chart.mjs",
-    "test": "node --test --test-concurrency=1 tests/site-release.test.mjs tests/mini-mocks.test.mjs tests/agent-readiness.test.mjs tests/cloudflare-access.test.mjs tests/local-grader.test.mjs tests/written-authority-hosted.test.mjs tests/name-matching-gate.test.mjs tests/normal-table.test.mjs tests/integrated-scenarios.test.mjs tests/examiner-slice.test.mjs tests/preparedness-fixes.test.mjs tests/syllabus-coverage.test.mjs tests/taught-vocabulary.test.mjs tests/taught-not-tested.test.mjs tests/test-runner-completeness.test.mjs",
+    "test": "node --test --test-concurrency=1 tests/site-release.test.mjs tests/mini-mocks.test.mjs tests/final-sprints.test.mjs tests/revision-personas.test.mjs tests/agent-readiness.test.mjs tests/cloudflare-access.test.mjs tests/local-grader.test.mjs tests/written-authority-hosted.test.mjs tests/name-matching-gate.test.mjs tests/normal-table.test.mjs tests/integrated-scenarios.test.mjs tests/examiner-slice.test.mjs tests/preparedness-fixes.test.mjs tests/syllabus-coverage.test.mjs tests/taught-vocabulary.test.mjs tests/taught-not-tested.test.mjs tests/test-runner-completeness.test.mjs",
     "review": "node tools/review-changes.mjs --html",
     "check:names": "node tools/measure-name-matching.js --gate",
     "check:syllabus": "node tools/measure-syllabus-coverage.mjs --gate",
@@ -17,6 +17,8 @@
     "validate:bank": "node tools/validate_t6_bank.js",
     "check:exam": "node tools/check_exam_readiness.mjs",
     "check:mini-mocks": "node tools/check-mini-mocks.mjs",
+    "check:final-sprints": "node tools/check-final-sprints.mjs",
+    "check:revision-personas": "node tools/check-revision-personas.mjs",
     "check:palette": "node tools/check-palette.mjs",
     "build:written-authority": "node tools/build_written_authority_assets.mjs",
     "build:course-rag": "node tools/build_course_rag.mjs",
@@ -30,6 +32,7 @@
     "build:layer": "node tools/build-concept-layer.mjs"
   },
   "dependencies": {
+    "gsap": "^3.15.0",
     "lucide-react": "^0.468.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

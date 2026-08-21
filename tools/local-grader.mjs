@@ -39,6 +39,7 @@ const BANK_FILES = [
   "app/sets/t6_catalog.js",
   /* Before t6_challenges.js, which reads T6_INTEGRATED while building the bank. */
   "app/sets/t6_integrated.js",
+  "app/sets/t6_ibm_case.js",
   "app/sets/t6_challenges.js"
 ];
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);

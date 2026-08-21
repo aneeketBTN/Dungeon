@@ -43,7 +43,7 @@ const outDir = process.argv[2] || path.join(here, "..", "evidence", "2026-08-15"
 
 const context = { window: {}, atob: (v) => Buffer.from(v, "base64").toString("binary") };
 vm.createContext(context);
-for (const rel of ["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_challenges.js"]) {
+for (const rel of ["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_ibm_case.js", "sets/t6_challenges.js"]) {
   const file = path.join(appRoot, rel);
   vm.runInContext(fs.readFileSync(file, "utf8"), context, { filename: file });
 }
@@ -65,7 +65,7 @@ const PAPERS = {
     { id: "C", label: "Section C", type: "match", count: 3, marks: 2, rule: "Match every pair. Two marks each. All or nothing." }] },
   IBM: { title: "Inclusive Business Model", sat: "23 August, 09:00–11:00", total: 100, calculator: null, sections: [
     { id: "A", label: "Section A", type: "short-answer", count: 10, marks: 10, prefer: ["integrated", "case", "short"], modeCounts: { integrated: 4, case: 6 }, rule: "Ten written answers on a caselet released two days before the exam." }],
-    caveat: "A mock cannot reproduce this paper, because the case is the paper. This is timed writing practice against the frameworks." }
+    caveat: "Numbered mocks rotate course-grounded transfer cases. Use the separate Released case paper for fixed practice against the actual supplied brief." }
 };
 
 function examSeed(courseId, setIndex) {
@@ -90,7 +90,7 @@ function examShuffle(items, seed) {
 
 function examPool(course, type) {
   return Object.keys(course.questions).map((k) => course.questions[k])
-    .filter((q) => (q.type || "mcq") !== "primer" && (q.type || "mcq") === type);
+    .filter((q) => !q.releasedCase && (q.type || "mcq") !== "primer" && (q.type || "mcq") === type);
 }
 
 function spreadByStem(questions) {

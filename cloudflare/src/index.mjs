@@ -74,11 +74,6 @@ function normalizeEmail(value) {
   return email;
 }
 
-function requestCountry(request) {
-  const value = request.cf?.country || request.headers.get("cf-ipcountry");
-  return typeof value === "string" && /^[A-Z]{2}$/.test(value.toUpperCase()) ? value.toUpperCase() : null;
-}
-
 function requireBindings(env, names) {
   const missing = names.filter((name) => typeof env?.[name] !== "string" || !env[name].trim());
   if (missing.length) throw new RequestError(503, "SETUP_REQUIRED", "Tester access is not configured.");
@@ -333,84 +328,41 @@ function expiredSessionCookie() {
 
 export function createD1Store() {
   return {
-    /* `releaseOtherDevice` is the learner moving from one device to another.
-     *
-     * Progress already follows the email through D1, so a learner who picks up a
-     * laptop instead of a phone has their work waiting — but the one-active-browser
-     * rule met them with "sign out there", which is not an instruction anyone can
-     * follow when "there" is at home. The owner could clear it from the Control Room;
-     * the learner could not, and had to wait for a human.
-     *
-     * Letting them evict their own other session grants no capability they did not
-     * already have: admission is a check on holding an approved email, and anyone
-     * holding one can already sign in whenever no session happens to exist. What the
-     * rule actually buys is that two people cannot use one account *at the same
-     * time*, and eviction keeps that exactly — one session in, one session out.
-     *
-     * The country lock is checked above this and is deliberately not touched.
-     * Switching devices is routine; clearing a lock is a security decision that
-     * stays with the owner. A locked account cannot take over its way in. */
-    async checkLogin(env, email, country, releaseOtherDevice) {
+    /* Personal-use and account-sharing expectations remain in the tester terms, but
+     * the application no longer turns device count or Cloudflare's coarse country
+     * signal into an automatic access decision. Mobile networks, VPNs, travel and
+     * ordinary browser changes made those checks a source of lockouts rather than a
+     * dependable identity control. Approved-email admission remains unchanged. */
+    async checkLogin(env) {
       const db = requireDatabase(env);
       const now = new Date().toISOString();
-      const tester = await db.prepare("SELECT first_country, location_locked_at FROM testers WHERE email = ?").bind(email).first();
-      if (tester?.location_locked_at) {
-        throw new RequestError(403, "ACCOUNT_LOCKED", "This tester account is locked. Ask Aneeket for help.");
-      }
-      if (tester?.first_country && country && tester.first_country !== country) {
-        await db.batch([
-          db.prepare("UPDATE testers SET location_locked_at = ?, lock_reason = ?, updated_at = ? WHERE email = ?")
-            .bind(now, "country-changed", now, email),
-          db.prepare("DELETE FROM learner_sessions WHERE email = ?").bind(email)
-        ]);
-        throw new RequestError(403, "LOCATION_LOCKED", "This tester account was locked because its country changed. Ask Aneeket for help.");
-      }
       await db.prepare("DELETE FROM learner_sessions WHERE expires_at <= ?").bind(now).run();
-      const existing = await db.prepare("SELECT token_hash FROM learner_sessions WHERE email = ? LIMIT 1").bind(email).first();
-      if (existing) {
-        if (releaseOtherDevice !== true) {
-          throw new RequestError(409, "ACCOUNT_IN_USE", "This account is already open on another browser. You can sign that one out and continue here.");
-        }
-        /* Sessions only. Progress lives in its own table and is never touched by a
-           device switch — the whole point is that the learner keeps their work. */
-        await db.prepare("DELETE FROM learner_sessions WHERE email = ?").bind(email).run();
-      }
-      return {releasedOtherDevice: Boolean(existing) && releaseOtherDevice === true};
+      return {approved: true};
     },
 
-    async issueSession(env, email, tokenHash, expiresAt, country) {
+    async issueSession(env, email, tokenHash, expiresAt) {
       const db = requireDatabase(env);
       const now = new Date().toISOString();
       await db.batch([
-        db.prepare(`INSERT INTO testers (email, active, created_at, updated_at, last_login_at, first_country)
-          VALUES (?, 1, ?, ?, ?, ?)
+        db.prepare(`INSERT INTO testers (email, active, created_at, updated_at, last_login_at)
+          VALUES (?, 1, ?, ?, ?)
           ON CONFLICT(email) DO UPDATE SET active = 1, updated_at = excluded.updated_at,
-            last_login_at = excluded.last_login_at, first_country = COALESCE(testers.first_country, excluded.first_country)`)
-          .bind(email, now, now, now, country),
-        db.prepare("INSERT INTO learner_sessions (token_hash, email, created_at, expires_at, country) VALUES (?, ?, ?, ?, ?)")
-          .bind(tokenHash, email, now, expiresAt, country)
+            last_login_at = excluded.last_login_at, first_country = NULL,
+            location_locked_at = NULL, lock_reason = NULL`)
+          .bind(email, now, now, now),
+        db.prepare("INSERT INTO learner_sessions (token_hash, email, created_at, expires_at) VALUES (?, ?, ?, ?)")
+          .bind(tokenHash, email, now, expiresAt)
       ]);
     },
 
-    async findSession(env, tokenHash, country) {
+    async findSession(env, tokenHash) {
       const db = requireDatabase(env);
-      const row = await db.prepare(`SELECT learner_sessions.email AS email, testers.first_country AS first_country,
-          testers.location_locked_at AS location_locked_at, testers.agreement_version AS agreement_version
+      const row = await db.prepare(`SELECT learner_sessions.email AS email, testers.agreement_version AS agreement_version
         FROM learner_sessions
         INNER JOIN testers ON testers.email = learner_sessions.email
         WHERE learner_sessions.token_hash = ? AND learner_sessions.expires_at > ? AND testers.active = 1`)
         .bind(tokenHash, new Date().toISOString()).first();
-      if (!row || row.location_locked_at) return null;
-      if (row.first_country && country && row.first_country !== country) {
-        const now = new Date().toISOString();
-        await db.batch([
-          db.prepare("UPDATE testers SET location_locked_at = ?, lock_reason = ?, updated_at = ? WHERE email = ?")
-            .bind(now, "country-changed", now, row.email),
-          db.prepare("DELETE FROM learner_sessions WHERE email = ?").bind(row.email)
-        ]);
-        throw new RequestError(403, "LOCATION_LOCKED", "This tester account was locked because its country changed. Ask Aneeket for help.");
-      }
-      return row;
+      return row || null;
     },
 
     async endSession(env, tokenHash) {
@@ -496,15 +448,6 @@ export function createD1Store() {
       ]);
     },
 
-    async unlockTester(env, email) {
-      const db = requireDatabase(env);
-      const now = new Date().toISOString();
-      const result = await db.prepare(`UPDATE testers
-        SET location_locked_at = NULL, lock_reason = NULL, first_country = NULL, updated_at = ?
-        WHERE email = ? AND active = 1`).bind(now, email).run();
-      return Number(result?.meta?.changes || 0) > 0;
-    },
-
     /* Force sign-out.
      *
      * Deliberately narrower than revoke. `revokeTester` deletes the tester row,
@@ -513,8 +456,7 @@ export function createD1Store() {
      * tester stays approved and every byte of progress survives, so their next
      * visit is a normal sign-in that resumes exactly where they were.
      *
-     * The country lock is left alone on purpose. Signing someone out is a routine
-     * act; clearing a lock is a security decision with its own explicit control. */
+     * This only clears authentication sessions. It never touches progress. */
     async signOutTester(env, email) {
       const db = requireDatabase(env);
       const result = await db.prepare("DELETE FROM learner_sessions WHERE email = ?").bind(email).run();
@@ -547,8 +489,8 @@ export function createD1Store() {
       if (!emails.length) return {};
       const db = requireDatabase(env);
       const placeholders = emails.map(() => "?").join(", ");
-      const result = await db.prepare(`SELECT testers.email, testers.first_country, testers.location_locked_at,
-          testers.lock_reason, testers.agreement_version, testers.agreement_accepted_at, testers.last_seen_at,
+      const result = await db.prepare(`SELECT testers.email, testers.agreement_version,
+          testers.agreement_accepted_at, testers.last_seen_at,
           testers.community_invite_opened_at, testers.community_join_acknowledged_at, testers.community_reminder_at,
           COUNT(learner_sessions.token_hash) AS active_sessions,
           MAX(learner_progress.updated_at) AS progress_updated_at
@@ -556,14 +498,10 @@ export function createD1Store() {
         LEFT JOIN learner_sessions ON learner_sessions.email = testers.email AND learner_sessions.expires_at > ?
         LEFT JOIN learner_progress ON learner_progress.email = testers.email
         WHERE testers.email IN (${placeholders})
-        GROUP BY testers.email, testers.first_country, testers.location_locked_at, testers.lock_reason,
-          testers.agreement_version, testers.agreement_accepted_at, testers.last_seen_at,
+        GROUP BY testers.email, testers.agreement_version, testers.agreement_accepted_at, testers.last_seen_at,
           testers.community_invite_opened_at, testers.community_join_acknowledged_at, testers.community_reminder_at`)
         .bind(new Date().toISOString(), ...emails).all();
       return Object.fromEntries((result.results || []).map((row) => [row.email, {
-        firstCountry: row.first_country || null,
-        locked: Boolean(row.location_locked_at),
-        lockReason: row.lock_reason || null,
         activeSession: Number(row.active_sessions || 0) > 0,
         agreementAccepted: row.agreement_version === AGREEMENT_VERSION,
         agreementEverAccepted: Boolean(row.agreement_version),
@@ -692,7 +630,7 @@ export function createD1Store() {
 async function authenticateLearner(request, env, store) {
   const token = sessionTokenFromRequest(request);
   if (!token) return null;
-  const row = await store.findSession(env, await hashToken(token), requestCountry(request));
+  const row = await store.findSession(env, await hashToken(token));
   if (!row?.email) return null;
   // A version bump is a real terms change. A session issued under older terms must not carry that
   // acceptance forward, so the learner returns to the agreement step on the next request.
@@ -739,7 +677,6 @@ async function manageSession(request, env, fetchImpl, store) {
 
   const token = randomSessionToken();
   const expiresAt = new Date(Date.now() + SESSION_DAYS * 86400 * 1000).toISOString();
-  const country = requestCountry(request);
   const acceptedVersion = await store.agreementVersion(env, email);
   const acceptanceRequested = body?.acceptAgreement === true;
   if (acceptedVersion !== AGREEMENT_VERSION) {
@@ -759,14 +696,11 @@ async function manageSession(request, env, fetchImpl, store) {
       throw new RequestError(400, "COMMUNITY_ACK_REQUIRED", "Open the WhatsApp invite and confirm membership before entering.");
     }
   }
-  const login = await store.checkLogin(env, email, country, body?.releaseOtherDevice === true);
+  await store.checkLogin(env, email);
   if (acceptedVersion !== AGREEMENT_VERSION) await store.acceptAgreement(env, email, AGREEMENT_VERSION);
-  await store.issueSession(env, email, await hashToken(token), expiresAt, country);
-  /* Recorded separately so a run of takeovers on one address is visible to the owner
-     as a pattern — one learner switching devices looks nothing like an address being
-     passed around, and only the log can tell them apart. */
-  console.log(JSON.stringify({event: "learner_login", status: "approved", releasedOtherDevice: Boolean(login?.releasedOtherDevice)}));
-  return json({status: "approved", email, releasedOtherDevice: Boolean(login?.releasedOtherDevice)}, 200, {"Set-Cookie": sessionCookie(token)});
+  await store.issueSession(env, email, await hashToken(token), expiresAt);
+  console.log(JSON.stringify({event: "learner_login", status: "approved"}));
+  return json({status: "approved", email}, 200, {"Set-Cookie": sessionCookie(token)});
 }
 
 async function manageCommunity(request, env, store) {
@@ -1063,12 +997,6 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
     if (!targetEmail) throw new RequestError(400, "INVALID_EMAIL", "Enter a valid tester email.");
     if (targetEmail === ownerEmail) throw new RequestError(400, "OWNER_PROTECTED", "Owner access cannot be changed here.");
     if (!emails.includes(targetEmail)) throw new RequestError(404, "NOT_APPROVED", "That email is not an approved tester.");
-    if (body?.action === "unlock") {
-      if (typeof store.unlockTester !== "function") throw new RequestError(503, "BACKEND_UNAVAILABLE", "Progress storage is temporarily unavailable.");
-      await store.unlockTester(env, targetEmail);
-      console.log(JSON.stringify({event: "tester_lock_change", action: "unlock"}));
-      return json(await responseBody(emails, {unlocked: targetEmail}));
-    }
     /* A tester asking for their written answers back, without withdrawing from the
      * test. The privacy notice promises this happens on request and without their
      * having to explain why, so it is a control the owner can act on rather than a
@@ -1091,7 +1019,7 @@ async function manageTesters(request, env, fetchImpl, verifyAdmin, store) {
       console.log(JSON.stringify({event: "tester_community_reminder", reminded: 1}));
       return json(await responseBody(emails, {reminded: [targetEmail]}));
     }
-    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use sign-out, sign-out-all, unlock, bump, bump-unjoined, or delete-answers.");
+    throw new RequestError(400, "UNSUPPORTED_ACTION", "Use sign-out, sign-out-all, bump, bump-unjoined, or delete-answers.");
   }
 
   if (method === "DELETE") {
@@ -1177,6 +1105,7 @@ function learnerAssetPath(pathname, prefix) {
   ]);
   if (learnerFiles.has(pathname)) return learnerFiles.get(pathname);
   if (pathname.startsWith(`${prefix}/sets/`)) return `/app${pathname.slice(prefix.length)}`;
+  if (pathname.startsWith(`${prefix}/vendor/`)) return `/app${pathname.slice(prefix.length)}`;
   // The client directory was renamed from mock/ to app/. These /mock/ URLs are public and may sit
   // in tester bookmarks, so they keep resolving; only the asset they point at moved.
   if (pathname === `${prefix}/mock/t6.html` || pathname === `${prefix}/mock/t6.css` || pathname === `${prefix}/mock/t6.js`) {

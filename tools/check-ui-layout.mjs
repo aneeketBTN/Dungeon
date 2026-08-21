@@ -36,10 +36,12 @@ if (!chrome) throw new Error("Chrome or Edge was not found; pass --chrome <path>
 
 const only = flag("only", null);
 const scenes = [
-  ["dashboard", "SPMS"], ["lesson", "SCLM"], ["question", "SCLM"],
-  ["exam-home", "SCLM"], ["exam-question", "SCLM"],
+  ["dashboard", "SPMS"], ["dashboard-folded", "IBM"], ["lesson", "SCLM"], ["question", "SCLM"],
+  ["exam-home", "SCLM"], ["exam-final", "IBM"], ["exam-full", "IBM"],
+  ["exam-released", "IBM"], ["exam-question", "SCLM"],
   ["mini-question", "SPMS"], ["mini-feedback", "SPMS"],
-  ["mini-result", "SPMS"], ["notes", "SCLM"]
+  ["mini-result", "SPMS"], ["mini-feedback", "IBM"], ["mini-result", "IBM"],
+  ["notes", "SCLM"], ["notes-ibm", "IBM"]
 ].filter(([scene]) => !only || scene === only);
 const sizes = [[375, 812, "dark"], [1280, 900, "light"]];
 const zeroUi = ["overflow", "clipped", "circleFit", "overlaps", "ragged", "cutRows", "hiddenScroll", "barInset"];

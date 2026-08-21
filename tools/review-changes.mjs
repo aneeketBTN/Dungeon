@@ -122,7 +122,7 @@ if (process.argv.includes("--html")) {
   const sandbox = { window: {}, console };
   vm.createContext(sandbox);
   for (const file of ["app/sets/t6_brgsa.js", "app/sets/t6_catalog.js",
-    "app/sets/t6_integrated.js", "app/sets/t6_challenges.js"]) {
+    "app/sets/t6_integrated.js", "app/sets/t6_ibm_case.js", "app/sets/t6_challenges.js"]) {
     vm.runInContext(fs.readFileSync(path.join(root, file), "utf8"), sandbox, { filename: file });
   }
   const courses = sandbox.window.T6_COURSES;

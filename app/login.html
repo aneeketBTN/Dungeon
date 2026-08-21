@@ -27,21 +27,6 @@
         <button id="login-submit" type="submit">Open revision dashboard</button>
       </form>
 
-      <!-- Moving to another device. Progress already follows the email through the
-           server, so the only thing in the way is the one-active-browser rule. This
-           says so plainly and offers the one action that resolves it, rather than the
-           old dead end of "sign out there" — which nobody can do from a device they
-           did not bring. -->
-      <section class="device-switch" id="device-switch" aria-labelledby="device-switch-title" hidden>
-        <p class="eyebrow">Already signed in elsewhere</p>
-        <h2 id="device-switch-title" tabindex="-1">Continue on this device?</h2>
-        <p>This account is open on another browser. You can sign that one out and carry on here.</p>
-        <p class="device-switch-note">Your progress is saved to your account, not to a device, so nothing is lost either way. The other browser will need to sign in again.</p>
-        <button id="device-switch-confirm" type="button">Sign out the other device and continue</button>
-        <p class="form-message" id="device-switch-message" role="status" aria-live="polite"></p>
-        <button class="back-button" id="device-switch-cancel" type="button">Back</button>
-      </section>
-
       <section class="agreement" id="agreement" aria-labelledby="agreement-title" hidden>
         <p class="eyebrow">One-time agreement</p>
         <h2 id="agreement-title" tabindex="-1">Keep the closed test private</h2>
@@ -74,7 +59,7 @@
             <h3>No copying</h3>
             <p>Do not scrape, bulk-download, reverse engineer, plagiarise, republish, sell, adapt, or use private material to reproduce Dungeon or create a substantially similar question bank, dashboard, workflow, or product. Ordinary use and good-faith bug reports are allowed.</p>
             <h3>Security and data</h3>
-            <p>Dungeon stores your approved email, revision progress and attempts, an opaque session-token hash, timestamps, first-login Cloudflare country code, agreement version, and account-lock state. It does not request precise GPS. Cloudflare may process ordinary network and security metadata. One active browser is permitted. A country change can lock the account for Aneeket to review; travel, VPNs, mobile networks, and routing can cause legitimate changes.</p>
+            <p>Dungeon stores your approved email, revision progress and attempts, opaque session-token hashes, timestamps, and the agreement version. It does not request precise GPS or use Cloudflare's country signal to lock your account. Cloudflare may still process ordinary network and security metadata. Personal access remains a condition of the tester agreement even though Dungeon does not automatically limit your devices or region.</p>
             <h3>Your written answers</h3>
             <p>When you write an answer in written practice, Dungeon sends it to an AI model to be checked against the course material. That model may be Cloudflare's, or a third-party provider reached through a routing service that can change if one is unavailable, so the company handling a given answer is not knowable in advance and may be outside India. Nothing identifying you is sent with it: the model receives the question, your writing, and the course passages, and never your name, email, or account.</p>
             <p>Dungeon keeps the text you wrote for up to three months. This is not needed to run your own session, so it is worth being clear about: the machine marking is not yet reliable enough to be treated as a grade, and it is improved by comparing what it decided against what a person reading the same answer would decide. Your own results are shown to you; the stored text is used to correct the rubrics and write better prompts for the students who take this course after you. It is not published, sold, or shown to other testers.</p>

@@ -29,8 +29,6 @@ function createMemoryStore({agreementAccepted = true} = {}) {
   const sessions = new Map();
   const active = new Set();
   const progress = new Map();
-  const countries = new Map();
-  const locked = new Set();
   const agreements = new Map();
   const communityOpened = new Map();
   const communityJoined = new Map();
@@ -43,7 +41,6 @@ function createMemoryStore({agreementAccepted = true} = {}) {
     sessions,
     active,
     progress,
-    locked,
     agreements,
     communityOpened,
     communityJoined,
@@ -51,34 +48,15 @@ function createMemoryStore({agreementAccepted = true} = {}) {
     writtenUsage,
     archive,
     failArchive(value = true) { archiveFails = value; },
-    async checkLogin(env, email, country, releaseOtherDevice) {
-      if (locked.has(email)) throw new RequestError(403, "ACCOUNT_LOCKED", "This tester account is locked. Ask Aneeket for help.");
-      if (countries.has(email) && country && countries.get(email) !== country) {
-        locked.add(email);
-        for (const [tokenHash, sessionEmail] of sessions) if (sessionEmail === email) sessions.delete(tokenHash);
-        throw new RequestError(403, "LOCATION_LOCKED", "This tester account was locked because its country changed. Ask Aneeket for help.");
-      }
-      const inUse = [...sessions.values()].includes(email);
-      if (inUse) {
-        if (releaseOtherDevice !== true) {
-          throw new RequestError(409, "ACCOUNT_IN_USE", "This account is already open on another browser. You can sign that one out and continue here.");
-        }
-        for (const [tokenHash, sessionEmail] of sessions) if (sessionEmail === email) sessions.delete(tokenHash);
-      }
-      return {releasedOtherDevice: inUse && releaseOtherDevice === true};
+    async checkLogin() {
+      return {approved: true};
     },
-    async issueSession(env, email, tokenHash, expiresAt, country) {
+    async issueSession(env, email, tokenHash) {
       active.add(email);
-      if (country && !countries.has(email)) countries.set(email, country);
       sessions.set(tokenHash, email);
     },
-    async findSession(env, tokenHash, country) {
+    async findSession(env, tokenHash) {
       const email = sessions.get(tokenHash);
-      if (email && countries.has(email) && country && countries.get(email) !== country) {
-        locked.add(email);
-        sessions.delete(tokenHash);
-        return null;
-      }
       if (!email || !active.has(email)) return null;
       return {email, agreement_version: agreements.get(email) || (agreementAccepted ? currentAgreement : null)};
     },
@@ -127,14 +105,11 @@ function createMemoryStore({agreementAccepted = true} = {}) {
         communityJoinedAt: communityJoined.get(email) || null,
         communityReminderAt: communityReminders.get(email) || null,
         activeSession: [...sessions.values()].includes(email),
-        locked: locked.has(email),
         hasProgress: progress.has(email)
       }]));
     },
     async revokeTester(env, email) {
       active.delete(email);
-      countries.delete(email);
-      locked.delete(email);
       progress.delete(email);
       for (let index = archive.length - 1; index >= 0; index -= 1) {
         if (archive[index].email === email) archive.splice(index, 1);
@@ -144,11 +119,6 @@ function createMemoryStore({agreementAccepted = true} = {}) {
       communityJoined.delete(email);
       communityReminders.delete(email);
       for (const [tokenHash, sessionEmail] of sessions) if (sessionEmail === email) sessions.delete(tokenHash);
-    },
-    async unlockTester(env, email) {
-      const wasLocked = locked.delete(email);
-      countries.delete(email);
-      return wasLocked;
     },
     /* Sign-out touches sessions and nothing else — the memory store mirrors that
      * deliberately, so a test asserting progress survives is testing the contract
@@ -601,7 +571,7 @@ test("signing everyone out clears tester sessions and leaves the owner alone", a
   assert.ok(!body.signedOut.includes(baseEnv.OWNER_EMAIL), "the owner must never be signed out by the bulk control");
 });
 
-test("unlocking a country lock keeps the tester's saved progress", async () => {
+test("a country change needs no unlock and keeps the tester's saved progress", async () => {
   const sampleState = {version: 2, selectedCourse: "BRGSA", conceptAttempts: {BRGSA: {C1: [{correct: true}]}}, completed: {BRGSA: [1]}};
   let wroteGroup = false;
   const store = createMemoryStore();
@@ -625,29 +595,17 @@ test("unlocking a country lock keeps the tester's saved progress", async () => {
     headers: {Origin: "https://aneeketdas.com", Cookie: cookie}
   }), baseEnv);
 
-  const fromAbroad = await login(worker, "alpha@example.com", baseEnv, "US");
-  assert.equal(fromAbroad.status, 403);
-  assert.equal((await fromAbroad.json()).code, "LOCATION_LOCKED");
-
-  const unlock = await worker.fetch(request("/dungeon/admin/api/testers", {
-    method: "PATCH",
-    headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com"},
-    body: JSON.stringify({email: "alpha@example.com", action: "unlock"})
-  }), baseEnv);
-  assert.equal(unlock.status, 200);
-  assert.equal((await unlock.json()).unlocked, "alpha@example.com");
-  assert.equal(wroteGroup, false, "unlock must not rewrite the Access group");
-
-  const afterUnlock = await login(worker, "alpha@example.com", baseEnv, "US");
-  assert.equal(afterUnlock.status, 200);
+  const afterMove = await login(worker, "alpha@example.com", baseEnv, "US");
+  assert.equal(afterMove.status, 200);
+  assert.equal(wroteGroup, false, "a country change must not rewrite the Access group");
   const progressResponse = await worker.fetch(request("/dungeon/api/progress", {
-    headers: {Cookie: cookieFrom(afterUnlock)}
+    headers: {Cookie: cookieFrom(afterMove), "CF-IPCountry": "US"}
   }), baseEnv);
   assert.equal(progressResponse.status, 200);
   assert.deepEqual((await progressResponse.json()).state, sampleState);
 });
 
-test("a learner can move to a new device without losing progress or waiting for the owner", async () => {
+test("a learner can use another device without evicting the first or losing progress", async () => {
   const sampleState = {version: 2, selectedCourse: "BRGSA", conceptAttempts: {BRGSA: {C1: [{correct: true}]}}, completed: {BRGSA: [1]}};
   const worker = workerWithGroup(["alpha@example.com"], {store: createMemoryStore()});
 
@@ -660,16 +618,10 @@ test("a learner can move to a new device without losing progress or waiting for 
     body: JSON.stringify({state: sampleState})
   }), baseEnv);
 
-  // Laptop: the plain attempt is refused, but with a code the page can act on rather
-  // than the old dead end of "sign out there".
-  const blocked = await login(worker, "alpha@example.com");
-  assert.equal(blocked.status, 409);
-  assert.equal((await blocked.json()).code, "ACCOUNT_IN_USE");
-
-  // Laptop: the learner chooses to end the other session.
-  const laptop = await login(worker, "alpha@example.com", baseEnv, null, true);
+  // Laptop: sign in directly. Device count is a term, not an authentication lock.
+  const laptop = await login(worker, "alpha@example.com");
   assert.equal(laptop.status, 200);
-  assert.equal((await laptop.clone().json()).releasedOtherDevice, true);
+  assert.equal((await laptop.clone().json()).releasedOtherDevice, undefined);
 
   // The work follows the account, not the device.
   const carried = await worker.fetch(request("/dungeon/api/progress", {
@@ -678,23 +630,21 @@ test("a learner can move to a new device without losing progress or waiting for 
   assert.equal(carried.status, 200);
   assert.deepEqual((await carried.json()).state, sampleState);
 
-  // Still exactly one active browser: the phone's cookie no longer authenticates.
+  // The phone remains valid; signing in elsewhere no longer evicts active sessions.
   const oldDevice = await worker.fetch(request("/dungeon/api/progress", {
     headers: {Cookie: cookieFrom(phone)}
   }), baseEnv);
-  assert.equal(oldDevice.status, 401, "the previous session must be ended, not merely joined");
+  assert.equal(oldDevice.status, 200);
 });
 
-test("a country-locked account cannot take over its way back in", async () => {
+test("legacy device-switch input cannot reintroduce a country lock", async () => {
   const worker = workerWithGroup(["alpha@example.com"], {store: createMemoryStore()});
   const first = await login(worker, "alpha@example.com", baseEnv, "IN");
   assert.equal(first.status, 200);
 
-  // A device switch is routine; clearing a country lock is a security decision, and
-  // the release flag must not be a way around it.
+  // Old clients may still send the retired flag. It is ignored, as is the region.
   const abroad = await login(worker, "alpha@example.com", baseEnv, "US", true);
-  assert.equal(abroad.status, 403);
-  assert.equal((await abroad.json()).code, "LOCATION_LOCKED");
+  assert.equal(abroad.status, 200);
 });
 
 test("cohort insights rank by unassisted first attempts and exclude the owner", () => {
@@ -739,15 +689,15 @@ test("cohort insights rank by unassisted first attempts and exclude the owner", 
   assert.equal(summary.participation.some((row) => row.email === "corrupt@example.com"), false);
 });
 
-test("unlock refuses an address that is not an approved tester", async () => {
+test("the retired unlock action is no longer part of the owner API", async () => {
   const worker = workerWithGroup(["alpha@example.com"]);
   const response = await worker.fetch(request("/dungeon/admin/api/testers", {
     method: "PATCH",
     headers: {"Content-Type": "application/json", Origin: "https://aneeketdas.com"},
-    body: JSON.stringify({email: "stranger@example.com", action: "unlock"})
+    body: JSON.stringify({email: "alpha@example.com", action: "unlock"})
   }), baseEnv);
-  assert.equal(response.status, 404);
-  assert.equal((await response.json()).code, "NOT_APPROVED");
+  assert.equal(response.status, 400);
+  assert.equal((await response.json()).code, "UNSUPPORTED_ACTION");
 });
 
 test("owner can bump every approved tester still missing the WhatsApp group", async () => {
@@ -879,22 +829,22 @@ test("progress is durable across learner sessions", async () => {
   assert.deepEqual((await loaded.json()).state, state);
 });
 
-test("one email cannot open a second active browser and a new country locks the account", async () => {
+test("one email can keep several browser sessions across country changes", async () => {
   const store = createMemoryStore();
   const worker = workerWithGroup(["alpha@example.com"], {store});
   const first = await login(worker, "alpha@example.com", baseEnv, "SG");
   assert.equal(first.status, 200);
 
   const simultaneous = await login(worker, "alpha@example.com", baseEnv, "SG");
-  assert.equal(simultaneous.status, 409);
+  assert.equal(simultaneous.status, 200);
 
   await worker.fetch(request("/dungeon/api/session", {
     method: "DELETE",
     headers: {Origin: "https://aneeketdas.com", Cookie: cookieFrom(first), "CF-IPCountry": "SG"}
   }), baseEnv);
   const moved = await login(worker, "alpha@example.com", baseEnv, "IN");
-  assert.equal(moved.status, 403);
-  assert.equal(store.locked.has("alpha@example.com"), true);
+  assert.equal(moved.status, 200);
+  assert.equal([...store.sessions.values()].filter((email) => email === "alpha@example.com").length, 2);
 });
 
 test("owner routes retain the separate Cloudflare Access boundary", async () => {

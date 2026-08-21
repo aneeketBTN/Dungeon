@@ -20,7 +20,7 @@ here, and treat a disagreement as this file being stale.
 subjects and all 359 named syllabus ideas now read 100%. The bank is **219 concepts and 2,827
 questions**, with every concept linked. IBM's same-day owner direction superseded its pause: 69
 new records plus four wording repairs closed its 73-idea queue. Its assessment form is authored as
-taxonomy, not guessed from the unreleased case — layer ideas receive written + MCQ practice,
+taxonomy, not guessed from what was then the unreleased case — layer ideas receive written + MCQ practice,
 frameworks written-only, and bounded concepts MCQ-only. This is a coverage milestone, not
 completion of the adopted depth decision: the 219 records still stand in for 359 named ideas.
 Teaching delivery is now 283/283 scheduled with zero readable-only entries. Phase 2 continues with

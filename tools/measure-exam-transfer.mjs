@@ -44,7 +44,7 @@ const gate = process.argv.indexOf("--gate") >= 0;
 
 const context = { window: {}, atob: (v) => Buffer.from(v, "base64").toString("binary") };
 vm.createContext(context);
-for (const rel of ["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_challenges.js"]) {
+for (const rel of ["sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js", "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_ibm_case.js", "sets/t6_challenges.js"]) {
   const file = path.join(appRoot, rel);
   vm.runInContext(fs.readFileSync(file, "utf8"), context, { filename: file });
 }
@@ -100,7 +100,8 @@ function examPrefer(questions, prefer) {
 
 function examPool(course, type) {
   return Object.keys(course.questions).map((id) => course.questions[id])
-    .filter((question) => (question.type || "mcq") !== "primer" && (question.type || "mcq") === type);
+    .filter((question) => !question.releasedCase &&
+      (question.type || "mcq") !== "primer" && (question.type || "mcq") === type);
 }
 
 function conceptsOf(question) {

@@ -462,33 +462,51 @@
           <div>
             <p class="eyebrow">Dungeon, the examiner</p>
             <h1 id="exam-home-title">Choose the practice you need.</h1>
-            <p class="exam-home-lede">Use a 15-minute teaching mini-mock to touch every module,
-              apply the course, and learn from every answer. The full papers remain below when
-              you specifically want two hours under the real rules with feedback held to the end.</p>
+            <p class="exam-home-lede">Choose by time left: a full mock when the exam is at least a
+              week away, a coached Speedrun inside the final week, or a 25-minute Mini just before it.</p>
           </div>
         </header>
 
-        <!-- One recommended paper, above everything. A candidate opening this wants to
-             be told what to sit, not to compare every set and diagnostic — the list is still
-             below for when they want to choose. -->
-        <section class="exam-pick" id="exam-pick" aria-labelledby="exam-pick-title" hidden>
-          <p class="eyebrow">Do this next</p>
-          <h2 id="exam-pick-title"></h2>
-          <p class="exam-pick-why" id="exam-pick-why"></p>
-          <div class="exam-pick-facts" id="exam-pick-facts"></div>
-          <button class="button primary" id="exam-pick-start" type="button"></button>
+        <nav class="exam-mode-switch" id="exam-mode-switch" role="tablist" aria-label="Examiner practice type">
+          <button type="button" role="tab" data-exam-mode="full" aria-controls="exam-mode-full">Full mocks <small>1+ week out</small></button>
+          <button type="button" role="tab" data-exam-mode="mini" aria-controls="exam-mode-mini">Speedrun <small>within a week</small></button>
+          <button type="button" role="tab" data-exam-mode="final" aria-controls="exam-mode-final">Minis <small>last 25–30 min</small></button>
+        </nav>
+
+        <section class="exam-mode-panel" id="exam-mode-mini" role="tabpanel" aria-label="Final-week Speedruns">
+          <!-- One recommended round, above the four subject choices. -->
+          <section class="exam-pick" id="exam-pick" aria-labelledby="exam-pick-title" hidden>
+            <p class="eyebrow">Do this next</p>
+            <h2 id="exam-pick-title"></h2>
+            <p class="exam-pick-why" id="exam-pick-why"></p>
+            <div class="exam-pick-facts" id="exam-pick-facts"></div>
+            <button class="button primary" id="exam-pick-start" type="button"></button>
+          </section>
+          <div class="exam-panel-heading">
+            <div><p class="eyebrow">Within a week</p><h2>Eight questions. Every module.</h2></div>
+            <p>Use coached Speedruns across the final week. Answer first; get the correction immediately.</p>
+          </div>
+          <div class="exam-mini-grid" id="exam-mini-grid"></div>
         </section>
 
-        <!-- Your record across every paper. A returning candidate is asking "am I
-             moving" before "which set next". -->
-        <section class="exam-record" id="exam-record-block" aria-labelledby="exam-record-title" hidden>
-          <h2 id="exam-record-title">Your record</h2>
-          <div class="insight-grid" id="exam-record"></div>
-          <p class="insight-verdict" id="exam-record-verdict"></p>
+        <section class="exam-mode-panel" id="exam-mode-final" role="tabpanel" aria-label="Last-minute Minis" hidden>
+          <div id="final-sprint"></div>
         </section>
 
-        <h2 class="exam-papers-title">Full exam-condition papers</h2>
-        <div class="exam-papers" id="exam-papers"></div>
+        <section class="exam-mode-panel" id="exam-mode-full" role="tabpanel" aria-label="Full exam-condition mocks" hidden>
+          <!-- Your record across every paper. A returning candidate is asking "am I
+               moving" before "which set next". -->
+          <section class="exam-record" id="exam-record-block" aria-labelledby="exam-record-title" hidden>
+            <h2 id="exam-record-title">Your full-mock record</h2>
+            <div class="insight-grid" id="exam-record"></div>
+            <p class="insight-verdict" id="exam-record-verdict"></p>
+          </section>
+          <div class="exam-panel-heading">
+            <div><p class="eyebrow">A week or more out</p><h2 class="exam-papers-title">Full exam-condition mocks</h2></div>
+            <p>Two hours under the real section rules. Use these early enough to diagnose and repair; feedback stays hidden until submission.</p>
+          </div>
+          <div class="exam-papers" id="exam-papers"></div>
+        </section>
 
         <!-- The same floating offer the learning system makes, for the same reason:
              the coverage cycles run well past the recommendation, and a candidate
@@ -685,10 +703,13 @@
   <script src="sets/t6_catalog.js"></script>
   <!-- Before t6_challenges.js, which reads T6_INTEGRATED while building the bank. -->
   <script src="sets/t6_integrated.js"></script>
+  <script src="sets/t6_ibm_case.js"></script>
   <script src="sets/t6_challenges.js"></script>
+  <script src="sets/t6_final_sprints.js"></script>
   <script src="sets/t6_mini_mocks.js"></script>
   <!-- Generated by tools/measure-syllabus-coverage.mjs --emit. Counts only, no course text. -->
   <script src="sets/t6_coverage.js"></script>
+  <script src="vendor/gsap.min.js"></script>
   <script src="t6.js"></script>
 </body>
 </html>

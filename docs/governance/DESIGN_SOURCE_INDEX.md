@@ -47,10 +47,24 @@ not make it authoritative.
      independently verify WhatsApp membership; the owner can record in-app bumps and manually send
      the copied reminder before removing a non-participating tester.
    - IBM testing taxonomy (2026-08-20, superseding the earlier pause): implement every remaining
-     course-grounded idea without pretending to know the unreleased exam case. Foundational layer
+     course-grounded idea without pretending to know the then-unreleased exam case. Foundational layer
      ideas receive subjective + MCQ practice; named frameworks/models receive subjective practice
      only; bounded concepts and distinctions receive MCQ practice only. Generic lesson-grounded
      caselets are practice, never a claim about the examination case.
+   - Final-revision and Examiner separation (2026-08-22, refined by owner the same day): make
+     two-hour Full mocks for one week or more out, coached Speedruns for within the final week, and
+     25–30 minute Minis immediately before the exam three explicit choices. Speedruns must not be
+     buried inside full-paper cards. The released IBM prompt receives its own fixed ten-question
+     paper; numbered IBM sets remain transfer cycles. On the Learn home, the full subject cards
+     remain the first-load state and fold into an animated, clearly selected subject rail only
+     after a subject is chosen. Both short routes must also survive the established learner-persona
+     audit: gaming resistance for Brilliant-but-lazy, immediate teaching/completeness for Average
+     Joe, and whole-cycle/module coverage plus bounded answer spines for Dumb-but-diligent. A
+     written Speedrun answer is one coached interaction, not submission followed by a second rubric.
+   - Personal-access controls (2026-08-22, superseding the 2026-08-11 device/country enforcement):
+     retain personal access and one-browser-at-a-time as tester terms, but do not enforce a device
+     ceiling or country lock. Concurrent sessions are allowed; coarse country is neither stored
+     nor used to deny access. Owner/admin routes are excluded from learner burst limiting.
    - Dashboard chart system (2026-08-20): owner direction replaces every handmade data graph with
      the actual shadcn chart component structure and Recharts primitives. Official area and radar
      registries define the implementation reference; Dungeon supplies its own data, tokens and
@@ -319,11 +333,16 @@ one side.
   offline fallback, revocation deletes a tester's sessions and progress, and the collection notice
   is stated in `docs/community/PRIVACY.md` and the tester agreement. Telemetry and the paused cohort agents remain
   separate, still-unmade decisions.
+- Superseding owner decision (2026-08-22): persistence remains, but first-country and device-lock
+  enforcement are retired. New sessions clear legacy lock/country state, and migration `0008`
+  clears it for existing rows. Personal access remains a contractual and manually reviewable
+  boundary rather than an automated region/device verdict.
 
 ### C20 — Anti-harvesting intent versus the limits of a client-side bank
 
 - The owner does not want unrelated students scraping the authored bank, but approved testers must
-  still receive learning content in a browser and the current scheduler loads three bank scripts.
+  still receive learning content in a browser and the current scheduler loads allowlisted teaching,
+  bank, mock, and final-revision scripts.
 - Resolution (2026-08-11, amended the same day when the emailed code was dropped): use individual
   approved-email admission, session-gated learner assets, owner-only administration, revocation,
   no-index responses, private cache controls, edge rate limiting, one active browser per email, and
@@ -331,6 +350,10 @@ one side.
   anti-scraping or DRM: an approved technical tester can still download visible client assets, and
   the admission check proves possession of an approved address, not identity. Stronger protection
   requires a separate server-side, per-session item-delivery architecture.
+- Superseding owner decision (2026-08-22): remove the one-browser and country-lock enforcement from
+  that control set. Approved-email admission, signed sessions, revocation, private caching,
+  no-index responses, and learner-path rate limiting remain; the authenticated admin path is
+  explicitly excluded from learner burst limiting so its own API fan-out cannot lock out the owner.
 
 ### C21 — Exact path routing versus a private origin
 

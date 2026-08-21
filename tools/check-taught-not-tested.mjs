@@ -54,7 +54,7 @@ const COURSE_IDS = ["BRGSA", "IBM", "SCLM", "SPMS"];
 
 const BANK_FILES = [
   "sets/t6_lessons.js", "sets/t6_diagnoses.js", "sets/t6_brgsa.js",
-  "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_challenges.js",
+  "sets/t6_catalog.js", "sets/t6_integrated.js", "sets/t6_ibm_case.js", "sets/t6_challenges.js",
 ];
 
 function loadCourses() {

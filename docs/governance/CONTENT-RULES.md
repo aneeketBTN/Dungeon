@@ -325,9 +325,11 @@ question type trains the wrong skill.
 - `conceptKind: "concept"` → `assessmentMode: "objective"`: MCQ/objective families and
   boss linkage; no short answer.
 
-Generic lesson-grounded caselets may teach transfer. They must not name, predict or imply
-the unreleased examination case. Generated framework links use `writtenMode: "case"`;
-`"integrated"` is reserved for whole authored scenarios that receive exam priority.
+Generic lesson-grounded caselets may teach transfer. They must not be presented as the released
+examination brief. The released IBM case is a separate, fixed Examiner-only paper marked with
+`releasedCase: true`; it never enters numbered-paper rotation or Learn scheduling. Generated
+framework links use `writtenMode: "case"`; `"integrated"` is reserved for whole authored scenarios
+that receive exam priority.
 
 **Gate:** `tools/validate_t6_bank.js`; the bank-wide contract test in
 `tests/integrated-scenarios.test.mjs`; the mode-specific Learn-reach floor in

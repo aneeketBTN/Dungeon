@@ -98,8 +98,7 @@
       address.textContent = email;
       chips.className = "tester-chips";
 
-      if (status.locked) chips.append(chip("Locked", "alert"));
-      else if (status.activeSession) chips.append(chip("Signed in", "good"));
+      if (status.activeSession) chips.append(chip("Signed in", "good"));
       // A tester who accepted an earlier version has agreed to something; only the current terms
       // are outstanding. Saying "Not agreed yet" for both reads as if they never signed anything.
       if (status.agreementAccepted) chips.append(chip("Agreed", "good"));
@@ -109,18 +108,14 @@
       if (status.communityReminderAt && !status.communityJoined) chips.append(chip("Bumped", "alert"));
       if (status.hasProgress) chips.append(chip("Has progress", "good"));
       else chips.append(chip("Not started", "warn"));
-      /* Live sessions, so "Sign out" is never a control the owner has to guess
-       * about. More than one means the same email is open in several browsers. */
+      /* Live sessions remain operationally useful without being an access limit. */
       var live = Number(status.activeSessions || 0);
       if (live === 1) chips.append(chip("Signed in", "good"));
-      else if (live > 1) chips.append(chip("Signed in ×" + live, "alert"));
-      if (status.firstCountry) chips.append(chip(status.firstCountry));
+      else if (live > 1) chips.append(chip("Signed in ×" + live, "good"));
 
       var seen = relativeTime(status.lastSeenAt || status.progressUpdatedAt);
-      detail.className = status.locked ? "tester-security locked" : "tester-security";
-      detail.textContent = status.locked
-        ? "Locked after a country change. Clearing the lock keeps their progress."
-        : (seen ? "Last active " + seen : "No activity recorded yet");
+      detail.className = "tester-security";
+      detail.textContent = seen ? "Last active " + seen : "No activity recorded yet";
 
       actions.className = "tester-actions";
       if (!status.communityJoined) {
@@ -140,15 +135,6 @@
         signOut.setAttribute("aria-label", "End the browser sessions for " + email + " so they sign in again, keeping their progress");
         signOut.addEventListener("click", function () { signOutTester(email, live); });
         actions.append(signOut);
-      }
-      if (status.locked) {
-        var unlock = document.createElement("button");
-        unlock.className = "button secondary";
-        unlock.type = "button";
-        unlock.textContent = "Clear lock";
-        unlock.setAttribute("aria-label", "Clear the country lock for " + email);
-        unlock.addEventListener("click", function () { unlockTester(email); });
-        actions.append(unlock);
       }
       /* Always available, because a deletion request can arrive on any day from
        * any tester and there is no state that makes it inapplicable. */
@@ -352,29 +338,6 @@
     $("tester-parse-hint").textContent = count
       ? count + (count === 1 ? " email ready" : " emails ready") + (count > 25 ? " — over the 25 limit" : "")
       : "Up to 25 at a time.";
-  }
-
-  async function unlockTester(email) {
-    if (!testersConnected) return;
-    if (!window.confirm("Clear the country lock for " + email + "?\n\nThey keep their saved progress and can sign in again from where they are now.")) return;
-    setTesterControls(true, true);
-    try {
-      var response = await fetch(testersEndpoint, {
-        method: "PATCH",
-        cache: "no-store",
-        credentials: "same-origin",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({email: email, action: "unlock"})
-      });
-      var payload = await readJson(response);
-      if (!response.ok) throw new Error(payload.message || "The lock could not be cleared.");
-      renderTesters(Array.isArray(payload.testers) ? payload.testers : [], payload.security);
-      showToast("Lock cleared for " + email + ". Their progress is intact.");
-    } catch (error) {
-      showToast(error.message || "The lock could not be cleared.");
-    } finally {
-      setTesterControls(testersConnected, false);
-    }
   }
 
   /* A tester asking for their written answers back.

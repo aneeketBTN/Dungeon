@@ -1,7 +1,7 @@
-/* Dungeon mini-mocks.
+/* Dungeon Speedruns (the internal API keeps its original mini-mock name).
  *
- * A mini-mock is deliberately not a shortened exam paper. It is an eight-question,
- * coached confidence round: one applied surface from every module, feedback after
+ * A Speedrun is deliberately not a shortened exam paper. It is an eight-question,
+ * coached final-week round: one applied surface from every module, feedback after
  * every answer, and no clock. The complete sequence is a coverage cycle. Concepts
  * that have not appeared in the current cycle win selection first; after the cycle
  * reaches every concept, `rotation` changes the question families and begins again.

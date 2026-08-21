@@ -179,7 +179,7 @@ const scheduledByCourse = {};
 try {
   const bankContext = { window: {} };
   vm.createContext(bankContext);
-  for (const file of ["t6_lessons", "t6_diagnoses", "t6_brgsa", "t6_catalog", "t6_integrated", "t6_challenges"]) {
+  for (const file of ["t6_lessons", "t6_diagnoses", "t6_brgsa", "t6_catalog", "t6_integrated", "t6_ibm_case", "t6_challenges"]) {
     const p = join(root, "app", "sets", `${file}.js`);
     if (existsSync(p)) {
       try { vm.runInContext(readFileSync(p, "utf8"), bankContext); } catch { /* partial bank is fine */ }
