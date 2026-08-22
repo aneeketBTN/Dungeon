@@ -174,30 +174,36 @@ test("the three seeded BRGSA Section C draws are genuinely different papers", ()
     `three sets must be three draws, got ${JSON.stringify(draws)}`);
 });
 
-test("IBM keeps full-case depth while rotating the expanded written bank", () => {
+test("IBM keeps a little full-case depth while prioritising direct framework application", () => {
   const win = loadBank();
   const course = win.T6_COURSES.IBM;
   const draws = sectionDraw(course, "IBM", "A", "short-answer", 10, PREFER,
-    { integrated: 4, case: 6 });
+    { integrated: 2, case: 8 });
   const rotated = new Set();
   const concepts = new Set();
   draws.forEach((taken, set) => {
     const integrated = taken.filter((question) => question.writtenMode === "integrated").length;
     const cases = taken.filter((question) => question.writtenMode === "case").length;
-    assert.equal(integrated, 4, `IBM set ${set + 1} must carry four whole cases`);
-    assert.equal(cases, 6, `IBM set ${set + 1} must rotate six focused case responses`);
+    assert.equal(integrated, 2, `IBM set ${set + 1} must carry two whole cases`);
+    assert.equal(cases, 8, `IBM set ${set + 1} must rotate eight direct framework cases`);
     assert.ok(taken.filter((question) => question.writtenMode === "integrated")
       .every((question) => question.examOnly),
     `IBM set ${set + 1} must spend its integrated slice on examiner-only cases first`);
     taken.filter((question) => question.writtenMode === "case")
-      .forEach((question) => rotated.add(question.id));
+      .forEach((question) => {
+        rotated.add(question.id);
+        assert.doesNotMatch(question.caselet || "", /A second decision in the same organisation/i,
+          `${question.id} still stitches two caselets into one direct IBM slot`);
+        assert.match(question.stem || "", /^Using .+ what should (?:the organisation|be done)/i,
+          `${question.id} does not ask one named-framework decision directly`);
+      });
     taken.forEach((question) => {
       concepts.add(question.conceptId);
       Array.from(question.supportingConceptIds || []).forEach((id) => concepts.add(id));
     });
   });
-  assert.equal(rotated.size, 18,
-    "the six expanded-bank slots must be different on all three IBM mocks");
+  assert.equal(rotated.size, 24,
+    "the eight direct framework slots must be different on all three IBM mocks");
   assert.ok(concepts.size >= 30,
     `three IBM mocks must now reach at least 30 concepts, got ${concepts.size}`);
 });
@@ -262,7 +268,7 @@ test("the persona harness's paper builder still matches the app's", () => {
     assert.match(source, /examOnly \? 0 : 1/, `${label} must rank reserved items ahead of shared ones`);
     assert.match(source, /prefer: \["integrated", "case", "short"\]/,
       `${label} must declare the preference on its ten-mark sections`);
-    assert.match(source, /modeCounts:\s*\{\s*integrated:\s*4,\s*case:\s*6\s*\}/,
-      `${label} must keep four whole IBM cases while rotating six expanded-bank case responses`);
+    assert.match(source, /modeCounts:\s*\{\s*integrated:\s*2,\s*case:\s*8\s*\}/,
+      `${label} must keep two whole IBM cases while prioritising eight direct framework cases`);
   }
 });

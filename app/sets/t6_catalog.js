@@ -234,16 +234,20 @@
         config.id, concept, "apply", "What is the best interpretation or next step?",
         concept.application, concept.applicationWrong, concept.caselet, concept.module + index + 1
       );
-      /* Both the stem and the caselet used to be constants, identical for all 64
-         concepts, so a paper could print the same visible prompt sixteen times and
-         the item named nothing a candidate could reason about. Both now carry the
-         concept, which is what makes the question answerable as written. */
+      /* SCLM's observed paper rewards direct recall and interpretation. Its old
+         connect item still wrapped every concept in a fictional student sentence,
+         adding reading without adding evidence. Keep the concept-specific stem but
+         remove that pseudo-case: the bridge itself is the statement being recalled.
+         Other subjects retain the existing study surface until their own paper
+         evidence justifies changing it. */
       var connect = makeQuestion(
-        config.id, concept, "connect", "Which explanation best connects " + concept.name + " to the wider subject?",
+        config.id, concept, "connect", config.id === "SCLM"
+          ? "Which statement correctly describes why " + concept.name + " matters?"
+          : "Which explanation best connects " + concept.name + " to the wider subject?",
         concept.bridge,
         // Cycle the bridge across all four length ranks rather than pinning it to one.
         connectWrong(concept.bridge, index % 4, concept.name),
-        "A student can state what " + concept.name + " is, and now has to say why it changes the next decision.",
+        config.id === "SCLM" ? "" : "A student can state what " + concept.name + " is, and now has to say why it changes the next decision.",
         concept.module + index + 2
       );
       explain.repairId = apply.id;

@@ -1,5 +1,138 @@
 # Changelog
 
+## 2026-08-23 — Study becomes a centered desk, every module ends in a chamber, and exam routes finish
+
+Evidence: `evidence/2026-08-23/study-reader-exam-finish/verification.md`.
+
+Implemented on `codex/notes-primary-chambers` and **not deployed**. Study now keeps its reading
+column centered independently of navigation. A 104×52 desktop `Contents` control aligns with the
+module heading and reveals the module channel on hover, focus or click without reflowing the text;
+tablet and phone widths receive in-flow horizontal forms. The lecture utility card follows the
+active reading on desktop, while Key terms links calculate the live sticky offset before scrolling.
+The footer, offline copy and module navigation now share one centered 960px ending.
+
+All four subjects end every module with a rotating four-question chamber. SPMS carries exact-two
+P-type work, SCLM uses numerical or matching questions where the bank supports them, and IBM/BRGSA
+mix direct application with a compact case-answer spine. Misses alone offer named repair. IBM's
+exact released brief is now a full Study answer pack and the first Examiner block: one explicit
+assumption/model method, ten course lenses and ten model answers, all expanded in print.
+
+Examiner presents `Full mocks` and `Exam time`, with Speedrun and Mini consolidated inside Exam
+time. A live launch exposed the real cause of inert paper buttons after their render binding was
+repaired: `openExaminer()` still called the removed `pauseFinalSprint()` function. The stale call is
+gone; IBM Set 1 opens, the 120-minute clock starts, Question 1 renders and the console stays clean.
+
+Visual acceptance caught a defect in its own newly repurposed driver: an SCLM Study filename could
+contain SPMS because the scene waited for the reader but did not select the requested subject. The
+driver now verifies both the selected subject tab and course code before declaring readiness. The
+post-repair run is **32/32 layout scenes**, **36/36 regular captures** and **36/36 optical captures**.
+The full suite is **164/164**; build 24; lesson gate 283/283; bank 0 errors / 69 standing extraction
+warnings; exam 0/0; Wrangler dry run green. A 22-page IBM module 1 A4 render contains all ten
+questions and ten model answers with no interactive artifacts or clipping.
+
+## 2026-08-22 — IBM/SCLM take priority, Study prints cleanly, mocks open, and owner auth stops cold-looping
+
+Evidence: `evidence/2026-08-22/ibm-sclm-exam-study-release/verification.md`.
+
+Implemented locally on `codex/notes-primary-chambers` and **not deployed**. Study now puts the
+subject selector and content first. Its permanent 270px course card is replaced on desktop by a
+64px numbered rail that expands to 270px on hover or keyboard focus using a 280ms eased reveal;
+phones keep the complete static navigator. The module download stays beside the Dungeon reader
+title and returns at the bottom of the module. Every lecture title has a 44px download icon that
+prints only that lecture.
+
+Printing now has an A4-specific layout rather than inheriting the screen grid: fixed millimetre
+margins, compact print typography, aligned glossary columns, visible worked-answer explanations,
+controlled page breaks and no interactive buttons, skip links, chambers, shadows or navigation.
+The complete IBM module 1 and its first lecture were generated, rendered page by page and inspected.
+The final module was 13 pages and the lecture 2 pages; no clipped text, isolated heading, control
+artifact or blank action page remained.
+
+Examiner's active front door is IBM, SCLM, then SPMS. BRGSA's direct-pattern pack and writing
+playbook remain in source as historical reference but are hidden. Mock cards now use one delegated
+listener on their stable container, so re-rendering the paper chooser cannot leave a visible button
+inert; a failed paper build reports an actionable message instead of doing nothing. SCLM numerical
+questions now render the scenario as givens and the authored prompt as the explicit calculation
+task, fixing the previous scenario duplication. IBM's ten-question numbered papers now take two
+integrated cases and eight direct named-framework cases. The eight direct slots spread across all
+eight modules before backfill; the complete 65-record written-relevant cycle remains seven papers.
+
+The owner-login timeout was traced to Access verification constructing an empty remote JWKS
+resolver for every admin HTML, asset and API request. The Worker now retains only jose's
+serialisable public-key cache per configured Access origin while creating a fresh resolver for each
+request. A signed-token regression test proves that two authenticated requests make one certificate
+fetch, not two; no request promise, token or owner data enters module state.
+
+Verification: explicit suite **159/159**; production build **24 public assets**; exam readiness
+**0 errors / 0 warnings**; IBM's seven-paper cycle **65/65** and eight modules per paper; Mini,
+final-sprint, revision-persona and palette gates PASS; Wrangler **4.120.1** authenticated dry run
+reads 28 deployed assets and exits without publishing.
+
+## 2026-08-22 — Study introduces ideas where the course teaches them
+
+Evidence: `evidence/2026-08-22/ibm-sclm-notes-primary/contextual-reading-layout.md`.
+
+Implemented locally on `codex/notes-primary-chambers` and **not deployed**. The module-wide “Start
+with the map” block is removed. All **219 assessed concepts** already name one exact source lecture,
+so Study now places each summary in a compact “Keep from this lecture” recap after that lecture's
+explanation, worked move and key terms. A learner begins with the first lesson rather than a second
+syllabus, while every assessed idea remains visible at the point where it has context.
+
+The eleven numerical exoskeletons now carry explicit source lectures and render immediately after
+the relevant teaching: BRGSA 3, SCLM 5, SPMS 2 and IBM 1. The large IBM released-case pack moves
+after module 1's reading instead of interrupting its beginning; module chambers remain the final
+step. Print/PDF follows the same authored sequence while continuing to omit interactive chambers.
+
+The internal lecture structure is also aligned. Prose, worked moves, visible Key terms, assessed
+recaps and Next connection share the same 760px reading edge. Worked moves use horizontal rules
+instead of an inset card; Key terms has a real heading; Course context and Next connection use a
+label/content row that collapses cleanly to one column on phones.
+
+Worked examples now preserve both reading speeds. The visible path is **Case → Answer**, so the
+usable exam move arrives before the explanation; the existing causal detail is reused under a
+closed “Why this answer works” disclosure and is expanded for print/PDF. Two BRGSA examples were
+reauthored directly from the observed Section B shape: rising blended CAC with unchanged cohorts
+asks for a cause investigation, and plan payback asks for the calculation followed by ways to reduce
+it without changing CAC. This is the template for later IBM and SCLM example refinement: one bounded
+task first, deeper teaching available in place, and no separate exam-prep block added to the lesson.
+
+Verification: the complete explicit suite is **158/158**, the contextual-reading test proves all
+219 concept sources and all 11 method homes, the production build contains **24 assets**, and the
+palette gate passes in both themes.
+
+## 2026-08-22 — Study becomes the front door and IBM/SCLM get module chambers
+
+Evidence: `evidence/2026-08-22/ibm-sclm-notes-primary/verification.md`.
+
+Implemented locally on `codex/notes-primary-chambers` and **not deployed**. Dungeon now presents two
+front doors: Study and Exam. The complete 283-entry notes reader is the default first surface; the
+separate Learn dashboard and Notes tab no longer compete with it. Learn's evidence, re-teaching and
+focused-practice machinery remain available behind Study when an actual miss identifies the concept
+that needs work.
+
+Every IBM and SCLM module now ends in a four-question rotating chamber. IBM samples one definition,
+one decision, one connection and one short case paragraph. The paragraph is one interaction: reveal
+a course-grounded answer spine, then finish; it is explicitly ungraded and never opens the old
+self-marking rubric. SCLM samples three direct objective checks and then uses an honest published-
+paper format: a numerical in modules 2 or 3, matching in the other modules. A repeat rotates the
+sample rather than implying that four questions exhaust the module.
+
+Chambers diagnose through ordinary concept evidence but impose no confidence step, hidden same-run
+reattempt or all-concept read/test sequence. Results state the sample size, name only the missed
+concepts and offer the existing focused concept practice for each one. Correct answers do not create
+extra work. Starting, leaving and finishing a chamber return to the exact Study module.
+
+The numerical audit closes the method-teaching check for the shipped bank: all **8 SCLM numerical
+items** have a Study exoskeleton — exponential smoothing (1), EOQ and annual cost (2), newsvendor
+(1), and safety stock/reorder point/service level/inventory position (4). They are concentrated in
+modules 2 and 3. Module 6 has a useful cycle-time exoskeleton but no tolerance-graded question, so no
+numerical was invented merely to make the chamber distribution look even.
+
+Verification: the complete suite is **157/157**; production build **24 assets**; exam readiness
+**0 errors / 0 warnings**; bank, naming, craft, revision-persona, Mini and palette reviews PASS.
+Browser checks confirm the Study-first desktop route, IBM's single answer-spine interaction and the
+SCLM chamber at 375×812 with a Study return and no visible horizontal overflow.
+
 ## 2026-08-22 — BRGSA gets the first SPMS-derived paper-pattern drill and a written-answer playbook
 
 Evidence: `evidence/2026-08-22/brgsa-paper-pattern-revision/verification.md`.
@@ -9,6 +142,10 @@ SPMS confirms the recurring objective-question shapes, while their use for BRGSA
 working transfer assumption rather than a prediction of unseen questions. The six visible moves are
 recall and anatomy, statements and objectives, change and interpretation, close-concept
 distinctions, best-fit framework selection and case recommendation.
+
+The underlying first-party pattern report is preserved for future retrieval at
+`docs/research/SPMS_OBJECTIVE_QUESTION_FEEDBACK_2026-08-22.md`; it includes the original MCQ and
+multiple-right format boundary and the fuller set of observed question families.
 
 The start action now launches a purpose-authored **29-question BRGSA pass: one direct MCQ for every
 one of its 29 concepts**, in module and teaching order. The questions implement the reported shapes

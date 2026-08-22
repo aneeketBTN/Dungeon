@@ -45,7 +45,7 @@ test("module practice uses each paper's answer shape where that format exists", 
   }
   const sclmNumericModules = Array.from(courses.SCLM.runs.filter((item) => item.module <= 8 && item.formatQuotas.length),
     (item) => item.module);
-  assert.deepEqual(sclmNumericModules, [2, 3]);
+  assert.deepEqual(sclmNumericModules, [2, 3, 6, 7, 8]);
 });
 
 test("authored cases explain the case that was actually shown", () => {
@@ -67,6 +67,18 @@ test("reported teaching contradictions are removed at their source", () => {
 test("SCLM mock matching questions no longer repeat one stem", () => {
   const matches = Object.values(courses.SCLM.questions).filter((question) => question.type === "match");
   assert.ok(new Set(matches.map((question) => question.stem)).size >= 5);
+});
+
+test("SCLM bridge checks ask the concept directly without a fictional student case", () => {
+  const connects = Object.values(courses.SCLM.questions)
+    .filter((question) => question.type === "mcq" && question.perspective === "connect");
+  assert.ok(connects.length >= courses.SCLM.concepts.length,
+    "every SCLM concept needs a direct consequence or connection check");
+  for (const question of connects) {
+    assert.equal(question.caselet || "", "", `${question.id} still carries a filler caselet`);
+    assert.match(question.stem, /^Which statement correctly describes why .+ matters\?$/,
+      `${question.id} does not ask the bridge directly`);
+  }
 });
 
 test("Learn keeps fresh cases available and coverage cycles retain paper craft", () => {
@@ -91,6 +103,7 @@ test("Learn keeps fresh cases available and coverage cycles retain paper craft",
       SCLM: {sets: 3, concepts: 36}
     };
     for (const [subject, target] of Object.entries(expected)) {
+      const cycleNumerics = new Set();
       const setNumbers = fs.readdirSync(temp).map((name) => {
         const match = new RegExp(`^${subject}-set(\\d+)\\.json$`).exec(name);
         return match ? Number(match[1]) : null;
@@ -103,6 +116,24 @@ test("Learn keeps fresh cases available and coverage cycles retain paper craft",
         const key = JSON.parse(fs.readFileSync(path.join(temp, `${subject}-set${set}.key.json`), "utf8"));
         assert.equal(candidate.instructions.coverageCycle.sets, target.sets);
         assert.equal(candidate.instructions.coverageCycle.paperRelevantConcepts, target.concepts);
+        if (subject === "SCLM") {
+          assert.equal(candidate.instructions.minutes, 120);
+          assert.equal(candidate.instructions.calculator, "scientific");
+          assert.equal(candidate.instructions.marksOnTheRealPaper, 80);
+          assert.equal(candidate.instructions.marksAvailableHere, 80);
+          assert.deepEqual(candidate.instructions.sections.map((section) => ({
+            id: section.id, count: section.count, marks: section.marks
+          })), [
+            {id: "A", count: 50, marks: 1},
+            {id: "B", count: 6, marks: 4},
+            {id: "C", count: 3, marks: 2}
+          ], "SCLM must stay at 50 MCQs, 6 numericals, and 3 matching questions");
+          for (const question of candidate.paper.filter((row) => row.section === "B")) {
+            assert.equal(cycleNumerics.has(question.id), false,
+              `${question.id} repeats before the three-set SCLM numerical rotation is exhausted`);
+            cycleNumerics.add(question.id);
+          }
+        }
         key.key.forEach((question) => [question.conceptId].concat(question.supportingConceptIds || [])
           .filter(Boolean).forEach((conceptId) => reached.add(conceptId)));
         const modules = new Set(key.key.flatMap((question) => question.sourceIds || [])
@@ -112,6 +143,8 @@ test("Learn keeps fresh cases available and coverage cycles retain paper craft",
       }
       assert.equal(reached.size, target.concepts,
         `${subject} coverage cycle must surface every paper-relevant concept`);
+      if (subject === "SCLM") assert.equal(cycleNumerics.size, 18,
+        "the three SCLM mocks must provide eighteen distinct numerical questions");
     }
     const strategies = execFileSync(process.execPath,
       [path.join(root, "tools", "run-persona-strategies.mjs"), temp, "--gate"],

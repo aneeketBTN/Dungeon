@@ -469,9 +469,9 @@
       "The gap between the levels is where the decision lives. A blended CAC of ₹3,200 looks healthy right up until you compute LinkedIn separately and find it costs ₹10,000 per customer — the same average was concealing one channel that should be cut and another that should be scaled."
     ],
     worked: {
-      setup: "A LinkedIn campaign spends ₹8,00,000 and produces 80 customers. Blended CAC across the company is ₹3,200.",
-      move: "Report channel CAC as ₹10,000 (8,00,000 ÷ 80) alongside the blend, and decide per channel.",
-      because: "CAC only becomes a decision when its cost scope and its customer denominator both match the thing you are deciding about."
+      setup: "Blended CAC rises from ₹3,200 to ₹4,100 while cohort retention, ARPU, and customer quality stay unchanged. The company wants to know what caused the increase.",
+      move: "Break the blend into channel CAC and acquisition-funnel components. Check whether the mix shifted toward expensive channels, media costs rose, or lead-to-customer conversion fell; unchanged cohorts make a deterioration in acquired-customer quality less likely.",
+      because: "Blended CAC is a weighted average, so it can rise even when the customers remain equally valuable. The investigation has to separate price paid for traffic, funnel efficiency, sales effort, and channel mix before blaming the cohort or cutting acquisition altogether."
     },
     glossary: [
       {term: "blended CAC", plain: "All marketing and sales spend divided by all new customers — a company-level average."},
@@ -1169,9 +1169,9 @@
       "When someone says the payback period is bad, the first question is whether the problem is the numerator or the denominator. There are three knobs: CAC, ARPU, and gross margin. Higher margin shortens payback without touching either of the other two."
     ],
     worked: {
-      setup: "A company spends ₹10 lakh a month on acquisition with an 18-month payback period and wants to grow faster.",
-      move: "Ask which of CAC, ARPU, or margin is responsible before increasing the budget.",
-      because: "Adding spend to a slow payback multiplies the capital tied up; shortening the payback releases the money you already committed."
+      setup: "A plan earns ₹1,000 in monthly ARPU at a 60% gross margin and has a CAC of ₹9,000. Calculate payback, then reduce it without changing CAC.",
+      move: "Monthly gross profit is ₹1,000 × 60% = ₹600, so payback is ₹9,000 ÷ ₹600 = 15 months. With CAC fixed, raise ARPU, improve gross margin by lowering direct service cost, or collect more of the contract value upfront.",
+      because: "Payback divides CAC by monthly gross profit, not by revenue. Higher retention improves LTV but does not shorten this 15-month result unless it also changes monthly gross profit or cash collection; that distinction prevents a plausible but irrelevant recommendation."
     },
     glossary: [
       {term: "payback period", plain: "How long until a customer has repaid what it cost to acquire them."},

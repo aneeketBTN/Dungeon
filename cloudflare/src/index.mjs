@@ -1,4 +1,4 @@
-import { createRemoteJWKSet, jwtVerify } from "jose";
+import { createRemoteJWKSet, jwtVerify, jwksCache } from "jose";
 import {
   WrittenAuthorityError,
   gradeHostedAnswer,
@@ -16,6 +16,27 @@ const REQUIRED_ADMIN_BINDINGS = [
   "ACCESS_TEAM_DOMAIN",
   "ACCESS_ADMIN_AUD"
 ];
+/* Cloudflare Access public keys rotate rarely, while the admin shell requests HTML,
+ * CSS, JavaScript, and several APIs in quick succession. Creating an empty remote
+ * JWKS resolver for every request made every one of those requests wait on the cert
+ * endpoint. On a cold isolate the first page could time out; reloading then appeared
+ * to work only because an upstream cache had warmed.
+ *
+ * Keep only jose's serialisable public-JWK cache between requests. A fresh resolver
+ * still belongs to each request, so no in-flight fetch or request-scoped promise is
+ * shared through module state. The map is keyed by the configured Access origin and
+ * bounded because the origin comes from environment configuration, not user input. */
+const ACCESS_JWKS_CACHES = new Map();
+const ACCESS_JWKS_CACHE_LIMIT = 4;
+
+function accessJwksCache(teamUrl) {
+  const key = teamUrl.origin;
+  if (!ACCESS_JWKS_CACHES.has(key)) {
+    if (ACCESS_JWKS_CACHES.size >= ACCESS_JWKS_CACHE_LIMIT) ACCESS_JWKS_CACHES.clear();
+    ACCESS_JWKS_CACHES.set(key, {});
+  }
+  return ACCESS_JWKS_CACHES.get(key);
+}
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
   "base-uri 'none'",
@@ -103,7 +124,7 @@ function accessTeamUrl(env) {
   return teamUrl;
 }
 
-async function verifyAccess(request, env, audience) {
+export async function verifyAccess(request, env, audience) {
   const token = request.headers.get("cf-access-jwt-assertion");
   if (!token) throw new RequestError(403, "ACCESS_AUTH_REQUIRED", "Cloudflare Access authentication is required.");
   if (typeof audience !== "string" || !audience.trim()) {
@@ -111,7 +132,12 @@ async function verifyAccess(request, env, audience) {
   }
   const teamUrl = accessTeamUrl(env);
   try {
-    const jwks = createRemoteJWKSet(new URL("/cdn-cgi/access/certs", teamUrl));
+    const jwks = createRemoteJWKSet(new URL("/cdn-cgi/access/certs", teamUrl), {
+      [jwksCache]: accessJwksCache(teamUrl),
+      timeoutDuration: 5000,
+      cooldownDuration: 30000,
+      cacheMaxAge: 60 * 60 * 1000
+    });
     const {payload} = await jwtVerify(token, jwks, {issuer: teamUrl.origin, audience});
     return payload;
   } catch (error) {

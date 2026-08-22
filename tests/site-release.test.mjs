@@ -127,14 +127,19 @@ test("Learn has one sequenced front door and discloses detail progressively", as
   assert.match(html, /id="result-bars"[^>]*role="img"/);
 });
 
-test("Quick Notes covers the authored course and teaches numerical setup", async () => {
+test("Study is the primary course reader and teaches numerical setup", async () => {
   const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/t6.css", import.meta.url), "utf8");
 
-  assert.match(html, /id="mode-notes"/);
-  assert.match(html, /<section class="screen notes-screen" id="notes-screen"/);
+  assert.match(html, /id="mode-learn"[\s\S]*?<span>Study<\/span>/);
+  assert.doesNotMatch(html, /id="mode-notes"/);
+  assert.match(html, /<section class="screen notes-screen active" id="notes-screen"/);
   assert.match(html, /id="notes-search"/);
-  assert.match(html, /id="notes-print"/);
+  assert.match(html, /class="notes-masthead"[\s\S]*?id="notes-print"[\s\S]*?Module PDF/);
+  assert.match(html, /id="notes-more-subjects"/);
+  assert.match(html, /id="notes-toc-label"/);
+  assert.doesNotMatch(html, /class="notes-hero"/);
   assert.match(app, /Object\.keys\(LESSONS\)\.map/);
   assert.match(app, /var NUMERICAL_METHODS = \{/);
   assert.match(app, /Question exoskeleton/);
@@ -142,7 +147,40 @@ test("Quick Notes covers the authored course and teaches numerical setup", async
   assert.match(app, /σDLT = σ per period × √lead time/);
   assert.match(app, /LTV as ARPU × expected lifespan × gross margin/);
   assert.match(app, /RICE = reach × impact × confidence ÷ effort/);
+  assert.match(app, /function notesChamberHtml\(courseId, module\)/);
+  const chamberSource = app.slice(app.indexOf("function moduleChamberQuestionIds"), app.indexOf("function printNotes"));
+  assert.doesNotMatch(chamberSource, /\["IBM", "SCLM"\]\.indexOf\(courseId\) < 0/);
+  assert.match(app, /scheduled = session\.kind !== "module-chamber" && ensureReattempt/);
   assert.match(app, /window\.print\(\)/);
+  assert.match(app, /notesModuleHtml\(courseId, notesState\.module, false\)/);
+  assert.match(app, /data-print-lecture=/);
+  assert.match(app, /class='notes-lesson-tools'/);
+  assert.match(app, /class='notes-tool-outcome'/);
+  assert.match(app, /function notesStickyScrollOffset\(\)/);
+  assert.match(app, /style\.position !== "sticky" && style\.position !== "fixed"/);
+  assert.match(app, /scrollToNotesTarget\(document\.getElementById\(inPageLink\.getAttribute\("href"\)\.slice\(1\)\)\)/);
+  assert.match(app, /class='notes-key-terms' id='terms-/);
+  assert.match(app, /data-notes-anchor-title tabindex='-1'/);
+  assert.match(app, /\["IBM", "SCLM", "SPMS", "BRGSA"\]/);
+  assert.match(app, /function printNotesLecture\(lectureId\)/);
+  assert.match(app, /class='notes-download-footer'/);
+  assert.match(app, /class='notes-module-end'/);
+  assert.match(app, /\$\("notes-toc-label"\)\.textContent = "Contents"/);
+  assert.match(css, /Foldout Study Desk — approved Impeccable composition/);
+  assert.match(css, /@media screen and \(min-width: 721px\)[\s\S]*?\.notes-shell \{ position: relative; display: block; \}/);
+  assert.match(css, /@media screen and \(min-width: 721px\)[\s\S]*?position: fixed;[\s\S]*?width: 104px;[\s\S]*?height: 52px;/);
+  assert.match(css, /\.notes-toc-panel \{[\s\S]*?inset: 0 auto auto 102px;[\s\S]*?transform: translateX\(-12px\)/);
+  assert.match(css, /\.notes-module-end \{[\s\S]*?max-width: 960px;[\s\S]*?margin: 56px auto 0/);
+  assert.match(css, /\.notes-end-row \{[\s\S]*?grid-template-columns: 1fr/);
+  assert.match(css, /cubic-bezier\(\.16,1,\.3,1\)/);
+  assert.match(css, /\.notes-reader \{[\s\S]*?background: transparent;[\s\S]*?border: 0;/);
+  assert.match(css, /\.notes-key-terms \{ margin-top: 30px; scroll-margin-block-start: 160px; \}/);
+  assert.match(css, /@media screen and \(max-width: 960px\)[\s\S]*?\.notes-key-terms \{ scroll-margin-block-start: 86px; \}/);
+  assert.match(css, /@media screen and \(max-width: 720px\)[\s\S]*?\.notes-key-terms \{ scroll-margin-block-start: 78px; \}/);
+  assert.match(css, /@media print[\s\S]*?@page \{ size: A4 portrait; margin: 15mm 16mm 18mm; \}/);
+  assert.match(css, /@media print[\s\S]*?\.notes-chamber[\s\S]*?display: none !important/);
+  assert.match(css, /\.notes-lesson \+ \.notes-lesson \{ margin-top: 5mm; break-before: auto; \}/);
+  assert.match(css, /\.skip-link[\s\S]*?\.notes-reader button \{ display: none !important; \}/);
 });
 
 test("wrong-answer feedback teaches the correction without exposing scheduling rules", async () => {
@@ -157,20 +195,22 @@ test("wrong-answer feedback teaches the correction without exposing scheduling r
   assert.doesNotMatch(app, /Not yet — this idea will return|This ‘could explain’ error will return|A different question on the same idea is placed later/);
 });
 
-test("Examiner separates full mocks, Speedruns, and Minis by time to exam", async () => {
+test("Examiner keeps full mocks separate and consolidates Speedruns and Minis under Exam time", async () => {
   const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
   const css = await readFile(new URL("../app/t6.css", import.meta.url), "utf8");
   const selector = await readFile(new URL("../app/sets/t6_mini_mocks.js", import.meta.url), "utf8");
 
-  assert.match(html, /data-exam-mode="mini"/);
-  assert.match(html, /data-exam-mode="final"/);
+  assert.match(html, /data-exam-mode="exam"/);
   assert.match(html, /data-exam-mode="full"/);
+  assert.match(html, /data-exam-time-mode="speedrun"/);
+  assert.match(html, /data-exam-time-mode="mini"/);
   assert.match(html, /id="exam-mini-grid"/);
   assert.match(html, /id="final-sprint"/);
   assert.match(html, /Full mocks <small>1\+ week out<\/small>/);
-  assert.match(html, /Speedrun <small>within a week<\/small>/);
-  assert.match(html, /Minis <small>last 25–30 min<\/small>/);
+  assert.match(html, /Exam time <small>final week \+ last minutes<\/small>/);
+  assert.match(html, /<b>Speedrun<\/b><span>15 minutes · coached<\/span>/);
+  assert.match(html, /<b>Mini<\/b><span>Last 25–30 minutes<\/span>/);
   assert.match(html, /Full exam-condition mocks/);
   assert.match(html, /id="confidence-guide"/);
   assert.match(html, /sets\/t6_mini_mocks\.js/);
@@ -185,19 +225,42 @@ test("Examiner separates full mocks, Speedruns, and Minis by time to exam", asyn
   assert.match(app, /Next-time method/);
   assert.match(app, /!isRevisionSprint\(session\) && !correct/);
   assert.match(app, /kind:"final-sprint"/);
+  assert.match(app, /function setExamTimeMode\(mode\)/);
   assert.match(app, /final-choice-grid/);
   assert.match(app, /8 questions · one per module/);
   assert.match(app, /final-disclosure/);
   assert.match(app, /classList\.toggle\("is-final-sprint", session\.kind === "final-sprint"\)/);
   assert.match(css, /\.practice-screen\.is-final-sprint \.topic-panel \{ display: none; \}/);
   assert.match(css, /\.practice-screen\.is-final-sprint \.practice-shell \{ grid-template-columns: minmax\(0,820px\); gap: 0; \}/);
-  assert.match(html, /t6\.js\?v=20260822-brgsa-pattern-8/);
+  assert.match(html, /t6\.js\?v=20260823-scroll-access-6/);
   assert.match(app, /entry\.boundingClientRect\.height > 0[\s\S]+entry\.boundingClientRect\.top <= 72[\s\S]+entry\.intersectionRatio < 0\.25/);
   assert.match(app, /threshold: \[0, 0\.25\]/);
   assert.match(app, /both correct = 2 marks; one correct and no wrong option = 1; any wrong option = 0/i);
   assert.match(app, /else if \(chosen\.length < 2\) chosen\.push\(index\)/);
   assert.match(app, /Speedrun complete/);
   assert.match(app, /Mini complete/);
+  assert.match(app, /\$all\("#exam-papers \[data-exam-set\]"\)\.forEach/);
+  assert.match(app, /That mock could not be prepared/);
+  assert.match(app, /openExaminer\(button\.dataset\.examCourse, Number\(button\.dataset\.examSet\)\)/);
+  assert.doesNotMatch(app, /pauseFinalSprint\(\)/);
+});
+
+test("IBM released-case answers are explicit in Study and at the top of Examiner", async () => {
+  const html = await readFile(new URL("../app/t6.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../app/t6.js", import.meta.url), "utf8");
+  const released = await readFile(new URL("../app/sets/t6_ibm_case.js", import.meta.url), "utf8");
+
+  assert.match(html, /class="exam-case-priority"[\s\S]*?<h2 id="exam-case-priority-title">Case-based answers<\/h2>/);
+  assert.match(html, /id="exam-case-priority-start"[\s\S]*?Practice all 10 answers/);
+  assert.match(html, /id="exam-case-priority-study"[\s\S]*?Study how to solve them/);
+  assert.match(app, /function notesReleasedCaseJumpHtml\(courseId, module\)/);
+  assert.match(app, /<h3 id='notes-released-case' tabindex='-1'>Case-based answers<\/h3>/);
+  assert.match(app, /class='notes-case-answer'" \+ caseAnswerOpen/);
+  assert.match(app, /var caseAnswerOpen = notesState\.printing \? " open" : ""/);
+  assert.match(app, /Question → course lens → model answer/);
+  assert.match(app, /openExaminer\("IBM", EXAM_RELEASED_SET\)/);
+  assert.equal((released.match(/id: "ibm_released_/g) || []).length, 10);
+  assert.equal((released.match(/exemplar: "/g) || []).length, 10);
 });
 
 test("anonymous login assets do not disclose the private WhatsApp invite", async () => {

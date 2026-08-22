@@ -22,7 +22,7 @@
   It ships nothing: `tools/` is outside the build allowlist.
 
   EVERYTHING WAITS
-  The app renders its dashboard after its own boot, and crossing between Learn and the
+  The app renders its Study reader after its own boot, and crossing between Study and the
   examiner runs through `document.startViewTransition`, which is asynchronous. The first
   version of this file drove the UI on the iframe's `load` event and failed on fourteen
   of sixteen scenes with "no subject card reads 'SPMS'" — the cards had not been rendered
@@ -190,6 +190,20 @@
     commit.click();
   }
 
+  function selectStudySubject() {
+    return waitFor("the Study subject controls", function () {
+      return pick('[data-notes-course="' + subject + '"]') && pick("#notes-course-code");
+    }).then(function () {
+      var button = pick('[data-notes-course="' + subject + '"]');
+      if (button.getAttribute("aria-selected") !== "true") button.click();
+      return waitFor("Study to render " + subject, function () {
+        var selected = pick('[data-notes-course="' + subject + '"][aria-selected="true"]');
+        var code = pick("#notes-course-code");
+        return selected && code && code.textContent.trim() === subject;
+      });
+    });
+  }
+
   function openMiniMock() {
     return SCENES["exam-home"]()
       .then(function () {
@@ -242,64 +256,48 @@
    * find its control rejects, and the frame paints the failure rather than
    * photographing whatever happened to be on screen. */
   var SCENES = {
-    /* The homepage on a fresh profile — what a learner meets first. */
+    /* The Study reader on a fresh profile — what a learner meets first. The historical
+       scene name stays stable so evidence paths remain comparable. */
     dashboard: function () {
-      return waitFor("the dashboard and its one next action", function () {
-        return card(subject) && pick(".dashboard-screen.active #start-recommended") &&
-          pick(".dashboard-screen.active #next-step-title");
-      });
+      return waitFor("the Study reader and its first module", function () {
+        return pick(".notes-screen.active #notes-reader .notes-chapter-head") &&
+          pick(".notes-screen.active #notes-toc-toggle") && pick(".notes-screen.active #notes-print");
+      }).then(selectStudySubject);
     },
 
     "dashboard-folded": function () {
       return SCENES.dashboard()
         .then(function () {
-          /* Screenshots accept the settled state, not a headless RAF implementation.
-             The production fallback is the same immediate state used for reduced
-             motion; the live browser separately exercises the GSAP transition. */
-          win().gsap = null;
-          card(subject).click();
+          pick("#notes-toc-toggle").click();
         })
         .then(function () {
-          return waitFor("the compact subject tabs with a named current subject", function () {
-            return pick("#course-grid.is-folded .course-card[aria-current='true'] .course-current");
+          return waitFor("the expanded Study contents channel", function () {
+            return pick("#notes-toc.is-open #notes-module-nav button[aria-current='true']");
           });
         });
     },
 
-    /* The first lesson of the subject's first step: the teaching surface. */
+    /* The first lecture and its access rail: the primary teaching surface. */
     lesson: function () {
       return SCENES.dashboard()
-        .then(function () { win().gsap = null; card(subject).click(); })
         .then(function () {
-          return waitFor("the selected subject and its one start action", function () {
-            return pick("#course-grid.is-folded .course-card[aria-current='true']") && pick("#start-recommended");
-          });
-        })
-        .then(function (button) { button.click(); })
-        .then(function () {
-          return waitFor("a lesson on screen", function () {
-            var panel = doc().getElementById("lesson-panel");
-            return panel && !panel.hidden;
+          return waitFor("a lecture and its sticky access tools", function () {
+            return pick(".notes-screen.active .notes-lesson") &&
+              pick(".notes-screen.active .notes-lesson-tools") &&
+              pick(".notes-screen.active .notes-tool-download");
           });
         });
     },
 
-    /* A scored question inside a real run, reached by answering the ones before it. */
+    /* The four-question chamber reached from the end of the current module. */
     question: function () {
-      return SCENES.lesson().then(function () {
-        var tries = 0;
-        function onward() {
-          var options = doc().getElementById("options");
-          var hasControl = options && options.querySelector(".option, input[type=radio]");
-          var isPrediction = options && options.querySelector("textarea");
-          if (hasControl && !isPrediction && tries > 0) return Promise.resolve();
-          if (tries > 10) return Promise.reject(new Error("no scored question reached in 10 steps"));
-          tries += 1;
-          advance();
-          return waitFor("the next step", function () { return doc().getElementById("options"); }, 3000).then(onward);
-        }
-        return onward();
-      });
+      return SCENES.lesson()
+        .then(function () { pick(".notes-chamber [data-start-chamber]").click(); })
+        .then(function () {
+          return waitFor("the module chamber question", function () {
+            return pick(".practice-screen.active #commit-answer") && pick(".practice-screen.active #question-title");
+          });
+        });
     },
 
     /* The examiner's front door. Crossing runs through a view transition. */
@@ -378,12 +376,11 @@
       return waitFor("Quick Notes and its first complete chapter", function () {
         return pick(".notes-screen.active #notes-reader .notes-lesson") &&
           pick(".notes-screen.active #notes-module-nav button");
-      });
+      }).then(selectStudySubject);
     },
 
     "notes-ibm": function () {
       return SCENES.notes()
-        .then(function () { pick('[data-notes-course="IBM"]').click(); })
         .then(function () {
           return waitFor("the IBM released-case notes pack", function () {
             return pick(".notes-screen.active .notes-case-pack [data-open-released-case]");

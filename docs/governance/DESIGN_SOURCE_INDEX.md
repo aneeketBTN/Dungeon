@@ -51,9 +51,20 @@ not make it authoritative.
      ideas receive subjective + MCQ practice; named frameworks/models receive subjective practice
      only; bounded concepts and distinctions receive MCQ practice only. Generic lesson-grounded
      caselets are practice, never a claim about the examination case.
-   - Final-revision and Examiner separation (2026-08-22, refined by owner the same day): make
-     two-hour Full mocks for one week or more out, coached Speedruns for within the final week, and
-     25–30 minute Minis immediately before the exam three explicit choices. Speedruns must not be
+   - BRGSA post-paper feedback (2026-08-22):
+     `docs/research/BRGSA_EXAM_FEEDBACK_2026-08-22.md` is the canonical first-party record of the
+     direct ten-mark and Section B shapes the owner observed, plus the later Case → Answer / deeper-
+     why authoring direction. It explicitly keeps IBM and SCLM similarity as an unverified working
+     assumption rather than paper evidence.
+   - SPMS objective-pattern feedback (2026-08-22):
+     `docs/research/SPMS_OBJECTIVE_QUESTION_FEEDBACK_2026-08-22.md` preserves the owner-observed MCQ
+     and multiple-right families: recall, anatomy, purpose, statement verification, directional and
+     mixed-signal interpretation, distinctions, best fit and case recommendation. Cross-subject use
+     is a labelled authoring assumption, not evidence of another paper's format.
+   - Final-revision and Examiner separation (2026-08-22, refined 2026-08-23): keep two-hour Full
+     mocks as one first choice for one week or more out. Consolidate the coached Speedrun and the
+     25–30 minute Mini under one `Exam time` first choice, with their distance-to-exam labels inside
+     that route. Speedruns must not be
      buried inside full-paper cards. The released IBM prompt receives its own fixed ten-question
      paper; numbered IBM sets remain transfer cycles. On the Learn home, the full subject cards
      remain the first-load state and fold into an animated, clearly selected subject rail only

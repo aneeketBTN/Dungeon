@@ -64,7 +64,7 @@ const PAPERS = {
     { id: "B", label: "Section B", type: "numeric", count: 6, marks: 4, rule: "Enter the final figure only. No marks for working." },
     { id: "C", label: "Section C", type: "match", count: 3, marks: 2, rule: "Match every pair. Two marks each. All or nothing." }] },
   IBM: { title: "Inclusive Business Model", sat: "23 August, 09:00–11:00", total: 100, calculator: null, sections: [
-    { id: "A", label: "Section A", type: "short-answer", count: 10, marks: 10, prefer: ["integrated", "case", "short"], modeCounts: { integrated: 4, case: 6 }, rule: "Ten written answers on a caselet released two days before the exam." }],
+    { id: "A", label: "Section A", type: "short-answer", count: 10, marks: 10, prefer: ["integrated", "case", "short"], modeCounts: { integrated: 2, case: 8 }, rule: "Ten direct framework-application answers: decide, cite one case fact, and justify the link." }],
     caveat: "Numbered mocks rotate course-grounded transfer cases. Use the separate Released case paper for fixed practice against the actual supplied brief." }
 };
 
@@ -128,9 +128,9 @@ function selectionCoverageGain(questions, covered) {
   return ids.size;
 }
 
-function examPrefer(questions, prefer, covered) {
+function examPrefer(questions, prefer, covered, usedQuestions) {
   const hasReserved = questions.some((q) => q.examOnly);
-  if ((!prefer || !prefer.length) && !hasReserved && !covered) return questions;
+  if ((!prefer || !prefer.length) && !hasReserved && !covered && !usedQuestions) return questions;
   const band = (question) => {
     if (!prefer || !prefer.length) return 0;
     const index = prefer.indexOf(question.writtenMode);
@@ -141,6 +141,7 @@ function examPrefer(questions, prefer, covered) {
     .sort((a, b) => band(a.question) - band(b.question) ||
       reserved(a.question) - reserved(b.question) ||
       (covered ? coverageGain(b.question, covered) - coverageGain(a.question, covered) : 0) ||
+      (usedQuestions ? Number(usedQuestions.has(a.question.id)) - Number(usedQuestions.has(b.question.id)) : 0) ||
       a.index - b.index)
     .map((entry) => entry.question);
 }
@@ -216,12 +217,21 @@ function takeExamSection(pool, section, covered) {
   const used = new Set();
   for (const [mode, count] of Object.entries(section.modeCounts)) {
     let want = count;
-    for (const question of pool) {
-      if (want <= 0 || taken.length >= section.count || used.has(question.id)) continue;
-      if (question.writtenMode !== mode) continue;
+    const modePool = pool.filter((question) => question.writtenMode === mode);
+    const modeModules = new Set();
+    function takeModeQuestion(question) {
+      if (want <= 0 || taken.length >= section.count || used.has(question.id)) return;
       taken.push(question);
       used.add(question.id);
+      if (question.module != null) modeModules.add(question.module);
       want -= 1;
+    }
+    for (const question of modePool) {
+      if (question.module == null || modeModules.has(question.module)) continue;
+      takeModeQuestion(question);
+    }
+    for (const question of modePool) {
+      takeModeQuestion(question);
     }
   }
   for (const question of pool) {
@@ -232,7 +242,7 @@ function takeExamSection(pool, section, covered) {
   return taken;
 }
 
-function buildPaper(courseId, setIndex, coveredBefore = new Set()) {
+function buildPaper(courseId, setIndex, coveredBefore = new Set(), usedQuestions = new Set()) {
   const course = courses[courseId];
   const spec = PAPERS[courseId];
   const seed = examSeed(courseId, setIndex);
@@ -240,7 +250,7 @@ function buildPaper(courseId, setIndex, coveredBefore = new Set()) {
   const items = [];
   const shortfalls = [];
   for (const section of spec.sections) {
-    const pool = examPrefer(examShuffle(examPool(course, section.type), seed + section.id.charCodeAt(0)), section.prefer, covered);
+    const pool = examPrefer(examShuffle(examPool(course, section.type), seed + section.id.charCodeAt(0)), section.prefer, covered, usedQuestions);
     let taken = takeExamSection(pool, section, covered);
     if (taken.length < section.count) {
       shortfalls.push({ section: section.id, want: section.count, have: taken.length, type: section.type });
@@ -269,13 +279,15 @@ function examRelevantConceptIds(courseId) {
 function buildCoverageCycle(courseId) {
   const target = examRelevantConceptIds(courseId);
   const covered = new Set();
+  const usedQuestions = new Set();
   const papers = [];
   let stagnant = 0;
   for (let setIndex = 0; setIndex < 24 && (setIndex < 3 || covered.size < target.size); setIndex += 1) {
     const before = covered.size;
-    const built = buildPaper(courseId, setIndex, covered);
+    const built = buildPaper(courseId, setIndex, covered, usedQuestions);
     const introduced = new Set();
     for (const entry of built.items) {
+      usedQuestions.add(entry.question.id);
       for (const id of questionConceptIds(entry.question)) {
         if (!target.has(id)) continue;
         if (!covered.has(id)) introduced.add(id);

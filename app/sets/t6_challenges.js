@@ -1445,6 +1445,48 @@
      explanation: "Exponential smoothing adds a proportion of the last forecast error to the last forecast: Ft = Ft−1 + α(At−1 − Ft−1). Here that is 1200 + 0.2 × (1320 − 1200) = 1200 + 24 = 1224 units.",
      link: "Alpha is a choice about responsiveness, not a fitting parameter — which is why the same data can justify different forecasts."},
 
+    {concept: "sclm_smoothing", source: "SCLM-M02-L06", node: "Exponential smoothing after a fall",
+     stem: "A warehouse forecast 800 units for last week. Actual demand was 650 units, and the smoothing constant is 0.3.",
+     prompt: "What is the forecast for this week?", unit: "units", answer: 755, tolerance: 1,
+     nearMisses: [
+       {value: 845, tolerance: 1, tag: "Reversed the forecast error", label: "Moved the forecast in the wrong direction",
+        why: "Actual demand was below the old forecast, so the correction must pull the forecast down. Using 800 − 650 instead of 650 − 800 makes it rise to 845.",
+        cue: "Check direction first: an actual below forecast must make the next forecast lower."},
+       {value: 650, tolerance: 1, tag: "Copied the actual", label: "Used alpha as if it were one",
+        why: "The latest actual becomes the forecast only when alpha is 1. Here only 30% of the 150-unit error is carried forward.",
+        cue: "With 0 < alpha < 1, the new forecast must lie between the old forecast and the latest actual."}
+     ],
+     explanation: "Ft = 800 + 0.3 × (650 − 800) = 800 − 45 = 755 units. The answer lies between 650 and 800 and moves in the correct direction.",
+     link: "The sign of the forecast error is the quickest protection against reversing the adjustment."},
+
+    {concept: "sclm_smoothing", source: "SCLM-M02-L06", node: "Recovering the smoothing constant",
+     stem: "A planner's old forecast was 1,000 units and actual demand was 1,200 units. The published next forecast is 1,050 units.",
+     prompt: "What smoothing constant was used? Give it as a decimal.", unit: "", dimensionless: true, answer: 0.25, tolerance: 0.01,
+     nearMisses: [
+       {value: 0.75, tolerance: 0.01, tag: "Reported the unused share", label: "Gave one minus alpha",
+        why: "The forecast moved 50 units across a 200-unit error. The share carried forward is 50 ÷ 200 = 0.25; 0.75 is the share of the old forecast left untouched.",
+        cue: "Alpha is correction divided by error, not the amount of the error ignored."},
+       {value: 4, tolerance: 0.01, tag: "Inverted the division", label: "Divided error by correction",
+        why: "A smoothing constant must lie from 0 to 1. Dividing 200 by 50 produces 4 and fails that range check.",
+        cue: "Alpha is a proportion. An answer above one shows the ratio was inverted."}
+     ],
+     explanation: "The forecast correction is 1,050 − 1,000 = 50 and the old error is 1,200 − 1,000 = 200. Therefore alpha = 50 ÷ 200 = 0.25.",
+     link: "The smoothing equation can be read forwards for a forecast or backwards to audit the responsiveness of a policy."},
+
+    {concept: "sclm_smoothing", source: "SCLM-M02-L06", node: "Two-step exponential smoothing",
+     stem: "The forecast for January was 900 units and January demand was 1,020. February demand was then 850. The smoothing constant is 0.25.",
+     prompt: "After updating for both actuals in order, what is the forecast for March?", unit: "units", answer: 910, tolerance: 1,
+     nearMisses: [
+       {value: 887.5, tolerance: 1, tag: "Reused the January forecast", label: "Skipped the first update",
+        why: "The February actual must update the February forecast of 930, not the original January forecast of 900. Reusing 900 discards the first period's learning.",
+        cue: "Write each updated forecast on its own line and carry that result into the next line."},
+       {value: 930, tolerance: 1, tag: "Stopped after one update", label: "Ignored the second actual",
+        why: "930 is the forecast after January only. The question supplies February demand because a second update is required.",
+        cue: "Count the actual observations in the stem; each one after the starting forecast produces an update."}
+     ],
+     explanation: "February's forecast is 900 + 0.25 × (1,020 − 900) = 930. March's forecast is then 930 + 0.25 × (850 − 930) = 910 units.",
+     link: "Exponential smoothing is recursive: every answer becomes the starting forecast for the next period."},
+
     {concept: "sclm_eoq", source: "SCLM-M03-L03", node: "Economic order quantity",
      stem: "A distributor expects steady annual demand of 12,000 units. Each order placed costs ₹600 regardless of its size. Holding one unit for a year costs ₹40.",
      prompt: "What order quantity minimises the total of ordering and holding cost?", unit: "units", answer: 600, tolerance: 1,
@@ -1472,6 +1514,34 @@
      ],
      explanation: "Ordering cost is (D/Q)·K = (12,000 ÷ 600) × 600 = ₹12,000. Holding cost is (Q/2)·h = 300 × 40 = ₹12,000. Total ₹24,000. That the two halves are equal is not a coincidence — it is the property that defines the EOQ.",
      link: "Equal ordering and holding cost at the optimum is the quickest check that a computed EOQ is right."},
+
+    {concept: "sclm_eoq", source: "SCLM-M03-L03", node: "Economic order quantity with fresh units",
+     stem: "A components distributor sells 18,000 units a year. Placing one replenishment order costs ₹800, and holding one unit for one year costs ₹32.",
+     prompt: "What is the economic order quantity?", unit: "units", answer: 948.7, tolerance: 2,
+     nearMisses: [
+       {value: 670.8, tolerance: 2, tag: "Dropped the factor of two", label: "Used the wrong EOQ numerator",
+        why: "EOQ uses 2DK because average cycle stock is Q/2. Omitting the two gives about 671 rather than 949.",
+        cue: "Write the complete formula before entering numbers: square root of 2DK divided by h."},
+       {value: 37.9, tolerance: 2, tag: "Swapped K and h", label: "Ignored the units on the two costs",
+        why: "₹800 is charged per order and belongs in K; ₹32 is charged per unit per year and belongs in h. Swapping them collapses the answer.",
+        cue: "Label every input with its unit before substitution."}
+     ],
+     explanation: "EOQ = √(2 × 18,000 × 800 ÷ 32) = √900,000 = 948.7 units, or about 949 whole units.",
+     link: "The quantity is meaningful only after per-order and per-unit-year costs are mapped correctly."},
+
+    {concept: "sclm_eoq", source: "SCLM-M03-L03", node: "Orders per year at a stated quantity",
+     stem: "Annual demand is 15,000 units and the replenishment policy orders 500 units every time an order is placed.",
+     prompt: "How many orders will be placed in one year?", unit: "orders", answer: 30, tolerance: 0.1,
+     nearMisses: [
+       {value: 500, tolerance: 0.1, tag: "Repeated the order quantity", label: "Answered how much instead of how often",
+        why: "Five hundred is the quantity in each order. Frequency is annual demand divided by that quantity: 15,000 ÷ 500.",
+        cue: "The unit requested is orders per year, so units per year must be divided by units per order."},
+       {value: 0.03, tolerance: 0.01, tag: "Inverted demand and quantity", label: "Produced years per order",
+        why: "Q ÷ D gives the fraction of a year between orders, not the number of orders in a year. The requested rate is D ÷ Q.",
+        cue: "Let the requested unit settle the division before using the numbers."}
+     ],
+     explanation: "Orders per year = D ÷ Q = 15,000 ÷ 500 = 30 orders.",
+     link: "This frequency is the multiplier used in annual ordering cost, (D/Q)K."},
 
     {concept: "sclm_newsvendor", source: "SCLM-M03-L05", node: "Newsvendor decision",
      stem: "A seasonal item sells for ₹900 and costs ₹500 to buy. There is one buying opportunity, and anything unsold at the end of the season clears at ₹200.",
@@ -1574,7 +1644,107 @@
         cue: "Check the direction: backorders make you worse off, so they cannot raise the figure."}
      ],
      explanation: "Inventory position is on-hand, plus what is on order and not yet arrived, minus backorders: 480 + (2 × 125) − 90 = 640 units. That sits 60 below the reorder point of 700, so an order is due now. The comparison is always against inventory position, never against the shelf.",
-     link: "Comparing the shelf against a reorder point is the most common way a continuous review policy orders twice for the same shortfall."}
+     link: "Comparing the shelf against a reorder point is the most common way a continuous review policy orders twice for the same shortfall."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L05", node: "Newsvendor order quantity", reference: "standard-normal",
+     stem: "A one-season product sells for ₹1,200, costs ₹700, and can be cleared for ₹300 if unsold. Demand is normally distributed with a mean of 500 units and a standard deviation of 80 units. The normal table gives z = 0.14 for the required probability.",
+     prompt: "What order quantity does the newsvendor rule recommend?", unit: "units", answer: 511.2, tolerance: 2,
+     nearMisses: [
+       {value: 488.8, tolerance: 2, tag: "Moved to the wrong side of the mean", label: "Used a negative z for a ratio above one-half",
+        why: "Underage costs ₹500 and overage costs ₹400, so the critical ratio is above 0.5 and the order must sit above the mean. Subtracting the z-buffer reverses that result.",
+        cue: "Compare underage and overage before using the table. The more expensive error determines which side of the mean you move toward."},
+       {value: 483.2, tolerance: 2, tag: "Ignored salvage value", label: "Overstated the cost of leftover stock",
+        why: "Treating unsold units as worthless makes overage ₹700 instead of ₹400 and pushes the critical ratio below one-half. The ₹300 salvage value must reduce the overage cost.",
+        cue: "Overage is purchase cost minus salvage value, not purchase cost alone."}
+     ],
+     explanation: "Cu = 1,200 − 700 = ₹500 and Co = 700 − 300 = ₹400. The critical ratio is 500 ÷ 900 = 0.556, corresponding to z ≈ 0.14. Order quantity = 500 + 0.14 × 80 = 511.2 units.",
+     link: "The final order follows from the error-cost ratio first and the demand distribution second."},
+
+    {concept: "sclm_newsvendor", source: "SCLM-M03-L06", sourceIds: ["SCLM-M03-L05", "SCLM-M03-L06"],
+     node: "Reorder point at 97.5% service", reference: "standard-normal",
+     stem: "Daily demand averages 30 units with a standard deviation of 8 units. Replenishment lead time is a constant 16 days and the depot wants a 97.5% cycle service level, for which z = 1.96.",
+     prompt: "What reorder point should the depot use?", unit: "units", answer: 542.7, tolerance: 2,
+     nearMisses: [
+       {value: 495.7, tolerance: 2, tag: "Used the daily deviation", label: "Buffered only one day",
+        why: "The protection period is sixteen days. Its deviation is 8 × √16 = 32, not the daily figure of 8.",
+        cue: "Convert both the mean and the deviation to the lead time before applying z."},
+       {value: 730.9, tolerance: 3, tag: "Multiplied deviation by lead time", label: "Used L instead of square-root L",
+        why: "Independent daily variances add, so the deviation grows with √16 = 4. Multiplying 8 by 16 makes the buffer four times too large.",
+        cue: "Mean scales with L; standard deviation scales with √L."}
+     ],
+     explanation: "Mean lead-time demand is 30 × 16 = 480. Lead-time deviation is 8 × √16 = 32. Safety stock is 1.96 × 32 = 62.72, so ROP = 480 + 62.72 = 542.72 units.",
+     link: "The reorder point combines expected protection-period demand with the chosen service buffer."},
+
+    {concept: "sclm_turnaround", source: "SCLM-M06-L07", node: "Throughput gained from faster turnaround",
+     stem: "An engine-on-load change raises completed rake trips from 21 to 27 per month. Each rake carries 2,000 tonnes.",
+     prompt: "How much additional tonnage can be moved per month?", unit: "tonnes", answer: 12000, tolerance: 10,
+     nearMisses: [
+       {value: 54000, tolerance: 10, tag: "Reported the new total", label: "Answered total throughput instead of the increase",
+        why: "Twenty-seven trips move 54,000 tonnes in total, but the question asks for the gain over the old 21-trip policy.",
+        cue: "For an increase, subtract the old level before multiplying by capacity."},
+       {value: 6, tolerance: 0.1, tag: "Stopped at trips", label: "Did not convert the operating change into tonnage",
+        why: "Six is the additional number of trips. The business result is 6 trips × 2,000 tonnes per trip.",
+        cue: "Carry the unit through the final multiplication: trips cancel and tonnes remain."}
+     ],
+     explanation: "The policy creates 27 − 21 = 6 additional trips. At 2,000 tonnes per trip, the increase is 6 × 2,000 = 12,000 tonnes per month.",
+     link: "The calculation converts time recovered inside the cycle into the capacity the business actually gains."},
+
+    {concept: "sclm_turnaround", source: "SCLM-M06-L07", node: "Engine-on-load delay penalty",
+     stem: "An engine-on-load agreement allows three hours for loading and charges ₹3,800 for every hour beyond that window. A rake takes 4.5 hours to load.",
+     prompt: "What penalty is payable?", unit: "₹", answer: 5700, tolerance: 10,
+     nearMisses: [
+       {value: 17100, tolerance: 10, tag: "Charged the whole loading time", label: "Ignored the allowed window",
+        why: "The penalty applies only after the agreed three-hour window. Charging all 4.5 hours produces ₹17,100 instead of the delay charge.",
+        cue: "Compute excess time first, then apply the hourly penalty."},
+       {value: 3800, tolerance: 10, tag: "Rounded the delay down", label: "Charged one hour instead of one-and-a-half",
+        why: "The overrun is 4.5 − 3 = 1.5 hours. Nothing in the stem says partial hours are waived or rounded down.",
+        cue: "Preserve the stated fraction of an hour unless the charging rule tells you otherwise."}
+     ],
+     explanation: "Chargeable delay is 4.5 − 3 = 1.5 hours. Penalty = 1.5 × ₹3,800 = ₹5,700.",
+     link: "The penalty makes the operating agreement enforceable rather than merely aspirational."},
+
+    {concept: "sclm_multimodal", source: "SCLM-M07-L01", node: "Annual inbound material requirement",
+     stem: "A sponge-iron plant is rated for 500,000 tonnes of output a year. Each tonne of output requires 1.24 tonnes of pellets and 0.31 tonnes of lump ore.",
+     prompt: "What total inbound tonnage must the logistics system bring in each year?", unit: "tonnes", answer: 775000, tolerance: 10,
+     nearMisses: [
+       {value: 620000, tolerance: 10, tag: "Counted pellets only", label: "Left out the lump-ore flow",
+        why: "Pellets are 620,000 tonnes, but the process also needs 155,000 tonnes of lump ore. Both inbound streams use the logistics network.",
+        cue: "Calculate every input requirement before adding them."},
+       {value: 500000, tolerance: 10, tag: "Repeated rated output", label: "Confused product tonnage with inbound tonnage",
+        why: "The plant produces 500,000 tonnes but consumes 1.55 tonnes of material for each tonne produced.",
+        cue: "Check whether the conversion factor is above one; if it is, inbound tonnage cannot equal output."}
+     ],
+     explanation: "Pellets: 500,000 × 1.24 = 620,000 tonnes. Lump ore: 500,000 × 0.31 = 155,000 tonnes. Total inbound requirement = 775,000 tonnes per year.",
+     link: "The material balance must exist before modes, routes, and per-tonne costs can be compared."},
+
+    {concept: "sclm_multimodal", source: "SCLM-M07-L06", node: "Cycle stock from shipment size",
+     stem: "A sea option delivers the entire annual requirement of 62,000 tonnes in one shipment, which is then consumed steadily before the next annual delivery.",
+     prompt: "What is the average cycle stock created by this shipment policy?", unit: "tonnes", answer: 31000, tolerance: 10,
+     nearMisses: [
+       {value: 62000, tolerance: 10, tag: "Used the maximum stock", label: "Held the full shipment as the average",
+        why: "Stock begins near 62,000 and falls steadily toward zero. Average cycle stock is therefore half the batch, not the full batch.",
+        cue: "For steady drawdown from Q to zero, average cycle stock is Q/2."},
+       {value: 5167, tolerance: 10, tag: "Converted to one month's demand", label: "Answered buffer stock instead of cycle stock",
+        why: "One month's demand is about 5,167 tonnes, but that is a possible buffer-stock assumption. Cycle stock comes from the annual shipment size itself.",
+        cue: "Name the inventory component before calculating it: shipment size creates cycle stock."}
+     ],
+     explanation: "With steady drawdown, inventory moves from 62,000 tonnes toward zero, so average cycle stock is Q ÷ 2 = 62,000 ÷ 2 = 31,000 tonnes.",
+     link: "Large cheap shipments save freight partly by creating inventory, which is why mode choice must include carrying cost."},
+
+    {concept: "sclm_akshaya", source: "SCLM-M08-L02", sourceIds: ["SCLM-M08-L02", "SCLM-M08-L03"],
+     node: "Cook-to-consume time constraint",
+     stem: "A meal finishes cooking at 07:30 and is eaten at the last school at 12:45. The permitted cook-to-consume interval is six hours.",
+     prompt: "How many minutes of time slack remain?", unit: "minutes", answer: 45, tolerance: 1,
+     nearMisses: [
+       {value: 315, tolerance: 1, tag: "Reported elapsed time", label: "Answered time used instead of slack remaining",
+        why: "Five hours fifteen minutes equals 315 minutes, but the question asks how much of the 360-minute limit remains.",
+        cue: "Slack is allowance minus time used."},
+       {value: 75, tolerance: 1, tag: "Misread the half hour", label: "Subtracted clock times incorrectly",
+        why: "From 07:30 to 12:30 is five hours, then another fifteen minutes reaches 12:45. The elapsed time is 315 minutes, not 285.",
+        cue: "Bridge through a whole-hour clock point before converting to minutes."}
+     ],
+     explanation: "Elapsed time is 5 hours 15 minutes = 315 minutes. The six-hour limit is 360 minutes, leaving 360 − 315 = 45 minutes of slack.",
+     link: "Every additional stop at the end of the route spends slack shared by all meals already on that route."}
   ];
 
   function addAuthoredNumeric(course) {
@@ -1606,7 +1776,12 @@
         variantFamily: item.concept + "_numeric",
         boss: false,
         caselet: item.stem,
-        stem: item.stem,
+        /* Examiner renders `caselet` as the givens and `stem` as the task. Keeping
+           both on `item.stem` repeated the scenario and never displayed what the
+           learner was meant to calculate. The authored `prompt` is the direct paper
+           instruction; retain it separately too because Learn's numeric control uses
+           that field as its compact label. */
+        stem: item.prompt,
         prompt: item.prompt,
         unit: item.unit,
         dimensionless: !!item.dimensionless,
@@ -3859,7 +4034,9 @@
       selfReviewOnly: true,
       writtenMode: "case",
       caselet: data.caselet,
-      stem: "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in " + (course.id === "IBM" ? "five to eight" : "four to six") + " sentences.",
+      stem: course.id === "IBM"
+        ? "Using " + data.name + ", what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph."
+        : "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in four to six sentences.",
       rubric: [
         {id: "understanding", label: "Course understanding", description: "Applies " + data.name + " accurately to this case; the exact term need not be named if the idea is clearly used."},
         {id: "judgement", label: "Decision", description: ensureSentence(data.application)},
@@ -3895,9 +4072,13 @@
 
   /* A written-only framework still has to belong to the concept graph. Linking it
    * through an objective boss would violate its declared assessment mode, so it
-   * receives a linked case response with the nearest non-objective idea. It stays
-   * `case`, not `integrated`: the latter is reserved for the few whole authored
-   * scenarios that fill IBM's ten-mark section ahead of generated practice. */
+   * receives a direct case response with the nearest non-objective idea retained as
+   * a one-sentence distinction. The old surface stitched two unrelated caselets
+   * together ("a second decision ...") and then asked the learner to build a
+   * reasoning chain. That is useful deep practice, but it badly overstates the
+   * observed IBM paper: the examiner names a course lens and asks for its direct
+   * application. The revised surface therefore asks one decision about one case;
+   * the partner proves the conceptual link without becoming a second problem. */
   function addWrittenLinkAnswer(course, concept, partner, data, partnerData) {
     addQuestion(course, {
       id: concept.id + "_written_link",
@@ -3907,35 +4088,38 @@
       module: concept.module,
       source: data.source,
       sourceIds: unique([data.source, partnerData.source]),
-      node: data.name + " → " + partnerData.name,
-      pattern: "Written framework connection",
-      perspective: "generate",
+      node: data.name,
+      pattern: "Direct framework application",
+      perspective: "apply",
       type: "short-answer",
-      skills: ["explain", "apply", "connect", "generate"],
-      difficulty: 4,
+      skills: ["explain", "apply", "distinguish"],
+      difficulty: 3,
       variantFamily: concept.id + "_written-link",
       boss: false,
       estimatedMinutes: 7,
       selfReviewOnly: true,
       writtenMode: "case",
-      caselet: ensureSentence(data.caselet) + " A second decision in the same organisation raises " + partnerData.name + ": " + ensureSentence(partnerData.caselet),
-      stem: "Write a connected recommendation. Explain what " + data.name + " settles first, what " + partnerData.name + " settles next, and why one framework cannot substitute for the other.",
+      caselet: ensureSentence(data.caselet),
+      stem: "Using " + data.name + ", what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing " + data.name + " from " + partnerData.name + ".",
       rubric: [
-        {id: "first_idea", label: data.name, description: "Uses the first framework accurately and states the decision it governs: " + ensureSentence(data.application)},
-        {id: "second_idea", label: partnerData.name, description: "Uses the connected idea accurately and states its different decision: " + ensureSentence(partnerData.application)},
-        {id: "integration", label: "Connection", description: "Explains the order or dependency between the two decisions instead of listing the ideas separately."}
+        {id: "decision", label: "Direct decision", description: "States the action governed by " + data.name + ": " + ensureSentence(data.application)},
+        {id: "case_evidence", label: "Case fact", description: "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."},
+        {id: "framework", label: data.name, description: "Uses the framework accurately: " + ensureSentence(data.summary)},
+        {id: "distinction", label: "Close-concept distinction", description: "States briefly why " + partnerData.name + " answers a different decision rather than substituting for " + data.name + "."}
       ],
       writtenGaps: [
-        writtenGap("first-missing", "first_idea", "missing", "concept", "First framework is missing", "State what the first framework permits you to conclude before moving to the second decision."),
-        writtenGap("first-inaccurate", "first_idea", "misunderstood", "concept", "First framework is inaccurate", "Return to the first course anchor and correct what it permits you to conclude."),
-        writtenGap("second-missing", "second_idea", "missing", "concept", "Connected idea is missing", "Name the second decision and apply the idea that actually governs it."),
-        writtenGap("second-inaccurate", "second_idea", "misunderstood", "concept", "Connected idea is inaccurate", "Separate the second idea from the first and correct its decision rule."),
-        writtenGap("connection-missing", "integration", "missing", "writing", "Ideas are listed, not connected", "Add the because step that shows how the first decision enables, limits, or changes the second."),
-        writtenGap("connection-reversed", "integration", "misunderstood", "concept", "Reasoning order is reversed", "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence.")
+        writtenGap("decision-missing", "decision", "missing", "writing", "No decision stated", "Open with what the organisation should do before explaining the framework."),
+        writtenGap("framework-inaccurate", "framework", "misunderstood", "concept", "Framework used inaccurately", "Return to the named framework and state the decision it actually governs."),
+        writtenGap("evidence-missing", "case_evidence", "missing", "writing", "No case fact used", "Use one concrete fact from the supplied situation, then add the because step."),
+        writtenGap("evidence-misread", "case_evidence", "misunderstood", "concept", "Case fact misread", "Check what the selected fact proves before using it as support."),
+        writtenGap("distinction-missing", "distinction", "missing", "concept", "Close concept not distinguished", "Finish with one sentence stating the different question the neighbouring concept answers.")
       ],
-      exemplar: ensureSentence(data.summary) + " " + ensureSentence(data.application) + " " + ensureSentence(partnerData.summary) + " " + ensureSentence(partnerData.application) + " Together, the first decision sets the condition under which the second can work; " + ensureSentence(data.bridge) + " " + ensureSentence(partnerData.bridge),
+      exemplar: "The decision is: " + ensureSentence(data.application) + " The governing framework is " + data.name + ": " + ensureSentence(data.summary) + " " +
+        (data.caseEvidence ? ensureSentence(data.caseEvidence) + " " : "") +
+        "That case fact supports the decision because " + ensureSentence(data.caseLink || data.bridge) +
+        " " + partnerData.name + " is related but answers a different decision: " + ensureSentence(partnerData.summary),
       explanation: data.summary,
-      link: data.bridge + " " + partnerData.bridge,
+      link: data.bridge + " The nearby distinction is " + partnerData.name + ".",
       misconceptions: [],
       repairId: concept.id + "_case_answer"
     });

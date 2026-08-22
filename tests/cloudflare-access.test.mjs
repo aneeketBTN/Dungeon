@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
+import {createRequire} from "node:module";
+import {pathToFileURL} from "node:url";
 import test from "node:test";
 
-import {createWorker, RequestError, summarizeCohort} from "../cloudflare/src/index.mjs";
+import {createWorker, RequestError, summarizeCohort, verifyAccess} from "../cloudflare/src/index.mjs";
+
+const requireFromCloudflare = createRequire(new URL("../cloudflare/package.json", import.meta.url));
+const {SignJWT, exportJWK, generateKeyPair} = await import(pathToFileURL(requireFromCloudflare.resolve("jose")).href);
 
 const owner = "owner@example.com";
 /* Bumping this is the point: a new version forces every tester to re-accept
@@ -845,6 +850,42 @@ test("one email can keep several browser sessions across country changes", async
   const moved = await login(worker, "alpha@example.com", baseEnv, "IN");
   assert.equal(moved.status, 200);
   assert.equal([...store.sessions.values()].filter((email) => email === "alpha@example.com").length, 2);
+});
+
+test("owner authentication reuses the Access public keys after the first request", async () => {
+  const {privateKey, publicKey} = await generateKeyPair("RS256");
+  const publicJwk = await exportJWK(publicKey);
+  publicJwk.kid = "owner-cache-test";
+  publicJwk.alg = "RS256";
+  publicJwk.use = "sig";
+  const teamDomain = "https://owner-cache-test.cloudflareaccess.com";
+  const audience = "owner-cache-audience";
+  const token = await new SignJWT({email: owner})
+    .setProtectedHeader({alg: "RS256", kid: publicJwk.kid})
+    .setIssuer(teamDomain)
+    .setAudience(audience)
+    .setIssuedAt()
+    .setExpirationTime("2h")
+    .sign(privateKey);
+  const originalFetch = globalThis.fetch;
+  let certFetches = 0;
+  globalThis.fetch = async (input) => {
+    const url = input instanceof Request ? new URL(input.url) : new URL(String(input));
+    assert.equal(url.href, `${teamDomain}/cdn-cgi/access/certs`);
+    certFetches += 1;
+    return Response.json({keys: [publicJwk]});
+  };
+  try {
+    const env = {...baseEnv, ACCESS_TEAM_DOMAIN: teamDomain, ACCESS_ADMIN_AUD: audience};
+    const requestWithToken = () => request("/dungeon/admin/", {headers: {"cf-access-jwt-assertion": token}});
+    const first = await verifyAccess(requestWithToken(), env, audience);
+    const second = await verifyAccess(requestWithToken(), env, audience);
+    assert.equal(first.email, owner);
+    assert.equal(second.email, owner);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+  assert.equal(certFetches, 1, "the second admin request must verify from the serialisable JWKS cache");
 });
 
 test("owner routes retain the separate Cloudflare Access boundary", async () => {

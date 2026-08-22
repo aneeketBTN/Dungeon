@@ -45,15 +45,16 @@ test("SPMS-derived paper-pattern revision gives every BRGSA concept one direct q
   assert.deepEqual(answerPositions, [7, 7, 8, 7]);
 });
 
-test("Examiner states the claim boundary and provides DEAL and PACER writing guides", () => {
+test("Examiner retains the BRGSA reference pack but hides it behind the IBM/SCLM priority", () => {
   const html = fs.readFileSync(path.join(appDir, "t6.html"), "utf8");
   const app = fs.readFileSync(path.join(appDir, "t6.js"), "utf8");
 
-  assert.match(html, /id="exam-paper-pattern"/);
+  assert.match(html, /id="exam-paper-pattern"[^>]*hidden/);
   assert.match(html, /SPMS-derived · BRGSA first/);
   assert.match(html, /not as a prediction/);
   assert.match(html, /29 questions/);
   assert.match(html, /Every BRGSA concept/);
+  assert.match(html, /id="brgsa-writing-playbook"[^>]*hidden/);
   assert.match(html, /Section B · 4 × 5 marks/);
   assert.match(html, /Case answer: DEAL/);
   assert.match(html, /Section C · 2 × 10 marks/);
@@ -65,4 +66,6 @@ test("Examiner states the claim boundary and provides DEAL and PACER writing gui
   assert.match(app, /classList\.toggle\("is-paper-pattern", session\.kind === "paper-pattern"\)/);
   assert.match(app, /session\.kind === "paper-pattern" \? ""/);
   assert.match(app, /!isRevisionSprint\(session\)\) recordAttempt/);
+  assert.match(app, /var EXAM_HOME_ORDER = \["IBM", "SCLM", "SPMS"\]/);
+  assert.match(app, /EXAM_HOME_ORDER\.filter\(function \(courseId\) \{ return EXAM_PAPERS\[courseId\]; \}\)/);
 });

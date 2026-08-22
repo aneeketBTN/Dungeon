@@ -82,6 +82,10 @@ export function auditFinalSprints() {
         errors.push(`${question.id}: released case must remain an examiner-only integrated written response`);
       }
       if (!question.caselet?.includes(released.prompt)) errors.push(`${question.id}: lost the exact released prompt`);
+      if (!/^Using\s/i.test(question.stem || "")) errors.push(`${question.id}: released-case task must name its course lens directly`);
+      if (String(question.stem || "").trim().split(/\s+/).filter(Boolean).length > 40) {
+        errors.push(`${question.id}: released-case task is too compound for the observed direct paper level`);
+      }
       if ((question.rubric || []).length < 5) errors.push(`${question.id}: rubric has fewer than five criteria`);
       if (String(question.exemplar || "").length < 400) errors.push(`${question.id}: exemplar is too thin for a ten-mark answer`);
     }

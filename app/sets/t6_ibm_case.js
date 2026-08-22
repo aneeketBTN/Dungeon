@@ -26,7 +26,7 @@
   var model = {
     name: "Kisan Saathi Hubs",
     thesis: "A farmer-owned network of solar-powered village hubs that combines grading, storage, aggregation, transparent buyer linkage, and sale-linked payment into one financially sustainable service.",
-    caselet: "Released prompt: “" + prompt + "”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    caselet: "Released prompt: “" + prompt + "”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     operatingModel: [
       "Farmer-owned local company: 65% FPO, 35% mission-bound social enterprise.",
       "Village delivery: grading, solar cold and dry storage, transparent prices, aggregation, and multi-buyer linkage.",
@@ -57,7 +57,7 @@
       module: 1,
       title: "Define the poverty problem before designing",
       conceptIds: ["ibm_disparity_gap", "ibm_poverty_dynamics", "ibm_smallholder_bottlenecks"],
-      task: "The released prompt speaks of ‘poor people’ generally. Define the beneficiary and the binding problem Kisan Saathi should solve. Explain why narrowing the segment strengthens rather than weakens the inclusive ambition.",
+      task: "Using disparity, poverty dynamics, and smallholder bottlenecks, identify Kisan Saathi's beneficiary and binding problem. Use the working assumptions and justify why the segment must be specific.",
       rubric: commonRubric(
         "Uses disparity, poverty dynamics, and smallholder bottlenecks to identify a structural constraint rather than treating poverty as a personality or a lack of effort.",
         "Uses the stated pilot assumptions: 600 farmers, six villages, fragmented lots, perishability, irregular cash flow, weak information, storage, and buyer access.",
@@ -72,7 +72,7 @@
       module: 1,
       title: "Prove that the model is inclusive",
       conceptIds: ["ibm_inclusive", "ibm_profit_social_good", "ibm_zone_of_conflict"],
-      task: "Classify Kisan Saathi as inclusive business, ordinary commercial enterprise, CSR, or charity. State the test you would use if farmer welfare and profitability later pull apart.",
+      task: "Using the definition of inclusive business and the zone of conflict, explain why Kisan Saathi qualifies. Give one change that would make it an ordinary commercial enterprise instead.",
       rubric: commonRubric(
         "Defines inclusive business through a primary underserved need plus financial sustainability, and uses the zone of conflict as the pressure test.",
         "Uses the 65% farmer ownership, voluntary sale rule, disclosed fees, operating-cost discipline, and patronage dividend rather than relying on the venture’s stated intentions.",
@@ -87,7 +87,7 @@
       module: 7,
       title: "Place farmers inside the value chain",
       conceptIds: ["ibm_fpo", "ibm_governance"],
-      task: "Explain the role farmers play in Kisan Saathi and evaluate the proposed 65:35 ownership and governance arrangement. What keeps aggregation from becoming another intermediary extracting value from them?",
+      task: "Using FPO ownership and governance, identify the roles farmers play in Kisan Saathi. Assess the 65:35 structure and recommend one safeguard against value extraction.",
       rubric: commonRubric(
         "Uses FPO ownership, aggregation, market linkage, and governance rather than treating membership by itself as inclusion.",
         "Uses the 65:35 ownership, elected directors, published weights and prices, voluntary sale, grievance process, and patronage dividend.",
@@ -102,7 +102,7 @@
       module: 5,
       title: "Create shared value rather than transfer risk",
       conceptIds: ["ibm_shared_value", "ibm_backward_integration", "ibm_diageo_value_chain"],
-      task: "Show how Kisan Saathi creates value for both farmers and buyers. Distinguish genuine shared value from a model that merely transfers quality, price, or weather risk onto farmers.",
+      task: "Using shared value, explain how Kisan Saathi benefits both farmers and buyers. Identify one situation in which the model would transfer risk instead of creating value.",
       rubric: commonRubric(
         "Uses perishability and shared value to locate additional value, not a redistribution presented as creation.",
         "Uses grading, storage, buyer-sized aggregation, transparent deductions, several buyers, and the higher-net-price scale gate.",
@@ -117,7 +117,7 @@
       module: 5,
       title: "Design affordability as a system",
       conceptIds: ["ibm_bop", "ibm_single_serve", "ibm_empathy_credit", "ibm_selco"],
-      task: "Evaluate Kisan Saathi’s pay-after-sale pricing. Explain why affordability is more than a low fee and how the product, payment timing, finance, and service promise must work together.",
+      task: "Using bottom-of-the-pyramid affordability and SELCO's product–finance–service system, explain why Kisan Saathi uses pay-after-sale pricing. State what else must work for the offer to remain affordable.",
       rubric: commonRubric(
         "Applies bottom-of-pyramid design and SELCO’s product–finance–service system to irregular cash flow rather than assuming a discount solves affordability.",
         "Uses the after-sale deduction, disclosed storage fee, 2% commission, voluntary exit, local maintenance, and sale-linked repayment logic.",
@@ -132,7 +132,7 @@
       module: 4,
       title: "Choose what is local and what is standard",
       conceptIds: ["ibm_decentralised_model", "ibm_asset_light", "ibm_replication", "ibm_decentralised_footprint"],
-      task: "Design the operating architecture for Kisan Saathi. What should be decentralised to the village hub, what should be standardised centrally, and what should the social enterprise own rather than control through partners?",
+      task: "Using decentralisation and the asset-light model, state what Kisan Saathi should manage locally and what it should standardise centrally. Justify the division.",
       rubric: commonRubric(
         "Uses decentralisation, asset-light partnership, and controlled replication rather than treating local presence or central ownership as universally superior.",
         "Uses local operators and technicians, FPO majority ownership, common grading, service, audit, software, maintenance, and multi-buyer standards.",
@@ -147,7 +147,7 @@
       module: 8,
       title: "Make the financing logic honest",
       conceptIds: ["ibm_social_business", "ibm_impact_investing", "ibm_blended_finance", "ibm_giin_criteria"],
-      task: "Explain how Kisan Saathi should finance its pilot and later expansion. Separate catalytic subsidy from operating viability, and state what an impact investor should require before committing capital.",
+      task: "Using blended finance and impact investment, recommend how Kisan Saathi should finance the pilot and later expansion. Separate temporary subsidy from recurring operating viability.",
       rubric: commonRubric(
         "Separates social business, impact investment, and blended finance, including intentionality, measurement, and an expected return.",
         "Uses first-loss pilot capital, fee-funded operations, later impact debt, hub-level cash contribution, two crop cycles, and the explicit farmer outcome gates.",
@@ -162,7 +162,7 @@
       module: 3,
       title: "Protect the model from mission dilution",
       conceptIds: ["ibm_mission_dilution", "ibm_responsible_lending", "ibm_governance"],
-      task: "Identify the main ways Kisan Saathi could harm the people it intends to serve. Design governance and finance protections against mission dilution, over-indebtedness, elite capture, and dependence on one buyer.",
+      task: "Using mission dilution, responsible finance, and governance, identify two ways Kisan Saathi could harm farmers and recommend one enforceable protection for each.",
       rubric: commonRubric(
         "Uses mission dilution, responsible finance, and governance as operating controls rather than as statements of values.",
         "Uses majority farmer ownership, approval of fees, voluntary sale, several buyers, total-obligation checks, transparent receipts, grievance handling, and participation reporting.",
@@ -177,7 +177,7 @@
       module: 4,
       title: "Scale only what has been proved",
       conceptIds: ["ibm_replication", "ibm_scaling_ceiling", "ibm_decentralised_footprint"],
-      task: "The pilot attracts requests from thirty more villages after its first harvest. Write the scale recommendation. What must be proved for two crop cycles, what can be replicated, and what should stop expansion?",
+      task: "Using controlled replication and the scaling ceiling, decide whether Kisan Saathi should enter thirty more villages after one harvest. State the go conditions and one stop condition.",
       rubric: commonRubric(
         "Uses the scaling ceiling and controlled replication to reject reach as sufficient evidence.",
         "Uses two crop cycles, positive hub cash contribution, higher net price after fees, lower spoilage, prompt payment, inclusive participation, reliable uptime, and common standards.",
@@ -192,7 +192,7 @@
       module: 8,
       title: "Measure impact without mistaking activity for change",
       conceptIds: ["ibm_ted_london", "ibm_impact_measurement", "ibm_giin_criteria", "ibm_carbon_markets"],
-      task: "Design the impact and learning system for Kisan Saathi. Distinguish output, outcome, and attributable impact; apply the Ted London stakeholder lens; and include environmental as well as social effects.",
+      task: "Using output, outcome, impact, and Ted London's stakeholder lens, design a short scorecard for Kisan Saathi. Include one comparison that makes the impact claim credible.",
       rubric: commonRubric(
         "Uses output–outcome–impact, a credible counterfactual, Ted London’s stakeholders and dimensions, and impact-investment discipline.",
         "Uses the proposed baseline, phased comparison villages, farmer net price, spoilage, payment days, income stability, participation, uptime, energy, transport, and refrigerant measures.",

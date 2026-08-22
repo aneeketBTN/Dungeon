@@ -5208,7 +5208,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_disparity_gap_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_disparity_gap",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Disparity gap, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A district has the same disease burden as the state average but one clinic per 80,000 residents instead of one per 18,000, and household travel costs exceed the consultation fee.",
     "sourceIds": [
       "IBM-M01-L01"
@@ -5349,7 +5349,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_inclusive_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_inclusive",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Inclusive business, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Sanjeevani Clinics runs eleven centres in low-income urban districts. A consultation costs ₹120 against ₹600 at the nearest private hospital, and 78% of its patients earn under ₹15,000 a month. Fees cover operating costs and fund two new centres a year, while a philanthropic grant covered only the original fit-out. A consultant now proposes adding a cosmetic dermatology line at ₹4,000 a visit, arguing the margin would let the group expand faster. The existing centres already run at 94% capacity with a three-day wait.",
     "sourceIds": [
       "IBM-M01-L03"
@@ -5490,7 +5490,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_bop_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_bop",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Bottom-of-the-pyramid design, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A packaged foods company sells a 2 kg fortified flour pack at ₹340, payable in a single transaction, through 400 urban supermarkets. It targets rural districts holding 90 million people and has reached 0.3% of them in two years. Field visits find median household cash arrives weekly rather than monthly, the nearest stocking retailer is 14 km away, and 2 kg exceeds what most families can store safely through the humid season. The country manager proposes doubling the advertising budget, citing the size of the untapped population.",
     "sourceIds": [
       "IBM-M01-L07"
@@ -5631,7 +5631,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_single_serve_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_single_serve",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Single-serve revolution, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A sanitation product lasts a month but costs a day's income upfront; households instead buy smaller, more expensive substitutes each evening.",
     "sourceIds": [
       "IBM-M01-L07"
@@ -5772,7 +5772,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_cross_subsidisation_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_cross_subsidisation",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Cross-subsidisation, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A hospital proposes premium private rooms whose contribution would fund standard beds, but both segments share the same operating theatres and surgeons.",
     "sourceIds": [
       "IBM-M01-L07"
@@ -5913,7 +5913,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_diageo_value_chain_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_diageo_value_chain",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Diageo value chain, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A beverage producer can replace imported grain with local smallholder supply, but quality varies and individual farmers cannot meet delivery volumes.",
     "sourceIds": [
       "IBM-M01-L08"
@@ -6054,7 +6054,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_profit_social_good_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_profit_social_good",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Profit versus social good, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A low-cost diagnostic service can raise margins by shifting scarce appointments to premium wellness tests while its target patients already wait four days.",
     "sourceIds": [
       "IBM-M01-L10"
@@ -6195,7 +6195,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_zone_of_conflict_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_zone_of_conflict",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Zone of conflict, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A lender earns more from repeat top-up loans, while borrower data show debt service is already consuming most household cash flow.",
     "sourceIds": [
       "IBM-M01-L10"
@@ -6336,7 +6336,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_total_healthcare_cost_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_total_healthcare_cost",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Total cost of healthcare, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A rural clinic charges less than a city hospital, but patients lose two workdays and pay for transport on four separate visits for one procedure.",
     "sourceIds": [
       "IBM-M02-L01"
@@ -6477,7 +6477,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_inverted_pyramid_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_inverted_pyramid",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Inverted pyramid, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Specialists review every routine screening result, creating a six-week queue even though trained technicians can clear normal cases under a protocol.",
     "sourceIds": [
       "IBM-M02-L02"
@@ -6618,7 +6618,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_vaatsalya_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_vaatsalya",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using No-frills healthcare access, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A hospital group runs six 200-bed tertiary facilities in three large cities, whose cardiac and oncology units sit at 61% occupancy. Its own records show 44% of admissions travel more than 90 km, most for deliveries, dialysis and routine surgery needing no tertiary equipment. A normal delivery costs the patient about ₹38,000. A proposal on the table is a network of 40-bed centres in semi-urban towns handling primary and secondary care only, at an estimated ₹11,000 per delivery and staffed by locally recruited clinicians.",
     "sourceIds": [
       "IBM-M02-L04"
@@ -6759,7 +6759,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_market_failure_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_market_failure",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Market failure, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Rural patients need teleconsultations and can pay the clinician's fee, but no provider serves them because verifying identity and collecting many small payments costs more than the consultation.",
     "sourceIds": [
       "IBM-M02-L04"
@@ -6900,7 +6900,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_decentralised_model_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_decentralised_model",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Decentralised model, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "One city hospital handles routine cases from forty towns, although local teams could deliver most care if they had protocols and a referral line.",
     "sourceIds": [
       "IBM-M02-L04"
@@ -7041,7 +7041,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_asset_light_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_asset_light",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Asset-light model, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "An education provider can enter twelve districts by training existing schools or only two by buying land and constructing campuses itself.",
     "sourceIds": [
       "IBM-M02-L04"
@@ -7182,7 +7182,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_micro_insurance_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_micro_insurance",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Micro-insurance, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Households can manage routine clinic fees but sell productive assets when an emergency admission creates a single large bill.",
     "sourceIds": [
       "IBM-M02-L04"
@@ -7323,7 +7323,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_poverty_dynamics_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_poverty_dynamics",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Poverty dynamics, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A worker misses income during illness, borrows at a high rate for treatment, and then sells the equipment used to earn after returning to work.",
     "sourceIds": [
       "IBM-M02-L04"
@@ -7464,7 +7464,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_aurolab_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_aurolab",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Aurolab, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A hospital imports lenses whose unit price limits subsidised surgery, although regional demand could support a specialised local plant at scale.",
     "sourceIds": [
       "IBM-M02-L04"
@@ -7605,7 +7605,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_aravind_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_aravind",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Aravind Eye Hospital process specialisation, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "An eye hospital has four ophthalmologists and a nine-week cataract waiting list. A time study finds each surgeon spends 71% of the working day on counselling, vision measurement, dilation checks and post-operative dressing, and 29% operating. Complication rates sit at the national benchmark and the trustees have said that must not move. The hospital already employs 22 trained paramedical staff, mostly assigned to reception. A consultant proposes recruiting two more surgeons, at a cost current surpluses cannot fund.",
     "sourceIds": [
       "IBM-M02-L08"
@@ -7746,7 +7746,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_pay_per_use_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_pay_per_use",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Pay-per-use equipment, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Small clinics need diagnostic equipment twice a week and cannot finance a machine that would sit idle on the other days.",
     "sourceIds": [
       "IBM-M02-L08"
@@ -7887,7 +7887,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_telemedicine_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_telemedicine",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Telemedicine, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Patients make a six-hour trip for every follow-up even though most visits review symptoms, images and medicine adherence.",
     "sourceIds": [
       "IBM-M02-L10"
@@ -8028,7 +8028,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_low_cost_schools_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_low_cost_schools",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Low-cost private schools, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A school chain halves fees and opens quickly, but pupil attendance and basic reading outcomes fall while parents lack usable performance information.",
     "sourceIds": [
       "IBM-M02-L13"
@@ -8169,7 +8169,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_poverty_penalty_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_poverty_penalty",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Poverty penalty, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A household buys water daily at five times the network tariff because it cannot afford a connection deposit and no utility reaches the settlement.",
     "sourceIds": [
       "IBM-M03-L02"
@@ -8310,7 +8310,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_grameen_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_grameen",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Grameen Bank group-based microfinance, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A lender wants to reach 30 villages where 82% of households hold no bank-acceptable collateral and no formal credit record, and its two field officers cannot assess 4,000 households individually. A pilot in four villages lent to self-formed groups of five women, releasing funds to two members first and to the rest only after the first repayments arrived, with weekly meetings held in the village. Repayment reached 97% over eighteen months. Head office now proposes dropping the meetings and the staged release to cut cost per loan, keeping the group label.",
     "sourceIds": [
       "IBM-M03-L03"
@@ -8451,7 +8451,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_shg_linkage_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_shg_linkage",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Self-help group bank linkage, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Twenty women save together for a year and maintain clear internal repayment records, but none can satisfy the bank's individual collateral rule.",
     "sourceIds": [
       "IBM-M03-L03"
@@ -8592,7 +8592,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_mission_dilution_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_mission_dilution",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Mission dilution, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A lender founded for first-time rural borrowers raises average loan size and moves officers to market towns because established traders are cheaper to serve.",
     "sourceIds": [
       "IBM-M03-L03"
@@ -8733,7 +8733,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_smallholder_bottlenecks_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_smallholder_bottlenecks",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Smallholder bottlenecks, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Farmers receive better seed on credit but still sell individually after harvest to the only local trader because storage and buyer access are absent.",
     "sourceIds": [
       "IBM-M03-L03"
@@ -8874,7 +8874,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_open_source_innovation_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_open_source_innovation",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Open-source innovation, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A low-cost irrigation controller works in one region but replacement parts and software changes require a distant vendor whose visits take months.",
     "sourceIds": [
       "IBM-M03-L03"
@@ -9015,7 +9015,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_social_mobilisation_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_social_mobilisation",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Social mobilisation, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A producer programme registers farmers individually, but meetings fail and buyers cannot obtain the volume or shared quality commitment they require.",
     "sourceIds": [
       "IBM-M03-L03"
@@ -9156,7 +9156,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_responsible_lending_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_responsible_lending",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Responsible lending, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A microfinance institution has grown disbursements 140% in two years. Field agents earn 60% of their variable pay per additional loan disbursed and nothing tied to repayment. A sample of 500 borrowers finds the median household now services four concurrent microloans, 38% used their most recent loan to repay an existing one, and total monthly debt service reaches 71% of reported household income. Portfolio-at-risk still reads 1.2%, because refinancing keeps accounts current. The growth committee wants two new districts next quarter.",
     "sourceIds": [
       "IBM-M03-L05"
@@ -9297,7 +9297,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_formal_banking_failure_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_formal_banking_failure",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Formal banking failure, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Seasonal traders repay suppliers reliably but lack property titles, payslips and a nearby branch, so a bank rejects every application automatically.",
     "sourceIds": [
       "IBM-M03-L05"
@@ -9438,7 +9438,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_andhra_crisis_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_andhra_crisis",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Andhra Pradesh crisis, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Several lenders enter the same villages, reward officers for disbursement and share no debt data while repayment remains high through refinancing.",
     "sourceIds": [
       "IBM-M03-L05"
@@ -9579,7 +9579,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_rural_bpo_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_rural_bpo",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Rural BPO model, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A BPO is considering a delivery centre in a district town where about 1,200 graduates enter the market each year and few migrate for work. Wage expectations run 40% below the metro rate, and attrition at comparable rural centres is 8% against 45% in cities. The available contracts are document processing and regional-language customer support, with a client quality bar of a 2% error ceiling audited monthly. Local candidates have strong regional-language ability and little exposure to accented international voice work, and the town loses power for about 90 minutes a day.",
     "sourceIds": [
       "IBM-M04-L04"
@@ -9720,7 +9720,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_socio_cultural_barriers_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_socio_cultural_barriers",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Socio-cultural barriers, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A rural centre recruits women successfully, but most leave when late shifts require unsafe travel and families receive no explanation of the work.",
     "sourceIds": [
       "IBM-M04-L04"
@@ -9861,7 +9861,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_csr_trap_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_csr_trap",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using CSR trap, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A company trains rural graduates each year from its CSR budget, but no business unit commits work and the programme ends whenever annual funding tightens.",
     "sourceIds": [
       "IBM-M04-L04"
@@ -10002,7 +10002,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_decentralised_footprint_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_decentralised_footprint",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Decentralised footprint, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "One large rural centre has filled its local hiring pool, while nearby towns each have smaller groups of qualified workers and suitable partner sites.",
     "sourceIds": [
       "IBM-M04-L04"
@@ -10143,7 +10143,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_coopetition_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_coopetition",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Co-opetition, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Three rural service firms each lack enough volume for reliable connectivity and training, although together they can support both.",
     "sourceIds": [
       "IBM-M04-L04"
@@ -10284,7 +10284,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_multilingual_routing_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_multilingual_routing",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Multilingual IT Routing, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Customer requests arrive in eight regional languages, but each small centre can staff only two and callers are repeatedly transferred or abandoned.",
     "sourceIds": [
       "IBM-M04-L04"
@@ -10425,7 +10425,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_scaling_ceiling_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_scaling_ceiling",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Scaling ceiling, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A rural centre model succeeds in ten towns but expansion stalls because trainers, local managers and audited client work are not growing with sites.",
     "sourceIds": [
       "IBM-M04-L04"
@@ -10566,7 +10566,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_replication_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_replication",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Replicating rural services, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A rural services company runs eight centres it owns and staffs directly, and holds requests from 60 towns. It has ₹4 crore of capital against ₹90 lakh needed per owned centre, and nobody who knows hiring conditions in those towns. Two pilots run by local entrepreneurs who funded their own fit-out reached break-even in seven months against eleven for owned centres. One of those pilots missed the group's training standard, and a client audit flagged inconsistent output quality across the network.",
     "sourceIds": [
       "IBM-M04-L05"
@@ -10707,7 +10707,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_impact_sourcing_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_impact_sourcing",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Impact sourcing, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A firm can source data processing from a metro vendor or from a rural centre whose trained staff meet the same error target and have few local formal jobs.",
     "sourceIds": [
       "IBM-M04-L06"
@@ -10848,7 +10848,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_backward_integration_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_backward_integration",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Backward integration, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A food processor depends on traders for a crop whose variable handling creates rejections and leaves farmers with no quality feedback.",
     "sourceIds": [
       "IBM-M05-L02"
@@ -10989,7 +10989,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_shared_value_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_shared_value",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Shared value, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A dairy processor buys from 12,000 smallholders. Rejections for bacterial count run at 19%, forcing spot purchases at a 23% premium whenever supply falls short. Farmers average 4.1 litres per animal per day against a 7-litre regional benchmark, and most sell through intermediaries who deduct 15%. A proposal would fund village chilling units, veterinary services and direct payment at ₹6 crore over three years, projected to lift yield to 6 litres, cut rejections to 6% and raise farmer realisation by 22%. The CFO asks why a processor should pay for farm productivity.",
     "sourceIds": [
       "IBM-M05-L07"
@@ -11130,7 +11130,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_income_disparity_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_income_disparity",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Income disparity, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Two neighbouring groups use the same energy service, but one can finance equipment upfront while the other spends more each month on unsafe substitutes.",
     "sourceIds": [
       "IBM-M05-L07"
@@ -11271,7 +11271,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_bop_scale_paradox_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_bop_scale_paradox",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using BOP scale paradox, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A firm cites ten million households needing clean energy, but each sale requires long travel, education, finance and after-sale service for a small ticket.",
     "sourceIds": [
       "IBM-M05-L07"
@@ -11412,7 +11412,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_energy_poverty_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_energy_poverty",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Energy poverty, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A tailor stops work at dusk and spends a fifth of weekly income on kerosene whose light also damages indoor air quality.",
     "sourceIds": [
       "IBM-M05-L07"
@@ -11553,7 +11553,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_selco_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_selco",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using SELCO affordability system, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A street vendor trades until 9 pm and spends ₹15 a day on kerosene, about ₹450 a month, for light poor enough that customers leave early. A solar unit costs ₹9,000 outright, which she cannot pay, but a rural bank will finance it at ₹10 a day over three years once repayment capacity is shown. Brighter light is expected to raise daily takings by about ₹90. Two earlier solar programmes in the district failed when units broke and no technician was available within 40 km, and villagers now say they will not buy without a repair promise.",
     "sourceIds": [
       "IBM-M05-L10"
@@ -11694,7 +11694,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_empathy_credit_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_empathy_credit",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Empathy-driven credit, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A street vendor saves on fuel after installing solar lighting, but a conventional monthly instalment falls before the days when her weekly cash balance is strongest.",
     "sourceIds": [
       "IBM-M05-L10"
@@ -11835,7 +11835,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_labournet_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_labournet",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using LabourNet platform, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Migrant construction workers in a metro lose an average of nine days a month searching for work and are paid 18% below rate when hired through informal brokers. Almost none hold a document proving prior work, and 91% have no bank-recognised identity, so contractors treat them as unverifiable risk and insurers decline cover. A platform proposes registering workers with verified identity, independently assessed skill grades and a logged work history, then matching them to contractors. Contractors say they will pay a premium only where the skill grade is independently assessed rather than self-declared.",
     "sourceIds": [
       "IBM-M06-L02"
@@ -11976,7 +11976,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_informal_sector_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_informal_sector",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Informal sector, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Skilled workers find jobs through local agents, are paid in cash and have no portable record of experience, insurance or grievance route.",
     "sourceIds": [
       "IBM-M06-L02"
@@ -12117,7 +12117,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_workforce_pivot_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_workforce_pivot",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Workforce solutions pivot, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A provider trains thousands of workers but placement remains low because employers need verified skills, attendance support and replacement guarantees.",
     "sourceIds": [
       "IBM-M06-L02"
@@ -12258,7 +12258,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_floral_upcycling_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_floral_upcycling",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Floral upcycling, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Temples discard tonnes of flowers into waterways, and a venture can turn the material into incense but has no steady retail channel or safe sorting process.",
     "sourceIds": [
       "IBM-M06-L02"
@@ -12399,7 +12399,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_waste_picker_franchise_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_waste_picker_franchise",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Waste picker franchisee, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Independent collectors know local routes but sell to several intermediaries, lack protective equipment and cannot guarantee buyers a consistent grade.",
     "sourceIds": [
       "IBM-M06-L04"
@@ -12540,7 +12540,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_waste_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_waste",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Inclusive waste enterprise, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Temples in one city send about 8 tonnes of flower waste a week to landfill, where it decomposes into a local waterway. A venture collects it free, converts it into incense and natural dyes, and employs 60 women from nearby low-income settlements at ₹11,000 a month against the ₹6,500 they earned in informal work. Retail buyers pay a premium for the provenance and current output sells out. Scaling to 20 tonnes needs a second site and either mechanised sorting, which would halve the workforce, or 60 more women hired and trained.",
     "sourceIds": [
       "IBM-M06-L05"
@@ -12681,7 +12681,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_urban_centric_paradox_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_urban_centric_paradox",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Urban-centric paradox, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A workforce platform has thousands of city employers but excludes rural workers because registration requires a smartphone, English and travel to an urban office.",
     "sourceIds": [
       "IBM-M06-L05"
@@ -12822,7 +12822,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_fpo_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_fpo",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Farmer Producer Organisation, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "Nine hundred farmers in one block grow a distinctive aromatic rice. Each markets 2 to 4 tonnes through village traders at ₹22 a kg, while the same rice retails in city stores at ₹95. No individual farmer can meet a retailer's 200-tonne minimum consignment or fund the certification a premium buyer requires. A producer company has been registered with the farmers as shareholders and grant funding covers three years of working capital, but it has nobody with buyer relationships, packaging experience, or the means to hold quality across 900 growers. A neighbouring FPO collapsed after two seasons for exactly that reason.",
     "sourceIds": [
       "IBM-M07-L04"
@@ -12963,7 +12963,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_governance_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_governance",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Governance, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "An FPO's manager signs buyer contracts and sets deductions without publishing prices or allowing farmer directors to review related-party transactions.",
     "sourceIds": [
       "IBM-M07-L04"
@@ -13104,7 +13104,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_social_business_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_social_business",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Social business, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A food company creates a fortified snack for children in low-income districts, priced at ₹5 so the target households can actually buy it. The line covers its own costs and repays the investors' original capital, after which surplus is reinvested in distribution rather than paid out. Nutrition surveys show a measurable fall in deficiency among regular consumers. The group board asks why the line should not instead be run as CSR funded from group profit, or priced at ₹12 where the same product would earn a normal margin from wealthier urban buyers.",
     "sourceIds": [
       "IBM-M07-L05"
@@ -13245,7 +13245,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_social_plastics_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_social_plastics",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Social plastics, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A brand offers a premium for recycled plastic, but its supplier reports only tonnes and cannot show who collected it or how workers were paid.",
     "sourceIds": [
       "IBM-M07-L05"
@@ -13386,7 +13386,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_impact_investing_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_impact_investing",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Impact investing, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A fund raises ₹500 crore for affordable housing. It sets a target that 70% of units go to households below a stated income line, requires quarterly reporting on who actually occupies them, and expects a 9% return so the capital can be recycled into further projects. One developer in the pipeline offers 16% but will commit to only 25% of units below the income line, and proposes reporting sales value rather than buyer income. The investment committee is split, noting the fund's headline return currently sits below its target.",
     "sourceIds": [
       "IBM-M08-L01"
@@ -13527,7 +13527,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_carbon_markets_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_carbon_markets",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Carbon markets, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A clean-cooking project claims credits for every stove distributed, although many replace functioning clean stoves and household use is not monitored.",
     "sourceIds": [
       "IBM-M08-L01"
@@ -13668,7 +13668,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_blended_finance_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_blended_finance",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Blended finance, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A rural infrastructure fund is viable after construction but private investors will not bear first-loss development and demand risk.",
     "sourceIds": [
       "IBM-M08-L01"
@@ -13809,7 +13809,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_giin_criteria_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_giin_criteria",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using GIIN criteria, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A conventional fund buys shares in a profitable employer and retroactively labels every job and tax payment as impact without a target or outcome process.",
     "sourceIds": [
       "IBM-M08-L01"
@@ -13950,7 +13950,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_impact_measurement_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_impact_measurement",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Impact measurement, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A skills programme reports that graduates earn 34% more two years on than a comparison group of non-participants from the same districts. Enrolment was voluntary and required attending an information session, submitting an application and paying a ₹500 deposit. Baseline data show applicants already had 1.9 more years of schooling and were three times likelier to have held formal employment before the programme began. A regional wage boom lifted earnings across all districts over the same period. The funder is being asked to scale the programme fivefold on the strength of the 34% figure.",
     "sourceIds": [
       "IBM-M08-L05"
@@ -14091,7 +14091,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_ted_london_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_ted_london",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Ted London framework, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A distributor lowers product price but requires village agents to hold unpaid stock and absorb every return, while the firm reports rapid reach growth.",
     "sourceIds": [
       "IBM-M08-L05"
@@ -14232,7 +14232,7 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_rct_case_answer",
     "courseId": "IBM",
     "conceptId": "ibm_rct",
-    "stem": "What should be done in this case? State the governing course idea, make a clear decision, and explain how a specific case fact supports it in five to eight sentences.",
+    "stem": "Using Randomised controlled trial, what should be done? Give the decision first, then use one case fact and explain why it supports the decision in one paragraph.",
     "caselet": "A programme has more eligible villages than it can serve this year and wants credible evidence before national expansion.",
     "sourceIds": [
       "IBM-M08-L05"
@@ -14317,76 +14317,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_single_serve_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_single_serve",
-    "stem": "Write a connected recommendation. Explain what Single-serve revolution settles first, what Bottom-of-the-pyramid design settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A sanitation product lasts a month but costs a day's income upfront; households instead buy smaller, more expensive substitutes each evening. A second decision in the same organisation raises Bottom-of-the-pyramid design: A packaged foods company sells a 2 kg fortified flour pack at ₹340, payable in a single transaction, through 400 urban supermarkets. It targets rural districts holding 90 million people and has reached 0.3% of them in two years. Field visits find median household cash arrives weekly rather than monthly, the nearest stocking retailer is 14 km away, and 2 kg exceeds what most families can store safely through the humid season. The country manager proposes doubling the advertising budget, citing the size of the untapped population.",
+    "stem": "Using Single-serve revolution, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Single-serve revolution from Bottom-of-the-pyramid design.",
+    "caselet": "A sanitation product lasts a month but costs a day's income upfront; households instead buy smaller, more expensive substitutes each evening.",
     "sourceIds": [
       "IBM-M01-L07"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Single-serve revolution: Offer a safe smaller unit or payment interval whose total economics remain viable and whose repeated use still delivers the intended benefit."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Single-serve revolution",
-        "description": "Uses the first framework accurately and states the decision it governs: Offer a safe smaller unit or payment interval whose total economics remain viable and whose repeated use still delivers the intended benefit."
+        "description": "Uses the framework accurately: The single-serve revolution redesigns unit size and payment timing so low and irregular cash flow does not block access to a useful product."
       },
       {
-        "id": "second_idea",
-        "label": "Bottom-of-the-pyramid design",
-        "description": "Uses the connected idea accurately and states its different decision: Redesign affordability, access and service around the constraints, because population size is never demand by itself."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Bottom-of-the-pyramid design answers a different decision rather than substituting for Single-serve revolution."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -14394,76 +14391,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_cross_subsidisation_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_cross_subsidisation",
-    "stem": "Write a connected recommendation. Explain what Cross-subsidisation settles first, what Single-serve revolution settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A hospital proposes premium private rooms whose contribution would fund standard beds, but both segments share the same operating theatres and surgeons. A second decision in the same organisation raises Single-serve revolution: A sanitation product lasts a month but costs a day's income upfront; households instead buy smaller, more expensive substitutes each evening.",
+    "stem": "Using Cross-subsidisation, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Cross-subsidisation from Single-serve revolution.",
+    "caselet": "A hospital proposes premium private rooms whose contribution would fund standard beds, but both segments share the same operating theatres and surgeons.",
     "sourceIds": [
       "IBM-M01-L07"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Cross-subsidisation: Separate amenities from essential quality, price the premium clearly, and protect capacity for the subsidised segment."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Cross-subsidisation",
-        "description": "Uses the first framework accurately and states the decision it governs: Separate amenities from essential quality, price the premium clearly, and protect capacity for the subsidised segment."
+        "description": "Uses the framework accurately: Cross-subsidisation charges one customer segment more so another can access the same essential capability at a lower price without weakening quality."
       },
       {
-        "id": "second_idea",
-        "label": "Single-serve revolution",
-        "description": "Uses the connected idea accurately and states its different decision: Offer a safe smaller unit or payment interval whose total economics remain viable and whose repeated use still delivers the intended benefit."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Single-serve revolution answers a different decision rather than substituting for Cross-subsidisation."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -14471,77 +14465,74 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_diageo_value_chain_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_diageo_value_chain",
-    "stem": "Write a connected recommendation. Explain what Diageo value chain settles first, what Cross-subsidisation settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A beverage producer can replace imported grain with local smallholder supply, but quality varies and individual farmers cannot meet delivery volumes. A second decision in the same organisation raises Cross-subsidisation: A hospital proposes premium private rooms whose contribution would fund standard beds, but both segments share the same operating theatres and surgeons.",
+    "stem": "Using Diageo value chain, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Diageo value chain from Cross-subsidisation.",
+    "caselet": "A beverage producer can replace imported grain with local smallholder supply, but quality varies and individual farmers cannot meet delivery volumes.",
     "sourceIds": [
       "IBM-M01-L08",
       "IBM-M01-L07"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Diageo value chain: Build procurement, aggregation and supplier development together, then track both input reliability and producer income."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Diageo value chain",
-        "description": "Uses the first framework accurately and states the decision it governs: Build procurement, aggregation and supplier development together, then track both input reliability and producer income."
+        "description": "Uses the framework accurately: The Diageo value-chain example links small suppliers to a commercial chain through local sourcing, capability support and a reliable route to market."
       },
       {
-        "id": "second_idea",
-        "label": "Cross-subsidisation",
-        "description": "Uses the connected idea accurately and states its different decision: Separate amenities from essential quality, price the premium clearly, and protect capacity for the subsidised segment."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Cross-subsidisation answers a different decision rather than substituting for Diageo value chain."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -14549,77 +14540,74 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_inverted_pyramid_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_inverted_pyramid",
-    "stem": "Write a connected recommendation. Explain what Inverted pyramid settles first, what Total cost of healthcare settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Specialists review every routine screening result, creating a six-week queue even though trained technicians can clear normal cases under a protocol. A second decision in the same organisation raises Total cost of healthcare: A rural clinic charges less than a city hospital, but patients lose two workdays and pay for transport on four separate visits for one procedure.",
+    "stem": "Using Inverted pyramid, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Inverted pyramid from Total cost of healthcare.",
+    "caselet": "Specialists review every routine screening result, creating a six-week queue even though trained technicians can clear normal cases under a protocol.",
     "sourceIds": [
       "IBM-M02-L02",
       "IBM-M02-L01"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Inverted pyramid: Protocolise routine work, define escalation triggers, and reserve scarce specialist capacity for the cases that cross those triggers."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Inverted pyramid",
-        "description": "Uses the first framework accurately and states the decision it governs: Protocolise routine work, define escalation triggers, and reserve scarce specialist capacity for the cases that cross those triggers."
+        "description": "Uses the framework accurately: The inverted-pyramid model moves routine decisions and delivery to trained lower-cost roles while scarce experts handle exceptions and high-skill work."
       },
       {
-        "id": "second_idea",
-        "label": "Total cost of healthcare",
-        "description": "Uses the connected idea accurately and states its different decision: Compare complete patient pathways and redesign location, scheduling and follow-up around the cost the household actually bears."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Total cost of healthcare answers a different decision rather than substituting for Inverted pyramid."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -14627,76 +14615,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_decentralised_model_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_decentralised_model",
-    "stem": "Write a connected recommendation. Explain what Decentralised model settles first, what Market failure settles next, and why one framework cannot substitute for the other.",
-    "caselet": "One city hospital handles routine cases from forty towns, although local teams could deliver most care if they had protocols and a referral line. A second decision in the same organisation raises Market failure: Rural patients need teleconsultations and can pay the clinician's fee, but no provider serves them because verifying identity and collecting many small payments costs more than the consultation.",
+    "stem": "Using Decentralised model, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Decentralised model from Market failure.",
+    "caselet": "One city hospital handles routine cases from forty towns, although local teams could deliver most care if they had protocols and a referral line.",
     "sourceIds": [
       "IBM-M02-L04"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Decentralised model: Place routine capacity locally, specify what stays central, and make referral and quality data flow in both directions."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Decentralised model",
-        "description": "Uses the first framework accurately and states the decision it governs: Place routine capacity locally, specify what stays central, and make referral and quality data flow in both directions."
+        "description": "Uses the framework accurately: A decentralised model distributes service capacity near users while central standards, referral and support preserve consistency."
       },
       {
-        "id": "second_idea",
-        "label": "Market failure",
-        "description": "Uses the connected idea accurately and states its different decision: Identify the failed mechanism and redesign information, risk sharing or transaction cost instead of treating the population as having no demand."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Market failure answers a different decision rather than substituting for Decentralised model."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -14704,76 +14689,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_asset_light_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_asset_light",
-    "stem": "Write a connected recommendation. Explain what Asset-light model settles first, what Decentralised model settles next, and why one framework cannot substitute for the other.",
-    "caselet": "An education provider can enter twelve districts by training existing schools or only two by buying land and constructing campuses itself. A second decision in the same organisation raises Decentralised model: One city hospital handles routine cases from forty towns, although local teams could deliver most care if they had protocols and a referral line.",
+    "stem": "Using Asset-light model, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Asset-light model from Decentralised model.",
+    "caselet": "An education provider can enter twelve districts by training existing schools or only two by buying land and constructing campuses itself.",
     "sourceIds": [
       "IBM-M02-L04"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Asset-light model: Use partner assets under enforceable service standards and invest central resources in curriculum, training and quality assurance."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Asset-light model",
-        "description": "Uses the first framework accurately and states the decision it governs: Use partner assets under enforceable service standards and invest central resources in curriculum, training and quality assurance."
+        "description": "Uses the framework accurately: An asset-light model scales access by coordinating existing facilities or partners instead of owning every physical asset used in delivery."
       },
       {
-        "id": "second_idea",
-        "label": "Decentralised model",
-        "description": "Uses the connected idea accurately and states its different decision: Place routine capacity locally, specify what stays central, and make referral and quality data flow in both directions."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Decentralised model answers a different decision rather than substituting for Asset-light model."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -14781,76 +14763,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_micro_insurance_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_micro_insurance",
-    "stem": "Write a connected recommendation. Explain what Micro-insurance settles first, what Poverty dynamics settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Households can manage routine clinic fees but sell productive assets when an emergency admission creates a single large bill. A second decision in the same organisation raises Poverty dynamics: A worker misses income during illness, borrows at a high rate for treatment, and then sells the equipment used to earn after returning to work.",
+    "stem": "Using Micro-insurance, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Micro-insurance from Poverty dynamics.",
+    "caselet": "Households can manage routine clinic fees but sell productive assets when an emergency admission creates a single large bill.",
     "sourceIds": [
       "IBM-M02-L04"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Micro-insurance: Define the covered event, align premium timing with cash flow, and make verification and claims cheap enough for small policies."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Micro-insurance",
-        "description": "Uses the first framework accurately and states the decision it governs: Define the covered event, align premium timing with cash flow, and make verification and claims cheap enough for small policies."
+        "description": "Uses the framework accurately: Micro-insurance pools many low-income customers' small premiums against a defined high-cost risk using simple terms and workable claims access."
       },
       {
-        "id": "second_idea",
-        "label": "Poverty dynamics",
-        "description": "Uses the connected idea accurately and states its different decision: Design around the sequence of vulnerability, including prevention, payment timing and protection of productive assets."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Poverty dynamics answers a different decision rather than substituting for Micro-insurance."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -14858,77 +14837,74 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_aurolab_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_aurolab",
-    "stem": "Write a connected recommendation. Explain what Aurolab settles first, what Aravind Eye Hospital process specialisation settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A hospital imports lenses whose unit price limits subsidised surgery, although regional demand could support a specialised local plant at scale. A second decision in the same organisation raises Aravind Eye Hospital process specialisation: An eye hospital has four ophthalmologists and a nine-week cataract waiting list. A time study finds each surgeon spends 71% of the working day on counselling, vision measurement, dilation checks and post-operative dressing, and 29% operating. Complication rates sit at the national benchmark and the trustees have said that must not move. The hospital already employs 22 trained paramedical staff, mostly assigned to reception. A consultant proposes recruiting two more surgeons, at a cost current surpluses cannot fund.",
+    "stem": "Using Aurolab, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Aurolab from Aravind Eye Hospital process specialisation.",
+    "caselet": "A hospital imports lenses whose unit price limits subsidised surgery, although regional demand could support a specialised local plant at scale.",
     "sourceIds": [
       "IBM-M02-L04",
       "IBM-M02-L08"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Aurolab: Build quality-assured local manufacturing around sufficient volume and pass process savings into access rather than treating low price as low standard."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Aurolab",
-        "description": "Uses the first framework accurately and states the decision it governs: Build quality-assured local manufacturing around sufficient volume and pass process savings into access rather than treating low price as low standard."
+        "description": "Uses the framework accurately: The Aurolab model localises high-quality production and uses volume economics to cut the cost of essential ophthalmic supplies."
       },
       {
-        "id": "second_idea",
-        "label": "Aravind Eye Hospital process specialisation",
-        "description": "Uses the connected idea accurately and states its different decision: Separate standardisable tasks for trained support staff so the specialist concentrates on the constrained surgical step."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Aravind Eye Hospital process specialisation answers a different decision rather than substituting for Aurolab."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -14936,76 +14912,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_pay_per_use_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_pay_per_use",
-    "stem": "Write a connected recommendation. Explain what Pay-per-use equipment settles first, what Aravind Eye Hospital process specialisation settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Small clinics need diagnostic equipment twice a week and cannot finance a machine that would sit idle on the other days. A second decision in the same organisation raises Aravind Eye Hospital process specialisation: An eye hospital has four ophthalmologists and a nine-week cataract waiting list. A time study finds each surgeon spends 71% of the working day on counselling, vision measurement, dilation checks and post-operative dressing, and 29% operating. Complication rates sit at the national benchmark and the trustees have said that must not move. The hospital already employs 22 trained paramedical staff, mostly assigned to reception. A consultant proposes recruiting two more surgeons, at a cost current surpluses cannot fund.",
+    "stem": "Using Pay-per-use equipment, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Pay-per-use equipment from Aravind Eye Hospital process specialisation.",
+    "caselet": "Small clinics need diagnostic equipment twice a week and cannot finance a machine that would sit idle on the other days.",
     "sourceIds": [
       "IBM-M02-L08"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Pay-per-use equipment: Pool the asset, price each use against lifecycle cost, and guarantee uptime so clinics buy reliable access rather than ownership."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Pay-per-use equipment",
-        "description": "Uses the first framework accurately and states the decision it governs: Pool the asset, price each use against lifecycle cost, and guarantee uptime so clinics buy reliable access rather than ownership."
+        "description": "Uses the framework accurately: Pay-per-use equipment converts a large ownership cost into a smaller charge tied to each use while the provider retains maintenance responsibility."
       },
       {
-        "id": "second_idea",
-        "label": "Aravind Eye Hospital process specialisation",
-        "description": "Uses the connected idea accurately and states its different decision: Separate standardisable tasks for trained support staff so the specialist concentrates on the constrained surgical step."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Aravind Eye Hospital process specialisation answers a different decision rather than substituting for Pay-per-use equipment."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15013,77 +14986,74 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_telemedicine_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_telemedicine",
-    "stem": "Write a connected recommendation. Explain what Telemedicine settles first, what Low-cost private schools settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Patients make a six-hour trip for every follow-up even though most visits review symptoms, images and medicine adherence. A second decision in the same organisation raises Low-cost private schools: A school chain halves fees and opens quickly, but pupil attendance and basic reading outcomes fall while parents lack usable performance information.",
+    "stem": "Using Telemedicine, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Telemedicine from Low-cost private schools.",
+    "caselet": "Patients make a six-hour trip for every follow-up even though most visits review symptoms, images and medicine adherence.",
     "sourceIds": [
       "IBM-M02-L10",
       "IBM-M02-L13"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Telemedicine: Define remote-safe tasks, escalation rules, data quality and a local pathway for cases that need hands-on care."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Telemedicine",
-        "description": "Uses the first framework accurately and states the decision it governs: Define remote-safe tasks, escalation rules, data quality and a local pathway for cases that need hands-on care."
+        "description": "Uses the framework accurately: Telemedicine separates clinical work that can travel as information from examination or treatment that still requires physical presence."
       },
       {
-        "id": "second_idea",
-        "label": "Low-cost private schools",
-        "description": "Uses the connected idea accurately and states its different decision: Hold an explicit learning standard, equip teachers to meet it, and publish evidence parents can use before replicating the school model."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Low-cost private schools answers a different decision rather than substituting for Telemedicine."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15091,77 +15061,74 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_low_cost_schools_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_low_cost_schools",
-    "stem": "Write a connected recommendation. Explain what Low-cost private schools settles first, what Telemedicine settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A school chain halves fees and opens quickly, but pupil attendance and basic reading outcomes fall while parents lack usable performance information. A second decision in the same organisation raises Telemedicine: Patients make a six-hour trip for every follow-up even though most visits review symptoms, images and medicine adherence.",
+    "stem": "Using Low-cost private schools, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Low-cost private schools from Telemedicine.",
+    "caselet": "A school chain halves fees and opens quickly, but pupil attendance and basic reading outcomes fall while parents lack usable performance information.",
     "sourceIds": [
       "IBM-M02-L13",
       "IBM-M02-L10"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Low-cost private schools: Hold an explicit learning standard, equip teachers to meet it, and publish evidence parents can use before replicating the school model."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Low-cost private schools",
-        "description": "Uses the first framework accurately and states the decision it governs: Hold an explicit learning standard, equip teachers to meet it, and publish evidence parents can use before replicating the school model."
+        "description": "Uses the framework accurately: Low-cost private schools pursue affordable learning through disciplined delivery, teacher support and accountability rather than by treating low price as sufficient quality."
       },
       {
-        "id": "second_idea",
-        "label": "Telemedicine",
-        "description": "Uses the connected idea accurately and states its different decision: Define remote-safe tasks, escalation rules, data quality and a local pathway for cases that need hands-on care."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Telemedicine answers a different decision rather than substituting for Low-cost private schools."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15169,76 +15136,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_shg_linkage_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_shg_linkage",
-    "stem": "Write a connected recommendation. Explain what Self-help group bank linkage settles first, what Grameen Bank group-based microfinance settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Twenty women save together for a year and maintain clear internal repayment records, but none can satisfy the bank's individual collateral rule. A second decision in the same organisation raises Grameen Bank group-based microfinance: A lender wants to reach 30 villages where 82% of households hold no bank-acceptable collateral and no formal credit record, and its two field officers cannot assess 4,000 households individually. A pilot in four villages lent to self-formed groups of five women, releasing funds to two members first and to the rest only after the first repayments arrived, with weekly meetings held in the village. Repayment reached 97% over eighteen months. Head office now proposes dropping the meetings and the staged release to cut cost per loan, keeping the group label.",
+    "stem": "Using Self-help group bank linkage, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Self-help group bank linkage from Grameen Bank group-based microfinance.",
+    "caselet": "Twenty women save together for a year and maintain clear internal repayment records, but none can satisfy the bank's individual collateral rule.",
     "sourceIds": [
       "IBM-M03-L03"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Self-help group bank linkage: Assess the group's records and governance, lend through a staged linkage, and keep member debt and use transparent."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Self-help group bank linkage",
-        "description": "Uses the first framework accurately and states the decision it governs: Assess the group's records and governance, lend through a staged linkage, and keep member debt and use transparent."
+        "description": "Uses the framework accurately: Self-help group bank linkage connects a savings-led local group to formal bank credit using group records, discipline and collective accountability."
       },
       {
-        "id": "second_idea",
-        "label": "Grameen Bank group-based microfinance",
-        "description": "Uses the connected idea accurately and states its different decision: Use formed groups, staged lending and local monitoring, which works only while repayment capacity stays real."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Grameen Bank group-based microfinance answers a different decision rather than substituting for Self-help group bank linkage."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15246,76 +15210,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_open_source_innovation_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_open_source_innovation",
-    "stem": "Write a connected recommendation. Explain what Open-source innovation settles first, what Social mobilisation settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A low-cost irrigation controller works in one region but replacement parts and software changes require a distant vendor whose visits take months. A second decision in the same organisation raises Social mobilisation: A producer programme registers farmers individually, but meetings fail and buyers cannot obtain the volume or shared quality commitment they require.",
+    "stem": "Using Open-source innovation, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Open-source innovation from Social mobilisation.",
+    "caselet": "A low-cost irrigation controller works in one region but replacement parts and software changes require a distant vendor whose visits take months.",
     "sourceIds": [
       "IBM-M03-L03"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Open-source innovation: Open the relevant design, document standards and build a contributor and maintenance system that preserves safety and compatibility."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Open-source innovation",
-        "description": "Uses the first framework accurately and states the decision it governs: Open the relevant design, document standards and build a contributor and maintenance system that preserves safety and compatibility."
+        "description": "Uses the framework accurately: Open-source innovation shares designs or knowledge so local actors can adapt, repair and improve a solution without depending on one proprietary supplier."
       },
       {
-        "id": "second_idea",
-        "label": "Social mobilisation",
-        "description": "Uses the connected idea accurately and states its different decision: Invest in trusted local organisation, shared problem definition and representative decision rules before relying on collective delivery."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Social mobilisation answers a different decision rather than substituting for Open-source innovation."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15323,76 +15284,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_social_mobilisation_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_social_mobilisation",
-    "stem": "Write a connected recommendation. Explain what Social mobilisation settles first, what Open-source innovation settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A producer programme registers farmers individually, but meetings fail and buyers cannot obtain the volume or shared quality commitment they require. A second decision in the same organisation raises Open-source innovation: A low-cost irrigation controller works in one region but replacement parts and software changes require a distant vendor whose visits take months.",
+    "stem": "Using Social mobilisation, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Social mobilisation from Open-source innovation.",
+    "caselet": "A producer programme registers farmers individually, but meetings fail and buyers cannot obtain the volume or shared quality commitment they require.",
     "sourceIds": [
       "IBM-M03-L03"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Social mobilisation: Invest in trusted local organisation, shared problem definition and representative decision rules before relying on collective delivery."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Social mobilisation",
-        "description": "Uses the first framework accurately and states the decision it governs: Invest in trusted local organisation, shared problem definition and representative decision rules before relying on collective delivery."
+        "description": "Uses the framework accurately: Social mobilisation builds collective awareness, participation and bargaining capacity before asking dispersed households to use a new institution or market channel."
       },
       {
-        "id": "second_idea",
-        "label": "Open-source innovation",
-        "description": "Uses the connected idea accurately and states its different decision: Open the relevant design, document standards and build a contributor and maintenance system that preserves safety and compatibility."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Open-source innovation answers a different decision rather than substituting for Social mobilisation."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15400,76 +15358,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_andhra_crisis_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_andhra_crisis",
-    "stem": "Write a connected recommendation. Explain what Andhra Pradesh crisis settles first, what Formal banking failure settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Several lenders enter the same villages, reward officers for disbursement and share no debt data while repayment remains high through refinancing. A second decision in the same organisation raises Formal banking failure: Seasonal traders repay suppliers reliably but lack property titles, payslips and a nearby branch, so a bank rejects every application automatically.",
+    "stem": "Using Andhra Pradesh crisis, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Andhra Pradesh crisis from Formal banking failure.",
+    "caselet": "Several lenders enter the same villages, reward officers for disbursement and share no debt data while repayment remains high through refinancing.",
     "sourceIds": [
       "IBM-M03-L05"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Andhra Pradesh crisis: Pause expansion, consolidate exposure data, change incentives and put enforceable borrower-protection and grievance systems in place."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Andhra Pradesh crisis",
-        "description": "Uses the first framework accurately and states the decision it governs: Pause expansion, consolidate exposure data, change incentives and put enforceable borrower-protection and grievance systems in place."
+        "description": "Uses the framework accurately: The Andhra Pradesh microfinance crisis shows how rapid multi-lending, coercive collection and weak oversight can turn outreach growth into borrower harm and regulatory shutdown."
       },
       {
-        "id": "second_idea",
-        "label": "Formal banking failure",
-        "description": "Uses the connected idea accurately and states its different decision: Replace unavailable proxies with cash-flow evidence, local information and a delivery channel whose transaction cost fits small loans."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Formal banking failure answers a different decision rather than substituting for Andhra Pradesh crisis."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15477,76 +15432,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_decentralised_footprint_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_decentralised_footprint",
-    "stem": "Write a connected recommendation. Explain what Decentralised footprint settles first, what CSR trap settles next, and why one framework cannot substitute for the other.",
-    "caselet": "One large rural centre has filled its local hiring pool, while nearby towns each have smaller groups of qualified workers and suitable partner sites. A second decision in the same organisation raises CSR trap: A company trains rural graduates each year from its CSR budget, but no business unit commits work and the programme ends whenever annual funding tightens.",
+    "stem": "Using Decentralised footprint, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Decentralised footprint from CSR trap.",
+    "caselet": "One large rural centre has filled its local hiring pool, while nearby towns each have smaller groups of qualified workers and suitable partner sites.",
     "sourceIds": [
       "IBM-M04-L04"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Decentralised footprint: Replicate smaller connected centres with shared training, routing, security and quality assurance rather than expanding one site indefinitely."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Decentralised footprint",
-        "description": "Uses the first framework accurately and states the decision it governs: Replicate smaller connected centres with shared training, routing, security and quality assurance rather than expanding one site indefinitely."
+        "description": "Uses the framework accurately: A decentralised footprint distributes small delivery centres across locations so work reaches talent while common technology and standards hold the network together."
       },
       {
-        "id": "second_idea",
-        "label": "CSR trap",
-        "description": "Uses the connected idea accurately and states its different decision: Connect the capability to a real value chain and buyer while using subsidy only for a defined transition or public-good gap."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why CSR trap answers a different decision rather than substituting for Decentralised footprint."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15554,76 +15506,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_coopetition_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_coopetition",
-    "stem": "Write a connected recommendation. Explain what Co-opetition settles first, what Decentralised footprint settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Three rural service firms each lack enough volume for reliable connectivity and training, although together they can support both. A second decision in the same organisation raises Decentralised footprint: One large rural centre has filled its local hiring pool, while nearby towns each have smaller groups of qualified workers and suitable partner sites.",
+    "stem": "Using Co-opetition, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Co-opetition from Decentralised footprint.",
+    "caselet": "Three rural service firms each lack enough volume for reliable connectivity and training, although together they can support both.",
     "sourceIds": [
       "IBM-M04-L04"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Co-opetition: Define the shared layer, protect client information and compete transparently above it on service and price."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Co-opetition",
-        "description": "Uses the first framework accurately and states the decision it governs: Define the shared layer, protect client information and compete transparently above it on service and price."
+        "description": "Uses the framework accurately: Co-opetition lets competitors share infrastructure, standards or market development where joint scale creates value, while competing on their distinct offers."
       },
       {
-        "id": "second_idea",
-        "label": "Decentralised footprint",
-        "description": "Uses the connected idea accurately and states its different decision: Replicate smaller connected centres with shared training, routing, security and quality assurance rather than expanding one site indefinitely."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Decentralised footprint answers a different decision rather than substituting for Co-opetition."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15631,76 +15580,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_multilingual_routing_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_multilingual_routing",
-    "stem": "Write a connected recommendation. Explain what Multilingual IT Routing settles first, what Co-opetition settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Customer requests arrive in eight regional languages, but each small centre can staff only two and callers are repeatedly transferred or abandoned. A second decision in the same organisation raises Co-opetition: Three rural service firms each lack enough volume for reliable connectivity and training, although together they can support both.",
+    "stem": "Using Multilingual IT Routing, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Multilingual IT Routing from Co-opetition.",
+    "caselet": "Customer requests arrive in eight regional languages, but each small centre can staff only two and callers are repeatedly transferred or abandoned.",
     "sourceIds": [
       "IBM-M04-L04"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Multilingual IT Routing: Tag demand and worker capability, route dynamically, and monitor service levels by language instead of duplicating every skill at every centre."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Multilingual IT Routing",
-        "description": "Uses the first framework accurately and states the decision it governs: Tag demand and worker capability, route dynamically, and monitor service levels by language instead of duplicating every skill at every centre."
+        "description": "Uses the framework accurately: Multilingual IT Routing directs work by language and skill across a distributed service network while presenting one reliable interface to the client."
       },
       {
-        "id": "second_idea",
-        "label": "Co-opetition",
-        "description": "Uses the connected idea accurately and states its different decision: Define the shared layer, protect client information and compete transparently above it on service and price."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Co-opetition answers a different decision rather than substituting for Multilingual IT Routing."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15708,77 +15654,74 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_backward_integration_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_backward_integration",
-    "stem": "Write a connected recommendation. Explain what Backward integration settles first, what Shared value settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A food processor depends on traders for a crop whose variable handling creates rejections and leaves farmers with no quality feedback. A second decision in the same organisation raises Shared value: A dairy processor buys from 12,000 smallholders. Rejections for bacterial count run at 19%, forcing spot purchases at a 23% premium whenever supply falls short. Farmers average 4.1 litres per animal per day against a 7-litre regional benchmark, and most sell through intermediaries who deduct 15%. A proposal would fund village chilling units, veterinary services and direct payment at ₹6 crore over three years, projected to lift yield to 6 litres, cut rejections to 6% and raise farmer realisation by 22%. The CFO asks why a processor should pay for farm productivity.",
+    "stem": "Using Backward integration, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Backward integration from Shared value.",
+    "caselet": "A food processor depends on traders for a crop whose variable handling creates rejections and leaves farmers with no quality feedback.",
     "sourceIds": [
       "IBM-M05-L02",
       "IBM-M05-L07"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Backward integration: Take control of the necessary sourcing, support or processing step while testing whether ownership adds more value than a governed partnership."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Backward integration",
-        "description": "Uses the first framework accurately and states the decision it governs: Take control of the necessary sourcing, support or processing step while testing whether ownership adds more value than a governed partnership."
+        "description": "Uses the framework accurately: Backward integration brings a critical upstream input or capability into the model when unreliable supply blocks quality, access or livelihood outcomes."
       },
       {
-        "id": "second_idea",
-        "label": "Shared value",
-        "description": "Uses the connected idea accurately and states its different decision: Evaluate whether the operating model creates additional value for both the firm and farmers rather than merely donating after profit is made."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Shared value answers a different decision rather than substituting for Backward integration."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15786,76 +15729,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_empathy_credit_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_empathy_credit",
-    "stem": "Write a connected recommendation. Explain what Empathy-driven credit settles first, what SELCO affordability system settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A street vendor saves on fuel after installing solar lighting, but a conventional monthly instalment falls before the days when her weekly cash balance is strongest. A second decision in the same organisation raises SELCO affordability system: A street vendor trades until 9 pm and spends ₹15 a day on kerosene, about ₹450 a month, for light poor enough that customers leave early. A solar unit costs ₹9,000 outright, which she cannot pay, but a rural bank will finance it at ₹10 a day over three years once repayment capacity is shown. Brighter light is expected to raise daily takings by about ₹90. Two earlier solar programmes in the district failed when units broke and no technician was available within 40 km, and villagers now say they will not buy without a repair promise.",
+    "stem": "Using Empathy-driven credit, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Empathy-driven credit from SELCO affordability system.",
+    "caselet": "A street vendor saves on fuel after installing solar lighting, but a conventional monthly instalment falls before the days when her weekly cash balance is strongest.",
     "sourceIds": [
       "IBM-M05-L10"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Empathy-driven credit: Verify the livelihood economics, align instalments with cash flow, and keep independent capacity checks and transparent terms."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Empathy-driven credit",
-        "description": "Uses the first framework accurately and states the decision it governs: Verify the livelihood economics, align instalments with cash flow, and keep independent capacity checks and transparent terms."
+        "description": "Uses the framework accurately: Empathy-driven credit starts from the customer's cash-flow pattern and livelihood use, then structures finance around repayment capacity rather than a standard product calendar."
       },
       {
-        "id": "second_idea",
-        "label": "SELCO affordability system",
-        "description": "Uses the connected idea accurately and states its different decision: Bundle the light with finance and dependable service, since removing any one of those links makes it unusable."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why SELCO affordability system answers a different decision rather than substituting for Empathy-driven credit."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15863,76 +15803,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_workforce_pivot_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_workforce_pivot",
-    "stem": "Write a connected recommendation. Explain what Workforce solutions pivot settles first, what Informal sector settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A provider trains thousands of workers but placement remains low because employers need verified skills, attendance support and replacement guarantees. A second decision in the same organisation raises Informal sector: Skilled workers find jobs through local agents, are paid in cash and have no portable record of experience, insurance or grievance route.",
+    "stem": "Using Workforce solutions pivot, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Workforce solutions pivot from Informal sector.",
+    "caselet": "A provider trains thousands of workers but placement remains low because employers need verified skills, attendance support and replacement guarantees.",
     "sourceIds": [
       "IBM-M06-L02"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Workforce solutions pivot: Redefine the offer around a successful work placement, then integrate assessment, matching and retention support into the revenue model."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Workforce solutions pivot",
-        "description": "Uses the first framework accurately and states the decision it governs: Redefine the offer around a successful work placement, then integrate assessment, matching and retention support into the revenue model."
+        "description": "Uses the framework accurately: A workforce solutions pivot moves from selling isolated training to solving the employer's full hiring, deployment and retention problem."
       },
       {
-        "id": "second_idea",
-        "label": "Informal sector",
-        "description": "Uses the connected idea accurately and states its different decision: Preserve useful flexibility while adding verifiable skills, transparent terms, portable history and access to protection."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Informal sector answers a different decision rather than substituting for Workforce solutions pivot."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -15940,76 +15877,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_floral_upcycling_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_floral_upcycling",
-    "stem": "Write a connected recommendation. Explain what Floral upcycling settles first, what Workforce solutions pivot settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Temples discard tonnes of flowers into waterways, and a venture can turn the material into incense but has no steady retail channel or safe sorting process. A second decision in the same organisation raises Workforce solutions pivot: A provider trains thousands of workers but placement remains low because employers need verified skills, attendance support and replacement guarantees.",
+    "stem": "Using Floral upcycling, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Floral upcycling from Workforce solutions pivot.",
+    "caselet": "Temples discard tonnes of flowers into waterways, and a venture can turn the material into incense but has no steady retail channel or safe sorting process.",
     "sourceIds": [
       "IBM-M06-L02"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Floral upcycling: Design source collection, safe processing, a credible product market and worker economics together before reading tonnage as impact."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Floral upcycling",
-        "description": "Uses the first framework accurately and states the decision it governs: Design source collection, safe processing, a credible product market and worker economics together before reading tonnage as impact."
+        "description": "Uses the framework accurately: Floral upcycling converts discarded flowers into higher-value products while building collection, processing demand and dignified livelihoods as one model."
       },
       {
-        "id": "second_idea",
-        "label": "Workforce solutions pivot",
-        "description": "Uses the connected idea accurately and states its different decision: Redefine the offer around a successful work placement, then integrate assessment, matching and retention support into the revenue model."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Workforce solutions pivot answers a different decision rather than substituting for Floral upcycling."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -16017,77 +15951,74 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_waste_picker_franchise_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_waste_picker_franchise",
-    "stem": "Write a connected recommendation. Explain what Waste picker franchisee settles first, what Inclusive waste enterprise settles next, and why one framework cannot substitute for the other.",
-    "caselet": "Independent collectors know local routes but sell to several intermediaries, lack protective equipment and cannot guarantee buyers a consistent grade. A second decision in the same organisation raises Inclusive waste enterprise: Temples in one city send about 8 tonnes of flower waste a week to landfill, where it decomposes into a local waterway. A venture collects it free, converts it into incense and natural dyes, and employs 60 women from nearby low-income settlements at ₹11,000 a month against the ₹6,500 they earned in informal work. Retail buyers pay a premium for the provenance and current output sells out. Scaling to 20 tonnes needs a second site and either mechanised sorting, which would halve the workforce, or 60 more women hired and trained.",
+    "stem": "Using Waste picker franchisee, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Waste picker franchisee from Inclusive waste enterprise.",
+    "caselet": "Independent collectors know local routes but sell to several intermediaries, lack protective equipment and cannot guarantee buyers a consistent grade.",
     "sourceIds": [
       "IBM-M06-L04",
       "IBM-M06-L05"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Waste picker franchisee: Create a franchise contract with territory, service and safety standards, transparent material pricing and access to pooled buyers."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Waste picker franchisee",
-        "description": "Uses the first framework accurately and states the decision it governs: Create a franchise contract with territory, service and safety standards, transparent material pricing and access to pooled buyers."
+        "description": "Uses the framework accurately: The waste-picker franchisee model gives local collectors a defined territory, training, equipment and market access while preserving entrepreneurial ownership."
       },
       {
-        "id": "second_idea",
-        "label": "Inclusive waste enterprise",
-        "description": "Uses the connected idea accurately and states its different decision: Track pollution reduction, product economics and worker livelihoods, which count as shared value only when all three hold."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Inclusive waste enterprise answers a different decision rather than substituting for Waste picker franchisee."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -16095,76 +16026,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_social_plastics_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_social_plastics",
-    "stem": "Write a connected recommendation. Explain what Social plastics settles first, what Social business settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A brand offers a premium for recycled plastic, but its supplier reports only tonnes and cannot show who collected it or how workers were paid. A second decision in the same organisation raises Social business: A food company creates a fortified snack for children in low-income districts, priced at ₹5 so the target households can actually buy it. The line covers its own costs and repays the investors' original capital, after which surplus is reinvested in distribution rather than paid out. Nutrition surveys show a measurable fall in deficiency among regular consumers. The group board asks why the line should not instead be run as CSR funded from group profit, or priced at ₹12 where the same product would earn a normal margin from wealthier urban buyers.",
+    "stem": "Using Social plastics, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Social plastics from Social business.",
+    "caselet": "A brand offers a premium for recycled plastic, but its supplier reports only tonnes and cannot show who collected it or how workers were paid.",
     "sourceIds": [
       "IBM-M07-L05"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Social plastics: Build traceability from collector payment through processing to buyer claim, and price the chain so verified benefit reaches the worker."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Social plastics",
-        "description": "Uses the first framework accurately and states the decision it governs: Build traceability from collector payment through processing to buyer claim, and price the chain so verified benefit reaches the worker."
+        "description": "Uses the framework accurately: Social plastics links verified plastic recovery to improved collector livelihoods and a buyer willing to value the social and environmental provenance."
       },
       {
-        "id": "second_idea",
-        "label": "Social business",
-        "description": "Uses the connected idea accurately and states its different decision: Judge whether the social goal drives the model and discipline keeps it running, never letting profit become the purpose."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Social business answers a different decision rather than substituting for Social plastics."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -16172,76 +16100,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_carbon_markets_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_carbon_markets",
-    "stem": "Write a connected recommendation. Explain what Carbon markets settles first, what Blended finance settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A clean-cooking project claims credits for every stove distributed, although many replace functioning clean stoves and household use is not monitored. A second decision in the same organisation raises Blended finance: A rural infrastructure fund is viable after construction but private investors will not bear first-loss development and demand risk.",
+    "stem": "Using Carbon markets, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Carbon markets from Blended finance.",
+    "caselet": "A clean-cooking project claims credits for every stove distributed, although many replace functioning clean stoves and household use is not monitored.",
     "sourceIds": [
       "IBM-M08-L01"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Carbon markets: Set a credible baseline, verify adoption and persistence, account for leakage, and share revenue under transparent community terms."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Carbon markets",
-        "description": "Uses the first framework accurately and states the decision it governs: Set a credible baseline, verify adoption and persistence, account for leakage, and share revenue under transparent community terms."
+        "description": "Uses the framework accurately: Carbon markets finance verified emissions reductions or removals through tradable credits whose integrity depends on baseline, additionality, permanence and leakage controls."
       },
       {
-        "id": "second_idea",
-        "label": "Blended finance",
-        "description": "Uses the connected idea accurately and states its different decision: Use concessional capital for the specific additional risk, define who bears each loss, and require a path to commercial discipline and measurable impact."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Blended finance answers a different decision rather than substituting for Carbon markets."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -16249,76 +16174,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_blended_finance_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_blended_finance",
-    "stem": "Write a connected recommendation. Explain what Blended finance settles first, what Carbon markets settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A rural infrastructure fund is viable after construction but private investors will not bear first-loss development and demand risk. A second decision in the same organisation raises Carbon markets: A clean-cooking project claims credits for every stove distributed, although many replace functioning clean stoves and household use is not monitored.",
+    "stem": "Using Blended finance, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Blended finance from Carbon markets.",
+    "caselet": "A rural infrastructure fund is viable after construction but private investors will not bear first-loss development and demand risk.",
     "sourceIds": [
       "IBM-M08-L01"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Blended finance: Use concessional capital for the specific additional risk, define who bears each loss, and require a path to commercial discipline and measurable impact."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Blended finance",
-        "description": "Uses the first framework accurately and states the decision it governs: Use concessional capital for the specific additional risk, define who bears each loss, and require a path to commercial discipline and measurable impact."
+        "description": "Uses the framework accurately: Blended finance combines catalytic concessional capital with commercial capital to improve a project's risk-return profile without concealing its underlying economics."
       },
       {
-        "id": "second_idea",
-        "label": "Carbon markets",
-        "description": "Uses the connected idea accurately and states its different decision: Set a credible baseline, verify adoption and persistence, account for leakage, and share revenue under transparent community terms."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Carbon markets answers a different decision rather than substituting for Blended finance."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -16326,76 +16248,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_giin_criteria_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_giin_criteria",
-    "stem": "Write a connected recommendation. Explain what GIIN criteria settles first, what Blended finance settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A conventional fund buys shares in a profitable employer and retroactively labels every job and tax payment as impact without a target or outcome process. A second decision in the same organisation raises Blended finance: A rural infrastructure fund is viable after construction but private investors will not bear first-loss development and demand risk.",
+    "stem": "Using GIIN criteria, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing GIIN criteria from Blended finance.",
+    "caselet": "A conventional fund buys shares in a profitable employer and retroactively labels every job and tax payment as impact without a target or outcome process.",
     "sourceIds": [
       "IBM-M08-L01"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by GIIN criteria: State the intended outcome before investment, use evidence to set contribution, manage and report performance, and preserve the declared return logic."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "GIIN criteria",
-        "description": "Uses the first framework accurately and states the decision it governs: State the intended outcome before investment, use evidence to set contribution, manage and report performance, and preserve the declared return logic."
+        "description": "Uses the framework accurately: The GIIN criteria distinguish impact investment through intentional positive impact, evidence and measurement, impact management and an expected financial return."
       },
       {
-        "id": "second_idea",
-        "label": "Blended finance",
-        "description": "Uses the connected idea accurately and states its different decision: Use concessional capital for the specific additional risk, define who bears each loss, and require a path to commercial discipline and measurable impact."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Blended finance answers a different decision rather than substituting for GIIN criteria."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -16403,76 +16322,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_ted_london_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_ted_london",
-    "stem": "Write a connected recommendation. Explain what Ted London framework settles first, what Impact measurement settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A distributor lowers product price but requires village agents to hold unpaid stock and absorb every return, while the firm reports rapid reach growth. A second decision in the same organisation raises Impact measurement: A skills programme reports that graduates earn 34% more two years on than a comparison group of non-participants from the same districts. Enrolment was voluntary and required attending an information session, submitting an application and paying a ₹500 deposit. Baseline data show applicants already had 1.9 more years of schooling and were three times likelier to have held formal employment before the programme began. A regional wage boom lifted earnings across all districts over the same period. The funder is being asked to scale the programme fivefold on the strength of the 34% figure.",
+    "stem": "Using Ted London framework, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Ted London framework from Impact measurement.",
+    "caselet": "A distributor lowers product price but requires village agents to hold unpaid stock and absorb every return, while the firm reports rapid reach growth.",
     "sourceIds": [
       "IBM-M08-L05"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Ted London framework: Map value creation and capture for each actor, identify value destroyed or transferred, and redesign the relationship before declaring impact."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Ted London framework",
-        "description": "Uses the first framework accurately and states the decision it governs: Map value creation and capture for each actor, identify value destroyed or transferred, and redesign the relationship before declaring impact."
+        "description": "Uses the framework accurately: The Ted London framework examines who creates, captures and loses value across the enterprise and community rather than reporting firm value alone."
       },
       {
-        "id": "second_idea",
-        "label": "Impact measurement",
-        "description": "Uses the connected idea accurately and states its different decision: Use a comparable control or another defensible counterfactual and account for selection before attributing the income change to the programme."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Impact measurement answers a different decision rather than substituting for Ted London framework."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -16480,76 +16396,73 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_rct_written_link",
     "courseId": "IBM",
     "conceptId": "ibm_rct",
-    "stem": "Write a connected recommendation. Explain what Randomised controlled trial settles first, what Ted London framework settles next, and why one framework cannot substitute for the other.",
-    "caselet": "A programme has more eligible villages than it can serve this year and wants credible evidence before national expansion. A second decision in the same organisation raises Ted London framework: A distributor lowers product price but requires village agents to hold unpaid stock and absorb every return, while the firm reports rapid reach growth.",
+    "stem": "Using Randomised controlled trial, what should the organisation do? State the decision first, use one fact from the case, and explain why it supports the decision. End with one sentence distinguishing Randomised controlled trial from Ted London framework.",
+    "caselet": "A programme has more eligible villages than it can serve this year and wants credible evidence before national expansion.",
     "sourceIds": [
       "IBM-M08-L05"
     ],
     "rubric": [
       {
-        "id": "first_idea",
+        "id": "decision",
+        "label": "Direct decision",
+        "description": "States the action governed by Randomised controlled trial: Pre-register outcomes, randomise transparently, protect participants, measure attrition and interpret the result within its setting and implementation."
+      },
+      {
+        "id": "case_evidence",
+        "label": "Case fact",
+        "description": "Uses a supplied fact and explains why it supports the decision rather than merely repeating it."
+      },
+      {
+        "id": "framework",
         "label": "Randomised controlled trial",
-        "description": "Uses the first framework accurately and states the decision it governs: Pre-register outcomes, randomise transparently, protect participants, measure attrition and interpret the result within its setting and implementation."
+        "description": "Uses the framework accurately: A randomised controlled trial assigns eligible units by chance so average outcome differences can estimate the intervention's causal effect under the study conditions."
       },
       {
-        "id": "second_idea",
-        "label": "Ted London framework",
-        "description": "Uses the connected idea accurately and states its different decision: Map value creation and capture for each actor, identify value destroyed or transferred, and redesign the relationship before declaring impact."
-      },
-      {
-        "id": "integration",
-        "label": "Connection",
-        "description": "Explains the order or dependency between the two decisions instead of listing the ideas separately."
+        "id": "distinction",
+        "label": "Close-concept distinction",
+        "description": "States briefly why Ted London framework answers a different decision rather than substituting for Randomised controlled trial."
       }
     ],
     "writtenGaps": [
       {
-        "id": "first-missing",
-        "criterionId": "first_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "First framework is missing",
-        "repair": "State what the first framework permits you to conclude before moving to the second decision."
-      },
-      {
-        "id": "first-inaccurate",
-        "criterionId": "first_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "First framework is inaccurate",
-        "repair": "Return to the first course anchor and correct what it permits you to conclude."
-      },
-      {
-        "id": "second-missing",
-        "criterionId": "second_idea",
-        "kind": "missing",
-        "scope": "concept",
-        "label": "Connected idea is missing",
-        "repair": "Name the second decision and apply the idea that actually governs it."
-      },
-      {
-        "id": "second-inaccurate",
-        "criterionId": "second_idea",
-        "kind": "misunderstood",
-        "scope": "concept",
-        "label": "Connected idea is inaccurate",
-        "repair": "Separate the second idea from the first and correct its decision rule."
-      },
-      {
-        "id": "connection-missing",
-        "criterionId": "integration",
+        "id": "decision-missing",
+        "criterionId": "decision",
         "kind": "missing",
         "scope": "writing",
-        "label": "Ideas are listed, not connected",
-        "repair": "Add the because step that shows how the first decision enables, limits, or changes the second."
+        "label": "No decision stated",
+        "repair": "Open with what the organisation should do before explaining the framework."
       },
       {
-        "id": "connection-reversed",
-        "criterionId": "integration",
+        "id": "framework-inaccurate",
+        "criterionId": "framework",
         "kind": "misunderstood",
         "scope": "concept",
-        "label": "Reasoning order is reversed",
-        "repair": "Rebuild the chain in teaching order so the earlier decision does not depend on its own consequence."
+        "label": "Framework used inaccurately",
+        "repair": "Return to the named framework and state the decision it actually governs."
+      },
+      {
+        "id": "evidence-missing",
+        "criterionId": "case_evidence",
+        "kind": "missing",
+        "scope": "writing",
+        "label": "No case fact used",
+        "repair": "Use one concrete fact from the supplied situation, then add the because step."
+      },
+      {
+        "id": "evidence-misread",
+        "criterionId": "case_evidence",
+        "kind": "misunderstood",
+        "scope": "concept",
+        "label": "Case fact misread",
+        "repair": "Check what the selected fact proves before using it as support."
+      },
+      {
+        "id": "distinction-missing",
+        "criterionId": "distinction",
+        "kind": "missing",
+        "scope": "concept",
+        "label": "Close concept not distinguished",
+        "repair": "Finish with one sentence stating the different question the neighbouring concept answers."
       }
     ]
   },
@@ -17402,8 +17315,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_01_problem",
     "courseId": "IBM",
     "conceptId": "ibm_disparity_gap",
-    "stem": "The released prompt speaks of ‘poor people’ generally. Define the beneficiary and the binding problem Kisan Saathi should solve. Explain why narrowing the segment strengthens rather than weakens the inclusive ambition.",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using disparity, poverty dynamics, and smallholder bottlenecks, identify Kisan Saathi's beneficiary and binding problem. Use the working assumptions and justify why the segment must be specific.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M01-L01",
       "IBM-M02-L04",
@@ -17507,8 +17420,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_02_identity",
     "courseId": "IBM",
     "conceptId": "ibm_inclusive",
-    "stem": "Classify Kisan Saathi as inclusive business, ordinary commercial enterprise, CSR, or charity. State the test you would use if farmer welfare and profitability later pull apart.",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using the definition of inclusive business and the zone of conflict, explain why Kisan Saathi qualifies. Give one change that would make it an ordinary commercial enterprise instead.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M01-L03",
       "IBM-M01-L10"
@@ -17611,8 +17524,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_03_ownership",
     "courseId": "IBM",
     "conceptId": "ibm_fpo",
-    "stem": "Explain the role farmers play in Kisan Saathi and evaluate the proposed 65:35 ownership and governance arrangement. What keeps aggregation from becoming another intermediary extracting value from them?",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using FPO ownership and governance, identify the roles farmers play in Kisan Saathi. Assess the 65:35 structure and recommend one safeguard against value extraction.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M07-L04"
     ],
@@ -17714,8 +17627,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_04_value",
     "courseId": "IBM",
     "conceptId": "ibm_shared_value",
-    "stem": "Show how Kisan Saathi creates value for both farmers and buyers. Distinguish genuine shared value from a model that merely transfers quality, price, or weather risk onto farmers.",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using shared value, explain how Kisan Saathi benefits both farmers and buyers. Identify one situation in which the model would transfer risk instead of creating value.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M05-L07",
       "IBM-M05-L02",
@@ -17819,8 +17732,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_05_affordability",
     "courseId": "IBM",
     "conceptId": "ibm_bop",
-    "stem": "Evaluate Kisan Saathi’s pay-after-sale pricing. Explain why affordability is more than a low fee and how the product, payment timing, finance, and service promise must work together.",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using bottom-of-the-pyramid affordability and SELCO's product–finance–service system, explain why Kisan Saathi uses pay-after-sale pricing. State what else must work for the offer to remain affordable.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M01-L07",
       "IBM-M05-L10"
@@ -17923,8 +17836,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_06_operations",
     "courseId": "IBM",
     "conceptId": "ibm_decentralised_model",
-    "stem": "Design the operating architecture for Kisan Saathi. What should be decentralised to the village hub, what should be standardised centrally, and what should the social enterprise own rather than control through partners?",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using decentralisation and the asset-light model, state what Kisan Saathi should manage locally and what it should standardise centrally. Justify the division.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M02-L04",
       "IBM-M04-L05",
@@ -18028,8 +17941,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_07_economics",
     "courseId": "IBM",
     "conceptId": "ibm_social_business",
-    "stem": "Explain how Kisan Saathi should finance its pilot and later expansion. Separate catalytic subsidy from operating viability, and state what an impact investor should require before committing capital.",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using blended finance and impact investment, recommend how Kisan Saathi should finance the pilot and later expansion. Separate temporary subsidy from recurring operating viability.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M07-L05",
       "IBM-M08-L01"
@@ -18132,8 +18045,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_08_protection",
     "courseId": "IBM",
     "conceptId": "ibm_mission_dilution",
-    "stem": "Identify the main ways Kisan Saathi could harm the people it intends to serve. Design governance and finance protections against mission dilution, over-indebtedness, elite capture, and dependence on one buyer.",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using mission dilution, responsible finance, and governance, identify two ways Kisan Saathi could harm farmers and recommend one enforceable protection for each.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M03-L03",
       "IBM-M03-L05",
@@ -18237,8 +18150,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_09_scale",
     "courseId": "IBM",
     "conceptId": "ibm_replication",
-    "stem": "The pilot attracts requests from thirty more villages after its first harvest. Write the scale recommendation. What must be proved for two crop cycles, what can be replicated, and what should stop expansion?",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using controlled replication and the scaling ceiling, decide whether Kisan Saathi should enter thirty more villages after one harvest. State the go conditions and one stop condition.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M04-L05",
       "IBM-M04-L04"
@@ -18341,8 +18254,8 @@ export const WRITTEN_QUESTION_BANK = Object.freeze({
     "id": "ibm_released_10_impact",
     "courseId": "IBM",
     "conceptId": "ibm_ted_london",
-    "stem": "Design the impact and learning system for Kisan Saathi. Distinguish output, outcome, and attributable impact; apply the Ted London stakeholder lens; and include environmental as well as social effects.",
-    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nFor this practice paper, the candidate makes the missing case explicit. Kisan Saathi Hubs begins with a pilot serving 600 small and marginal farmers across six villages. Farmers currently sell small, perishable lots with little storage, weak price information, irregular cash flow, and limited bargaining power. These are design assumptions, not national statistics supplied by the examiner.\n\nA farmer producer organisation owns 65% of the local operating company; the social enterprise that supplies the solar cold room, grading process, buyer network, software, training, and maintenance owns 35%. Each village hub offers pay-per-use grading and storage, an open price board, aggregation into buyer-sized lots, and contracts with several institutional buyers. The storage fee is deducted only after sale, alongside a disclosed 2% transaction commission. A farmer may take the stored produce away or sell elsewhere without penalty. Local women and young people are trained as operators and technicians.\n\nThe first hub uses concessional first-loss capital for the unproven installation risk; operating costs must be covered by fees, and later equipment may use impact debt only after demand is demonstrated. Before expansion, the pilot must show two crop cycles of reliable service, positive cash contribution at hub level, higher farmer price after every fee, lower spoilage, prompt payment, and participation that is not captured by larger landholders. The rollout is phased so comparable villages not yet served provide a practical counterfactual. Farmer-elected directors approve fees, publish weights and prices, hear grievances, and decide how surplus is split between maintenance reserves and a patronage dividend.",
+    "stem": "Using output, outcome, impact, and Ted London's stakeholder lens, design a short scorecard for Kisan Saathi. Include one comparison that makes the impact claim credible.",
+    "caselet": "Released prompt: “Based on your understanding of the condition of the poor people in our country and the discussions on case studies that we studied during the course, create an inclusive business model.”\n\nWorking assumptions for this practice paper: Kisan Saathi Hubs pilots six village hubs for 600 small and marginal farmers who currently face small sale lots, perishability, weak price information, irregular cash flow, limited storage, and poor buyer access. These are the candidate's design assumptions, not facts supplied by the examiner.\n\nAn FPO owns 65% of the local company and a mission-bound social enterprise owns 35%. The hubs provide grading, solar storage, transparent prices, aggregation, and access to several buyers. Farmers pay after sale through a disclosed storage fee and 2% commission, may sell elsewhere, and elect the directors who approve fees and grievances.\n\nConcessional first-loss capital funds the unproven pilot; normal fees must cover recurring operation. Expansion begins only after two crop cycles show reliable service, positive hub cash contribution, higher farmer prices after all fees, lower spoilage, prompt payment, and participation by the smallest farmers.",
     "sourceIds": [
       "IBM-M08-L05",
       "IBM-M08-L01"
