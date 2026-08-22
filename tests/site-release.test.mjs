@@ -191,7 +191,9 @@ test("Examiner separates full mocks, Speedruns, and Minis by time to exam", asyn
   assert.match(app, /classList\.toggle\("is-final-sprint", session\.kind === "final-sprint"\)/);
   assert.match(css, /\.practice-screen\.is-final-sprint \.topic-panel \{ display: none; \}/);
   assert.match(css, /\.practice-screen\.is-final-sprint \.practice-shell \{ grid-template-columns: minmax\(0,820px\); gap: 0; \}/);
-  assert.match(html, /t6\.js\?v=20260822-minis-2/);
+  assert.match(html, /t6\.js\?v=20260822-brgsa-pattern-8/);
+  assert.match(app, /entry\.boundingClientRect\.height > 0[\s\S]+entry\.boundingClientRect\.top <= 72[\s\S]+entry\.intersectionRatio < 0\.25/);
+  assert.match(app, /threshold: \[0, 0\.25\]/);
   assert.match(app, /both correct = 2 marks; one correct and no wrong option = 1; any wrong option = 0/i);
   assert.match(app, /else if \(chosen\.length < 2\) chosen\.push\(index\)/);
   assert.match(app, /Speedrun complete/);

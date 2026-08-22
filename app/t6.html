@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow, noarchive">
   <title>Dungeon — Learn, practise, improve</title>
   <meta name="description" content="A clear Term 6 revision dashboard with source-based practice, progress tracking, and targeted re-attempts.">
-  <link rel="stylesheet" href="t6.css?v=20260822-minis-2">
+  <link rel="stylesheet" href="t6.css?v=20260822-brgsa-pattern-8">
   <!-- Synchronous and above the fold on purpose: this sets the theme attribute before
        the first paint. Deferring it, or folding it into t6.js at the end of <body>,
        renders the wrong theme and then swaps. See the header of theme.js. -->
@@ -467,6 +467,72 @@
           </div>
         </header>
 
+        <section class="exam-pattern-brief" id="exam-paper-pattern" aria-labelledby="exam-pattern-title">
+          <div class="exam-pattern-copy">
+            <p class="eyebrow">New · SPMS-derived · BRGSA first</p>
+            <h2 id="exam-pattern-title">Revise BRGSA concept by concept.</h2>
+            <p>One short question per concept. Each asks for one direct move—recall, identify,
+              interpret, distinguish, select, or recommend—using SPMS as a revision lens, not as a prediction.</p>
+            <div class="exam-pattern-moves" aria-label="Six recurring objective-question moves">
+              <article><b>Recall &amp; anatomy</b><span>Name the method, its parts, and what constitutes the framework.</span></article>
+              <article><b>Statements &amp; objectives</b><span>Judge what is true, relevant, entailed, or the concept's purpose.</span></article>
+              <article><b>Change &amp; interpretation</b><span>Trace what happens to Y when X moves, including mixed signals.</span></article>
+              <article><b>Distinguish neighbours</b><span>Separate two methods or concepts that solve similar problems.</span></article>
+              <article><b>Choose the best fit</b><span>Select the framework or method that matches the scenario.</span></article>
+              <article><b>Recommend from a case</b><span>Apply the framework and choose the defensible next action.</span></article>
+            </div>
+            <p class="exam-pattern-rule"><b>Fast revision rule:</b> for every concept, rehearse
+              objective → parts → what changes → closest rival → best-fit case → recommendation.</p>
+          </div>
+          <aside class="exam-pattern-start" aria-label="Start the BRGSA paper-pattern drill">
+            <p class="eyebrow">Ready now</p>
+            <h3>BRGSA paper-pattern drill</h3>
+            <div class="exam-pattern-facts"><span>29 questions</span><span>Every BRGSA concept</span><span>8 modules</span><span>Correction after each answer</span></div>
+            <button class="button primary" id="brgsa-pattern-start" type="button">Start BRGSA drill <span aria-hidden="true">→</span></button>
+            <small>BRGSA is the only adapted subject in this first slice. Full mocks still preserve the published paper structure.</small>
+          </aside>
+        </section>
+
+        <details class="exam-writing-playbook" id="brgsa-writing-playbook" open>
+          <summary>
+            <span><span class="eyebrow">BRGSA · Sections B and C</span><b>Turn the same thinking into well-built written answers.</b><small>5-mark cases use DEAL. 10-mark descriptive answers use PACER.</small></span>
+            <span class="disclosure-action">Close</span>
+          </summary>
+          <div class="exam-writing-body">
+            <article class="exam-writing-card case-answer">
+              <header><span>Section B · 4 × 5 marks</span><h3>Case answer: DEAL</h3><p>One compact chain. Do not retell the whole case.</p></header>
+              <ol>
+                <li><b>D · Decide</b><span>Give the diagnosis or recommendation in the first sentence.</span></li>
+                <li><b>E · Evidence</b><span>Select two case facts that actually change the decision.</span></li>
+                <li><b>A · Apply</b><span>Name the framework and connect those facts through its rule or causal logic.</span></li>
+                <li><b>L · Land</b><span>End with a specific action plus the metric, threshold, or condition that will test it.</span></li>
+              </ol>
+              <p class="exam-answer-template"><b>Answer spine</b><span>“The best reading/action is __. Under __, __ matters because __. Here, __ and __ show __. Therefore __; track __ and change course if __.”</span></p>
+            </article>
+            <article class="exam-writing-card subjective-answer">
+              <header><span>Section C · 2 × 10 marks</span><h3>Descriptive answer: PACER</h3><p>A short argument, not a catalogue of notes.</p></header>
+              <ol>
+                <li><b>P · Position</b><span>Answer the question directly and set the scope.</span></li>
+                <li><b>A · Anatomy</b><span>Define the concept's objective, components, and method in course language.</span></li>
+                <li><b>C · Causal logic</b><span>Explain what changes what, or make the decisive comparison with the nearest concept.</span></li>
+                <li><b>E · Evidence</b><span>Apply the logic to the case or a precise course-grounded example; make every paragraph earn a conclusion.</span></li>
+                <li><b>R · Reservation + resolution</b><span>Name a limit, trade-off, or condition, then finish with the justified judgement or recommendation.</span></li>
+              </ol>
+              <p class="exam-answer-template"><b>Paragraph test</b><span>Claim → because → evidence/example → therefore. If a paragraph cannot complete that chain, it is probably a note dump.</span></p>
+            </article>
+            <aside class="exam-command-guide">
+              <div><p class="eyebrow">Read the command first</p><h3>The verb decides the answer shape.</h3></div>
+              <dl>
+                <div><dt>Interpret</dt><dd>Direction → likely cause → implication → next check.</dd></div>
+                <div><dt>Distinguish</dt><dd>Shared domain → decisive difference → when each fits.</dd></div>
+                <div><dt>Recommend</dt><dd>Decision → framework → case evidence → action → measure.</dd></div>
+                <div><dt>Evaluate / justify</dt><dd>Criterion → support → limitation → reasoned judgement.</dd></div>
+              </dl>
+              <p><b>Avoid:</b> retelling the case, dumping a framework without applying it, or giving generic actions with no owner, measure, or condition.</p>
+            </aside>
+          </div>
+        </details>
+
         <nav class="exam-mode-switch" id="exam-mode-switch" role="tablist" aria-label="Examiner practice type">
           <button type="button" role="tab" data-exam-mode="full" aria-controls="exam-mode-full">Full mocks <small>1+ week out</small></button>
           <button type="button" role="tab" data-exam-mode="mini" aria-controls="exam-mode-mini">Speedrun <small>within a week</small></button>
@@ -707,9 +773,10 @@
   <script src="sets/t6_challenges.js?v=20260822-minis-2"></script>
   <script src="sets/t6_final_sprints.js?v=20260822-minis-2"></script>
   <script src="sets/t6_mini_mocks.js"></script>
+  <script src="sets/t6_paper_pattern.js?v=20260822-brgsa-pattern-8"></script>
   <!-- Generated by tools/measure-syllabus-coverage.mjs --emit. Counts only, no course text. -->
   <script src="sets/t6_coverage.js"></script>
   <script src="vendor/gsap.min.js"></script>
-  <script src="t6.js?v=20260822-minis-2"></script>
+  <script src="t6.js?v=20260822-brgsa-pattern-8"></script>
 </body>
 </html>

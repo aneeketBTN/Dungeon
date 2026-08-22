@@ -630,8 +630,8 @@
     window.clearTimeout(writtenEvidenceTimer);
     writtenEvidenceTimer = null;
     $all(".screen").forEach(function (screen) { screen.classList.toggle("active", screen.id === id); });
-    var coachedMockScreen = (id === "practice-screen" && session && ["confidence-sprint", "final-sprint"].indexOf(session.kind) >= 0) ||
-      (id === "results-screen" && lastFinished && ["confidence-sprint", "final-sprint"].indexOf(lastFinished.kind) >= 0);
+    var coachedMockScreen = (id === "practice-screen" && session && ["confidence-sprint", "final-sprint", "paper-pattern"].indexOf(session.kind) >= 0) ||
+      (id === "results-screen" && lastFinished && ["confidence-sprint", "final-sprint", "paper-pattern"].indexOf(lastFinished.kind) >= 0);
     markMode(id === "notes-screen" ? "notes" : (EXAM_SCREENS[id] || coachedMockScreen) ? "exam" : "learn");
     syncModeSwitchVisibility();
     /* After markMode, not before: the header reports the side you are on, and the
@@ -936,6 +936,9 @@
   function getQuestion(courseId, questionId) {
     if (String(questionId).indexOf("lesson:") === 0) return lessonQuestion(courseId, questionId);
     if (String(questionId).indexOf("written-repair:") === 0) return writtenRepairQuestion(courseId, questionId);
+    var paperPatternQuestion = window.T6_PAPER_PATTERN && typeof window.T6_PAPER_PATTERN.question === "function"
+      ? window.T6_PAPER_PATTERN.question(courseId, questionId) : null;
+    if (paperPatternQuestion) return paperPatternQuestion;
     return getCourse(courseId).questions[questionId] || null;
   }
   function getStudySet(courseId, setId) {
@@ -2760,7 +2763,12 @@
     $(goId).addEventListener("click", function () { hero.click(); });
     new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        var away = !entry.isIntersecting;
+        // A hidden source has no usable geometry, and a source still below the
+        // viewport has not been read. Re-offer it only once at least three
+        // quarters have passed above the sticky header.
+        var away = entry.boundingClientRect.height > 0
+          && entry.boundingClientRect.top <= 72
+          && entry.intersectionRatio < 0.25;
         /* The Speedrun recommendation lives inside one Examiner tab. A hidden tab
            is technically outside the viewport, but that must not resurrect its
            floating action over Minis or Full mocks. */
@@ -2769,7 +2777,7 @@
         document.body.classList.toggle("has-resume-bar", away);
         if (away) fill(hero);
       });
-    }, {threshold: 0}).observe(observed);
+    }, {threshold: [0, 0.25]}).observe(observed);
   }
 
   function bindResumeBar() {
@@ -4129,7 +4137,7 @@
   function currentQuestion() { return getQuestion(session.courseId, currentItem().id); }
 
   function isRevisionSprint(value) {
-    return Boolean(value) && ["confidence-sprint", "final-sprint"].indexOf(value.kind) >= 0;
+    return Boolean(value) && ["confidence-sprint", "final-sprint", "paper-pattern"].indexOf(value.kind) >= 0;
   }
 
   function shouldAskConfidence(question, item) {
@@ -4157,9 +4165,10 @@
 
   function renderPracticeShell() {
     $("practice-screen").classList.toggle("is-final-sprint", session.kind === "final-sprint");
+    $("practice-screen").classList.toggle("is-paper-pattern", session.kind === "paper-pattern");
     $("practice-kicker").textContent = session.kicker;
     $("practice-title").textContent = getCourse(session.courseId).shortTitle + " · " + session.title;
-    $("leave-practice").textContent = session.kind === "confidence-sprint" ? "← Save and return to Speedruns" : session.kind === "final-sprint" ? "← Save and return to Minis" : "← Save and return home";
+    $("leave-practice").textContent = session.kind === "confidence-sprint" ? "← Save and return to Speedruns" : session.kind === "final-sprint" ? "← Save and return to Minis" : session.kind === "paper-pattern" ? "← Save and return to BRGSA patterns" : "← Save and return home";
     $("leave-practice").classList.toggle("to-mocks", isRevisionSprint(session));
     var dueBox = document.querySelector(".due-box");
     if (dueBox) dueBox.hidden = isRevisionSprint(session);
@@ -4174,7 +4183,8 @@
       session.queue.forEach(function (item, index) {
         var question = getQuestion(session.courseId, item.id);
         var li = document.createElement("li");
-        li.textContent = "M" + question.module + " · " + question.node;
+        var patternStep = session.kind === "paper-pattern" ? paperPatternStep(question.id) : null;
+        li.textContent = patternStep ? "M" + question.module + " · " + patternStep.label : "M" + question.module + " · " + question.node;
         if (index === session.index) li.className = "active";
         else if (index < session.index) li.className = "done";
         holder.appendChild(li);
@@ -4325,6 +4335,7 @@
     $("question-pattern").textContent = isPrimer ? "Predict first"
       : session.kind === "confidence-sprint" ? "Module " + question.module + " · Speedrun"
       : session.kind === "final-sprint" ? "Module " + question.module + " · Mini"
+      : session.kind === "paper-pattern" ? "Module " + question.module + " · " + (paperPatternStep(question.id) || {label:"Paper-pattern drill"}).label
       : focusLabels.length ? "Dungeon re-check · " + focusLabels.join(" + ")
       : linkedPair ? "Both together · " + linkedPair.join(" + ")
       : item.isReattempt ? "Re-attempt · new perspective"
@@ -4353,9 +4364,10 @@
     $("task-kicker").textContent = linkedPair ? "Both together · " + linkedPair.join(" + ")
       : session.kind === "confidence-sprint" ? "Apply it"
       : session.kind === "final-sprint" ? "Choose, then check"
+      : session.kind === "paper-pattern" ? (paperPatternStep(question.id) || {label:"Choose, then check"}).label
       : question.caselet ? "Then decide"
       : "Your task";
-    $("prompt-flow").classList.toggle("has-kicker", !isPrimer && (!!question.caselet || !!linkedPair));
+    $("prompt-flow").classList.toggle("has-kicker", !isPrimer && (!!question.caselet || !!linkedPair || session.kind === "paper-pattern"));
     $("feedback").className = "feedback";
     $("feedback").innerHTML = "";
     $("commit-answer").hidden = false;
@@ -5936,7 +5948,7 @@
     var before = conceptStatus(session.courseId, question.conceptId);
     var predicted = question.type === "primer" && !session.primerSkipped && typeof selected === "string" && selected.trim().length > 0;
     if (question.type === "primer") recordPrimerAttempt(session.courseId, question, predicted);
-    else if (session.mode !== "simulation" && session.kind !== "final-sprint") recordAttempt(session.courseId, question, evaluation, confidence, item, session.blockId, timing);
+    else if (session.mode !== "simulation" && !isRevisionSprint(session)) recordAttempt(session.courseId, question, evaluation, confidence, item, session.blockId, timing);
     var after = conceptStatus(session.courseId, question.conceptId);
     var failedConceptIds = Object.keys(evaluation.conceptResults || {}).filter(function (conceptId) {
       return evaluation.conceptResults[conceptId] === false;
@@ -6183,11 +6195,13 @@
     var methodCopy = session.kind === "confidence-sprint"
       ? "<div class='confidence-method-result'>" + confidenceMethodHtml(question, "Next-time method") + "</div>"
       : "";
+    var bridgeCopy = session.kind === "paper-pattern" ? ""
+      : "<p class='bridge'><b>How it fits:</b> " + escapeHtml(question.link) + "</p>";
     feedback.innerHTML = "<span class='feedback-label'>" + escapeHtml(label) + "</span>" +
       (marksCopy ? "<p class='msq-marks'>" + escapeHtml(marksCopy) + "</p>" : "") +
       (numericCopy ? "<p class='numeric-verdict'>" + escapeHtml(numericCopy) + "</p>" : "") + answerKeyHtml + body +
       (bossCopy ? "<p class='still-valid'><b>What remains valid:</b> " + escapeHtml(bossCopy) + "</p>" : "") +
-      "<p class='bridge'><b>How it fits:</b> " + escapeHtml(question.link) + "</p>" +
+      bridgeCopy +
       methodCopy +
       (returnCopy ? "<p class='return-note'>" + escapeHtml(returnCopy) + "</p>" : "");
     $("commit-answer").hidden = true;
@@ -6352,6 +6366,7 @@
     }).length;
     var isMiniMock = completedSession.kind === "confidence-sprint";
     var isFinalMini = completedSession.kind === "final-sprint";
+    var isPaperPattern = completedSession.kind === "paper-pattern";
     var partMarked = scoredInitial.filter(function (response) { return response.msqMarks && response.msqMarks.awarded === 1; }).length;
     var miniPossible = scoredInitial.reduce(function (sum, response) { return sum + (response.msqMarks ? 2 : 1); }, 0);
 
@@ -6383,19 +6398,25 @@
       return ids.concat(response.conceptIds || [response.conceptId]);
     }, [])).map(function (conceptId) { return getConcept(completedSession.courseId, conceptId); }).filter(Boolean);
 
-    $("results-kicker").textContent = isFinalMini
+    $("results-kicker").textContent = isPaperPattern
+      ? "BRGSA pattern drill complete"
+      : isFinalMini
       ? "Mini complete"
       : isMiniMock
       ? "Speedrun complete"
       : completedRun
       ? "Run " + completedRun.step + " of " + path.steps + " complete"
       : completedSession.kind === "written-practice" ? "Written practice complete" : "Practice complete";
-    $("results-title").textContent = isFinalMini
+    $("results-title").textContent = isPaperPattern
+      ? "Eight modules, six recurring ways of being asked."
+      : isFinalMini
       ? "Eight fast decisions, eight immediate corrections."
       : isMiniMock
       ? "You touched all eight modules. Keep the method, not the score."
       : completedRun ? "Run " + completedRun.step + " is clear. Here’s the quick look." : "Here’s what this practice changed.";
-    $("results-copy").textContent = isFinalMini
+    $("results-copy").textContent = isPaperPattern
+      ? "This was an SPMS-derived revision lens for BRGSA Section A, not an exam prediction. It does not alter mastery evidence; keep the question moves that exposed a weak distinction."
+      : isFinalMini
       ? "This was accelerated revision, not an exam prediction. It does not alter mastery evidence; carry the corrected distinctions into the paper."
       : isMiniMock
       ? "This was a coached final-week Speedrun, not an exam prediction. Use the misses below as a short list of distinctions to carry into the next rotation."
@@ -6404,23 +6425,27 @@
       : "Your evidence held at " + nowEvidence + "%. The useful change is knowing exactly what still needs another check.";
 
     var accuracyLabel = document.querySelector(".result-stats article:first-child small");
-    if (accuracyLabel) accuracyLabel.textContent = isFinalMini ? "Mini score" : scoredInitial.length ? "Accuracy" : "Review mode";
+    if (accuracyLabel) accuracyLabel.textContent = isPaperPattern ? "Drill score" : isFinalMini ? "Mini score" : scoredInitial.length ? "Accuracy" : "Review mode";
     $("result-score").textContent = scoredInitial.length ? percent + "%" : "Self-check";
-    $("score-caption").textContent = isFinalMini
+    $("score-caption").textContent = isPaperPattern
+      ? "8 questions across all 8 BRGSA modules"
+      : isFinalMini
       ? miniPossible + " available marks across 8 questions"
       : scoredInitial.length
       ? scoredInitial.length + " scored question" + (scoredInitial.length === 1 ? "" : "s")
       : constructed.length + " written response" + (constructed.length === 1 ? "" : "s");
     var resultLabels = $all(".result-stats article small");
-    if (resultLabels[1]) resultLabels[1].textContent = isFinalMini ? "Fully correct" : "Correct first try";
-    if (resultLabels[2]) resultLabels[2].textContent = isFinalMini ? "Needs correction" : "Missed first try";
-    if (resultLabels[3]) resultLabels[3].textContent = isFinalMini ? "One-mark MSQs" : "Concepts improved";
+    if (resultLabels[1]) resultLabels[1].textContent = isPaperPattern || isFinalMini ? "Fully correct" : "Correct first try";
+    if (resultLabels[2]) resultLabels[2].textContent = isPaperPattern || isFinalMini ? "Needs correction" : "Missed first try";
+    if (resultLabels[3]) resultLabels[3].textContent = isPaperPattern ? "Question moves" : isFinalMini ? "One-mark MSQs" : "Concepts improved";
     $("result-correct").textContent = String(initialCorrect);
     $("result-missed").textContent = String(initialMissed);
     $("result-third-label").textContent = constructed.length ? (completedSession.mode === "simulation" ? "Written responses" : machineGraded.length ? "Written responses checked" : "Responses self-reviewed") : "Re-attempts passed";
     $("result-reattempts").textContent = String(constructed.length || reattempts);
-    $("result-improved").textContent = String(isFinalMini ? partMarked : improved);
-    $("result-learned").textContent = isFinalMini
+    $("result-improved").textContent = String(isPaperPattern ? 6 : isFinalMini ? partMarked : improved);
+    $("result-learned").textContent = isPaperPattern
+      ? correctConcepts.length ? "You handled " + conceptNameList(correctConcepts.slice(0, 3)) + (correctConcepts.length > 3 ? " and " + (correctConcepts.length - 3) + " more" : "") + " through the new question patterns." : "Use the immediate corrections as your short revision list."
+      : isFinalMini
       ? correctConcepts.length ? "You applied " + conceptNameList(correctConcepts.slice(0, 3)) + (correctConcepts.length > 3 ? " and " + (correctConcepts.length - 3) + " more" : "") + " cleanly." : "The useful result is the correction you just saw after every answer."
       : improvedConcepts.length
       ? conceptNameList(improvedConcepts.slice(0, 3)) + (improvedConcepts.length > 3 ? " and " + (improvedConcepts.length - 3) + " more" : "") + " gained a stronger evidence state."
@@ -6431,7 +6456,9 @@
       ? conceptNameList(struggledConcepts.slice(0, 3)) + (struggledConcepts.length > 3 ? " and " + (struggledConcepts.length - 3) + " more" : "") + " caused a first-attempt miss."
       : "No scored concept caused a first-attempt miss in this run.";
     var nextMini = isMiniMock ? nextMiniMock(completedSession.courseId) : null;
-    $("result-next").textContent = isFinalMini
+    $("result-next").textContent = isPaperPattern
+      ? "Use DEAL for each 5-mark case and PACER for each 10-mark descriptive answer; both structures are waiting on the Examiner home."
+      : isFinalMini
       ? "A fresh Mini keeps the same subject format mix and rotates the question families."
       : isMiniMock
       ? nextMini.freshRotation
@@ -6443,9 +6470,9 @@
       : "The nine-run path is clear. Replays and focused practice are now fully available.";
 
     var resultChart = document.querySelector(".result-chart");
-    if (resultChart) resultChart.hidden = isFinalMini;
+    if (resultChart) resultChart.hidden = isFinalMini || isPaperPattern;
     var conceptReview = document.querySelector(".result-review-section");
-    if (conceptReview) conceptReview.hidden = isFinalMini;
+    if (conceptReview) conceptReview.hidden = isFinalMini || isPaperPattern;
     $("result-before-bar").style.width = beforeEvidence + "%";
     $("result-now-bar").style.width = nowEvidence + "%";
     $("result-before-value").textContent = beforeEvidence + "%";
@@ -6472,18 +6499,22 @@
     });
     if (!touched.length) review.innerHTML = "<p>No concept response was recorded.</p>";
     renderAnswerReview(completedSession);
-    $("results-home").textContent = isFinalMini ? "← Back to Minis" : isMiniMock ? "← Back to Speedruns" : "← Revision home";
-    $("result-primary").innerHTML = isFinalMini
+    $("results-home").textContent = isPaperPattern ? "← Back to BRGSA paper patterns" : isFinalMini ? "← Back to Minis" : isMiniMock ? "← Back to Speedruns" : "← Revision home";
+    $("result-primary").innerHTML = isPaperPattern
+      ? "Review the written-answer playbook <span aria-hidden='true'>→</span>"
+      : isFinalMini
       ? "Start a fresh Mini <span aria-hidden='true'>→</span>"
       : isMiniMock
       ? (nextMini.freshRotation ? "Start fresh rotation" : "Start next Speedrun") + " <span aria-hidden='true'>→</span>"
       : recommendationActionLabel(recommendation(completedSession.courseId)) + " <span aria-hidden='true'>→</span>";
-    $("result-primary").onclick = isFinalMini
+    $("result-primary").onclick = isPaperPattern
+      ? openBrgsaWritingPlaybook
+      : isFinalMini
       ? function () { startFinalSprint(completedSession.courseId); }
       : isMiniMock
       ? function () { startConfidenceSprint(completedSession.courseId, nextMini.round.index, nextMini.rotation); }
       : function () { executeRecommendation(); };
-    $("repeat-set").textContent = isFinalMini ? "Repeat this Mini" : isMiniMock ? "Repeat this Speedrun" : completedSession.kind === "practice-check" || completedSession.kind === "practice-shape" || completedSession.kind === "written-practice" ? "Repeat this practice" : "Replay this run";
+    $("repeat-set").textContent = isPaperPattern ? "Repeat this drill" : isFinalMini ? "Repeat this Mini" : isMiniMock ? "Repeat this Speedrun" : completedSession.kind === "practice-check" || completedSession.kind === "practice-shape" || completedSession.kind === "written-practice" ? "Repeat this practice" : "Replay this run";
     $("repeat-set").onclick = repeatFinished;
   }
 
@@ -6527,6 +6558,7 @@
 
   function repeatFinished() {
     if (!lastFinished) return goDashboard();
+    if (lastFinished.kind === "paper-pattern") return startPaperPatternRevision(lastFinished.courseId);
     if (lastFinished.kind === "final-sprint") return startFinalSprint(lastFinished.courseId, lastFinished.finalSprintRotation);
     if (lastFinished.kind === "confidence-sprint") return startConfidenceSprint(lastFinished.courseId, lastFinished.confidenceRound, lastFinished.confidenceRotation);
     if (lastFinished.setId) return startStudySet(lastFinished.courseId, lastFinished.setId);
@@ -9383,6 +9415,10 @@
     miniMocks: function (courseId, rotation) {
       return window.T6_MINI_MOCKS ? window.T6_MINI_MOCKS.build(courseId, rotation || 0) : null;
     },
+    paperPattern: function (courseId) {
+      return window.T6_PAPER_PATTERN && typeof window.T6_PAPER_PATTERN.build === "function"
+        ? window.T6_PAPER_PATTERN.build(courseId) : null;
+    },
     ladder: function (courseId) { return courseLadder(courseId); },
     /* What a lesson's closing handoff actually SAYS in a given run — the prose plus
        the correction the app prints when the run departs from the course's order.
@@ -9546,6 +9582,10 @@
       .map(renderMiniMockCard).join("");
     $("exam-papers").innerHTML = EXAM_ORDER.filter(function (courseId) { return EXAM_PAPERS[courseId]; })
       .map(renderExamPaperCard).join("");
+    var patternStart = $("brgsa-pattern-start");
+    if (patternStart) patternStart.innerHTML = isCurrentPaperPatternSession(profile.active, "BRGSA")
+      ? "Resume BRGSA drill <span aria-hidden='true'>→</span>"
+      : "Start BRGSA drill <span aria-hidden='true'>→</span>";
     $all("#exam-mini-grid [data-mini-mock-course]").forEach(function (button) {
       button.addEventListener("click", function () {
         if (profile.active && profile.active.kind === "confidence-sprint" && profile.active.courseId === button.dataset.miniMockCourse) return resumeActive();
@@ -9592,6 +9632,55 @@
 
   function finalSprintData(courseId) {
     return window.T6_FINAL_SPRINTS && window.T6_FINAL_SPRINTS[courseId];
+  }
+
+  function paperPatternBuild(courseId) {
+    return window.T6_PAPER_PATTERN && typeof window.T6_PAPER_PATTERN.build === "function"
+      ? window.T6_PAPER_PATTERN.build(courseId) : null;
+  }
+
+  function paperPatternStep(questionId) {
+    var built = paperPatternBuild("BRGSA");
+    return built && built.route.filter(function (step) { return step.id === questionId; })[0] || null;
+  }
+
+  function isCurrentPaperPatternSession(value, courseId) {
+    var built = paperPatternBuild(courseId || "BRGSA");
+    return Boolean(value && built && value.kind === "paper-pattern" && value.courseId === courseId
+      && value.paperPatternVersion === built.version && value.baseCount === built.questionIds.length);
+  }
+
+  function startPaperPatternRevision(courseId) {
+    courseId = courseId || "BRGSA";
+    if (isCurrentPaperPatternSession(profile.active, courseId)) return resumeActive();
+    var built = paperPatternBuild(courseId);
+    if (!built || built.questionIds.length !== 29) return toast("The BRGSA concept-by-concept drill is not ready yet.");
+    profile.selectedCourse = courseId;
+    session = createSession(courseId, {
+      kind:"paper-pattern",
+      mode:"learning",
+      title:"Direct concept revision",
+      kicker:"BRGSA concept revision · 29 direct questions · immediate correction",
+      skipLessons:true,
+      skipPrimers:true
+    }, built.questionIds);
+    session.paperPatternVersion = built.version;
+    profile.active = clone(session);
+    saveProfile();
+    beginPractice();
+  }
+
+  function openBrgsaWritingPlaybook() {
+    openExamHome();
+    window.setTimeout(function () {
+      var playbook = $("brgsa-writing-playbook");
+      if (!playbook) return;
+      playbook.open = true;
+      var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      playbook.scrollIntoView({behavior: reduced ? "auto" : "smooth", block:"start"});
+      var summary = playbook.querySelector("summary");
+      if (summary) summary.focus({preventScroll:true});
+    }, 180);
   }
 
   function finalSprintState(courseId) {
@@ -10699,6 +10788,7 @@
       tabs[next].focus();
       setExamHomeMode(tabs[next].dataset.examMode);
     });
+    $("brgsa-pattern-start").addEventListener("click", function () { startPaperPatternRevision("BRGSA"); });
     $("final-sprint").addEventListener("click", function (event) {
       var courseButton = event.target.closest("[data-final-course]");
       if (courseButton) {

@@ -183,7 +183,7 @@ export function auditRevisionPersonas() {
   if (/recordAttempt\(|recordWrittenPracticeEvidence\(|recordExamWrittenDiagnosis\(/.test(miniRoute)) {
     errors.push("Minis write learning or exam evidence despite being a last-minute self-check");
   }
-  if (!/session\.kind !== "final-sprint"\) recordAttempt/.test(app)) errors.push("Interactive Minis are not explicitly excluded from mastery attempts");
+  if (!/!isRevisionSprint\(session\)\) recordAttempt/.test(app)) errors.push("Interactive Minis and paper-pattern drills are not explicitly excluded from mastery attempts");
 
   return {ok:errors.length === 0, errors, subjects};
 }

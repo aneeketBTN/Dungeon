@@ -98,6 +98,22 @@ units, formulas, thinking order and checks across BRGSA 3 / SCLM 5 / SPMS 2 / IB
 feedback now teaches Better answer → Why → What your answer missed → Use this check, with internal
 return/retest scheduling language removed.
 
+**BRGSA paper-pattern revision — IMPLEMENTED LOCAL / NOT DEPLOYED (2026-08-22).** The top of
+Examiner now carries an explicitly bounded **SPMS-derived / BRGSA-first** objective-question lens:
+recall and anatomy, statements and objectives, change and interpretation, close-concept
+distinctions, best-fit selection and case recommendation. Its revision-only pack now authors **29
+short MCQs / 29 BRGSA concepts / all eight modules** in teaching order. Each question asks for one
+move and one answer: no case block, linked blanks or multi-step synthesis. The pack stays outside the
+417-question Learn bank, teaches immediately after every answer and writes no mastery evidence. A
+versioned start replaces the earlier eight-question saved route; the active drill hides the 29-row
+topic sidebar, and direct feedback does not repeat the explanation as a second bridge paragraph.
+The same block now gives the published written sections a compact answer playbook: **DEAL** for the
+four 5-mark cases and **PACER** for the two 10-mark descriptive answers, plus command-verb shapes for
+interpret, distinguish, recommend and evaluate/justify. These are revision heuristics, not an
+official marking scheme or a prediction of unseen BRGSA questions. Full suite **152/152**, palette
+gate green and build **24 assets**. Evidence:
+`evidence/2026-08-22/brgsa-paper-pattern-revision/verification.md`.
+
 **UI separation and alignment — RELEASE GREEN (2026-08-22).** Dashboard, progress, Exam and mini
 cards separate through tonal lift, restrained shadow and status silhouettes instead of outline-box
 grids. The dashboard has no competing floating action or Bag overlap; full-paper confidence targets
@@ -113,7 +129,7 @@ visually inspected.
 and the field is nested, not top level). Its 69 current warnings are extraction-unverified glossary
 terms from PDFs the validator cannot extract, reported rather than hidden. Syllabus,
 taught-vocabulary, taught-not-tested, spine, naming, palette, mini-rotation, final-sprint,
-revision-persona and craft gates PASS; full test suite **150/150**; build 23 assets; authenticated
+revision-persona and craft gates PASS; full test suite **152/152**; build 24 assets; authenticated
 Wrangler dry run PASS; exam readiness 0 errors / 0 warnings. The automated layout gate is 32/32 and
 both screenshot sweeps are 36/36. The dashboard chart runtime is
 intentionally no longer shipped.
@@ -134,6 +150,14 @@ Each line is a pointer, not the record: the CHANGELOG entry of the same date and
 the numbers, the defects found, and the evidence paths. Do not re-derive a claim from a line
 here — read the entry.
 
+- **2026-08-22 — BRGSA gets the first SPMS-derived paper-pattern drill and a written-answer playbook**
+  (Top-of-Examiner six-move objective lens; 29 purpose-authored direct MCQs cover all 29 BRGSA
+  concepts without entering the Learn bank; immediate correction and no mastery evidence. DEAL
+  structures the four 5-mark cases; PACER
+  structures the two 10-mark descriptive answers; command verbs map to answer shapes. Explicitly
+  bounded as revision heuristics rather than a paper prediction or official rubric. Full suite
+  152/152, palette green, build 24. Evidence:
+  `evidence/2026-08-22/brgsa-paper-pattern-revision/verification.md`.)
 - **2026-08-22 — Minis become accelerated revision and SPMS follows the exact P-type rule**
   (Static prompts replaced by interactive eight-question, one-per-module objective runs with
   immediate teaching and no mastery evidence. SPMS 5 MCQ + 3 exact P-type; BRGSA/IBM rapid scenario

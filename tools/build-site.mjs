@@ -31,6 +31,7 @@ const publicFiles = [
   "app/sets/t6_challenges.js",
   "app/sets/t6_final_sprints.js",
   "app/sets/t6_mini_mocks.js",
+  "app/sets/t6_paper_pattern.js",
   "app/sets/t6_coverage.js",
   "app/vendor/gsap.min.js"
 ];

@@ -1,5 +1,41 @@
 # Changelog
 
+## 2026-08-22 — BRGSA gets the first SPMS-derived paper-pattern drill and a written-answer playbook
+
+Evidence: `evidence/2026-08-22/brgsa-paper-pattern-revision/verification.md`.
+
+Implemented locally and **not deployed**. Examiner now opens with a clearly bounded revision lens:
+SPMS confirms the recurring objective-question shapes, while their use for BRGSA Section A is a
+working transfer assumption rather than a prediction of unseen questions. The six visible moves are
+recall and anatomy, statements and objectives, change and interpretation, close-concept
+distinctions, best-fit framework selection and case recommendation.
+
+The start action now launches a purpose-authored **29-question BRGSA pass: one direct MCQ for every
+one of its 29 concepts**, in module and teaching order. The questions implement the reported shapes
+without importing the learning route's transfer friction: direct recall, framework anatomy,
+statement and objective checks, directional and mixed-signal interpretation, close-concept
+distinctions, best-fit selection and short case recommendation. Every stem asks for one move and
+every item has one unambiguous answer; there are no case blocks, linked blanks or multi-part cloze
+interactions. Each item cites the lecture and concept summary it was authored from.
+
+The 29 surfaces live in a revision-only pack rather than `T6_COURSES.BRGSA.questions`, so BRGSA's
+417-question Learn bank and mastery evidence are unchanged. Correction appears after every answer,
+the run is resumable, and a version marker replaces saved copies of the superseded eight-question
+route. On the question screen the 29-row topic rail is removed, the card owns the desktop and phone
+layout, and direct feedback shows the correction once instead of repeating it under “How it fits.”
+
+The same top block now covers the paper's written half. Section B's four 5-mark cases use **DEAL**:
+Decide, Evidence, Apply, Land. Section C's two 10-mark descriptive answers use **PACER**: Position,
+Anatomy, Causal logic, Evidence, Reservation plus resolution. A command-verb guide separately maps
+interpret, distinguish, recommend and evaluate/justify to the answer shape each requires. The page
+states that these structures are answer heuristics, not a faculty mark scheme.
+
+Verification: the dedicated pack and claim-boundary tests pass; the complete explicit release suite
+is **152/152**; revision-persona, Mini, final-sprint and exam-readiness gates pass; the palette gate
+passes in both themes; the production build contains **24 allowlisted assets**. Browser checks at
+1280×720 and 375×812 show zero horizontal overflow, no premature floating action and no topic rail
+inside the direct drill.
+
 ## 2026-08-22 — Minis become accelerated revision and SPMS follows the exact P-type rule
 
 Evidence: `evidence/2026-08-22/t6-accelerated-minis-ptype/verification.md`.
